@@ -1,5 +1,5 @@
 (ns renderer.element.impl.shape.poly
-  "An abstraction for polygons and polylines that have similar hehavior."
+  "An abstraction for polygons and polylines that have similar behavior."
   (:require
    [clojure.core.matrix :as matrix]
    [clojure.string :as string]
