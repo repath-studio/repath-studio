@@ -117,17 +117,6 @@
  :-> :elements)
 
 (rf/reg-sub
- ::a11y-filter
- :<- [::active]
- :-> :a11y-filter)
-
-(rf/reg-sub
- ::a11y-filter-active?
- :<- [::a11y-filter]
- (fn [active-filter [_ k]]
-   (= active-filter k)))
-
-(rf/reg-sub
  ::hovered-ids
  :<- [::active]
  :-> :hovered-ids)

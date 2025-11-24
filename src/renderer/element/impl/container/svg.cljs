@@ -3,6 +3,7 @@
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/svg"
   (:require
    [re-frame.core :as rf]
+   [renderer.a11y.subs :as-alias a11y.subs]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
@@ -26,7 +27,7 @@
         child-els @(rf/subscribe [::element.subs/filter-visible (:children el)])
         rect-attrs (select-keys attrs [:x :y :width :height])
         text-attrs (select-keys attrs [:x :y])
-        active-filter @(rf/subscribe [::document.subs/a11y-filter])
+        active-filter @(rf/subscribe [::a11y.subs/active-filter])
         zoom @(rf/subscribe [::document.subs/zoom])
         pointer-handler (partial event.impl.pointer/handler! el)
         shadow-size (/ 2 zoom)]

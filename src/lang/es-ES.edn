@@ -150,16 +150,16 @@
   :about "Acerca de"}
 
  :renderer.a11y.db
- {:blur "desenfoque"
-  :blur-x2 "desenfoque-x2"
-  :protanopia "protanopia"
-  :protanomaly "protanomalía"
-  :deuteranopia "deuteranopia"
-  :deuteranomaly "deuteranomalía"
-  :tritanopia "tritanopia"
-  :tritanomaly "tritanomalía"
-  :achromatopsia "acromatopsia"
-  :achromatomaly "acromatoma­lía"}
+ {:blur "Desenfoque"
+  :heavy-blur "Desenfoque intenso"
+  :protanopia "Protanopia"
+  :protanomaly "Protanomalía"
+  :deuteranopia "Deuteranopia"
+  :deuteranomaly "Deuteranomalía"
+  :tritanopia "Tritanopia"
+  :tritanomaly "Tritanomalía"
+  :achromatopsia "Acromatopsia"
+  :achromatomaly "Acromatoma­lía"}
 
  :renderer.element.events
  {:modify-selection "Modificar selección"

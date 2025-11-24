@@ -150,16 +150,16 @@
   :about "Informazioni"}
 
  :renderer.a11y.db
- {:blur "sfocatura"
-  :blur-x2 "sfocatura-x2"
-  :protanopia "protanopia"
-  :protanomaly "protanomalia"
-  :deuteranopia "deuteranopia"
-  :deuteranomaly "deuteranomalia"
-  :tritanopia "tritanopia"
-  :tritanomaly "tritanomalia"
-  :achromatopsia "acromatopsia"
-  :achromatomaly "acromatopsia parziale"}
+ {:blur "Sfocatura"
+  :heavy-blur "Sfocatura intensa"
+  :protanopia "Protanopia"
+  :protanomaly "Protanomalia"
+  :deuteranopia "Deuteranopia"
+  :deuteranomaly "Deuteranomalia"
+  :tritanopia "Tritanopia"
+  :tritanomaly "Tritanomalia"
+  :achromatopsia "Acromatopsia"
+  :achromatomaly "Acromatopsia parziale"}
 
  :renderer.element.events
  {:modify-selection "Modifica selezione"

@@ -150,16 +150,16 @@
   :about "О программе"}
 
  :renderer.a11y.db
- {:blur "размытие"
-  :blur-x2 "размытие-x2"
-  :protanopia "протанопия"
-  :protanomaly "протаномалия"
-  :deuteranopia "дейтеранопия"
-  :deuteranomaly "дейтераномалия"
-  :tritanopia "тританопия"
-  :tritanomaly "тританомалия"
-  :achromatopsia "ахроматопсия"
-  :achromatomaly "ахроматомалия"}
+ {:blur "Размытие"
+  :heavy-blur "Сильное размытие"
+  :protanopia "Протанопия"
+  :protanomaly "Протаномалия"
+  :deuteranopia "Дейтеранопия"
+  :deuteranomaly "Дейтераномалия"
+  :tritanopia "Тританопия"
+  :tritanomaly "Тританомалия"
+  :achromatopsia "Ахроматопсия"
+  :achromatomaly "Ахроматомалия"}
 
  :renderer.element.events
  {:modify-selection "Изменить выделение"

@@ -151,7 +151,7 @@
 
  :renderer.a11y.db
  {:blur "ضبابية البصر"
-  :blur-x2 "ضبابية البصر المضاعفة"
+  :heavy-blur "ضبابية البصر الشديدة"
   :protanopia "عمى الألوان الأحمر"
   :protanomaly "ضعف الألوان الأحمر"
   :deuteranopia "عمى الألوان الأخضر"

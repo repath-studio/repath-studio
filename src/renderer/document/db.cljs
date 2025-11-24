@@ -2,7 +2,6 @@
   (:require
    [malli.core :as m]
    [malli.transform :as m.transform]
-   [renderer.a11y.db :refer [A11yFilterId]]
    [renderer.db :refer [Vec2 JS_Object]]
    [renderer.element.db :refer [Element ElementId]]
    [renderer.history.db :refer [History HistoryIndex]]
@@ -31,7 +30,6 @@
    [:pan {:default [0 0]} Vec2]
    [:elements {:default {}} [:map-of ElementId Element]]
    [:centered {:optional true} boolean?]
-   [:a11y-filter {:optional true} A11yFilterId]
    [:attrs {:default {:fill "white"
                       :stroke "black"}} [:map-of keyword? string?]]
    [:preview-label {:optional true} string?]

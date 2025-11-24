@@ -150,7 +150,7 @@
 
  :renderer.a11y.db
  {:blur "模糊"
-  :blur-x2 "模糊-x2"
+  :heavy-blur "重度模糊"
   :protanopia "红色盲"
   :protanomaly "红色弱"
   :deuteranopia "绿色盲"

@@ -150,16 +150,16 @@
   :about "Σχετικά"}
 
  :renderer.a11y.db
- {:blur "θόλωση όρασης"
-  :blur-x2 "έντονη θόλωση όρασης"
-  :protanopia "πρωτανωπία"
-  :protanomaly "πρωτανωμαλία"
-  :deuteranopia "δευτερανωπία"
-  :deuteranomaly "δευτερανωμαλία"
-  :tritanopia "τριτανωπία"
-  :tritanomaly "τριτανωμαλία"
-  :achromatopsia "αχρωματοψία"
-  :achromatomaly "αχρωματομαλία"}
+ {:blur "Θόλωση όρασης"
+  :heavy-blur "Έντονη θόλωση όρασης"
+  :protanopia "Πρωτανωπία"
+  :protanomaly "Πρωτανωμαλία"
+  :deuteranopia "Δευτερανωπία"
+  :deuteranomaly "Δευτερανωμαλία"
+  :tritanopia "Τριτανωπία"
+  :tritanomaly "Τριτανωμαλία"
+  :achromatopsia "Αχρωματοψία"
+  :achromatomaly "Αχρωματομαλία"}
 
  :renderer.element.events
  {:modify-selection "Τροποποίηση επιλογής"

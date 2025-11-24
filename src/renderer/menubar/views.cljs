@@ -2,6 +2,7 @@
   (:require
    ["@radix-ui/react-menubar" :as Menubar]
    [re-frame.core :as rf]
+   [renderer.a11y.events :as-alias a11y.events]
    [renderer.a11y.subs :as-alias a11y.subs]
    [renderer.app.events :as-alias app.events]
    [renderer.app.subs :as-alias app.subs]
@@ -457,8 +458,8 @@
            :label label
            :type :checkbox
            :icon "a11y"
-           :checked [::document.subs/a11y-filter-active? id]
-           :action [::document.events/toggle-a11y-filter id]})
+           :checked [::a11y.subs/filter-active? id]
+           :action [::a11y.events/toggle-active-filter id]})
         @(rf/subscribe [::a11y.subs/filters])))
 
 (defn languages-submenu

@@ -150,16 +150,16 @@
   :about "Hakkında"}
 
  :renderer.a11y.db
- {:blur "bulanık"
-  :blur-x2 "bulanık-x2"
-  :protanopia "protanopi"
-  :protanomaly "protanomali"
-  :deuteranopia "döteranopi"
-  :deuteranomaly "döteranomali"
-  :tritanopia "tritanopi"
-  :tritanomaly "tritanomali"
-  :achromatopsia "akromatopsi"
-  :achromatomaly "akromatomali"}
+ {:blur "Bulanık"
+  :heavy-blur "Yoğun bulanık"
+  :protanopia "Protanopi"
+  :protanomaly "Protanomali"
+  :deuteranopia "Döteranopi"
+  :deuteranomaly "Döteranomali"
+  :tritanopia "Tritanopi"
+  :tritanomaly "Tritanomali"
+  :achromatopsia "Akromatopsi"
+  :achromatomaly "Akromatomali"}
 
  :renderer.element.events
  {:modify-selection "Seçimi değiştir"
