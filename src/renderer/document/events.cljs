@@ -457,7 +457,7 @@
  (fn [{:keys [db]} _]
    (let [els (element.handlers/root-children db)
          svg (utils.element/->svg els)]
-     (if (:platmform db)
+     (if (app.handlers/desktop? (:platform db))
        {::effects/ipc-invoke
         {:channel "print"
          :data svg

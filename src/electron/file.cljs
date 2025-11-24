@@ -81,8 +81,8 @@
 
 (defn print!
   [content]
-  (let [window (BrowserWindow. #js {:show false
-                                    :frame false})]
+  (let [window (BrowserWindow. #js {:autoHideMenuBar true
+                                    :title "Print Preview"})]
     (js/Promise.
      (fn [res rej]
        (.on (.-webContents window) "did-finish-load"
@@ -90,6 +90,7 @@
               (.-webContents window)
               #js {}
               (fn [success error]
+                (.close window)
                 (if success
                   (res)
                   (rej error)))))
