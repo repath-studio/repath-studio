@@ -75,7 +75,7 @@
                   (element.handlers/refresh-bbox id)
                   (history.handlers/finalize [::set-text "Set text"])))
             (tool.handlers/activate :transform))
-    ::effects/focus nil}))
+    ::effects/focus-canvas nil}))
 
 (defmethod element.hierarchy/render :text
   [el]
