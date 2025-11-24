@@ -114,8 +114,8 @@
 (defmethod tool.hierarchy/on-pointer-move :transform
   [db e]
   (let [{:keys [element]} e
-        movable? (or (and element (not (utils.element/root? element)))
-                     (= (:type element) :handle))
+        movable? (or (= (:type element) :handle)
+                     (and element (not (utils.element/root? element))))
         cursor (if movable? "move" "default")]
     (cond-> db
       (not (:shift-key e))
