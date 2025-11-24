@@ -151,7 +151,7 @@
 
  :renderer.a11y.db
  {:blur "흐림"
-  :blur-x2 "흐림-x2"
+  :heavy-blur "강한 흐림"
   :protanopia "적색맹"
   :protanomaly "적색약"
   :deuteranopia "녹색맹"

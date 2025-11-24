@@ -150,16 +150,16 @@
   :about "Over"}
 
  :renderer.a11y.db
- {:blur "vervaging"
-  :blur-x2 "vervaging-x2"
-  :protanopia "protanopie"
-  :protanomaly "protanomalie"
-  :deuteranopia "deuteranopie"
-  :deuteranomaly "deuteranomalie"
-  :tritanopia "tritanopie"
-  :tritanomaly "tritanomalie"
-  :achromatopsia "achromatopsie"
-  :achromatomaly "achromatopsie gedeeltelijk"}
+ {:blur "Vervaging"
+  :heavy-blur "Sterke vervaging"
+  :protanopia "Protanopie"
+  :protanomaly "Protanomalie"
+  :deuteranopia "Deuteranopie"
+  :deuteranomaly "Deuteranomalie"
+  :tritanopia "Tritanopie"
+  :tritanomaly "Tritanomalie"
+  :achromatopsia "Achromatopsie"
+  :achromatomaly "Achromatopsie gedeeltelijk"}
 
  :renderer.element.events
  {:modify-selection "Selectie wijzigen"

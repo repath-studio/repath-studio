@@ -151,7 +151,7 @@
 
  :renderer.a11y.db
  {:blur "Unschärfe"
-  :blur-x2 "Starke Unschärfe"
+  :heavy-blur "Starke Unschärfe"
   :protanopia "Protanopie"
   :protanomaly "Protanomalie"
   :deuteranopia "Deuteranopie"

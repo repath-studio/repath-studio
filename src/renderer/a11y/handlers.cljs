@@ -8,11 +8,11 @@
 (m/=> deregister-filter [:-> App A11yFilterId App])
 (defn deregister-filter
   [db a11y-filter-id]
-  (update db :a11y-filters
-          (fn [filters]
-            (->> filters
-                 (remove #(= (:id %) a11y-filter-id))
-                 (into [])))))
+  (update-in db [:a11y :filters]
+             (fn [filters]
+               (->> filters
+                    (remove #(= (:id %) a11y-filter-id))
+                    (into [])))))
 
 (m/=> register-filter [:-> App A11yFilter App])
 (defn register-filter
@@ -24,4 +24,4 @@
                     {:a11y-filter a11y-filter}))
     (-> db
         (deregister-filter (:id a11y-filter))
-        (update :a11y-filters conj a11y-filter))))
+        (update-in [:a11y :filters] conj a11y-filter))))

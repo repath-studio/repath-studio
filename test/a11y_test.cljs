@@ -30,4 +30,21 @@
      (testing "deregister"
        (rf/dispatch [::a11y.events/deregister-filter :blur-x3])
 
-       (is (= (count @a11y-filters) 10))))))
+       (is (= (count @a11y-filters) 10)))
+
+     (testing "active filter"
+       (let [active-filter (rf/subscribe [::a11y.subs/active-filter])]
+         (testing "default state"
+           (is (not @active-filter)))
+
+         (testing "enable filter"
+           (rf/dispatch [::a11y.events/toggle-active-filter :blur])
+           (is (= @active-filter :blur)))
+
+         (testing "change active filter"
+           (rf/dispatch [::a11y.events/toggle-active-filter :deuteranopia])
+           (is (= @active-filter :deuteranopia)))
+
+         (testing "disable filter"
+           (rf/dispatch [::a11y.events/toggle-active-filter :deuteranopia])
+           (is (not @active-filter))))))))

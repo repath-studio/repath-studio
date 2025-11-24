@@ -80,23 +80,6 @@
            (rf/dispatch [::document.events/set-attr :stroke "yellow"])
            (is (= @stroke "yellow")))))
 
-     (testing "filters"
-       (let [a11y-filter (rf/subscribe [::document.subs/a11y-filter])]
-         (testing "default state"
-           (is (not @a11y-filter)))
-
-         (testing "enable filter"
-           (rf/dispatch [::document.events/toggle-a11y-filter :blur])
-           (is (= @a11y-filter :blur)))
-
-         (testing "change active filter"
-           (rf/dispatch [::document.events/toggle-a11y-filter :deuteranopia])
-           (is (= @a11y-filter :deuteranopia)))
-
-         (testing "disable filter"
-           (rf/dispatch [::document.events/toggle-a11y-filter :deuteranopia])
-           (is (not @a11y-filter)))))
-
      (testing "collapse/expand elements"
        (let [collapsed-ids (rf/subscribe [::document.subs/collapsed-ids])
              id (random-uuid)]

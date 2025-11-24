@@ -150,16 +150,16 @@
   :about "Om"}
 
  :renderer.a11y.db
- {:blur "suddig"
-  :blur-x2 "suddig-x2"
-  :protanopia "protanopi"
-  :protanomaly "protanomali"
-  :deuteranopia "deuteranopi"
-  :deuteranomaly "deuteranomali"
-  :tritanopia "tritanopi"
-  :tritanomaly "tritanomali"
-  :achromatopsia "akromatopsi"
-  :achromatomaly "akromatopsi partiell"}
+ {:blur "Suddig"
+  :heavy-blur "Kraftig suddig"
+  :protanopia "Protanopi"
+  :protanomaly "Protanomali"
+  :deuteranopia "Deuteranopi"
+  :deuteranomaly "Deuteranomali"
+  :tritanopia "Tritanopi"
+  :tritanomaly "Tritanomali"
+  :achromatopsia "Akromatopsi"
+  :achromatomaly "Akromatopsi partiell"}
 
  :renderer.element.events
  {:modify-selection "Ändra markering"

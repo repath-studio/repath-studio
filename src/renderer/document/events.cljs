@@ -53,14 +53,6 @@
    (document.handlers/expand-el db id)))
 
 (rf/reg-event-db
- ::toggle-a11y-filter
- [persist]
- (fn [db [_ id]]
-   (if (= (:a11y-filter (document.handlers/active db)) id)
-     (update-in db (document.handlers/path db) dissoc :a11y-filter)
-     (assoc-in db (document.handlers/path db :a11y-filter) id))))
-
-(rf/reg-event-db
  ::swap-colors
  [persist]
  (fn [db [_]]

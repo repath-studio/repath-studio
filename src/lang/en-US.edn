@@ -150,16 +150,16 @@
   :about "About"}
 
  :renderer.a11y.db
- {:blur "blur"
-  :blur-x2 "blur-x2"
-  :protanopia "protanopia"
-  :protanomaly "protanomaly"
-  :deuteranopia "deuteranopia"
-  :deuteranomaly "deuteranomaly"
-  :tritanopia "tritanopia"
-  :tritanomaly "tritanomaly"
-  :achromatopsia "achromatopsia"
-  :achromatomaly "achromatomaly"}
+ {:blur "Blur"
+  :heavy-blur "Heavy Blur"
+  :protanopia "Protanopia"
+  :protanomaly "Protanomaly"
+  :deuteranopia "Deuteranopia"
+  :deuteranomaly "Deuteranomaly"
+  :tritanopia "Tritanopia"
+  :tritanomaly "Tritanomaly"
+  :achromatopsia "Achromatopsia"
+  :achromatomaly "Achromatomaly"}
 
  :renderer.element.events
  {:modify-selection "Modify selection"

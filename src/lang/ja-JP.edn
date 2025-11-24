@@ -151,7 +151,7 @@
 
  :renderer.a11y.db
  {:blur "ブラー"
-  :blur-x2 "ブラーx2"
+  :heavy-blur "強いブラー"
   :protanopia "第一色覚異常"
   :protanomaly "第一色弱"
   :deuteranopia "第二色覚異常"
