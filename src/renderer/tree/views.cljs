@@ -10,7 +10,6 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
    [renderer.element.views :as element.views]
-   [renderer.event.impl.keyboard :as event.impl.keyboard]
    [renderer.events :as-alias events]
    [renderer.frame.events :as-alias frame.events]
    [renderer.i18n.views :as i18n.views]
@@ -19,6 +18,7 @@
    [renderer.tree.events :as-alias tree.events]
    [renderer.utils.dom :as utils.dom]
    [renderer.utils.element :as utils.element]
+   [renderer.utils.key :as utils.key]
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]))
 
@@ -63,9 +63,7 @@
           :enter-key-hint "done"
           :on-drag-start #(.preventDefault %)
           :on-focus #(.. % -target select)
-          :on-key-down #(event.impl.keyboard/input-key-down-handler!
-                         % label
-                         set-item-label! id)
+          :on-key-down #(utils.key/down-handler! % label set-item-label! id)
           :on-blur (fn [e]
                      (reset! edit-mode? false)
                      (set-item-label! e id))}]

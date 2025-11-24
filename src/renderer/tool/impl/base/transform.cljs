@@ -23,6 +23,7 @@
    [renderer.tool.views :as tool.views]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
+   [renderer.utils.key :as utils.key]
    [renderer.utils.length :as utils.length]
    [renderer.utils.svg :as utils.svg]
    [renderer.views :as views]))
@@ -36,8 +37,6 @@
                   :bottom-left])
 
 (derive :transform ::tool.hierarchy/tool)
-
-(derive :zoom ::tool.hierarchy/tool)
 
 (defonce select-box (reagent/atom nil))
 
@@ -115,11 +114,9 @@
 (defmethod tool.hierarchy/on-pointer-move :transform
   [db e]
   (let [{:keys [element]} e
-        cursor (if (and element
-                        (or (= (:type element) :handle)
-                            (not (utils.element/root? element))))
-                 "move"
-                 "default")]
+        movable? (or (and element (not (utils.element/root? element)))
+                     (= (:type element) :handle))
+        cursor (if movable? "move" "default")]
     (cond-> db
       (not (:shift-key e))
       (element.handlers/clear-ignored)
@@ -131,35 +128,45 @@
       (:id element)
       (element.handlers/hover (:id element)))))
 
+(defn event->arrow-key-step
+  [e]
+  (let [{:keys [shift-key ctrl-key]} e]
+    (cond-> 1
+      shift-key (* 10)
+      ctrl-key (/ 10))))
+
+(defn event->offset
+  [e]
+  (let [arrow-key-step (event->arrow-key-step e)]
+    (case (:key e)
+      "ArrowUp" [0 (- arrow-key-step)]
+      "ArrowDown" [0 arrow-key-step]
+      "ArrowLeft" [(- arrow-key-step) 0]
+      "ArrowRight" [arrow-key-step 0]
+      [0 0])))
+
 (defmethod tool.hierarchy/on-key-down :transform
   [db e]
-  (cond-> db
-    (= (:key e) "Shift")
-    (element.handlers/ignore :bbox)
+  (let [k (:key e)]
+    (cond-> db
+      (= k "Shift")
+      (element.handlers/ignore :bbox)
 
-    (= (:key e) "ArrowUp")
-    (element.handlers/translate [0 -1])
+      (utils.key/arrow? k)
+      (element.handlers/translate (event->offset e))
 
-    (= (:key e) "ArrowDown")
-    (element.handlers/translate [0 1])
-
-    (= (:key e) "ArrowLeft")
-    (element.handlers/translate [-1 0])
-
-    (= (:key e) "ArrowRight")
-    (element.handlers/translate [1 0])
-
-    (= (:key e) "Escape")
-    (history.handlers/reset-state)))
+      (= k "Escape")
+      (history.handlers/reset-state))))
 
 (defmethod tool.hierarchy/on-key-up :transform
   [db e]
-  (cond-> db
-    (= (:key e) "Shift")
-    (element.handlers/clear-ignored)
+  (let [k (:key e)]
+    (cond-> db
+      (= k "Shift")
+      (element.handlers/clear-ignored)
 
-    (contains? #{"ArrowUp" "ArrowDown" "ArrowLeft" "ArrowRight"} (:key e))
-    (history.handlers/finalize [::move-selection "Move selection"])))
+      (utils.key/arrow? k)
+      (history.handlers/finalize [::move-selection "Move selection"]))))
 
 (defmethod tool.hierarchy/on-pointer-down :transform
   [db e]
@@ -340,18 +347,20 @@
 
 (defn drag-start->state
   [clicked-element]
-  (case (:type clicked-element)
-    :element
-    (if (= (:tag clicked-element) :canvas)
-      :select
-      :translate)
+  (let [{el-type :type
+         :keys [tag action]} clicked-element]
+    (case el-type
+      :element
+      (if (= tag :canvas)
+        :select
+        :translate)
 
-    :handle
-    (if (= (:action clicked-element) :scale)
-      :scale
-      :translate)
+      :handle
+      (if (= action :scale)
+        :scale
+        :translate)
 
-    :idle))
+      :idle)))
 
 (defmethod tool.hierarchy/on-drag-start :transform
   [db e]
@@ -428,17 +437,15 @@
       (= state :select)
       (-> (cond-> (not (:shift-key e)) element.handlers/deselect)
           (reduce-by-area (:alt-key e) element.handlers/select)
-          (app.handlers/add-fx [::set-select-box nil])
-          (history.handlers/finalize [::modify-selection "Modify selection"]))
+          (app.handlers/add-fx [::set-select-box nil]))
 
-      (= state :translate)
-      (history.handlers/finalize [::move-selection "Move selection"])
-
-      (= state :scale)
-      (history.handlers/finalize [::scale-selection "Scale selection"])
-
-      (= state :clone)
-      (history.handlers/finalize [::clone-selection "Clone selection"])
+      (not= state :idle)
+      (history.handlers/finalize
+       (case state
+         :select [::modify-selection "Modify selection"]
+         :translate [::move-selection "Move selection"]
+         :scale [::scale-selection "Scale selection"]
+         :clone [::clone-selection "Clone selection"]))
 
       :always
       (-> (tool.handlers/set-state :idle)

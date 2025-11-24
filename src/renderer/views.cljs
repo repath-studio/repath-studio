@@ -25,8 +25,8 @@
    [re-frame.core :as rf]
    [reagent.core :as reagent]
    [renderer.app.subs :as-alias app.subs]
-   [renderer.event.impl.keyboard :as event.impl.keyboard]
    [renderer.i18n.views :as i18n.views]
+   [renderer.utils.key :as utils.key]
    [renderer.window.subs :as-alias window.subs]))
 
 (defn merge-with-class
@@ -108,7 +108,7 @@
           (conj "Alt")
 
           :always
-          (conj (event.impl.keyboard/key-code->key (:keyCode shortcut))))))
+          (conj (utils.key/code->key (:keyCode shortcut))))))
 
 (defn shortcuts
   [event]

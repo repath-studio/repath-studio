@@ -8,7 +8,6 @@
    [renderer.document.events :as-alias document.events]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.events :as-alias element.events]
-   [renderer.event.impl.keyboard :as event.impl.keyboard]
    [renderer.frame.events :as-alias frame.events]
    [renderer.i18n.views :as i18n.views]
    [renderer.panel.events :as-alias panel.events]
@@ -17,6 +16,7 @@
    [renderer.ruler.subs :as-alias ruler.subs]
    [renderer.snap.views :as snap.views]
    [renderer.timeline.views :as timeline.views]
+   [renderer.utils.key :as utils.key]
    [renderer.utils.length :as utils.length]
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]))
@@ -132,9 +132,7 @@
               :appearance "textfield"}
       :default-value value
       :on-blur #(set-zoom % value)
-      :on-key-down #(event.impl.keyboard/input-key-down-handler! % value
-                                                                 set-zoom
-                                                                 % value)
+      :on-key-down #(utils.key/down-handler! % value set-zoom % value)
       :on-wheel #(rf/dispatch (if (pos? (.-deltaY %))
                                 [::frame.events/zoom-out]
                                 [::frame.events/zoom-in]))}]))

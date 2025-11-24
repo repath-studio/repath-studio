@@ -27,7 +27,6 @@
    [renderer.error.views :as error.views]
    [renderer.event.effects]
    [renderer.event.events]
-   [renderer.event.impl.keyboard :as impl.keyboard]
    [renderer.events]
    [renderer.frame.events]
    [renderer.frame.subs]
@@ -55,6 +54,7 @@
    [renderer.tool.impl.core]
    [renderer.tool.subs]
    [renderer.tree.events]
+   [renderer.utils.key :as utils.key]
    [renderer.window.effects]
    [renderer.window.events]
    [renderer.window.subs]
@@ -102,7 +102,7 @@
   (rf/dispatch-sync [::app.events/initialize])
 
   (rf/dispatch [::re-pressed/add-keyboard-event-listener "keydown"])
-  (rf/dispatch [::re-pressed/set-keydown-rules impl.keyboard/keydown-rules])
+  (rf/dispatch [::re-pressed/set-keydown-rules utils.key/keydown-rules])
 
   (mount-root!)
   (js/console.log easter-egg))

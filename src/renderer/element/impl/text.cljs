@@ -11,7 +11,6 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
    [renderer.element.views :as element.views]
-   [renderer.event.impl.keyboard :as event.impl.keyboard]
    [renderer.history.handlers :as history.handlers]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
@@ -19,6 +18,7 @@
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.font :as utils.font]
+   [renderer.utils.key :as utils.key]
    [renderer.utils.length :as utils.length]))
 
 (derive :text ::element.hierarchy/shape)
@@ -111,9 +111,7 @@
        :on-pointer-down #(.stopPropagation %)
        :on-pointer-up #(.stopPropagation %)
        :on-blur #(rf/dispatch [::set-text id (get-text! %)])
-       :on-key-down #(event.impl.keyboard/input-key-down-handler! % content
-                                                                  identity
-                                                                  id)
+       :on-key-down #(utils.key/down-handler! % content identity id)
        :ref (fn [this]
               (when this
                 (rf/dispatch [::tool.events/set-state :type])))

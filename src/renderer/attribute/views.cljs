@@ -9,12 +9,12 @@
    [renderer.element.events :as-alias element.events]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
-   [renderer.event.impl.keyboard :as event.impl.keyboard]
    [renderer.events :as-alias events]
    [renderer.i18n.views :as i18n.views]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.attribute :as utils.attribute]
+   [renderer.utils.key :as utils.key]
    [renderer.views :as views]))
 
 (defn browser-icon
@@ -87,9 +87,9 @@
       (when spec-url
         [info-button spec-url [::specification "Specification"]])]]))
 
-(defn on-change-handler!
+(defn update-handler!
   ([event k old-v]
-   (on-change-handler! event k old-v true))
+   (update-handler! event k old-v true))
   ([event k old-v finalize?]
    (let [new-v (.. event -target -value)]
      (when-not (= new-v old-v)
@@ -119,10 +119,8 @@
             :enter-key-hint "done"
             :on-pointer-up pointer-up-handler!
             :placeholder (if v placeholder "multiple")
-            :on-blur #(on-change-handler! % k v)
-            :on-key-down #(event.impl.keyboard/input-key-down-handler!
-                           % v
-                           on-change-handler! k v)})]
+            :on-blur #(update-handler! % k v)
+            :on-key-down #(utils.key/down-handler! % v update-handler! k v)})]
    (when-not (or (empty? (str v)) disabled)
      [:button.form-control-button.bg-primary.absolute.right-0.p1.invisible
       {:class "hover:bg-transparent rtl:right-auto rtl:left-0
