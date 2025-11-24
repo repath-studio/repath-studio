@@ -1,8 +1,7 @@
 (ns renderer.a11y.events
   (:require
    [re-frame.core :as rf]
-   [renderer.a11y.handlers :as a11y.handlers]
-   [renderer.app.events :refer [persist]]))
+   [renderer.a11y.handlers :as a11y.handlers]))
 
 (rf/reg-event-db
  ::register-filter
@@ -16,8 +15,8 @@
 
 (rf/reg-event-db
  ::toggle-active-filter
- [persist]
+ [(rf/path :a11y)]
  (fn [db [_ id]]
-   (if (= (-> db :a11y :active-filter) id)
-     (update db :a11y dissoc :active-filter)
-     (assoc-in db [:a11y :active-filter] id))))
+   (if (= (:active-filter db) id)
+     (dissoc db :active-filter)
+     (assoc db :active-filter id))))

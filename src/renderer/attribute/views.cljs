@@ -60,7 +60,8 @@
 
 (defn construct-mdn-url
   [attr]
-  (str "https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/" attr))
+  (str "https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/"
+       attr))
 
 (defn caniusethis
   [{:keys [tag attr]}]
