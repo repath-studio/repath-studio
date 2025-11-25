@@ -7,8 +7,11 @@
    [renderer.history.db :refer [History HistoryIndex]]
    [renderer.tool.db :refer [HandleId]]))
 
+(def min-zoom 0.01)
+(def max-zoom 100)
+
 (def ZoomFactor
-  [:and number? [:>= 0.01] [:<= 100]])
+  [:and number? [:>= min-zoom] [:<= max-zoom]])
 
 (def DocumentId uuid?)
 

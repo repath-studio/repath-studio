@@ -4,7 +4,7 @@
    [malli.core :as m]
    [renderer.app.db :refer [App]]
    [renderer.db :refer [BBox Vec2]]
-   [renderer.document.db :refer [ZoomFactor]]
+   [renderer.document.db :as document.db :refer [ZoomFactor]]
    [renderer.element.handlers :as element.handlers]
    [renderer.frame.db :refer [DomRect Viewbox FocusType]]
    [renderer.utils.bounds :as utils.bounds]
@@ -22,9 +22,8 @@
               (viewbox zoom pan))))
   ([zoom pan dom-rect]
    (let [{:keys [width height]} dom-rect]
-     (into pan
-           (matrix/div [width height]
-                       zoom)))))
+     (->> (matrix/div [width height] zoom)
+          (into pan)))))
 
 (m/=> pan-by [:function
               [:-> App Vec2 App]
@@ -51,7 +50,9 @@
   [db factor pos]
   (let [active-document (:active-document db)
         {:keys [zoom pan]} (get-in db [:documents active-document])
-        updated-zoom (utils.math/clamp (* zoom factor) 0.01 100)
+        updated-zoom (-> (* zoom factor)
+                         (utils.math/clamp document.db/min-zoom
+                                           document.db/max-zoom))
         updated-factor (/ updated-zoom zoom)
         updated-pan (matrix/sub (matrix/div pan updated-factor)
                                 (matrix/sub (matrix/div pos updated-factor)
@@ -110,12 +111,11 @@
    (let [[w h] (utils.bounds/->dimensions bbox)
          {:keys [active-document dom-rect]} db
          width-ratio (/ (:width dom-rect) w)
-         height-ratio (/ (:height dom-rect) h)
-         min-zoom (min width-ratio height-ratio)]
+         height-ratio (/ (:height dom-rect) h)]
      (-> db
          (assoc-in [:documents active-document :zoom]
                    (case focus-type
-                     :original (min (* min-zoom 0.9) 1)
-                     :fit min-zoom
+                     :original (min (* (min width-ratio height-ratio) 0.9) 1)
+                     :fit (min width-ratio height-ratio)
                      :fill (max width-ratio height-ratio)))
          (pan-to-bbox bbox)))))
