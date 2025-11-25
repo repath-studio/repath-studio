@@ -22,7 +22,7 @@
 
 (defn write-file!
   [file-path data]
-  (let [document (-> (apply dissoc data config/save-info-keys)
+  (let [document (-> (reduce dissoc data config/save-info-keys)
                      (pr-str))]
     (-> (.writeFile fs/promises file-path document "utf-8")
         (.then #(-> (select-keys data [:id])
@@ -74,7 +74,7 @@
         (.then (fn [^js/Object result]
                  (if (.-canceled result)
                    (js/Promise.reject)
-                   (->> (get (js->clj result) "filePaths")
+                   (->> (.-filePaths result)
                         (mapv read!)
                         (clj->js)
                         (js/Promise.resolve))))))))

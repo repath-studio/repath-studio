@@ -17,3 +17,8 @@
 (defn web?
   [platform]
   (= platform "web"))
+
+(m/=> mac? [:-> Platform boolean?])
+(defn mac?
+  [platform]
+  (= platform "darwin"))

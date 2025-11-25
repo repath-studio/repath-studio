@@ -76,20 +76,17 @@
 (rf/reg-sub
  ::web?
  :<- [::platform]
- (fn [platform _]
-   (utils.platform/web? platform)))
+ utils.platform/web?)
 
 (rf/reg-sub
  ::desktop?
  :<- [::platform]
- (fn [platform _]
-   (utils.platform/desktop? platform)))
+ utils.platform/desktop?)
 
 (rf/reg-sub
  ::mac?
  :<- [::platform]
- (fn [platform _]
-   (= platform "darwin")))
+ utils.platform/mac?)
 
 (rf/reg-sub
  ::standalone?

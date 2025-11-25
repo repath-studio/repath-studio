@@ -108,9 +108,9 @@
         existing-titles (->> documents (map :title) set)]
     (loop [n 1]
       (let [title (str "Untitled-" n)]
-        (if-not (contains? existing-titles title)
-          title
-          (recur (inc n)))))))
+        (if (contains? existing-titles title)
+          (recur (inc n))
+          title)))))
 
 (m/=> create-tab [:-> App Document App])
 (defn create-tab

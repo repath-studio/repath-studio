@@ -64,7 +64,8 @@
       (.then (fn [result]
                (if (= result "granted")
                  (f args)
-                 (rf/dispatch [::app.events/toast :error
+                 (rf/dispatch [::app.events/toast
+                               :error
                                (i18n.views/t [::permission-denied
                                               "Permission to access the file was
                                                denied."])]))))))

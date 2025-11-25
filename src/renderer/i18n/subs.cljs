@@ -32,8 +32,7 @@
 (rf/reg-sub
  ::options
  :<- [::languages]
- (fn [languages _]
-   (i18n.handlers/tempura-options languages)))
+ i18n.handlers/tempura-options)
 
 (rf/reg-sub
  ::language
