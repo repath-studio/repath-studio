@@ -8,14 +8,12 @@
 (defn data-url->canvas!
   [data-url size on-error f]
   (let [[w h] size
-        canvas (js/OffscreenCanvas. 0 0)
+        canvas (js/OffscreenCanvas. w h)
         context (.getContext canvas "2d")
         image (js/Image.)]
     (set! (.-src image) data-url)
     (-> (.decode image)
-        (.then #(do (set! (.-width canvas) w)
-                    (set! (.-height canvas) h)
-                    (.drawImage context image 0 0 w h)
+        (.then #(do (.drawImage context image 0 0 w h)
                     (f canvas)))
         (.catch #(some-> on-error (conj %) rf/dispatch)))))
 

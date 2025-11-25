@@ -180,25 +180,29 @@
 (rf/reg-event-fx
  ::open-recent
  (fn [{:keys [db]} [_ {:keys [id path]}]]
-   (if (document.handlers/open? db id)
+   (cond
+     (document.handlers/open? db id)
      {:db (document.handlers/set-active db id)}
-     (if (app.handlers/desktop? db)
-       {::effects/ipc-invoke
-        {:channel "open-documents"
-         :data path
-         :on-success [::load-multiple]
-         :on-error [::recent-error id]
-         :formatter #(mapv string->edn %)}}
-       {::app.effects/get-local-store
-        {:store-key (str id)
-         :formatter (fn [file-handle]
-                      (if file-handle
-                        {:on-success [::file-read id]
-                         :on-error [::recent-error id]
-                         :file-handle file-handle}
-                        (throw (js/Error. "File handle not found"))))
-         :on-success [::events/file-open]
-         :on-error [::recent-error id]}}))))
+
+     (app.handlers/desktop? db)
+     {::effects/ipc-invoke
+      {:channel "open-documents"
+       :data path
+       :on-success [::load-multiple]
+       :on-error [::recent-error id]
+       :formatter #(mapv string->edn %)}}
+
+     :else
+     {::app.effects/get-local-store
+      {:store-key (str id)
+       :formatter (fn [file-handle]
+                    (if file-handle
+                      {:on-success [::file-read id]
+                       :on-error [::recent-error id]
+                       :file-handle file-handle}
+                      (throw (js/Error. "File handle not found"))))
+       :on-success [::events/file-open]
+       :on-error [::recent-error id]}})))
 
 (rf/reg-event-fx
  ::recent-error

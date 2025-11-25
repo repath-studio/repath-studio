@@ -45,15 +45,13 @@
 (m/=> persisted-format [:-> App DocumentId PersistedDocument])
 (defn persisted-format
   [db id]
-  (let [document (-> (entity db id)
-                     (assoc :version (:version db)))]
-    (->> (:elements document)
-         (keys)
-         (reduce (fn [document el-id]
-                   (update-in document [:elements el-id] dissoc :selected))
-                 (m/decode PersistedDocument
-                           document
-                           m.transform/strip-extra-keys-transformer)))))
+  (-> PersistedDocument
+      (m/decode (entity db id) m.transform/strip-extra-keys-transformer)
+      (assoc :version (:version db))
+      (update :elements (fn [elements]
+                          (into {}
+                                (map (fn [[k v]] [k (dissoc v :selected)]))
+                                elements)))))
 
 (m/=> close [:-> App DocumentId App])
 (defn close
@@ -73,7 +71,8 @@
 (m/=> add-recent [:-> App map? App])
 (defn add-recent
   [db document]
-  (let [equals? (fn [x] (or (and (:path x)
+  (let [max-recent 10
+        equals? (fn [x] (or (and (:path x)
                                  (= (:path x) (:path document)))
                             (= (:id x) (:id document))))]
     (cond-> db
@@ -83,14 +82,13 @@
                                       document
                                       m.transform/strip-extra-keys-transformer)
                             (conj (filterv (complement equals?) %))
-                            (take-last 10)
+                            (take-last max-recent)
                             (vec))))))
 
 (m/=> remove-recent [:-> App DocumentId App])
 (defn remove-recent
   [db id]
-  (update db :recent #(->> (remove (fn [x] (= id (:id x))) %)
-                           (vec))))
+  (update db :recent #(filterv (fn [x] (not= id (:id x))) %)))
 
 (m/=> center [:-> App App])
 (defn center
@@ -129,8 +127,8 @@
         (update :document-tabs #(utils.vec/add % (inc active-index) id)))))
 
 (m/=> create [:function
-              [:-> map? uuid? App]
-              [:-> map? uuid? [:maybe Vec2] App]])
+              [:-> App uuid? App]
+              [:-> App uuid? [:maybe Vec2] App]])
 (defn create
   ([db guid]
    (create db guid [595 842]))
