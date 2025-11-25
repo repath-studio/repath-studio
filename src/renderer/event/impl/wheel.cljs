@@ -2,7 +2,6 @@
   (:require
    [malli.core :as m]
    [re-frame.core :as rf]
-   [renderer.db :refer [JS_Object]]
    [renderer.event.db :refer [WheelEvent]]
    [renderer.event.events :as-alias event.events]))
 
@@ -21,7 +20,7 @@
    :meta-key (.-metaKey e)
    :shift-key (.-shiftKey e)})
 
-(m/=> handler! [:-> JS_Object nil?])
+(m/=> handler! [:-> any? nil?])
 (defn handler!
   [^js/WheelEvent e]
   (.stopPropagation e)

@@ -166,7 +166,7 @@
 (rf/reg-event-fx
  ::open
  (fn [{:keys [db]} [_]]
-   (if (app.handlers/desktop? (:platform db))
+   (if (app.handlers/desktop? db)
      {::effects/ipc-invoke
       {:channel "open-documents"
        :on-success [::load-multiple]
@@ -182,7 +182,7 @@
  (fn [{:keys [db]} [_ {:keys [id path]}]]
    (if (document.handlers/open? db id)
      {:db (document.handlers/set-active db id)}
-     (if (app.handlers/desktop? (:platform db))
+     (if (app.handlers/desktop? db)
        {::effects/ipc-invoke
         {:channel "open-documents"
          :data path
@@ -326,7 +326,7 @@
          document (document.handlers/persisted-format db id)
          on-success [::saved close]
          on-error [::app.events/toast-error]]
-     (if (app.handlers/desktop? (:platform db))
+     (if (app.handlers/desktop? db)
        {::effects/ipc-invoke
         {:channel "save-document"
          :data (pr-str document)
@@ -350,7 +350,7 @@
          document (document.handlers/persisted-format db id)
          on-success [::saved false]
          on-error [::app.events/toast-error]]
-     (if (app.handlers/desktop? (:platform db))
+     (if (app.handlers/desktop? db)
        {::effects/ipc-invoke
         {:channel "save-document-as"
          :data (pr-str document)
@@ -457,7 +457,7 @@
  (fn [{:keys [db]} _]
    (let [els (element.handlers/root-children db)
          svg (utils.element/->svg els)]
-     (if (app.handlers/desktop? (:platform db))
+     (if (app.handlers/desktop? db)
        {::effects/ipc-invoke
         {:channel "print"
          :data svg

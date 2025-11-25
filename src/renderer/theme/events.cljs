@@ -26,7 +26,7 @@
  ::update-status-bar
  (fn [{:keys [db]} _]
    (cond-> {}
-     (app.handlers/mobile? (:platform db))
+     (app.handlers/mobile? db)
      (assoc ::theme.effects/set-status-bar-style
             (theme.handlers/computed-mode db)))))
 

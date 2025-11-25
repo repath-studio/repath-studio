@@ -27,6 +27,6 @@
 (rf/reg-event-fx
  ::open-remote-url
  (fn [{:keys [db]} [_ url]]
-   (if (app.handlers/desktop? (:platform db))
+   (if (app.handlers/desktop? db)
      {::effects/ipc-send ["open-remote-url" url]}
      {::effects/open-remote-url url})))

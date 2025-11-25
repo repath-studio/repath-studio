@@ -58,7 +58,7 @@
 (rf/reg-event-fx
  ::relaunch
  (fn [{:keys [db]} _]
-   (if (app.handlers/desktop? (:platform db))
+   (if (app.handlers/desktop? db)
      {::effects/ipc-send ["relaunch"]}
      {::window.effects/reload nil})))
 
@@ -76,7 +76,7 @@
 (rf/reg-event-fx
  ::toggle-fullscreen
  (fn [{:keys [db]} _]
-   (if (app.handlers/desktop? (:platform db))
+   (if (app.handlers/desktop? db)
      {::effects/ipc-send ["window-toggle-fullscreen"]}
      {::window.effects/toggle-fullscreen nil})))
 

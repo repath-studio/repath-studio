@@ -1,7 +1,8 @@
 (ns renderer.app.handlers
   (:require
    [malli.core :as m]
-   [renderer.app.db :refer [App Feature Platform]]))
+   [renderer.app.db :refer [App Feature Platform]]
+   [renderer.utils.platform :as utils.platform]))
 
 (m/=> add-fx [:-> App vector? App])
 (defn add-fx
@@ -13,17 +14,22 @@
   [db k]
   (contains? (:features db) k))
 
-(m/=> desktop? [:-> Platform boolean?])
+(m/=> platform [:-> App Platform])
+(defn platform
+  [db]
+  (:platform db))
+
+(m/=> desktop? [:-> App boolean?])
 (defn desktop?
-  [platform]
-  (contains? #{"darwin" "win32" "linux"} platform))
+  [db]
+  (utils.platform/desktop? (platform db)))
 
-(m/=> mobile? [:-> Platform boolean?])
+(m/=> mobile? [:-> App boolean?])
 (defn mobile?
-  [platform]
-  (contains? #{"android" "ios"} platform))
+  [db]
+  (utils.platform/mobile? (platform db)))
 
-(m/=> web? [:-> Platform boolean?])
+(m/=> web? [:-> App boolean?])
 (defn web?
-  [platform]
-  (= platform "web"))
+  [db]
+  (utils.platform/web? (platform db)))

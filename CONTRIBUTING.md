@@ -68,7 +68,9 @@ module\
 ## Re-frame recommendations
 
 Avoid chaining events to create new ones. Always prefer composing pure functions
-that directly transform the db. That is the whole purpose of `handlers` namespace.
+that directly transform the db. That is the whole purpose of `handlers`
+namespace. Most functions under `handlers` take the db as their first argument,
+so they can be easily composed using the thread-first macro `->`.
 
 Use interceptors sparingly. Although they look (and probably are) ingenious, it
 is hard to write and reason with them. Doing things explicitly, is usually

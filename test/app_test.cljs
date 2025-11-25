@@ -5,8 +5,6 @@
    [re-frame.core :as rf]
    [renderer.app.events :as-alias app.events]
    [renderer.app.subs :as-alias app.subs]
-   [renderer.i18n.events :as-alias i18n.events]
-   [renderer.i18n.subs :as-alias i18n.subs]
    [renderer.panel.events :as-alias panel.events]
    [renderer.panel.subs :as-alias panel.subs]))
 
@@ -14,19 +12,13 @@
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
 
-   (testing "language"
-     (let [lang (rf/subscribe [::i18n.subs/user-lang])
-           system-lang (rf/subscribe [::i18n.subs/system-lang])
-           computed-lang (rf/subscribe [::i18n.subs/lang])]
-       (testing "default"
-         (is (= "system" @lang))
-         (is (= "en-US" @system-lang))
-         (is (= "en-US" @computed-lang)))
-
-       (testing "set valid language"
-         (rf/dispatch [::i18n.events/set-user-lang "el-GR"])
-         (is (= "el-GR" @lang))
-         (is (= "el-GR" @computed-lang)))))
+   (testing "platform"
+     (let [platform (rf/subscribe [::app.subs/platform])
+           desktop? (rf/subscribe [::app.subs/desktop?])
+           web? (rf/subscribe [::app.subs/web?])]
+       (is (= @platform "web"))
+       (is @web?)
+       (is (not @desktop?))))
 
    (testing "toggling grid"
      (let [grid-visible (rf/subscribe [::app.subs/grid])]

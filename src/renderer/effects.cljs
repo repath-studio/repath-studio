@@ -30,12 +30,6 @@
        (.catch #(some-> on-error (conj %) rf/dispatch)))))
 
 (rf/reg-fx
- ::focus
- (fn [id]
-   (some-> (.getElementById js/document id)
-           (.focus))))
-
-(rf/reg-fx
  ::focus-canvas
  (fn []
    (some-> (utils.dom/canvas-element!)

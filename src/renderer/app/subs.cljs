@@ -1,7 +1,7 @@
 (ns renderer.app.subs
   (:require
    [re-frame.core :as rf]
-   [renderer.app.handlers :as app.handlers]))
+   [renderer.utils.platform :as utils.platform]))
 
 (rf/reg-sub
  ::pointer-pos
@@ -77,13 +77,13 @@
  ::web?
  :<- [::platform]
  (fn [platform _]
-   (app.handlers/web? platform)))
+   (utils.platform/web? platform)))
 
 (rf/reg-sub
  ::desktop?
  :<- [::platform]
  (fn [platform _]
-   (app.handlers/desktop? platform)))
+   (utils.platform/desktop? platform)))
 
 (rf/reg-sub
  ::mac?

@@ -66,7 +66,7 @@
                    :nearest-neighbor-offset (:point nearest-neighbor)))
         :always
         (-> (tool.hierarchy/on-pointer-down e)
-            (app.handlers/add-fx [::effects/focus-canvas])))
+            (app.handlers/add-fx [::effects/focus-canvas nil])))
 
       "pointerup"
       (if (contains? active-pointers pointer-id)

@@ -121,12 +121,14 @@
                       renderer.utils.extra utils.extra
                       renderer.utils.font utils.font
                       renderer.utils.hiccup utils.hiccup
+                      renderer.utils.key utils.key
                       renderer.utils.i18n utils.i18n
                       renderer.utils.length utils.length
                       renderer.utils.map utils.map
                       renderer.utils.math utils.math
                       renderer.utils.migration utils.migration
                       renderer.utils.path utils.path
+                      renderer.utils.platform utils.platform
                       renderer.utils.svg utils.svg
                       renderer.utils.unit utils.unit
                       renderer.utils.vec utils.vec
