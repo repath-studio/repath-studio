@@ -1,9 +1,10 @@
 (ns renderer.tool.impl.element.polygon
   "https://www.w3.org/TR/SVG/shapes.html#PolygonElement"
-  (:require [renderer.history.handlers :as history.handlers]
-            [renderer.tool.handlers :as tool.handlers]
-            [renderer.tool.hierarchy :as tool.hierarchy]
-            [renderer.tool.impl.element.poly :as poly]))
+  (:require
+   [renderer.history.handlers :as history.handlers]
+   [renderer.tool.handlers :as tool.handlers]
+   [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.tool.impl.element.poly :as poly]))
 
 (derive :polygon ::tool.hierarchy/poly)
 

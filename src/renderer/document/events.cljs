@@ -330,22 +330,26 @@
          document (document.handlers/persisted-format db id)
          on-success [::saved close]
          on-error [::app.events/toast-error]]
-     (if (app.handlers/desktop? db)
+     (cond
+       (app.handlers/desktop? db)
        {::effects/ipc-invoke
         {:channel "save-document"
          :data (pr-str document)
          :on-success [::saved close]
          :on-error on-error
          :formatter string->edn}}
-       (if (app.handlers/feature? db :file-system)
-         {::app.effects/get-local-store
-          {:store-key (str id)
-           :formatter #(-> document
-                           (file-save-options on-success on-error)
-                           (assoc :file-handle %))
-           :on-success [::events/file-save]
-           :on-error on-error}}
-         {:dispatch [::download]})))))
+
+       (app.handlers/feature? db :file-system)
+       {::app.effects/get-local-store
+        {:store-key (str id)
+         :formatter #(-> document
+                         (file-save-options on-success on-error)
+                         (assoc :file-handle %))
+         :on-success [::events/file-save]
+         :on-error on-error}}
+
+       :else
+       {:dispatch [::download]}))))
 
 (rf/reg-event-fx
  ::save-as
@@ -354,16 +358,20 @@
          document (document.handlers/persisted-format db id)
          on-success [::saved false]
          on-error [::app.events/toast-error]]
-     (if (app.handlers/desktop? db)
+     (cond
+       (app.handlers/desktop? db)
        {::effects/ipc-invoke
         {:channel "save-document-as"
          :data (pr-str document)
          :on-success on-success
          :on-error on-error
          :formatter string->edn}}
-       (if (app.handlers/feature? db :file-system)
-         {::effects/file-save (file-save-options document on-success on-error)}
-         {:dispatch [::download]})))))
+
+       (app.handlers/feature? db :file-system)
+       {::effects/file-save (file-save-options document on-success on-error)}
+
+       :else
+       {:dispatch [::download]}))))
 
 (rf/reg-event-fx
  ::download
