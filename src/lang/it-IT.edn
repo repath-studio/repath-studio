@@ -284,7 +284,9 @@
  {:label "Rettangolo"
   :description "L'elemento <rect> è una forma SVG di base che disegna
                 rettangoli, definiti dalla loro posizione, larghezza e altezza.
-                I rettangoli possono avere gli angoli arrotondati."}
+                I rettangoli possono avere gli angoli arrotondati."
+  :rx-handle "maniglia di raggio x"
+  :ry-handle "maniglia di raggio y"}
 
  :renderer.element.impl.custom.blob
  {:x "Coordinata orizzontale del centro del blob."

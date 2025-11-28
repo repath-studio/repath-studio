@@ -284,7 +284,9 @@
  {:label "Retângulo"
   :description "O elemento <rect> é uma forma SVG básica que desenha retângulos,
                 definidos pela sua posição, largura e altura. Os retângulos
-                podem ter os seus cantos arredondados."}
+                podem ter os seus cantos arredondados."
+  :rx-handle "alça de raio x"
+  :ry-handle "alça de raio y"}
 
  :renderer.element.impl.custom.blob
  {:x "Coordenada horizontal do centro do blob."

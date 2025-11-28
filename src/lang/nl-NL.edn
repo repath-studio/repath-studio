@@ -286,7 +286,9 @@
  {:label "Rechthoek"
   :description "Het <rect> element is een SVG basisvorm die rechthoeken tekent,
                 gedefinieerd door hun positie, breedte en hoogte. De rechthoeken
-                kunnen afgeronde hoeken hebben."}
+                kunnen afgeronde hoeken hebben."
+  :rx-handle "x-straalgreep"
+  :ry-handle "y-straalgreep"}
 
  :renderer.element.impl.custom.blob
  {:x "Horizontale coördinaat van het middelpunt van de blob."

@@ -46,24 +46,26 @@
 
       el)))
 
+(defn render-edit-handles
+  [[min-x min-y max-x max-y] element-id]
+  [:g
+   (for [handle [{:x min-x
+                  :y min-y
+                  :id :position
+                  :label [::position-handle "position handle"]}
+                 {:x max-x
+                  :y max-y
+                  :id :size
+                  :label [::size-handle "size handle"]}]]
+     (let [handle (merge handle {:type :handle
+                                 :action :edit
+                                 :element-id element-id})]
+       ^{:key (:id handle)}
+       [tool.views/square-handle handle]))])
+
 (defmethod element.hierarchy/render-edit ::element.hierarchy/box
   [el]
-  (let [el-bbox (:bbox el)
-        [min-x min-y max-x max-y] el-bbox]
-    [:g
-     (for [handle [{:x min-x
-                    :y min-y
-                    :id :position
-                    :label [::position-handle "position handle"]}
-                   {:x max-x
-                    :y max-y
-                    :id :size
-                    :label [::size-handle "size handle"]}]]
-       (let [handle (merge handle {:type :handle
-                                   :action :edit
-                                   :element-id (:id el)})]
-         ^{:key (:id handle)}
-         [tool.views/square-handle handle]))]))
+  (render-edit-handles (:bbox el) (:id el)))
 
 (defmethod element.hierarchy/bbox ::element.hierarchy/box
   [el]

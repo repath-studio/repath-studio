@@ -5,9 +5,11 @@
    [clojure.string :as string]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.element.impl.box :as element.impl.box]
    [renderer.event.handlers :as event.handlers]
    [renderer.tool.views :as tool.views]
    [renderer.utils.bounds :as utils.bounds]
+   [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]))
 
 (derive :rect ::element.hierarchy/box)
@@ -28,39 +30,63 @@
            :stroke-dasharray
            :stroke-linejoin]})
 
+(defmethod element.hierarchy/scale :rect
+  [el ratio pivot-point]
+  (let [[x y] ratio
+        offset (utils.element/scale-offset ratio pivot-point)]
+    (cond-> el
+      :always
+      (-> (attribute.hierarchy/update-attr :width * x)
+          (attribute.hierarchy/update-attr :height * y)
+          (element.hierarchy/translate offset))
+
+      (-> el :attrs :rx)
+      (attribute.hierarchy/update-attr :rx * x)
+
+      (-> el :attrs :ry)
+      (attribute.hierarchy/update-attr :ry * y))))
+
+(defn clamp-radius-to-size
+  [el]
+  (let [{:keys [attrs]} el
+        width (utils.length/unit->px (:width attrs))
+        height (utils.length/unit->px (:height attrs))]
+    (-> el
+        (attribute.hierarchy/update-attr :rx min (/ width 2))
+        (attribute.hierarchy/update-attr :ry min (/ height 2)))))
+
 (defmethod element.hierarchy/edit :rect
   [el offset handle e]
   (let [[x y] (cond-> offset
                 (and (contains? #{:position :size} handle)
                      (:ctrl-key e))
                 (event.handlers/lock-direction))
-        clamp-size (partial max 0)
-        el-bbox (:bbox el)
-        [w h] (utils.bounds/->dimensions el-bbox)
-        locked-radius? (:ctrl-key e)
+        [w h] (utils.bounds/->dimensions (:bbox el))
         clamp-radius (fn [r max-size]
                        (min (max 0 r)
-                            (/ (if locked-radius?
+                            (/ (if (:ctrl-key e)
                                  (min w h)
                                  max-size) 2)))]
     (case handle
       :position
       (-> el
-          (attribute.hierarchy/update-attr :width (comp clamp-size -) x)
-          (attribute.hierarchy/update-attr :height (comp clamp-size -) y)
-          (element.hierarchy/translate [x y]))
+          (attribute.hierarchy/update-attr :width (comp (partial max 0) -) x)
+          (attribute.hierarchy/update-attr :height (comp (partial max 0) -) y)
+          (element.hierarchy/translate [x y])
+          (clamp-radius-to-size))
 
       :size
       (-> el
-          (attribute.hierarchy/update-attr :width (comp clamp-size +) x)
-          (attribute.hierarchy/update-attr :height (comp clamp-size +) y))
+          (attribute.hierarchy/update-attr :width (comp (partial max 0) +) x)
+          (attribute.hierarchy/update-attr :height (comp (partial max 0) +) y)
+          (clamp-radius-to-size))
 
       :rx
       (cond-> el
         :always
         (attribute.hierarchy/update-attr :rx (comp #(clamp-radius % w) -) x)
 
-        locked-radius?
+        (:ctrl-key e)
         (update :attrs (fn [attrs] (assoc attrs :ry (:rx attrs)))))
 
       :ry
@@ -68,7 +94,7 @@
         :always
         (attribute.hierarchy/update-attr :ry (comp #(clamp-radius % h) +) y)
 
-        locked-radius?
+        (:ctrl-key e)
         (update :attrs (fn [attrs] (assoc attrs :rx (:ry attrs)))))
 
       el)))
@@ -76,23 +102,11 @@
 (defmethod element.hierarchy/render-edit :rect
   [el]
   (let [el-bbox (:bbox el)
-        [min-x min-y max-x max-y] el-bbox
+        [_min-x min-y max-x _max-y] el-bbox
         {{:keys [rx ry]} :attrs} el
         [rx ry] (mapv utils.length/unit->px [rx ry])]
     [:g
-     (for [handle [{:x min-x
-                    :y min-y
-                    :id :position
-                    :label [::position-handle "position handle"]}
-                   {:x max-x
-                    :y max-y
-                    :id :size
-                    :label [::size-handle "size handle"]}]]
-       (let [handle (merge handle {:type :handle
-                                   :action :edit
-                                   :element-id (:id el)})]
-         ^{:key (:id handle)}
-         [tool.views/square-handle handle]))
+     (element.impl.box/render-edit-handles el-bbox (:id el))
      (for [handle [{:x (- max-x rx)
                     :y min-y
                     :id :rx

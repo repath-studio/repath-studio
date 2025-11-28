@@ -277,7 +277,9 @@
  :renderer.element.impl.shape.rect
  {:label "矩形"
   :description "<rect>要素は、位置、幅、高さによって定義される矩形を描画する基本的な
-                SVG形状です。矩形の角を丸くすることもできます。"}
+                SVG形状です。矩形の角を丸くすることもできます。"
+  :rx-handle "x半径ハンドル"
+  :ry-handle "y半径ハンドル"}
 
  :renderer.element.impl.custom.blob
  {:x "ブロブの中心のX座標。"

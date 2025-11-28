@@ -284,7 +284,9 @@
  {:label "Rectángulo"
   :description "El elemento <rect> es una forma SVG básica que dibuja
                 rectángulos, definidos por su posición, ancho y alto. Los
-                rectángulos pueden tener sus esquinas redondeadas."}
+                rectángulos pueden tener sus esquinas redondeadas."
+  :rx-handle "manija de radio x"
+  :ry-handle "manija de radio y"}
 
  :renderer.element.impl.custom.blob
  {:x "Coordenada horizontal del centro del blob."

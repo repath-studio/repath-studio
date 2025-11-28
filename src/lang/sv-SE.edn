@@ -283,7 +283,9 @@
  {:label "Rektangel"
   :description "Elementet <rect> är en SVG grundform som ritar rektanglar,
                 definierade av deras position, bredd och höjd. Rektanglarna kan
-                ha rundade hörn."}
+                ha rundade hörn."
+  :rx-handle "x-radiehandtag"
+  :ry-handle "y-radiehandtag"}
 
  :renderer.element.impl.custom.blob
  {:x "Horisontell koordinat för blob:ens centrum."
