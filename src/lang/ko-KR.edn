@@ -279,7 +279,9 @@
  {:label "사각형"
   :description "<rect> 요소는 위치, 너비, 높이로 정의된 사각형을
                 그리는 기본 SVG 모양입니다. 사각형의 모서리는
-                둥글게 할 수 있습니다."}
+                둥글게 할 수 있습니다."
+  :rx-handle "x 반지름 핸들"
+  :ry-handle "y 반지름 핸들"}
 
  :renderer.element.impl.custom.blob
  {:x "블롭 중심의 수평 좌표입니다."

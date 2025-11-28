@@ -68,30 +68,22 @@
 
 (defmethod tool.hierarchy/on-drag-start :edit
   [db e]
-  (cond-> db
-    (= (-> e :element :type) :handle)
-    (tool.handlers/set-state :edit)))
-
-(defn lock-direction
-  "Locks pointer movement to the axis with the biggest offset"
-  [[x y]]
-  (if (> (abs x) (abs y))
-    [x 0]
-    [0 y]))
+  (tool.handlers/set-state db (if (= (-> e :element :type) :handle)
+                                :edit
+                                :select)))
 
 (defmethod tool.hierarchy/on-drag :edit
   [db e]
   (let [{:keys [element-id id]} (:clicked-element db)
-        delta (cond-> (matrix/add (tool.handlers/pointer-delta db)
-                                  (snap.handlers/nearest-delta db))
-                (:ctrl-key e)
-                (lock-direction))]
+        offset (matrix/add (tool.handlers/pointer-delta db)
+                           (snap.handlers/nearest-delta db))]
     (cond-> db
       :always
       (history.handlers/reset-state)
 
       element-id
-      (element.handlers/update-el element-id element.hierarchy/edit delta id))))
+      (element.handlers/update-el element-id
+                                  element.hierarchy/edit offset id e))))
 
 (defmethod tool.hierarchy/on-drag-end :edit
   [db _e]

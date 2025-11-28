@@ -11,25 +11,28 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.bounds :as utils.bounds]))
 
-#_(defn circle-handle
-    [el & children]
-    (let [{:keys [x y id]} el
-          zoom @(rf/subscribe [::document.subs/zoom])
-          clicked-element @(rf/subscribe [::app.subs/clicked-element])
-          pointer-handler (partial event.impl.pointer/handler! el)]
-      (into [:circle {:key id
-                      :cx x
-                      :cy y
-                      :stroke "var(--accent)"
-                      :stroke-width (/ 1 zoom)
-                      :fill (if (= (:key clicked-element) id)
-                              "var(--accent)"
-                              "var(--accent-foreground)")
-                      :r (/ 4 zoom)
-                      :cursor "default"
-                      :on-pointer-up pointer-handler
-                      :on-pointer-down pointer-handler
-                      :on-pointer-move pointer-handler}] children)))
+(defn circle-handle
+  [el]
+  (let [{:keys [x y id element-id label]} el
+        zoom @(rf/subscribe [::document.subs/zoom])
+        clicked-element @(rf/subscribe [::app.subs/clicked-element])
+        handle-size @(rf/subscribe [::document.subs/handle-size])
+        pointer-handler (partial event.impl.pointer/handler! el)
+        active (and (= (:id clicked-element) id)
+                    (= (:element-id clicked-element) element-id))]
+    [:circle {:key id
+              :cx x
+              :cy y
+              :stroke (if active "var(--accent)" "gray")
+              :stroke-width (/ 1 zoom)
+              :fill (if active "var(--accent)" "var(--accent-foreground)")
+              :r (/ handle-size 2)
+              :cursor "default"
+              :on-pointer-up pointer-handler
+              :on-pointer-down pointer-handler
+              :on-pointer-move pointer-handler}
+     (when label
+       [:title (i18n.views/t label)])]))
 
 (defn square-handle
   [el]
@@ -41,14 +44,12 @@
         pointer-handler (partial event.impl.pointer/handler! el)
         active (and (= (:id clicked-element) id)
                     (= (:element-id clicked-element) element-id))]
-    [:rect {:fill (if active
-                    "var(--accent)"
-                    "var(--accent-foreground)")
+    [:rect {:fill (if active "var(--accent)" "var(--accent-foreground)")
             :stroke (if active "var(--accent)" "gray")
             :stroke-width stroke-width
             :x (- x (/ handle-size 2))
             :y (- y (/ handle-size 2))
-            :rx (/ 1.5 zoom)
+            :rx (/ 1 zoom)
             :width handle-size
             :height handle-size
             :cursor (or cursor "move")

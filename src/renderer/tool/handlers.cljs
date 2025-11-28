@@ -50,7 +50,8 @@
 (m/=> pointer-delta [:-> App Vec2])
 (defn pointer-delta
   [db]
-  (matrix/sub (:adjusted-pointer-pos db) (:adjusted-pointer-offset db)))
+  (matrix/sub (:adjusted-pointer-pos db)
+              (:adjusted-pointer-offset db)))
 
 (m/=> snapped-offset [:-> App Vec2])
 (defn snapped-offset

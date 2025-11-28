@@ -280,7 +280,9 @@
  {:label "Rectangle"
   :description "The <rect> element is a basic SVG shape that draws rectangles,
                 defined by their position, width, and height. The rectangles may
-                have their corners rounded."}
+                have their corners rounded."
+  :rx-handle "x radius handle"
+  :ry-handle "y radius handle"}
 
  :renderer.element.impl.custom.blob
  {:x "Horizontal coordinate of the blob's center."

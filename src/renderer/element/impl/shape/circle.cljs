@@ -69,7 +69,7 @@
                       "z"])))
 
 (defmethod element.hierarchy/edit :circle
-  [el [x _y] handle]
+  [el [x _y] handle _e]
   (case handle
     :r (attribute.hierarchy/update-attr el :r #(abs (+ % x)))
     el))

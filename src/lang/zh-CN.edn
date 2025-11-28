@@ -270,7 +270,9 @@
  :renderer.element.impl.shape.rect
  {:label "矩形"
   :description "元素 <rect> 是一个基本的 SVG 形状，绘制由位置、宽度和高度定义的
-                矩形。矩形可以有圆角。"}
+                矩形。矩形可以有圆角。"
+  :rx-handle "x 半径手柄"
+  :ry-handle "y 半径手柄"}
 
  :renderer.element.impl.custom.blob
  {:x "blob 中心的水平坐标。"

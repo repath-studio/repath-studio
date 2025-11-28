@@ -285,7 +285,9 @@
  {:label "Rechteck"
   :description "Das Element <rect> ist eine SVG-Grundform, die Rechtecke
                 zeichnet, definiert durch ihre Position, Breite und Höhe. Die
-                Rechtecke können abgerundete Ecken haben."}
+                Rechtecke können abgerundete Ecken haben."
+  :rx-handle "x-Radiusgriff"
+  :ry-handle "y-Radiusgriff"}
 
  :renderer.element.impl.custom.blob
  {:x "Horizontale Koordinate des Blob-Zentrums."

@@ -285,7 +285,9 @@
  {:label "Rectangle"
   :description "L'élément <rect> est une forme SVG de base qui dessine des
                 rectangles, définis par leur position, largeur et hauteur. Les
-                rectangles peuvent avoir leurs coins arrondis."}
+                rectangles peuvent avoir leurs coins arrondis."
+  :rx-handle "poignée de rayon x"
+  :ry-handle "poignée de rayon y"}
 
  :renderer.element.impl.custom.blob
  {:x "Coordonnée horizontale du centre du blob."

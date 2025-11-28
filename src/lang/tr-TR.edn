@@ -284,7 +284,9 @@
  {:label "Dikdörtgen"
   :description "<rect> öğesi, konumları, genişlikleri ve yükseklikleriyle
                 tanımlanan dikdörtgenler çizen temel bir SVG şeklidir.
-                Dikdörtgenlerin köşeleri yuvarlatılabilir."}
+                Dikdörtgenlerin köşeleri yuvarlatılabilir."
+  :rx-handle "x yarıçap tutamacı"
+  :ry-handle "y yarıçap tutamacı"}
 
  :renderer.element.impl.custom.blob
  {:x "Blob'un merkezi için yatay koordinat."

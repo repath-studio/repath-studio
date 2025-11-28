@@ -61,14 +61,6 @@
         (assoc-in [:documents active-document :zoom] updated-zoom)
         (assoc-in [:documents active-document :pan] updated-pan))))
 
-(m/=> adjusted-pointer-pos [:-> App Vec2 Vec2])
-(defn adjusted-pointer-pos
-  [db pos]
-  (let [{:keys [zoom pan]} (get-in db [:documents (:active-document db)])]
-    (-> pos
-        (matrix/div zoom)
-        (matrix/add pan))))
-
 (m/=> zoom-at-pointer [:-> App number? App])
 (defn zoom-at-pointer
   [db factor]
