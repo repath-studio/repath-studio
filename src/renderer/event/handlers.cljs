@@ -14,25 +14,41 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]))
 
-(m/=> significant-drag? [:-> Vec2 Vec2 number? boolean?])
+(m/=> significant-drag? [:-> App Vec2 Vec2 boolean?])
 (defn significant-drag?
-  [position offset threshold]
+  [db position offset]
   (> (apply max (map abs (matrix/sub position offset)))
-     threshold))
+     (:drag-threshold db)))
+
+(m/=> adjusted-pointer-pos [:-> App Vec2 Vec2])
+(defn adjusted-pointer-pos
+  [db pos]
+  (let [{:keys [zoom pan]} (get-in db [:documents (:active-document db)])]
+    (-> pos
+        (matrix/div zoom)
+        (matrix/add pan))))
+
+(m/=> lock-direction [:-> Vec2 Vec2])
+(defn lock-direction
+  "Locks pointer movement to the axis with the biggest offset"
+  [[x y]]
+  (if (> (abs x) (abs y))
+    [x 0]
+    [0 y]))
 
 (m/=> pointer [:-> App PointerEvent App])
 (defn pointer
   [db e]
-  (let [{:keys [pointer-offset tool state cached-tool cached-state
-                dom-rect drag drag-threshold nearest-neighbor active-pointers
-                double-click-delta event-timestamp]} db
+  (let [{:keys [pointer-offset tool state cached-tool cached-state dom-rect drag
+                nearest-neighbor active-pointers double-click-delta
+                event-timestamp]} db
         {:keys [button pointer-pos timestamp pointer-id]} e
-        adjusted-pos (frame.handlers/adjusted-pointer-pos db pointer-pos)
+        adjusted-pos (adjusted-pointer-pos db pointer-pos)
         db (snap.handlers/update-nearest-neighbors db)]
     (case (:type e)
       "pointermove"
       (-> (if pointer-offset
-            (if (significant-drag? pointer-pos pointer-offset drag-threshold)
+            (if (significant-drag? db pointer-pos pointer-offset)
               (cond-> db
                 (not= tool :pan)
                 (tool.handlers/pan-out-of-canvas dom-rect
@@ -157,7 +173,7 @@
   (case (:type e)
     "drop"
     (let [{:keys [data-transfer pointer-pos]} e
-          position (frame.handlers/adjusted-pointer-pos db pointer-pos)]
+          position (adjusted-pointer-pos db pointer-pos)]
       (app.handlers/add-fx db [::event.effects/drop [position data-transfer]]))
 
     db))

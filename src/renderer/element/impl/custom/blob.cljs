@@ -156,7 +156,7 @@
         (.toString))))
 
 (defmethod element.hierarchy/edit :blob
-  [el [x y] handle]
+  [el [x y] handle _e]
   (case handle
     :size
     (attribute.hierarchy/update-attr el :size #(max 0 (+ % (min x y))))

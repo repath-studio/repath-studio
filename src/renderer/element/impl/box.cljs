@@ -4,8 +4,8 @@
   (:require
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.event.handlers :as event.handlers]
    [renderer.tool.views :as tool.views]
-   [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]))
 
@@ -27,8 +27,11 @@
         (element.hierarchy/translate offset))))
 
 (defmethod element.hierarchy/edit ::element.hierarchy/box
-  [el [x y] handle]
-  (let [clamp (partial max 0)]
+  [el offset handle e]
+  (let [[x y] (cond-> offset
+                (:ctrl-key e)
+                (event.handlers/lock-direction))
+        clamp (partial max 0)]
     (case handle
       :position
       (-> el
@@ -46,15 +49,14 @@
 (defmethod element.hierarchy/render-edit ::element.hierarchy/box
   [el]
   (let [el-bbox (:bbox el)
-        [min-x min-y] el-bbox
-        [w h] (utils.bounds/->dimensions el-bbox)]
+        [min-x min-y max-x max-y] el-bbox]
     [:g
      (for [handle [{:x min-x
                     :y min-y
                     :id :position
                     :label [::position-handle "position handle"]}
-                   {:x (+ min-x w)
-                    :y (+ min-y h)
+                   {:x max-x
+                    :y max-y
                     :id :size
                     :label [::size-handle "size handle"]}]]
        (let [handle (merge handle {:type :handle

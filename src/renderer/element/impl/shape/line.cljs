@@ -9,6 +9,7 @@
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.event.handlers :as event.handlers]
    [renderer.tool.views :as tool.views]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
@@ -100,19 +101,22 @@
             :element-id (:id el)}])]))
 
 (defmethod element.hierarchy/edit :line
-  [el [x y] handle]
-  (case handle
-    :starting-point
-    (-> el
-        (attribute.hierarchy/update-attr :x1 + x)
-        (attribute.hierarchy/update-attr :y1 + y))
+  [el offset handle e]
+  (let [[x y] (cond-> offset
+                (:ctrl-key e)
+                (event.handlers/lock-direction))]
+    (case handle
+      :starting-point
+      (-> el
+          (attribute.hierarchy/update-attr :x1 + x)
+          (attribute.hierarchy/update-attr :y1 + y))
 
-    :ending-point
-    (-> el
-        (attribute.hierarchy/update-attr :x2 + x)
-        (attribute.hierarchy/update-attr :y2 + y))
+      :ending-point
+      (-> el
+          (attribute.hierarchy/update-attr :x2 + x)
+          (attribute.hierarchy/update-attr :y2 + y))
 
-    el))
+      el)))
 
 (defmethod element.hierarchy/bbox :line
   [el]

@@ -7,6 +7,7 @@
    [renderer.app.subs :as-alias app.subs]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.event.handlers :as event.handlers]
    [renderer.tool.views :as tool.views]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.element :as utils.element]
@@ -91,8 +92,11 @@
          (into [:g]))))
 
 (defmethod element.hierarchy/edit ::element.hierarchy/poly
-  [el [x y] handle]
+  [el offset handle e]
   (let [index (js/parseInt (name handle))
+        [x y] (cond-> offset
+                (:ctrl-key e)
+                (event.handlers/lock-direction))
         transform-point (fn [[px py]]
                           (list (utils.length/transform px + x)
                                 (utils.length/transform py + y)))]

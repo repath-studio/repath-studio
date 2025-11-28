@@ -75,7 +75,7 @@
     (* Math/PI rx ry)))
 
 (defmethod element.hierarchy/edit :ellipse
-  [el [x y] handle]
+  [el [x y] handle _e]
   (let [{{:keys [rx ry]} :attrs} el]
     (case handle
       :rx (attribute.hierarchy/update-attr el (if rx :rx :ry) #(abs (+ % x)))

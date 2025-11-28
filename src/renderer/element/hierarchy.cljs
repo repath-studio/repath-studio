@@ -35,5 +35,5 @@
 (defmethod snapping-points :default [] [])
 (defmethod translate :default [el _offset] el)
 (defmethod scale :default [el _ratio _pivot-point] el)
-(defmethod edit :default [el _offset _handle] el)
+(defmethod edit :default [el _offset _handle _e] el)
 (defmethod properties :default [])
