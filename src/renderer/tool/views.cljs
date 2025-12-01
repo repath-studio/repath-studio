@@ -18,21 +18,29 @@
         clicked-element @(rf/subscribe [::app.subs/clicked-element])
         handle-size @(rf/subscribe [::document.subs/handle-size])
         pointer-handler (partial event.impl.pointer/handler! el)
+        r (/ handle-size 2)
         active (and (= (:id clicked-element) id)
                     (= (:element-id clicked-element) element-id))]
-    [:circle {:key id
-              :cx x
-              :cy y
-              :stroke (if active "var(--accent)" "gray")
-              :stroke-width (/ 1 zoom)
-              :fill (if active "var(--accent)" "var(--accent-foreground)")
-              :r (/ handle-size 2)
-              :cursor "default"
-              :on-pointer-up pointer-handler
-              :on-pointer-down pointer-handler
-              :on-pointer-move pointer-handler}
-     (when label
-       [:title (i18n.views/t label)])]))
+    [:g
+     [:circle {:cx x
+               :cy y
+               :stroke "var(--accent-foreground)"
+               :stroke-opacity ".5"
+               :stroke-width (/ 3 zoom)
+               :r r
+               :cursor "default"
+               :on-pointer-up pointer-handler
+               :on-pointer-down pointer-handler
+               :on-pointer-move pointer-handler}
+      (when label
+        [:title (i18n.views/t label)])]
+     [:circle {:cx x
+               :cy y
+               :stroke (if active "var(--accent)" "var(--foreground-muted)")
+               :stroke-width (/ 1 zoom)
+               :fill (if active "var(--accent)" "var(--primary)")
+               :r r
+               :pointer-events "none"}]]))
 
 (defn square-handle
   [el]
@@ -40,30 +48,37 @@
         zoom @(rf/subscribe [::document.subs/zoom])
         clicked-element @(rf/subscribe [::app.subs/clicked-element])
         handle-size @(rf/subscribe [::document.subs/handle-size])
-        stroke-width (/ 1 zoom)
         pointer-handler (partial event.impl.pointer/handler! el)
+        stroke-width (/ 1 zoom)
+        rx (/ 1 zoom)
+        x (- x (/ handle-size 2))
+        y (- y (/ handle-size 2))
         active (and (= (:id clicked-element) id)
                     (= (:element-id clicked-element) element-id))]
-    [:rect {:fill (if active "var(--accent)" "var(--accent-foreground)")
-            :stroke (if active "var(--accent)" "gray")
-            :stroke-width stroke-width
-            :x (- x (/ handle-size 2))
-            :y (- y (/ handle-size 2))
-            :rx (/ 1 zoom)
-            :width handle-size
-            :height handle-size
-            :cursor (or cursor "move")
-            :on-pointer-up pointer-handler
-            :on-pointer-down pointer-handler
-            :on-pointer-move pointer-handler}
-     (when label
-       [:title (i18n.views/t label)])]))
-
-(defn scale-handle
-  [props]
-  ^{:key (:id props)}
-  [square-handle (merge props {:type :handle
-                               :action :scale})])
+    [:g
+     [:rect {:stroke "var(--accent-foreground)"
+             :stroke-opacity ".5"
+             :stroke-width (/ 3 zoom)
+             :x x
+             :y y
+             :rx rx
+             :width handle-size
+             :height handle-size
+             :cursor (or cursor "move")
+             :on-pointer-up pointer-handler
+             :on-pointer-down pointer-handler
+             :on-pointer-move pointer-handler}
+      (when label
+        [:title (i18n.views/t label)])]
+     [:rect {:fill (if active "var(--accent)" "var(--accent-foreground)")
+             :stroke (if active "var(--accent)" "var(--foreground-muted)")
+             :stroke-width stroke-width
+             :x x
+             :y y
+             :rx rx
+             :width handle-size
+             :height handle-size
+             :pointer-events "none"}]]))
 
 (m/=> wrapping-bbox [:-> BBox any?])
 (defn wrapping-bbox
@@ -81,15 +96,19 @@
                     :y min-y
                     :width w
                     :height h
-                    :stroke-width (/ 2 zoom)
                     :stroke-opacity ".3"
                     :fill "transparent"
-                    :shape-rendering "crispEdges"
-                    :stroke "var(--accent)"
-                    :pointer-events (when ignored? "none")}]
-    [:rect (merge rect-attrs {:on-pointer-up pointer-handler
-                              :on-pointer-down pointer-handler
-                              :on-pointer-move pointer-handler})]))
+                    :shape-rendering "crispEdges"}]
+    [:g
+     [:rect (merge rect-attrs {:stroke-width (/ 2 zoom)
+                               :stroke "var(--accent-foreground)"
+                               :pointer-events (when ignored? "none")
+                               :on-pointer-up pointer-handler
+                               :on-pointer-down pointer-handler
+                               :on-pointer-move pointer-handler})]
+     [:rect (merge rect-attrs {:stroke-width (/ 1 zoom)
+                               :pointer-events "none"
+                               :stroke "var(--accent)"})]]))
 
 (m/=> min-bbox [:-> BBox BBox])
 (defn min-bbox
@@ -153,4 +172,5 @@
                           (and (= state :scale)
                                (= (:id %) (:id clicked-element))))
                   ^{:key (:id %)}
-                  [scale-handle %])))]))
+                  [square-handle (merge % {:type :handle
+                                           :action :scale})])))]))

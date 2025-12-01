@@ -49,8 +49,7 @@
                                                   :y1 offset-y
                                                   :x2 x
                                                   :y2 y
-                                                  :hypotenuse hypotenuse
-                                                  :stroke "gray"}])))
+                                                  :hypotenuse hypotenuse}])))
 
 (defmethod tool.hierarchy/render :measure
   []
@@ -60,15 +59,21 @@
           angle (utils.math/angle [x1 y1] [x2 y2])
           zoom @(rf/subscribe [::document.subs/zoom])
           straight? (< angle 180)
-          straight-angle (if straight? angle (- angle 360))]
+          straight-angle (if straight? angle (- angle 360))
+          line-bg-attrs {:stroke "var(--accent-foreground)"
+                         :stroke-opacity ".5"
+                         :stroke-width 3}]
       [:g
-       [utils.svg/cross [x1 y1]]
-       [utils.svg/cross [x2 y2]]
-
        [utils.svg/arc [x1 y1] 20 (if straight? 0 angle) (abs straight-angle)]
 
-       [utils.svg/line [x1 y1] [x2 y2] false]
+       [utils.svg/line [x1 y1] [x2 y2] line-bg-attrs]
+       [utils.svg/line [x1 y1] [(+ x1 (/ 30 zoom)) y1] line-bg-attrs]
+
+       [utils.svg/line [x1 y1] [x2 y2]]
        [utils.svg/line [x1 y1] [(+ x1 (/ 30 zoom)) y1]]
+
+       [utils.svg/cross [x1 y1]]
+       [utils.svg/cross [x2 y2]]
 
        [utils.svg/label
         (str (utils.length/->fixed straight-angle 2 false) "°")

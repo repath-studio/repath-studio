@@ -86,13 +86,21 @@
   [el]
   (let [bbox (:bbox el)
         [cx cy] (utils.bounds/center bbox)
-        [rx ry] (matrix/div (utils.bounds/->dimensions bbox) 2)]
+        [rx ry] (matrix/div (utils.bounds/->dimensions bbox) 2)
+        line-end-x (+ cx rx)
+        line-end-y (- cy ry)]
     [:g ::edit-handles
      [utils.svg/times [cx cy]]
-     [utils.svg/line [cx cy] [(+ cx rx) cy]]
+
+     [utils.svg/line [cx cy] [line-end-x cy] :stroke "var(--accent-foreground)"]
+     [utils.svg/line [cx cy] [cx line-end-y] :stroke "var(--accent-foreground)"]
+
+     [utils.svg/line [cx cy] [line-end-x cy] :stroke-dasharray 5]
+     [utils.svg/line [cx cy] [cx line-end-y] :stroke-dasharray 5]
+
      [utils.svg/label (utils.length/->fixed rx 2 false) {:x (+ cx (/ rx 2))
                                                          :y cy}]
-     [utils.svg/line [cx cy] [cx (- cy ry)]]
+
      [utils.svg/label (utils.length/->fixed ry 2 false) {:x cx
                                                          :y (- cy (/ ry 2))}]
      (map (fn [handle]

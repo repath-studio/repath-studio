@@ -38,7 +38,7 @@
        {:on-pointer-up pointer-handler
         :on-pointer-down pointer-handler
         :on-pointer-move pointer-handler
-        :fill "gray"
+        :fill "var(--foreground-muted)"
         :font-size (/ 12 zoom)}) (or (:label el) (name (:tag el)))]
 
      [:rect
