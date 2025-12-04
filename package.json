@@ -125,7 +125,7 @@
     "constants": "0.0.2",
     "create-react-class": "15.7.0",
     "doc-link-checker-cli": "1.0.4",
-    "electron": "39.2.4",
+    "electron": "39.2.5",
     "electron-builder": "26.0.12",
     "electron-builder-notarize": "1.5.2",
     "events": "3.3.0",
@@ -149,10 +149,10 @@
     "path-browserify": "1.0.1",
     "perfect-freehand": "1.2.2",
     "process": "0.11.10",
-    "puppeteer": "24.31.0",
-    "react": "19.2.0",
+    "puppeteer": "24.32.0",
+    "react": "19.2.1",
     "react-d3-tree": "3.6.6",
-    "react-dom": "19.2.0",
+    "react-dom": "19.2.1",
     "react-frame-component": "5.2.7",
     "react-resizable-panels": "3.0.6",
     "react-svg": "16.3.0",
@@ -178,7 +178,7 @@
     "electron-window-state": "5.0.3"
   },
   "overrides": {
-    "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react": "19.2.1",
+    "react-dom": "19.2.1"
   }
 }
