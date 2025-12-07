@@ -8,6 +8,8 @@ to report security vulnerabilities. Even when unsure whether the bug in question
 is an exploitable vulnerability, it is recommended to use the above methods and
 not discuss the issue anywhere else.
 
+## PGP key
+
 If reporting through email, please encrypt sensitive information using our PGP
 key.
 
