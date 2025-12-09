@@ -17,7 +17,7 @@
         re-pressed/re-pressed {:mvn/version "0.3.2"}
         reagent/reagent {:mvn/version "2.0.1"}
         replumb/replumb {:mvn/version "0.2.4"}
-        thheller/shadow-cljs {:mvn/version "3.3.2"}}
+        thheller/shadow-cljs {:mvn/version "3.3.3"}}
  :aliases
  {:dev {:extra-paths ["test" "portfolio/src"]
         :extra-deps {cider/cider-nrepl {:mvn/version "0.58.0"}
