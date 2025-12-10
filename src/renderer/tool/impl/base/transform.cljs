@@ -31,8 +31,10 @@
 (def ScaleHandle [:enum
                   :middle-right
                   :middle-left
-                  :top-middle :bottom-middle
-                  :top-right :top-left
+                  :top-middle
+                  :bottom-middle
+                  :top-right
+                  :top-left
                   :bottom-right
                   :bottom-left])
 
@@ -419,16 +421,13 @@
         (tool.handlers/set-state db :translate))
 
       :scale
-      (let [options {:ratio-locked ratio-locked?
-                     :in-place shift-key
-                     :recursive alt-key}]
-        (-> db
-            (history.handlers/reset-state)
-            (tool.handlers/set-cursor (if locked? "not-allowed" "default"))
-            (scale (matrix/add delta (snap.handlers/nearest-delta db))
-                   options)))
-
-      :idle db)))
+      (-> db
+          (history.handlers/reset-state)
+          (tool.handlers/set-cursor (if locked? "not-allowed" "default"))
+          (scale (matrix/add delta (snap.handlers/nearest-delta db))
+                 {:ratio-locked ratio-locked?
+                  :in-place shift-key
+                  :recursive alt-key})))))
 
 (defmethod tool.hierarchy/on-drag-end :transform
   [db e]
@@ -502,6 +501,12 @@
       [utils.svg/label text {:x x
                              :y y}])))
 
+(m/=> render-bounding-box [:-> Element boolean? any?])
+(defn render-bounding-box
+  [el dashed?]
+  (some-> (:bbox el)
+          (utils.svg/bounding-box dashed?)))
+
 (defmethod tool.hierarchy/render :transform
   []
   (let [state @(rf/subscribe [::tool.subs/state])
@@ -509,17 +514,15 @@
         bbox @(rf/subscribe [::element.subs/bbox])
         elements-area @(rf/subscribe [::element.subs/area])
         pivot-point @(rf/subscribe [::tool.subs/pivot-point])
-        hovered-ids @(rf/subscribe [::element.subs/hovered])]
+        hovered-elements @(rf/subscribe [::element.subs/hovered])]
     [:<>
      (for [el selected-elements]
-       (when (:bbox el)
-         ^{:key (str (:id el) "-bbox")}
-         [utils.svg/bounding-box (:bbox el) false]))
+       ^{:key (str (:id el) "-bbox")}
+       [render-bounding-box el false])
 
-     (for [el hovered-ids]
-       (when (:bbox el)
-         ^{:key (str (:id el) "-bbox")}
-         [utils.svg/bounding-box (:bbox el) true]))
+     (for [el hovered-elements]
+       ^{:key (str (:id el) "-bbox")}
+       [render-bounding-box el true])
 
      (when (and (pos? elements-area)
                 (= state :scale)
