@@ -31,7 +31,7 @@ jobs:
           java-version: '21'
 
       - name: Cache clojure dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.m2/repository
@@ -47,7 +47,7 @@ jobs:
           cli: 1.12.4.1582
 
       - name: Cache npm dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: '~/.npm'
           key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
@@ -90,13 +90,13 @@ jobs:
             mv android/app/build/outputs/bundle/release/app-release-signed.aab repath-studio-android.aab
 
       - name: Upload android apk to release
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: android-apk
           path: repath-studio-android.apk
 
       - name: Upload android aab to release
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: android-aab
           path: repath-studio-android.aab

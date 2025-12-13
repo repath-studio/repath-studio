@@ -27,7 +27,7 @@ jobs:
         uses: crate-ci/typos@v1.39.2
 
       - name: Cache clojure dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.m2/repository
@@ -44,7 +44,7 @@ jobs:
           clj-kondo: 2025.10.23
 
       - name: Cache npm dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: '~/.npm'
           key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
