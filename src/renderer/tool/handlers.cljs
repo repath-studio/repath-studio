@@ -102,7 +102,8 @@
         (history.handlers/reset-state))
 
     (= (:state db) :idle)
-    (activate :transform)
+    (-> (dissoc :cached-tool :cached-state)
+        (activate :transform))
 
     :always
     (-> (assoc :active-pointers #{})
