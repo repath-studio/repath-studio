@@ -1,8 +1,6 @@
 (ns renderer.core
   (:require
    ["electron-log/renderer"]
-   [config :as config]
-   [day8.re-frame-10x]
    [re-frame.core :as rf]
    [re-pressed.core :as re-pressed]
    [reagent.dom.client :as ra.dom.client]
@@ -97,8 +95,6 @@
   (print "Type (help) to see a list of commands."))
 
 (defn ^:export init! []
-  ;; REVIEW: Is there a better way to handle this?
-  (when config/debug? (day8.re-frame-10x/show-panel! false))
   ;; https://code.thheller.com/blog/shadow-cljs/2017/10/14/bootstrap-support.html
   (bootstrap/init replumb.repl/st {:path "js/bootstrap"
                                    :load-on-init '[user]} bootstrap-cb!)
