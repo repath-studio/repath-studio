@@ -6,7 +6,7 @@
 
 (defn tool?
   [tool]
-  (isa? tool ::tool.hierarchy/tool))
+  (isa? @tool.hierarchy/hierarchy tool ::tool.hierarchy/tool))
 
 (def Tool
   [:fn {:error/fn (fn [{:keys [value]} _]
