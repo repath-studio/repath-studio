@@ -10,8 +10,6 @@
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.utils.attribute :as utils.attribute]))
 
-(derive ::tool.hierarchy/poly ::tool.hierarchy/element)
-
 (defmethod tool.hierarchy/help [::tool.hierarchy/poly :idle]
   []
   [:<>

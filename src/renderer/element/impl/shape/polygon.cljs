@@ -3,7 +3,7 @@
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/polygon"
   (:require [renderer.element.hierarchy :as element.hierarchy]))
 
-(derive :polygon ::element.hierarchy/poly)
+(element.hierarchy/derive-element :polygon ::element.hierarchy/poly)
 
 (defmethod element.hierarchy/properties :polygon
   []

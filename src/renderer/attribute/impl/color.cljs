@@ -10,9 +10,9 @@
    [renderer.i18n.views :as i18n.views]
    [renderer.views :as views]))
 
-(derive :stroke ::color)
-(derive :fill ::color)
-(derive :color ::color)
+(attribute.hierarchy/derive-attribute :stroke ::color)
+(attribute.hierarchy/derive-attribute :fill ::color)
+(attribute.hierarchy/derive-attribute :color ::color)
 
 (defn picker
   [k v]

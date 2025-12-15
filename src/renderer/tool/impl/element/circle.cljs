@@ -9,8 +9,6 @@
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.utils.length :as utils.length]))
 
-(derive :circle ::tool.hierarchy/element)
-
 (defmethod tool.hierarchy/properties :circle
   []
   {:icon "circle-tool"

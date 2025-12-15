@@ -10,7 +10,8 @@
  :<- [::element.subs/entities]
  (fn [elements]
    (->> elements
-        (filter #(contains? (descendants ::element.hierarchy/animation)
+        (filter #(contains? (descendants @element.hierarchy/hierarchy
+                                         ::element.hierarchy/animation)
                             (:tag %))))))
 
 (defn effect-id

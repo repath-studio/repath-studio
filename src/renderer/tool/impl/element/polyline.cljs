@@ -6,8 +6,6 @@
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.element.poly :as poly]))
 
-(derive :polyline ::tool.hierarchy/poly)
-
 (defmethod tool.hierarchy/properties :polyline
   []
   {:icon "polyline"

@@ -21,7 +21,7 @@
    [renderer.utils.key :as utils.key]
    [renderer.utils.length :as utils.length]))
 
-(derive :text ::element.hierarchy/shape)
+(element.hierarchy/derive-element :text ::element.hierarchy/shape)
 
 (defmethod element.hierarchy/properties :text
   []

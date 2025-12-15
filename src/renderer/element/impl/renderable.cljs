@@ -7,7 +7,9 @@
    [renderer.element.views :as element.views]
    [renderer.tool.subs :as-alias tool.subs]))
 
-(derive ::element.hierarchy/renderable ::element.hierarchy/element)
+(element.hierarchy/derive-element
+ ::element.hierarchy/renderable
+ ::element.hierarchy/element)
 
 (defmethod element.hierarchy/render ::element.hierarchy/renderable
   [el]

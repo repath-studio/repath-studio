@@ -12,7 +12,7 @@
    [renderer.utils.length :as utils.length]
    [renderer.utils.svg :as utils.svg]))
 
-(derive :circle ::element.hierarchy/shape)
+(element.hierarchy/derive-element :circle ::element.hierarchy/shape)
 
 (defmethod element.hierarchy/properties :circle
   []

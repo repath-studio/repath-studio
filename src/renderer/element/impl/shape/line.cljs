@@ -16,7 +16,7 @@
    [renderer.utils.length :as utils.length]
    [renderer.utils.svg :as utils.svg]))
 
-(derive :line ::element.hierarchy/shape)
+(element.hierarchy/derive-element :line ::element.hierarchy/shape)
 
 (defmethod element.hierarchy/properties :line
   []

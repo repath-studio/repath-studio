@@ -14,8 +14,6 @@
    [renderer.utils.svg :as utils.svg]
    [renderer.views :as views]))
 
-(derive :edit ::tool.hierarchy/tool)
-
 (defmethod tool.hierarchy/properties :edit
   []
   {:icon "edit"

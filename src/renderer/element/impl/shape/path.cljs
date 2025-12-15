@@ -11,7 +11,7 @@
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]))
 
-(derive :path ::element.hierarchy/shape)
+(element.hierarchy/derive-element :path ::element.hierarchy/shape)
 
 (defmethod element.hierarchy/properties :path
   []

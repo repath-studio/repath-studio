@@ -9,8 +9,6 @@
    [renderer.utils.length :as utils.length]
    [renderer.views :as views]))
 
-(derive :svg ::tool.hierarchy/element)
-
 (defmethod tool.hierarchy/properties :svg
   []
   {:icon "svg"

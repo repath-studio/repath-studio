@@ -14,7 +14,9 @@
    [renderer.utils.length :as utils.length]
    [renderer.utils.svg :as utils.svg]))
 
-(derive ::element.hierarchy/poly ::element.hierarchy/shape)
+(element.hierarchy/derive-element
+ ::element.hierarchy/poly
+ ::element.hierarchy/shape)
 
 (def partition-to-px
   (comp (map utils.length/unit->px)

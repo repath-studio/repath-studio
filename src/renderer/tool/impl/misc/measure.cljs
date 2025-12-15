@@ -13,8 +13,6 @@
    [renderer.utils.math :as utils.math]
    [renderer.utils.svg :as utils.svg]))
 
-(derive :measure ::tool.hierarchy/tool)
-
 (defonce measure-attrs (reagent/atom nil))
 
 (rf/reg-fx

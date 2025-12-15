@@ -9,7 +9,7 @@
    [renderer.element.subs :as-alias element.subs]
    [renderer.event.impl.pointer :as event.impl.pointer]))
 
-(derive :svg ::element.hierarchy/container)
+(element.hierarchy/derive-element :svg ::element.hierarchy/container)
 
 (defmethod element.hierarchy/properties :svg
   []

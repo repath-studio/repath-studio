@@ -297,8 +297,12 @@
   [tag]
   (merge (when (element.db/tag? tag)
            (merge (->attrs-memo (or (tag (:elements svg-data)) {}))
-                  (when (or (isa? tag ::element.hierarchy/shape)
-                            (isa? tag ::element.hierarchy/container))
+                  (when (or (isa? @element.hierarchy/hierarchy
+                                  tag
+                                  ::element.hierarchy/shape)
+                            (isa? @element.hierarchy/hierarchy
+                                  tag
+                                  ::element.hierarchy/container))
                     (zipmap core (repeat "")))))
          (when (contains? #{:animateMotion :animateTransform} tag)
            (->attrs-memo (:animate (:elements svg-data))))

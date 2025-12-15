@@ -4,8 +4,8 @@
   (:require
    [renderer.element.hierarchy :as element.hierarchy]))
 
-(derive :image ::element.hierarchy/graphics)
-(derive :image ::element.hierarchy/box)
+(element.hierarchy/derive-element :image ::element.hierarchy/graphics)
+(element.hierarchy/derive-element :image ::element.hierarchy/box)
 
 (defmethod element.hierarchy/properties :image
   []

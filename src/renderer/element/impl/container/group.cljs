@@ -10,7 +10,7 @@
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]))
 
-(derive :g ::element.hierarchy/container)
+(element.hierarchy/derive-element :g ::element.hierarchy/container)
 
 (defmethod element.hierarchy/properties :g
   []

@@ -5,8 +5,6 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]))
 
-(derive :text ::tool.hierarchy/element)
-
 (defmethod tool.hierarchy/properties :text
   []
   {:icon "text"

@@ -12,7 +12,7 @@
    [renderer.utils.length :as utils.length]
    [renderer.utils.svg :as utils.svg]))
 
-(derive :ellipse ::element.hierarchy/shape)
+(element.hierarchy/derive-element :ellipse ::element.hierarchy/shape)
 
 (defmethod element.hierarchy/properties :ellipse
   []
