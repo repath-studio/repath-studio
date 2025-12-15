@@ -15,17 +15,17 @@
          computed-mode (rf/subscribe [::theme.subs/computed-mode])]
 
      (testing "default theme"
-       (is (= :system @theme-mode))
-       (is (= :light @computed-mode)))
+       (is (= :dark @theme-mode))
+       (is (= :dark @computed-mode)))
 
      (testing "theme cycling"
-       (rf/dispatch [::theme.events/set-mode :dark])
-       (is (= :dark @theme-mode))
-       (is (= :dark @computed-mode))
-
        (rf/dispatch [::theme.events/set-mode :light])
        (is (= :light @theme-mode))
        (is (= :light @computed-mode))
+
+       (rf/dispatch [::theme.events/set-mode :dark])
+       (is (= :dark @theme-mode))
+       (is (= :dark @computed-mode))
 
        (rf/dispatch [::theme.events/set-mode :system])
        (is (= :system @theme-mode))
