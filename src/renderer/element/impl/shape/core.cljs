@@ -15,7 +15,9 @@
    [renderer.element.subs :as-alias element.subs]
    [renderer.utils.element :as utils.element]))
 
-(derive ::element.hierarchy/shape ::element.hierarchy/graphics)
+(element.hierarchy/derive-element
+ ::element.hierarchy/shape
+ ::element.hierarchy/graphics)
 
 (defmethod element.hierarchy/render-to-string ::element.hierarchy/shape
   [el]

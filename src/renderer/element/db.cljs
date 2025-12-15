@@ -7,7 +7,8 @@
 
 (defn tag?
   [k]
-  (contains? (descendants ::element.hierarchy/element) k))
+  (contains? (descendants @element.hierarchy/hierarchy
+                          ::element.hierarchy/element) k))
 
 (def ElementTag
   [:fn {:error/fn (fn [{:keys [value]} _]

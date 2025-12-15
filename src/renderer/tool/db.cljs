@@ -1,17 +1,9 @@
 (ns renderer.tool.db
   (:require
    [renderer.element.db :refer [ElementId]]
-   [renderer.i18n.db :refer [Translation]]
-   [renderer.tool.hierarchy :as tool.hierarchy]))
+   [renderer.i18n.db :refer [Translation]]))
 
-(defn tool?
-  [tool]
-  (isa? tool ::tool.hierarchy/tool))
-
-(def Tool
-  [:fn {:error/fn (fn [{:keys [value]} _]
-                    (str value " is not a supported tool"))}
-   tool?])
+(def Tool keyword?)
 
 (def State [:enum :idle :translate :clone :scale :select :create :edit :type])
 

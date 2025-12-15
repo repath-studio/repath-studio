@@ -10,8 +10,6 @@
    [renderer.utils.length :as utils.length]
    [renderer.views :as views]))
 
-(derive :rect ::tool.hierarchy/element)
-
 (defmethod tool.hierarchy/properties :rect
   []
   {:icon "rectangle-tool"

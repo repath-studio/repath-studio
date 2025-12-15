@@ -3,7 +3,7 @@
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.views :as attribute.views]))
 
-(derive :opacity ::range)
+(attribute.hierarchy/derive-attribute :opacity ::range)
 
 (defmethod attribute.hierarchy/form-element [:default ::range]
   [_ k v attrs]

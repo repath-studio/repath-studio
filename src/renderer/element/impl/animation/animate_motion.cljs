@@ -4,7 +4,9 @@
   (:require
    [renderer.element.hierarchy :as element.hierarchy]))
 
-(derive :animateMotion ::element.hierarchy/animation)
+(element.hierarchy/derive-element
+ :animateMotion
+ ::element.hierarchy/animation)
 
 (defmethod element.hierarchy/properties :animateMotion
   []

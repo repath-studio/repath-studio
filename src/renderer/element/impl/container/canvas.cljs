@@ -19,7 +19,9 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.svg :as utils.svg]))
 
-(derive :canvas ::element.hierarchy/element)
+(element.hierarchy/derive-element
+ :canvas
+ ::element.hierarchy/element)
 
 (defmethod element.hierarchy/properties :canvas
   []

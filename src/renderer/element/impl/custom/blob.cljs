@@ -20,9 +20,9 @@
    [renderer.utils.svg :as utils.svg]
    [renderer.views :as views]))
 
-(derive :blob ::element.hierarchy/renderable)
+(element.hierarchy/derive-element :blob ::element.hierarchy/renderable)
 
-(derive :size ::attribute.impl.length/length)
+(attribute.hierarchy/derive-attribute :size ::attribute.impl.length/length)
 
 (defmethod attribute.hierarchy/form-element [:blob :extraPoints]
   [_ k v attrs]

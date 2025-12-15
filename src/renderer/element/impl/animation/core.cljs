@@ -8,7 +8,9 @@
    [renderer.element.impl.animation.animate-transform]
    [renderer.element.subs :as-alias element.subs]))
 
-(derive ::element.hierarchy/animation ::element.hierarchy/descriptive)
+(element.hierarchy/derive-element
+ ::element.hierarchy/animation
+ ::element.hierarchy/descriptive)
 
 (defmethod element.hierarchy/render ::element.hierarchy/animation
   [el]

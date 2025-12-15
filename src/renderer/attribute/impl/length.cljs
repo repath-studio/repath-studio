@@ -9,25 +9,23 @@
    [renderer.utils.length :as utils.length]
    [renderer.views :as views]))
 
-(derive :x ::length)
-(derive :y ::length)
-(derive :x1 ::length)
-(derive :y1 ::length)
-(derive :x2 ::length)
-(derive :y2 ::length)
-(derive :cx ::length)
-(derive :cy ::length)
-(derive :dx ::length)
-(derive :dy ::length)
-
-(derive ::positive-length ::length)
-
-(derive :width ::positive-length)
-(derive :height ::positive-length)
-(derive :stroke-width ::positive-length)
-(derive :r ::positive-length)
-(derive :rx ::positive-length)
-(derive :ry ::positive-length)
+(attribute.hierarchy/derive-attribute :x ::length)
+(attribute.hierarchy/derive-attribute :y ::length)
+(attribute.hierarchy/derive-attribute :x1 ::length)
+(attribute.hierarchy/derive-attribute :y1 ::length)
+(attribute.hierarchy/derive-attribute :x2 ::length)
+(attribute.hierarchy/derive-attribute :y2 ::length)
+(attribute.hierarchy/derive-attribute :cx ::length)
+(attribute.hierarchy/derive-attribute :cy ::length)
+(attribute.hierarchy/derive-attribute :dx ::length)
+(attribute.hierarchy/derive-attribute :dy ::length)
+(attribute.hierarchy/derive-attribute ::positive-length ::length)
+(attribute.hierarchy/derive-attribute :width ::positive-length)
+(attribute.hierarchy/derive-attribute :height ::positive-length)
+(attribute.hierarchy/derive-attribute :stroke-width ::positive-length)
+(attribute.hierarchy/derive-attribute :r ::positive-length)
+(attribute.hierarchy/derive-attribute :rx ::positive-length)
+(attribute.hierarchy/derive-attribute :ry ::positive-length)
 
 (defmethod attribute.hierarchy/form-element [:default ::length]
   [_ k v {:keys [disabled placeholder]}]

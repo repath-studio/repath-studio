@@ -3,7 +3,7 @@
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/polyline"
   (:require [renderer.element.hierarchy :as element.hierarchy]))
 
-(derive :polyline ::element.hierarchy/poly)
+(element.hierarchy/derive-element :polyline ::element.hierarchy/poly)
 
 (defmethod element.hierarchy/properties :polyline
   []

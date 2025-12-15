@@ -13,8 +13,6 @@
    [renderer.utils.svg :as utils.svg]
    [renderer.views :as views]))
 
-(derive :zoom ::tool.hierarchy/tool)
-
 (defonce select-box (reagent/atom nil))
 
 (rf/reg-fx

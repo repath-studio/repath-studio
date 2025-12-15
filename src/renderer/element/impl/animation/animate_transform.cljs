@@ -4,7 +4,9 @@
   (:require
    [renderer.element.hierarchy :as element.hierarchy]))
 
-(derive :animateTransform ::element.hierarchy/animation)
+(element.hierarchy/derive-element
+ :animateTransform
+ ::element.hierarchy/animation)
 
 (defmethod element.hierarchy/properties :animateTransform
   []

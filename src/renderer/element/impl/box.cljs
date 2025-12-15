@@ -9,7 +9,9 @@
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]))
 
-(derive ::element.hierarchy/box ::element.hierarchy/renderable)
+(element.hierarchy/derive-element
+ ::element.hierarchy/box
+ ::element.hierarchy/renderable)
 
 (defmethod element.hierarchy/translate ::element.hierarchy/box
   [el [x y]]

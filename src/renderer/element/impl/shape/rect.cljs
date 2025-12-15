@@ -12,8 +12,8 @@
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]))
 
-(derive :rect ::element.hierarchy/box)
-(derive :rect ::element.hierarchy/shape)
+(element.hierarchy/derive-element :rect ::element.hierarchy/box)
+(element.hierarchy/derive-element :rect ::element.hierarchy/shape)
 
 (defmethod element.hierarchy/properties :rect
   []
