@@ -15,6 +15,8 @@
    [renderer.tool.impl.element.svg]
    [renderer.tool.impl.element.text]))
 
+(tool.hierarchy/derive-tool ::tool.hierarchy/element ::tool.hierarchy/tool)
+
 (defmethod tool.hierarchy/help [::tool.hierarchy/element :idle]
   []
   (i18n.views/t [::help "Click and drag to create an element."]))

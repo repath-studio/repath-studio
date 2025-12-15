@@ -10,6 +10,8 @@
    [renderer.utils.element :as utils.element]
    [renderer.utils.path :as utils.path]))
 
+(tool.hierarchy/derive-tool :pen ::tool.hierarchy/draw)
+
 (defmethod tool.hierarchy/properties :pen
   []
   {:icon "pencil"

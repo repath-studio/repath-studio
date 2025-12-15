@@ -6,6 +6,8 @@
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.element.poly :as poly]))
 
+(tool.hierarchy/derive-tool :polygon ::tool.hierarchy/poly)
+
 (defmethod tool.hierarchy/properties :polygon
   []
   {:icon "polygon-tool"

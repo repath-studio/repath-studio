@@ -10,6 +10,8 @@
    [renderer.utils.length :as utils.length]
    [renderer.views :as views]))
 
+(tool.hierarchy/derive-tool :ellipse ::tool.hierarchy/element)
+
 (defmethod tool.hierarchy/properties :ellipse
   []
   {:icon "ellipse-tool"

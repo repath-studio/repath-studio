@@ -12,6 +12,8 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]))
 
+(tool.hierarchy/derive-tool :dropper ::tool.hierarchy/tool)
+
 (defmethod tool.hierarchy/properties :dropper
   []
   {:icon "eye-dropper"

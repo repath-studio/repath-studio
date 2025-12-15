@@ -9,6 +9,8 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]))
 
+(tool.hierarchy/derive-tool :pan ::tool.hierarchy/tool)
+
 (defmethod tool.hierarchy/properties :pan
   []
   {:icon "hand"

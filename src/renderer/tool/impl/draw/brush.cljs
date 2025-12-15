@@ -14,6 +14,8 @@
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]))
 
+(tool.hierarchy/derive-tool :brush ::tool.hierarchy/draw)
+
 (defmethod tool.hierarchy/properties :brush
   []
   {:icon "brush"

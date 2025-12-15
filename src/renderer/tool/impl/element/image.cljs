@@ -11,6 +11,8 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]))
 
+(tool.hierarchy/derive-tool :image ::tool.hierarchy/element)
+
 (defmethod tool.hierarchy/properties :image
   []
   {:icon "image"

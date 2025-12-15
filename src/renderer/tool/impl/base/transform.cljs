@@ -38,6 +38,8 @@
                   :bottom-right
                   :bottom-left])
 
+(tool.hierarchy/derive-tool :transform ::tool.hierarchy/tool)
+
 (defonce select-box (reagent/atom nil))
 
 (rf/reg-fx

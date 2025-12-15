@@ -8,6 +8,8 @@
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.utils.element :as utils.element]))
 
+(tool.hierarchy/derive-tool :fill ::tool.hierarchy/tool)
+
 (defmethod tool.hierarchy/properties :fill
   []
   {:icon "fill"

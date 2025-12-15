@@ -9,6 +9,8 @@
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.utils.length :as utils.length]))
 
+(tool.hierarchy/derive-tool :line ::tool.hierarchy/element)
+
 (defmethod tool.hierarchy/properties :line
   []
   {:icon "line-tool"
