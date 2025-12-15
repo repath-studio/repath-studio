@@ -72,85 +72,68 @@
 
 (defn ^:export circle
   "Creates a circle."
-  ([[cx cy] r]
-   (circle [cx cy] r nil))
-  ([[cx cy] r attrs]
-   (create {:tag :circle
-            :attrs (merge {:cx cx
-                           :cy cy
-                           :r r} attrs)})))
+  [[cx cy] r & {:as attrs}]
+  (create {:tag :circle
+           :attrs (merge {:cx cx
+                          :cy cy
+                          :r r} attrs)}))
 
 (defn ^:export rect
   "Creates a rectangle."
-  ([[x y] width height]
-   (rect [x y] width height nil))
-  ([[x y] width height attrs]
-   (create {:tag :rect
-            :attrs (merge {:x x
-                           :y y
-                           :width width
-                           :height height} attrs)})))
+  [x y width height & {:as attrs}]
+  (create {:tag :rect
+           :attrs (merge {:x x
+                          :y y
+                          :width width
+                          :height height} attrs)}))
 
 (defn ^:export line
   "Creates a line."
-  ([[[x1 y1] [x2 y2]]]
-   (line [x1 y1] [x2 y2] {:stroke "#000000"}))
-  ([[x1 y1] [x2 y2]]
-   (line [x1 y1] [x2 y2] {:stroke "#000000"}))
-  ([[x1 y1] [x2 y2] attrs]
-   (create {:tag :line
-            :attrs (merge {:x1 x1
-                           :y1 y1
-                           :x2 x2
-                           :y2 y2} attrs)})))
+  [[x1 y1] [x2 y2] & {:as attrs}]
+  (create {:tag :line
+           :attrs (merge {:x1 x1
+                          :y1 y1
+                          :x2 x2
+                          :y2 y2
+                          :stroke "#000000"} attrs)}))
 
 (defn ^:export polygon
   "Creates a polygon."
-  ([points]
-   (polygon points {:stroke "#000000"}))
-  ([points attrs]
-   (create {:tag :polygon
-            :attrs (merge {:points (string/join " " (flatten points))}
-                          attrs)})))
+  [points & {:as attrs}]
+  (create {:tag :polygon
+           :attrs (merge {:points (string/join " " (flatten points))}
+                         attrs)}))
 
 (defn ^:export polyline
   "Creates a polyline."
-  ([points]
-   (polyline points {:stroke "#000000"}))
-  ([points attrs]
-   (create {:tag :polyline
-            :attrs (merge {:points (string/join " " (flatten points))}
-                          attrs)})))
+  [points & {:as attrs}]
+  (create {:tag :polyline
+           :attrs (merge {:points (string/join " " (flatten points))}
+                         attrs)}))
 
 (defn ^:export path
   "Creates a path."
-  ([path-commands]
-   (path path-commands {:stroke "#000000"}))
-  ([path-commands attrs]
-   (create {:path (merge {:d (string/join " " (flatten path-commands))}
-                         attrs)})))
+  [path-commands & {:as attrs}]
+  (create {:path (merge {:d (string/join " " (flatten path-commands))}
+                        attrs)}))
 
 (defn ^:export image
   "Creates an image."
-  ([[x y] width height href]
-   (image [x y] width height href nil))
-  ([[x y] width height href attrs]
-   (create {:tag :image
-            :attrs (merge {:x x
-                           :y y
-                           :width width
-                           :height height
-                           :href href} attrs)})))
+  [[x y] width height href & {:as attrs}]
+  (create {:tag :image
+           :attrs (merge {:x x
+                          :y y
+                          :width width
+                          :height height
+                          :href href} attrs)}))
 
 (defn ^:export text
   "Creates a text element."
-  ([[x y] content]
-   (text [x y] content nil))
-  ([[x y] content attrs]
-   (create {:tag :text
-            :content content
-            :attrs (merge {:x x
-                           :y y} attrs)})))
+  [[x y] content & {:as attrs}]
+  (create {:tag :text
+           :content content
+           :attrs (merge {:x x
+                          :y y} attrs)}))
 
 (defn ^:export set-attr
   "Sets the attribute of the selected elements."
@@ -342,6 +325,7 @@
   "")
 
 ;; Expose all commands to global namespace.
+;; We might have to redeclare those functions for each language.
 (doseq [command (vals (ns-publics 'user))]
   (aset js/window (:name (meta command)) (.call ^js (.-val command))))
 
