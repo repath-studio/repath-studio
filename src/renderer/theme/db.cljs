@@ -8,5 +8,5 @@
 
 (def Theme
   [:map {:closed true}
-   [:mode {:default :system} ThemeMode]
+   [:mode {:default :dark} ThemeMode]
    [:native-mode {:optional true} NativeMode]])
