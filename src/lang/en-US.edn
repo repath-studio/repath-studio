@@ -685,7 +685,8 @@
   :close-doc "Close document"
   :close-all "Close all"
   :close-saved "Close saved"
-  :close-others "Close others"}
+  :close-others "Close others"
+  :more-actions "More document actions"}
 
  :renderer.window.views
  {:minimize "Minimize"

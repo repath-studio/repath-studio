@@ -160,13 +160,11 @@
      [:> DropdownMenu/Trigger
       {:as-child true}
       [:button.button.flex.items-center.justify-center.px-2.font-mono.rounded
-       {:aria-label "More document actions"}
+       {:title (i18n.views/t [::more-actions "More document actions"])}
        [:div.flex.gap-1.items-center
         (when-not (or md? (= document-count 1))
           document-count)
-        [views/icon (if md?
-                      "ellipsis-h"
-                      "chevron-down")]]]]
+        [views/icon (if md? "ellipsis-h" "chevron-down")]]]]
      [:> DropdownMenu/Portal
       (cond->> [{:label [::close-all "Close all"]
                  :key :close-all

@@ -711,7 +711,8 @@
   :close-doc "Chiudi documento"
   :close-all "Chiudi tutto"
   :close-saved "Chiudi salvati"
-  :close-others "Chiudi altri"}
+  :close-others "Chiudi altri"
+  :more-actions "Altre azioni del documento"}
 
  :renderer.window.views
  {:minimize "Riduci a icona"

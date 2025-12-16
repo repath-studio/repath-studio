@@ -32,10 +32,7 @@
   [:> DropdownMenu/Root
    [:> DropdownMenu/Trigger
     {:as-child true}
-    [:button.button
-     {:class "flex gap-1 items-center px-3 uppercase bg-primary font-mono
-                  outline-inset"}
-     trigger-content]]
+    trigger-content]
    [:> DropdownMenu/Portal
     (into [:> DropdownMenu/Content
            {:side "bottom"
@@ -113,10 +110,19 @@
            :on-click #(rf/dispatch [::app.events/install])}])
        (when (or md? mac?)
          [:<>
-          [dropdown code (->> (menubar.views/languages-submenu)
-                              (mapv (partial language-item system-code)))]
           [dropdown
-           [views/icon (name theme-mode)]
+           [:button.button
+            {:title (i18n.views/t [::menubar.views/language "Language"])
+             :class "flex gap-1 items-center px-3 uppercase bg-primary font-mono
+                     outline-inset"}
+            code]
+           (->> (menubar.views/languages-submenu)
+                (mapv (partial language-item system-code)))]
+          [dropdown
+           [:button.button
+            {:title (i18n.views/t [::menubar.views/theme-mode "Theme Mode"])
+             :class "flex gap-1 items-center px-3 bg-primary outline-inset"}
+            [views/icon (name theme-mode)]]
            (->> menubar.views/theme-mode-submenu
                 (mapv views/dropdown-menu-item))]])
        (when (or fullscreen? mac? (and web? md?))

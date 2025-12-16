@@ -709,7 +709,8 @@
   :close-doc "Fermer le document"
   :close-all "Fermer tout"
   :close-saved "Fermer les enregistrés"
-  :close-others "Fermer les autres"}
+  :close-others "Fermer les autres"
+  :more-actions "Plus d'actions du document"}
 
  :renderer.window.views
  {:minimize "Réduire"

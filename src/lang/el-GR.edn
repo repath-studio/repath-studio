@@ -721,7 +721,8 @@
   :close-doc "Κλείσιμο εγγράφου"
   :close-all "Κλείσιμο όλων"
   :close-saved "Κλείσιμο αποθηκευμένων"
-  :close-others "Κλείσιμο άλλων"}
+  :close-others "Κλείσιμο άλλων"
+  :more-actions "Περισσότερες ενέργειες εγγράφου"}
 
  :renderer.window.views
  {:minimize "Ελαχιστοποίηση"

@@ -674,7 +674,8 @@
   :close-doc "إغلاق المستند"
   :close-all "إغلاق الكل"
   :close-saved "إغلاق المحفوظة"
-  :close-others "إغلاق الآخرين"}
+  :close-others "إغلاق الآخرين"
+  :more-actions "المزيد من إجراءات المستند"}
 
  :renderer.window.views
  {:minimize "تصغير"

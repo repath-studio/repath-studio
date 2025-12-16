@@ -621,7 +621,8 @@
   :close-doc "关闭文档"
   :close-all "关闭全部"
   :close-saved "关闭已保存"
-  :close-others "关闭其他"}
+  :close-others "关闭其他"
+  :more-actions "更多文档操作"}
 
  :renderer.window.views
  {:minimize "最小化"

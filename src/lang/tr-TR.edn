@@ -693,7 +693,8 @@
   :close-doc "Belgeyi kapat"
   :close-all "Tümünü kapat"
   :close-saved "Kaydedilenleri kapat"
-  :close-others "Diğerlerini kapat"}
+  :close-others "Diğerlerini kapat"
+  :more-actions "Daha fazla belge işlemi"}
 
  :renderer.window.views
  {:minimize "Küçült"

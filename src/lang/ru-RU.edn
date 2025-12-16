@@ -694,7 +694,8 @@
   :close-doc "Закрыть документ"
   :close-all "Закрыть всё"
   :close-saved "Закрыть сохранённые"
-  :close-others "Закрыть остальные"}
+  :close-others "Закрыть остальные"
+  :more-actions "Другие действия с документом"}
 
  :renderer.window.views
  {:minimize "Свернуть"

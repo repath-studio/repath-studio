@@ -699,7 +699,8 @@
   :close-doc "Stäng dokument"
   :close-all "Stäng alla"
   :close-saved "Stäng sparade"
-  :close-others "Stäng andra"}
+  :close-others "Stäng andra"
+  :more-actions "Fler dokumentåtgärder"}
 
  :renderer.window.views
  {:minimize "Minimera"

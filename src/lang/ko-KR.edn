@@ -655,7 +655,8 @@
   :close-doc "문서 닫기"
   :close-all "모두 닫기"
   :close-saved "저장된 것 닫기"
-  :close-others "다른 것들 닫기"}
+  :close-others "다른 것들 닫기"
+  :more-actions "더 많은 문서 작업"}
 
  :renderer.window.views
  {:minimize "최소화"

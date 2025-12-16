@@ -659,7 +659,8 @@
   :close-doc "ドキュメントを閉じる"
   :close-all "すべて閉じる"
   :close-saved "保存済みを閉じる"
-  :close-others "他を閉じる"}
+  :close-others "他を閉じる"
+  :more-actions "その他のドキュメント操作"}
 
  :renderer.window.views
  {:minimize "最小化"
