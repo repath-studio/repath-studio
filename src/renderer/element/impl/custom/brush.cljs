@@ -9,6 +9,7 @@
    [renderer.attribute.impl.range :as attribute.impl.range]
    [renderer.attribute.views :as attribute.views]
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.event.handlers :as event.handlers]
    [renderer.event.impl.pointer :as event.impl.pointer]
    [renderer.tool.views :as tool.views]
    [renderer.utils.attribute :as utils.attribute]
@@ -38,7 +39,7 @@
   [:size :thinning :smoothing :streamline])
 
 (attribute.hierarchy/derive-attribute :thinning ::attribute.impl.range/range)
-(attribute.hierarchy/derive-attribute :smoothing :attribute.impl.range/range)
+(attribute.hierarchy/derive-attribute :smoothing ::attribute.impl.range/range)
 (attribute.hierarchy/derive-attribute :streamline ::attribute.impl.range/range)
 
 (defmethod attribute.hierarchy/form-element [:brush :size]
@@ -192,3 +193,19 @@
                                                   :action :edit
                                                   :element-id (:id el)}]))
                    (-> el :attrs :points points->vec))])
+
+(defmethod element.hierarchy/edit :brush
+  [el offset handle e]
+  (let [index (js/parseInt (name handle))
+        [x y] (cond-> offset
+                (:ctrl-key e)
+                (event.handlers/lock-direction))
+        transform-point (fn [[px py pressure]]
+                          (vector (utils.length/transform px + x)
+                                  (utils.length/transform py + y)
+                                  pressure))]
+    (update-in el [:attrs :points] #(-> (points->vec %)
+                                        (update index transform-point)
+                                        (flatten)
+                                        (->> (string/join " ")
+                                             (string/trim))))))
