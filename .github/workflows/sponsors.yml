@@ -18,6 +18,7 @@ jobs:
         uses: JamesIves/github-sponsors-readme-action@v1
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          minimum: 1000
           file: 'README.md'
 
       - name: Deploy to GitHub Pages 🚀
