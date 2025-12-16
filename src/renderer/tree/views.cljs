@@ -46,38 +46,37 @@
     (.focus (tree.effects/query-by-id! id))))
 
 (defn item-label
-  [el]
+  [el edit-mode?]
   (let [{:keys [id label visible selected tag]} el
         properties (element.hierarchy/properties tag)
         tag-label (or (some-> properties :label i18n.views/t)
                       (string/capitalize (name tag)))]
-    (reagent/with-let [edit-mode? (reagent/atom false)]
-      (if @edit-mode?
-        [:input.bg-transparent.w-full
-         {:class ["font-[inherit]! leading-[inherit]!"
-                  (when (= :svg tag) "font-bold")]
-          :default-value label
-          :placeholder tag-label
-          :auto-focus true
-          :draggable true ; Prevents drag of parent.
-          :enter-key-hint "done"
-          :on-drag-start #(.preventDefault %)
-          :on-focus #(.. % -target select)
-          :on-key-down #(utils.key/down-handler! % label set-item-label! id)
-          :on-blur (fn [e]
-                     (reset! edit-mode? false)
-                     (set-item-label! e id))}]
-        [:div.flex.w-full.overflow-hidden
-         [:div.truncate
-          {:class [(when-not visible "opacity-60")
-                   (when (= :svg tag) "font-bold")]
-           :style {:cursor (when selected "text")}
-           :on-double-click (fn [e]
-                              (.stopPropagation e)
-                              (reset! edit-mode? true))}
-          (if (empty? label)
-            tag-label
-            label)]]))))
+    (if @edit-mode?
+      [:input.bg-transparent.w-full
+       {:class ["font-[inherit]! leading-[inherit]!"
+                (when (= :svg tag) "font-bold")]
+        :default-value label
+        :placeholder tag-label
+        :auto-focus true
+        :draggable true ; Prevents drag of parent.
+        :enter-key-hint "done"
+        :on-drag-start #(.preventDefault %)
+        :on-focus #(.. % -target select)
+        :on-key-down #(utils.key/down-handler! % label set-item-label! id)
+        :on-blur (fn [e]
+                   (reset! edit-mode? false)
+                   (set-item-label! e id))}]
+      [:div.flex.w-full.overflow-hidden
+       [:div.truncate
+        {:class [(when-not visible "opacity-60")
+                 (when (= :svg tag) "font-bold")]
+         :style {:cursor (when selected "text")}
+         :on-double-click (fn [e]
+                            (.stopPropagation e)
+                            (reset! edit-mode? true))}
+        (if (empty? label)
+          tag-label
+          label)]])))
 
 (defn drop-handler!
   [e parent-id]
@@ -92,7 +91,7 @@
   (reset! last-focused-id id))
 
 (defn key-down-handler!
-  [e id]
+  [e id edit-mode?]
   (case (.-code e)
     "ArrowUp"
     (do (.stopPropagation e)
@@ -118,6 +117,10 @@
     (do (.stopPropagation e)
         (rf/dispatch [::element.events/select id (.-ctrlKey e)]))
 
+    "KeyE"
+    (do (.stopPropagation e)
+        (reset! edit-mode? true))
+
     nil))
 
 (defn collapse-button
@@ -139,52 +142,53 @@
         md? @(rf/subscribe [::window.subs/md?])
         collapse-button-width (if md? 21 27) ; TODO: Get from CSS variable.
         padding (* collapse-button-width (cond-> depth (seq children) dec))]
-    [:div.list-item-button.button.flex.px-1.items-center.text-start.group
-     {:class ["hover:bg-overlay outline-inset"
-              (when selected "accent")
-              (when hovered "bg-overlay")
-              (when-not md? "h-10")]
-      :tab-index 0
-      :data-id (str id)
-      :on-double-click #(rf/dispatch [::frame.events/pan-to-element id])
-      :on-pointer-enter #(rf/dispatch [::document.events/set-hovered-id id])
-      :ref (fn [this]
-             (when (and this selected)
-               (rf/dispatch [::events/scroll-into-view this])
-               (set-last-focused-id! (.getAttribute this "data-id"))))
-      :draggable true
-      :on-key-down #(key-down-handler! % id)
-      :on-drag-start #(-> % .-dataTransfer (.setData "id" (str id)))
-      :on-drag-enter #(rf/dispatch [::document.events/set-hovered-id id])
-      :on-drag-over #(.preventDefault %)
-      :on-drop #(drop-handler! % id)
-      :on-pointer-down #(when (= (.-button %) 2)
-                          (rf/dispatch [::element.events/select
-                                        id (.-ctrlKey %)]))
-      :on-click (fn [e]
-                  (.stopPropagation e)
-                  (if (.-shiftKey e)
-                    (rf/dispatch-sync [::tree.events/select-range
-                                       @last-focused-id id])
-                    (do (rf/dispatch [::element.events/select id (.-ctrlKey e)])
-                        (reset! last-focused-id id))))}
-     [:div.shrink-0 {:style {:flex-basis padding}}]
-     [:div.flex-1.flex.items-center.justify-between.w-full.overflow-hidden
-      (when (seq children)
-        [collapse-button id collapsed])
-      [:div.flex-1.overflow-hidden.flex.items-center
-       {:class "gap-1.5"}
-       (when-let [icon (:icon (utils.element/properties el))]
-         [views/icon icon {:class (when-not visible "opacity-60")}])
-       [item-label el]]
-      [item-prop-toggle id
-       locked :locked
-       "lock" "unlock"
-       [::unlock "Unlock"] [::lock "Lock"]]
-      [item-prop-toggle id
-       (not visible) :visible
-       "eye-closed" "eye"
-       [::show "Show"] [::hide "Hide"]]]]))
+    (reagent/with-let [edit-mode? (reagent/atom false)]
+      [:div.list-item-button.button.flex.px-1.items-center.text-start.group
+       {:class ["hover:bg-overlay outline-inset"
+                (when selected "accent")
+                (when hovered "bg-overlay")
+                (when-not md? "h-10")]
+        :tab-index 0
+        :data-id (str id)
+        :on-double-click #(rf/dispatch [::frame.events/pan-to-element id])
+        :on-pointer-enter #(rf/dispatch [::document.events/set-hovered-id id])
+        :ref (fn [this]
+               (when (and this selected)
+                 (rf/dispatch [::events/scroll-into-view this])
+                 (set-last-focused-id! (.getAttribute this "data-id"))))
+        :draggable true
+        :on-key-down #(key-down-handler! % id edit-mode?)
+        :on-drag-start #(-> % .-dataTransfer (.setData "id" (str id)))
+        :on-drag-enter #(rf/dispatch [::document.events/set-hovered-id id])
+        :on-drag-over #(.preventDefault %)
+        :on-drop #(drop-handler! % id)
+        :on-pointer-down #(when (= (.-button %) 2)
+                            (rf/dispatch [::element.events/select
+                                          id (.-ctrlKey %)]))
+        :on-click (fn [e]
+                    (.stopPropagation e)
+                    (if (.-shiftKey e)
+                      (rf/dispatch-sync [::tree.events/select-range
+                                         @last-focused-id id])
+                      (do (rf/dispatch [::element.events/select id (.-ctrlKey e)])
+                          (reset! last-focused-id id))))}
+       [:div.shrink-0 {:style {:flex-basis padding}}]
+       [:div.flex-1.flex.items-center.justify-between.w-full.overflow-hidden
+        (when (seq children)
+          [collapse-button id collapsed])
+        [:div.flex-1.overflow-hidden.flex.items-center
+         {:class "gap-1.5"}
+         (when-let [icon (:icon (utils.element/properties el))]
+           [views/icon icon {:class (when-not visible "opacity-60")}])
+         [item-label el edit-mode?]]
+        [item-prop-toggle id
+         locked :locked
+         "lock" "unlock"
+         [::unlock "Unlock"] [::lock "Lock"]]
+        [item-prop-toggle id
+         (not visible) :visible
+         "eye-closed" "eye"
+         [::show "Show"] [::hide "Hide"]]]])))
 
 (defn item [el depth elements]
   (let [{:keys [selected children id]} el
