@@ -170,7 +170,8 @@
                     (if (.-shiftKey e)
                       (rf/dispatch-sync [::tree.events/select-range
                                          @last-focused-id id])
-                      (do (rf/dispatch [::element.events/select id (.-ctrlKey e)])
+                      (do (rf/dispatch [::element.events/select
+                                        id (.-ctrlKey e)])
                           (reset! last-focused-id id))))}
        [:div.shrink-0 {:style {:flex-basis padding}}]
        [:div.flex-1.flex.items-center.justify-between.w-full.overflow-hidden
