@@ -1,9 +1,25 @@
 (ns renderer.panel.views
   (:require
-   ["react-resizable-panels" :refer [PanelResizeHandle]]))
+   ["react-resizable-panels" :refer [Group Panel Separator useDefaultLayout]]
+   [reagent.core :refer [defc]]))
 
-(defn resize-handle
-  [id]
-  [:> PanelResizeHandle
-   {:id id
-    :class "resize-handle"}])
+(defn separator []
+  [:> Separator
+   {:class "panel-separator"}])
+
+(defn panel
+  [props & children]
+  (into [:> Panel props] children))
+
+(defc group
+  [{:keys [id]
+    :as props} & children]
+  (let [{:keys [defaultLayout onLayoutChange]} (useDefaultLayout
+                                                #js {:groupId id,
+                                                     :storage js/localStorage})]
+    (into [:> Group
+           (merge {:class "grow"
+                   :defaultLayout defaultLayout
+                   :onLayoutChange onLayoutChange}
+                  props)]
+          children)))

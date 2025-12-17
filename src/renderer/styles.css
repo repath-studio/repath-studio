@@ -96,8 +96,8 @@ label {
 }
 
 .menu-content {
-  @apply bg-primary drop-shadow-lg p-1 z-10 rounded-sm no-drag min-w-[100px]
-  sm:min-w-[200px] border border-border;
+  @apply bg-primary drop-shadow-lg p-1 z-10 rounded-sm no-drag min-w-25
+  sm:min-w-50 border border-border;
 }
 
 .menu-item,
@@ -106,7 +106,7 @@ label {
 .menu-radio-item {
   all: unset;
   @apply button-size flex justify-between gap-4 text-foreground items-center
-  rounded-sm relative select-none px-[33px] py-1 md:py-0 wrap-anywhere;
+  rounded-sm relative select-none px-8.25 py-1 md:py-0 wrap-anywhere;
 }
 
 .menu-item[data-state='open'],
@@ -142,18 +142,16 @@ label {
   max-height: 80vh;
 }
 
-.resize-handle {
+.panel-separator {
   @apply relative;
 
   &:after {
+    @apply block absolute z-1;
     content: '';
-    display: block;
-    z-index: 1;
-    position: absolute;
     transition: background-color 0.3s;
   }
 
-  &[data-panel-group-direction='vertical'] {
+  &[aria-orientation='horizontal'] {
     @apply h-px;
 
     &:after {
@@ -163,7 +161,7 @@ label {
     }
   }
 
-  &[data-panel-group-direction='horizontal'] {
+  &[aria-orientation='vertical'] {
     @apply w-px;
 
     &:after {
@@ -173,7 +171,8 @@ label {
     }
   }
 
-  &[data-resize-handle-state='drag'] {
+  &[data-separator='active'],
+  &[data-separator='hover'] {
     &:after {
       @apply bg-accent;
     }

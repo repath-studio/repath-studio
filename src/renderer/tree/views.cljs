@@ -217,10 +217,9 @@
      {:class "hover:**:[&.list-item-button]:not-hover:bg-inherit"
       :on-click #(rf/dispatch [::element.events/deselect-all])}
      [views/scroll-area
-      [:ul.overflow-hidden
+      [:ul.overflow-hidden.w-full
        {:role "menu"
-        :on-pointer-leave #(rf/dispatch [::document.events/clear-hovered])
-        :class (if md? "w-[227px]" "w-full")}
+        :on-pointer-leave #(rf/dispatch [::document.events/clear-hovered])}
        (for [el (reverse root-children)]
          ^{:key (:id el)}
          [item el 1 elements])]]]))

@@ -4,7 +4,6 @@
    ["@radix-ui/react-select" :as Select]
    ["@radix-ui/react-tooltip" :as Tooltip]
    ["path-browserify" :as path-browserify]
-   ["react-resizable-panels" :refer [Panel PanelGroup]]
    [clojure.string :as string]
    [config :as config]
    [re-frame.core :as rf]
@@ -114,7 +113,7 @@
 
 (defn right-panel
   [active-tool]
-  [:div.flex.flex-col.h-full.bg-secondary
+  [:div.flex.flex-col.h-full.bg-secondary.grow
    [views/scroll-area
     (tool.hierarchy/right-panel active-tool)]
    [:div.bg-primary.grow.flex]])
@@ -191,61 +190,54 @@
 (defn center-top-group
   []
   [:div.flex.flex-col.flex-1.h-full
-   [:> PanelGroup
-    {:direction "horizontal"
-     :id "center-top-group"
-     :autoSaveId "center-top-group"}
-    [:div.flex.flex-1.overflow-hidden
-     [:> Panel
-      {:id "frame-panel"
-       :order 1}
-      [frame-panel]]
-     (when @(rf/subscribe [::window.subs/md?])
-       [:<>
-        (when @(rf/subscribe [::panel.subs/visible? :history])
-          [:<>
-           [panel.views/resize-handle "history-resize-handle"]
-           [:> Panel {:id "history-panel"
-                      :defaultSize 30
-                      :minSize 5
-                      :order 2}
-            [:div.bg-primary.h-full
-             [history.views/root]]]])
+   [panel.views/group
+    {:orientation "horizontal"
+     :id "center-top-group"}
+    [panel.views/panel
+     {:id "frame-panel"}
+     [frame-panel]]
+    (when @(rf/subscribe [::window.subs/md?])
+      [:<>
+       (when @(rf/subscribe [::panel.subs/visible? :history])
+         [:<>
+          [panel.views/separator]
+          [panel.views/panel {:id "history-panel"
+                              :defaultSize 30
+                              :minSize 5}
+           [:div.bg-primary.h-full
+            [history.views/root]]]])
 
-        (when @(rf/subscribe [::panel.subs/visible? :xml])
-          [:<>
-           [panel.views/resize-handle "xml-resize-handle"]
-           [:> Panel {:id "xml-panel"
-                      :defaultSize 30
-                      :minSize 5
-                      :order 3}
+       (when @(rf/subscribe [::panel.subs/visible? :xml])
+         [:<>
+          [panel.views/separator]
+          [panel.views/panel {:id "xml-panel"
+                              :defaultSize 30
+                              :minSize 5}
 
-            [:div.h-full.bg-primary.flex
-             [xml-panel]]]])])]]])
+           [:div.h-full.bg-primary.flex
+            [xml-panel]]]])])]])
 
 (defn editor
   []
   (let [timeline-visible @(rf/subscribe [::panel.subs/visible? :timeline])
         md? @(rf/subscribe [::window.subs/md?])]
-    [:> PanelGroup
-     {:direction "vertical"
-      :id "editor-group"
-      :autoSaveId "editor-group"}
-     [:> Panel {:id "editor-panel"
-                :minSize 20
-                :order 1}
+    [panel.views/group
+     {:orientation "vertical"
+      :id "editor-group"}
+     [panel.views/panel
+      {:id "editor-panel"
+       :minSize 20}
       [center-top-group]]
      [toolbar.status/root]
      (when md?
        [:<>
         (when timeline-visible
           [:<>
-           [panel.views/resize-handle "timeline-resize-handle"]
-           [:> Panel
+           [panel.views/separator]
+           [panel.views/panel
             {:id "timeline-panel"
              :minSize 10
-             :defaultSize 20
-             :order 2}
+             :defaultSize 20}
             [timeline.views/root]]])
         [repl.views/root]])]))
 
@@ -433,27 +425,53 @@
          (if documents?
            [:div.flex.flex-col.h-full.overflow-hidden
             [:div.flex.flex-1.overflow-hidden.gap-px
-             (when (and tree? md?)
-               [:div.flex.flex-col.overflow-hidden
-                [document.views/actions]
-                [tree.views/root]])
-             [:div.flex.flex-col.flex-1.overflow-hidden.h-full
-              (if md?
-                [document.views/tab-bar]
-                [:div.flex.overflow-hidden
-                 (when-not desktop?
-                   [views/toolbar [menubar.views/root]])
-                 [document.views/tab-bar]
-                 [:div.drag.flex-1]])
-              [:div.flex.h-full.flex-1.gap-px.overflow-hidden
-               [:div.flex.h-full.flex-col.flex-1.overflow-hidden.gap-px
-                [editor]]
-               (when md?
-                 [:div.flex.gap-px
-                  (when properties?
-                    [:div.w-80 [right-panel active-tool]])
-                  [:div.bg-primary.flex
-                   [toolbar.object/root]]])]]]
+             [panel.views/group
+              {:orientation "horizontal"
+               :id "main-group"}
+              (when (and tree? md?)
+                [panel.views/panel
+                 {:id "left-panel"
+                  :defaultSize "227px"
+                  :minSize "227px"
+                  :collapsible true}
+                 [:div.flex.flex-col.overflow-hidden
+                  [document.views/actions]
+                  [tree.views/root]]])
+              [panel.views/separator]
+              [panel.views/panel
+               {:id "center-panel"
+                :defaultSize "100"
+                :minSize "50px"}
+               [:div.flex.flex-col.flex-1.overflow-hidden.h-full
+                (if md?
+                  [document.views/tab-bar]
+                  [:div.flex.overflow-hidden
+                   (when-not desktop?
+                     [views/toolbar [menubar.views/root]])
+                   [document.views/tab-bar]
+                   [:div.drag.flex-1]])
+                [:div.flex.h-full.flex-1.gap-px.overflow-hidden
+                 [panel.views/group
+                  {:orientation "horizontal"
+                   :id "main-editor-group"}
+                  [panel.views/panel
+                   {:id "main-editor-panel"}
+                   [:div.flex.h-full.flex-col.flex-1.overflow-hidden.gap-px
+                    [editor]]]
+                  (when (and md? properties?)
+                    [:<>
+                     [panel.views/separator]
+                     [panel.views/panel
+                      {:id "right-panel"
+                       :defaultSize "320px"
+                       :minSize "250px"
+                       :collapsible true
+                       :class "flex gap-px"}
+                      (when properties?
+                        [right-panel active-tool])]])]
+                 (when md?
+                   [:div.bg-primary.flex
+                    [toolbar.object/root]])]]]]]
             (when-not md?
               [bottom-bar])]
            [home recent-documents])
