@@ -40,8 +40,8 @@
                    (.blur target))
       nil)))
 
-;; https://google.github.io/closure-library/api/goog.events.KeyCodes.html
 (def codes
+  "https://google.github.io/closure-library/api/goog.events.KeyCodes.html"
   (js->clj KeyCodes))
 
 (def key-chars

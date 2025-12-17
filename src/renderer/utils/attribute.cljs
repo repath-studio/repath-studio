@@ -9,11 +9,13 @@
    [renderer.element.db :as element.db :refer [ElementAttrs ElementTag]]
    [renderer.element.hierarchy :as element.hierarchy]))
 
-;; https://github.com/mdn/data/blob/main/docs/updating_css_json.md
-(def mdn-data (js->clj mdn :keywordize-keys true))
+(def mdn-data
+  "https://github.com/mdn/data/blob/main/docs/updating_css_json.md"
+  (js->clj mdn :keywordize-keys true))
 
-;; https://github.com/mdn/browser-compat-data
-(def svg-data (js->clj (.-svg bcd) :keywordize-keys true))
+(def svg-data
+  "https://github.com/mdn/browser-compat-data"
+  (js->clj (.-svg bcd) :keywordize-keys true))
 
 (def core #{:id :class :style})
 
@@ -61,8 +63,8 @@
    :id :class :tab-index
    :style])
 
-;; https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-weight#common_weight_name_mapping
 (def weight-name-mapping
+  "https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-weight#common_weight_name_mapping"
   {"100" ["Thin" "Hairline"]
    "200" ["ExtraLight" "UltraLight"]
    "300" ["Light"]
