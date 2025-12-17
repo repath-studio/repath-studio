@@ -75,6 +75,10 @@
                  [{:keyCode (codes "P")
                    :ctrlKey true
                    :shiftKey true}]]
+                [[::element.events/stroke->path]
+                 [{:keyCode (codes "P")
+                   :ctrlKey true
+                   :altKey true}]]
                 [[::panel.events/toggle :tree]
                  [{:keyCode (codes "T")
                    :ctrlKey true}]]
@@ -90,10 +94,6 @@
                 [[::ruler.events/toggle-visible]
                  [{:keyCode (codes "R")
                    :ctrlKey true}]]
-                [[::element.events/stroke->path]
-                 [{:keyCode (codes "P")
-                   :ctrlKey true
-                   :altKey true}]]
                 [[::element.events/copy]
                  [{:keyCode (codes "C")
                    :ctrlKey true}]]
