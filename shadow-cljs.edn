@@ -2,7 +2,9 @@
 
  :build-defaults {:build-hooks [(shadow-git-inject.core/hook)]
                   :compiler-options {:source-map true
-                                     :silence-optimizations-warning true}
+                                     :silence-optimizations-warning true
+                                     :output-feature-set :es-unsupported
+                                     :language-in :unsupported}
                   :js-options {:resolve
                                {"fs" {:target :npm
                                       :require "graceful-fs"}
@@ -32,8 +34,6 @@
              :output-dir "resources/public/js"
              :compiler-options {:optimizations :simple
                                 :output-wrapper false
-                                :output-feature-set :es-unsupported
-                                :language-in :unsupported
                                 :pseudo-names true
                                 :pretty-print true
                                 :closure-defines
