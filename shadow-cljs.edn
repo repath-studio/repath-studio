@@ -32,7 +32,8 @@
              :output-dir "resources/public/js"
              :compiler-options {:optimizations :simple
                                 :output-wrapper false
-                                :output-feature-set :es-next
+                                :output-feature-set :es-unsupported
+                                :language-in :unsupported
                                 :pseudo-names true
                                 :pretty-print true
                                 :closure-defines
