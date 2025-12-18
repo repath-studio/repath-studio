@@ -71,7 +71,8 @@
   (let [threshold (min (/ size 10) 100)
         step (min (/ size 50) 100)]
     (cond
-      (and (< position threshold) `(< position offset))
+      (and (< position threshold)
+           (< position offset))
       (- step)
 
       (and (> position (- size threshold))
