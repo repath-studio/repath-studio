@@ -210,19 +210,18 @@
 
 (defn inner-sidebar-render
   [root-children elements]
-  (let [md? @(rf/subscribe [::window.subs/md?])]
-    [:div#tree-sidebar.flex.flex-1.bg-primary.h-full.overflow-hidden
-     ;; When the tree is hovered, ignore the hovered class of the elements,
-     ;; if the element itself is not also hovered.
-     {:class "hover:**:[&.list-item-button]:not-hover:bg-inherit"
-      :on-click #(rf/dispatch [::element.events/deselect-all])}
-     [views/scroll-area
-      [:ul.overflow-hidden.w-full
-       {:role "menu"
-        :on-pointer-leave #(rf/dispatch [::document.events/clear-hovered])}
-       (for [el (reverse root-children)]
-         ^{:key (:id el)}
-         [item el 1 elements])]]]))
+  [:div#tree-sidebar.flex.flex-1.bg-primary.h-full.overflow-hidden
+   ;; When the tree is hovered, ignore the hovered class of the elements,
+   ;; if the element itself is not also hovered.
+   {:class "hover:**:[&.list-item-button]:not-hover:bg-inherit"
+    :on-click #(rf/dispatch [::element.events/deselect-all])}
+   [views/scroll-area
+    [:ul.overflow-hidden.w-full
+     {:role "menu"
+      :on-pointer-leave #(rf/dispatch [::document.events/clear-hovered])}
+     (for [el (reverse root-children)]
+       ^{:key (:id el)}
+       [item el 1 elements])]]])
 
 (defn inner-sidebar []
   (let [state @(rf/subscribe [::tool.subs/state])

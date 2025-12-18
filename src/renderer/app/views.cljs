@@ -452,9 +452,35 @@
         [:div.bg-primary.flex
          [toolbar.object/root]])]]))
 
+(defn main-panel-group []
+  (let [tree? @(rf/subscribe [::panel.subs/visible? :tree])
+        md? @(rf/subscribe [::window.subs/md?])]
+    [:div.flex.flex-col.h-full.overflow-hidden
+     [:div.flex.flex-1.overflow-hidden.gap-px
+      [panel.views/group
+       {:orientation "horizontal"
+        :id "main-group"
+        :class "w-full"}
+       (when (and tree? md?)
+         [:<>
+          [panel.views/panel
+           {:id "left-panel"
+            :defaultSize 227
+            :minSize 227}
+           [:div.flex.flex-col.overflow-hidden.h-full
+            [document.views/actions]
+            [tree.views/root]]]
+          [panel.views/separator]])
+       [panel.views/panel
+        {:id "center-panel"
+         :minSize 50
+         :defaultSize "100%"}
+        [center-panel]]]]
+     (when-not md?
+       [bottom-bar])]))
+
 (defn root []
   (let [documents? @(rf/subscribe [::document.subs/entities?])
-        tree? @(rf/subscribe [::panel.subs/visible? :tree])
         recent-documents @(rf/subscribe [::document.subs/recent])
         lang-dir @(rf/subscribe [::i18n.subs/lang-dir])
         desktop? @(rf/subscribe [::app.subs/desktop?])
@@ -470,29 +496,7 @@
            [window.views/app-header]
            [:div])
          (if documents?
-           [:div.flex.flex-col.h-full.overflow-hidden
-            [:div.flex.flex-1.overflow-hidden.gap-px
-             [panel.views/group
-              {:orientation "horizontal"
-               :id "main-group"
-               :class "w-full"}
-              (when (and tree? md?)
-                [:<>
-                 [panel.views/panel
-                  {:id "left-panel"
-                   :defaultSize 227
-                   :minSize 227}
-                  [:div.flex.flex-col.overflow-hidden.h-full
-                   [document.views/actions]
-                   [tree.views/root]]]
-                 [panel.views/separator]])
-              [panel.views/panel
-               {:id "center-panel"
-                :minSize 50
-                :defaultSize "100%"}
-               [center-panel]]]]
-            (when-not md?
-              [bottom-bar])]
+           [main-panel-group]
            [home recent-documents])
          [:div]]
         [dialog.views/root]
