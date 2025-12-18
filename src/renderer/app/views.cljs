@@ -118,9 +118,22 @@
     (tool.hierarchy/right-panel active-tool)]
    [:div.bg-primary.grow.flex]])
 
+(defn ruler-locked-toggle
+  []
+  (let [ruler-locked? @(rf/subscribe [::ruler.subs/locked?])]
+    [:div.bg-primary
+     {:style {:width ruler.views/ruler-size
+              :height ruler.views/ruler-size}}
+     [views/icon-button
+      (if ruler-locked? "lock" "unlock")
+      {:class "button-size-small rounded-xs m-0 bg-transparent! hidden"
+       :title (i18n.views/t (if ruler-locked?
+                              [::unlock "Unlock"]
+                              [::lock "Lock"]))
+       :on-click #(rf/dispatch [::ruler.events/toggle-locked])}]]))
+
 (defn frame-panel []
   (let [ruler-visible? @(rf/subscribe [::ruler.subs/visible?])
-        ruler-locked? @(rf/subscribe [::ruler.subs/locked?])
         backdrop @(rf/subscribe [::app.subs/backdrop])
         read-only? @(rf/subscribe [::document.subs/read-only?])
         help-message @(rf/subscribe [::tool.subs/help])
@@ -137,13 +150,7 @@
          [:div.bg-primary
           {:style {:width ruler.views/ruler-size
                    :height ruler.views/ruler-size}}
-          [views/icon-button
-           (if ruler-locked? "lock" "unlock")
-           {:class "button-size-small rounded-xs m-0 bg-transparent! hidden"
-            :title (i18n.views/t (if ruler-locked?
-                                   [::unlock "Unlock"]
-                                   [::lock "Lock"]))
-            :on-click #(rf/dispatch [::ruler.events/toggle-locked])}]]
+          [ruler-locked-toggle]]
          [:div.bg-primary.flex-1
           {:dir "ltr"
            :class "rtl:pl-[50px] rtl:md:pl-0"}
@@ -160,10 +167,8 @@
          :style {:background "var(--secondary)"}}
         [frame.views/root]
         [:div.absolute.inset-0.pointer-events-none.inset-shadow]
-        (when read-only?
-          [read-only-overlay])
-        (when debug-info?
-          [debug-info])
+        (when read-only? [read-only-overlay])
+        (when debug-info? [debug-info])
         (when worker-active?
           [:div.absolute.bottom-2.right-2.text-gray-500
            [views/loading-indicator]])
