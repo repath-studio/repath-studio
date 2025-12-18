@@ -148,7 +148,7 @@ label {
   &:after {
     @apply block absolute z-1;
     content: '';
-    transition: background-color 0.3s;
+    transition: background-color 0.3s 0.3s;
   }
 
   &[aria-orientation='horizontal'] {
@@ -174,7 +174,14 @@ label {
   &[data-separator='active'],
   &[data-separator='hover'] {
     &:after {
-      @apply bg-accent;
+      @apply bg-accent!;
+    }
+  }
+
+  &:focus-visible {
+    @apply outline-hidden;
+    &:after {
+      @apply bg-border delay-0;
     }
   }
 }
