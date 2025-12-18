@@ -178,6 +178,12 @@ label {
     }
   }
 
+  &:focus {
+    &:after {
+      @apply delay-0;
+    }
+  }
+
   &:focus-visible {
     @apply outline-hidden;
     &:after {
