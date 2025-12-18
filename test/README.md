@@ -1,7 +1,7 @@
 # Testing
 
 We are using [shadow-cljs](https://shadow-cljs.github.io/docs/UsersGuide.html#_testing)
-that provides a utility targets to make building tests easier.
+that provides targets to make building tests easier.
 
 ## Running the tests
 
