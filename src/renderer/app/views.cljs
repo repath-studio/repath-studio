@@ -189,33 +189,39 @@
                   :theme codemirror-theme}}]]]))
 (defn center-top-group
   []
-  [:div.flex.flex-col.flex-1.h-full
-   [panel.views/group
-    {:orientation "horizontal"
-     :id "center-top-group"}
-    [panel.views/panel
-     {:id "frame-panel"}
-     [frame-panel]]
-    (when @(rf/subscribe [::window.subs/md?])
-      [:<>
-       (when @(rf/subscribe [::panel.subs/visible? :history])
-         [:<>
-          [panel.views/separator]
-          [panel.views/panel {:id "history-panel"
-                              :defaultSize 30
-                              :minSize 5}
-           [:div.bg-primary.h-full
-            [history.views/root]]]])
+  (let [md? @(rf/subscribe [::window.subs/md?])
+        history-visible? @(rf/subscribe [::panel.subs/visible? :history])
+        xml-visible? @(rf/subscribe [::panel.subs/visible? :xml])]
+    [:div.flex.flex-col.flex-1.h-full
+     [panel.views/group
+      {:orientation "horizontal"
+       :id "center-top-group"
+       :class "h-full"}
+      (when (and md? xml-visible?)
+        [:<>
+         [panel.views/panel
+          {:id "xml-panel"
+           :defaultSize 300
+           :minSize 100}
+          [:div.h-full.bg-primary.flex
+           [xml-panel]]]
+         [panel.views/separator]])
 
-       (when @(rf/subscribe [::panel.subs/visible? :xml])
-         [:<>
-          [panel.views/separator]
-          [panel.views/panel {:id "xml-panel"
-                              :defaultSize 30
-                              :minSize 5}
+      [panel.views/panel
+       {:id "frame-panel"
+        :defaultSize "100%"
+        :minSize 50}
+       [frame-panel]]
 
-           [:div.h-full.bg-primary.flex
-            [xml-panel]]]])])]])
+      (when (and md? history-visible?)
+        [:<>
+         [panel.views/separator]
+         [panel.views/panel
+          {:id "history-panel"
+           :defaultSize 300
+           :minSize 100}
+          [:div.bg-primary.h-full
+           [history.views/root]]]])]]))
 
 (defn editor
   []
@@ -223,23 +229,25 @@
         md? @(rf/subscribe [::window.subs/md?])]
     [panel.views/group
      {:orientation "vertical"
-      :id "editor-group"}
+      :id "editor-group"
+      :class "h-full"}
      [panel.views/panel
       {:id "editor-panel"
+       :defaultSize "100%"
        :minSize 20}
       [center-top-group]]
+
+     (when (and md? timeline-visible)
+       [:<>
+        [panel.views/separator]
+        [panel.views/panel
+         {:id "timeline-panel"
+          :minSize 100
+          :defaultSize 300}
+         [timeline.views/root]]])
      [toolbar.status/root]
      (when md?
-       [:<>
-        (when timeline-visible
-          [:<>
-           [panel.views/separator]
-           [panel.views/panel
-            {:id "timeline-panel"
-             :minSize 10
-             :defaultSize 20}
-            [timeline.views/root]]])
-        [repl.views/root]])]))
+       [repl.views/root])]))
 
 (defn document-size-select []
   [:> Select/Root
@@ -283,6 +291,20 @@
     (or title (.basename path-browserify path))]
    (when path
      [:span.text-lg.text-foreground-muted (.dirname path-browserify path)])])
+
+(def help-commands
+  [["command"
+    [::command-panel "Command panel"]
+    [::dialog.events/show-cmdk]]
+   ["earth"
+    [::website "Website"]
+    [::events/open-remote-url "https://repath.studio/"]]
+   ["commit"
+    [::source-code "Source Code"]
+    [::events/open-remote-url "https://github.com/repath-studio/repath-studio"]]
+   ["list"
+    [::changelog "Changelog"]
+    [::events/open-remote-url "https://repath.studio/roadmap/changelog/"]]])
 
 (defn help-command
   [icon label event]
@@ -341,18 +363,7 @@
          [:h2.mb-3.mt-8.text-2xl
           (i18n.views/t [::help "Help"])]
 
-         (->> [["command"
-                [::command-panel "Command panel"]
-                [::dialog.events/show-cmdk]]
-               ["earth"
-                [::website "Website"]
-                [::events/open-remote-url "https://repath.studio/"]]
-               ["commit"
-                [::source-code "Source Code"]
-                [::events/open-remote-url "https://github.com/repath-studio/repath-studio"]]
-               ["list"
-                [::changelog "Changelog"]
-                [::events/open-remote-url "https://repath.studio/roadmap/changelog/"]]]
+         (->> help-commands
               (map #(apply help-command %))
               (into [:div]))]]]]]]])
 
@@ -402,12 +413,48 @@
        :disabled (not some-selected?)
        :content [right-panel active-tool]}]]))
 
-(defn root
-  []
+(defn center-panel []
+  (let [properties? @(rf/subscribe [::panel.subs/visible? :properties])
+        active-tool @(rf/subscribe [::tool.subs/active])
+        md? @(rf/subscribe [::window.subs/md?])
+        desktop? @(rf/subscribe [::app.subs/desktop?])]
+    [:div.flex.flex-col.flex-1.overflow-hidden.h-full
+     (if md?
+       [document.views/tab-bar]
+       [:div.flex.overflow-hidden
+        (when-not desktop?
+          [views/toolbar [menubar.views/root]])
+        [document.views/tab-bar]
+        [:div.drag.flex-1]])
+     [:div.flex.h-full.flex-1.gap-px.overflow-hidden
+      [panel.views/group
+       {:orientation "horizontal"
+        :id "main-editor-group"
+        :class "w-full"}
+       [panel.views/panel
+        {:id "main-editor-panel"
+         :defaultSize "100%"
+         :minSize 50}
+        [:div.flex.h-full.flex-col.flex-1.overflow-hidden.gap-px.w-full
+         [editor]]]
+       (when (and md? properties?)
+         [:<>
+          [panel.views/separator]
+          [panel.views/panel
+           {:id "right-panel"
+            :defaultSize 320
+            :minSize 280
+            :maxSize "50%"
+            :class "flex gap-px"}
+           (when properties?
+             [right-panel active-tool])]])]
+      (when md?
+        [:div.bg-primary.flex
+         [toolbar.object/root]])]]))
+
+(defn root []
   (let [documents? @(rf/subscribe [::document.subs/entities?])
         tree? @(rf/subscribe [::panel.subs/visible? :tree])
-        properties? @(rf/subscribe [::panel.subs/visible? :properties])
-        active-tool @(rf/subscribe [::tool.subs/active])
         recent-documents @(rf/subscribe [::document.subs/recent])
         lang-dir @(rf/subscribe [::i18n.subs/lang-dir])
         desktop? @(rf/subscribe [::app.subs/desktop?])
@@ -427,51 +474,23 @@
             [:div.flex.flex-1.overflow-hidden.gap-px
              [panel.views/group
               {:orientation "horizontal"
-               :id "main-group"}
+               :id "main-group"
+               :class "w-full"}
               (when (and tree? md?)
-                [panel.views/panel
-                 {:id "left-panel"
-                  :defaultSize "227px"
-                  :minSize "227px"
-                  :collapsible true}
-                 [:div.flex.flex-col.overflow-hidden
-                  [document.views/actions]
-                  [tree.views/root]]])
-              [panel.views/separator]
+                [:<>
+                 [panel.views/panel
+                  {:id "left-panel"
+                   :defaultSize 227
+                   :minSize 227}
+                  [:div.flex.flex-col.overflow-hidden.h-full
+                   [document.views/actions]
+                   [tree.views/root]]]
+                 [panel.views/separator]])
               [panel.views/panel
                {:id "center-panel"
-                :defaultSize "100"
-                :minSize "50px"}
-               [:div.flex.flex-col.flex-1.overflow-hidden.h-full
-                (if md?
-                  [document.views/tab-bar]
-                  [:div.flex.overflow-hidden
-                   (when-not desktop?
-                     [views/toolbar [menubar.views/root]])
-                   [document.views/tab-bar]
-                   [:div.drag.flex-1]])
-                [:div.flex.h-full.flex-1.gap-px.overflow-hidden
-                 [panel.views/group
-                  {:orientation "horizontal"
-                   :id "main-editor-group"}
-                  [panel.views/panel
-                   {:id "main-editor-panel"}
-                   [:div.flex.h-full.flex-col.flex-1.overflow-hidden.gap-px
-                    [editor]]]
-                  (when (and md? properties?)
-                    [:<>
-                     [panel.views/separator]
-                     [panel.views/panel
-                      {:id "right-panel"
-                       :defaultSize "320px"
-                       :minSize "250px"
-                       :collapsible true
-                       :class "flex gap-px"}
-                      (when properties?
-                        [right-panel active-tool])]])]
-                 (when md?
-                   [:div.bg-primary.flex
-                    [toolbar.object/root]])]]]]]
+                :minSize 50
+                :defaultSize "100%"}
+               [center-panel]]]]
             (when-not md?
               [bottom-bar])]
            [home recent-documents])

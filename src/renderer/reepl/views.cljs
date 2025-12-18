@@ -198,8 +198,8 @@
         [panel.views/separator]
         [panel.views/panel
          {:id "repl-panel"
-          :minSize 10
-          :defaultSize 20}
+          :minSize 100
+          :defaultSize 300}
          [repl-items @items (assoc show-value-opts :set-text set-text)]]])
 
      (when-not @(rf/subscribe [::window.subs/md?])

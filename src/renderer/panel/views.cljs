@@ -18,8 +18,7 @@
                                                 #js {:groupId id,
                                                      :storage js/localStorage})]
     (into [:> Group
-           (merge {:class "grow"
-                   :defaultLayout defaultLayout
+           (merge {:defaultLayout defaultLayout
                    :onLayoutChange onLayoutChange}
                   props)]
           children)))
