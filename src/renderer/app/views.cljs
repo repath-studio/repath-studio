@@ -73,19 +73,19 @@
         clicked-element (rf/subscribe [::app.subs/clicked-element])
         ignored-ids (rf/subscribe [::document.subs/ignored-ids])
         nearest-neighbor (rf/subscribe [::snap.subs/nearest-neighbor])]
-    [["Viewbox" (coll->str @viewbox)]
-     ["Pointer position" (coll->str @pointer-pos)]
-     ["Adjusted pointer position" (coll->str @adjusted-pos)]
+    [["Viewbox" (coll->str viewbox)]
+     ["Pointer position" (coll->str pointer-pos)]
+     ["Adjusted pointer position" (coll->str adjusted-pos)]
      ["Pointer offset" (coll->str @pointer-offset)]
-     ["Adjusted pointer offset" (coll->str @adjusted-offset)]
-     ["Pointer drag?" (str @drag?)]
-     ["Pan" (coll->str @pan)]
-     ["Active tool" @active-tool]
-     ["Cached tool" @cached-tool]
-     ["State" @tool-state]
-     ["Clicked element" (:id @clicked-element)]
-     ["Ignored elements" @ignored-ids]
-     ["Snap" (map->str @nearest-neighbor)]]))
+     ["Adjusted pointer offset" (coll->str adjusted-offset)]
+     ["Pointer drag?" (str drag?)]
+     ["Pan" (coll->str pan)]
+     ["Active tool" active-tool]
+     ["Cached tool" cached-tool]
+     ["State" tool-state]
+     ["Clicked element" (:id clicked-element)]
+     ["Ignored elements" ignored-ids]
+     ["Snap" (map->str nearest-neighbor)]]))
 
 (defn debug-info []
   [:div
@@ -95,15 +95,6 @@
            [:div.flex
             [:strong.mr-1 s]
             [:div v]]))])
-
-(defn help
-  [message]
-  [:div.absolute.top-0.left-0.w-full.pointer-events-none
-   [:div.hidden.justify-center.w-full.p-4.lg:flex
-    [:div.bg-primary.overflow-hidden.shadow.rounded-full
-     [:div.text-xs.gap-1.flex.flex-wrap.py-2.px-4.justify-center.truncate
-      {:aria-live "polite"}
-      message]]]])
 
 (defn read-only-overlay []
   [:div.absolute.inset-0.border-4.border-accent.pointer-events-none
@@ -173,7 +164,7 @@
           [:div.absolute.bottom-2.right-2.text-gray-500
            [views/loading-indicator]])
         (when (and help-bar (seq help-message) xl?)
-          [help help-message])
+          [views/help help-message])
         (when backdrop
           [:div.absolute.inset-0
            {:on-click #(rf/dispatch [::app.events/set-backdrop false])}])]
@@ -181,8 +172,7 @@
          [:div.bg-primary.flex.items-center
           [toolbar.object/root]])]]]))
 
-(defn xml-panel
-  []
+(defn xml-panel []
   (let [xml @(rf/subscribe [::element.subs/xml])
         codemirror-theme @(rf/subscribe [::theme.subs/codemirror])]
     [views/scroll-area
@@ -192,8 +182,8 @@
                   :readOnly true
                   :screenReaderLabel "XML"
                   :theme codemirror-theme}}]]]))
-(defn center-top-group
-  []
+
+(defn center-top-group []
   (let [md? @(rf/subscribe [::window.subs/md?])
         history-visible? @(rf/subscribe [::panel.subs/visible? :history])
         xml-visible? @(rf/subscribe [::panel.subs/visible? :xml])]
@@ -228,8 +218,7 @@
           [:div.bg-primary.h-full
            [history.views/root]]]])]]))
 
-(defn editor
-  []
+(defn editor []
   (let [timeline-visible @(rf/subscribe [::panel.subs/visible? :timeline])
         md? @(rf/subscribe [::window.subs/md?])]
     [panel.views/group
@@ -256,8 +245,8 @@
 
 (defn document-size-select []
   [:> Select/Root
-   {:onValueChange #(rf/dispatch [::document.events/new-from-template
-                                  (get db/a-series-paper-sizes %)])}
+   {:onValueChange #(let [size (get db/a-series-paper-sizes %)]
+                      (rf/dispatch [::document.events/new-from-template size]))}
    [:> Select/Trigger
     {:class "button px-2 bg-overlay rounded-sm"
      :aria-label (i18n.views/t [::select-size "Select size"])}
@@ -372,8 +361,7 @@
               (map #(apply help-command %))
               (into [:div]))]]]]]]])
 
-(defn bottom-bar
-  []
+(defn bottom-bar []
   (let [some-selected? @(rf/subscribe [::element.subs/some-selected?])
         active-tool @(rf/subscribe [::tool.subs/active])]
     [:div.flex.justify-evenly.p-2.gap-1.rtl:flex-row-reverse
