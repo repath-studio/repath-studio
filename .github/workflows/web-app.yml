@@ -39,7 +39,7 @@ jobs:
           java-version: '21'
 
       - name: Typos
-        uses: crate-ci/typos@v1.39.2
+        uses: crate-ci/typos@v1.40.0
 
       - name: Cache clojure dependencies
         uses: actions/cache@v5
