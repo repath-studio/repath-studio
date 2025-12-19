@@ -24,11 +24,15 @@
   (let [frame-window (.-window (useFrame))]
     (reagent/create-class
      {:component-did-mount
-      #(.addEventListener frame-window "wheel"
-                          event.impl.wheel/handler! #js {:passive false})
+      #(.addEventListener frame-window
+                          "wheel"
+                          event.impl.wheel/handler!
+                          #js {:passive false})
 
       :component-will-unmount
-      #(.removeEventListener frame-window "wheel" event.impl.wheel/handler!)
+      #(.removeEventListener frame-window
+                             "wheel"
+                             event.impl.wheel/handler!)
 
       :reagent-render #()})))
 

@@ -92,7 +92,7 @@
 }
 
 @utility form-element {
-  @apply bg-primary border-0 w-full px-3 py-1 h-[27px]! shadow-none!
+  @apply bg-primary border-0 w-full px-3 py-1 h-6.75! shadow-none!
   text-foreground! disabled:text-foreground-disabled!
   hover:text-foreground-hovered! focus:text-foreground-hovered! box-border
   placeholder:text-foreground-disabled text-xs!;
@@ -136,5 +136,5 @@
 
 @utility form-control-button {
   @apply button bg-primary text-foreground-muted p-1 outline-inset
-  min-h-[27px] min-w-[27px]!;
+  min-h-6.75! min-w-6.75!;
 }
