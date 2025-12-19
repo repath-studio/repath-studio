@@ -14,11 +14,10 @@
 (defc group
   [{:keys [id]
     :as props} & children]
-  (let [{:keys [defaultLayout onLayoutChange]} (useDefaultLayout
-                                                #js {:groupId id,
-                                                     :storage js/localStorage})]
+  (let [layout (useDefaultLayout #js {:groupId id,
+                                      :storage js/localStorage})]
     (into [:> Group
-           (merge {:defaultLayout defaultLayout
-                   :onLayoutChange onLayoutChange}
+           (merge {:defaultLayout (.-defaultLayout layout)
+                   :onLayoutChange (.-onLayoutChange layout)}
                   props)]
           children)))
