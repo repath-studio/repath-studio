@@ -118,7 +118,8 @@
  ::clear-local-store
  (fn [{:keys [on-error]}]
    (-> (localforage/clear)
-       (.catch #(some-> on-error (conj %) rf/dispatch)))))
+       (.catch #(some-> on-error (conj %) rf/dispatch)))
+   (js/localStorage.clear)))
 
 (defn persist
   []
