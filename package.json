@@ -154,7 +154,7 @@
     "react-d3-tree": "3.6.6",
     "react-dom": "19.2.3",
     "react-frame-component": "5.2.7",
-    "react-resizable-panels": "4.0.7",
+    "react-resizable-panels": "4.0.9",
     "react-svg": "16.3.0",
     "shadow-cljs": "3.3.4",
     "shx": "0.4.0",
