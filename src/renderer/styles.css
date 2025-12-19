@@ -142,56 +142,6 @@ label {
   max-height: 80vh;
 }
 
-.panel-separator {
-  @apply relative;
-
-  &:after {
-    @apply block absolute z-1;
-    content: '';
-    transition: background-color 0.3s 0.3s;
-  }
-
-  &[aria-orientation='horizontal'] {
-    @apply h-px;
-
-    &:after {
-      @apply w-full h-1;
-
-      top: -50%;
-    }
-  }
-
-  &[aria-orientation='vertical'] {
-    @apply w-px;
-
-    &:after {
-      @apply h-full w-1;
-
-      left: -50%;
-    }
-  }
-
-  &[data-separator='active'],
-  &[data-separator='hover'] {
-    &:after {
-      @apply bg-accent!;
-    }
-  }
-
-  &:focus {
-    &:after {
-      @apply delay-0;
-    }
-  }
-
-  &:focus-visible {
-    @apply outline-hidden;
-    &:after {
-      @apply bg-border delay-0;
-    }
-  }
-}
-
 @keyframes rotationBreak {
   0% {
     transform: rotate(0);
