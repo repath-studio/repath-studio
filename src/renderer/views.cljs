@@ -387,3 +387,12 @@
                        rtl:[&>*:not(:first-child)]:border-r-0
                        rtl:[&>*:not(:first-child)]:rounded-r-none"}]
         children))
+
+(defn help
+  [message]
+  [:div.absolute.top-0.left-0.w-full.pointer-events-none
+   [:div.hidden.justify-center.w-full.p-4.lg:flex
+    [:div.bg-primary.overflow-hidden.shadow.rounded-full
+     [:div.text-xs.gap-1.flex.flex-wrap.py-2.px-4.justify-center.truncate
+      {:aria-live "polite"}
+      message]]]])
