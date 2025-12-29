@@ -28,11 +28,11 @@
     :action [::element.events/lower-to-bottom]}
    {:type :separator}
    {:label [::animate "Animate"]
-    :action [::element.events/animate :animate {}]}
+    :action [::element.events/animate :animate]}
    {:label [::animate-transform "Animate Transform"]
-    :action [::element.events/animate :animateTransform {}]}
+    :action [::element.events/animate :animateTransform]}
    {:label [::animate-motion "Animate Motion"]
-    :action [::element.events/animate :animateMotion {}]}
+    :action [::element.events/animate :animateMotion]}
    {:type :separator}
    {:label [::duplicate "Duplicate"]
     :action [::element.events/duplicate]}

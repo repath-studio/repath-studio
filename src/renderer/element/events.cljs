@@ -258,10 +258,10 @@
                                     :animate
                                     [::menubar.views/animate]
 
-                                    :animate-transform
+                                    :animateTransform
                                     [::menubar.views/animate-transform]
 
-                                    :animate-motion
+                                    :animateMotion
                                     [::menubar.views/animate-motion])))))
 
 (rf/reg-event-db
