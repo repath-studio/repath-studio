@@ -240,13 +240,20 @@
   (align :center-horizontal))
 
 (defn ^:export animate
-  "Animates the selected elements."
-  ([]
-   (animate {}))
-  ([attrs]
-   (animate :animate attrs))
-  ([tag attrs]
-   (rf/dispatch-sync [::element.events/animate tag attrs])))
+  "Animates an attribute of the selected elements over time."
+  [& {:as attrs}]
+  (rf/dispatch-sync [::element.events/animate :animate attrs]))
+
+(defn ^:export animate-transform
+  "Animates a transformation attribute of the selected elements to control
+   translation, scaling, rotation, and/or skewing."
+  [& {:as attrs}]
+  (rf/dispatch-sync [::element.events/animate :animateTransform attrs]))
+
+(defn ^:export animate-motion
+  "Animates the selected elements along a motion path."
+  [& {:as attrs}]
+  (rf/dispatch-sync [::element.events/animate :animateMotion attrs]))
 
 (defn ^:export undo
   "Goes back in history."

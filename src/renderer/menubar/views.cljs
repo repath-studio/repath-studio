@@ -284,15 +284,15 @@
   [{:id :animate
     :label [::animate "Animate"]
     :icon "animation"
-    :action [::element.events/animate :animate {}]}
+    :action [::element.events/animate :animate]}
    {:id :animate-transform
     :label [::animate-transform "Animate Transform"]
     :icon "animation"
-    :action [::element.events/animate :animateTransform {}]}
+    :action [::element.events/animate :animateTransform]}
    {:id :animate-motion
     :icon "animation"
     :label [::animate-motion "Animate Motion"]
-    :action [::element.events/animate :animateMotion {}]}])
+    :action [::element.events/animate :animateMotion]}])
 
 (defn path-submenu
   []
