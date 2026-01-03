@@ -7,7 +7,6 @@
    [reagent.core :as reagent]
    [renderer.element.events :as-alias element.events]
    [renderer.i18n.views :as i18n.views]
-   [renderer.panel.events :as-alias panel.events]
    [renderer.panel.subs :as-alias panel.subs]
    [renderer.timeline.events :as-alias timeline.events]
    [renderer.timeline.subs :as-alias timeline.subs]
