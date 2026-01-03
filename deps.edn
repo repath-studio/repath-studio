@@ -11,7 +11,7 @@
         metosin/malli {:mvn/version "0.20.0"}
         net.mikera/core.matrix {:mvn/version "0.63.0"}
         org.clj-commons/hickory {:mvn/version "0.7.7"}
-        org.clojure/math.combinatorics {:mvn/version "0.3.0"}
+        org.clojure/math.combinatorics {:mvn/version "0.3.2"}
         org.slf4j/slf4j-nop {:mvn/version "2.0.17"}
         re-frame/re-frame {:mvn/version "1.4.3"}
         re-pressed/re-pressed {:mvn/version "0.3.2"}
