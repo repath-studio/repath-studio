@@ -243,9 +243,9 @@
           :defaultSize 300}
          [timeline.views/root]
          [panel.views/close-button :timeline]]])
+     (when md? [panel.views/separator])
      [toolbar.status/root]
-     (when md?
-       [repl.views/root])]))
+     (when md? [repl.views/root])]))
 
 (defn document-size-select []
   [:> Select/Root
@@ -393,7 +393,7 @@
       {:icon "shell"
        :label [::shell "Shell"]
        :direction "bottom"
-       :content [repl.views/root]}]
+       :content [:div.flex.flex-col.flex-1 [repl.views/root]]}]
 
      [:span.v-divider]
 

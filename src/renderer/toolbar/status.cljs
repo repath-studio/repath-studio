@@ -216,8 +216,8 @@
 (defn root []
   (let [md? @(rf/subscribe [::window.subs/md?])]
     [views/toolbar
-     {:class "bg-primary mt-px relative justify-center md:justify-start py-2
-            md:py-1 gap-2 md:gap-1"}
+     {:class "bg-primary relative justify-center md:justify-start py-2 md:py-1
+              gap-2 md:gap-1"}
      [color-selectors]
      [:div.grow.hidden.md:block]
      (when md?

@@ -188,10 +188,7 @@
                                   (execute text #(add-result (not %1) %2)))))]
 
     (set-print! add-log)
-    [:div
-     {:class (if @(rf/subscribe [::window.subs/md?])
-               "contents"
-               "flex flex-col flex-1")}
+    [:<>
      (when (and @(rf/subscribe [::panel.subs/visible? :repl-history])
                 @(rf/subscribe [::window.subs/md?]))
        [:<>
