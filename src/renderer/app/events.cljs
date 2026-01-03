@@ -37,7 +37,8 @@
         ["window-unmaximized" [::window.events/set-maximized false]]
         ["window-entered-fullscreen" [::window.events/set-fullscreen true]]
         ["window-leaved-fullscreen" [::window.events/set-fullscreen false]]
-        ["window-minimized" [::window.events/set-minimized true]]]
+        ["window-minimized" [::window.events/set-minimized true]]
+        ["window-restored" [::window.events/set-minimized false]]]
        (mapv (partial vector ::effects/ipc-on))))
 
 (defn- json->clj
