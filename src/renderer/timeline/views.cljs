@@ -99,7 +99,6 @@
         replay? @(rf/subscribe [::timeline.subs/replay?])
         end @(rf/subscribe [::timeline.subs/end])
         speed @(rf/subscribe [::timeline.subs/speed])
-        md? @(rf/subscribe [::window.subs/md?])
         sm? @(rf/subscribe [::window.subs/sm?])]
     [views/toolbar
      {:class "bg-primary"}
@@ -126,12 +125,7 @@
      (when sm?
        [:<>
         [:span.v-divider]
-        [snap-controls]
-        (when md?
-          [:<>
-           [views/icon-button "window-close"
-            {:title (i18n.views/t [::hide-timeline "Hide timeline"])
-             :on-click #(rf/dispatch [::panel.events/toggle :timeline])}]])])]))
+        [snap-controls]])]))
 
 (defn register-listeners
   [timeline-ref]

@@ -197,10 +197,12 @@
        [:<>
         [panel.views/separator]
         [panel.views/panel
-         {:id "repl-panel"
+         {:id :repl-history
+          :class "relative"
           :minSize 100
           :defaultSize 300}
-         [repl-items @items (assoc show-value-opts :set-text set-text)]]])
+         [repl-items @items (assoc show-value-opts :set-text set-text)]
+         [panel.views/close-button :repl-history]]])
 
      (when-not @(rf/subscribe [::window.subs/md?])
        [repl-items @items (assoc show-value-opts :set-text set-text)])

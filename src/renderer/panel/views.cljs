@@ -1,12 +1,17 @@
 (ns renderer.panel.views
   (:require
    ["react-resizable-panels" :refer [Group Panel Separator useDefaultLayout]]
-   [reagent.core :refer [defc]]))
+   [goog.functions]
+   [re-frame.core :as rf]
+   [reagent.core :refer [defc]]
+   [renderer.i18n.views :as i18n.views]
+   [renderer.panel.events :as-alias panel.events]
+   [renderer.views :as views]))
 
 (defn separator []
   [:> Separator
    {:class "relative after:block after:absolute after:z-1
-            after:transition-colors after:duration-300 after:delay-300
+            after:transition-colors after:duration-300 after:delay-100
             focus:after:delay-0
             aria-[orientation=horizontal]:h-px
             aria-[orientation=horizontal]:after:w-full
@@ -17,11 +22,18 @@
             aria-[orientation=vertical]:after:w-1
             aria-[orientation=vertical]:after:left-[-50%]
             data-[separator=active]:after:bg-accent!
-            data-[separator=hover]:after:bg-accent!
             focus-visible:outline-hidden
             focus-visible:after:bg-border focus-visible:after:delay-0"}])
 
-(defn panel
+(defn close-button
+  [id]
+  [views/icon-button "window-close"
+   {:title (i18n.views/t [::close-panel "Close panel"])
+    :class "absolute z-1 top-1 right-1 rtl:right-auto rtl:left-1
+            bg-transparent!"
+    :on-click #(rf/dispatch [::panel.events/toggle id])}])
+
+(defc panel
   [props & children]
   (into [:> Panel props] children))
 

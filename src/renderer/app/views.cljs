@@ -195,28 +195,31 @@
       (when (and md? xml-visible?)
         [:<>
          [panel.views/panel
-          {:id "xml-panel"
+          {:id :xml
+           :class "relative"
            :defaultSize 300
            :minSize 100}
           [:div.h-full.bg-primary.flex
-           [xml-panel]]]
+           [xml-panel]]
+          [panel.views/close-button :xml]]
          [panel.views/separator]])
 
       [panel.views/panel
-       {:id "frame-panel"
-        :defaultSize "100%"
-        :minSize 50}
+       {:defaultSize "100%"
+        :minSize 100}
        [frame-panel]]
 
       (when (and md? history-visible?)
         [:<>
          [panel.views/separator]
          [panel.views/panel
-          {:id "history-panel"
+          {:id :history
+           :class "relative"
            :defaultSize 300
            :minSize 100}
           [:div.bg-primary.h-full
-           [history.views/root]]]])]]))
+           [history.views/root]]
+          [panel.views/close-button :history]]])]]))
 
 (defn editor []
   (let [timeline-visible @(rf/subscribe [::panel.subs/visible? :timeline])
@@ -226,19 +229,20 @@
       :id "editor-group"
       :class "h-full"}
      [panel.views/panel
-      {:id "editor-panel"
-       :defaultSize "100%"
-       :minSize 20}
+      {:defaultSize "100%"
+       :minSize 100}
       [center-top-group]]
 
      (when (and md? timeline-visible)
        [:<>
         [panel.views/separator]
         [panel.views/panel
-         {:id "timeline-panel"
+         {:id :timeline
+          :class "relative"
           :minSize 100
           :defaultSize 300}
-         [timeline.views/root]]])
+         [timeline.views/root]
+         [panel.views/close-button :timeline]]])
      [toolbar.status/root]
      (when md?
        [repl.views/root])]))
@@ -425,19 +429,17 @@
         :id "main-editor-group"
         :class "w-full"}
        [panel.views/panel
-        {:id "main-editor-panel"
-         :defaultSize "100%"
-         :minSize 50}
+        {:defaultSize "100%"
+         :minSize 100}
         [:div.flex.h-full.flex-col.flex-1.overflow-hidden.gap-px.w-full
          [editor]]]
        (when (and md? properties?)
          [:<>
           [panel.views/separator]
           [panel.views/panel
-           {:id "right-panel"
+           {:id :properties
             :defaultSize 320
-            :minSize 280
-            :maxSize "50%"
+            :minSize 320
             :class "flex gap-px"}
            (when properties?
              [right-panel active-tool])]])]
@@ -457,7 +459,7 @@
        (when (and tree? md?)
          [:<>
           [panel.views/panel
-           {:id "left-panel"
+           {:id :tree
             :defaultSize 227
             :minSize 227}
            [:div.flex.flex-col.overflow-hidden.h-full
@@ -465,9 +467,8 @@
             [tree.views/root]]]
           [panel.views/separator]])
        [panel.views/panel
-        {:id "center-panel"
-         :minSize 50
-         :defaultSize "100%"}
+        {:defaultSize "100%"
+         :minSize 100}
         [center-panel]]]]
      (when-not md?
        [bottom-bar])]))
@@ -480,17 +481,19 @@
         md? @(rf/subscribe [::window.subs/md?])
         loading? @(rf/subscribe [::app.subs/loading?])
         theme @(rf/subscribe [::theme.subs/theme])]
-    (if loading?
-      (when-not desktop? [:div.loader])
-      [:> Direction/Provider {:dir lang-dir}
-       [:> Tooltip/Provider
-        [:div.flex.flex-col.h-full.overflow-hidden.justify-between
-         (if (or md? desktop?)
-           [window.views/app-header]
-           [:div])
-         (if documents?
-           [main-panel-group]
-           [home recent-documents])
-         [:div]]
-        [dialog.views/root]
-        [views/toaster theme]]])))
+    [:<>
+     [:> Direction/Provider {:dir lang-dir}
+      [:> Tooltip/Provider
+       [:div.flex.flex-col.h-full.overflow-hidden.justify-between
+        (if (or md? desktop?)
+          [window.views/app-header]
+          [:div])
+        (if documents?
+          [main-panel-group]
+          [home recent-documents])
+        [:div]]
+       [dialog.views/root]
+       [views/toaster theme]]]
+     (when (and loading? (not desktop?))
+       [:div.bg-white.fixed.inset-0
+        [:div.loader]])]))

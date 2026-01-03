@@ -797,8 +797,7 @@
   :guide-snap "Magnétisme de guide"
   :play "Jouer"
   :replay "Rejouer"
-  :pause "Pause"
-  :hide-timeline "Masquer la chronologie"}
+  :pause "Pause"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Choisir un angle"}
@@ -825,4 +824,7 @@
   :no-thank-you "Non, merci"}
 
  :renderer.effects
- {:permission-denied "Permission d'accéder au fichier refusée."}}
+ {:permission-denied "Permission d'accéder au fichier refusée."}
+
+ :renderer.panel.views
+ {:close-panel "Fermer le panneau"}}

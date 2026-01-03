@@ -802,8 +802,7 @@
   :guide-snap "Hulplijnuitlijning"
   :play "Afspelen"
   :replay "Opnieuw afspelen"
-  :pause "Pauzeren"
-  :hide-timeline "Tijdlijn verbergen"}
+  :pause "Pauzeren"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Hoek kiezen"}
@@ -829,4 +828,7 @@
   :no-thank-you "Nee, dank je"}
 
  :renderer.effects
- {:permission-denied "Toestemming om het bestand te benaderen is geweigerd."}}
+ {:permission-denied "Toestemming om het bestand te benaderen is geweigerd."}
+
+ :renderer.panel.views
+ {:close-panel "Paneel sluiten"}}

@@ -803,8 +803,7 @@
   :guide-snap "Hilfslinien-Einrasten"
   :play "Abspielen"
   :replay "Wiederholen"
-  :pause "Pause"
-  :hide-timeline "Timeline ausblenden"}
+  :pause "Pause"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Winkel auswählen"}
@@ -831,4 +830,7 @@
   :no-thank-you "Nein, danke"}
 
  :renderer.effects
- {:permission-denied "Berechtigung zum Zugriff auf die Datei verweigert."}}
+ {:permission-denied "Berechtigung zum Zugriff auf die Datei verweigert."}
+
+ :renderer.panel.views
+ {:close-panel "Panel schließen"}}

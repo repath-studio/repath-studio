@@ -781,8 +781,7 @@
   :guide-snap "Kılavuz yapışı"
   :play "Oynat"
   :replay "Tekrar oynat"
-  :pause "Duraklat"
-  :hide-timeline "Zaman çizelgesini gizle"}
+  :pause "Duraklat"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Açı seç"}
@@ -808,4 +807,7 @@
   :no-thank-you "Hayır, teşekkürler"}
 
  :renderer.effects
- {:permission-denied "Dosyaya erişim izni reddedildi."}}
+ {:permission-denied "Dosyaya erişim izni reddedildi."}
+
+ :renderer.panel.views
+ {:close-panel "Paneli kapat"}}
