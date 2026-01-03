@@ -787,8 +787,7 @@
   :guide-snap "Hjälplinjefäst"
   :play "Spela"
   :replay "Spela om"
-  :pause "Pausa"
-  :hide-timeline "Dölj tidslinje"}
+  :pause "Pausa"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Välj vinkel"}
@@ -813,4 +812,7 @@
   :no-thank-you "Nej tack"}
 
  :renderer.effects
- {:permission-denied "Tillstånd att komma åt filen nekades."}}
+ {:permission-denied "Tillstånd att komma åt filen nekades."}
+
+ :renderer.panel.views
+ {:close-panel "Stäng panel"}}

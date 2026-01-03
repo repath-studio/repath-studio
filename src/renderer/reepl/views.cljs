@@ -1,6 +1,5 @@
 (ns renderer.reepl.views
   (:require
-   ["react-resizable-panels" :refer [Panel]]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
    [renderer.app.events :as-alias app.events]
@@ -189,20 +188,18 @@
                                   (execute text #(add-result (not %1) %2)))))]
 
     (set-print! add-log)
-    [:div
-     {:class (if @(rf/subscribe [::window.subs/md?])
-               "contents"
-               "flex flex-col flex-1")}
+    [:<>
      (when (and @(rf/subscribe [::panel.subs/visible? :repl-history])
                 @(rf/subscribe [::window.subs/md?]))
        [:<>
-        [panel.views/resize-handle "repl-resize-handle"]
-        [:> Panel
-         {:id "repl-panel"
-          :minSize 10
-          :defaultSize 20
-          :order 3}
-         [repl-items @items (assoc show-value-opts :set-text set-text)]]])
+        [panel.views/separator]
+        [panel.views/panel
+         {:id :repl-history
+          :class "relative"
+          :minSize 100
+          :defaultSize 300}
+         [repl-items @items (assoc show-value-opts :set-text set-text)]
+         [panel.views/close-button :repl-history]]])
 
      (when-not @(rf/subscribe [::window.subs/md?])
        [repl-items @items (assoc show-value-opts :set-text set-text)])

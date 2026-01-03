@@ -790,8 +790,7 @@
   :guide-snap "Ajuste a guía"
   :play "Reproducir"
   :replay "Repetir"
-  :pause "Pausar"
-  :hide-timeline "Ocultar línea de tiempo"}
+  :pause "Pausar"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Elegir ángulo"}
@@ -818,4 +817,7 @@
   :no-thank-you "No, gracias"}
 
  :renderer.effects
- {:permission-denied "Se denegó el permiso para acceder al archivo."}}
+ {:permission-denied "Se denegó el permiso para acceder al archivo."}
+
+ :renderer.panel.views
+ {:close-panel "Cerrar panel"}}

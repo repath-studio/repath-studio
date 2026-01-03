@@ -782,8 +782,7 @@
   :guide-snap "Привязка к направляющим"
   :play "Воспроизвести"
   :replay "Повтор"
-  :pause "Пауза"
-  :hide-timeline "Скрыть временную шкалу"}
+  :pause "Пауза"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Выбрать угол"}
@@ -810,4 +809,7 @@
   :no-thank-you "Нет, спасибо"}
 
  :renderer.effects
- {:permission-denied "В доступе к файлу отказано."}}
+ {:permission-denied "В доступе к файлу отказано."}
+
+ :renderer.panel.views
+ {:close-panel "Закрыть панель"}}

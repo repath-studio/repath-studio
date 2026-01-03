@@ -784,8 +784,7 @@
   :guide-snap "Ajuste à guia"
   :play "Reproduzir"
   :replay "Repetir"
-  :pause "Pausar"
-  :hide-timeline "Ocultar cronologia"}
+  :pause "Pausar"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Escolher ângulo"}
@@ -811,4 +810,7 @@
   :no-thank-you "Não, obrigado"}
 
  :renderer.effects
- {:permission-denied "A permissão para aceder ao ficheiro foi negada."}}
+ {:permission-denied "A permissão para aceder ao ficheiro foi negada."}
+
+ :renderer.panel.views
+ {:close-panel "Fechar painel"}}

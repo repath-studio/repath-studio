@@ -799,8 +799,7 @@
   :guide-snap "Aggancio guide"
   :play "Riproduci"
   :replay "Riproduci di nuovo"
-  :pause "Pausa"
-  :hide-timeline "Nascondi timeline"}
+  :pause "Pausa"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Preleva angolo"}
@@ -826,4 +825,7 @@
   :no-thank-you "No, grazie"}
 
  :renderer.effects
- {:permission-denied "Permesso di accesso al file negato."}}
+ {:permission-denied "Permesso di accesso al file negato."}
+
+ :renderer.panel.views
+ {:close-panel "Chiudi pannello"}}
