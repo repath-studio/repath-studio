@@ -59,18 +59,8 @@
   all: unset;
 }
 
-html {
-  @apply h-full p-safe;
-}
-
 body {
-  @apply m-0 text-foreground relative bg-secondary select-none font-sans h-full!
-  overflow-hidden;
   font-size: var(--font-size);
-}
-
-#app {
-  @apply h-full;
 }
 
 p {
@@ -140,6 +130,38 @@ label {
 .select-content {
   min-width: 127px;
   max-height: 80vh;
+}
+
+.popover-content {
+  @apply bg-primary drop-shadow-lg z-10 rounded-sm wrap-break-word border
+  border-border animate-in fade-in max-w-xs;
+}
+
+.tooltip-content {
+  @apply bg-primary px-2 py-1 rounded-sm drop-shadow-md border border-border
+  animate-in fade-in max-w-3xs;
+}
+
+.form-control-button {
+  @apply button bg-primary text-foreground-muted p-1 outline-inset
+  min-h-6.75! min-w-6.75!;
+}
+
+.form-element {
+  @apply bg-primary border-0 w-full px-3 py-1 h-6.75! shadow-none!
+  text-foreground! disabled:text-foreground-disabled!
+  hover:text-foreground-hovered! focus:text-foreground-hovered! box-border
+  placeholder:text-foreground-disabled text-xs!;
+}
+
+.button-link {
+  @apply text-foreground-hovered inline-block text-left text-wrap break-all
+  hover:cursor-pointer hover:underline outline-default;
+}
+
+.backdrop {
+  @apply fixed inset-0 flex items-center justify-center bg-backdrop
+  animate-in fade-in;
 }
 
 @keyframes rotationBreak {

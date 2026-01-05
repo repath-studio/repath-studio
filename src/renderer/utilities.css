@@ -81,23 +81,6 @@
   @apply m-1 border-t border-border self-stretch;
 }
 
-@utility button-link {
-  @apply text-foreground-hovered inline-block text-left text-wrap break-all
-  hover:cursor-pointer hover:underline outline-default;
-}
-
-@utility backdrop {
-  @apply fixed inset-0 flex items-center justify-center bg-backdrop
-  animate-in fade-in;
-}
-
-@utility form-element {
-  @apply bg-primary border-0 w-full px-3 py-1 h-6.75! shadow-none!
-  text-foreground! disabled:text-foreground-disabled!
-  hover:text-foreground-hovered! focus:text-foreground-hovered! box-border
-  placeholder:text-foreground-disabled text-xs!;
-}
-
 @utility outline-default {
   @apply outline-foreground outline-offset-1 focus-visible:outline-1;
 }
@@ -122,19 +105,4 @@
   &:disabled {
     @apply cursor-default pointer-events-none text-foreground-disabled;
   }
-}
-
-@utility popover-content {
-  @apply bg-primary drop-shadow-lg z-10 rounded-sm wrap-break-word border
-  border-border animate-in fade-in max-w-xs;
-}
-
-@utility tooltip-content {
-  @apply bg-primary px-2 py-1 rounded-sm drop-shadow-md border border-border
-  animate-in fade-in max-w-3xs;
-}
-
-@utility form-control-button {
-  @apply button bg-primary text-foreground-muted p-1 outline-inset
-  min-h-6.75! min-w-6.75!;
 }
