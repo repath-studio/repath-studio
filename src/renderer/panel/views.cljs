@@ -43,8 +43,7 @@
 (defc group
   [{:keys [id]
     :as props} & children]
-  (let [layout (useDefaultLayout #js {:id id,
-                                      :storage js/localStorage})]
+  (let [layout (useDefaultLayout #js {:id id})]
     (js/console.log (.-defaultLayout layout))
     (into [:> Group
            (merge {:defaultLayout (.-defaultLayout layout)
