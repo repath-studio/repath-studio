@@ -481,19 +481,17 @@
         md? @(rf/subscribe [::window.subs/md?])
         loading? @(rf/subscribe [::app.subs/loading?])
         theme @(rf/subscribe [::theme.subs/theme])]
-    [:<>
-     [:> Direction/Provider {:dir lang-dir}
-      [:> Tooltip/Provider
-       [:div.flex.flex-col.h-full.overflow-hidden.justify-between
-        (if (or md? desktop?)
-          [window.views/app-header]
-          [:div])
-        (if documents?
-          [main-panel-group]
-          [home recent-documents])
-        [:div]]
-       [dialog.views/root]
-       [views/toaster theme]]]
-     (when (and loading? (not desktop?))
-       [:div.bg-white.fixed.inset-0
-        [:div.loader]])]))
+    (if loading?
+      (when-not desktop? [:div.loader])
+      [:> Direction/Provider {:dir lang-dir}
+       [:> Tooltip/Provider
+        [:div.flex.flex-col.h-full.overflow-hidden.justify-between
+         (if (or md? desktop?)
+           [window.views/app-header]
+           [:div])
+         (if documents?
+           [main-panel-group]
+           [home recent-documents])
+         [:div]]
+        [dialog.views/root]
+        [views/toaster theme]]])))
