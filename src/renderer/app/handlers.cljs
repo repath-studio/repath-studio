@@ -9,8 +9,8 @@
   [db effect]
   (update db :fx conj effect))
 
-(m/=> feature? [:-> App Feature boolean?])
-(defn feature?
+(m/=> supported-feature? [:-> App Feature boolean?])
+(defn supported-feature?
   [db k]
   (contains? (:features db) k))
 

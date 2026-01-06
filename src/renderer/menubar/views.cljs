@@ -101,7 +101,7 @@
             :label [::recent "Recent"]
             :type :sub-menu
             :enabled [::document.subs/recent?]
-            :active [::app.subs/feature? :file-system]
+            :active [::app.subs/supported-feature? :file-system]
             :items (recent-submenu)}
            {:id :divider-2
             :type :separator}
@@ -110,13 +110,13 @@
             :icon "save"
             :action [::document.events/save]
             :enabled [::document.subs/saveable?]
-            :active [::app.subs/feature? :file-system]}
+            :active [::app.subs/supported-feature? :file-system]}
            {:id :save-as
             :label [::save-as "Save as..."]
             :icon "save-as"
             :action [::document.events/save-as]
             :enabled [::document.subs/entities?]
-            :active [::app.subs/feature? :file-system]}
+            :active [::app.subs/supported-feature? :file-system]}
            {:id :download
             :icon "download"
             :label [::download "Download"]

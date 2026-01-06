@@ -172,7 +172,7 @@
  ::handle-size
  :<- [::zoom]
  :<- [::window.subs/md?]
- :<- [::app.subs/feature? :touch]
+ :<- [::app.subs/supported-feature? :touch]
  (fn [[zoom md? touch?] [_]]
    (let [base-size 13]
      (cond-> (/ base-size zoom)

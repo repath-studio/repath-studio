@@ -55,7 +55,7 @@
 (defmethod attribute.hierarchy/form-element [:default :font-family]
   [_ k v attrs]
   (let [font-list @(rf/subscribe [::app.subs/font-list])
-        local-fonts @(rf/subscribe [::app.subs/feature? :local-fonts])]
+        local-fonts @(rf/subscribe [::app.subs/supported-feature? :local-fonts])]
     [:div.flex.gap-px.w-full
      [attribute.views/form-input k v attrs]
      (when local-fonts

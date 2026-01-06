@@ -97,7 +97,7 @@
    {:id :misc
     :label [::misc "Miscallaneous tools"]
     :tools (cond-> [:fill :measure]
-             @(rf/subscribe [::app.subs/feature? :eye-dropper])
+             @(rf/subscribe [::app.subs/supported-feature? :eye-dropper])
              (conj :dropper))}])
 
 (defn root

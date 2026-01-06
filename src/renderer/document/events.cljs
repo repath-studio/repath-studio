@@ -339,7 +339,7 @@
          :on-error on-error
          :formatter string->edn}}
 
-       (app.handlers/feature? db :file-system)
+       (app.handlers/supported-feature? db :file-system)
        {::app.effects/get-local-store
         {:store-key (str id)
          :formatter #(-> document
@@ -367,7 +367,7 @@
          :on-error on-error
          :formatter string->edn}}
 
-       (app.handlers/feature? db :file-system)
+       (app.handlers/supported-feature? db :file-system)
        {::effects/file-save (file-save-options document on-success on-error)}
 
        :else
