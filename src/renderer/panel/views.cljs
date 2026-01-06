@@ -29,13 +29,16 @@
   [id]
   [views/icon-button "window-close"
    {:title (i18n.views/t [::close-panel "Close panel"])
-    :class "absolute z-1 top-1 right-1 rtl:right-auto rtl:left-1
-            bg-transparent!"
+    :class "panel-close-button absolute z-1 top-1 right-1 rtl:right-auto
+            rtl:left-1 bg-transparent! invisible"
     :on-click #(rf/dispatch [::panel.events/toggle id])}])
 
 (defc panel
   [props & children]
-  (into [:> Panel props] children))
+  (into [:> Panel (views/merge-with-class
+                   {:class "hover:[&_>.panel-close-button]:visible!"}
+                   props)]
+        children))
 
 (defc group
   [{:keys [id]
