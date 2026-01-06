@@ -742,8 +742,7 @@
   :guide-snap "가이드 스냅"
   :play "재생"
   :replay "다시 재생"
-  :pause "일시정지"
-  :hide-timeline "타임라인 숨기기"}
+  :pause "일시정지"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "각도 선택"}
@@ -767,4 +766,7 @@
   :no-thank-you "아니요, 괜찮습니다"}
 
  :renderer.effects
- {:permission-denied "파일에 대한 액세스 권한이 거부되었습니다."}}
+ {:permission-denied "파일에 대한 액세스 권한이 거부되었습니다."}
+
+ :renderer.panel.views
+ {:close-panel "패널 닫기"}}

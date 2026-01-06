@@ -808,8 +808,7 @@
   :guide-snap "Οδηγός πλέγματος"
   :play "Αναπαραγωγή"
   :replay "Αναπαραγωγή ξανά"
-  :pause "Παύση"
-  :hide-timeline "Κλείσιμο χρονολογίου"}
+  :pause "Παύση"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Επιλογή γωνίας"}
@@ -835,4 +834,7 @@
   :no-thank-you "Όχι, ευχαριστώ"}
 
  :renderer.effects
- {:permission-denied "Η άδεια πρόσβασης στο αρχείο απορρίφθηκε."}}
+ {:permission-denied "Η άδεια πρόσβασης στο αρχείο απορρίφθηκε."}
+
+ :renderer.panel.views
+ {:close-panel "Κλείσιμο πάνελ"}}

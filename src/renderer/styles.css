@@ -164,44 +164,6 @@ label {
   animate-in fade-in;
 }
 
-.resize-handle {
-  @apply relative;
-
-  &:after {
-    content: '';
-    display: block;
-    z-index: 1;
-    position: absolute;
-    transition: background-color 0.3s;
-  }
-
-  &[data-panel-group-direction='vertical'] {
-    @apply h-px;
-
-    &:after {
-      @apply w-full h-1;
-
-      top: -50%;
-    }
-  }
-
-  &[data-panel-group-direction='horizontal'] {
-    @apply w-px;
-
-    &:after {
-      @apply h-full w-1;
-
-      left: -50%;
-    }
-  }
-
-  &[data-resize-handle-state='drag'] {
-    &:after {
-      @apply bg-accent;
-    }
-  }
-}
-
 @keyframes rotationBreak {
   0% {
     transform: rotate(0);

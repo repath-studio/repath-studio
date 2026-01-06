@@ -773,8 +773,7 @@
   :guide-snap "Guide snap"
   :play "Play"
   :replay "Replay"
-  :pause "Pause"
-  :hide-timeline "Hide timeline"}
+  :pause "Pause"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Pick angle"}
@@ -799,4 +798,7 @@
   :no-thank-you "No, thank you"}
 
  :renderer.effects
- {:permission-denied "Permission to access the file was denied."}}
+ {:permission-denied "Permission to access the file was denied."}
+
+ :renderer.panel.views
+ {:close-panel "Close panel"}}

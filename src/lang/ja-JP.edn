@@ -746,8 +746,7 @@
   :guide-snap "ガイドスナップ"
   :play "再生"
   :replay "リプレイ"
-  :pause "一時停止"
-  :hide-timeline "タイムラインを隠す"}
+  :pause "一時停止"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "角度を選択"}
@@ -771,4 +770,7 @@
   :no-thank-you "いいえ、結構です"}
 
  :renderer.effects
- {:permission-denied "ファイルへのアクセス許可が拒否されました。"}}
+ {:permission-denied "ファイルへのアクセス許可が拒否されました."}
+
+ :renderer.panel.views
+ {:close-panel "パネルを閉じる"}}

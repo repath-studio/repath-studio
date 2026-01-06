@@ -708,8 +708,7 @@
   :guide-snap "参考线吸附"
   :play "播放"
   :replay "重播"
-  :pause "暂停"
-  :hide-timeline "隐藏时间轴"}
+  :pause "暂停"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "选择角度"}
@@ -733,4 +732,7 @@
   :no-thank-you "不用了，谢谢"}
 
  :renderer.effects
- {:permission-denied "访问文件的权限被拒绝。"}}
+ {:permission-denied "访问文件的权限被拒绝."}
+
+ :renderer.panel.views
+ {:close-panel "关闭面板"}}

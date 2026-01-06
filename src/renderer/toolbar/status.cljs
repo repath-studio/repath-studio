@@ -76,31 +76,29 @@
        [views/dropdown-menu-item item])
      [views/dropdownmenu-arrow]]]])
 
-(defn view-radio-buttons []
-  (cond-> []
-    @(rf/subscribe [::window.subs/xl?])
-    (into [{:title [::timeline "Timeline"]
-            :active [::panel.subs/visible? :timeline]
-            :icon "animation"
-            :action [::panel.events/toggle :timeline]}
-           {:title [::history "History"]
-            :active [::panel.subs/visible? :history]
-            :icon "history"
-            :action [::panel.events/toggle :history]}
-           {:title [::xml "XML"]
-            :active [::panel.subs/visible? :xml]
-            :icon "code"
-            :action [::panel.events/toggle :xml]}])
+(def panel-buttons
+  [{:title [::xml "XML"]
+    :active [::panel.subs/visible? :xml]
+    :icon "code"
+    :action [::panel.events/toggle :xml]}
+   {:title [::timeline "Timeline"]
+    :active [::panel.subs/visible? :timeline]
+    :icon "animation"
+    :action [::panel.events/toggle :timeline]}
+   {:title [::history "History"]
+    :active [::panel.subs/visible? :history]
+    :icon "history"
+    :action [::panel.events/toggle :history]}])
 
-    :always
-    (into [{:title [::grid "Grid"]
-            :active [::app.subs/grid]
-            :icon "grid"
-            :action [::app.events/toggle-grid]}
-           {:title [::rulers "Rulers"]
-            :active [::ruler.subs/visible?]
-            :icon "ruler-combined"
-            :action [::ruler.events/toggle-visible]}])))
+(def view-radio-buttons
+  [{:title [::grid "Grid"]
+    :active [::app.subs/grid]
+    :icon "grid"
+    :action [::app.events/toggle-grid]}
+   {:title [::rulers "Rulers"]
+    :active [::ruler.subs/visible?]
+    :icon "ruler-combined"
+    :action [::ruler.events/toggle-visible]}])
 
 (defn set-zoom
   [e v]
@@ -216,13 +214,18 @@
         {:class "w-1/2 h-1/2 bottom-1/4 right-1/4"}]]]]))
 
 (defn root []
-  [views/toolbar
-   {:class "bg-primary mt-px relative justify-center md:justify-start py-2
-            md:py-1 gap-2 md:gap-1"}
-   [color-selectors]
-   [:div.grow.hidden.md:block]
-   (into [:<>] (map radio-button (view-radio-buttons)))
-   [snap.views/root]
-   [zoom-button-group]
-   [coordinates]
-   [timeline.views/time-bar]])
+  (let [md? @(rf/subscribe [::window.subs/md?])]
+    [views/toolbar
+     {:class "bg-primary relative justify-center md:justify-start py-2 md:py-1
+              gap-2 md:gap-1"}
+     [color-selectors]
+     [:div.grow.hidden.md:block]
+     (when md?
+       [:<>
+        (into [:<>] (map radio-button panel-buttons))
+        [:div.v-divider]])
+     (into [:<>] (map radio-button view-radio-buttons))
+     [snap.views/root]
+     [zoom-button-group]
+     [coordinates]
+     [timeline.views/time-bar]]))

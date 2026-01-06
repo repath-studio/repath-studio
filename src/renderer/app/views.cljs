@@ -4,7 +4,6 @@
    ["@radix-ui/react-select" :as Select]
    ["@radix-ui/react-tooltip" :as Tooltip]
    ["path-browserify" :as path-browserify]
-   ["react-resizable-panels" :refer [Panel PanelGroup]]
    [clojure.string :as string]
    [config :as config]
    [re-frame.core :as rf]
@@ -74,19 +73,19 @@
         clicked-element (rf/subscribe [::app.subs/clicked-element])
         ignored-ids (rf/subscribe [::document.subs/ignored-ids])
         nearest-neighbor (rf/subscribe [::snap.subs/nearest-neighbor])]
-    [["Viewbox" (coll->str @viewbox)]
-     ["Pointer position" (coll->str @pointer-pos)]
-     ["Adjusted pointer position" (coll->str @adjusted-pos)]
+    [["Viewbox" (coll->str viewbox)]
+     ["Pointer position" (coll->str pointer-pos)]
+     ["Adjusted pointer position" (coll->str adjusted-pos)]
      ["Pointer offset" (coll->str @pointer-offset)]
-     ["Adjusted pointer offset" (coll->str @adjusted-offset)]
-     ["Pointer drag?" (str @drag?)]
-     ["Pan" (coll->str @pan)]
-     ["Active tool" @active-tool]
-     ["Cached tool" @cached-tool]
-     ["State" @tool-state]
-     ["Clicked element" (:id @clicked-element)]
-     ["Ignored elements" @ignored-ids]
-     ["Snap" (map->str @nearest-neighbor)]]))
+     ["Adjusted pointer offset" (coll->str adjusted-offset)]
+     ["Pointer drag?" (str drag?)]
+     ["Pan" (coll->str pan)]
+     ["Active tool" active-tool]
+     ["Cached tool" cached-tool]
+     ["State" tool-state]
+     ["Clicked element" (:id clicked-element)]
+     ["Ignored elements" ignored-ids]
+     ["Snap" (map->str nearest-neighbor)]]))
 
 (defn debug-info []
   [:div
@@ -97,15 +96,6 @@
             [:strong.mr-1 s]
             [:div v]]))])
 
-(defn help
-  [message]
-  [:div.absolute.top-0.left-0.w-full.pointer-events-none
-   [:div.hidden.justify-center.w-full.p-4.lg:flex
-    [:div.bg-primary.overflow-hidden.shadow.rounded-full
-     [:div.text-xs.gap-1.flex.flex-wrap.py-2.px-4.justify-center.truncate
-      {:aria-live "polite"}
-      message]]]])
-
 (defn read-only-overlay []
   [:div.absolute.inset-0.border-4.border-accent.pointer-events-none
    (when-let [preview-label @(rf/subscribe [::document.subs/preview-label])]
@@ -114,14 +104,27 @@
 
 (defn right-panel
   [active-tool]
-  [:div.flex.flex-col.h-full.bg-secondary
+  [:div.flex.flex-col.h-full.bg-secondary.grow
    [views/scroll-area
     (tool.hierarchy/right-panel active-tool)]
    [:div.bg-primary.grow.flex]])
 
+(defn ruler-locked-toggle
+  []
+  (let [ruler-locked? @(rf/subscribe [::ruler.subs/locked?])]
+    [:div.bg-primary
+     {:style {:width ruler.views/ruler-size
+              :height ruler.views/ruler-size}}
+     [views/icon-button
+      (if ruler-locked? "lock" "unlock")
+      {:class "button-size-small rounded-xs m-0 bg-transparent! hidden"
+       :title (i18n.views/t (if ruler-locked?
+                              [::unlock "Unlock"]
+                              [::lock "Lock"]))
+       :on-click #(rf/dispatch [::ruler.events/toggle-locked])}]]))
+
 (defn frame-panel []
   (let [ruler-visible? @(rf/subscribe [::ruler.subs/visible?])
-        ruler-locked? @(rf/subscribe [::ruler.subs/locked?])
         backdrop @(rf/subscribe [::app.subs/backdrop])
         read-only? @(rf/subscribe [::document.subs/read-only?])
         help-message @(rf/subscribe [::tool.subs/help])
@@ -138,13 +141,7 @@
          [:div.bg-primary
           {:style {:width ruler.views/ruler-size
                    :height ruler.views/ruler-size}}
-          [views/icon-button
-           (if ruler-locked? "lock" "unlock")
-           {:class "button-size-small rounded-xs m-0 bg-transparent! hidden"
-            :title (i18n.views/t (if ruler-locked?
-                                   [::unlock "Unlock"]
-                                   [::lock "Lock"]))
-            :on-click #(rf/dispatch [::ruler.events/toggle-locked])}]]
+          [ruler-locked-toggle]]
          [:div.bg-primary.flex-1
           {:dir "ltr"
            :class "rtl:pl-[50px] rtl:md:pl-0"}
@@ -161,15 +158,13 @@
          :style {:background "var(--secondary)"}}
         [frame.views/root]
         [:div.absolute.inset-0.pointer-events-none.inset-shadow]
-        (when read-only?
-          [read-only-overlay])
-        (when debug-info?
-          [debug-info])
+        (when read-only? [read-only-overlay])
+        (when debug-info? [debug-info])
         (when worker-active?
           [:div.absolute.bottom-2.right-2.text-gray-500
            [views/loading-indicator]])
         (when (and help-bar (seq help-message) xl?)
-          [help help-message])
+          [views/help help-message])
         (when backdrop
           [:div.absolute.inset-0
            {:on-click #(rf/dispatch [::app.events/set-backdrop false])}])]
@@ -177,8 +172,7 @@
          [:div.bg-primary.flex.items-center
           [toolbar.object/root]])]]]))
 
-(defn xml-panel
-  []
+(defn xml-panel []
   (let [xml @(rf/subscribe [::element.subs/xml])
         codemirror-theme @(rf/subscribe [::theme.subs/codemirror])]
     [views/scroll-area
@@ -188,71 +182,75 @@
                   :readOnly true
                   :screenReaderLabel "XML"
                   :theme codemirror-theme}}]]]))
-(defn center-top-group
-  []
-  [:div.flex.flex-col.flex-1.h-full
-   [:> PanelGroup
-    {:direction "horizontal"
-     :id "center-top-group"
-     :autoSaveId "center-top-group"}
-    [:div.flex.flex-1.overflow-hidden
-     [:> Panel
-      {:id "frame-panel"
-       :order 1}
-      [frame-panel]]
-     (when @(rf/subscribe [::window.subs/md?])
-       [:<>
-        (when @(rf/subscribe [::panel.subs/visible? :history])
-          [:<>
-           [panel.views/resize-handle "history-resize-handle"]
-           [:> Panel {:id "history-panel"
-                      :defaultSize 30
-                      :minSize 5
-                      :order 2}
-            [:div.bg-primary.h-full
-             [history.views/root]]]])
 
-        (when @(rf/subscribe [::panel.subs/visible? :xml])
-          [:<>
-           [panel.views/resize-handle "xml-resize-handle"]
-           [:> Panel {:id "xml-panel"
-                      :defaultSize 30
-                      :minSize 5
-                      :order 3}
+(defn center-top-group []
+  (let [md? @(rf/subscribe [::window.subs/md?])
+        history-visible? @(rf/subscribe [::panel.subs/visible? :history])
+        xml-visible? @(rf/subscribe [::panel.subs/visible? :xml])]
+    [:div.flex.flex-col.flex-1.h-full
+     [panel.views/group
+      {:orientation "horizontal"
+       :id "center-top-group"
+       :class "h-full"}
+      (when (and md? xml-visible?)
+        [:<>
+         [panel.views/panel
+          {:id :xml
+           :class "relative"
+           :defaultSize 300
+           :minSize 100}
+          [:div.h-full.bg-primary.flex
+           [xml-panel]]
+          [panel.views/close-button :xml]]
+         [panel.views/separator]])
 
-            [:div.h-full.bg-primary.flex
-             [xml-panel]]]])])]]])
+      [panel.views/panel
+       {:defaultSize "100%"
+        :minSize 100}
+       [frame-panel]]
 
-(defn editor
-  []
+      (when (and md? history-visible?)
+        [:<>
+         [panel.views/separator]
+         [panel.views/panel
+          {:id :history
+           :class "relative"
+           :defaultSize 300
+           :minSize 100}
+          [:div.bg-primary.h-full
+           [history.views/root]]
+          [panel.views/close-button :history]]])]]))
+
+(defn editor []
   (let [timeline-visible @(rf/subscribe [::panel.subs/visible? :timeline])
         md? @(rf/subscribe [::window.subs/md?])]
-    [:> PanelGroup
-     {:direction "vertical"
+    [panel.views/group
+     {:orientation "vertical"
       :id "editor-group"
-      :autoSaveId "editor-group"}
-     [:> Panel {:id "editor-panel"
-                :minSize 20
-                :order 1}
+      :class "h-full"}
+     [panel.views/panel
+      {:defaultSize "100%"
+       :minSize 100}
       [center-top-group]]
-     [toolbar.status/root]
-     (when md?
+
+     (when (and md? timeline-visible)
        [:<>
-        (when timeline-visible
-          [:<>
-           [panel.views/resize-handle "timeline-resize-handle"]
-           [:> Panel
-            {:id "timeline-panel"
-             :minSize 10
-             :defaultSize 20
-             :order 2}
-            [timeline.views/root]]])
-        [repl.views/root]])]))
+        [panel.views/separator]
+        [panel.views/panel
+         {:id :timeline
+          :class "relative"
+          :minSize 100
+          :defaultSize 300}
+         [timeline.views/root]
+         [panel.views/close-button :timeline]]])
+     (when md? [panel.views/separator])
+     [toolbar.status/root]
+     (when md? [repl.views/root])]))
 
 (defn document-size-select []
   [:> Select/Root
-   {:onValueChange #(rf/dispatch [::document.events/new-from-template
-                                  (get db/a-series-paper-sizes %)])}
+   {:onValueChange #(let [size (get db/a-series-paper-sizes %)]
+                      (rf/dispatch [::document.events/new-from-template size]))}
    [:> Select/Trigger
     {:class "button px-2 bg-overlay rounded-sm"
      :aria-label (i18n.views/t [::select-size "Select size"])}
@@ -291,6 +289,20 @@
     (or title (.basename path-browserify path))]
    (when path
      [:span.text-lg.text-foreground-muted (.dirname path-browserify path)])])
+
+(def help-commands
+  [["command"
+    [::command-panel "Command panel"]
+    [::dialog.events/show-cmdk]]
+   ["earth"
+    [::website "Website"]
+    [::events/open-remote-url "https://repath.studio/"]]
+   ["commit"
+    [::source-code "Source Code"]
+    [::events/open-remote-url "https://github.com/repath-studio/repath-studio"]]
+   ["list"
+    [::changelog "Changelog"]
+    [::events/open-remote-url "https://repath.studio/roadmap/changelog/"]]])
 
 (defn help-command
   [icon label event]
@@ -349,23 +361,11 @@
          [:h2.mb-3.mt-8.text-2xl
           (i18n.views/t [::help "Help"])]
 
-         (->> [["command"
-                [::command-panel "Command panel"]
-                [::dialog.events/show-cmdk]]
-               ["earth"
-                [::website "Website"]
-                [::events/open-remote-url "https://repath.studio/"]]
-               ["commit"
-                [::source-code "Source Code"]
-                [::events/open-remote-url "https://github.com/repath-studio/repath-studio"]]
-               ["list"
-                [::changelog "Changelog"]
-                [::events/open-remote-url "https://repath.studio/roadmap/changelog/"]]]
+         (->> help-commands
               (map #(apply help-command %))
               (into [:div]))]]]]]]])
 
-(defn bottom-bar
-  []
+(defn bottom-bar []
   (let [some-selected? @(rf/subscribe [::element.subs/some-selected?])
         active-tool @(rf/subscribe [::tool.subs/active])]
     [:div.flex.justify-evenly.p-2.gap-1.rtl:flex-row-reverse
@@ -393,7 +393,7 @@
       {:icon "shell"
        :label [::shell "Shell"]
        :direction "bottom"
-       :content [repl.views/root]}]
+       :content [:div.flex.flex-col.flex-1 [repl.views/root]]}]
 
      [:span.v-divider]
 
@@ -410,12 +410,71 @@
        :disabled (not some-selected?)
        :content [right-panel active-tool]}]]))
 
-(defn root
-  []
-  (let [documents? @(rf/subscribe [::document.subs/entities?])
-        tree? @(rf/subscribe [::panel.subs/visible? :tree])
-        properties? @(rf/subscribe [::panel.subs/visible? :properties])
+(defn center-panel []
+  (let [properties? @(rf/subscribe [::panel.subs/visible? :properties])
         active-tool @(rf/subscribe [::tool.subs/active])
+        md? @(rf/subscribe [::window.subs/md?])
+        desktop? @(rf/subscribe [::app.subs/desktop?])]
+    [:div.flex.flex-col.flex-1.overflow-hidden.h-full
+     (if md?
+       [document.views/tab-bar]
+       [:div.flex.overflow-hidden
+        (when-not desktop?
+          [views/toolbar [menubar.views/root]])
+        [document.views/tab-bar]
+        [:div.drag.flex-1]])
+     [:div.flex.h-full.flex-1.gap-px.overflow-hidden
+      [panel.views/group
+       {:orientation "horizontal"
+        :id "main-editor-group"
+        :class "w-full"}
+       [panel.views/panel
+        {:defaultSize "100%"
+         :minSize 100}
+        [:div.flex.h-full.flex-col.flex-1.overflow-hidden.gap-px.w-full
+         [editor]]]
+       (when (and md? properties?)
+         [:<>
+          [panel.views/separator]
+          [panel.views/panel
+           {:id :properties
+            :defaultSize 320
+            :minSize 320
+            :class "flex gap-px"}
+           (when properties?
+             [right-panel active-tool])]])]
+      (when md?
+        [:div.bg-primary.flex
+         [toolbar.object/root]])]]))
+
+(defn main-panel-group []
+  (let [tree? @(rf/subscribe [::panel.subs/visible? :tree])
+        md? @(rf/subscribe [::window.subs/md?])]
+    [:div.flex.flex-col.h-full.overflow-hidden
+     [:div.flex.flex-1.overflow-hidden.gap-px
+      [panel.views/group
+       {:orientation "horizontal"
+        :id "main-group"
+        :class "w-full"}
+       (when (and tree? md?)
+         [:<>
+          [panel.views/panel
+           {:id :tree
+            :defaultSize 227
+            :minSize 227}
+           [:div.flex.flex-col.overflow-hidden.h-full
+            [document.views/actions]
+            [tree.views/root]]]
+          [panel.views/separator]])
+       [panel.views/panel
+        {:defaultSize "100%"
+         :minSize 100}
+        [center-panel]]]]
+     (when-not md?
+       [bottom-bar])]))
+
+(defn root []
+  (let [documents? @(rf/subscribe [::document.subs/entities?])
         recent-documents @(rf/subscribe [::document.subs/recent])
         lang-dir @(rf/subscribe [::i18n.subs/lang-dir])
         desktop? @(rf/subscribe [::app.subs/desktop?])
@@ -431,31 +490,7 @@
            [window.views/app-header]
            [:div])
          (if documents?
-           [:div.flex.flex-col.h-full.overflow-hidden
-            [:div.flex.flex-1.overflow-hidden.gap-px
-             (when (and tree? md?)
-               [:div.flex.flex-col.overflow-hidden
-                [document.views/actions]
-                [tree.views/root]])
-             [:div.flex.flex-col.flex-1.overflow-hidden.h-full
-              (if md?
-                [document.views/tab-bar]
-                [:div.flex.overflow-hidden
-                 (when-not desktop?
-                   [views/toolbar [menubar.views/root]])
-                 [document.views/tab-bar]
-                 [:div.drag.flex-1]])
-              [:div.flex.h-full.flex-1.gap-px.overflow-hidden
-               [:div.flex.h-full.flex-col.flex-1.overflow-hidden.gap-px
-                [editor]]
-               (when md?
-                 [:div.flex.gap-px
-                  (when properties?
-                    [:div.w-80 [right-panel active-tool]])
-                  [:div.bg-primary.flex
-                   [toolbar.object/root]]])]]]
-            (when-not md?
-              [bottom-bar])]
+           [main-panel-group]
            [home recent-documents])
          [:div]]
         [dialog.views/root]

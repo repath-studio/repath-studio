@@ -762,8 +762,7 @@
   :guide-snap "التقاط الدليل"
   :play "تشغيل"
   :replay "إعادة تشغيل"
-  :pause "إيقاف مؤقت"
-  :hide-timeline "إخفاء الجدول الزمني"}
+  :pause "إيقاف مؤقت"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "اختيار زاوية"}
@@ -788,4 +787,7 @@
   :no-thank-you "لا، شكراً"}
 
  :renderer.effects
- {:permission-denied "تم رفض الإذن للوصول إلى الملف."}}
+ {:permission-denied "تم رفض الإذن للوصول إلى الملف."}
+
+ :renderer.panel.views
+ {:close-panel "إغلاق اللوحة"}}
