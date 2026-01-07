@@ -339,7 +339,7 @@
                           :else
                           "0 - env(safe-area-inset-right)
                            0 - env(safe-area-inset-left)")}}
-       [:> Drawer.Title {:class "sr-only"} label]
+       [:> Drawer.Title {:class "sr-only"} (i18n.views/t label)]
        [:> Drawer.Description
         {:as-child true}
         [:div.flex.flex-1.overflow-hidden
