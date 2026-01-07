@@ -216,7 +216,8 @@
   [:div#tree-sidebar.flex.flex-1.bg-primary.h-full.overflow-hidden
    ;; When the tree is hovered, ignore the hovered class of the elements,
    ;; if the element itself is not also hovered.
-   {:class "hover:**:[&.list-item-button]:not-hover:bg-inherit"
+   {:class "hover:**:[&.list-item-button]:not-hover:bg-inherit
+            focus-visible:outline-default focus-visible:outline-inset"
     :on-click #(rf/dispatch [::element.events/deselect-all])
     :tab-index 0
     :on-key-down #(case (.-code %)
