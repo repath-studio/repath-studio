@@ -13,17 +13,44 @@
        (.from js/Array)))
 
 (rf/reg-fx
+ ::focus
+ (fn []
+   (some-> (.getElementById js/document "tree-sidebar")
+           (.focus))))
+
+(rf/reg-fx
+ ::focus-first
+ (fn []
+   (some-> (get-list-elements!)
+           (first)
+           (.focus))))
+
+(rf/reg-fx
+ ::focus-last
+ (fn []
+   (some-> (get-list-elements!)
+           (last)
+           (.focus))))
+
+(rf/reg-fx
  ::focus-next
  (fn [[id direction]]
    (let [list-elements (get-list-elements!)
          current-el (query-by-id! id)
          index (.indexOf list-elements current-el)
          max-index (dec (count list-elements))
-         updated-i (case direction
-                     :up (if (zero? index) max-index (dec index))
-                     :down (if (< index max-index) (inc index) 0))
-         element (get list-elements updated-i)]
-     (.focus element))))
+         updated-index (case direction
+                         :up
+                         (if (zero? index)
+                           max-index
+                           (dec index))
+
+                         :down
+                         (if (< index max-index)
+                           (inc index)
+                           0))]
+     (some-> (get list-elements updated-index)
+             (.focus)))))
 
 (rf/reg-fx
  ::select-range

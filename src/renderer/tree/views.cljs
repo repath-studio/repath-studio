@@ -113,6 +113,9 @@
     (do (.stopPropagation e)
         (rf/dispatch [::element.events/select id (.-ctrlKey e)]))
 
+    "Escape"
+    (rf/dispatch [::tree.events/focus])
+
     "Space"
     (do (.stopPropagation e)
         (rf/dispatch [::element.events/select id (.-ctrlKey e)]))
@@ -214,7 +217,18 @@
    ;; When the tree is hovered, ignore the hovered class of the elements,
    ;; if the element itself is not also hovered.
    {:class "hover:**:[&.list-item-button]:not-hover:bg-inherit"
-    :on-click #(rf/dispatch [::element.events/deselect-all])}
+    :on-click #(rf/dispatch [::element.events/deselect-all])
+    :tab-index 0
+    :on-key-down #(case (.-code %)
+                    "ArrowUp"
+                    (do (.stopPropagation %)
+                        (rf/dispatch [::tree.events/focus-last]))
+
+                    "ArrowDown"
+                    (do (.stopPropagation %)
+                        (rf/dispatch [::tree.events/focus-first]))
+
+                    nil)}
    [views/scroll-area
     [:ul.overflow-hidden.w-full
      {:role "menu"
