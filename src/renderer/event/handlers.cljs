@@ -62,8 +62,7 @@
 (defn on-pointer-move
   [db e]
   (let [{:keys [pointer-offset tool dom-rect active-pointers drag-pointer]} db
-        {:keys [pointer-pos pointer-id]} e
-        adjusted-pos (adjusted-pointer-pos db pointer-pos)]
+        {:keys [pointer-pos pointer-id]} e]
     (if (and (not drag-pointer)
              (> (count active-pointers) 1))
       (pinch db e)
@@ -88,14 +87,13 @@
 
         (or (= drag-pointer pointer-id) (not drag-pointer))
         (assoc :pointer-pos pointer-pos
-               :adjusted-pointer-pos adjusted-pos)))))
+               :adjusted-pointer-pos (adjusted-pointer-pos db pointer-pos))))))
 
 (m/=> on-pointer-down [:-> App PointerEvent App])
 (defn on-pointer-down
   [db e]
   (let [{:keys [tool state nearest-neighbor active-pointers]} db
-        {:keys [button pointer-pos pointer-id]} e
-        adjusted-pos (adjusted-pointer-pos db pointer-pos)]
+        {:keys [button pointer-pos pointer-id]} e]
     (cond-> db
       (not= button :right)
       (assoc-in [:active-pointers pointer-id] e)
@@ -108,7 +106,7 @@
       (and (not= button :right)
            (not (seq active-pointers)))
       (assoc :pointer-offset pointer-pos
-             :adjusted-pointer-offset adjusted-pos
+             :adjusted-pointer-offset (adjusted-pointer-pos db pointer-pos)
              :nearest-neighbor-offset (:point nearest-neighbor))
 
       (not (seq active-pointers))
