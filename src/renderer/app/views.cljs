@@ -61,6 +61,8 @@
 (defn debug-rows
   []
   (let [viewbox @(rf/subscribe [::frame.subs/viewbox])
+        active-pointers @(rf/subscribe [::app.subs/active-pointers])
+        pinch-distance @(rf/subscribe [::app.subs/pinch-distance])
         pointer-pos @(rf/subscribe [::app.subs/pointer-pos])
         adjusted-pos @(rf/subscribe [::app.subs/adjusted-pointer-pos])
         pointer-offset @(rf/subscribe [::app.subs/pointer-offset])
@@ -74,6 +76,8 @@
         ignored-ids @(rf/subscribe [::document.subs/ignored-ids])
         nearest-neighbor @(rf/subscribe [::snap.subs/nearest-neighbor])]
     [["Viewbox" (coll->str viewbox)]
+     ["Active pointers" (coll->str (keys active-pointers))]
+     ["Pinch distance" (str pinch-distance)]
      ["Pointer position" (coll->str pointer-pos)]
      ["Adjusted pointer position" (coll->str adjusted-pos)]
      ["Pointer offset" (coll->str pointer-offset)]

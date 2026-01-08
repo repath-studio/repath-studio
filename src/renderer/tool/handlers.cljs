@@ -107,6 +107,7 @@
         (activate :transform))
 
     :always
-    (-> (assoc :active-pointers #{})
-        (dissoc :pointer-offset :drag :nearest-neighbor)
+    (-> (assoc :active-pointers {})
+        (dissoc :pointer-offset :drag-pointer :nearest-neighbor
+                :pinch-distance :pinch-midpoint)
         (set-state :idle))))

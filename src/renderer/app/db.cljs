@@ -8,6 +8,7 @@
    [renderer.dialog.db :refer [Dialog]]
    [renderer.document.db :refer [Document DocumentId RecentDocument]]
    [renderer.element.db :refer [Element]]
+   [renderer.event.db :refer [PointerEvent]]
    [renderer.frame.db :refer [DomRect]]
    [renderer.i18n.db
     :as i18n.db
@@ -39,7 +40,7 @@
   [:map {:closed true}
    [:tool {:default :transform} Tool]
    [:cached-tool {:optional true} Tool]
-   [:active-pointers {:default #{}} [:set number?]]
+   [:active-pointers {:default {}} [:map-of number? PointerEvent]]
    [:pointer-pos {:default [0 0]} Vec2]
    [:pointer-offset {:optional true} Vec2]
    [:adjusted-pointer-pos {:default [0 0]} Vec2]
@@ -47,7 +48,9 @@
    [:nearest-neighbor-offset {:optional true} [:maybe Vec2]]
    [:nearest-neighbor {:optional true} [:maybe NearestNeighbor]]
    [:nearest-neighbors {:optional true} [:sequential NearestNeighbor]]
-   [:drag {:optional true} boolean?]
+   [:drag-pointer {:optional true} number?]
+   [:pinch-distance {:optional true} number?]
+   [:pinch-midpoint {:optional true} Vec2]
    [:zoom-sensitivity {:default 0.9} [:and number? [:>= 0.01] [:<= 0.99]]]
    [:event-timestamp {:optional true} number?]
    [:features {:optional true} [:set Feature]]
@@ -74,7 +77,8 @@
              :persist true} [:vector RecentDocument]]
    [:drag-threshold {:default 1} number?]
    [:system-fonts {:optional true} SystemFonts]
-   [:debug-info {:default false} boolean?]
+   [:debug-info {:default false
+                 :persist true} boolean?]
    [:help-bar {:default true} boolean?]
    [:loading {:default true} boolean?]
    [:pen-mode {:default false} boolean?]

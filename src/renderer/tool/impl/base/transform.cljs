@@ -382,7 +382,10 @@
 (defmethod tool.hierarchy/on-drag :transform
   [db e]
   (let [{:keys [ctrl-key alt-key shift-key]} e
-        ratio-locked? (or ctrl-key (element.handlers/ratio-locked? db))
+        multi-touch? (> (count (:active-pointers db)) 1)
+        ratio-locked? (or ctrl-key
+                          multi-touch?
+                          (element.handlers/ratio-locked? db))
         db (element.handlers/clear-ignored db)
         delta (tool.handlers/pointer-delta db)
         [delta-x delta-y] delta
@@ -397,7 +400,7 @@
       (-> db
           (element.handlers/clear-hovered)
           (app.handlers/add-fx [::set-select-box (select-rect db alt-key)])
-          (reduce-by-area alt-key element.handlers/hover))
+          (reduce-by-area (or alt-key multi-touch?) element.handlers/hover))
 
       :translate
       (if alt-key
