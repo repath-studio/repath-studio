@@ -60,23 +60,23 @@
 
 (defn debug-rows
   []
-  (let [viewbox (rf/subscribe [::frame.subs/viewbox])
-        pointer-pos (rf/subscribe [::app.subs/pointer-pos])
-        adjusted-pos (rf/subscribe [::app.subs/adjusted-pointer-pos])
-        pointer-offset (rf/subscribe [::app.subs/pointer-offset])
-        adjusted-offset (rf/subscribe [::app.subs/adjusted-pointer-offset])
-        drag? (rf/subscribe [::tool.subs/drag?])
-        pan (rf/subscribe [::document.subs/pan])
-        active-tool (rf/subscribe [::tool.subs/active])
-        cached-tool (rf/subscribe [::tool.subs/cached])
-        tool-state (rf/subscribe [::tool.subs/state])
-        clicked-element (rf/subscribe [::app.subs/clicked-element])
-        ignored-ids (rf/subscribe [::document.subs/ignored-ids])
-        nearest-neighbor (rf/subscribe [::snap.subs/nearest-neighbor])]
+  (let [viewbox @(rf/subscribe [::frame.subs/viewbox])
+        pointer-pos @(rf/subscribe [::app.subs/pointer-pos])
+        adjusted-pos @(rf/subscribe [::app.subs/adjusted-pointer-pos])
+        pointer-offset @(rf/subscribe [::app.subs/pointer-offset])
+        adjusted-offset @(rf/subscribe [::app.subs/adjusted-pointer-offset])
+        drag? @(rf/subscribe [::tool.subs/drag?])
+        pan @(rf/subscribe [::document.subs/pan])
+        active-tool @(rf/subscribe [::tool.subs/active])
+        cached-tool @(rf/subscribe [::tool.subs/cached])
+        tool-state @(rf/subscribe [::tool.subs/state])
+        clicked-element @(rf/subscribe [::app.subs/clicked-element])
+        ignored-ids @(rf/subscribe [::document.subs/ignored-ids])
+        nearest-neighbor @(rf/subscribe [::snap.subs/nearest-neighbor])]
     [["Viewbox" (coll->str viewbox)]
      ["Pointer position" (coll->str pointer-pos)]
      ["Adjusted pointer position" (coll->str adjusted-pos)]
-     ["Pointer offset" (coll->str @pointer-offset)]
+     ["Pointer offset" (coll->str pointer-offset)]
      ["Adjusted pointer offset" (coll->str adjusted-offset)]
      ["Pointer drag?" (str drag?)]
      ["Pan" (coll->str pan)]
