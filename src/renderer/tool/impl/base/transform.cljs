@@ -524,14 +524,12 @@
         hovered-elements @(rf/subscribe [::element.subs/hovered])
         touch? @(rf/subscribe [::app.subs/supported-feature? :touch])]
     [:<>
-     (for [el selected-elements]
-       ^{:key (str (:id el) "-bbox")}
-       [render-bounding-box el false])
+     (into [:<>]
+           (map #(render-bounding-box % false) selected-elements))
 
      (when (or (not touch?) (= state :select))
-       (for [el hovered-elements]
-         ^{:key (str (:id el) "-bbox")}
-         [render-bounding-box el true]))
+       (into [:<>]
+             (map #(render-bounding-box % true) hovered-elements)))
 
      (when (and (pos? elements-area)
                 (= state :scale)
