@@ -42,7 +42,7 @@
   (let [{:keys [active-pointers pinch-distance pinch-midpoint]} db
         {:keys [pointer-id]} e
         active-pointers (assoc active-pointers pointer-id e)
-        [pos1 pos2] (map :pointer-pos (take 2 (vals active-pointers)))
+        [pos1 pos2] (->> (vals active-pointers) (take 2) (map :pointer-pos))
         distance (matrix/distance pos1 pos2)
         midpoint (-> (matrix/add pos1 pos2)
                      (matrix/div 2))
@@ -61,10 +61,9 @@
 (m/=> on-pointer-move [:-> App PointerEvent App])
 (defn on-pointer-move
   [db e]
-  (let [{:keys [pointer-offset tool dom-rect active-pointers drag-pointer]} db
+  (let [{:keys [pointer-offset tool dom-rect drag-pointer]} db
         {:keys [pointer-pos pointer-id]} e]
-    (if (and (not drag-pointer)
-             (> (count active-pointers) 1))
+    (if (and (tool.handlers/multi-touch? db) (not drag-pointer))
       (pinch db e)
       (cond-> (if pointer-offset
                 (if (significant-drag? db pointer-pos pointer-offset)
@@ -158,9 +157,7 @@
         db (snap.handlers/update-nearest-neighbors db)]
     (case (:type e)
       "pointermove"
-      (cond-> db
-        (contains? active-pointers pointer-id)
-        (on-pointer-move e))
+      (on-pointer-move db e)
 
       "pointerdown"
       (on-pointer-down db e)
