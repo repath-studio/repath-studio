@@ -29,7 +29,7 @@
 (defmulti bbox :tag :hierarchy hierarchy)
 (defmulti translate (fn [el _offset] (:tag el)) :hierarchy hierarchy)
 (defmulti scale (fn [el _ratio _pivot-point] (:tag el)) :hierarchy hierarchy)
-(defmulti edit (fn [el _offset _handle] (:tag el)) :hierarchy hierarchy)
+(defmulti edit (fn [el _offset _handle _lock?] (:tag el)) :hierarchy hierarchy)
 (defmulti properties identity :hierarchy hierarchy)
 
 (defmethod render :default [])
@@ -41,5 +41,5 @@
 (defmethod snapping-points :default [] [])
 (defmethod translate :default [el _offset] el)
 (defmethod scale :default [el _ratio _pivot-point] el)
-(defmethod edit :default [el _offset _handle _e] el)
+(defmethod edit :default [el _offset _handle _lock?] el)
 (defmethod properties :default [])

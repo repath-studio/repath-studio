@@ -101,9 +101,9 @@
             :element-id (:id el)}])]))
 
 (defmethod element.hierarchy/edit :line
-  [el offset handle e]
+  [el offset handle lock?]
   (let [[x y] (cond-> offset
-                (:ctrl-key e)
+                lock?
                 (event.handlers/lock-direction))]
     (case handle
       :starting-point
