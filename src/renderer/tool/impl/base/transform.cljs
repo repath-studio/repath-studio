@@ -6,6 +6,7 @@
    [reagent.core :as reagent]
    [renderer.app.db :refer [App]]
    [renderer.app.handlers :as app.handlers]
+   [renderer.app.subs :as-alias app.subs]
    [renderer.db :refer [BBox Vec2]]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.db :refer [Element]]
@@ -517,15 +518,17 @@
         bbox @(rf/subscribe [::element.subs/bbox])
         elements-area @(rf/subscribe [::element.subs/area])
         pivot-point @(rf/subscribe [::tool.subs/pivot-point])
-        hovered-elements @(rf/subscribe [::element.subs/hovered])]
+        hovered-elements @(rf/subscribe [::element.subs/hovered])
+        touch? @(rf/subscribe [::app.subs/supported-feature? :touch])]
     [:<>
      (for [el selected-elements]
        ^{:key (str (:id el) "-bbox")}
        [render-bounding-box el false])
 
-     (for [el hovered-elements]
-       ^{:key (str (:id el) "-bbox")}
-       [render-bounding-box el true])
+     (when-not touch?
+       (for [el hovered-elements]
+         ^{:key (str (:id el) "-bbox")}
+         [render-bounding-box el true]))
 
      (when (and (pos? elements-area)
                 (= state :scale)
