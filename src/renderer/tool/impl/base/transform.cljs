@@ -7,7 +7,7 @@
    [renderer.app.db :refer [App]]
    [renderer.app.handlers :as app.handlers]
    [renderer.app.subs :as-alias app.subs]
-   [renderer.db :refer [BBox Vec2]]
+   [renderer.db :refer [BBox Orientation Vec2]]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.db :refer [Element]]
    [renderer.element.handlers :as element.handlers]
@@ -15,7 +15,6 @@
    [renderer.element.subs :as-alias element.subs]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
-   [renderer.ruler.db :refer [Orientation]]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.db :refer [Handle]]
    [renderer.tool.handlers :as tool.handlers]
@@ -380,24 +379,29 @@
       (-> (element.handlers/toggle-selection id shift-key)
           (snap.handlers/delete-from-tree #{id})))))
 
+(m/=> ratio-locked? [:-> App any? boolean?])
 (defn ratio-locked?
   [db e]
   (or (:ctrl-key e)
       (tool.handlers/multi-touch? db)
       (element.handlers/ratio-locked? db)))
 
+(m/=> direction [:-> Vec2 Orientation])
+(defn direction
+  [delta]
+  (let [[delta-x delta-y] delta]
+    (if (> (abs delta-x) (abs delta-y))
+      :vertical
+      :horizontal)))
+
 (defmethod tool.hierarchy/on-drag :transform
   [db e]
   (let [{:keys [ctrl-key alt-key shift-key]} e
         db (element.handlers/clear-ignored db)
         delta (tool.handlers/pointer-delta db)
-        [delta-x delta-y] delta
         selected-elements (element.handlers/selected db)
         locked? (every? :locked selected-elements)
-        axis (when ctrl-key
-               (if (> (abs delta-x) (abs delta-y))
-                 :vertical
-                 :horizontal))]
+        axis (when ctrl-key (direction delta))]
     (case (:state db)
       :select
       (-> db
