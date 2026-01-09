@@ -380,13 +380,15 @@
       (-> (element.handlers/toggle-selection id shift-key)
           (snap.handlers/delete-from-tree #{id})))))
 
+(defn ratio-locked?
+  [db e]
+  (or (:ctrl-key e)
+      (tool.handlers/multi-touch? db)
+      (element.handlers/ratio-locked? db)))
+
 (defmethod tool.hierarchy/on-drag :transform
   [db e]
   (let [{:keys [ctrl-key alt-key shift-key]} e
-        multi-touch? (> (count (:active-pointers db)) 1)
-        ratio-locked? (or ctrl-key
-                          multi-touch?
-                          (element.handlers/ratio-locked? db))
         db (element.handlers/clear-ignored db)
         delta (tool.handlers/pointer-delta db)
         [delta-x delta-y] delta
@@ -401,7 +403,8 @@
       (-> db
           (element.handlers/clear-hovered)
           (app.handlers/add-fx [::set-select-box (select-rect db alt-key)])
-          (reduce-by-area (or alt-key multi-touch?) element.handlers/hover))
+          (reduce-by-area (or alt-key (tool.handlers/multi-touch? db))
+                          element.handlers/hover))
 
       :translate
       (if alt-key
@@ -429,7 +432,7 @@
           (history.handlers/reset-state)
           (tool.handlers/set-cursor (if locked? "not-allowed" "default"))
           (scale (matrix/add delta (snap.handlers/nearest-delta db))
-                 {:ratio-locked ratio-locked?
+                 {:ratio-locked (ratio-locked? db e)
                   :in-place shift-key
                   :recursive alt-key})))))
 
