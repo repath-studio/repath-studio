@@ -56,15 +56,15 @@
         (attribute.hierarchy/update-attr :ry min (/ height 2)))))
 
 (defmethod element.hierarchy/edit :rect
-  [el offset handle e]
+  [el offset handle lock?]
   (let [[x y] (cond-> offset
                 (and (contains? #{:position :size} handle)
-                     (:ctrl-key e))
+                     lock?)
                 (event.handlers/lock-direction))
         [w h] (utils.bounds/->dimensions (:bbox el))
         clamp-radius (fn [r max-size]
                        (min (max 0 r)
-                            (/ (if (:ctrl-key e)
+                            (/ (if lock?
                                  (min w h)
                                  max-size) 2)))]
     (case handle
@@ -86,7 +86,7 @@
         :always
         (attribute.hierarchy/update-attr :rx (comp #(clamp-radius % w) -) x)
 
-        (:ctrl-key e)
+        lock?
         (update :attrs (fn [attrs] (assoc attrs :ry (:rx attrs)))))
 
       :ry
@@ -94,7 +94,7 @@
         :always
         (attribute.hierarchy/update-attr :ry (comp #(clamp-radius % h) +) y)
 
-        (:ctrl-key e)
+        lock?
         (update :attrs (fn [attrs] (assoc attrs :rx (:ry attrs)))))
 
       el)))

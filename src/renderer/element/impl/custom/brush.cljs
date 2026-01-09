@@ -195,10 +195,10 @@
                    (-> el :attrs :points points->vec))])
 
 (defmethod element.hierarchy/edit :brush
-  [el offset handle e]
+  [el offset handle lock?]
   (let [index (js/parseInt (name handle))
         [x y] (cond-> offset
-                (:ctrl-key e)
+                lock?
                 (event.handlers/lock-direction))
         transform-point (fn [[px py pressure]]
                           (vector (utils.length/transform px + x)

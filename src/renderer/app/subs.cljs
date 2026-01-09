@@ -4,6 +4,14 @@
    [renderer.utils.platform :as utils.platform]))
 
 (rf/reg-sub
+ ::active-pointers
+ :-> :active-pointers)
+
+(rf/reg-sub
+ ::pinch-distance
+ :-> :pinch-distance)
+
+(rf/reg-sub
  ::pointer-pos
  :-> :pointer-pos)
 

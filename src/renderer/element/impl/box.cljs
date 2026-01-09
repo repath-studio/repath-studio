@@ -29,9 +29,9 @@
         (element.hierarchy/translate offset))))
 
 (defmethod element.hierarchy/edit ::element.hierarchy/box
-  [el offset handle e]
+  [el offset handle lock?]
   (let [[x y] (cond-> offset
-                (:ctrl-key e)
+                lock?
                 (event.handlers/lock-direction))
         clamp (partial max 0)]
     (case handle

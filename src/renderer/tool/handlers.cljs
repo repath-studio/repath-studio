@@ -81,6 +81,19 @@
 
       :else 0)))
 
+(m/=> clear-pointer-data [:-> App App])
+(defn clear-pointer-data
+  [db]
+  (-> db
+      (assoc :active-pointers {})
+      (dissoc :drag-pointer :pointer-offset :adjusted-pointer-offset
+              :nearest-neighbor :nearest-neighbor-offset
+              :pinch-distance :pinch-midpoint)))
+
+(defn multi-touch?
+  [db]
+  (> (count (:active-pointers db)) 1))
+
 (m/=> pan-out-of-canvas [:-> App DomRect Vec2 Vec2 App])
 (defn pan-out-of-canvas
   [db dom-rect pointer-pos pointer-offset]
@@ -107,6 +120,5 @@
         (activate :transform))
 
     :always
-    (-> (assoc :active-pointers #{})
-        (dissoc :pointer-offset :drag :nearest-neighbor)
+    (-> (clear-pointer-data)
         (set-state :idle))))

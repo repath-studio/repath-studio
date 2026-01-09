@@ -94,10 +94,10 @@
          (into [:g]))))
 
 (defmethod element.hierarchy/edit ::element.hierarchy/poly
-  [el offset handle e]
+  [el offset handle lock?]
   (let [index (js/parseInt (name handle))
         [x y] (cond-> offset
-                (:ctrl-key e)
+                lock?
                 (event.handlers/lock-direction))
         transform-point (fn [[px py]]
                           (list (utils.length/transform px + x)

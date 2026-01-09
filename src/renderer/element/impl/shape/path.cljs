@@ -88,7 +88,7 @@
     path))
 
 (defmethod element.hierarchy/edit :path
-  [el offset handle]
+  [el offset handle _lock?]
   (let [index (js/parseInt (name handle))]
     (update-in el [:attrs :d] #(-> (svgpath %)
                                    (translate-segment index offset)

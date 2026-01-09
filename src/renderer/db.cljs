@@ -10,6 +10,9 @@
    [number? {:title "max-x"}]
    [number? {:title "max-y"}]])
 
+(def Orientation
+  [:enum :vertical :horizontal])
+
 (def BooleanOperation
   [:enum :unite :intersect :subtract :exclude :divide])
 

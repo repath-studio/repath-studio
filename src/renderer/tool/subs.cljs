@@ -16,8 +16,13 @@
  :-> :pivot-point)
 
 (rf/reg-sub
+ ::drag-pointer
+ :-> :drag-pointer)
+
+(rf/reg-sub
  ::drag?
- :-> :drag)
+ :<- [::drag-pointer]
+ boolean)
 
 (rf/reg-sub
  ::cursor

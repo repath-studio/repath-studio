@@ -75,6 +75,7 @@
 (defmethod tool.hierarchy/on-drag :edit
   [db e]
   (let [{:keys [element-id id]} (:clicked-element db)
+        lock? (or (:ctrl-key e) (tool.handlers/multi-touch? db))
         offset (matrix/add (tool.handlers/pointer-delta db)
                            (snap.handlers/nearest-delta db))]
     (cond-> db
@@ -83,7 +84,7 @@
 
       element-id
       (element.handlers/update-el element-id
-                                  element.hierarchy/edit offset id e))))
+                                  element.hierarchy/edit offset id lock?))))
 
 (defmethod tool.hierarchy/on-drag-end :edit
   [db _e]

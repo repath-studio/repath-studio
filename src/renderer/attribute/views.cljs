@@ -227,7 +227,7 @@
      [:> HoverCard/Trigger
       {:as-child true}
       [:div.flex.items-center.overflow-hidden
-       [:label.form-element.w-28.truncate.flex-1.rtl:text-left!.py-0
+       [:label.form-element.w-28.truncate.flex-1.rtl:text-left!.py-0!.h-full!
         {:for (name k)
          :dir "ltr"
          :class ["leading-[27px]" (when active "text-foreground-hovered")]}

@@ -48,7 +48,8 @@
 
 (defmethod tool.hierarchy/on-drag :ellipse
   [db e]
-  (let [attrs (attributes db (:ctrl-key e))
+  (let [lock-ratio (or (:ctrl-key e) (tool.handlers/multi-touch? db))
+        attrs (attributes db lock-ratio)
         assoc-attr (fn [el [k v]] (assoc-in el [:attrs k] (str v)))]
     (element.handlers/update-selected db #(reduce assoc-attr % attrs))))
 
