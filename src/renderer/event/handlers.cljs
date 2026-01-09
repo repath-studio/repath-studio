@@ -68,7 +68,8 @@
       (cond-> (if pointer-offset
                 (if (significant-drag? db pointer-pos pointer-offset)
                   (cond-> db
-                    (not= tool :pan)
+                    (and (not= tool :pan)
+                         (= drag-pointer pointer-id))
                     (tool.handlers/pan-out-of-canvas dom-rect
                                                      pointer-pos
                                                      pointer-offset)
