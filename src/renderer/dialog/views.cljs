@@ -116,7 +116,7 @@
      :placeholder (i18n.views/t [::search-command "Search for a command"])}]
    [views/scroll-area
     [:> Command/CommandList
-     {:class "p-1 max-h-[30dvh] sm:max-h-[50dvh]"}
+     {:class "p-1 max-h-[50dvh]"}
      [:> Command/CommandEmpty
       {:class "p-2"}
       (i18n.views/t [::no-results "No results found."])]
