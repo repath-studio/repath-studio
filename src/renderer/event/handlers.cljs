@@ -146,6 +146,9 @@
             (tool.handlers/set-state cached-state)
             (dissoc :cached-tool :cached-state))
 
+        (not (tool.handlers/multi-touch? db))
+        (tool.handlers/clear-pointer-data)
+
         :always
         (update :active-pointers dissoc pointer-id)))))
 
