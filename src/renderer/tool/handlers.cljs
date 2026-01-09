@@ -90,6 +90,10 @@
               :nearest-neighbor :nearest-neighbor-offset
               :pinch-distance :pinch-midpoint)))
 
+(defn multi-touch?
+  [db]
+  (> (count (:active-pointers db)) 1))
+
 (m/=> pan-out-of-canvas [:-> App DomRect Vec2 Vec2 App])
 (defn pan-out-of-canvas
   [db dom-rect pointer-pos pointer-offset]
