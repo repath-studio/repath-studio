@@ -528,7 +528,7 @@
        ^{:key (str (:id el) "-bbox")}
        [render-bounding-box el false])
 
-     (when-not touch?
+     (when (or (not touch?) (= state :select))
        (for [el hovered-elements]
          ^{:key (str (:id el) "-bbox")}
          [render-bounding-box el true]))
