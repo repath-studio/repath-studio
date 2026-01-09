@@ -5,7 +5,7 @@
   "author": "Konstantinos Kaloutas",
   "homepage": "https://repath.studio",
   "license": "AGPL-3.0",
-  "version": "0.4.11",
+  "version": "0.4.12",
   "scripts": {
     "upgrade": "npx npm-check-updates -u -x 'codemirror @sentry/react' && npm install && npm upgrade",
     "postinstall": "npx electron-builder install-app-deps",

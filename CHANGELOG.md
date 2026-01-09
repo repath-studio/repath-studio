@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.4.12 (2025-01-09)
+
+**Added**
+
+- Multi-touch support [116](https://github.com/repath-studio/repath-studio/pull/116)
+- Radius handle for rect elements [#106](https://github.com/repath-studio/repath-studio/pull/106)
+- Brush point editing
+- Arrow key modifiers (ctrl, shift) to reduce or increase speed on transform
+- Missing titles and translations
+- Edit tree element label on `E` down
+
+**Changed**
+
+- Enhance resizable panels [114](https://github.com/repath-studio/repath-studio/pull/114)
+- Enhance readability of canvas tool overlays
+- Improve keyboard accessibility of element tree
+- Set default theme mode to dark
+
+**Fixed**
+
+- Print document on desktop
+- Cached tool on cancel action
+- Order of `stroke->path` keyboard shortcut
+- Adding animations
+- Missing `window-restored` event
+
 ## 0.4.11 (2025-11-21)
 
 **Added**
