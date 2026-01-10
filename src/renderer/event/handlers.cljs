@@ -128,7 +128,7 @@
         (update :active-pointers dissoc pointer-id)
 
         (<= (count active-pointers) 2)
-        (-> (dissoc :pinch-distance :pinch-midpoint)
+        (-> (tool.handlers/clear-pointer-data)
             (snap.handlers/update-viewport-tree)))
       (cond-> (if drag-pointer
                 (cond-> db
