@@ -42,7 +42,9 @@
   (let [{:keys [active-pointers pinch-distance pinch-midpoint]} db
         {:keys [pointer-id]} e
         active-pointers (assoc active-pointers pointer-id e)
-        [pos1 pos2] (->> (vals active-pointers) (take 2) (map :pointer-pos))
+        [pos1 pos2] (->> (vals active-pointers)
+                         (take 2)
+                         (map :pointer-pos))
         distance (matrix/distance pos1 pos2)
         midpoint (-> (matrix/add pos1 pos2)
                      (matrix/div 2))
@@ -126,7 +128,7 @@
         (update :active-pointers dissoc pointer-id)
 
         (<= (count active-pointers) 2)
-        (-> (tool.handlers/clear-pointer-data)
+        (-> (dissoc :pinch-distance :pinch-midpoint)
             (snap.handlers/update-viewport-tree)))
       (cond-> (if drag-pointer
                 (cond-> db
