@@ -322,8 +322,7 @@
             :defaultSize 320
             :minSize 320
             :class "flex gap-px"}
-           (when properties?
-             [right-panel active-tool])]])]
+           [right-panel active-tool]]])]
       (when md?
         [:div.bg-primary.flex
          [toolbar.object/root]])]]))
