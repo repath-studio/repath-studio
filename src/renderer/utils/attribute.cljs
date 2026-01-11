@@ -254,6 +254,24 @@
 
 (def property-data-memo (memoize property-data))
 
+(m/=> mdn-url [:-> keyword? [:maybe map?] [:maybe string?]])
+(defn mdn-url
+  [k data]
+  (or (:mdn_url data)
+      (when data
+        (str "https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/"
+             (name k)))
+      (:mdn_url (property-data-memo k))))
+
+(m/=> spec-url [:-> keyword? [:maybe map?] [:maybe string?]])
+(defn spec-url
+  [k data]
+  (let [url (or (:spec_url data)
+                (:href (property-data-memo k)))]
+    (cond-> url
+      (vector? url)
+      (first))))
+
 (def whitespace-regex #"\s*[\s,]\s*")
 
 (m/=> str->seq [:-> string? vector?])

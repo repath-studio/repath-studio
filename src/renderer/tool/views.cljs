@@ -134,7 +134,11 @@
         clicked-element @(rf/subscribe [::app.subs/clicked-element])
         bbox (cond-> bbox (= state :idle) min-bbox)
         [min-x min-y max-x max-y] bbox
-        [w h] (utils.bounds/->dimensions bbox)]
+        [w h] (utils.bounds/->dimensions bbox)
+        show? (fn [id]
+                (or (= state :idle)
+                    (and (= state :scale)
+                         (= id (:id clicked-element)))))]
     [:g {:key :bounding-corners}
      (->> [{:x min-x
             :y min-y
@@ -168,9 +172,7 @@
             :y max-y
             :id :bottom-middle
             :cursor "ns-resize"}]
-          (map #(when (or (= state :idle)
-                          (and (= state :scale)
-                               (= (:id %) (:id clicked-element))))
+          (map #(when (show? (:id %))
                   ^{:key (:id %)}
                   [square-handle (merge % {:type :handle
                                            :action :scale})])))]))

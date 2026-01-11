@@ -58,34 +58,19 @@
     {:on-click #(rf/dispatch [::events/open-remote-url url])}
     (i18n.views/t label)]))
 
-(defn construct-mdn-url
-  [attr]
-  (str "https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/"
-       attr))
-
 (defn caniusethis
   [{:keys [tag attr]}]
   (let [data (if attr
                (utils.attribute/compatibility tag attr)
                (utils.attribute/compatibility tag))
-        support-data (:support data)
-        property (when attr (utils.attribute/property-data-memo attr))
-        spec-url (or (:spec_url data)
-                     (:href property))
-        spec-url (if (vector? spec-url)
-                   (first spec-url)
-                   spec-url)
-        mdn-url (or (when data
-                      (or (:mdn_url data)
-                          (construct-mdn-url (name attr))))
-                    (:mdn_url property))]
+        support-data (:support data)]
     [:div.flex.flex-col
      (when (some :version_added (vals support-data))
        [browser-compatibility support-data])
      [:div.flex.gap-2
-      (when mdn-url
+      (when-let [mdn-url (utils.attribute/mdn-url attr data)]
         [info-button mdn-url])
-      (when spec-url
+      (when-let [spec-url (utils.attribute/spec-url attr data)]
         [info-button spec-url [::specification "Specification"]])]]))
 
 (defn update-handler!
@@ -293,6 +278,26 @@
            [:div.flex [info-button url]])]
         [views/hovercard-arrow]]]]]))
 
+(defn heading
+  [el selected-elements selected-tags tag]
+  (let [multitag? (next selected-tags)]
+    [:div.flex.bg-primary.py-5.px-4.gap-1.items-center
+     [:h1.flex-1.text-lg
+      (if-not (next selected-elements)
+        (let [el-label (:label el)
+              properties (element.hierarchy/properties tag)]
+          (if (empty? el-label)
+            (or (some-> properties :label i18n.views/t)
+                (string/capitalize (name tag)))
+            el-label))
+        (i18n.views/t [::attributes-title "%1 %2 elements"]
+                      [(count selected-elements)
+                       (when-not multitag?
+                         (name tag))]))]
+
+     (when-not multitag?
+       [tag-info tag])]))
+
 (defn form
   []
   (let [selected-elements @(rf/subscribe [::element.subs/selected])
@@ -302,27 +307,12 @@
         tool-state @(rf/subscribe [::tool.subs/state])
         tool-cached-state @(rf/subscribe [::tool.subs/cached-state])
         tag (first selected-tags)
-        multitag? (next selected-tags)
         locked? (or selected-locked?
                     (not= tool-state :idle)
                     (and tool-cached-state (not= tool-cached-state :idle)))]
     (when-first [el selected-elements]
       [:div
-       [:div.flex.bg-primary.py-5.px-4.gap-1.items-center
-        [:h1.flex-1.text-lg
-         (if-not (next selected-elements)
-           (let [el-label (:label el)
-                 properties (element.hierarchy/properties tag)]
-             (if (empty? el-label)
-               (or (some-> properties :label i18n.views/t)
-                   (string/capitalize (name tag)))
-               el-label))
-           (i18n.views/t [::attributes-title "%1 %2 elements"]
-                         [(count selected-elements)
-                          (when-not multitag?
-                            (name tag))]))]
-        (when-not multitag?
-          [tag-info tag])]
+       [heading el selected-elements selected-tags tag]
        (when (seq selected-attrs)
          [:div.grid.grid-cols-2.grid-flow-row.my-px.w-full.gap-px
           {:style {:grid-template-columns "minmax(120px, 120px) 1fr"}}

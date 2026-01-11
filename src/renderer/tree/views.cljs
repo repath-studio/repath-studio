@@ -45,27 +45,32 @@
   (when-not (.-relatedTarget e)
     (.focus (tree.effects/query-by-id! id))))
 
+(defn label-input
+  [el tag-label edit-mode?]
+  (let [{:keys [id label tag]} el]
+    [:input.bg-transparent.w-full
+     {:class ["font-[inherit]! leading-[inherit]!"
+              (when (= :svg tag) "font-bold")]
+      :default-value label
+      :placeholder tag-label
+      :auto-focus true
+      :draggable true ; Prevents drag of parent.
+      :enter-key-hint "done"
+      :on-drag-start #(.preventDefault %)
+      :on-focus #(.. % -target select)
+      :on-key-down #(utils.key/down-handler! % label set-item-label! id)
+      :on-blur (fn [e]
+                 (reset! edit-mode? false)
+                 (set-item-label! e id))}]))
+
 (defn item-label
   [el edit-mode?]
-  (let [{:keys [id label visible selected tag]} el
+  (let [{:keys [label visible selected tag]} el
         properties (element.hierarchy/properties tag)
         tag-label (or (some-> properties :label i18n.views/t)
                       (string/capitalize (name tag)))]
     (if @edit-mode?
-      [:input.bg-transparent.w-full
-       {:class ["font-[inherit]! leading-[inherit]!"
-                (when (= :svg tag) "font-bold")]
-        :default-value label
-        :placeholder tag-label
-        :auto-focus true
-        :draggable true ; Prevents drag of parent.
-        :enter-key-hint "done"
-        :on-drag-start #(.preventDefault %)
-        :on-focus #(.. % -target select)
-        :on-key-down #(utils.key/down-handler! % label set-item-label! id)
-        :on-blur (fn [e]
-                   (reset! edit-mode? false)
-                   (set-item-label! e id))}]
+      [label-input el tag-label edit-mode?]
       [:div.flex.w-full.overflow-hidden
        [:div.truncate
         {:class [(when-not visible "opacity-60")

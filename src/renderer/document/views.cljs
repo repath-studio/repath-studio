@@ -95,6 +95,13 @@
                 :action [::document.events/open-directory path]
                 :disabled (nil? path)}]))))
 
+(defn on-tab-drop
+  [id dragged-over? e]
+  (let [dropped-id (utils.dom/event->uuid e)]
+    (.preventDefault e)
+    (reset! dragged-over? false)
+    (rf/dispatch [::document.events/swap-position dropped-id id])))
+
 (defn tab
   [id]
   (let [document @(rf/subscribe [::document.subs/entity id])
@@ -127,16 +134,9 @@
             :on-drag-over #(.preventDefault %)
             :on-drag-enter #(reset! dragged-over? true)
             :on-drag-leave #(reset! dragged-over? false)
-            :on-drop (fn [e]
-                       (let [dropped-id (utils.dom/event->uuid e)]
-                         (.preventDefault e)
-                         (reset! dragged-over? false)
-                         (rf/dispatch [::document.events/swap-position
-                                       dropped-id
-                                       id])))
-            :ref (fn [this]
-                   (when (and this active?)
-                     (rf/dispatch [::events/scroll-into-view this])))}
+            :on-drop (partial on-tab-drop id dragged-over?)
+            :ref #(when (and % active?)
+                    (rf/dispatch [::events/scroll-into-view %]))}
            [:div.pointer-events-none.px-2.gap-1.flex.overflow-hidden
             (when-not saved?
               [:span.md:hidden "•"])
@@ -147,9 +147,7 @@
            [:> ContextMenu/Content
             {:class "menu-content context-menu-content"
              :on-escape-key-down #(.stopPropagation %)}]
-           (map (fn [item]
-                  [views/context-menu-item item])
-                (context-menu id)))]]))))
+           (map views/context-menu-item (context-menu id)))]]))))
 
 (defn documents-dropdown-button
   []
