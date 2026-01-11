@@ -95,11 +95,13 @@
       :always
       (tool.hierarchy/on-drag e))))
 
-(m/=> significant-drag? [:-> App Vec2 Vec2 boolean?])
+(m/=> significant-drag? [:-> App PointerEvent boolean?])
 (defn significant-drag?
-  [db position offset]
-  (> (apply max (map abs (matrix/sub position offset)))
-     (:drag-threshold db)))
+  [db e]
+  (let [{:keys [pointer-offset drag-threshold]} db
+        {:keys [pointer-pos]} e]
+    (> (matrix/distance pointer-offset pointer-pos)
+       drag-threshold)))
 
 (m/=> on-pointer-move [:-> App PointerEvent App])
 (defn on-pointer-move
@@ -110,7 +112,7 @@
       (on-pinch db e)
       (cond-> (if (and pointer-offset
                        (contains? active-pointers pointer-id)
-                       (significant-drag? db pointer-pos pointer-offset))
+                       (significant-drag? db e))
                 (on-drag db e)
                 (tool.hierarchy/on-pointer-move db e))
 
