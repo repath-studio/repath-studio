@@ -446,7 +446,8 @@
     (cond-> db
       (= state :select)
       (-> (cond-> (not (:shift-key e)) element.handlers/deselect)
-          (reduce-by-area (:alt-key e) element.handlers/select)
+          (reduce-by-area (or (:alt-key e) (tool.handlers/multi-touch? db))
+                          element.handlers/select)
           (app.handlers/add-fx [::set-select-box nil]))
 
       (not= state :idle)
