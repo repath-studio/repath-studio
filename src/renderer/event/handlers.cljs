@@ -14,12 +14,6 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]))
 
-(m/=> significant-drag? [:-> App Vec2 Vec2 boolean?])
-(defn significant-drag?
-  [db position offset]
-  (> (apply max (map abs (matrix/sub position offset)))
-     (:drag-threshold db)))
-
 (m/=> adjusted-pointer-pos [:-> App Vec2 Vec2])
 (defn adjusted-pointer-pos
   [db pos]
@@ -36,8 +30,8 @@
     [x 0]
     [0 y]))
 
-(m/=> pinch [:-> App PointerEvent App])
-(defn pinch
+(m/=> on-pinch [:-> App PointerEvent App])
+(defn on-pinch
   [db e]
   (let [{:keys [active-pointers pinch-distance pinch-midpoint]} db
         {:keys [pointer-id]} e
@@ -60,34 +54,67 @@
           (frame.handlers/zoom-at-position (/ distance pinch-distance)
                                            adjusted-midpoint)))))
 
+(m/=> on-drag-start [:-> App PointerEvent App])
+(defn on-drag-start
+  [db {:keys [pointer-id]
+       :as e}]
+  (-> db
+      (assoc :drag-pointer pointer-id)
+      (tool.hierarchy/on-drag-start e)
+      (app.handlers/add-fx [::event.effects/set-pointer-capture pointer-id])))
+
+(m/=> on-drag-end [:-> App PointerEvent App])
+(defn on-drag-end
+  [db {:keys [pointer-id]
+       :as e}]
+  (-> db
+      (tool.hierarchy/on-drag-end e)
+      (tool.handlers/clear-pointer-data)
+      (app.handlers/add-fx [::event.effects/release-pointer-capture
+                            pointer-id])))
+
+(m/=> drag-pointer? [:-> App PointerEvent boolean?])
+(defn drag-pointer?
+  [db e]
+  (= (:drag-pointer db)
+     (:pointer-id e)))
+
+(m/=> on-drag [:-> App PointerEvent App])
+(defn on-drag
+  [db e]
+  (let [{:keys [pointer-offset tool dom-rect drag-pointer]} db
+        {:keys [pointer-pos]} e]
+    (cond-> db
+      (and (not= tool :pan)
+           (drag-pointer? db e))
+      (tool.handlers/pan-out-of-canvas dom-rect pointer-pos pointer-offset)
+
+      (not drag-pointer)
+      (on-drag-start e)
+
+      :always
+      (tool.hierarchy/on-drag e))))
+
+(m/=> significant-drag? [:-> App Vec2 Vec2 boolean?])
+(defn significant-drag?
+  [db position offset]
+  (> (apply max (map abs (matrix/sub position offset)))
+     (:drag-threshold db)))
+
 (m/=> on-pointer-move [:-> App PointerEvent App])
 (defn on-pointer-move
   [db e]
-  (let [{:keys [pointer-offset tool dom-rect drag-pointer]} db
+  (let [{:keys [pointer-offset drag-pointer active-pointers]} db
         {:keys [pointer-pos pointer-id]} e]
     (if (and (tool.handlers/multi-touch? db) (not drag-pointer))
-      (pinch db e)
-      (cond-> (if pointer-offset
-                (if (significant-drag? db pointer-pos pointer-offset)
-                  (cond-> db
-                    (and (not= tool :pan)
-                         (= drag-pointer pointer-id))
-                    (tool.handlers/pan-out-of-canvas dom-rect
-                                                     pointer-pos
-                                                     pointer-offset)
-
-                    (not drag-pointer)
-                    (-> (assoc :drag-pointer pointer-id)
-                        (tool.hierarchy/on-drag-start e)
-                        (app.handlers/add-fx
-                         [::event.effects/set-pointer-capture pointer-id]))
-
-                    :always
-                    (tool.hierarchy/on-drag e))
-                  db)
+      (on-pinch db e)
+      (cond-> (if (and pointer-offset
+                       (contains? active-pointers pointer-id)
+                       (significant-drag? db pointer-pos pointer-offset))
+                (on-drag db e)
                 (tool.hierarchy/on-pointer-move db e))
 
-        (or (= drag-pointer pointer-id) (not drag-pointer))
+        (or (drag-pointer? db e) (not drag-pointer))
         (assoc :pointer-pos pointer-pos
                :adjusted-pointer-pos (adjusted-pointer-pos db pointer-pos))))))
 
@@ -106,20 +133,27 @@
           (tool.handlers/activate :pan))
 
       (and (not= button :right)
-           (not (seq active-pointers)))
+           (empty? active-pointers))
       (assoc :pointer-offset pointer-pos
              :adjusted-pointer-offset (adjusted-pointer-pos db pointer-pos)
              :nearest-neighbor-offset (:point nearest-neighbor))
 
-      (not (seq active-pointers))
+      (empty? active-pointers)
       (-> (tool.hierarchy/on-pointer-down e)
           (app.handlers/add-fx [::effects/focus-canvas nil])))))
+
+(m/=> db-click? [:-> App PointerEvent boolean?])
+(defn db-click?
+  [db e]
+  (let [{:keys [double-click-delta event-timestamp]} db
+        {:keys [timestamp]} e]
+    (< 0 (- timestamp event-timestamp) double-click-delta)))
 
 (m/=> on-pointer-up [:-> App PointerEvent App])
 (defn on-pointer-up
   [db e]
-  (let [{:keys [cached-tool cached-state active-pointers double-click-delta
-                event-timestamp pinch-distance drag-pointer]} db
+  (let [{:keys [cached-tool cached-state active-pointers pinch-distance
+                drag-pointer]} db
         {:keys [button timestamp pointer-id]} e
         db (snap.handlers/update-nearest-neighbors db)]
     (if pinch-distance
@@ -132,18 +166,13 @@
             (snap.handlers/update-viewport-tree)))
       (cond-> (if drag-pointer
                 (cond-> db
-                  (= drag-pointer pointer-id)
-                  (-> (tool.hierarchy/on-drag-end e)
-                      (tool.handlers/clear-pointer-data)
-                      (app.handlers/add-fx
-                       [::event.effects/release-pointer-capture pointer-id])))
-                (if (= button :right)
-                  db
-                  (if (< 0 (- timestamp event-timestamp) double-click-delta)
-                    (-> (dissoc db :event-timestamp)
-                        (tool.hierarchy/on-double-click e))
-                    (-> (assoc db :event-timestamp timestamp)
-                        (tool.hierarchy/on-pointer-up e)))))
+                  (drag-pointer? db e)
+                  (on-drag-end e))
+                (if (db-click? db e)
+                  (-> (dissoc db :event-timestamp)
+                      (tool.hierarchy/on-double-click e))
+                  (-> (assoc db :event-timestamp timestamp)
+                      (tool.hierarchy/on-pointer-up e))))
         (and cached-tool (= button :middle))
         (-> (tool.handlers/activate cached-tool)
             (tool.handlers/set-state cached-state)
@@ -158,8 +187,8 @@
 (m/=> pointer [:-> App PointerEvent App])
 (defn pointer
   [db e]
-  (let [{:keys [pointer-id]} e
-        {:keys [active-pointers]} db
+  (let [{:keys [active-pointers]} db
+        {:keys [pointer-id button]} e
         db (snap.handlers/update-nearest-neighbors db)]
     (case (:type e)
       "pointermove"
@@ -170,55 +199,67 @@
 
       "pointerup"
       (cond-> db
-        (contains? active-pointers pointer-id)
+        (and (contains? active-pointers pointer-id)
+             (not= button :right))
         (on-pointer-up e))
 
       db)))
+
+(m/=> on-key-down [:-> App KeyboardEvent App])
+(defn on-key-down
+  [db e]
+  (cond-> db
+    (and (= (:code e) "Space")
+         (not= (:tool db) :pan)
+         (= (:state db) :idle))
+    (-> (assoc :cached-tool (:tool db))
+        (tool.handlers/activate :pan))
+
+    (= (:key e) "Shift")
+    (-> (assoc-in [:snap :transient-active] true)
+        (cond->
+         (not (-> db :snap :active))
+          (-> (dissoc :nearest-neighbor)
+              (snap.handlers/rebuild-tree))))
+
+    (and (= (:key e) "Alt")
+         (= (:state db) :idle))
+    (assoc-in [:menubar :indicator] true)
+
+    :always
+    (tool.hierarchy/on-key-down e)))
+
+(m/=> on-key-up [:-> App KeyboardEvent App])
+(defn on-key-up
+  [db e]
+  (cond-> db
+    (and (= (:code e) "Space")
+         (:cached-tool db))
+    (-> (tool.handlers/activate (:cached-tool db))
+        (dissoc :cached-tool))
+
+    (= (:key e) "Shift")
+    (-> (assoc-in [:snap :transient-active] false)
+        (cond->
+         (not (-> db :snap :active))
+          (dissoc :nearest-neighbor)))
+
+    (= (:key e) "Alt")
+    (assoc-in [:menubar :indicator] false)
+
+    :always
+    (tool.hierarchy/on-key-up e)))
 
 (m/=> keyboard [:-> App KeyboardEvent App])
 (defn keyboard
   [db e]
   (case (:type e)
     "keydown"
-    (cond-> db
-      (and (= (:code e) "Space")
-           (not= (:tool db) :pan)
-           (= (:state db) :idle))
-      (-> (assoc :cached-tool (:tool db))
-          (tool.handlers/activate :pan))
-
-      (= (:key e) "Shift")
-      (-> (assoc-in [:snap :transient-active] true)
-          (cond->
-           (not (-> db :snap :active))
-            (-> (dissoc :nearest-neighbor)
-                (snap.handlers/rebuild-tree))))
-
-      (and (= (:key e) "Alt")
-           (= (:state db) :idle))
-      (assoc-in [:menubar :indicator] true)
-
-      :always
-      (tool.hierarchy/on-key-down e))
+    (on-key-down db e)
 
     "keyup"
-    (cond-> db
-      (and (= (:code e) "Space")
-           (:cached-tool db))
-      (-> (tool.handlers/activate (:cached-tool db))
-          (dissoc :cached-tool))
+    (on-key-up db e)
 
-      (= (:key e) "Shift")
-      (-> (assoc-in [:snap :transient-active] false)
-          (cond->
-           (not (-> db :snap :active))
-            (dissoc :nearest-neighbor)))
-
-      (= (:key e) "Alt")
-      (assoc-in [:menubar :indicator] false)
-
-      :always
-      (tool.hierarchy/on-key-up e))
     db))
 
 (m/=> wheel [:-> App WheelEvent App])
