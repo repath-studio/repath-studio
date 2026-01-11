@@ -148,8 +148,9 @@
 (defn db-click?
   [db e]
   (let [{:keys [double-click-delta event-timestamp]} db
-        {:keys [timestamp]} e]
-    (< 0 (- timestamp event-timestamp) double-click-delta)))
+        {:keys [timestamp]} e
+        timestamp-delta (- timestamp event-timestamp)]
+    (< 0 timestamp-delta double-click-delta)))
 
 (m/=> on-pointer-up [:-> App PointerEvent App])
 (defn on-pointer-up
