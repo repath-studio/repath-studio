@@ -46,7 +46,7 @@ jobs:
           restore-keys: ${{ runner.os }}-cljdeps-
 
       - name: Install clojure tools
-        uses: DeLaGuardo/setup-clojure@13.4
+        uses: DeLaGuardo/setup-clojure@13.5
         with:
           cli: 1.12.4.1582
 
