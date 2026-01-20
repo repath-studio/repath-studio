@@ -95,8 +95,9 @@
   [el]
   (let [{:keys [attrs children]} el
         child-elements @(rf/subscribe [::element.subs/filter-visible children])
-        attrs (into {} (comp (dissoc attrs :fill)
-                             (remove #(empty? (str (second %))))))]
+        attrs (->> (dissoc attrs :fill)
+                   (remove #(empty? (str (second %))))
+                   (into {}))]
     (into [:svg attrs]
           (map element.hierarchy/render-to-string)
           child-elements)))
