@@ -130,3 +130,8 @@ terminal.
 ```bash
 npm run electron
 ```
+
+### Used Open Source programs
+
+- This project is tested with BrowserStack.
+- We are using Sentry for error reporting.
