@@ -88,11 +88,11 @@
   },
   "main": "resources/main.js",
   "devDependencies": {
-    "@capacitor/android": "8.0.1",
+    "@capacitor/android": "8.0.2",
     "@capacitor/assets": "3.0.5",
-    "@capacitor/cli": "8.0.1",
-    "@capacitor/core": "8.0.1",
-    "@capacitor/ios": "8.0.1",
+    "@capacitor/cli": "8.0.2",
+    "@capacitor/core": "8.0.2",
+    "@capacitor/ios": "8.0.2",
     "@capacitor/splash-screen": "8.0.0",
     "@capacitor/status-bar": "8.0.0",
     "@fontsource/noto-sans": "5.2.10",
@@ -149,13 +149,13 @@
     "path-browserify": "1.0.1",
     "perfect-freehand": "1.2.2",
     "process": "0.11.10",
-    "puppeteer": "24.36.0",
-    "react": "19.2.3",
+    "puppeteer": "24.36.1",
+    "react": "19.2.4",
     "react-d3-tree": "3.6.6",
-    "react-dom": "19.2.3",
+    "react-dom": "19.2.4",
     "react-frame-component": "5.2.7",
-    "react-resizable-panels": "4.4.2",
-    "react-svg": "16.3.0",
+    "react-resizable-panels": "4.5.2",
+    "react-svg": "16.4.0",
     "shadow-cljs": "3.3.5",
     "shx": "0.4.0",
     "snabbdom": "3.6.3",
@@ -172,13 +172,13 @@
   },
   "dependencies": {
     "@electron/devtron": "2.1.1",
-    "@sentry/electron": "7.6.0",
+    "@sentry/electron": "7.7.0",
     "electron-log": "5.4.3",
     "electron-updater": "6.7.3",
     "electron-window-state": "5.0.3"
   },
   "overrides": {
-    "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
   }
 }
