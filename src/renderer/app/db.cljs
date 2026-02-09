@@ -13,6 +13,8 @@
    [renderer.i18n.db
     :as i18n.db
     :refer [LanguageCodeIdentifier LanguageId Languages]]
+   [renderer.icon.db :refer [Icons]]
+   [renderer.icon.defaults :as icon.defaults]
    [renderer.menubar.db :refer [Menubar]]
    [renderer.panel.db :as panel.db :refer [Panel PanelId]]
    [renderer.ruler.db :refer [Ruler]]
@@ -87,6 +89,7 @@
                 :persist true} LanguageId]
    [:system-lang {:optional true} LanguageCodeIdentifier]
    [:languages {:default i18n.db/default} Languages]
+   [:icons {:default icon.defaults/defaults} Icons]
    [:platform {:optional true} Platform]
    [:versions {:optional true} [:maybe map?]]
    [:env {:optional true} [:maybe map?]]

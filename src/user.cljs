@@ -10,6 +10,7 @@
    [renderer.element.events :as-alias element.events]
    [renderer.history.events :as-alias history.events]
    [renderer.i18n.events :as-alias i18n.events]
+   [renderer.icon.events :as-alias icon.events]
    [renderer.window.events :as-alias window.events]))
 
 (defn ^:export translate
@@ -298,6 +299,16 @@
   "Closes the application."
   []
   (rf/dispatch-sync [::window.events/close]))
+
+(defn ^:export register-icon
+  "Registers an icon."
+  [icon]
+  (rf/dispatch-sync [::icon.events/register-icon icon]))
+
+(defn ^:export deregister-icon
+  "Deregisters an icon."
+  [id]
+  (rf/dispatch-sync [::icon.events/deregister-icon id]))
 
 (defn ^:export register-a11y-filter
   "Registers an accessibility filter."
