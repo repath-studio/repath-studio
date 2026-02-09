@@ -194,10 +194,11 @@
        {:title (i18n.views/t [::fill-color "Pick fill color"])
         :style {:background fill}}]]
 
-     [:button.button.bg-transparent!.rounded
-      {:title (i18n.views/t [::swap-color "Swap fill with stroke"])
-       :on-click #(rf/dispatch [::document.events/swap-colors])}
-      [views/icon "swap-horizontal"]]
+     [views/icon-button
+      "swap-horizontal"
+      {:class "bg-transparent!"
+       :title (i18n.views/t [::swap-color "Swap fill with stroke"])
+       :on-click #(rf/dispatch [::document.events/swap-colors])}]
 
      [views/color-picker
       {:color stroke
