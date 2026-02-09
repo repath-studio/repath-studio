@@ -18,7 +18,6 @@
    ["codemirror/mode/css/css.js"]
    ["codemirror/mode/xml/xml.js"]
    ["react" :as react]
-   ["react-svg" :refer [ReactSVG]]
    ["sonner" :refer [Toaster]]
    ["tailwind-merge" :refer [twMerge]]
    ["vaul" :refer [Drawer]]
@@ -26,6 +25,7 @@
    [reagent.core :as reagent]
    [renderer.app.subs :as-alias app.subs]
    [renderer.i18n.views :as i18n.views]
+   [renderer.icon.subs :as-alias icon.subs]
    [renderer.utils.key :as utils.key]
    [renderer.window.subs :as-alias window.subs]))
 
@@ -37,13 +37,14 @@
                          (apply twMerge)))))
 
 (defn icon
-  [icon-name props]
-  [:> ReactSVG
-   (merge-with-class {:class "flex justify-center [&_svg]:fill-current"
-                      :src (str "icons/" icon-name ".svg")
-                      :loading #(reagent/as-element
-                                 [:div {:class "w-[17px] h-[17px]"}])}
-                     props)])
+  [id props]
+  (when-let [path-data (:path @(rf/subscribe [::icon.subs/icon id]))]
+    [:svg (merge-with-class {:class "fill-current"
+                             :viewBox "0 0 17 17"
+                             :width "17"
+                             :height "17"}
+                            props)
+     [:path {:d path-data}]]))
 
 (defn kbd
   [k]
@@ -53,7 +54,9 @@
 (defn icon-button
   [icon-name props]
   [:button
-   (merge-with-class {:class "button rounded-sm"} props)
+   (merge-with-class {:class "button flex justify-center rounded-sm
+                              items-center"}
+                     props)
    [icon icon-name]])
 
 (defn loading-indicator
