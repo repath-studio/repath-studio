@@ -2,23 +2,21 @@
   (:require
    [malli.core :as m]))
 
-(def IconId keyword?)
+(def IconId string?)
 
 (def IconPath
   "A string of SVG path data.
-   https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/points"
+   https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/d"
   [:and
    :string
    [:re #"^[MmZzLlHhVvCcSsQqTtAa0-9\-,.\s]*$"]
-   [:fn {:error/message "contains adjacent command letters"}
-    #(not (re-find #"[a-zA-Z][a-zA-Z]" %))]
    [:fn {:error/message "must start with a path command"}
     #(not (re-find #"^[0-9\-,.]" %))]
    [:fn {:error/message "must not end with an operator"}
     #(not (re-find #"[\-,.]\s*$" %))]])
 
 (def Icon
-  [:map-of {:closed true}
+  [:map {:closed true}
    [:id IconId]
    [:path IconPath]])
 
