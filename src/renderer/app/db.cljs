@@ -89,7 +89,7 @@
                 :persist true} LanguageId]
    [:system-lang {:optional true} LanguageCodeIdentifier]
    [:languages {:default i18n.db/default} Languages]
-   [:icons {:default icon.defaults/defaults} Icons]
+   [:icons {:default icon.defaults/icons} Icons]
    [:platform {:optional true} Platform]
    [:versions {:optional true} [:maybe map?]]
    [:env {:optional true} [:maybe map?]]

@@ -32,6 +32,7 @@
 
   :renderer {:target :browser
              :output-dir "resources/public/js"
+             :build-hooks [(build.icon-generator/hook!)]
              :compiler-options {:optimizations :simple
                                 :output-wrapper false
                                 :pseudo-names true
