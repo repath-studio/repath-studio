@@ -1,5 +1,5 @@
 (ns renderer.attribute.impl.d
-  "https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/points"
+  "https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/d"
   (:require
    ["@radix-ui/react-popover" :as Popover]
    ["svgpath" :as svgpath]

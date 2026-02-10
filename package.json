@@ -155,7 +155,6 @@
     "react-dom": "19.2.4",
     "react-frame-component": "5.2.7",
     "react-resizable-panels": "4.6.2",
-    "react-svg": "16.4.2",
     "shadow-cljs": "3.3.5",
     "shx": "0.4.0",
     "snabbdom": "3.6.3",

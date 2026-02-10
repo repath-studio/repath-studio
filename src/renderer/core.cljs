@@ -35,6 +35,8 @@
    [renderer.i18n.effects]
    [renderer.i18n.events]
    [renderer.i18n.subs]
+   [renderer.icon.events]
+   [renderer.icon.subs]
    [renderer.menubar.events]
    [renderer.menubar.subs]
    [renderer.panel.events]
