@@ -9,7 +9,7 @@
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/d"
   [:and
    :string
-   [:re #"^[MmZzLlHhVvCcSsQqTtAa0-9\-,.\s]*$"]
+   [:re #"^[MmZzLlHhVvCcSsQqTtAa0-9eE\-,.\s]*$"]
    [:fn {:error/message "must start with a path command"}
     #(not (re-find #"^[0-9\-,.]" %))]
    [:fn {:error/message "must not end with an operator"}

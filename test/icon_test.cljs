@@ -14,11 +14,11 @@
 
    (let [file-icon (rf/subscribe [::icon.subs/icon "file"])
          registered-icon (rf/subscribe [::icon.subs/icon "new-icon"])
-         new-icon {:id "extra"
+         new-icon {:id "new-icon"
                    :path "M10 10 H 90 V 90 H 10 Z"}]
 
      (testing "defaults"
-       (is (= @file-icon (get icon.defaults/icons "new-icon")))
+       (is (= @file-icon (get icon.defaults/icons "file")))
        (is (not @registered-icon)))
 
      (testing "register"
@@ -27,6 +27,6 @@
        (is (= @registered-icon new-icon)))
 
      (testing "deregister"
-       (rf/dispatch [::icon.events/deregister-icon "extra"])
+       (rf/dispatch [::icon.events/deregister-icon "new-icon"])
 
        (is (not @registered-icon))))))
