@@ -21,6 +21,8 @@
    [renderer.history.subs]
    [renderer.i18n.events]
    [renderer.i18n.subs]
+   [renderer.icon.events]
+   [renderer.icon.subs]
    [renderer.panel.events]
    [renderer.panel.subs]
    [renderer.ruler.events]
