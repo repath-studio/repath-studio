@@ -41,7 +41,7 @@
   (let [active? (rf/subscribe [::snap.subs/active?])
         md? @(rf/subscribe [::window.subs/md?])]
     (reagent/with-let [open (reagent/atom false)]
-      [:button.button.rounded-sm.items-center.gap-1.md:flex
+      [:button.button.rounded-sm.items-center.gap-1.md:flex.justify-items-center
        {:title (i18n.views/t [::snap "Snap"])
         :class ["active:bg-overlay"
                 (when md? "px-1")
