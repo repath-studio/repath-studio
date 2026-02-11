@@ -11,7 +11,8 @@
 (defn svg-files!
   [icons-dir]
   (->> (.listFiles (io/file icons-dir))
-       (filter #(string/ends-with? (.getName ^File %) ".svg"))
+       (filter #(and (string/ends-with? (.getName ^File %) ".svg")
+                     (not= "icon-template.svg" (.getName ^File %))))
        (sort-by #(.getName ^File %))))
 
 (defn extract-path
