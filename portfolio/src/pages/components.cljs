@@ -1,8 +1,15 @@
 (ns pages.components
   (:require
-   [pages.icons :as icons]
    [portfolio.reagent-18 :refer-macros [defscene]]
+   [re-frame.core :as rf]
+   [renderer.i18n.subs]
+   [renderer.icon.defaults :as icon.defaults]
    [renderer.views :as views]))
+
+(rf/reg-sub
+ :renderer.icon.subs/icon
+ (fn [_ [_ id]]
+   (get icon.defaults/icons id)))
 
 (defscene ^:export buttons
   :title "Buttons"
@@ -85,15 +92,10 @@
   []
   [:div.flex
    [:div.flex.flex-wrap.gap-2.p-3
-    (for [icon-name icons/default]
-      ^{:key icon-name}
-      [:div {:title icon-name}
-       [views/icon icon-name]])]
-   [:div.flex.gap-2.p-3
-    (for [icon-name icons/branded]
-      ^{:key icon-name}
-      [:div {:title icon-name}
-       [views/icon icon-name]])]
+    (for [[k _v] icon.defaults/icons]
+      ^{:key k}
+      [:div {:title k}
+       [views/icon k]])]
    [:div.flex.p-3
     [views/icon "download"
      {:class "text-accent"}]]])

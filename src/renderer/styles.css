@@ -60,6 +60,8 @@
 }
 
 body {
+  @apply m-0 text-foreground relative bg-secondary select-none font-sans h-full!
+  overflow-hidden touch-none;
   font-size: var(--font-size);
 }
 
