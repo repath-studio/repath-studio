@@ -134,6 +134,10 @@ label {
   max-height: 80vh;
 }
 
+.select-scroll-button {
+  @apply flex items-center justify-center;
+}
+
 .popover-content {
   @apply bg-primary drop-shadow-lg z-10 rounded-sm wrap-break-word border
   border-border animate-in fade-in max-w-xs;
