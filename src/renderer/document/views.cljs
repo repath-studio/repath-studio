@@ -62,7 +62,8 @@
   [id saved]
   [:button.button.button-size-small.invisible.relative.shrink-0.bg-inherit.group
    {:key id
-    :class "hover:[&_.dot-icon]:hidden focus:[&_.dot-icon]:hidden rounded-xs"
+    :class "hover:[&_.dot-icon]:hidden focus:[&_.dot-icon]:hidden rounded-xs
+            flex items-center justify-center"
     :title (i18n.views/t [::close-doc "Close document"])
     :on-click (fn [e]
                 (.stopPropagation e)
@@ -70,9 +71,9 @@
    [views/icon "times"]
    (when-not saved
      [views/icon "dot"
-      {:class "absolute inset-0 bg-inherit items-center text-foreground-muted
-               md:visible invisible group-hover:invisible group-focus:invisible
-               group-active:invisible"}])])
+      {:class "absolute top-0.5 left-0.5 bg-inherit items-center
+               text-foreground-muted invisible md:visible group-hover:invisible
+               group-focus:invisible group-active:invisible"}])])
 
 (defn context-menu
   [id]
