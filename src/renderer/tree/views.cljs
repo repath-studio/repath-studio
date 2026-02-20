@@ -188,7 +188,8 @@
         [:div.flex-1.overflow-hidden.flex.items-center
          {:class "gap-1.5"}
          (when-let [icon (:icon (utils.element/properties el))]
-           [views/icon icon {:class (when-not visible "opacity-60")}])
+           [views/icon icon {:class ["shrink-0"
+                                     (when-not visible "opacity-60")]}])
          [item-label el edit-mode?]]
         [item-prop-toggle id
          locked :locked
