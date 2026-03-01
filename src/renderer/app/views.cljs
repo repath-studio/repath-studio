@@ -321,6 +321,7 @@
            {:id :properties
             :defaultSize 320
             :minSize 320
+            :groupResizeBehavior "preserve-pixel-size"
             :class "flex gap-px"}
            [right-panel active-tool]]])]
       (when md?
@@ -341,7 +342,8 @@
           [panel.views/panel
            {:id :tree
             :defaultSize 227
-            :minSize 227}
+            :minSize 227
+            :groupResizeBehavior "preserve-pixel-size"}
            [:div.flex.flex-col.overflow-hidden.h-full
             [document.views/actions]
             [tree.views/root]]]
