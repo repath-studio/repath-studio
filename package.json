@@ -7,7 +7,7 @@
   "license": "AGPL-3.0",
   "version": "0.4.12",
   "scripts": {
-    "upgrade": "npx npm-check-updates -u -x 'codemirror @xzdarcy/react-timeline-editor' && npm install && npm upgrade",
+    "upgrade": "npx npm-check-updates -u -x 'codemirror @xzdarcy/react-timeline-editor @sentry/react' && npm install && npm upgrade",
     "postinstall": "npx electron-builder install-app-deps",
     "tailwindcss:build": "npx @tailwindcss/cli -i ./src/renderer/styles.css -o ./resources/public/css/styles.css --minify",
     "tailwindcss:watch": "npx @tailwindcss/cli -i ./src/renderer/styles.css -o ./resources/public/css/styles.css --watch=always",
@@ -113,7 +113,7 @@
     "@repath-studio/react-color": "2.19.4",
     "@sentry/capacitor": "3.1.0",
     "@sentry/cli": "3.2.3",
-    "@sentry/react": "10.41.0",
+    "@sentry/react": "10.40.0",
     "@tailwindcss/cli": "4.2.1",
     "@xzdarcy/react-timeline-editor": "0.1.9",
     "acorn": "8.16.0",
