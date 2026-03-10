@@ -22,6 +22,6 @@
  {:dev {:extra-paths ["test" "portfolio/src"]
         :extra-deps {cider/cider-nrepl {:mvn/version "0.58.0"}
                      day8.re-frame/re-frame-10x {:mvn/version "1.11.0"}
-                     no.cjohansen/portfolio {:mvn/version "2025.11.2"}}}
+                     no.cjohansen/portfolio {:mvn/version "2026.03.1"}}}
   :format {:deps {dev.weavejester/cljfmt {:mvn/version "0.16.1"}}}
   :lint {:deps {clj-kondo/clj-kondo {:mvn/version "2026.01.19"}}}}}
