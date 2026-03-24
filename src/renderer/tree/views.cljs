@@ -170,7 +170,7 @@
         :on-drag-enter #(rf/dispatch [::document.events/set-hovered-id id])
         :on-drag-over #(.preventDefault %)
         :on-drop #(drop-handler! % id)
-        :on-pointer-down #(when (= (.-button %) 2)
+        :on-pointer-down #(when (and (= (.-button %) 2) (not selected))
                             (rf/dispatch [::element.events/select
                                           id (.-ctrlKey %)]))
         :on-click (fn [e]
