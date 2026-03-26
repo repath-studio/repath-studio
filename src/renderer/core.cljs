@@ -6,6 +6,8 @@
    [reagent.dom.client :as ra.dom.client]
    [renderer.a11y.events]
    [renderer.a11y.subs]
+   [renderer.action.defaults :as action.defaults]
+   [renderer.action.subs]
    [renderer.app.effects]
    [renderer.app.events :as app.events]
    [renderer.app.subs]
@@ -104,7 +106,8 @@
   (rf/dispatch-sync [::app.events/initialize])
 
   (rf/dispatch [::re-pressed/add-keyboard-event-listener "keydown"])
-  (rf/dispatch [::re-pressed/set-keydown-rules utils.key/keydown-rules])
+  (rf/dispatch [::re-pressed/set-keydown-rules (utils.key/actions->keydown-rules
+                                                action.defaults/actions)])
 
   (mount-root!)
   (js/console.log easter-egg))

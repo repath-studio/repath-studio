@@ -18,6 +18,8 @@
    [:shift-key boolean?]
    [:type [:enum "keydown" "keypress" "keyup"]]])
 
+(def PointerId number?)
+
 (def PointerEvent
   [:map {:closed true}
    [:element [:maybe [:or Element Handle]]]
@@ -25,7 +27,7 @@
    [:pointer-pos [:maybe Vec2]]
    [:pressure [:maybe number?]]
    [:pointer-type [:enum "mouse" "pen" "touch"]]
-   [:pointer-id number?]
+   [:pointer-id PointerId]
    [:timestamp number?]
    [:primary boolean?]
    [:button [:maybe PointerButton]]

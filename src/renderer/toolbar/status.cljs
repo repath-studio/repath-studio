@@ -35,24 +35,24 @@
 (defn zoom-options []
   [{:label [::zoom-set-50 "Set to 50%"]
     :id "50"
-    :action [::frame.events/set-zoom 0.5]}
+    :event [::frame.events/set-zoom 0.5]}
    {:label [::zoom-set-100 "Set to 100%"]
     :id "100"
-    :action [::frame.events/set-zoom 1]}
+    :event [::frame.events/set-zoom 1]}
    {:label [::zoom-set-200 "Set to 200%"]
     :id "200"
-    :action [::frame.events/set-zoom 2]}
-   {:id :divider-1
+    :event [::frame.events/set-zoom 2]}
+   {:id :divider
     :type :separator}
    {:label [::zoom-focus-selected "Focus selected"]
     :id "center-selected"
-    :action [::frame.events/focus-selection :original]}
+    :event [::frame.events/focus-selection :original]}
    {:label [::zoom-fit-selected "Fit selected"]
     :id "fit-selected"
-    :action [::frame.events/focus-selection :fit]}
+    :event [::frame.events/focus-selection :fit]}
    {:label [::zoom-fill-selected "Fill selected"]
     :id "fill-selected"
-    :action [::frame.events/focus-selection :fill]}])
+    :event [::frame.events/focus-selection :fill]}])
 
 (defn zoom-menu
   []
@@ -158,7 +158,7 @@
      [zoom-menu]]))
 
 (defn radio-button
-  [{:keys [title active icon action class]}]
+  [{:keys [title active icon event class]}]
   [:> Tooltip/Root
    [:> Tooltip/Trigger
     {:as-child true}
@@ -166,7 +166,7 @@
      [views/radio-icon-button icon @(rf/subscribe active)
       {:class class
        :aria-label (i18n.views/t title)
-       :on-click #(rf/dispatch action)}]]]
+       :on-click #(rf/dispatch event)}]]]
    [:> Tooltip/Portal
     [:> Tooltip/Content
      {:class "tooltip-content"
@@ -175,7 +175,7 @@
       :on-escape-key-down #(.stopPropagation %)}
      [:div.flex.gap-2.items-center
       (i18n.views/t title)
-      [views/shortcuts action]]]]])
+      [views/shortcuts event]]]]])
 
 (defn color-selectors []
   (let [fill @(rf/subscribe [::document.subs/fill])

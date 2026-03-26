@@ -130,7 +130,7 @@
                      props)])
 
 (defn context-menu-item
-  [{:keys [label action checked disabled]
+  [{:keys [label event checked disabled]
     :as props}]
   (case (:type props)
     :separator
@@ -139,24 +139,24 @@
     :checkbox
     [:> ContextMenu/CheckboxItem
      {:class "menu-checkbox-item inset"
-      :onSelect #(rf/dispatch action)
+      :onSelect #(rf/dispatch event)
       :checked checked
       :disabled disabled}
      [:> ContextMenu/ItemIndicator
       {:class "menu-item-indicator"}
       [icon "checkmark"]]
      [:div (i18n.views/t label)]
-     [shortcuts action]]
+     [shortcuts event]]
 
     [:> ContextMenu/Item
      {:class "menu-item context-menu-item"
-      :onSelect #(rf/dispatch action)
+      :onSelect #(rf/dispatch event)
       :disabled disabled}
      [:div (i18n.views/t label)]
-     [shortcuts action]]))
+     [shortcuts event]]))
 
 (defn dropdown-menu-item
-  [{:keys [label action checked]
+  [{:keys [label event checked]
     :as props}]
   (case (:type props)
     :separator
@@ -166,22 +166,22 @@
     [:> DropdownMenu/CheckboxItem
      {:class "menu-checkbox-item inset"
       :on-click #(.stopPropagation %)
-      :on-select #(rf/dispatch action)
+      :on-select #(rf/dispatch event)
       :checked @(rf/subscribe checked)}
      [:> DropdownMenu/ItemIndicator
       {:class "menu-item-indicator"}
       [icon "checkmark"]]
      [:div (i18n.views/t label)]
-     [shortcuts action]]
+     [shortcuts event]]
 
     [:> DropdownMenu/Item
      {:class "menu-item dropdown-menu-item"
-      :onSelect #(rf/dispatch action)}
+      :onSelect #(rf/dispatch event)}
      (when (:icon props)
        [icon (:icon props)
         {:class "menu-item-indicator"}])
      [:div (i18n.views/t label)]
-     [shortcuts action]]))
+     [shortcuts event]]))
 
 (defn scroll-area
   [& more]

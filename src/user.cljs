@@ -6,6 +6,7 @@
    [re-frame.core :as rf]
    [re-frame.db :as rf.db]
    [renderer.a11y.events :as-alias a11y.events]
+   [renderer.action.events :as-alias action.events]
    [renderer.document.events :as-alias document.events]
    [renderer.element.events :as-alias element.events]
    [renderer.history.events :as-alias history.events]
@@ -334,6 +335,16 @@
   "Deregisters a language."
   [id]
   (rf/dispatch-sync [::i18n.events/deregister-language id]))
+
+(defn ^:export register-action
+  "Registers an action."
+  [action]
+  (rf/dispatch-sync [::action.events/register-action action]))
+
+(defn ^:export deregister-action
+  "Deregisters an action."
+  [id]
+  (rf/dispatch-sync [::action.events/deregister-action id]))
 
 (defn ^:export help
   "Lists available functions."

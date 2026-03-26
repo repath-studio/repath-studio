@@ -74,12 +74,12 @@
                                               :close true}]}]]])
 
 (defn cmdk-item
-  [{:keys [label action icon disabled]
+  [{:keys [label event icon disabled]
     :as attrs}]
   (when-not (or (= (:type attrs) :separator)
                 disabled)
     [:> Command/CommandItem
-     {:on-select #(rf/dispatch [::dialog.events/close action])
+     {:on-select #(rf/dispatch [::dialog.events/close event])
       :class "flex p-2 rounded-md items-center justify-between
               data-[selected=true]:bg-overlay"}
      [:div.flex.items-center.gap-2
@@ -90,7 +90,7 @@
                  (remove nil?)
                  (map i18n.views/t)
                  (string/join " - "))]]
-     [views/shortcuts action]]))
+     [views/shortcuts event]]))
 
 (defn cmdk-group-inner
   [items label]
