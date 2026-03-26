@@ -89,7 +89,6 @@
   "main": "resources/main.js",
   "devDependencies": {
     "@capacitor/android": "8.3.0",
-    "@capacitor/assets": "3.0.5",
     "@capacitor/cli": "8.3.0",
     "@capacitor/core": "8.3.0",
     "@capacitor/ios": "8.3.0",
