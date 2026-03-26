@@ -30,7 +30,8 @@
 (defn browser-support
   [browser version-added]
   [:div.text-center.flex-1
-   [:div {:title browser}
+   [:div.flex.justify-center
+    {:title browser}
     [views/icon (browser-icon browser)]]
    [:div.text-2xs.mt-1.text-primary
     (case version-added
@@ -282,7 +283,7 @@
   [el selected-elements selected-tags tag]
   (let [multitag? (next selected-tags)]
     [:div.flex.bg-primary.py-5.px-4.gap-1.items-center
-     [:h1.flex-1.text-lg
+     [:h1.flex-1.text-lg.overflow-hidden.text-ellipsis
       (if-not (next selected-elements)
         (let [el-label (:label el)
               properties (element.hierarchy/properties tag)]

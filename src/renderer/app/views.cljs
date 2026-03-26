@@ -102,13 +102,12 @@
 
 (defn right-panel
   [active-tool]
-  [:div.flex.flex-col.h-full.bg-secondary.grow
+  [:div.flex.flex-col.h-full.bg-secondary.grow.overflow-hidden
    [views/scroll-area
     (tool.hierarchy/right-panel active-tool)]
    [:div.bg-primary.grow.flex]])
 
-(defn ruler-locked-toggle
-  []
+(defn ruler-locked-toggle []
   (let [ruler-locked? @(rf/subscribe [::ruler.subs/locked?])]
     [:div.bg-primary
      {:style {:width ruler.views/ruler-size
