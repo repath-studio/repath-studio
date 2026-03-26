@@ -30,7 +30,8 @@
 (defn browser-support
   [browser version-added]
   [:div.text-center.flex-1
-   [:div {:title browser}
+   [:div.flex.justify-center
+    {:title browser}
     [views/icon (browser-icon browser)]]
    [:div.text-2xs.mt-1.text-primary
     (case version-added
