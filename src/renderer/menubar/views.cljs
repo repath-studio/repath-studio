@@ -30,15 +30,15 @@
                                            recent]})))]
     (cond-> recent-items
       (seq recent-items)
-      (concat [{:type :separator}
+      (concat [:separator
                {:id :clear-recent
                 :label [::recent-clear "Clear recent"]
                 :icon "delete"
                 :event [::document.events/clear-recent]}]))))
 
-(defn export-submenu []
+(def export-submenu
   [:export/svg
-   {:type :separator}
+   :separator
    :export/png
    :export/jpg
    :export/webp
@@ -49,7 +49,7 @@
    :label [::file "File"]
    :type :root
    :items [:document/new
-           {:type :separator}
+           :separator
            :document/open
            {:id :recent
             :label [::recent "Recent"]
@@ -57,7 +57,7 @@
             :enabled [::document.subs/recent?]
             :available [::app.subs/supported-feature? :file-system]
             :items (recent-submenu)}
-           {:type :separator}
+           :separator
            :document/save
            :document/save-as
            :document/download
@@ -65,10 +65,10 @@
             :label [::export-as "Export as"]
             :type :sub-menu
             :enabled [::document.subs/entities?]
-            :items (export-submenu)}
-           {:type :separator}
+            :items export-submenu}
+           :separator
            :document/print
-           {:type :separator}
+           :separator
            :document/close
            :window/close]})
 
@@ -79,50 +79,50 @@
    :enabled [::document.subs/entities?]
    :items [:history/undo
            :history/redo
-           {:type :separator}
+           :separator
            :clipboard/cut
            :clipboard/copy
            :clipboard/paste
            :clipboard/paste-in-place
            :clipboard/paste-styles
-           {:type :separator}
+           :separator
            :element/duplicate
-           {:type :separator}
+           :separator
            :element/select-all
            :element/deselect-all
            :element/invert-selection
            :element/select-same-tags
-           {:type :separator}
+           :separator
            :element/delete]})
 
-(defn align-submenu []
+(def align-submenu
   [:align/left
    :align/center-horizontal
    :align/right
-   {:type :separator}
+   :separator
    :align/top
    :align/center-vertical
    :align/bottom])
 
-(defn boolean-submenu []
+(def boolean-submenu
   [:boolean/exclude
    :boolean/unite
    :boolean/intersect
    :boolean/subtract
    :boolean/divide])
 
-(defn animate-submenu []
+(def animate-submenu
   [:animate/animate
    :animate/transform
    :animate/motion])
 
-(defn path-submenu []
+(def path-submenu
   [:path/simplify
    :path/smooth
    :path/flatten
    :path/reverse])
 
-(defn image-submenu []
+(def image-submenu
   [:image/trace])
 
 (defn object-menu []
@@ -132,53 +132,53 @@
    :enabled [::document.subs/entities?]
    :items [:object/to-path
            :object/stroke-to-path
-           {:type :separator}
+           :separator
            :object/group
            :object/ungroup
-           {:type :separator}
+           :separator
            :object/lock
            :object/unlock
-           {:type :separator}
+           :separator
            {:id :align
             :label [::align "Align"]
             :type :sub-menu
             :enabled [::element.subs/not-every-top-level?]
-            :items (align-submenu)}
+            :items align-submenu}
            {:id :animate
             :label [::animate "Animate"]
             :type :sub-menu
             :enabled [::element.subs/some-selected?]
-            :items (animate-submenu)}
+            :items animate-submenu}
            {:id :boolean
             :label [::boolean-operation "Boolean operation"]
             :type :sub-menu
             :enabled [::element.subs/multiple-selected?]
-            :items (boolean-submenu)}
-           {:type :separator}
+            :items boolean-submenu}
+           :separator
            :object/raise
            :object/lower
            :object/raise-to-top
            :object/lower-to-bottom
-           {:type :separator}
+           :separator
            {:id :image
             :type :sub-menu
             :label [::image "Image"]
             :enabled [::element.subs/some-selected?]
-            :items (image-submenu)}
+            :items image-submenu}
            {:id :path
             :label [::path "Path"]
             :type :sub-menu
             :enabled [::element.subs/some-selected?]
-            :items (path-submenu)}]})
+            :items path-submenu}]})
 
-(defn zoom-submenu []
+(def zoom-submenu
   [:zoom/in
    :zoom/out
-   {:type :separator}
+   :separator
    :zoom/set-50
    :zoom/set-100
    :zoom/set-200
-   {:type :separator}
+   :separator
    :zoom/focus-selected
    :zoom/fit-selected
    :zoom/fill-selected])
@@ -210,12 +210,12 @@
                :event [::i18n.events/set-user-lang "system"]
                :checked [::i18n.subs/selected-lang? "system"]}])))
 
-(defn theme-mode-submenu []
+(def theme-mode-submenu
   [:theme/set-system-mode
    :theme/set-dark-mode
    :theme/set-light-mode])
 
-(defn panel-submenu []
+(def panel-submenu
   [:panel/toggle-tree
    :panel/toggle-properties
    :panel/toggle-xml
@@ -231,11 +231,11 @@
             :label [::zoom "Zoom"]
             :type :sub-menu
             :enabled [::document.subs/entities?]
-            :items (zoom-submenu)}
+            :items zoom-submenu}
            {:id :theme-mode
             :label [::theme-mode "Theme mode"]
             :type :sub-menu
-            :items (theme-mode-submenu)}
+            :items theme-mode-submenu}
            {:id :a11y
             :label [::accessibility-filter "Accessibility filter"]
             :type :sub-menu
@@ -245,7 +245,7 @@
             :label [::language "Language"]
             :type :sub-menu
             :items (languages-submenu)}
-           {:type :separator}
+           :separator
            :view/toggle-grid
            :view/toggle-rulers
            :view/toggle-help-bar
@@ -255,7 +255,7 @@
            {:id :panel
             :label [::panel "Panel"]
             :type :sub-menu
-            :items (panel-submenu)
+            :items panel-submenu
             :available [::window.subs/md?]}
            {:type :separator
             :available [::window.subs/md?]}
@@ -266,35 +266,39 @@
    :label [::help "Help"]
    :type :root
    :items [:app/command-panel
-           {:type :separator}
+           :separator
            :help/website
            :help/source-code
            :help/license
            :help/changelog
            :help/privacy-policy
-           {:type :separator}
+           :separator
            :help/submit-issue
            :help/report-errors
-           {:type :separator}
+           :separator
            :help/about]})
 
 (defn action-menu-item
   [id]
-  (let [action @(rf/subscribe [::action.subs/action id])]
-    action))
+  (if (= id :separator)
+    {:type :separator}
+    (when-let [action @(rf/subscribe [::action.subs/action id])]
+      (cond-> action
+        (:checked action)
+        (assoc :type :checkbox)))))
 
 (defmulti menu-item :type)
 
-(defn resolve-item [item]
+(defn resolve-item
+  [item]
   (let [item (if (keyword? item)
                (some-> item action-menu-item menu-item)
                (menu-item item))
         {:keys [available]} item]
-    (when (or (nil? available)
-              @(rf/subscribe available))
+    (when (or (nil? available) @(rf/subscribe available))
       item)))
 
-(defmethod menu-item :separator []
+(defmethod menu-item :separator [_]
   [:> Menubar/Separator {:class "menu-separator"}])
 
 (defmethod menu-item :checkbox
