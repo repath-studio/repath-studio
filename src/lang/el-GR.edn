@@ -734,19 +734,6 @@
 
  :renderer.toolbar.status
  {:select-zoom "Επιλέξτε επίπεδο μεγέθυνσης"
-  :zoom-out "Σμίκρυνση"
-  :zoom-in "Μεγέθυνση"
-  :zoom-set-50 "Ορισμός σε 50%"
-  :zoom-set-100 "Ορισμός σε 100%"
-  :zoom-set-200 "Ορισμός σε 200%"
-  :zoom-focus-selected "Εστίαση επιλογής"
-  :zoom-fit-selected "Προσαρμογή επιλογής"
-  :zoom-fill-selected "Γέμισμα επιλογής"
-  :timeline "Χρονολόγιο"
-  :grid "Πλέγμα"
-  :rulers "Χάρακες"
-  :history "Ιστορικο"
-  :xml "XML"
   :fill-color "Επιλέξτε χρώμα γεμίσματος"
   :stroke-color "Επιλέξτε χρώμα περιγράμματος"
   :swap-color "Ανταλλάξτε το γέμισμα με τη γραμμή"}

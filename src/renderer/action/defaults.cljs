@@ -472,6 +472,7 @@
    :label [::zoom-in "In"]
    :icon "zoom-in"
    :event [::frame.events/zoom-in]
+   :enabled [::document.subs/zoom-in-available?]
    :shortcuts [{:keyCode (utils.key/codes "EQUALS")}]})
 
 (def zoom-out
@@ -479,6 +480,7 @@
    :label [::zoom-out "Out"]
    :icon "zoom-out"
    :event [::frame.events/zoom-out]
+   :enabled [::document.subs/zoom-out-available?]
    :shortcuts [{:keyCode (utils.key/codes "DASH")}]})
 
 (def zoom-set-50
@@ -608,7 +610,7 @@
 (def toggle-panel-timeline
   {:id :panel/toggle-timeline
    :label [::panel-timeline-editor "Timeline editor"]
-   :icon "timeline"
+   :icon "animation"
    :event [::panel.events/toggle :timeline]
    :checked [::panel.subs/visible? :timeline]})
 

@@ -23,6 +23,7 @@
    ["vaul" :refer [Drawer]]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
+   [renderer.action.subs :as-alias action.subs]
    [renderer.app.subs :as-alias app.subs]
    [renderer.i18n.views :as i18n.views]
    [renderer.icon.subs :as-alias icon.subs]
@@ -59,8 +60,7 @@
                      props)
    [icon icon-name]])
 
-(defn loading-indicator
-  []
+(defn loading-indicator []
   [icon "spinner" {:class "animate-spin"}])
 
 (defn switch
@@ -182,6 +182,13 @@
         {:class "menu-item-indicator"}])
      [:div (i18n.views/t label)]
      [shortcuts event]]))
+
+(defn dropdown-menu-action-item
+  [id]
+  (if (= id :separator)
+    [:> ContextMenu/Separator {:class "menu-separator"}]
+    (when-let [action @(rf/subscribe [::action.subs/action id])]
+      [dropdown-menu-item (dissoc action :icon)])))
 
 (defn scroll-area
   [& more]

@@ -65,6 +65,18 @@
  :-> :zoom)
 
 (rf/reg-sub
+ ::zoom-in-available?
+ :<- [::zoom]
+ (fn [zoom [_]]
+   (< zoom 100)))
+
+(rf/reg-sub
+ ::zoom-out-available?
+ :<- [::zoom]
+ (fn [zoom [_]]
+   (> zoom 0.01)))
+
+(rf/reg-sub
  ::rotate
  :<- [::active]
  :-> :rotate)
@@ -160,6 +172,7 @@
        :as db} [_]]
    (some->> active-document
             (document.handlers/saved? db))))
+
 (rf/reg-sub
  ::saveable?
  :<- [::entities?]
