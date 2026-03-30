@@ -220,8 +220,7 @@
 
 (defn editor []
   (let [timeline-visible @(rf/subscribe [::panel.subs/visible? :timeline])
-        md? @(rf/subscribe [::window.subs/md?])
-        repl-history? @(rf/subscribe [::panel.subs/visible? :repl-history])]
+        md? @(rf/subscribe [::window.subs/md?])]
     [panel.views/group
      {:orientation "vertical"
       :id "editor-group"
@@ -241,7 +240,7 @@
           :defaultSize 300}
          [timeline.views/root]
          [panel.views/close-button :timeline]]])
-     (when (and md? repl-history?) [panel.views/separator])
+     [panel.views/separator]
      [toolbar.status/root]
      (when md? [repl.views/root])]))
 
