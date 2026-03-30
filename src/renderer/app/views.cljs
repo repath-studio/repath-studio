@@ -130,7 +130,7 @@
         worker-active? @(rf/subscribe [::worker.subs/some-active?])
         md? @(rf/subscribe [::window.subs/md?])
         xl? @(rf/subscribe [::window.subs/xl?])]
-    [:div.flex.flex-col.flex-1.h-full.gap-px
+    [:div.flex.flex-col.flex-1.h-full.gap-px.overflow-hidden
      [:div
       [toolbar.tools/root]
       (when ruler-visible?
