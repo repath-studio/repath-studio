@@ -97,8 +97,8 @@
   :align-right "오른쪽 정렬"
   :align-top "위쪽 정렬"
   :align-bottom "아래쪽 정렬"
-  :align-center-vertically "수직 중앙 정렬"
-  :align-center-horizontally "수평 중앙 정렬"
+  :center-vertically "수직 중앙 정렬"
+  :center-horizontally "수평 중앙 정렬"
   :animate "애니메이션"
   :animate-transform "변환 애니메이션"
   :animate-motion "모션 애니메이션"
@@ -694,25 +694,6 @@
   :corners "모서리"
   :nodes "노드"
   :to " ~ "}
-
- :renderer.toolbar.object
- {:bring-front "맨 앞으로"
-  :send-back "맨 뒤로"
-  :bring-forward "앞으로"
-  :send-backward "뒤로"
-  :group "그룹"
-  :ungroup "그룹 해제"
-  :align-left "왼쪽 정렬"
-  :align-center-hor "수평 중앙 정렬"
-  :align-right "오른쪽 정렬"
-  :align-top "위쪽 정렬"
-  :align-center-ver "수직 중앙 정렬"
-  :align-bottom "아래쪽 정렬"
-  :unite "합치기"
-  :intersect "교집합"
-  :subtract "빼기"
-  :exclude "제외"
-  :divide "나누기"}
 
  :renderer.utils.bounds
  {:bounds-corner "경계 모서리"

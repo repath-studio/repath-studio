@@ -96,8 +96,8 @@
   :align-right "右对齐"
   :align-top "顶部对齐"
   :align-bottom "底部对齐"
-  :align-center-vertically "垂直居中对齐"
-  :align-center-horizontally "水平居中对齐"
+  :center-vertically "垂直居中对齐"
+  :center-horizontally "水平居中对齐"
   :animate "动画"
   :animate-transform "变换动画"
   :animate-motion "运动动画"
@@ -660,25 +660,6 @@
   :corners "角点"
   :nodes "节点"
   :to " 到 "}
-
- :renderer.toolbar.object
- {:bring-front "置于前面"
-  :send-back "置于后面"
-  :bring-forward "前移"
-  :send-backward "后移"
-  :group "成组"
-  :ungroup "取消成组"
-  :align-left "左对齐"
-  :align-center-hor "水平居中对齐"
-  :align-right "右对齐"
-  :align-top "顶部对齐"
-  :align-center-ver "垂直居中对齐"
-  :align-bottom "底部对齐"
-  :unite "合并"
-  :intersect "相交"
-  :subtract "差集"
-  :exclude "排除"
-  :divide "分割"}
 
  :renderer.utils.bounds
  {:bounds-corner "边界角点"

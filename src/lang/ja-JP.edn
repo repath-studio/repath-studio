@@ -97,8 +97,8 @@
   :align-right "右揃え"
   :align-top "上揃え"
   :align-bottom "下揃え"
-  :align-center-vertically "垂直中央揃え"
-  :align-center-horizontally "水平中央揃え"
+  :center-vertically "垂直中央揃え"
+  :center-horizontally "水平中央揃え"
   :animate "アニメーション"
   :animate-transform "変形をアニメーション"
   :animate-motion "モーションをアニメーション"
@@ -698,25 +698,6 @@
   :corners "角"
   :nodes "ノード"
   :to " に "}
-
- :renderer.toolbar.object
- {:bring-front "最前面へ"
-  :send-back "最背面へ"
-  :bring-forward "前面へ"
-  :send-backward "背面へ"
-  :group "グループ"
-  :ungroup "グループ解除"
-  :align-left "左揃え"
-  :align-center-hor "水平中央揃え"
-  :align-right "右揃え"
-  :align-top "上揃え"
-  :align-center-ver "垂直中央揃え"
-  :align-bottom "下揃え"
-  :unite "結合"
-  :intersect "交差"
-  :subtract "減算"
-  :exclude "除外"
-  :divide "分割"}
 
  :renderer.utils.bounds
  {:bounds-corner "境界角"

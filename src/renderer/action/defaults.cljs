@@ -341,33 +341,38 @@
 
 (def align-center-horizontal
   {:id :align/center-horizontal
-   :label [::align-center-horizontally "Center horizontally"]
+   :label [::center-horizontally "Center horizontally"]
    :icon "objects-align-center-horizontal"
-   :event [::element.events/align :center-horizontal]})
+   :event [::element.events/align :center-horizontal]
+   :enabled [::element.subs/not-every-top-level?]})
 
 (def align-right
   {:id :align/right
    :label [::align-right "Right"]
    :icon "objects-align-right"
-   :event [::element.events/align :right]})
+   :event [::element.events/align :right]
+   :enabled [::element.subs/not-every-top-level?]})
 
 (def align-top
   {:id :align/top
    :label [::align-top "Top"]
    :icon "objects-align-top"
-   :event [::element.events/align :top]})
+   :event [::element.events/align :top]
+   :enabled [::element.subs/not-every-top-level?]})
 
 (def align-center-vertical
   {:id :align/center-vertical
-   :label [::align-center-vertically "Center vertically"]
+   :label [::center-vertically "Center vertically"]
    :icon "objects-align-center-vertical"
-   :event [::element.events/align :center-vertical]})
+   :event [::element.events/align :center-vertical]
+   :enabled [::element.subs/not-every-top-level?]})
 
 (def align-bottom
   {:id :align/bottom
    :label [::align-bottom "Bottom"]
    :icon "objects-align-bottom"
-   :event [::element.events/align :bottom]})
+   :event [::element.events/align :bottom]
+   :enabled [::element.subs/not-every-top-level?]})
 
 (def boolean-exclude
   {:id :boolean/exclude

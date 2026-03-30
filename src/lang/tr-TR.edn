@@ -97,8 +97,8 @@
   :align-right "Sağa hizala"
   :align-top "Yukarı hizala"
   :align-bottom "Aşağı hizala"
-  :align-center-vertically "Dikey ortala"
-  :align-center-horizontally "Yatay ortala"
+  :center-vertically "Dikey ortala"
+  :center-horizontally "Yatay ortala"
   :animate "Animasyon"
   :animate-transform "Dönüşüm Animasyonu"
   :animate-motion "Hareket Animasyonu"
@@ -732,25 +732,6 @@
   :corners "köşeler"
   :nodes "düğümler"
   :to " ile "}
-
- :renderer.toolbar.object
- {:bring-front "En öne getir"
-  :send-back "En arkaya gönder"
-  :bring-forward "Öne getir"
-  :send-backward "Arkaya gönder"
-  :group "Grupla"
-  :ungroup "Grubu çöz"
-  :align-left "Sola hizala"
-  :align-center-hor "Yatay ortala"
-  :align-right "Sağa hizala"
-  :align-top "Yukarı hizala"
-  :align-center-ver "Dikey ortala"
-  :align-bottom "Aşağı hizala"
-  :unite "Birleştir"
-  :intersect "Kesişim"
-  :subtract "Çıkar"
-  :exclude "Dışla"
-  :divide "Böl"}
 
  :renderer.utils.bounds
  {:bounds-corner "sınır köşesi"

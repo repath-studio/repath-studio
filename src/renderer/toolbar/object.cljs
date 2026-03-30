@@ -2,127 +2,38 @@
   (:require
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
    [re-frame.core :as rf]
-   [renderer.element.events :as-alias element.events]
-   [renderer.element.subs :as-alias element.subs]
    [renderer.element.views :as element.views]
    [renderer.i18n.views :as i18n.views]
    [renderer.toolbar.views :as toolbar.views]
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]))
 
-(defn index-actions
-  [disabled]
-  [{:label [::bring-front "Bring to front"]
-    :icon "bring-front"
-    :action [::element.events/raise-to-top]
-    :disabled disabled}
-   {:label [::send-back "Send to back"]
-    :icon "send-back"
-    :action [::element.events/lower-to-bottom]
-    :disabled disabled}
-   {:label [::bring-forward "Bring forward"]
-    :icon "bring-forward"
-    :action [::element.events/raise]
-    :disabled disabled}
-   {:label [::send-backward "Send backward"]
-    :icon "send-backward"
-    :action [::element.events/lower]
-    :disabled disabled}])
+(def index-actions
+  [:object/raise-to-top
+   :object/lower-to-bottom
+   :object/raise
+   :object/lower])
 
-#_(defn group-actions
-    [disabled]
-    [{:label [::group "Group"]
-      :icon "group"
-      :disabled disabled
-      :action [::element.events/group]}
-     {:label [::ungroup "Ungroup"]
-      :icon "ungroup"
-      :disabled disabled
-      :action [::element.events/ungroup]}])
+#_(def group-actions
+    [:object/group
+     :object/ungroup])
 
-(defn alignment-actions
-  [disabled]
-  [{:label [::align-left "Align left"]
-    :icon "objects-align-left"
-    :disabled disabled
-    :action [::element.events/align :left]}
-   {:label [::align-center-hor "Align center horizontally"]
-    :disabled disabled
-    :icon "objects-align-center-horizontal"
-    :action [::element.events/align :center-horizontal]}
-   {:label [::align-right "Align right"]
-    :icon "objects-align-right"
-    :disabled disabled
-    :action [::element.events/align :right]}
-   {:type :divider}
-   {:label [::align-top "Align top"]
-    :icon "objects-align-top"
-    :disabled disabled
-    :action [::element.events/align :top]}
-   {:label [::align-center-ver "Align center vertically"]
-    :icon "objects-align-center-vertical"
-    :disabled disabled
-    :action [::element.events/align :center-vertical]}
-   {:label [::align-bottom "Align bottom"]
-    :icon "objects-align-bottom"
-    :disabled disabled
-    :action [::element.events/align :bottom]}])
+(def horizontal-alignment-actions
+  [:align/left
+   :align/center-horizontal
+   :align/right])
 
-(defn boolean-actions
-  [disabled]
-  [{:label [::unite "Unite"]
-    :icon "unite"
-    :disabled disabled
-    :action [::element.events/boolean-operation :unite]}
-   {:label [::intersect "Intersect"]
-    :icon "intersect"
-    :disabled disabled
-    :action [::element.events/boolean-operation :intersect]}
-   {:label [::subtract "Subtract"]
-    :icon "subtract"
-    :disabled disabled
-    :action [::element.events/boolean-operation :subtract]}
-   {:label [::exclude "Exclude"]
-    :icon "exclude"
-    :disabled disabled
-    :action [::element.events/boolean-operation :exclude]}
-   {:label [::divide "Divide"]
-    :icon "divide"
-    :disabled disabled
-    :action [::element.events/boolean-operation :divide]}])
+(def vertical-alignment-actions
+  [:align/top
+   :align/center-vertical
+   :align/bottom])
 
-#_(defn distribute-actions
-    []
-    [{:label "Distribute spacing horizontally"
-      :icon "distribute-spacing-horizontal"
-      :disabled true
-      :action [::element.events/istribute-spacing :horizontal]}
-     {:label "Distribute spacing vertically"
-      :icon "distribute-spacing-vertical"
-      :disabled true
-      :action [::element.events/distribute-spacing :vertical]}])
-
-#_(defn rotate-actions
-    []
-    [{:label "Rotate 90° clockwise"
-      :icon "rotate-clockwise"
-      :disabled true
-      :action [::element.events/rotate -90]}
-     {:label "Rotate 90° counterclockwise"
-      :icon "rotate-counterclockwise"
-      :disabled true
-      :action [::element.events/rotate 90]}])
-
-#_(defn flip-actions
-    []
-    [{:label "Flip horizontally"
-      :icon "flip-horizontal"
-      :disabled true
-      :action [::element.events/flip :horizontal]}
-     {:label "Flip vertically"
-      :icon "flip-vertical"
-      :disabled true
-      :action [::element.events/flip :vertical]}])
+(def boolean-actions
+  [:boolean/unite
+   :boolean/intersect
+   :boolean/subtract
+   :boolean/exclude
+   :boolean/divide])
 
 (defn more-button []
   [:> DropdownMenu/Root
@@ -142,28 +53,23 @@
                  :on-escape-key-down #(.stopPropagation %)}
                 [views/dropdownmenu-arrow]]))]])
 
-(defn object-buttons
-  []
-  (let [some-selected? @(rf/subscribe [::element.subs/some-selected?])
-        multiple-selected? @(rf/subscribe [::element.subs/multiple-selected?])
-        every-top-level? @(rf/subscribe [::element.subs/every-top-level?])
-        md? @(rf/subscribe [::window.subs/md?])
-        object-actions [(index-actions (not some-selected?))
-                        (when md? (alignment-actions every-top-level?))
-                        (boolean-actions (not multiple-selected?))]]
+(defn object-buttons []
+  (let [md? @(rf/subscribe [::window.subs/md?])
+        object-actions [index-actions
+                        (when md? horizontal-alignment-actions)
+                        (when md? vertical-alignment-actions)
+                        boolean-actions]]
     (->> (keep identity object-actions)
-         (interpose [{:type :divider}])
+         (interpose [:divider])
          (flatten)
-         (map toolbar.views/button))))
+         (map toolbar.views/action-button))))
 
-(defn root
-  []
-  (let [some-selected? @(rf/subscribe [::element.subs/some-selected?])
-        md? @(rf/subscribe [::window.subs/md?])]
+(defn root []
+  (let [md? @(rf/subscribe [::window.subs/md?])]
     [views/toolbar
      {:class "flex-col px-2 md:px-1 gap-2 md:gap-1"}
      (into [:<>] (object-buttons))
      (when-not md?
        [:<>
         [:span.h-divider]
-        [more-button (not some-selected?)]])]))
+        [more-button]])]))
