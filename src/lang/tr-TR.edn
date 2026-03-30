@@ -3,26 +3,22 @@
  :renderer.app.views
  {:lock "Kilitle"
   :unlock "Kilidi Aç"
-  :svg-description "Vektör Grafik Editörü"
-  :start "Başla"
-  :new "Yeni"
-  :or "veya"
-  :open "Aç"
-  :recent "Son Kullanılan"
-  :select-size "Boyut seç"
-  :select-template "Şablon seç"
-  :empty-canvas "Boş tuval"
-  :help "Yardım"
-  :command-panel "Komut paneli"
-  :website "Web sitesi"
-  :source-code "Kaynak Kodu"
-  :changelog "Değişiklik Günlüğü"
   :tree "Ağaç"
   :xml "XML"
   :timeline "Zaman çizelgesi"
   :shell "Kabuk"
   :history "Geçmiş"
   :attributes "Özellikler"}
+
+ :renderer.home.views
+ {:svg-description "Vektör Grafik Editörü"
+  :start "Başla"
+  :or "veya"
+  :recent "Son Kullanılan"
+  :select-size "Boyut seç"
+  :select-template "Şablon seç"
+  :empty-canvas "Boş tuval"
+  :help "Yardım"}
 
  :renderer.tree.views
  {:lock "Kilitle"

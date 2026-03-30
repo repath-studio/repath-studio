@@ -3,26 +3,22 @@
  :renderer.app.views
  {:lock "Lock"
   :unlock "Unlock"
-  :svg-description "Vector Graphics Editor"
-  :start "Start"
-  :new "New"
-  :or "or"
-  :open "Open"
-  :recent "Recent"
-  :select-size "Select size"
-  :select-template "Select template"
-  :empty-canvas "Empty canvas"
-  :help "Help"
-  :command-panel "Command panel"
-  :website "Website"
-  :source-code "Source Code"
-  :changelog "Changelog"
   :tree "Tree"
   :xml "XML"
   :timeline "Timeline"
   :shell "Shell"
   :history "History"
   :attributes "Attributes"}
+
+ :renderer.home.views
+ {:svg-description "Vector Graphics Editor"
+  :start "Start"
+  :or "or"
+  :recent "Recent"
+  :select-size "Select size"
+  :select-template "Select template"
+  :empty-canvas "Empty canvas"
+  :help "Help"}
 
  :renderer.tree.views
  {:lock "Lock"

@@ -3,26 +3,22 @@
  :renderer.app.views
  {:lock "Blocca"
   :unlock "Sblocca"
-  :svg-description "Editor di Grafica Vettoriale"
-  :start "Inizia"
-  :new "Nuovo"
-  :or "o"
-  :open "Apri"
-  :recent "Recenti"
-  :select-size "Seleziona dimensione"
-  :select-template "Seleziona modello"
-  :empty-canvas "Tela vuota"
-  :help "Aiuto"
-  :command-panel "Pannello comandi"
-  :website "Sito web"
-  :source-code "Codice sorgente"
-  :changelog "Changelog"
   :tree "Albero"
   :xml "XML"
   :timeline "Timeline"
   :shell "Shell"
   :history "Cronologia"
   :attributes "Attributi"}
+
+ :renderer.home.views
+ {:svg-description "Editor di Grafica Vettoriale"
+  :start "Inizia"
+  :or "o"
+  :recent "Recenti"
+  :select-size "Seleziona dimensione"
+  :select-template "Seleziona modello"
+  :empty-canvas "Tela vuota"
+  :help "Aiuto"}
 
  :renderer.tree.views
  {:lock "Blocca"

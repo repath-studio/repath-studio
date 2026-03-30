@@ -3,26 +3,22 @@
  :renderer.app.views
  {:lock "Заблокировать"
   :unlock "Разблокировать"
-  :svg-description "Редактор Векторной Графики"
-  :start "Начать"
-  :new "Новый"
-  :or "или"
-  :open "Открыть"
-  :recent "Недавние"
-  :select-size "Выбрать размер"
-  :select-template "Выбрать шаблон"
-  :empty-canvas "Пустой холст"
-  :help "Справка"
-  :command-panel "Панель команд"
-  :website "Веб-сайт"
-  :source-code "Исходный код"
-  :changelog "Журнал изменений"
   :tree "Дерево"
   :xml "XML"
   :timeline "Временная шкала"
   :shell "Консоль"
   :history "История"
   :attributes "Атрибуты"}
+
+ :renderer.home.views
+ {:svg-description "Редактор Векторной Графики"
+  :start "Начать"
+  :or "или"
+  :recent "Недавние"
+  :select-size "Выбрать размер"
+  :select-template "Выбрать шаблон"
+  :empty-canvas "Пустой холст"
+  :help "Справка"}
 
  :renderer.tree.views
  {:lock "Заблокировать"

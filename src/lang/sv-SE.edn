@@ -3,26 +3,22 @@
  :renderer.app.views
  {:lock "Lås"
   :unlock "Lås upp"
-  :svg-description "Vektorgrafik-editor"
-  :start "Start"
-  :new "Ny"
-  :or "eller"
-  :open "Öppna"
-  :recent "Senaste"
-  :select-size "Välj storlek"
-  :select-template "Välj mall"
-  :empty-canvas "Tom duk"
-  :help "Hjälp"
-  :command-panel "Kommandopanel"
-  :website "Webbplats"
-  :source-code "Källkod"
-  :changelog "Ändringslogg"
   :tree "Träd"
   :xml "XML"
   :timeline "Tidslinje"
   :shell "Skal"
   :history "Historik"
   :attributes "Attribut"}
+
+ :renderer.home.views
+ {:svg-description "Vektorgrafik-editor"
+  :start "Start"
+  :or "eller"
+  :recent "Senaste"
+  :select-size "Välj storlek"
+  :select-template "Välj mall"
+  :empty-canvas "Tom duk"
+  :help "Hjälp"}
 
  :renderer.tree.views
  {:lock "Lås"

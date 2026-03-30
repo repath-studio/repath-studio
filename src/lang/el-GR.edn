@@ -3,26 +3,22 @@
  :renderer.app.views
  {:lock "Κλείδωμα"
   :unlock "Ξεκλείδωμα"
-  :svg-description "Επεξεργαστής Διανυσματικών Γραφικών"
-  :start "Έναρξη"
-  :new "Νέο"
-  :or "ή"
-  :open "Άνοιγμα"
-  :recent "Πρόσφατα"
-  :select-size "Επιλογή μεγέθους"
-  :select-template "Επιλογή προτύπου"
-  :empty-canvas "Κενός καμβάς"
-  :help "Βοήθεια"
-  :command-panel "Πάνελ εντολών"
-  :website "Ιστότοπος"
-  :source-code "Πηγαίος κώδικας"
-  :changelog "Αρχείο αλλαγών"
   :tree "Δέντρο"
   :xml "XML"
   :timeline "Χρονολόγιο"
   :shell "Τερματικό"
   :history "Ιστορικό"
   :attributes "Χαρακτηριστικά"}
+
+ :renderer.home.views
+ {:svg-description "Επεξεργαστής Διανυσματικών Γραφικών"
+  :start "Έναρξη"
+  :or "ή"
+  :recent "Πρόσφατα"
+  :select-size "Επιλογή μεγέθους"
+  :select-template "Επιλογή προτύπου"
+  :empty-canvas "Κενός καμβάς"
+  :help "Βοήθεια"}
 
  :renderer.tree.views
  {:lock "Κλείδωμα"

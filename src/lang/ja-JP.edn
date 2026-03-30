@@ -3,26 +3,22 @@
  :renderer.app.views
  {:lock "ロック"
   :unlock "ロック解除"
-  :svg-description "ベクターグラフィックエディター"
-  :start "開始"
-  :new "新規"
-  :or "または"
-  :open "開く"
-  :recent "最近使用したファイル"
-  :select-size "サイズを選択"
-  :select-template "テンプレートを選択"
-  :empty-canvas "空のキャンバス"
-  :help "ヘルプ"
-  :command-panel "コマンドパネル"
-  :website "ウェブサイト"
-  :source-code "ソースコード"
-  :changelog "変更履歴"
   :tree "ツリー"
   :xml "XML"
   :timeline "タイムライン"
   :shell "シェル"
   :history "履歴"
   :attributes "属性"}
+
+ :renderer.home.views
+ {:svg-description "ベクターグラフィックエディター"
+  :start "開始"
+  :or "または"
+  :recent "最近使用したファイル"
+  :select-size "サイズを選択"
+  :select-template "テンプレートを選択"
+  :empty-canvas "空のキャンバス"
+  :help "ヘルプ"}
 
  :renderer.tree.views
  {:lock "ロック"

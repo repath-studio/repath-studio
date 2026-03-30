@@ -3,26 +3,22 @@
  :renderer.app.views
  {:lock "Sperren"
   :unlock "Entsperren"
-  :svg-description "Vektorgrafik-Editor"
-  :start "Starten"
-  :new "Neu"
-  :or "oder"
-  :open "Öffnen"
-  :recent "Zuletzt verwendet"
-  :select-size "Größe auswählen"
-  :select-template "Vorlage auswählen"
-  :empty-canvas "Leere Leinwand"
-  :help "Hilfe"
-  :command-panel "Befehlsfeld"
-  :website "Website"
-  :source-code "Quellcode"
-  :changelog "Änderungsprotokoll"
   :tree "Baum"
   :xml "XML"
   :timeline "Zeitleiste"
   :shell "Terminal"
   :history "Verlauf"
   :attributes "Attribute"}
+
+ :renderer.home.views
+ {:svg-description "Vektorgrafik-Editor"
+  :start "Starten"
+  :or "oder"
+  :recent "Zuletzt verwendet"
+  :select-size "Größe auswählen"
+  :select-template "Vorlage auswählen"
+  :empty-canvas "Leere Leinwand"
+  :help "Hilfe"}
 
  :renderer.tree.views
  {:lock "Sperren"

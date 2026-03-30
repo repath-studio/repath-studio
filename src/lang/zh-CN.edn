@@ -3,26 +3,22 @@
  :renderer.app.views
  {:lock "锁定"
   :unlock "解锁"
-  :svg-description "矢量图形编辑器"
-  :start "开始"
-  :new "新建"
-  :or "或"
-  :open "打开"
-  :recent "最近"
-  :select-size "选择尺寸"
-  :select-template "选择模板"
-  :empty-canvas "空白画布"
-  :help "帮助"
-  :command-panel "命令面板"
-  :website "网站"
-  :source-code "源代码"
-  :changelog "更改日志"
   :tree "树"
   :xml "XML"
   :timeline "时间轴"
   :shell "终端"
   :history "历史"
   :attributes "属性"}
+
+ :renderer.home.views
+ {:svg-description "矢量图形编辑器"
+  :start "开始"
+  :or "或"
+  :recent "最近"
+  :select-size "选择尺寸"
+  :select-template "选择模板"
+  :empty-canvas "空白画布"
+  :help "帮助"}
 
  :renderer.tree.views
  {:lock "锁定"

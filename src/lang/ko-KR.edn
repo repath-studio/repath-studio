@@ -3,26 +3,22 @@
  :renderer.app.views
  {:lock "잠금"
   :unlock "잠금 해제"
-  :svg-description "벡터 그래픽 편집기"
-  :start "시작"
-  :new "새로 만들기"
-  :or "또는"
-  :open "열기"
-  :recent "최근"
-  :select-size "크기 선택"
-  :select-template "템플릿 선택"
-  :empty-canvas "빈 캔버스"
-  :help "도움말"
-  :command-panel "명령 패널"
-  :website "웹사이트"
-  :source-code "소스 코드"
-  :changelog "변경 로그"
   :tree "트리"
   :xml "XML"
   :timeline "타임라인"
   :shell "쉘"
   :history "기록"
   :attributes "속성"}
+
+ :renderer.home.views
+ {:svg-description "벡터 그래픽 편집기"
+  :start "시작"
+  :or "또는"
+  :recent "최근"
+  :select-size "크기 선택"
+  :select-template "템플릿 선택"
+  :empty-canvas "빈 캔버스"
+  :help "도움말"}
 
  :renderer.tree.views
  {:lock "잠금"

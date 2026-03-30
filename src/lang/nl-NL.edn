@@ -3,26 +3,22 @@
  :renderer.app.views
  {:lock "Vergrendelen"
   :unlock "Ontgrendelen"
-  :svg-description "Vector Graphics Editor"
-  :start "Start"
-  :new "Nieuw"
-  :or "of"
-  :open "Openen"
-  :recent "Recent"
-  :select-size "Selecteer grootte"
-  :select-template "Selecteer sjabloon"
-  :empty-canvas "Leeg canvas"
-  :help "Help"
-  :command-panel "Commandopaneel"
-  :website "Website"
-  :source-code "Broncode"
-  :changelog "Wijzigingslog"
   :tree "Boom"
   :xml "XML"
   :timeline "Tijdlijn"
   :shell "Shell"
   :history "Geschiedenis"
   :attributes "Attributen"}
+
+ :renderer.home.views
+ {:svg-description "Vector Graphics Editor"
+  :start "Start"
+  :or "of"
+  :recent "Recent"
+  :select-size "Selecteer grootte"
+  :select-template "Selecteer sjabloon"
+  :empty-canvas "Leeg canvas"
+  :help "Help"}
 
  :renderer.tree.views
  {:lock "Vergrendelen"

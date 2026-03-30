@@ -3,26 +3,22 @@
  :renderer.app.views
  {:lock "Verrouiller"
   :unlock "Déverrouiller"
-  :svg-description "Éditeur de Graphiques Vectoriels"
-  :start "Démarrer"
-  :new "Nouveau"
-  :or "ou"
-  :open "Ouvrir"
-  :recent "Récents"
-  :select-size "Sélectionner la taille"
-  :select-template "Sélectionner un modèle"
-  :empty-canvas "Canevas vide"
-  :help "Aide"
-  :command-panel "Panneau de commandes"
-  :website "Site web"
-  :source-code "Code source"
-  :changelog "Journal des modifications"
   :tree "Arbre"
   :xml "XML"
   :timeline "Chronologie"
   :shell "Terminal"
   :history "Historique"
   :attributes "Attributs"}
+
+ :renderer.home.views
+ {:svg-description "Éditeur de Graphiques Vectoriels"
+  :start "Démarrer"
+  :or "ou"
+  :recent "Récents"
+  :select-size "Sélectionner la taille"
+  :select-template "Sélectionner un modèle"
+  :empty-canvas "Canevas vide"
+  :help "Aide"}
 
  :renderer.tree.views
  {:lock "Verrouiller"

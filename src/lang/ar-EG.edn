@@ -3,26 +3,22 @@
  :renderer.app.views
  {:lock "قفل"
   :unlock "فتح"
-  :svg-description "محرر الرسوميات المتجهة"
-  :start "ابدأ"
-  :new "جديد"
-  :or "أو"
-  :open "فتح"
-  :recent "حديث"
-  :select-size "اختيار الحجم"
-  :select-template "اختيار قالب"
-  :empty-canvas "لوحة رسم فارغة"
-  :help "مساعدة"
-  :command-panel "لوحة الأوامر"
-  :website "الموقع الإلكتروني"
-  :source-code "الكود المصدري"
-  :changelog "سجل التغييرات"
   :tree "الشجرة"
   :xml "XML"
   :timeline "الجدول الزمني"
   :shell "الطرفية"
   :history "التاريخ"
   :attributes "الخصائص"}
+
+ :renderer.home.views
+ {:svg-description "محرر الرسوميات المتجهة"
+  :start "ابدأ"
+  :or "أو"
+  :recent "حديث"
+  :select-size "اختيار الحجم"
+  :select-template "اختيار قالب"
+  :empty-canvas "لوحة رسم فارغة"
+  :help "مساعدة"}
 
  :renderer.tree.views
  {:lock "قفل"

@@ -93,9 +93,9 @@
 
 (defn titlebar [s]
   [:div.drag.grow.items-center
-   {:class "pointer-events-none truncate lg:absolute lg:justify-center px-1
-            lg:left-1/2 lg:-translate-x-1/2 z-[-1] lg:flex"
-    :dir "ltr"}
+   {:dir "ltr"
+    :class "pointer-events-none truncate lg:absolute lg:justify-center px-1
+            lg:left-1/2 lg:-translate-x-1/2 z-[-1] lg:flex"}
    s])
 
 (defn language-select
@@ -104,7 +104,7 @@
    [:button.button
     {:title (i18n.views/t [::menubar.views/language "Language"])
      :class "flex gap-1 items-center px-3 uppercase bg-primary font-mono
-                                   outline-inset"}
+             outline-inset"}
     code]
    (->> (menubar.views/languages-submenu)
         (mapv (partial language-item system-code)))])

@@ -4,10 +4,9 @@
    ["path-browserify" :as path-browserify]
    [config :as config]
    [re-frame.core :as rf]
+   [renderer.action.subs :as-alias action.subs]
    [renderer.db :as db]
-   [renderer.dialog.events :as-alias dialog.events]
    [renderer.document.events :as-alias document.events]
-   [renderer.events :as-alias events]
    [renderer.i18n.views :as i18n.views]
    [renderer.views :as views]))
 
@@ -54,28 +53,15 @@
    (when path
      [:span.text-lg.text-foreground-muted (.dirname path-browserify path)])])
 
-(def help-commands
-  [["command"
-    [::command-panel "Command panel"]
-    [::dialog.events/show-cmdk]]
-   ["earth"
-    [::website "Website"]
-    [::events/open-remote-url "https://repath.studio/"]]
-   ["commit"
-    [::source-code "Source Code"]
-    [::events/open-remote-url "https://github.com/repath-studio/repath-studio"]]
-   ["list"
-    [::changelog "Changelog"]
-    [::events/open-remote-url "https://repath.studio/roadmap/changelog/"]]])
-
-(defn help-command
-  [icon label event]
-  [:div.flex.items-center.gap-2.flex-wrap
-   [views/icon icon]
-   [:button.button-link.text-lg
-    {:on-click #(rf/dispatch event)}
-    (i18n.views/t label)]
-   [views/shortcuts event]])
+(defn command
+  [id]
+  (let [{:keys [icon label event]} @(rf/subscribe [::action.subs/action id])]
+    [:div.flex.items-center.gap-2.flex-wrap
+     [views/icon icon]
+     [:button.button-link.text-lg
+      {:on-click #(rf/dispatch event)}
+      (i18n.views/t label)]
+     [views/shortcuts event]]))
 
 (defn root
   [recent-documents]
@@ -97,22 +83,11 @@
          [:h2.mb-3.mt-8.text-2xl (i18n.views/t [::start "Start"])]
 
          [:div.flex.items-center.gap-2.flex-wrap
-          [views/icon "file"]
-          [:button.button-link.text-lg
-           {:on-click #(rf/dispatch [::document.events/new])}
-           (i18n.views/t [::new "New"])]
-          [views/shortcuts [::document.events/new]]
-
+          [command :document/new]
           [:span (i18n.views/t [::or "or"])]
-
           [document-size-select]]
 
-         [:div.flex.items-center.gap-2
-          [views/icon "folder"]
-          [:button.button-link.text-lg
-           {:on-click #(rf/dispatch [::document.events/open])}
-           (i18n.views/t [::open "Open"])]
-          [views/shortcuts [::document.events/open]]]
+         [command :document/open]
 
          (when (seq recent-documents)
            [:<> [:h2.mb-3.mt-8.text-2xl
@@ -125,6 +100,9 @@
          [:h2.mb-3.mt-8.text-2xl
           (i18n.views/t [::help "Help"])]
 
-         (->> help-commands
-              (map #(apply help-command %))
+         (->> [:app/command-panel
+               :help/website
+               :help/source-code
+               :help/changelog]
+              (map command)
               (into [:div]))]]]]]]])
