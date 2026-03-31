@@ -194,6 +194,6 @@
 
       :reagent-render
       (fn []
-        [:div.flex-col.h-full.w-full
+        [:div.flex-col.h-full.w-full.overflow-hidden
          [toolbar timeline-ref]
          [timeline timeline-ref]])})))
