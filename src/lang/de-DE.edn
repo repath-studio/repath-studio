@@ -194,20 +194,6 @@
   :cut-selection "Auswahl ausschneiden"
   :trace-image "Bild nachzeichnen"}
 
- :renderer.element.views
- {:cut "Ausschneiden"
-  :copy "Kopieren"
-  :paste "Einfügen"
-  :raise "Anheben"
-  :lower "Absenken"
-  :raise-top "Ganz nach oben"
-  :lower-bottom "Ganz nach unten"
-  :animate "Animieren"
-  :animate-transform "Transform animieren"
-  :animate-motion "Bewegung animieren"
-  :duplicate "Duplizieren"
-  :delete "Löschen"}
-
  :renderer.element.impl.animation.animate
  {:label "Animieren"
   :description "Das SVG-Element <animate> bietet eine Möglichkeit, ein
@@ -703,12 +689,7 @@
                              sein."}
 
  :renderer.document.views
- {:new "Neu"
-  :open "Öffnen"
-  :open-directory "Enthaltenden Ordner öffnen"
-  :save "Speichern"
-  :undo "Rückgängig"
-  :redo "Wiederholen"
+ {:open-directory "Enthaltenden Ordner öffnen"
   :close "Schließen"
   :close-doc "Dokument schließen"
   :close-all "Alle schließen"

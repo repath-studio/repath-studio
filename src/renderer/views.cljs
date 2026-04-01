@@ -56,11 +56,12 @@
    [icon icon-name]])
 
 (defn action-icon-button
-  [action]
+  [action & {:as attrs}]
   [icon-button (:icon action)
-   {:disabled (action.views/disabled? action)
-    :aria-label (action.views/label action)
-    :on-click (action.views/dispatch action)}])
+   (merge {:disabled (action.views/disabled? action)
+           :aria-label (action.views/label action)
+           :on-click (action.views/dispatch action)}
+          attrs)])
 
 (defn loading-indicator []
   [icon "spinner" {:class "animate-spin"}])

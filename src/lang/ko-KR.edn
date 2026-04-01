@@ -194,20 +194,6 @@
   :cut-selection "선택 잘라내기"
   :trace-image "이미지 추적"}
 
- :renderer.element.views
- {:cut "잘라내기"
-  :copy "복사"
-  :paste "붙여넣기"
-  :raise "앞으로"
-  :lower "뒤로"
-  :raise-top "맨 앞으로"
-  :lower-bottom "맨 뒤로"
-  :animate "애니메이션"
-  :animate-transform "변환 애니메이션"
-  :animate-motion "모션 애니메이션"
-  :duplicate "복제"
-  :delete "삭제"}
-
  :renderer.element.impl.animation.animate
  {:label "애니메이션"
   :description "SVG <animate> 요소는 시간 경과에 따라 요소의 속성을 애니메이션
@@ -643,12 +629,7 @@
   :unsupported-or-corrupted "파일이 지원되지 않거나 손상된 것 같습니다."}
 
  :renderer.document.views
- {:new "새로 만들기"
-  :open "열기"
-  :open-directory "포함 디렉토리 열기"
-  :save "저장"
-  :undo "실행 취소"
-  :redo "다시 실행"
+ {:open-directory "포함 디렉토리 열기"
   :close "닫기"
   :close-doc "문서 닫기"
   :close-all "모두 닫기"

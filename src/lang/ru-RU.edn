@@ -194,20 +194,6 @@
   :cut-selection "Вырезать выделенное"
   :trace-image "Трассировать изображение"}
 
- :renderer.element.views
- {:cut "Вырезать"
-  :copy "Копировать"
-  :paste "Вставить"
-  :raise "Поднять"
-  :lower "Опустить"
-  :raise-top "Поднять на передний план"
-  :lower-bottom "Опустить на задний план"
-  :animate "Анимировать"
-  :animate-transform "Анимировать трансформацию"
-  :animate-motion "Анимировать движение"
-  :duplicate "Дублировать"
-  :delete "Удалить"}
-
  :renderer.element.impl.animation.animate
  {:label "Анимировать"
   :description "Элемент SVG <animate> предоставляет способ анимировать атрибут
@@ -682,12 +668,7 @@
   :unsupported-or-corrupted "Файл не поддерживается или повреждён."}
 
  :renderer.document.views
- {:new "Новый"
-  :open "Открыть"
-  :open-directory "Открыть содержащую папку"
-  :save "Сохранить"
-  :undo "Отменить"
-  :redo "Повторить"
+ {:open-directory "Открыть содержащую папку"
   :close "Закрыть"
   :close-doc "Закрыть документ"
   :close-all "Закрыть всё"

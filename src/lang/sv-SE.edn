@@ -194,20 +194,6 @@
   :cut-selection "Klipp ut markering"
   :trace-image "Spåra bild"}
 
- :renderer.element.views
- {:cut "Klipp ut"
-  :copy "Kopiera"
-  :paste "Klistra in"
-  :raise "Höj"
-  :lower "Sänk"
-  :raise-top "Höj till toppen"
-  :lower-bottom "Sänk till botten"
-  :animate "Animera"
-  :animate-transform "Animera transformation"
-  :animate-motion "Animera rörelse"
-  :duplicate "Duplicera"
-  :delete "Ta bort"}
-
  :renderer.element.impl.animation.animate
  {:label "Animera"
   :description "SVG-elementet <animate> ger ett sätt att animera ett attribut
@@ -687,12 +673,7 @@
   :unsupported-or-corrupted "Filen verkar vara ostödd eller skadad."}
 
  :renderer.document.views
- {:new "Ny"
-  :open "Öppna"
-  :open-directory "Öppna innehållande katalog"
-  :save "Spara"
-  :undo "Ångra"
-  :redo "Gör om"
+ {:open-directory "Öppna innehållande katalog"
   :close "Stäng"
   :close-doc "Stäng dokument"
   :close-all "Stäng alla"

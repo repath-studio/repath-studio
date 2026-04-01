@@ -194,20 +194,6 @@
   :cut-selection "Selectie knippen"
   :trace-image "Afbeelding traceren"}
 
- :renderer.element.views
- {:cut "Knippen"
-  :copy "Kopiëren"
-  :paste "Plakken"
-  :raise "Verhogen"
-  :lower "Verlagen"
-  :raise-top "Naar voorgrond"
-  :lower-bottom "Naar achtergrond"
-  :animate "Animeren"
-  :animate-transform "Transformatie animeren"
-  :animate-motion "Beweging animeren"
-  :duplicate "Dupliceren"
-  :delete "Verwijderen"}
-
  :renderer.element.impl.animation.animate
  {:label "Animeren"
   :description "Het SVG <animate> element biedt een manier om een attribuut van
@@ -702,12 +688,7 @@
   :unsupported-or-corrupted "Bestand lijkt niet ondersteund of beschadigd."}
 
  :renderer.document.views
- {:new "Nieuw"
-  :open "Openen"
-  :open-directory "Containing directory openen"
-  :save "Opslaan"
-  :undo "Ongedaan maken"
-  :redo "Opnieuw"
+ {:open-directory "Containing directory openen"
   :close "Sluiten"
   :close-doc "Document sluiten"
   :close-all "Alles sluiten"

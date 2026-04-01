@@ -193,20 +193,6 @@
   :cut-selection "剪切选择"
   :trace-image "描摹图像"}
 
- :renderer.element.views
- {:cut "剪切"
-  :copy "复制"
-  :paste "粘贴"
-  :raise "提升"
-  :lower "降低"
-  :raise-top "置于顶层"
-  :lower-bottom "置于底层"
-  :animate "动画"
-  :animate-transform "变换动画"
-  :animate-motion "运动动画"
-  :duplicate "复制"
-  :delete "删除"}
-
  :renderer.element.impl.animation.animate
  {:label "动画"
   :description "SVG <animate> 元素提供了一种随时间为元素的属性设置动画的方法。"}
@@ -609,12 +595,7 @@
   :unsupported-or-corrupted "文件似乎不受支持或已损坏。"}
 
  :renderer.document.views
- {:new "新建"
-  :open "打开"
-  :open-directory "打开包含目录"
-  :save "保存"
-  :undo "撤销"
-  :redo "重做"
+ {:open-directory "打开包含目录"
   :close "关闭"
   :close-doc "关闭文档"
   :close-all "关闭全部"

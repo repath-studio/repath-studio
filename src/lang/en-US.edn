@@ -195,20 +195,6 @@
   :cut-selection "Cut selection"
   :trace-image "Trace image"}
 
- :renderer.element.views
- {:cut "Cut"
-  :copy "Copy"
-  :paste "Paste"
-  :raise "Raise"
-  :lower "Lower"
-  :raise-top "Raise to top"
-  :lower-bottom "Lower to bottom"
-  :animate "Animate"
-  :animate-transform "Animate Transform"
-  :animate-motion "Animate Motion"
-  :duplicate "Duplicate"
-  :delete "Delete"}
-
  :renderer.element.impl.animation.animate
  {:label "Animate"
   :description "The SVG <animate> element provides a way to animate an attribute
@@ -674,12 +660,7 @@
   :unsupported-or-corrupted "File appears to be unsupported or corrupted."}
 
  :renderer.document.views
- {:new "New"
-  :open "Open"
-  :open-directory "Open containing directory"
-  :save "Save"
-  :undo "Undo"
-  :redo "Redo"
+ {:open-directory "Open containing directory"
   :close "Close"
   :close-doc "Close document"
   :close-all "Close all"

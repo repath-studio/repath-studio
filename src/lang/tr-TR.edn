@@ -194,20 +194,6 @@
   :cut-selection "Seçimi kes"
   :trace-image "Resim izini sür"}
 
- :renderer.element.views
- {:cut "Kes"
-  :copy "Kopyala"
-  :paste "Yapıştır"
-  :raise "Yükselt"
-  :lower "Alçalt"
-  :raise-top "En üste yükselt"
-  :lower-bottom "En alta alçalt"
-  :animate "Animasyon"
-  :animate-transform "Dönüşüm animasyonu"
-  :animate-motion "Hareket animasyonu"
-  :duplicate "Çoğalt"
-  :delete "Sil"}
-
  :renderer.element.impl.animation.animate
  {:label "Animasyon"
   :description "SVG <animate> öğesi, bir öğenin niteliğini zaman içinde
@@ -681,12 +667,7 @@
   :unsupported-or-corrupted "Dosya desteklenmiyor veya bozuk görünüyor."}
 
  :renderer.document.views
- {:new "Yeni"
-  :open "Aç"
-  :open-directory "İçeren dizini aç"
-  :save "Kaydet"
-  :undo "Geri al"
-  :redo "Yinele"
+ {:open-directory "İçeren dizini aç"
   :close "Kapat"
   :close-doc "Belgeyi kapat"
   :close-all "Tümünü kapat"

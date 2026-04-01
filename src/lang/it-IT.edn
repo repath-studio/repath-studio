@@ -194,20 +194,6 @@
   :cut-selection "Taglia selezione"
   :trace-image "Traccia immagine"}
 
- :renderer.element.views
- {:cut "Taglia"
-  :copy "Copia"
-  :paste "Incolla"
-  :raise "Alza"
-  :lower "Abbassa"
-  :raise-top "Porta in primo piano"
-  :lower-bottom "Porta in secondo piano"
-  :animate "Anima"
-  :animate-transform "Anima trasformazione"
-  :animate-motion "Anima movimento"
-  :duplicate "Duplica"
-  :delete "Elimina"}
-
  :renderer.element.impl.animation.animate
  {:label "Anima"
   :description "L'elemento SVG <animate> fornisce un modo per animare un
@@ -699,12 +685,7 @@
   :unsupported-or-corrupted "Il file sembra non supportato o danneggiato."}
 
  :renderer.document.views
- {:new "Nuovo"
-  :open "Apri"
-  :open-directory "Apri directory contenente"
-  :save "Salva"
-  :undo "Annulla"
-  :redo "Ripeti"
+ {:open-directory "Apri directory contenente"
   :close "Chiudi"
   :close-doc "Chiudi documento"
   :close-all "Chiudi tutto"

@@ -55,11 +55,11 @@
      [views/select-arrow]]]])
 
 (defn action-button
-  [args]
-  (let [{:keys [icon title options event show-options options-label]} args]
+  [action]
+  (let [{:keys [icon label options event show-options options-label]} action]
     (reagent/with-let [open (reagent/atom false)]
       [:button.button.rounded-sm.items-center.px-1.gap-1.flex.w-auto
-       {:title (i18n.views/t title)
+       {:title (i18n.views/t label)
         :class [(if show-options "px-1" "px-2")
                 (when @open "bg-overlay!")]
         :on-click #(rf/dispatch event)

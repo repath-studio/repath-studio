@@ -4,11 +4,12 @@
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
+   [renderer.action.subs :as-alias action.subs]
+   [renderer.action.views :as action.views]
    [renderer.app.subs :as-alias app.subs]
    [renderer.document.events :as-alias document.events]
    [renderer.document.subs :as-alias document.subs]
    [renderer.events :as-alias events]
-   [renderer.history.events :as-alias history.events]
    [renderer.history.subs :as-alias history.subs]
    [renderer.history.views :as history.views]
    [renderer.i18n.views :as i18n.views]
@@ -21,42 +22,29 @@
   []
   (let [undos @(rf/subscribe [::history.subs/undos])
         redos @(rf/subscribe [::history.subs/redos])
-        md? @(rf/subscribe [::window.subs/md?])]
+        md? @(rf/subscribe [::window.subs/md?])
+        new-action @(rf/subscribe [::action.subs/entity :document/new])
+        open-action @(rf/subscribe [::action.subs/entity :document/open])
+        save-action @(rf/subscribe [::action.subs/entity :document/save])
+        undo-action @(rf/subscribe [::action.subs/entity :history/undo])
+        redo-action @(rf/subscribe [::action.subs/entity :history/redo])]
     [views/toolbar
 
-     [views/icon-button
-      "file"
-      {:title (i18n.views/t [::new "New"])
-       :on-click #(rf/dispatch [::document.events/new])}]
-
-     [views/icon-button
-      "folder"
-      {:title (i18n.views/t [::open "Open"])
-       :on-click #(rf/dispatch [::document.events/open])}]
-
-     [views/icon-button
-      "save"
-      {:title (i18n.views/t [::save "Save"])
-       :on-click #(rf/dispatch [::document.events/save])
-       :disabled @(rf/subscribe [::document.subs/active-saved?])}]
+     (->> [new-action open-action save-action]
+          (map #(views/action-icon-button % :title (action.views/label %)))
+          (into [:<>]))
 
      [:span.v-divider]
 
      [history.views/action-button
-      {:icon "undo"
-       :title [::undo "Undo"]
-       :options undos
-       :options-label [::undo-stack "Undo stack"]
-       :show-options md?
-       :action [::history.events/undo]}]
+      (merge undo-action {:options undos
+                          :options-label [::undo-stack "Undo stack"]
+                          :show-options md?})]
 
      [history.views/action-button
-      {:icon "redo"
-       :title [::redo "Redo"]
-       :options redos
-       :options-label [::redo-stack "Redo stack"]
-       :show-options md?
-       :action [::history.events/redo]}]]))
+      (merge redo-action {:options redos
+                          :options-label [::redo-stack "Redo stack"]
+                          :show-options md?})]]))
 
 (defn close-button
   [id saved]

@@ -195,20 +195,6 @@
   :cut-selection "Couper la sélection"
   :trace-image "Vectoriser l'image"}
 
- :renderer.element.views
- {:cut "Couper"
-  :copy "Copier"
-  :paste "Coller"
-  :raise "Élever"
-  :lower "Abaisser"
-  :raise-top "Élever au premier plan"
-  :lower-bottom "Abaisser à l'arrière-plan"
-  :animate "Animer"
-  :animate-transform "Animer la transformation"
-  :animate-motion "Animer le mouvement"
-  :duplicate "Dupliquer"
-  :delete "Supprimer"}
-
  :renderer.element.impl.animation.animate
  {:label "Animer"
   :description "L'élément SVG <animate> fournit un moyen d'animer un attribut
@@ -697,12 +683,7 @@
                              corrompu."}
 
  :renderer.document.views
- {:new "Nouveau"
-  :open "Ouvrir"
-  :open-directory "Ouvrir le répertoire contenant"
-  :save "Enregistrer"
-  :undo "Annuler"
-  :redo "Rétablir"
+ {:open-directory "Ouvrir le répertoire contenant"
   :close "Fermer"
   :close-doc "Fermer le document"
   :close-all "Fermer tout"

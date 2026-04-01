@@ -195,20 +195,6 @@
   :cut-selection "قص التحديد"
   :trace-image "تتبع الصورة"}
 
- :renderer.element.views
- {:cut "قص"
-  :copy "نسخ"
-  :paste "لصق"
-  :raise "رفع"
-  :lower "خفض"
-  :raise-top "رفع إلى الأعلى"
-  :lower-bottom "خفض إلى الأسفل"
-  :animate "تحريك"
-  :animate-transform "تحريك التحويل"
-  :animate-motion "تحريك الحركة"
-  :duplicate "مضاعفة"
-  :delete "حذف"}
-
  :renderer.element.impl.animation.animate
  {:label "تحريك"
   :description "يوفر عنصر SVG <animate> طريقة لتحريك سمة عنصر عبر الزمن."}
@@ -663,12 +649,7 @@
   :unsupported-or-corrupted "يبدو أن الملف غير مدعوم أو تالف."}
 
  :renderer.document.views
- {:new "جديد"
-  :open "فتح"
-  :open-directory "فتح المجلد المحتوي"
-  :save "حفظ"
-  :undo "تراجع"
-  :redo "إعادة"
+ {:open-directory "فتح المجلد المحتوي"
   :close "إغلاق"
   :close-doc "إغلاق المستند"
   :close-all "إغلاق الكل"

@@ -194,20 +194,6 @@
   :cut-selection "選択を切り取り"
   :trace-image "画像をトレース"}
 
- :renderer.element.views
- {:cut "切り取り"
-  :copy "コピー"
-  :paste "貼り付け"
-  :raise "前面へ"
-  :lower "背面へ"
-  :raise-top "最前面へ"
-  :lower-bottom "最背面へ"
-  :animate "アニメーション"
-  :animate-transform "トランスフォームアニメーション"
-  :animate-motion "モーションアニメーション"
-  :duplicate "複製"
-  :delete "削除"}
-
  :renderer.element.impl.animation.animate
  {:label "アニメーション"
   :description "SVG <animate> 要素は、要素の属性を時間とともにアニメーション
@@ -647,12 +633,7 @@
   :unsupported-or-corrupted "ファイルがサポートされていないか破損しているようです。"}
 
  :renderer.document.views
- {:new "新規"
-  :open "開く"
-  :open-directory "格納ディレクトリを開く"
-  :save "保存"
-  :undo "元に戻す"
-  :redo "やり直し"
+ {:open-directory "格納ディレクトリを開く"
   :close "閉じる"
   :close-doc "ドキュメントを閉じる"
   :close-all "すべて閉じる"

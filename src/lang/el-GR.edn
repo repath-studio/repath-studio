@@ -194,20 +194,6 @@
   :cut-selection "Αποκοπή επιλογής"
   :trace-image "Ανίχνευση εικόνας"}
 
- :renderer.element.views
- {:cut "Αποκοπή"
-  :copy "Αντιγραφή"
-  :paste "Επικόλληση"
-  :raise "Ανύψωση"
-  :lower "Χαμήλωμα"
-  :raise-top "Ανύψωση στην κορυφή"
-  :lower-bottom "Χαμήλωμα στο κάτω μέρος"
-  :animate "Κίνηση"
-  :animate-transform "Κίνηση μετασχηματισμού"
-  :animate-motion "Κίνηση κίνησης"
-  :duplicate "Δημιουργία αντιγράφου"
-  :delete "Διαγραφή"}
-
  :renderer.element.impl.animation.animate
  {:label "Κίνηση"
   :description "Το στοιχείο SVG <animate> παρέχει έναν τρόπο για την κίνηση
@@ -709,12 +695,7 @@
                              κατεστραμμένο."}
 
  :renderer.document.views
- {:new "Νέο"
-  :open "Άνοιγμα"
-  :open-directory "Άνοιγμα φακέλου προέλευσης"
-  :save "Αποθήκευση"
-  :undo "Αναίρεση"
-  :redo "Επαναφορά"
+ {:open-directory "Άνοιγμα φακέλου προέλευσης"
   :close "Κλείσμο"
   :close-doc "Κλείσιμο εγγράφου"
   :close-all "Κλείσιμο όλων"

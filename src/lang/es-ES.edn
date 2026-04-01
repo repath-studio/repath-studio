@@ -194,20 +194,6 @@
   :cut-selection "Cortar selección"
   :trace-image "Vectorizar imagen"}
 
- :renderer.element.views
- {:cut "Cortar"
-  :copy "Copiar"
-  :paste "Pegar"
-  :raise "Elevar"
-  :lower "Bajar"
-  :raise-top "Elevar al frente"
-  :lower-bottom "Bajar al fondo"
-  :animate "Animar"
-  :animate-transform "Animar transformación"
-  :animate-motion "Animar movimiento"
-  :duplicate "Duplicar"
-  :delete "Eliminar"}
-
  :renderer.element.impl.animation.animate
  {:label "Animar"
   :description "El elemento SVG <animate> proporciona una forma de animar un
@@ -690,12 +676,7 @@
                              corrupto."}
 
  :renderer.document.views
- {:new "Nuevo"
-  :open "Abrir"
-  :open-directory "Abrir directorio contenedor"
-  :save "Guardar"
-  :undo "Deshacer"
-  :redo "Rehacer"
+ {:open-directory "Abrir directorio contenedor"
   :close "Cerrar"
   :close-doc "Cerrar documento"
   :close-all "Cerrar todo"
