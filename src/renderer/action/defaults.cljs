@@ -49,7 +49,7 @@
    :shortcuts [{:keyCode (utils.key/codes "S")
                 :ctrlKey true}]
    :enabled [::document.subs/saveable?]
-   :active [::app.subs/supported-feature? :file-system]})
+   :available [::app.subs/supported-feature? :file-system]})
 
 (def document-save-as
   {:id :document/save-as
@@ -60,14 +60,15 @@
                 :ctrlKey true
                 :shiftKey true}]
    :enabled [::document.subs/entities?]
-   :active [::app.subs/supported-feature? :file-system]})
+   :available [::app.subs/supported-feature? :file-system]})
 
 (def document-download
   {:id :document/download
    :label [::download "Download"]
    :icon "download"
    :event [::document.events/download]
-   :enabled [::document.subs/entities?]})
+   :enabled [::document.subs/entities?]
+   :available [::app.subs/unsupported-feature? :file-system]})
 
 (def document-close
   {:id :document/close
@@ -527,7 +528,7 @@
    :label [::grid "Grid"]
    :icon "grid"
    :event [::app.events/toggle-grid]
-   :checked [::app.subs/grid]
+   :active [::app.subs/grid]
    :shortcuts [{:keyCode (utils.key/codes "PERIOD")
                 :ctrlKey true}]})
 
@@ -536,7 +537,7 @@
    :label [::rulers "Rulers"]
    :icon "ruler-combined"
    :event [::ruler.events/toggle-visible]
-   :checked [::ruler.subs/visible?]
+   :active [::ruler.subs/visible?]
    :shortcuts [{:keyCode (utils.key/codes "R")
                 :ctrlKey true}]})
 
@@ -544,7 +545,7 @@
   {:id :view/toggle-help-bar
    :label [::help-bar "Help bar"]
    :icon "info"
-   :checked [::app.subs/help-bar]
+   :active [::app.subs/help-bar]
    :event [::app.events/toggle-help-bar]})
 
 (def toggle-debug-info
@@ -552,7 +553,7 @@
    :label [::debug-info "Debug info"]
    :icon "bug"
    :event [::app.events/toggle-debug-info]
-   :checked [::app.subs/debug-info]
+   :active [::app.subs/debug-info]
    :shortcuts [{:keyCode (utils.key/codes "D")
                 :ctrlKey true
                 :shiftKey true}]})
@@ -563,15 +564,15 @@
    :icon "arrow-minimize"
    :event [::window.events/toggle-fullscreen]
    :shortcuts [{:keyCode (utils.key/codes "F11")}]
-   :active [::app.subs/desktop?]
-   :checked [::window.subs/fullscreen?]})
+   :available [::app.subs/desktop?]
+   :active [::window.subs/fullscreen?]})
 
 (def toggle-panel-tree
   {:id :panel/toggle-tree
    :label [::panel-element-tree "Element tree"]
    :icon "tree"
    :event [::panel.events/toggle :tree]
-   :checked [::panel.subs/visible? :tree]
+   :active [::panel.subs/visible? :tree]
    :shortcuts [{:keyCode (utils.key/codes "T")
                 :ctrlKey true}]})
 
@@ -580,7 +581,7 @@
    :label [::panel-properties "Properties"]
    :icon "properties"
    :event [::panel.events/toggle :properties]
-   :checked [::panel.subs/visible? :properties]
+   :active [::panel.subs/visible? :properties]
    :shortcuts [{:keyCode (utils.key/codes "P")
                 :ctrlKey true}]})
 
@@ -589,14 +590,14 @@
    :label [::panel-xml-view "XML view"]
    :icon "code"
    :event [::panel.events/toggle :xml]
-   :checked [::panel.subs/visible? :xml]})
+   :active [::panel.subs/visible? :xml]})
 
 (def toggle-panel-history
   {:id :panel/toggle-history
    :label [::panel-history-tree "History tree"]
    :icon "history"
    :event [::panel.events/toggle :history]
-   :checked [::panel.subs/visible? :history]
+   :active [::panel.subs/visible? :history]
    :shortcuts [{:keyCode (utils.key/codes "H")
                 :ctrlKey true}]})
 
@@ -605,14 +606,14 @@
    :label [::panel-shell-history "Shell history"]
    :icon "shell"
    :event [::panel.events/toggle :repl-history]
-   :checked [::panel.subs/visible? :repl-history]})
+   :active [::panel.subs/visible? :repl-history]})
 
 (def toggle-panel-timeline
   {:id :panel/toggle-timeline
    :label [::panel-timeline-editor "Timeline editor"]
    :icon "animation"
    :event [::panel.events/toggle :timeline]
-   :checked [::panel.subs/visible? :timeline]})
+   :active [::panel.subs/visible? :timeline]})
 
 (def window-close
   {:id :window/close
@@ -672,7 +673,7 @@
    :icon "bug"
    :type :checkbox
    :label [::report-errors "Report errors automatically"]
-   :checked [::error.subs/reporting?]
+   :active [::error.subs/reporting?]
    :event [::error.events/toggle-reporting]})
 
 (def help-about
@@ -781,21 +782,21 @@
    :label [::dark "Dark"]
    :icon "dark"
    :event [::theme.events/set-mode :dark]
-   :checked [::theme.subs/selected-mode? :dark]})
+   :active [::theme.subs/selected-mode? :dark]})
 
 (def set-light-theme-mode
   {:id :theme/set-light-mode
    :label [::light "Light"]
    :icon "light"
    :event [::theme.events/set-mode :light]
-   :checked [::theme.subs/selected-mode? :light]})
+   :active [::theme.subs/selected-mode? :light]})
 
 (def set-system-theme-mode
   {:id :theme/set-system-mode
    :label [::system "System"]
    :icon "system"
    :event [::theme.events/set-mode :system]
-   :checked [::theme.subs/selected-mode? :system]})
+   :active [::theme.subs/selected-mode? :system]})
 
 (def actions
   [document-new

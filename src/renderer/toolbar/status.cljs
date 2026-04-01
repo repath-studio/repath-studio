@@ -6,6 +6,7 @@
    ["@repath-studio/react-color" :refer [ChromePicker PhotoshopPicker]]
    [re-frame.core :as rf]
    [renderer.action.subs :as-alias action.subs]
+   [renderer.action.views :as action.views]
    [renderer.app.subs :as-alias app.subs]
    [renderer.document.events :as-alias document.events]
    [renderer.document.subs :as-alias document.subs]
@@ -46,7 +47,9 @@
           :zoom/focus-selected
           :zoom/fit-selected
           :zoom/fill-selected]
-         (map views/dropdown-menu-action-item)
+         (map action.views/entity)
+         (map #(dissoc % :icon))
+         (map views/dropdown-menu-item)
          (into [:> DropdownMenu/Content
                 {:class "menu-content rounded-sm"
                  :side "top"
@@ -93,35 +96,35 @@
 (defn action-icon-button
   [icon-name id]
   (when-let [action @(rf/subscribe [::action.subs/action id])]
-    (let [{:keys [label event enabled]} action]
+    (let [{:keys [label event]} action]
       [views/icon-button icon-name
        {:title (i18n.views/t label)
         :on-click #(rf/dispatch event)
-        :disabled (some-> enabled rf/subscribe deref not)}])))
+        :disabled (action.views/disabled? action)}])))
 
 (defn zoom-button-group
-  []
-  (let [zoom @(rf/subscribe [::document.subs/zoom])]
-    [views/button-group
-     [action-icon-button "minus" :zoom/out]
-     [action-icon-button "plus" :zoom/in]
-     [:div.flex.hidden.items-center
-      {:class "xl:flex"
-       :dir "ltr"}
-      [zoom-input zoom]
-      [:div.px-2.flex.items-center.font-mono "%"]]
-     [zoom-menu]]))
+  [zoom]
+  [views/button-group
+   [action-icon-button "minus" :zoom/out]
+   [action-icon-button "plus" :zoom/in]
+   [:div.flex.hidden.items-center
+    {:class "xl:flex"
+     :dir "ltr"}
+    [zoom-input zoom]
+    [:div.px-2.flex.items-center.font-mono "%"]]
+   [zoom-menu]])
 
 (defn radio-button
-  [{:keys [label active icon event class]}]
+  [{:keys [icon class]
+    :as action}]
   [:> Tooltip/Root
    [:> Tooltip/Trigger
     {:as-child true}
     [:span
-     [views/radio-icon-button icon (when active @(rf/subscribe active))
+     [views/radio-icon-button icon (action.views/checked? action)
       {:class class
-       :aria-label (i18n.views/t label)
-       :on-click #(rf/dispatch event)}]]]
+       :aria-label (action.views/label action)
+       :on-click (action.views/dispatch action)}]]]
    [:> Tooltip/Portal
     [:> Tooltip/Content
      {:class "tooltip-content"
@@ -129,13 +132,9 @@
       :side "top"
       :on-escape-key-down #(.stopPropagation %)}
      [:div.flex.gap-2.items-center
-      (i18n.views/t label)
-      [views/shortcuts event]]]]])
-
-(defn radio-action-button
-  [id]
-  (when-let [action @(rf/subscribe [::action.subs/action id])]
-    [radio-button action]))
+      (action.views/label action)
+      (when @(rf/subscribe [::window.subs/xl?])
+        [views/shortcuts action])]]]])
 
 (defn color-picker
   [props & children]
@@ -196,7 +195,8 @@
         {:class "w-1/2 h-1/2 bottom-1/4 right-1/4"}]]]]))
 
 (defn root []
-  (let [md? @(rf/subscribe [::window.subs/md?])]
+  (let [md? @(rf/subscribe [::window.subs/md?])
+        zoom @(rf/subscribe [::document.subs/zoom])]
     [views/toolbar
      {:class "bg-primary relative justify-center md:justify-start py-2 md:py-1
               gap-2 md:gap-1"}
@@ -207,14 +207,16 @@
         (->> [:panel/toggle-xml
               :panel/toggle-timeline
               :panel/toggle-history]
-             (map radio-action-button)
+             (map action.views/entity)
+             (map radio-button)
              (into [:<>]))
         [:div.v-divider]])
      (->> [:view/toggle-grid
            :view/toggle-rulers]
-          (map radio-action-button)
+          (map action.views/entity)
+          (map radio-button)
           (into [:<>]))
      [snap.views/root]
-     [zoom-button-group]
+     [zoom-button-group zoom]
      [coordinates]
      [timeline.views/time-bar]]))

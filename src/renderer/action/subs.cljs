@@ -10,4 +10,6 @@
  ::action
  :<- [::registry]
  (fn [registry [_ id]]
-   (get registry id)))
+   (if (= id :separator)
+     {:type :separator}
+     (get registry id))))

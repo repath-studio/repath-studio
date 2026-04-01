@@ -4,7 +4,7 @@
    [re-frame.core :as rf]
    [renderer.a11y.events :as-alias a11y.events]
    [renderer.a11y.subs :as-alias a11y.subs]
-   [renderer.action.subs :as-alias action.subs]
+   [renderer.action.views :as action.views]
    [renderer.app.subs :as-alias app.subs]
    [renderer.document.events :as-alias document.events]
    [renderer.document.subs :as-alias document.subs]
@@ -189,7 +189,7 @@
            :label label
            :type :checkbox
            :icon "a11y"
-           :checked [::a11y.subs/filter-active? id]
+           :active [::a11y.subs/filter-active? id]
            :event [::a11y.events/toggle-active-filter id]})
         @(rf/subscribe [::a11y.subs/filters])))
 
@@ -202,13 +202,13 @@
                 :type :checkbox
                 :icon "language"
                 :event [::i18n.events/set-user-lang k]
-                :checked [::i18n.subs/selected-lang? k]}))
+                :active [::i18n.subs/selected-lang? k]}))
        (into [{:id "system"
                :label [::system "System"]
                :type :checkbox
                :icon "language"
                :event [::i18n.events/set-user-lang "system"]
-               :checked [::i18n.subs/selected-lang? "system"]}])))
+               :active [::i18n.subs/selected-lang? "system"]}])))
 
 (def theme-mode-submenu
   [:theme/set-system-mode
@@ -280,46 +280,43 @@
 
 (defn action-menu-item
   [id]
-  (if (= id :separator)
-    {:type :separator}
-    (when-let [action @(rf/subscribe [::action.subs/action id])]
-      (cond-> action
-        (:checked action)
-        (assoc :type :checkbox)))))
+  (when-let [action (action.views/entity id)]
+    (cond-> action
+      (:active action)
+      (assoc :type :checkbox))))
 
 (defmulti menu-item :type)
 
 (defn resolve-item
   [item]
-  (let [item (if (keyword? item)
-               (some-> item action-menu-item menu-item)
-               (menu-item item))
-        {:keys [available]} item]
-    (when (or (nil? available) @(rf/subscribe available))
-      item)))
+  (when-let [action (cond-> item
+                      (keyword? item)
+                      action-menu-item)]
+    (menu-item action)))
 
 (defmethod menu-item :separator [_]
   [:> Menubar/Separator {:class "menu-separator"}])
 
 (defmethod menu-item :checkbox
-  [{:keys [label event checked]}]
+  [action]
   [:> Menubar/CheckboxItem
    {:class "menu-checkbox-item inset"
-    :on-select #(rf/dispatch event)
-    :checked @(rf/subscribe checked)}
+    :on-select (action.views/dispatch action)
+    :checked (action.views/checked? action)}
    [:> Menubar/ItemIndicator
     {:class "menu-item-indicator"}
     [views/icon "checkmark"]]
-   [:div (i18n.views/t label)]
-   [views/shortcuts event]])
+   [:div (action.views/label action)]
+   (when @(rf/subscribe [::window.subs/xl?])
+     [views/shortcuts action])])
 
 (defmethod menu-item :sub-menu
-  [{:keys [label items enabled]}]
+  [action]
   [:> Menubar/Sub
    [:> Menubar/SubTrigger
     {:class "sub-menu-item menu-item"
-     :disabled (some-> enabled rf/subscribe deref not)}
-    [:div (i18n.views/t label)]
+     :disabled (action.views/disabled? action)}
+    [:div (action.views/label action)]
     [:div.rtl:mr-auto.text-inherit
      {:class "mr-[-1rem] rtl:ml-[-1rem] rtl:scale-x-[-1]"}
      [views/icon "chevron-right"]]]
@@ -330,10 +327,11 @@
             :align "start"
             :loop true
             :on-escape-key-down #(.stopPropagation %)}]
-          (map resolve-item items))]])
+          (map resolve-item (:items action)))]])
 
 (defmethod menu-item :root
-  [{:keys [label items id enabled]}]
+  [{:keys [items id]
+    :as action}]
   (let [desktop? @(rf/subscribe [::app.subs/desktop?])
         computed-lang @(rf/subscribe [::i18n.subs/lang])
         menubar-indicator? @(rf/subscribe [::menubar.subs/indicator?])]
@@ -348,11 +346,11 @@
                     disabled:text-foreground-disabled rounded-sm
                     disabled:pointer-events-none"
                (when desktop? "min-h-auto")]
-       :disabled (some-> enabled rf/subscribe deref not)}
+       :disabled (action.views/disabled? action)}
       [:span
        {:class (when (and menubar-indicator? (= computed-lang "en-US"))
                  "md:first-letter:underline")}
-       (or (some-> label i18n.views/t)
+       (or (action.views/label action)
            [views/icon "menu" {:aria-label (i18n.views/t [::menu "Menu"])}])]]
      [:> Menubar/Portal
       (into [:> Menubar/Content
@@ -366,13 +364,14 @@
             (map resolve-item items))]]))
 
 (defmethod menu-item :default
-  [{:keys [label event enabled]}]
+  [action]
   [:> Menubar/Item
    {:class "menu-item"
-    :on-select #(rf/dispatch event)
-    :disabled (some-> enabled rf/subscribe deref not)}
-   [:div (i18n.views/t label)]
-   [views/shortcuts event]])
+    :on-select (action.views/dispatch action)
+    :disabled (action.views/disabled? action)}
+   [:div (action.views/label action)]
+   (when @(rf/subscribe [::window.subs/xl?])
+     [views/shortcuts action])])
 
 (defn submenus []
   [(file-menu)

@@ -2,6 +2,7 @@
   (:require
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
    [re-frame.core :as rf]
+   [renderer.action.views :as action.views]
    [renderer.element.views :as element.views]
    [renderer.i18n.views :as i18n.views]
    [renderer.toolbar.views :as toolbar.views]
@@ -13,10 +14,6 @@
    :object/lower-to-bottom
    :object/raise
    :object/lower])
-
-#_(def group-actions
-    [:object/group
-     :object/ungroup])
 
 (def horizontal-alignment-actions
   [:align/left
@@ -43,7 +40,8 @@
      {:aria-label (i18n.views/t [::more-actions "More object actions"])}
      [views/icon "ellipsis-h"]]]
    [:> DropdownMenu/Portal
-    (->> (element.views/context-menu)
+    (->> element.views/context-menu-actions
+         (map action.views/entity)
          (map views/dropdown-menu-item)
          (into [:> DropdownMenu/Content
                 {:side "left"
@@ -55,9 +53,9 @@
 
 (defn object-buttons []
   (let [md? @(rf/subscribe [::window.subs/md?])
-        object-actions [index-actions
-                        (when md? horizontal-alignment-actions)
-                        (when md? vertical-alignment-actions)
+        object-actions [(when md? index-actions)
+                        horizontal-alignment-actions
+                        vertical-alignment-actions
                         boolean-actions]]
     (->> (keep identity object-actions)
          (interpose [:divider])

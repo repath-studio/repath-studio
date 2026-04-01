@@ -3,18 +3,20 @@
    ["@radix-ui/react-tooltip" :as Tooltip]
    [re-frame.core :as rf]
    [renderer.action.subs :as-alias action.subs]
-   [renderer.i18n.views :as i18n.views]
-   [renderer.views :as views]))
+   [renderer.action.views :as action.views]
+   [renderer.views :as views]
+   [renderer.window.subs :as-alias window.subs]))
 
 (defn button
-  [{:keys [label icon enabled event]}]
+  [{:keys [icon]
+    :as action}]
   [:> Tooltip/Root
    [:> Tooltip/Trigger
     {:as-child true}
     [:span.shadow-4
-     [views/icon-button icon {:disabled (some-> enabled rf/subscribe deref not)
-                              :aria-label (i18n.views/t label)
-                              :on-click #(rf/dispatch event)}]]]
+     [views/icon-button icon {:disabled (action.views/disabled? action)
+                              :aria-label (action.views/label action)
+                              :on-click (action.views/dispatch action)}]]]
    [:> Tooltip/Portal
     [:> Tooltip/Content
      {:class "tooltip-content"
@@ -22,8 +24,9 @@
       :sideOffset 5
       :on-escape-key-down #(.stopPropagation %)}
      [:div.flex.gap-2.items-center
-      (i18n.views/t label)
-      [views/shortcuts event]]]]])
+      (action.views/label action)
+      (when @(rf/subscribe [::window.subs/xl?])
+        [views/shortcuts action])]]]])
 
 (defn action-button
   [id]

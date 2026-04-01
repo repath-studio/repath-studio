@@ -19,15 +19,12 @@
    ["react" :as react]
    ["sonner" :refer [Toaster]]
    ["tailwind-merge" :refer [twMerge]]
-   ["vaul" :refer [Drawer]]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
-   [renderer.action.subs :as-alias action.subs]
-   [renderer.app.subs :as-alias app.subs]
+   [renderer.action.views :as action.views]
    [renderer.i18n.views :as i18n.views]
    [renderer.icon.subs :as-alias icon.subs]
-   [renderer.utils.key :as utils.key]
-   [renderer.window.subs :as-alias window.subs]))
+   [renderer.utils.key :as utils.key]))
 
 (defn merge-with-class
   [& props]
@@ -95,7 +92,7 @@
                                                 "Resize panel thumb"])}]])
 
 (defn format-shortcut
-  [[shortcut]]
+  [shortcut]
   (into [:div.flex.gap-1.items-center {:dir "ltr"}]
         (comp (map kbd)
               (interpose [:span "+"]))
@@ -113,10 +110,9 @@
           (conj (utils.key/code->key (:keyCode shortcut))))))
 
 (defn shortcuts
-  [event]
-  (let [event-shortcuts @(rf/subscribe [::app.subs/event-shortcuts event])
-        xl? @(rf/subscribe [::window.subs/xl?])]
-    (when (and (seq event-shortcuts) xl?)
+  [action]
+  (let [event-shortcuts (:shortcuts action)]
+    (when (seq event-shortcuts)
       (into [:span.inline-flex.text-foreground-muted {:class "gap-1.5"}]
             (comp (map format-shortcut)
                   (interpose [:span]))
@@ -129,65 +125,59 @@
                      props)])
 
 (defn context-menu-item
-  [{:keys [label event checked disabled]
-    :as props}]
-  (case (:type props)
-    :separator
+  [action]
+  (cond
+    (= (:type action) :separator)
     [:> ContextMenu/Separator {:class "menu-separator"}]
 
-    :checkbox
+    (:active action)
     [:> ContextMenu/CheckboxItem
      {:class "menu-checkbox-item inset"
-      :onSelect #(rf/dispatch event)
-      :checked checked
-      :disabled disabled}
+      :onSelect (action.views/dispatch action)
+      :checked (action.views/checked? action)
+      :disabled (action.views/disabled? action)}
      [:> ContextMenu/ItemIndicator
       {:class "menu-item-indicator"}
       [icon "checkmark"]]
-     [:div (i18n.views/t label)]
-     [shortcuts event]]
+     [:div (action.views/label action)]
+     [shortcuts action]]
 
+    :else
     [:> ContextMenu/Item
      {:class "menu-item context-menu-item"
-      :onSelect #(rf/dispatch event)
-      :disabled disabled}
-     [:div (i18n.views/t label)]
-     [shortcuts event]]))
+      :onSelect (action.views/dispatch action)
+      :disabled (action.views/disabled? action)}
+     [:div (action.views/label action)]
+     [shortcuts action]]))
 
 (defn dropdown-menu-item
-  [{:keys [label event checked]
-    :as props}]
-  (case (:type props)
-    :separator
+  [action]
+  (cond
+    (= :separator (:type action))
     [:> DropdownMenu/Separator {:class "menu-separator"}]
 
-    :checkbox
+    (:active action)
     [:> DropdownMenu/CheckboxItem
      {:class "menu-checkbox-item inset"
       :on-click #(.stopPropagation %)
-      :on-select #(rf/dispatch event)
-      :checked @(rf/subscribe checked)}
+      :on-select (action.views/dispatch action)
+      :checked (action.views/checked? action)
+      :disabled (action.views/disabled? action)}
      [:> DropdownMenu/ItemIndicator
       {:class "menu-item-indicator"}
       [icon "checkmark"]]
-     [:div (i18n.views/t label)]
-     [shortcuts event]]
+     [:div (action.views/label action)]
+     [shortcuts action]]
 
+    :else
     [:> DropdownMenu/Item
      {:class "menu-item dropdown-menu-item"
-      :onSelect #(rf/dispatch event)}
-     (when (:icon props)
-       [icon (:icon props)
+      :onSelect (action.views/dispatch action)}
+     (when (:icon action)
+       [icon (:icon action)
         {:class "menu-item-indicator"}])
-     [:div (i18n.views/t label)]
-     [shortcuts event]]))
-
-(defn dropdown-menu-action-item
-  [id]
-  (if (= id :separator)
-    [:> ContextMenu/Separator {:class "menu-separator"}]
-    (when-let [action @(rf/subscribe [::action.subs/action id])]
-      [dropdown-menu-item (dissoc action :icon)])))
+     [:div (action.views/label action)]
+     [shortcuts action]]))
 
 (defn scroll-area
   [& more]
@@ -282,57 +272,6 @@
                            :on-blur #()
                            :on-change #()
                            :ref ref} attrs)])})))
-
-(defn drawer
-  [{:keys [label direction content disabled snap-points]
-    :as attrs}]
-  (reagent/with-let [snap (reagent/atom nil)]
-    [:> Drawer.Root
-     (cond-> {:direction direction}
-       snap-points
-       (assoc :snapPoints (clj->js snap-points)
-              :activeSnapPoint @snap
-              :setActiveSnapPoint (fn [v] (reset! snap v))))
-     [:> Drawer.Trigger
-      {:class "button p-1 rounded h-auto flex flex-col flex-1 text-2xs gap-1
-               overflow-hidden items-center"
-       :disabled disabled}
-      [icon (:icon attrs)]
-      [:span.truncate.w-full (i18n.views/t label)]]
-     [:> Drawer.Portal
-      [:> Drawer.Overlay
-       {:class "backdrop"}]
-      [:> Drawer.Content
-       {:class ["inset-0 fixed z-0 outline-none bg-primary flex shadow-lg"
-                (case direction
-                  "left"
-                  (cond->
-                   "right-auto max-w-[80dvw] min-w-[60dvw] py-safe pl-safe"
-                    @(rf/subscribe [::app.subs/mac?]) (str " pt-8"))
-
-                  "right"
-                  "left-auto max-w-[80dvw] min-w-[60dvw] py-safe pr-safe"
-
-                  "bottom"
-                  "top-auto max-h-[60dvh] min-h-[30dvh] px-safe pb-safe"
-
-                  "top"
-                  "bottom-auto max-h-[60dvh] min-h-[30dvh] px-safe pt-safe")]
-        :style {:margin (cond
-                          (or (= direction "left")
-                              (= direction "right"))
-                          "- env(safe-area-inset-top) 0
-                           - env(safe-area-inset-bottom) 0"
-
-                          :else
-                          "0 - env(safe-area-inset-right)
-                           0 - env(safe-area-inset-left)")}}
-       [:> Drawer.Title {:class "sr-only"} (i18n.views/t label)]
-       [:> Drawer.Description
-        {:as-child true}
-        [:div.flex.flex-1.overflow-hidden
-         {:class (when (= direction "bottom") "w-full")}
-         content]]]]]))
 
 (defn toaster
   [theme]

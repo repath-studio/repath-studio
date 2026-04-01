@@ -2,6 +2,7 @@
   (:require
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
    [re-frame.core :as rf]
+   [renderer.action.views :as action.views]
    [renderer.app.events :as-alias app.events]
    [renderer.app.subs :as-alias app.subs]
    [renderer.document.subs :as-alias document.subs]
@@ -14,15 +15,16 @@
    [renderer.window.subs :as-alias window.subs]))
 
 (defn language-item
-  [system-abbr {:keys [id label event checked abbr]}]
+  [system-abbr {:keys [id abbr]
+                :as action}]
   [:> DropdownMenu/CheckboxItem
    {:class "menu-checkbox-item inset"
-    :on-select #(rf/dispatch event)
-    :checked @(rf/subscribe checked)}
+    :on-select (action.views/dispatch action)
+    :checked (action.views/checked? action)}
    [:> DropdownMenu/ItemIndicator
     {:class "menu-item-indicator"}
     [views/icon "checkmark"]]
-   [:div (i18n.views/t label)]
+   [:div (action.views/label action)]
    (if (= id "system")
      [:span.font-mono.text-foreground-disabled (or system-abbr "EN")]
      [:span.font-mono.text-foreground-muted abbr])])
@@ -124,36 +126,38 @@
        (map button)
        (into [:div.flex])))
 
-(defn app-header []
-  (let [title-bar @(rf/subscribe [::document.subs/title-bar])
-        fullscreen? @(rf/subscribe [::window.subs/fullscreen?])
+(defn right-controls []
+  (let [fullscreen? @(rf/subscribe [::window.subs/fullscreen?])
         theme-mode @(rf/subscribe [::theme.subs/computed-mode])
         mac? @(rf/subscribe [::app.subs/mac?])
-        web? @(rf/subscribe [::app.subs/web?])
-        desktop? @(rf/subscribe [::app.subs/desktop?])
         installable? @(rf/subscribe [::app.subs/installable?])
         md? @(rf/subscribe [::window.subs/md?])
         system-code @(rf/subscribe [::i18n.subs/system-lang-code])
         code @(rf/subscribe [::i18n.subs/lang-code])
-        show-app-icon? (not (or fullscreen? mac?))
-        show-menubar? (or md? desktop?)
-        show-window-controls? (and desktop? (not (or fullscreen? mac?)))
-        show-fullscreen-toggle? (or fullscreen? mac? (and web? md?))]
+        window-controls? @(rf/subscribe [::window.subs/window-controls?])
+        fullscreen-toggle? @(rf/subscribe [::window.subs/fullscreen-toggle?])]
+    [:div.flex.gap-px
+     (when installable? [install-button])
+     (when (or md? mac?)
+       [:<>
+        [language-select system-code code]
+        [theme-mode-select theme-mode]])
+     (when window-controls? [fullscreen-toggle fullscreen?])
+     (when fullscreen-toggle? [window-controls])]))
+
+(defn app-header []
+  (let [title-bar @(rf/subscribe [::document.subs/title-bar])
+        fullscreen? @(rf/subscribe [::window.subs/fullscreen?])
+        mac? @(rf/subscribe [::app.subs/mac?])
+        app-icon? @(rf/subscribe [::window.subs/app-icon?])
+        menubar? @(rf/subscribe [::window.subs/menubar?])]
     [:div.flex.relative.items-center
      [:div.px-1.gap-1.flex.items-center.shrink-0
-      (when show-app-icon? [app-icon])
-      (when show-menubar?
+      (when app-icon? [app-icon])
+      (when menubar?
         [:div.flex.relative.bg-secondary
          {:class (when (and mac? (not fullscreen?)) "ml-16")}
          [menubar.views/root]])]
      [titlebar title-bar]
      [:div.flex.h-full.flex-1.drag]
-     [:div.flex
-      [:div.flex.gap-px
-       (when installable? [install-button])
-       (when (or md? mac?)
-         [:<>
-          [language-select system-code code]
-          [theme-mode-select theme-mode]])
-       (when show-fullscreen-toggle? [fullscreen-toggle fullscreen?])
-       (when show-window-controls? [window-controls])]]]))
+     [right-controls]]))

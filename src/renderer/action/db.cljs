@@ -21,7 +21,7 @@
    [:shortcuts {:optional true} [:vector Shortcut]]
    [:enabled {:optional true} vector?]
    [:available {:optional true} vector?]
-   [:checked {:optional true} vector?]])
+   [:active {:optional true} vector?]])
 
 (def valid-action? (m/validator Action))
 

@@ -64,20 +64,6 @@
  :-> :repl-mode)
 
 (rf/reg-sub
- ::keydown-rules
- :-> :re-pressed.core/keydown)
-
-(rf/reg-sub
- ::event-shortcuts
- :<- [::keydown-rules]
- (fn [keydown-rules [_ event]]
-   (->> keydown-rules
-        :event-keys
-        (filter #(= (first %) event))
-        (first)
-        (rest))))
-
-(rf/reg-sub
  ::platform
  :-> :platform)
 
@@ -133,3 +119,9 @@
  :<- [::features]
  (fn [features [_ k]]
    (contains? features k)))
+
+(rf/reg-sub
+ ::unsupported-feature?
+ :<- [::features]
+ (fn [features [_ k]]
+   (not (contains? features k))))

@@ -4,6 +4,7 @@
    [clojure.string :as string]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
+   [renderer.action.views :as action.views]
    [renderer.document.events :as-alias document.events]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.events :as-alias element.events]
@@ -23,7 +24,7 @@
    [renderer.window.subs :as-alias window.subs]))
 
 (defn item-prop-toggle
-  [id state k active-icon inactive-icon active-title inactive-title]
+  [{:keys [id state k active-icon inactive-icon active-title inactive-title]}]
   (let [title (if state active-title inactive-title)]
     [views/icon-button
      (if state
@@ -144,9 +145,57 @@
                                   [::document.events/expand-el id]
                                   [::document.events/collapse-el id])))}])
 
+(defn item-toggles
+  [{:keys [id locked visible]}]
+  [{:id id
+    :state locked
+    :k :locked
+    :active-icon "lock"
+    :inactive-icon "unlock"
+    :active-title [::unlock "Unlock"]
+    :inactive-title [::lock "Lock"]}
+   {:id id
+    :state (not visible)
+    :k :visible
+    :active-icon "eye-closed"
+    :inactive-icon "eye"
+    :active-title [::show "Show"]
+    :inactive-title [::hide "Hide"]}])
+
+(defn on-list-item-click!
+  [id]
+  (fn [e]
+    (.stopPropagation e)
+    (if (.-shiftKey e)
+      (rf/dispatch-sync [::tree.events/select-range
+                         @last-focused-id id])
+      (do (rf/dispatch [::element.events/select
+                        id (.-ctrlKey e)])
+          (reset! last-focused-id id)))))
+
+(defn on-list-item-pointer-down!
+  [id selected]
+  (fn [e]
+    (when (and (= (.-button e) 2) (not selected))
+      (rf/dispatch [::element.events/select
+                    id (.-ctrlKey e)]))))
+
+(defn on-list-item-ref-update!
+  [selected]
+  (fn [this]
+    (when (and this selected)
+      (rf/dispatch [::events/scroll-into-view this])
+      (set-last-focused-id! (.getAttribute this "data-id")))))
+
+(defn list-item-icon
+  [{:keys [visible]} el]
+  (when-let [icon (:icon (utils.element/properties el))]
+    [views/icon icon {:class ["shrink-0"
+                              (when-not visible "opacity-60")]}]))
+
 (defn list-item-button
   [el {:keys [depth collapsed hovered]}]
-  (let [{:keys [id selected children locked visible]} el
+  (let [{:keys [id selected children]} el
         md? @(rf/subscribe [::window.subs/md?])
         collapse-button-width (if md? 21 27) ; TODO: Get from CSS variable.
         padding (* collapse-button-width (cond-> depth (seq children) dec))]
@@ -160,45 +209,26 @@
         :data-id (str id)
         :on-double-click #(rf/dispatch [::frame.events/pan-to-element id])
         :on-pointer-enter #(rf/dispatch [::document.events/set-hovered-id id])
-        :ref (fn [this]
-               (when (and this selected)
-                 (rf/dispatch [::events/scroll-into-view this])
-                 (set-last-focused-id! (.getAttribute this "data-id"))))
+        :ref (on-list-item-ref-update! selected)
         :draggable true
         :on-key-down #(key-down-handler! % id edit-mode?)
         :on-drag-start #(-> % .-dataTransfer (.setData "id" (str id)))
         :on-drag-enter #(rf/dispatch [::document.events/set-hovered-id id])
         :on-drag-over #(.preventDefault %)
         :on-drop #(drop-handler! % id)
-        :on-pointer-down #(when (and (= (.-button %) 2) (not selected))
-                            (rf/dispatch [::element.events/select
-                                          id (.-ctrlKey %)]))
-        :on-click (fn [e]
-                    (.stopPropagation e)
-                    (if (.-shiftKey e)
-                      (rf/dispatch-sync [::tree.events/select-range
-                                         @last-focused-id id])
-                      (do (rf/dispatch [::element.events/select
-                                        id (.-ctrlKey e)])
-                          (reset! last-focused-id id))))}
+        :on-pointer-down (on-list-item-pointer-down! id selected)
+        :on-click (on-list-item-click! id)}
        [:div.shrink-0 {:style {:flex-basis padding}}]
        [:div.flex-1.flex.items-center.justify-between.w-full.overflow-hidden
         (when (seq children)
           [collapse-button id collapsed])
         [:div.flex-1.overflow-hidden.flex.items-center
          {:class "gap-1.5"}
-         (when-let [icon (:icon (utils.element/properties el))]
-           [views/icon icon {:class ["shrink-0"
-                                     (when-not visible "opacity-60")]}])
+         [list-item-icon el]
          [item-label el edit-mode?]]
-        [item-prop-toggle id
-         locked :locked
-         "lock" "unlock"
-         [::unlock "Unlock"] [::lock "Lock"]]
-        [item-prop-toggle id
-         (not visible) :visible
-         "eye-closed" "eye"
-         [::show "Show"] [::hide "Hide"]]]])))
+        (->> (item-toggles el)
+             (map item-prop-toggle)
+             (into [:<>]))]])))
 
 (defn item [el depth elements]
   (let [{:keys [selected children id]} el
@@ -261,8 +291,9 @@
     {:class "flex h-full w-full overflow-hidden"}
     [inner-sidebar]]
    [:> ContextMenu/Portal
-    (into [:> ContextMenu/Content
-           {:class "menu-content context-menu-content"
-            :on-escape-key-down #(.stopPropagation %)}]
-          (map (fn [menu-item] [views/context-menu-item menu-item])
-               (element.views/context-menu)))]])
+    (->> element.views/context-menu-actions
+         (keep action.views/entity)
+         (map views/context-menu-item)
+         (into [:> ContextMenu/Content
+                {:class "menu-content context-menu-content"
+                 :on-escape-key-down #(.stopPropagation %)}]))]])

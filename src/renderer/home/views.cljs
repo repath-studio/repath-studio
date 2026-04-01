@@ -8,7 +8,8 @@
    [renderer.db :as db]
    [renderer.document.events :as-alias document.events]
    [renderer.i18n.views :as i18n.views]
-   [renderer.views :as views]))
+   [renderer.views :as views]
+   [renderer.window.subs :as-alias window.subs]))
 
 (defn document-size-select []
   [:> Select/Root
@@ -55,13 +56,14 @@
 
 (defn command
   [id]
-  (let [{:keys [icon label event]} @(rf/subscribe [::action.subs/action id])]
+  (let [{:keys [icon label event]} @(rf/subscribe [::action.subs/action id])
+        xl? @(rf/subscribe [::window.subs/xl?])]
     [:div.flex.items-center.gap-2.flex-wrap
      [views/icon icon]
      [:button.button-link.text-lg
       {:on-click #(rf/dispatch event)}
       (i18n.views/t label)]
-     [views/shortcuts event]]))
+     (when xl? [views/shortcuts event])]))
 
 (defn root
   [recent-documents]
