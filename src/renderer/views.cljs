@@ -10,7 +10,6 @@
    ["@radix-ui/react-select" :as Select]
    ["@radix-ui/react-slider" :as Slider]
    ["@radix-ui/react-switch" :as Switch]
-   ["@repath-studio/react-color" :refer [ChromePicker PhotoshopPicker]]
    ["codemirror" :as codemirror]
    ["codemirror/addon/display/placeholder.js"]
    ["codemirror/addon/hint/css-hint.js"]
@@ -224,27 +223,6 @@
 
 (defn select-arrow []
   [:> Select/Arrow {:class "fill-primary stroke-border"}])
-
-(defn color-picker
-  [props & children]
-  (let [sm? @(rf/subscribe [::window.subs/sm?])]
-    [:> Popover/Root {:modal true}
-     (into [:> Popover/Trigger {:as-child true}]
-           children)
-     [:> Popover/Portal
-      [:> Popover/Content
-       {:class "popover-content max-w-fit"
-        :align "start"
-        :side "top"
-        :align-offset (:align-offset props)
-        :on-escape-key-down #(.stopPropagation %)}
-       [:div.p-2
-        {:dir "ltr"
-         :tab-index 0}
-        (if sm?
-          [:> PhotoshopPicker props]
-          [:> ChromePicker props])]
-       [popover-arrow]]]]))
 
 (def cm-defaults
   {:lineNumbers false

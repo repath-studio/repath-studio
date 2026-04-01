@@ -1,7 +1,9 @@
 (ns renderer.toolbar.status
   (:require
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
+   ["@radix-ui/react-popover" :as Popover]
    ["@radix-ui/react-tooltip" :as Tooltip]
+   ["@repath-studio/react-color" :refer [ChromePicker PhotoshopPicker]]
    [re-frame.core :as rf]
    [renderer.action.subs :as-alias action.subs]
    [renderer.app.subs :as-alias app.subs]
@@ -135,13 +137,34 @@
   (when-let [action @(rf/subscribe [::action.subs/action id])]
     [radio-button action]))
 
+(defn color-picker
+  [props & children]
+  (let [sm? @(rf/subscribe [::window.subs/sm?])]
+    [:> Popover/Root {:modal true}
+     (into [:> Popover/Trigger {:as-child true}]
+           children)
+     [:> Popover/Portal
+      [:> Popover/Content
+       {:class "popover-content max-w-fit"
+        :align "start"
+        :side "top"
+        :align-offset (:align-offset props)
+        :on-escape-key-down #(.stopPropagation %)}
+       [:div.p-2
+        {:dir "ltr"
+         :tab-index 0}
+        (if sm?
+          [:> PhotoshopPicker props]
+          [:> ChromePicker props])]
+       [views/popover-arrow]]]]))
+
 (defn color-selectors []
   (let [fill @(rf/subscribe [::document.subs/fill])
         stroke @(rf/subscribe [::document.subs/stroke])
         get-hex #(:hex (js->clj % :keywordize-keys true))]
     [:div.flex
      {:class "gap-0.5"}
-     [views/color-picker
+     [color-picker
       {:color fill
        :on-change-complete #(rf/dispatch [::element.events/set-attr :fill
                                           (get-hex %)])
@@ -158,7 +181,7 @@
        :title (i18n.views/t [::swap-color "Swap fill with stroke"])
        :on-click #(rf/dispatch [::document.events/swap-colors])}]
 
-     [views/color-picker
+     [color-picker
       {:color stroke
        :on-change-complete #(rf/dispatch [::element.events/set-attr
                                           :stroke
