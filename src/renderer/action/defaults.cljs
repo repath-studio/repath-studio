@@ -672,7 +672,6 @@
 (def help-report-errors
   {:id :help/report-errors
    :icon "bug"
-   :type :checkbox
    :label [::report-errors "Report errors automatically"]
    :active [::error.subs/reporting?]
    :event [::error.events/toggle-reporting]})

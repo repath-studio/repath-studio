@@ -8,7 +8,7 @@
    [renderer.icon.events :as-alias icon.events]
    [renderer.icon.subs :as-alias icon.subs]))
 
-(deftest filters
+(deftest icon
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
 
@@ -18,8 +18,8 @@
                    :path "M10 10 H 90 V 90 H 10 Z"}]
 
      (testing "defaults"
-       (is (= @file-icon-path (get-in icon.defaults/icons ["file" :path]))))
-     (is (not @registered-icon-path))
+       (is (= @file-icon-path (get-in icon.defaults/icons ["file" :path])))
+       (is (not @registered-icon-path)))
 
      (testing "register"
        (rf/dispatch [::icon.events/register-icon new-icon])
