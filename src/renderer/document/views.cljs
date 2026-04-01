@@ -113,20 +113,24 @@
        [:span.md:hidden "•"])
      [:span.truncate title]]))
 
+(defn tab-button-classes
+  [active? saved?]
+  ["flex items-center h-full relative text-left px-2 py-0 overflow-hidden
+    hover:[&_button]:visible outline-default hover:text-foreground
+    outline-inset"
+   (if active?
+     "bg-primary text-foreground [&_button]:visible"
+     "bg-secondary text-foreground-muted")
+   (when-not saved?
+     "[&_button]:visible")])
+
 (defn tab-button
   [id]
   (reagent/with-let [dragged-over? (reagent/atom false)]
     (let [saved? @(rf/subscribe [::document.subs/saved? id])
           active? @(rf/subscribe [::document.subs/active? id])]
       [:div.tab
-       {:class ["flex items-center h-full relative text-left px-2 py-0
-                       overflow-hidden hover:[&_button]:visible outline-default
-                       hover:text-foreground outline-inset"
-                (if active?
-                  "bg-primary text-foreground [&_button]:visible"
-                  "bg-secondary text-foreground-muted")
-                (when-not saved?
-                  "[&_button]:visible")]
+       {:class (tab-button-classes active? saved?)
         :on-wheel #(when-not (zero? (.-deltaY %))
                      (rf/dispatch [::document.events/cycle (.-deltaY %)]))
         :on-click #(rf/dispatch [::document.events/set-active id])
