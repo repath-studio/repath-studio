@@ -93,26 +93,23 @@
                                 [::frame.events/zoom-out]
                                 [::frame.events/zoom-in]))}]))
 
-(defn action-icon-button
-  [icon-name id]
-  (when-let [action @(rf/subscribe [::action.subs/action id])]
-    (let [{:keys [label event]} action]
-      [views/icon-button icon-name
-       {:title (i18n.views/t label)
-        :on-click #(rf/dispatch event)
-        :disabled (action.views/disabled? action)}])))
-
 (defn zoom-button-group
   [zoom]
-  [views/button-group
-   [action-icon-button "minus" :zoom/out]
-   [action-icon-button "plus" :zoom/in]
-   [:div.flex.hidden.items-center
-    {:class "xl:flex"
-     :dir "ltr"}
-    [zoom-input zoom]
-    [:div.px-2.flex.items-center.font-mono "%"]]
-   [zoom-menu]])
+  (let [zoom-out-action @(rf/subscribe [::action.subs/entity :zoom/out])
+        zoom-in-action @(rf/subscribe [::action.subs/entity :zoom/in])]
+    [views/button-group
+     (-> zoom-out-action
+         (assoc :icon "minus")
+         views/action-icon-button)
+     (-> zoom-in-action
+         (assoc :icon "plus")
+         views/action-icon-button)
+     [:div.flex.hidden.items-center
+      {:class "xl:flex"
+       :dir "ltr"}
+      [zoom-input zoom]
+      [:div.px-2.flex.items-center.font-mono "%"]]
+     [zoom-menu]]))
 
 (defn radio-button
   [{:keys [icon class]

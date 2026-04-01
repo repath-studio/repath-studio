@@ -51,22 +51,24 @@
                  :on-escape-key-down #(.stopPropagation %)}
                 [views/dropdownmenu-arrow]]))]])
 
-(defn object-buttons []
-  (let [md? @(rf/subscribe [::window.subs/md?])
-        object-actions [(when md? index-actions)
-                        horizontal-alignment-actions
-                        vertical-alignment-actions
-                        boolean-actions]]
-    (->> (keep identity object-actions)
-         (interpose [:divider])
-         (flatten)
-         (map toolbar.views/action-button))))
+(defn button-group
+  [ids]
+  (->> (map toolbar.views/button ids)
+       (into [:<>])))
 
 (defn root []
-  (let [md? @(rf/subscribe [::window.subs/md?])]
+  (let [md? @(rf/subscribe [::window.subs/md?])
+        groups [(when md? index-actions)
+                horizontal-alignment-actions
+                vertical-alignment-actions
+                boolean-actions]]
     [views/toolbar
      {:class "flex-col px-2 md:px-1 gap-2 md:gap-1"}
-     (into [:<>] (object-buttons))
+     (->> groups
+          (keep identity)
+          (map button-group)
+          (interpose [:span.h-divider])
+          (into [:<>]))
      (when-not md?
        [:<>
         [:span.h-divider]

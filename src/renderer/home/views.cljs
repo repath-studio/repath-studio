@@ -56,7 +56,7 @@
 
 (defn command
   [id]
-  (let [{:keys [icon label event]} @(rf/subscribe [::action.subs/action id])
+  (let [{:keys [icon label event]} @(rf/subscribe [::action.subs/entity id])
         xl? @(rf/subscribe [::window.subs/xl?])]
     [:div.flex.items-center.gap-2.flex-wrap
      [views/icon icon]

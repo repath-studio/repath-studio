@@ -55,6 +55,13 @@
                      props)
    [icon icon-name]])
 
+(defn action-icon-button
+  [action]
+  [icon-button (:icon action)
+   {:disabled (action.views/disabled? action)
+    :aria-label (action.views/label action)
+    :on-click (action.views/dispatch action)}])
+
 (defn loading-indicator []
   [icon "spinner" {:class "animate-spin"}])
 

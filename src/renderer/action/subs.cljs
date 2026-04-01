@@ -7,7 +7,7 @@
  :-> :actions)
 
 (rf/reg-sub
- ::action
+ ::entity
  :<- [::registry]
  (fn [registry [_ id]]
    (if (= id :separator)

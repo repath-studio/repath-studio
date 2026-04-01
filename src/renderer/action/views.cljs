@@ -49,8 +49,6 @@
 
 (defn entity
   [id]
-  (when-let [action (some-> [::action.subs/action id]
-                            rf/subscribe
-                            deref)]
+  (when-let [action @(rf/subscribe [::action.subs/entity id])]
     (when (available? action)
       action)))
