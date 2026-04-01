@@ -188,10 +188,10 @@
       (set-last-focused-id! (.getAttribute this "data-id")))))
 
 (defn list-item-icon
-  [{:keys [visible]} el]
+  [{:keys [visible]
+    :as el}]
   (when-let [icon (:icon (utils.element/properties el))]
-    [views/icon icon {:class ["shrink-0"
-                              (when-not visible "opacity-60")]}]))
+    [views/icon icon {:class ["shrink-0" (when-not visible "opacity-60")]}]))
 
 (defn list-item-button
   [el {:keys [depth collapsed hovered]}]
