@@ -19,11 +19,10 @@
    ["react" :as react]
    ["sonner" :refer [Toaster]]
    ["tailwind-merge" :refer [twMerge]]
-   [re-frame.core :as rf]
    [reagent.core :as reagent]
    [renderer.action.views :as action.views]
    [renderer.i18n.views :as i18n.views]
-   [renderer.icon.subs :as-alias icon.subs]
+   [renderer.icon.views :as icon.views]
    [renderer.utils.key :as utils.key]))
 
 (defn merge-with-class
@@ -35,18 +34,18 @@
 
 (defn icon
   [id props]
-  (when-let [path-data (:path @(rf/subscribe [::icon.subs/icon id]))]
+  (when-let [path (icon.views/path id)]
     [:svg (merge-with-class {:class "fill-current"
                              :viewBox "0 0 17 17"
                              :width "17"
                              :height "17"}
                             props)
-     [:path {:d path-data}]]))
+     path]))
 
 (defn kbd
   [k]
-  [:span {:class "p-1 text-2xs bg-overlay rounded-sm font-bold
-                  text-foreground-muted uppercase"} k])
+  [:span {:class "p-1 text-2xs bg-overlay rounded-sm font-bold uppercase
+                  text-foreground-muted"} k])
 
 (defn icon-button
   [icon-name props]

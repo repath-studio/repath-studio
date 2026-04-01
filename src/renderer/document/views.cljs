@@ -103,55 +103,63 @@
     (reset! dragged-over? false)
     (rf/dispatch [::document.events/swap-position dropped-id id])))
 
-(defn tab
+(defn document-title
   [id]
   (let [document @(rf/subscribe [::document.subs/entity id])
-        {:keys [title]} document
-        active? (= id @(rf/subscribe [::document.subs/active-id]))]
-    (reagent/with-let [dragged-over? (reagent/atom false)]
-      (let [saved? @(rf/subscribe [::document.subs/saved? id])]
-        [:> ContextMenu/Root
-         [:> ContextMenu/Trigger
-          {:as-child true}
-          [:div.tab
-           {:class ["flex items-center h-full relative text-left px-2 py-0
-                     overflow-hidden hover:[&_button]:visible outline-default
-                     hover:text-foreground outline-inset"
-                    (if active?
-                      "bg-primary text-foreground [&_button]:visible"
-                      "bg-secondary text-foreground-muted")
-                    (when-not saved?
-                      "[&_button]:visible")]
-            :on-wheel #(when-not (zero? (.-deltaY %))
-                         (rf/dispatch [::document.events/cycle (.-deltaY %)]))
-            :on-click #(rf/dispatch [::document.events/set-active id])
-            :on-pointer-up #(when (= (.-button %) 1)
-                              (rf/dispatch [::document.events/close id true]))
-            :draggable true
-            :tab-index 0
-            :on-key-down #(when (= (.-key %) "Enter")
-                            (rf/dispatch [::document.events/set-active id]))
-            :on-drag-start #(.setData (.-dataTransfer %) "id" (str id))
-            :on-drag-over #(.preventDefault %)
-            :on-drag-enter #(reset! dragged-over? true)
-            :on-drag-leave #(reset! dragged-over? false)
-            :on-drop (partial on-tab-drop id dragged-over?)
-            :ref #(when (and % active?)
-                    (rf/dispatch [::events/scroll-into-view %]))}
-           [:div.pointer-events-none.px-2.gap-1.flex.overflow-hidden
-            (when-not saved?
-              [:span.md:hidden "•"])
-            [:span.truncate title]]
-           [close-button id saved?]]]
-         [:> ContextMenu/Portal
-          (into
-           [:> ContextMenu/Content
-            {:class "menu-content context-menu-content"
-             :on-escape-key-down #(.stopPropagation %)}]
-           (map views/context-menu-item (context-menu id)))]]))))
+        saved? @(rf/subscribe [::document.subs/saved? id])
+        {:keys [title]} document]
+    [:div.pointer-events-none.px-2.gap-1.flex.overflow-hidden
+     (when-not saved?
+       [:span.md:hidden "•"])
+     [:span.truncate title]]))
 
-(defn documents-dropdown-button
-  []
+(defn tab-button
+  [id]
+  (reagent/with-let [dragged-over? (reagent/atom false)]
+    (let [saved? @(rf/subscribe [::document.subs/saved? id])
+          active? (= id @(rf/subscribe [::document.subs/active-id]))]
+      [:div.tab
+       {:class ["flex items-center h-full relative text-left px-2 py-0
+                       overflow-hidden hover:[&_button]:visible outline-default
+                       hover:text-foreground outline-inset"
+                (if active?
+                  "bg-primary text-foreground [&_button]:visible"
+                  "bg-secondary text-foreground-muted")
+                (when-not saved?
+                  "[&_button]:visible")]
+        :on-wheel #(when-not (zero? (.-deltaY %))
+                     (rf/dispatch [::document.events/cycle (.-deltaY %)]))
+        :on-click #(rf/dispatch [::document.events/set-active id])
+        :on-pointer-up #(when (= (.-button %) 1)
+                          (rf/dispatch [::document.events/close id true]))
+        :draggable true
+        :tab-index 0
+        :on-key-down #(when (= (.-key %) "Enter")
+                        (rf/dispatch [::document.events/set-active id]))
+        :on-drag-start #(.setData (.-dataTransfer %) "id" (str id))
+        :on-drag-over #(.preventDefault %)
+        :on-drag-enter #(reset! dragged-over? true)
+        :on-drag-leave #(reset! dragged-over? false)
+        :on-drop (partial on-tab-drop id dragged-over?)
+        :ref #(when (and % active?)
+                (rf/dispatch [::events/scroll-into-view %]))}
+       [document-title id]
+       [close-button id saved?]])))
+
+(defn tab
+  [id]
+  [:> ContextMenu/Root
+   [:> ContextMenu/Trigger
+    {:as-child true}
+    [tab-button id]]
+   [:> ContextMenu/Portal
+    (into
+     [:> ContextMenu/Content
+      {:class "menu-content context-menu-content"
+       :on-escape-key-down #(.stopPropagation %)}]
+     (map views/context-menu-item (context-menu id)))]])
+
+(defn documents-dropdown-button []
   (let [documents @(rf/subscribe [::document.subs/entities])
         md? @(rf/subscribe [::window.subs/md?])
         document-count (count documents)]
@@ -193,11 +201,18 @@
                [views/dropdownmenu-arrow]]
               (map views/dropdown-menu-item)))]]))
 
-(defn tab-bar
-  []
+(defn mobile-tabs []
   (let [documents @(rf/subscribe [::document.subs/entities])
-        tabs @(rf/subscribe [::document.subs/tabs])
-        active-id @(rf/subscribe [::document.subs/active-id])
+        active-id @(rf/subscribe [::document.subs/active-id])]
+    [:div.flex.overflow-hidden.gap-px
+     (when (second documents)
+       [views/toolbar
+        {:class "bg-primary"}
+        [documents-dropdown-button]])
+     [tab active-id]]))
+
+(defn tab-bar []
+  (let [tabs @(rf/subscribe [::document.subs/tabs])
         md? @(rf/subscribe [::window.subs/md?])
         tree-visible @(rf/subscribe [::panel.subs/visible? :tree])]
     [:div.flex.justify-between.gap-px.overflow-hidden
@@ -208,12 +223,7 @@
         (for [document-id tabs]
           ^{:key document-id}
           [tab document-id])
-        [:div.flex.overflow-hidden.gap-px
-         (when (second documents)
-           [views/toolbar
-            {:class "bg-primary"}
-            [documents-dropdown-button]])
-         [tab active-id]])
+        [mobile-tabs])
       (when-not md?
         [actions])
       [:div.drag.flex-1]]

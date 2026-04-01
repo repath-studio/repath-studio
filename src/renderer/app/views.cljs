@@ -122,16 +122,33 @@
                               [::lock "Lock"]))
        :on-click #(rf/dispatch [::ruler.events/toggle-locked])}]]))
 
-(defn frame-panel []
-  (let [ruler-visible? @(rf/subscribe [::ruler.subs/visible?])
-        backdrop @(rf/subscribe [::app.subs/backdrop])
+(defn frame []
+  (let [backdrop @(rf/subscribe [::app.subs/backdrop])
         read-only? @(rf/subscribe [::document.subs/read-only?])
         help-message @(rf/subscribe [::tool.subs/help])
         help-bar @(rf/subscribe [::app.subs/help-bar])
         debug-info? @(rf/subscribe [::app.subs/debug-info])
         worker-active? @(rf/subscribe [::worker.subs/some-active?])
-        md? @(rf/subscribe [::window.subs/md?])
         xl? @(rf/subscribe [::window.subs/xl?])]
+    [:div.grow.flex.relative
+     {:data-theme "light"
+      :style {:background "var(--secondary)"}}
+     [frame.views/root]
+     [:div.absolute.inset-0.pointer-events-none.inset-shadow]
+     (when read-only? [read-only-overlay])
+     (when debug-info? [debug-info])
+     (when worker-active?
+       [:div.absolute.bottom-2.right-2.text-gray-500
+        [views/loading-indicator]])
+     (when (and help-bar (seq help-message) xl?)
+       [views/help help-message])
+     (when backdrop
+       [:div.absolute.inset-0
+        {:on-click #(rf/dispatch [::app.events/set-backdrop false])}])]))
+
+(defn frame-panel []
+  (let [ruler-visible? @(rf/subscribe [::ruler.subs/visible?])
+        md? @(rf/subscribe [::window.subs/md?])]
     [:div.flex.flex-col.flex-1.h-full.gap-px.overflow-hidden
      [:div
       [toolbar.tools/root]
@@ -152,21 +169,7 @@
           :class "rtl:scale-x-[-1]"}
          [ruler.views/ruler :vertical]])
       [:div.relative.grow.flex
-       [:div.grow.flex.relative
-        {:data-theme "light"
-         :style {:background "var(--secondary)"}}
-        [frame.views/root]
-        [:div.absolute.inset-0.pointer-events-none.inset-shadow]
-        (when read-only? [read-only-overlay])
-        (when debug-info? [debug-info])
-        (when worker-active?
-          [:div.absolute.bottom-2.right-2.text-gray-500
-           [views/loading-indicator]])
-        (when (and help-bar (seq help-message) xl?)
-          [views/help help-message])
-        (when backdrop
-          [:div.absolute.inset-0
-           {:on-click #(rf/dispatch [::app.events/set-backdrop false])}])]
+       [frame]
        (when-not md?
          [:div.bg-primary.flex.items-center
           [toolbar.object/root]])]]]))

@@ -12,8 +12,8 @@
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
 
-   (let [file-icon (rf/subscribe [::icon.subs/icon "file"])
-         registered-icon (rf/subscribe [::icon.subs/icon "new-icon"])
+   (let [file-icon (rf/subscribe [::icon.subs/entity "file"])
+         registered-icon (rf/subscribe [::icon.subs/entity "new-icon"])
          new-icon {:id "new-icon"
                    :path "M10 10 H 90 V 90 H 10 Z"}]
 

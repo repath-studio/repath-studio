@@ -7,7 +7,7 @@
    [renderer.views :as views]))
 
 (rf/reg-sub
- :renderer.icon.subs/icon
+ :renderer.icon.subs/entity
  (fn [_ [_ id]]
    (get icon.defaults/icons id)))
 
