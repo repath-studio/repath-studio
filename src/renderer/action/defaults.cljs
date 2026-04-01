@@ -82,6 +82,7 @@
 (def document-close-all
   {:id :document/close-all
    :label [::close-all "Close all"]
+   :icon "window-close"
    :event [::document.events/close-all]
    :shortcuts [{:keyCode (utils.key/codes "W")
                 :ctrlKey true
@@ -685,12 +686,14 @@
 (def tool-cancel
   {:id :tool/cancel
    :label [::cancel "Cancel"]
+   :icon "window-close"
    :event [::tool.events/cancel]
    :shortcuts [{:keyCode (utils.key/codes "ESC")}]})
 
 (def menubar-activate-file
   {:id :menubar/activate-file
    :label [::menubar-file "File menu"]
+   :icon "file"
    :event [::menubar.events/activate :file]
    :shortcuts [{:keyCode (utils.key/codes "F")
                 :altKey true}]})
@@ -698,6 +701,7 @@
 (def menubar-activate-edit
   {:id :menubar/activate-edit
    :label [::menubar-edit "Edit menu"]
+   :icon "pencil"
    :event [::menubar.events/activate :edit]
    :shortcuts [{:keyCode (utils.key/codes "E")
                 :altKey true}]})
@@ -705,6 +709,7 @@
 (def menubar-activate-object
   {:id :menubar/activate-object
    :label [::menubar-object "Object menu"]
+   :icon "circle"
    :event [::menubar.events/activate :object]
    :shortcuts [{:keyCode (utils.key/codes "O")
                 :altKey true}]})
@@ -712,6 +717,7 @@
 (def menubar-activate-view
   {:id :menubar/activate-view
    :label [::menubar-view "View menu"]
+   :icon "eye"
    :event [::menubar.events/activate :view]
    :shortcuts [{:keyCode (utils.key/codes "V")
                 :altKey true}]})
@@ -719,6 +725,7 @@
 (def menubar-activate-help
   {:id :menubar/activate-help
    :label [::menubar-help "Help menu"]
+   :icon "help"
    :event [::menubar.events/activate :help]
    :shortcuts [{:keyCode (utils.key/codes "H")
                 :altKey true}]})
@@ -726,54 +733,63 @@
 (def tool-activate-edit
   {:id :tool/activate-edit
    :label [::tool-edit "Edit tool"]
+   :icon "edit"
    :event [::tool.events/activate :edit]
    :shortcuts [{:keyCode (utils.key/codes "E")}]})
 
 (def tool-activate-circle
   {:id :tool/activate-circle
    :label [::tool-circle "Circle tool"]
+   :icon "circle"
    :event [::tool.events/activate :circle]
    :shortcuts [{:keyCode (utils.key/codes "C")}]})
 
 (def tool-activate-line
   {:id :tool/activate-line
    :label [::tool-line "Line tool"]
+   :icon "line"
    :event [::tool.events/activate :line]
    :shortcuts [{:keyCode (utils.key/codes "L")}]})
 
 (def tool-activate-text
   {:id :tool/activate-text
    :label [::tool-text "Text tool"]
+   :icon "text"
    :event [::tool.events/activate :text]
    :shortcuts [{:keyCode (utils.key/codes "T")}]})
 
 (def tool-activate-pan
   {:id :tool/activate-pan
    :label [::tool-pan "Pan tool"]
+   :icon "hand"
    :event [::tool.events/activate :pan]
    :shortcuts [{:keyCode (utils.key/codes "P")}]})
 
 (def tool-activate-zoom
   {:id :tool/activate-zoom
    :label [::tool-zoom "Zoom tool"]
+   :icon "magnifier"
    :event [::tool.events/activate :zoom]
    :shortcuts [{:keyCode (utils.key/codes "Z")}]})
 
 (def tool-activate-rect
   {:id :tool/activate-rect
    :label [::tool-rect "Rectangle tool"]
+   :icon "rectangle"
    :event [::tool.events/activate :rect]
    :shortcuts [{:keyCode (utils.key/codes "R")}]})
 
 (def tool-activate-transform
   {:id :tool/activate-transform
    :label [::tool-transform "Transform tool"]
+   :icon "pointer"
    :event [::tool.events/activate :transform]
    :shortcuts [{:keyCode (utils.key/codes "S")}]})
 
 (def tool-activate-fill
   {:id :tool/activate-fill
    :label [::tool-fill "Fill tool"]
+   :icon "fill"
    :event [::tool.events/activate :fill]
    :shortcuts [{:keyCode (utils.key/codes "F")}]})
 

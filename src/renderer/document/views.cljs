@@ -117,7 +117,7 @@
   [id]
   (reagent/with-let [dragged-over? (reagent/atom false)]
     (let [saved? @(rf/subscribe [::document.subs/saved? id])
-          active? (= id @(rf/subscribe [::document.subs/active-id]))]
+          active? @(rf/subscribe [::document.subs/active? id])]
       [:div.tab
        {:class ["flex items-center h-full relative text-left px-2 py-0
                        overflow-hidden hover:[&_button]:visible outline-default
@@ -153,11 +153,11 @@
     {:as-child true}
     [tab-button id]]
    [:> ContextMenu/Portal
-    (into
-     [:> ContextMenu/Content
-      {:class "menu-content context-menu-content"
-       :on-escape-key-down #(.stopPropagation %)}]
-     (map views/context-menu-item (context-menu id)))]])
+    (->> (context-menu id)
+         (map views/context-menu-item)
+         (into [:> ContextMenu/Content
+                {:class "menu-content context-menu-content"
+                 :on-escape-key-down #(.stopPropagation %)}]))]])
 
 (defn documents-dropdown-button []
   (let [documents @(rf/subscribe [::document.subs/entities])
