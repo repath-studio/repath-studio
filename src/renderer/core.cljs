@@ -5,7 +5,7 @@
    [re-pressed.core :as re-pressed]
    [reagent.dom.client :as ra.dom.client]
    [renderer.a11y.core]
-   renderer.action.core
+   [renderer.action.core]
    [renderer.action.defaults :as action.defaults]
    [renderer.action.subs]
    [renderer.app.core]
