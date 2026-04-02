@@ -142,8 +142,8 @@
        [:<>
         [language-select system-code code]
         [theme-mode-select theme-mode]])
-     (when window-controls? [fullscreen-toggle fullscreen?])
-     (when fullscreen-toggle? [window-controls])]))
+     (when fullscreen-toggle? [fullscreen-toggle fullscreen?])
+     (when window-controls? [window-controls])]))
 
 (defn app-header []
   (let [title-bar @(rf/subscribe [::document.subs/title-bar])
