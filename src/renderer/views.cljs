@@ -179,7 +179,8 @@
     :else
     [:> DropdownMenu/Item
      {:class "menu-item dropdown-menu-item"
-      :onSelect (action.views/dispatch action)}
+      :onSelect (action.views/dispatch action)
+      :disabled (action.views/disabled? action)}
      (when (:icon action)
        [icon (:icon action)
         {:class "menu-item-indicator"}])
