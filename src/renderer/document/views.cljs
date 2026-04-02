@@ -75,8 +75,8 @@
              {:label [::close-others "Close others"]
               :event [::document.events/close-others id]
               :enabled (boolean (seq (rest tabs)))}
-             (action.views/entity :document/close-all)
-             (action.views/entity :document/close-saved)]
+             (action.views/entity :document/close-saved)
+             (action.views/entity :document/close-all)]
       desktop?
       (concat [{:type :separator}
                {:label [::open-directory "Open containing directory"]
@@ -164,8 +164,8 @@
           document-count)
         [views/icon (if md? "ellipsis-h" "chevron-down")]]]]
      [:> DropdownMenu/Portal
-      (cond->> [:document/close-all
-                :document/close-saved]
+      (cond->> [:document/close-saved
+                :document/close-all]
 
         :always
         (map (comp #(dissoc % :icon)
