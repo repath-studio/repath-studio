@@ -37,6 +37,12 @@
                       renderer.a11y.events a11y.events
                       renderer.a11y.handlers a11y.handlers
                       renderer.a11y.subs a11y.subs
+                      renderer.action.db action.db
+                      renderer.action.effects action.effects
+                      renderer.action.events action.events
+                      renderer.action.handlers action.handlers
+                      renderer.action.subs action.subs
+                      renderer.action.views action.views
                       renderer.app.db app.db
                       renderer.app.effects app.effects
                       renderer.app.events app.events
