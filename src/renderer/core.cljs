@@ -6,36 +6,27 @@
    [reagent.dom.client :as ra.dom.client]
    [renderer.a11y.core]
    [renderer.action.core]
-   [renderer.action.subs]
    [renderer.app.core]
    [renderer.app.events :as-alias app.events]
    [renderer.app.views :as app.views]
    [renderer.attribute.impl.core]
-   [renderer.dialog.events]
-   [renderer.dialog.subs]
+   [renderer.dialog.core]
    [renderer.document.core]
    [renderer.effects]
    [renderer.element.core]
    [renderer.error.core]
    [renderer.error.views :as error.views]
-   [renderer.event.effects]
-   [renderer.event.events]
+   [renderer.event.core]
    [renderer.events]
-   [renderer.frame.events]
-   [renderer.frame.subs]
-   [renderer.history.events]
-   [renderer.history.subs]
+   [renderer.frame.core]
+   [renderer.history.core]
    [renderer.i18n.core]
    [renderer.icon.core]
-   [renderer.menubar.events]
-   [renderer.menubar.subs]
-   [renderer.panel.events]
-   [renderer.panel.subs]
+   [renderer.menubar.core]
+   [renderer.panel.core]
    [renderer.reepl.replumb :as replumb]
-   [renderer.ruler.events]
-   [renderer.ruler.subs]
-   [renderer.snap.events]
-   [renderer.snap.subs]
+   [renderer.ruler.core]
+   [renderer.snap.core]
    [renderer.theme.core]
    [renderer.timeline.core]
    [renderer.tool.core]
@@ -80,8 +71,8 @@
   (bootstrap/init replumb.repl/st {:path "js/bootstrap"
                                    :load-on-init '[user]} bootstrap-cb!)
 
-  (rf/dispatch [::re-pressed/add-keyboard-event-listener "keydown"])
   (rf/dispatch-sync [::app.events/initialize])
+  (rf/dispatch [::re-pressed/add-keyboard-event-listener "keydown"])
 
   (mount-root!)
   (js/console.log easter-egg))
