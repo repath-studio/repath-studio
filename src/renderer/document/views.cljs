@@ -18,8 +18,7 @@
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]))
 
-(defn actions
-  []
+(defn actions []
   (let [undos @(rf/subscribe [::history.subs/undos])
         redos @(rf/subscribe [::history.subs/redos])
         md? @(rf/subscribe [::window.subs/md?])
