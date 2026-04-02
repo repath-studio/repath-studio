@@ -11,7 +11,7 @@
   [{:keys [enabled]}]
   (cond
     (false? enabled)
-    false
+    true
 
     (vector? enabled)
     (some-> enabled
@@ -20,7 +20,7 @@
             not)
 
     :else
-    false))
+    nil))
 
 (defn available?
   "An action is active if it doesn't have an :available subscription,
