@@ -94,21 +94,24 @@
 
 (defn zoom-button-group
   [zoom]
-  (let [zoom-out-action (action.views/entity :zoom/out)
-        zoom-in-action (action.views/entity :zoom/in)]
-    [views/button-group
-     (-> zoom-out-action
-         (assoc :icon "minus")
-         views/action-icon-button)
-     (-> zoom-in-action
-         (assoc :icon "plus")
-         views/action-icon-button)
-     [:div.flex.hidden.items-center
-      {:class "xl:flex"
-       :dir "ltr"}
-      [zoom-input zoom]
-      [:div.px-2.flex.items-center.font-mono "%"]]
-     [zoom-menu]]))
+  [views/button-group
+   (-> :zoom/out
+       action.views/entity
+       (assoc :icon "minus")
+       views/action-icon-button)
+
+   (-> :zoom/in
+       action.views/entity
+       (assoc :icon "plus")
+       views/action-icon-button)
+
+   [:div.flex.hidden.items-center
+    {:class "xl:flex"
+     :dir "ltr"}
+    [zoom-input zoom]
+    [:div.px-2.flex.items-center.font-mono "%"]]
+
+   [zoom-menu]])
 
 (defn radio-button
   [{:keys [icon class]
