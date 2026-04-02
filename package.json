@@ -124,7 +124,7 @@
     "constants": "0.0.2",
     "create-react-class": "15.7.0",
     "doc-link-checker-cli": "1.0.4",
-    "electron": "41.1.0",
+    "electron": "41.1.1",
     "electron-builder": "26.8.1",
     "electron-builder-notarize": "1.5.2",
     "events": "3.3.0",
