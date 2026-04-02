@@ -88,6 +88,13 @@
                 :ctrlKey true
                 :altKey true}]})
 
+(def document-close-saved
+  {:id :document/close-saved
+   :label [::close-saved "Close saved"]
+   :icon "window-close"
+   :event [::document.events/close-saved]
+   :enabled [::document.subs/some-saved?]})
+
 (def document-print
   {:id :document/print
    :label [::print "Print"]
@@ -829,6 +836,7 @@
    document-download
    document-close
    document-close-all
+   document-close-saved
    document-print
    export-svg
    export-png

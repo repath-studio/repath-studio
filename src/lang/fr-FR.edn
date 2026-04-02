@@ -73,6 +73,8 @@
   :save-as "Enregistrer sous..."
   :download "Télécharger"
   :close "Fermer"
+  :close-all "Fermer tout"
+  :close-saved "Fermer les enregistrés"
   :exit "Quitter"
   :undo "Annuler"
   :redo "Refaire"
@@ -686,8 +688,6 @@
  {:open-directory "Ouvrir le répertoire contenant"
   :close "Fermer"
   :close-doc "Fermer le document"
-  :close-all "Fermer tout"
-  :close-saved "Fermer les enregistrés"
   :close-others "Fermer les autres"
   :more-actions "Plus d'actions du document"}
 

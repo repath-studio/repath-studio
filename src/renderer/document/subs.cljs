@@ -174,6 +174,14 @@
             (document.handlers/saved? db))))
 
 (rf/reg-sub
+ ::some-saved?
+ (fn [db _]
+   (->> (:document-tabs db)
+        (filter #(document.handlers/saved? db %))
+        (seq)
+        (boolean))))
+
+(rf/reg-sub
  ::saveable?
  :<- [::entities?]
  :<- [::active-saved?]

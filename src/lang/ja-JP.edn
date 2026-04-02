@@ -73,6 +73,8 @@
   :save-as "名前を付けて保存..."
   :download "ダウンロード"
   :close "閉じる"
+  :close-all "すべて閉じる"
+  :close-saved "保存済みを閉じる"
   :exit "終了"
   :undo "元に戻す"
   :redo "やり直し"
@@ -636,8 +638,6 @@
  {:open-directory "格納ディレクトリを開く"
   :close "閉じる"
   :close-doc "ドキュメントを閉じる"
-  :close-all "すべて閉じる"
-  :close-saved "保存済みを閉じる"
   :close-others "他を閉じる"
   :more-actions "その他のドキュメント操作"}
 

@@ -73,6 +73,8 @@
   :save-as "다른 이름으로 저장..."
   :download "다운로드"
   :close "닫기"
+  :close-all "모두 닫기"
+  :close-saved "저장된 것 닫기"
   :exit "종료"
   :undo "실행 취소"
   :redo "다시 실행"
@@ -632,8 +634,6 @@
  {:open-directory "포함 디렉토리 열기"
   :close "닫기"
   :close-doc "문서 닫기"
-  :close-all "모두 닫기"
-  :close-saved "저장된 것 닫기"
   :close-others "다른 것들 닫기"
   :more-actions "더 많은 문서 작업"}
 

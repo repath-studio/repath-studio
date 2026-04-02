@@ -73,6 +73,8 @@
   :save-as "حفظ باسم..."
   :download "تحميل"
   :close "إغلاق"
+  :close-all "إغلاق الكل"
+  :close-saved "إغلاق المحفوظة"
   :exit "خروج"
   :undo "تراجع"
   :redo "إعادة"
@@ -652,8 +654,6 @@
  {:open-directory "فتح المجلد المحتوي"
   :close "إغلاق"
   :close-doc "إغلاق المستند"
-  :close-all "إغلاق الكل"
-  :close-saved "إغلاق المحفوظة"
   :close-others "إغلاق الآخرين"
   :more-actions "المزيد من إجراءات المستند"}
 

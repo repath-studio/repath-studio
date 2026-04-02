@@ -73,6 +73,8 @@
   :save-as "Spara som..."
   :download "Ladda ner"
   :close "Stäng"
+  :close-all "Stäng alla"
+  :close-saved "Stäng sparade"
   :exit "Avsluta"
   :undo "Ångra"
   :redo "Gör om"
@@ -676,8 +678,6 @@
  {:open-directory "Öppna innehållande katalog"
   :close "Stäng"
   :close-doc "Stäng dokument"
-  :close-all "Stäng alla"
-  :close-saved "Stäng sparade"
   :close-others "Stäng andra"
   :more-actions "Fler dokumentåtgärder"}
 

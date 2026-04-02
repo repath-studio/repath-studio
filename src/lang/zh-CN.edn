@@ -72,6 +72,8 @@
   :save-as "另存为..."
   :download "下载"
   :close "关闭"
+  :close-all "关闭全部"
+  :close-saved "关闭已保存"
   :exit "退出"
   :undo "撤销"
   :redo "重做"
@@ -598,8 +600,6 @@
  {:open-directory "打开包含目录"
   :close "关闭"
   :close-doc "关闭文档"
-  :close-all "关闭全部"
-  :close-saved "关闭已保存"
   :close-others "关闭其他"
   :more-actions "更多文档操作"}
 

@@ -73,6 +73,8 @@
   :save-as "Speichern unter..."
   :download "Herunterladen"
   :close "Schließen"
+  :close-all "Alle schließen"
+  :close-saved "Gespeicherte schließen"
   :exit "Beenden"
   :undo "Rückgängig"
   :redo "Wiederholen"
@@ -692,8 +694,6 @@
  {:open-directory "Enthaltenden Ordner öffnen"
   :close "Schließen"
   :close-doc "Dokument schließen"
-  :close-all "Alle schließen"
-  :close-saved "Gespeicherte schließen"
   :close-others "Andere schließen"
   :more-actions "Mehr Dokumentaktionen"}
 

@@ -73,6 +73,8 @@
   :save-as "Guardar como..."
   :download "Descargar"
   :close "Cerrar"
+  :close-all "Cerrar todo"
+  :close-saved "Cerrar guardados"
   :exit "Salir"
   :undo "Deshacer"
   :redo "Rehacer"
@@ -679,8 +681,6 @@
  {:open-directory "Abrir directorio contenedor"
   :close "Cerrar"
   :close-doc "Cerrar documento"
-  :close-all "Cerrar todo"
-  :close-saved "Cerrar guardados"
   :close-others "Cerrar otros"
   :more-actions "Más acciones del documento"}
 

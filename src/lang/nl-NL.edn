@@ -73,6 +73,8 @@
   :save-as "Opslaan als..."
   :download "Downloaden"
   :close "Sluiten"
+  :close-all "Alles sluiten"
+  :close-saved "Opgeslagen sluiten"
   :exit "Afsluiten"
   :undo "Ongedaan maken"
   :redo "Opnieuw"
@@ -691,8 +693,6 @@
  {:open-directory "Containing directory openen"
   :close "Sluiten"
   :close-doc "Document sluiten"
-  :close-all "Alles sluiten"
-  :close-saved "Opgeslagen sluiten"
   :close-others "Anderen sluiten"
   :more-actions "Meer documentacties"}
 

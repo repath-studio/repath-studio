@@ -71,19 +71,17 @@
         tabs @(rf/subscribe [::document.subs/tabs])
         desktop? @(rf/subscribe [::app.subs/desktop?])]
     (cond-> [{:label [::close "Close"]
-              :action [::document.events/close id true]}
+              :event [::document.events/close id true]}
              {:label [::close-others "Close others"]
-              :action [::document.events/close-others id]
-              :disabled (empty? (rest tabs))}
-             {:label [::close-all "Close all"]
-              :action [::document.events/close-all]}
-             {:label [::close-saved "Close saved"]
-              :action [::document.events/close-saved]}]
+              :event [::document.events/close-others id]
+              :enabled (boolean (seq (rest tabs)))}
+             (action.views/entity :document/close-all)
+             (action.views/entity :document/close-saved)]
       desktop?
       (concat [{:type :separator}
                {:label [::open-directory "Open containing directory"]
-                :action [::document.events/open-directory path]
-                :disabled (nil? path)}]))))
+                :event [::document.events/open-directory path]
+                :enabled (boolean (seq path))}]))))
 
 (defn on-tab-drop
   [id dragged-over? e]
@@ -144,7 +142,7 @@
   [:> ContextMenu/Root
    [:> ContextMenu/Trigger
     {:as-child true}
-    [tab-button id]]
+    [:div.overflow-hidden.flex [tab-button id]]]
    [:> ContextMenu/Portal
     (->> (context-menu id)
          (map views/context-menu-item)
@@ -166,21 +164,20 @@
           document-count)
         [views/icon (if md? "ellipsis-h" "chevron-down")]]]]
      [:> DropdownMenu/Portal
-      (cond->> [{:label [::close-all "Close all"]
-                 :key :close-all
-                 :action [::document.events/close-all]}
-                {:label [::close-saved "Close saved"]
-                 :key :close-saved
-                 :action [::document.events/close-saved]}]
+      (cond->> [:document/close-all
+                :document/close-saved]
+
+        :always
+        (map (comp #(dissoc % :icon)
+                   action.views/entity))
 
         (and (seq documents)
              (not md?))
         (concat (mapv (fn [{:keys [id title]}]
                         {:key id
-                         :type :checkbox
                          :label [(keyword id) title]
-                         :action [::document.events/set-active id]
-                         :checked [::document.subs/active? id]})
+                         :event [::document.events/set-active id]
+                         :active [::document.subs/active? id]})
                       documents)
                 [{:type :separator}])
 

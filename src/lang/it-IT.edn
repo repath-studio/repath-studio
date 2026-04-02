@@ -73,6 +73,8 @@
   :save-as "Salva come..."
   :download "Scarica"
   :close "Chiudi"
+  :close-all "Chiudi tutto"
+  :close-saved "Chiudi salvati"
   :exit "Esci"
   :undo "Annulla"
   :redo "Ripeti"
@@ -688,8 +690,6 @@
  {:open-directory "Apri directory contenente"
   :close "Chiudi"
   :close-doc "Chiudi documento"
-  :close-all "Chiudi tutto"
-  :close-saved "Chiudi salvati"
   :close-others "Chiudi altri"
   :more-actions "Altre azioni del documento"}
 

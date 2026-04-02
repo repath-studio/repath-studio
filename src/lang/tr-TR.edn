@@ -73,6 +73,8 @@
   :save-as "Farklı kaydet..."
   :download "İndir"
   :close "Kapat"
+  :close-all "Tümünü kapat"
+  :close-saved "Kaydedilenleri kapat"
   :exit "Çıkış"
   :undo "Geri al"
   :redo "Yinele"
@@ -670,8 +672,6 @@
  {:open-directory "İçeren dizini aç"
   :close "Kapat"
   :close-doc "Belgeyi kapat"
-  :close-all "Tümünü kapat"
-  :close-saved "Kaydedilenleri kapat"
   :close-others "Diğerlerini kapat"
   :more-actions "Daha fazla belge işlemi"}
 

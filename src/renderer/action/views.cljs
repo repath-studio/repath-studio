@@ -6,13 +6,21 @@
 
 (defn disabled?
   "Returns the disabled html attribute state.
-   An action is disabled if it has an :enabled subscription that returns false."
-  [action]
-  (some-> action
-          :enabled
-          rf/subscribe
-          deref
-          not))
+   An action is disabled if it has an :enabled subscription that returns false,
+   or if it has an :enabled boolean value of false."
+  [{:keys [enabled]}]
+  (cond
+    (false? enabled)
+    false
+
+    (vector? enabled)
+    (some-> enabled
+            rf/subscribe
+            deref
+            not)
+
+    :else
+    false))
 
 (defn available?
   "An action is active if it doesn't have an :available subscription,
