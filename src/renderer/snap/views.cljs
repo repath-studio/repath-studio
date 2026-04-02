@@ -16,24 +16,20 @@
 (defn snap-options
   []
   [{:id :centers
-    :type :checkbox
-    :action [::snap.events/toggle-option :centers]
-    :checked [::snap.subs/option-enabled? :centers]
+    :event [::snap.events/toggle-option :centers]
+    :active [::snap.subs/option-enabled? :centers]
     :label [::centers "centers"]}
    {:id :midpoints
-    :type :checkbox
-    :action [::snap.events/toggle-option :midpoints]
-    :checked [::snap.subs/option-enabled? :midpoints]
+    :event [::snap.events/toggle-option :midpoints]
+    :active [::snap.subs/option-enabled? :midpoints]
     :label [::midpoints "midpoints"]}
    {:id :corners
-    :type :checkbox
-    :action [::snap.events/toggle-option :corners]
-    :checked [::snap.subs/option-enabled? :corners]
+    :event [::snap.events/toggle-option :corners]
+    :active [::snap.subs/option-enabled? :corners]
     :label [::corners "corners"]}
    {:id :nodes
-    :type :checkbox
-    :action [::snap.events/toggle-option :nodes]
-    :checked [::snap.subs/option-enabled? :nodes]
+    :event [::snap.events/toggle-option :nodes]
+    :active [::snap.subs/option-enabled? :nodes]
     :label [::nodes "nodes"]}])
 
 (defn root

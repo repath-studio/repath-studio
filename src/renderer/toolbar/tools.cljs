@@ -70,7 +70,7 @@
              (mapv (fn [tool]
                      (let [properties (tool.hierarchy/properties tool)]
                        {:label (:label properties)
-                        :action [::tool.events/activate tool]
+                        :event [::tool.events/activate tool]
                         :icon (:icon properties)})))
              (into [:> DropdownMenu/Content
                     {:side "bottom"
