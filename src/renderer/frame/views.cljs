@@ -6,6 +6,7 @@
    [re-frame.core :as rf]
    [reagent.core :as reagent]
    [reagent.dom.server :as server]
+   [renderer.action.views :as action.views]
    [renderer.app.subs :as-alias app.subs]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
@@ -102,7 +103,8 @@
             [:> ContextMenu/Trigger
              [element.hierarchy/render root-el]]
             [:> ContextMenu/Portal
-             (->> (element.views/context-menu)
+             (->> element.views/context-menu-actions
+                  (keep action.views/entity)
                   (map views/context-menu-item)
                   (into [:> ContextMenu/Content
                          {:class "menu-content context-menu-content"

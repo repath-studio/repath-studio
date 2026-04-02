@@ -6,6 +6,8 @@
    [re-frame.subs :as rf.subs]
    [renderer.a11y.events]
    [renderer.a11y.subs]
+   [renderer.action.events]
+   [renderer.action.subs]
    [renderer.app.events :as app.events]
    [renderer.app.subs]
    [renderer.dialog.events]

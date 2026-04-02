@@ -5,13 +5,15 @@
    [clojure.string :as string]
    [config :as config]
    [re-frame.core :as rf]
+   [renderer.action.views :as action.views]
    [renderer.app.subs :as-alias app.subs]
    [renderer.dialog.events :as-alias dialog.events]
    [renderer.dialog.subs :as-alias dialog.subs]
    [renderer.document.events :as-alias document.events]
    [renderer.i18n.views :as i18n.views]
    [renderer.menubar.views :as menubar.views]
-   [renderer.views :as views]))
+   [renderer.views :as views]
+   [renderer.window.subs :as-alias window.subs]))
 
 (defn button
   [{:keys [action label auto-focus class]}]
@@ -25,8 +27,7 @@
   [& children]
   (into [:div.flex.gap-2] children))
 
-(defn about
-  []
+(defn about []
   (let [user-agent @(rf/subscribe [::app.subs/user-agent])]
     [:div
      [:div.flex.gap-3.items-start.pb-2
@@ -74,40 +75,41 @@
                                               :close true}]}]]])
 
 (defn cmdk-item
-  [{:keys [label action icon disabled]
-    :as attrs}]
-  (when-not (or (= (:type attrs) :separator)
-                disabled)
+  [{:keys [label event icon]
+    :as action}]
+  (when-not (or (= (:type action) :separator)
+                (action.views/disabled? action))
     [:> Command/CommandItem
-     {:on-select #(rf/dispatch [::dialog.events/close action])
+     {:on-select #(rf/dispatch [::dialog.events/close event])
       :class "flex p-2 rounded-md items-center justify-between
-              data-[selected=true]:bg-overlay"}
+                data-[selected=true]:bg-overlay"}
      [:div.flex.items-center.gap-2
       [:div.w-7.h-7.rounded.line-height-6.flex.justify-center.items-center
        {:class (when icon "bg-overlay")}
-       (when icon [views/icon icon])]
+       [views/icon icon]]
       [:div (->> label
                  (remove nil?)
                  (map i18n.views/t)
                  (string/join " - "))]]
-     [views/shortcuts action]]))
+     (when @(rf/subscribe [::window.subs/xl?])
+       [views/shortcuts action])]))
 
 (defn cmdk-group-inner
   [items label]
   (for [item items]
     (if (:items item)
-      (cmdk-group-inner (:items item) (:label item))
-      ^{:key (:id item)}
-      [cmdk-item (update item :label #(vector label %))])))
+      (->> (cmdk-group-inner (:items item) (:label item))
+           (into [:<>]))
+      (when-let [action (cond-> item (keyword? item) action.views/entity)]
+        [cmdk-item (update action :label #(vector label %))]))))
 
 (defn cmdk-group
   [{:keys [label items]}]
-  [:> Command/CommandGroup
-   {:heading (i18n.views/t label)}
-   (cmdk-group-inner items nil)])
+  (->> (cmdk-group-inner items nil)
+       (into [:> Command/CommandGroup
+              {:heading (i18n.views/t label)}])))
 
-(defn cmdk
-  []
+(defn cmdk []
   [:> Command/Command
    {:label "Command Menu"
     :on-key-down #(.stopPropagation %)}
@@ -124,8 +126,7 @@
        ^{:key (:id menu)}
        [cmdk-group menu])]]])
 
-(defn root
-  []
+(defn root []
   (let [active-dialog @(rf/subscribe [::dialog.subs/active])
         {:keys [title content attrs]} active-dialog]
     [:> Dialog/Root

@@ -16,6 +16,7 @@
   [bordered tool]
   (let [active-tool @(rf/subscribe [::tool.subs/active])
         cached-tool @(rf/subscribe [::tool.subs/cached])
+        xl? @(rf/subscribe [::window.subs/xl?])
         active (= active-tool tool)
         primary (= cached-tool tool)
         properties (tool.hierarchy/properties tool)
@@ -39,7 +40,7 @@
           :on-escape-key-down #(.stopPropagation %)}
          [:div.flex.gap-2.items-center
           label
-          [views/shortcuts [::tool.events/activate tool]]]]]])))
+          (when xl? [views/shortcuts [::tool.events/activate tool]])]]]])))
 
 (defn button-group
   [items]

@@ -1,6 +1,7 @@
 (ns renderer.window.subs
   (:require
-   [re-frame.core :as rf]))
+   [re-frame.core :as rf]
+   [renderer.app.subs :as-alias app.subs]))
 
 (rf/reg-sub
  ::window
@@ -51,3 +52,34 @@
  ::sm?
  :<- [::breakpoint? :sm]
  :-> identity)
+
+(rf/reg-sub
+ ::window-controls?
+ :<- [::app.subs/desktop?]
+ :<- [::fullscreen?]
+ :<- [::app.subs/mac?]
+ (fn [[desktop? fullscreen? mac?] _]
+   (and desktop? (not (or fullscreen? mac?)))))
+
+(rf/reg-sub
+ ::fullscreen-toggle?
+ :<- [::fullscreen?]
+ :<- [::app.subs/mac?]
+ :<- [::app.subs/web?]
+ :<- [::md?]
+ (fn [[fullscreen? mac? web? md?] _]
+   (or fullscreen? mac? (and web? md?))))
+
+(rf/reg-sub
+ ::app-icon?
+ :<- [::fullscreen?]
+ :<- [::app.subs/mac?]
+ (fn [[fullscreen? mac?] _]
+   (not (or fullscreen? mac?))))
+
+(rf/reg-sub
+ ::menubar?
+ :<- [::md?]
+ :<- [::app.subs/desktop?]
+ (fn [[md? desktop?] _]
+   (or md? desktop?)))

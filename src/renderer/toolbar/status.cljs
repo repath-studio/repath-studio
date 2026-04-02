@@ -1,19 +1,17 @@
 (ns renderer.toolbar.status
   (:require
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
+   ["@radix-ui/react-popover" :as Popover]
    ["@radix-ui/react-tooltip" :as Tooltip]
+   ["@repath-studio/react-color" :refer [ChromePicker PhotoshopPicker]]
    [re-frame.core :as rf]
-   [renderer.app.events :as-alias app.events]
+   [renderer.action.views :as action.views]
    [renderer.app.subs :as-alias app.subs]
    [renderer.document.events :as-alias document.events]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.events :as-alias element.events]
    [renderer.frame.events :as-alias frame.events]
    [renderer.i18n.views :as i18n.views]
-   [renderer.panel.events :as-alias panel.events]
-   [renderer.panel.subs :as-alias panel.subs]
-   [renderer.ruler.events :as-alias ruler.events]
-   [renderer.ruler.subs :as-alias ruler.subs]
    [renderer.snap.views :as snap.views]
    [renderer.timeline.views :as timeline.views]
    [renderer.utils.key :as utils.key]
@@ -32,73 +30,32 @@
      [:div.flex.justify-between
       [:span.mr-1 "Y:"] [:span (utils.length/->fixed y 2 false)]]]))
 
-(defn zoom-options []
-  [{:label [::zoom-set-50 "Set to 50%"]
-    :id "50"
-    :action [::frame.events/set-zoom 0.5]}
-   {:label [::zoom-set-100 "Set to 100%"]
-    :id "100"
-    :action [::frame.events/set-zoom 1]}
-   {:label [::zoom-set-200 "Set to 200%"]
-    :id "200"
-    :action [::frame.events/set-zoom 2]}
-   {:id :divider-1
-    :type :separator}
-   {:label [::zoom-focus-selected "Focus selected"]
-    :id "center-selected"
-    :action [::frame.events/focus-selection :original]}
-   {:label [::zoom-fit-selected "Fit selected"]
-    :id "fit-selected"
-    :action [::frame.events/focus-selection :fit]}
-   {:label [::zoom-fill-selected "Fill selected"]
-    :id "fill-selected"
-    :action [::frame.events/focus-selection :fill]}])
-
-(defn zoom-menu
-  []
+(defn zoom-menu []
   [:> DropdownMenu/Root
    [:> DropdownMenu/Trigger
     {:title (i18n.views/t [::select-zoom "Select zoom level"])
      :side "top"
      :as-child true}
     [:button.button.flex.items-center.justify-center.px-2.font-mono
-
      [views/icon "chevron-up"]]]
    [:> DropdownMenu/Portal
-    [:> DropdownMenu/Content
-     {:class "menu-content rounded-sm"
-      :side "top"
-      :align "end"
-      :on-key-down #(.stopPropagation %)
-      :on-escape-key-down #(.stopPropagation %)}
-     (for [item (zoom-options)]
-       ^{:key (:id item)}
-       [views/dropdown-menu-item item])
-     [views/dropdownmenu-arrow]]]])
-
-(def panel-buttons
-  [{:title [::xml "XML"]
-    :active [::panel.subs/visible? :xml]
-    :icon "code"
-    :action [::panel.events/toggle :xml]}
-   {:title [::timeline "Timeline"]
-    :active [::panel.subs/visible? :timeline]
-    :icon "animation"
-    :action [::panel.events/toggle :timeline]}
-   {:title [::history "History"]
-    :active [::panel.subs/visible? :history]
-    :icon "history"
-    :action [::panel.events/toggle :history]}])
-
-(def view-radio-buttons
-  [{:title [::grid "Grid"]
-    :active [::app.subs/grid]
-    :icon "grid"
-    :action [::app.events/toggle-grid]}
-   {:title [::rulers "Rulers"]
-    :active [::ruler.subs/visible?]
-    :icon "ruler-combined"
-    :action [::ruler.events/toggle-visible]}])
+    (->> [:zoom/set-50
+          :zoom/set-100
+          :zoom/set-200
+          :separator
+          :zoom/focus-selected
+          :zoom/fit-selected
+          :zoom/fill-selected]
+         (map action.views/entity)
+         (map #(dissoc % :icon))
+         (map views/dropdown-menu-item)
+         (into [:> DropdownMenu/Content
+                {:class "menu-content rounded-sm"
+                 :side "top"
+                 :align "end"
+                 :on-key-down #(.stopPropagation %)
+                 :on-escape-key-down #(.stopPropagation %)}
+                [views/dropdownmenu-arrow]]))]])
 
 (defn set-zoom
   [e v]
@@ -136,20 +93,16 @@
                                 [::frame.events/zoom-in]))}]))
 
 (defn zoom-button-group
-  []
-  (let [zoom @(rf/subscribe [::document.subs/zoom])]
+  [zoom]
+  (let [zoom-out-action (action.views/entity :zoom/out)
+        zoom-in-action (action.views/entity :zoom/in)]
     [views/button-group
-     [:button.button.px-2.font-mono.rounded
-      {:disabled (<= zoom 0.01)
-       :title (i18n.views/t [::zoom-out "Zoom out"])
-       :on-click #(rf/dispatch [::frame.events/zoom-out])}
-      [views/icon "minus"]]
-
-     [:button.button.px-2.font-mono.rounded
-      {:disabled (>= zoom 100)
-       :title (i18n.views/t [::zoom-in "Zoom in"])
-       :on-click #(rf/dispatch [::frame.events/zoom-in])}
-      [views/icon "plus"]]
+     (-> zoom-out-action
+         (assoc :icon "minus")
+         views/action-icon-button)
+     (-> zoom-in-action
+         (assoc :icon "plus")
+         views/action-icon-button)
      [:div.flex.hidden.items-center
       {:class "xl:flex"
        :dir "ltr"}
@@ -158,15 +111,16 @@
      [zoom-menu]]))
 
 (defn radio-button
-  [{:keys [title active icon action class]}]
+  [{:keys [icon class]
+    :as action}]
   [:> Tooltip/Root
    [:> Tooltip/Trigger
     {:as-child true}
     [:span
-     [views/radio-icon-button icon @(rf/subscribe active)
+     [views/radio-icon-button icon (action.views/checked? action)
       {:class class
-       :aria-label (i18n.views/t title)
-       :on-click #(rf/dispatch action)}]]]
+       :aria-label (action.views/label action)
+       :on-click (action.views/dispatch action)}]]]
    [:> Tooltip/Portal
     [:> Tooltip/Content
      {:class "tooltip-content"
@@ -174,8 +128,30 @@
       :side "top"
       :on-escape-key-down #(.stopPropagation %)}
      [:div.flex.gap-2.items-center
-      (i18n.views/t title)
-      [views/shortcuts action]]]]])
+      (action.views/label action)
+      (when @(rf/subscribe [::window.subs/xl?])
+        [views/shortcuts action])]]]])
+
+(defn color-picker
+  [props & children]
+  (let [sm? @(rf/subscribe [::window.subs/sm?])]
+    [:> Popover/Root {:modal true}
+     (into [:> Popover/Trigger {:as-child true}]
+           children)
+     [:> Popover/Portal
+      [:> Popover/Content
+       {:class "popover-content max-w-fit"
+        :align "start"
+        :side "top"
+        :align-offset (:align-offset props)
+        :on-escape-key-down #(.stopPropagation %)}
+       [:div.p-2
+        {:dir "ltr"
+         :tab-index 0}
+        (if sm?
+          [:> PhotoshopPicker props]
+          [:> ChromePicker props])]
+       [views/popover-arrow]]]]))
 
 (defn color-selectors []
   (let [fill @(rf/subscribe [::document.subs/fill])
@@ -183,7 +159,7 @@
         get-hex #(:hex (js->clj % :keywordize-keys true))]
     [:div.flex
      {:class "gap-0.5"}
-     [views/color-picker
+     [color-picker
       {:color fill
        :on-change-complete #(rf/dispatch [::element.events/set-attr :fill
                                           (get-hex %)])
@@ -200,7 +176,7 @@
        :title (i18n.views/t [::swap-color "Swap fill with stroke"])
        :on-click #(rf/dispatch [::document.events/swap-colors])}]
 
-     [views/color-picker
+     [color-picker
       {:color stroke
        :on-change-complete #(rf/dispatch [::element.events/set-attr
                                           :stroke
@@ -215,7 +191,8 @@
         {:class "w-1/2 h-1/2 bottom-1/4 right-1/4"}]]]]))
 
 (defn root []
-  (let [md? @(rf/subscribe [::window.subs/md?])]
+  (let [md? @(rf/subscribe [::window.subs/md?])
+        zoom @(rf/subscribe [::document.subs/zoom])]
     [views/toolbar
      {:class "bg-primary relative justify-center md:justify-start py-2 md:py-1
               gap-2 md:gap-1"}
@@ -223,10 +200,19 @@
      [:div.grow.hidden.md:block]
      (when md?
        [:<>
-        (into [:<>] (map radio-button panel-buttons))
+        (->> [:panel/toggle-xml
+              :panel/toggle-timeline
+              :panel/toggle-history]
+             (map action.views/entity)
+             (map radio-button)
+             (into [:<>]))
         [:div.v-divider]])
-     (into [:<>] (map radio-button view-radio-buttons))
+     (->> [:view/toggle-grid
+           :view/toggle-rulers]
+          (map action.views/entity)
+          (map radio-button)
+          (into [:<>]))
      [snap.views/root]
-     [zoom-button-group]
+     [zoom-button-group zoom]
      [coordinates]
      [timeline.views/time-bar]]))

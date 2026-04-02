@@ -4,15 +4,17 @@
    [malli.core :as m]
    [malli.transform :as m.transform]
    [renderer.a11y.db :as a11y.db :refer [A11y]]
+   [renderer.action.db :refer [ActionRegistry]]
+   [renderer.action.defaults :as action.defaults]
    [renderer.db :refer [BBox Vec2 JS_Object]]
    [renderer.dialog.db :refer [Dialog]]
    [renderer.document.db :refer [Document DocumentId RecentDocument]]
    [renderer.element.db :refer [Element]]
-   [renderer.event.db :refer [PointerEvent]]
+   [renderer.event.db :refer [PointerEvent PointerId]]
    [renderer.frame.db :refer [DomRect]]
    [renderer.i18n.db
     :as i18n.db
-    :refer [LanguageCodeIdentifier LanguageId Languages]]
+    :refer [LanguageCodeIdentifier LanguageId LanguageRegistry]]
    [renderer.icon.db :refer [Icons]]
    [renderer.icon.defaults :as icon.defaults]
    [renderer.menubar.db :refer [Menubar]]
@@ -42,7 +44,7 @@
   [:map {:closed true}
    [:tool {:default :transform} Tool]
    [:cached-tool {:optional true} Tool]
-   [:active-pointers {:default {}} [:map-of number? PointerEvent]]
+   [:active-pointers {:default {}} [:map-of PointerId PointerEvent]]
    [:pointer-pos {:default [0 0]} Vec2]
    [:pointer-offset {:optional true} Vec2]
    [:adjusted-pointer-pos {:default [0 0]} Vec2]
@@ -88,7 +90,7 @@
    [:user-lang {:default "system"
                 :persist true} LanguageId]
    [:system-lang {:optional true} LanguageCodeIdentifier]
-   [:languages {:default i18n.db/default} Languages]
+   [:languages {:default i18n.db/registry} LanguageRegistry]
    [:icons {:default icon.defaults/icons} Icons]
    [:platform {:optional true} Platform]
    [:versions {:optional true} [:maybe map?]]
@@ -117,6 +119,7 @@
                               [:elements {:optional true} [:* Element]]]]
    [:kdtree {:optional true} [:maybe map?]]
    [:viewbox-kdtree {:optional true} [:maybe map?]]
+   [:actions {:default action.defaults/registry} ActionRegistry]
    [:a11y {:default {:filters a11y.db/default-filters}} A11y]
    [:re-pressed.core/keydown {:optional true} map?]])
 

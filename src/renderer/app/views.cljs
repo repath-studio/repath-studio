@@ -2,8 +2,10 @@
   (:require
    ["@radix-ui/react-direction" :as Direction]
    ["@radix-ui/react-tooltip" :as Tooltip]
+   ["vaul" :refer [Drawer]]
    [clojure.string :as string]
    [re-frame.core :as rf]
+   [reagent.core :as reagent]
    [renderer.app.events :as-alias app.events]
    [renderer.app.subs :as-alias app.subs]
    [renderer.dialog.views :as dialog.views]
@@ -120,16 +122,33 @@
                               [::lock "Lock"]))
        :on-click #(rf/dispatch [::ruler.events/toggle-locked])}]]))
 
-(defn frame-panel []
-  (let [ruler-visible? @(rf/subscribe [::ruler.subs/visible?])
-        backdrop @(rf/subscribe [::app.subs/backdrop])
+(defn frame []
+  (let [backdrop @(rf/subscribe [::app.subs/backdrop])
         read-only? @(rf/subscribe [::document.subs/read-only?])
         help-message @(rf/subscribe [::tool.subs/help])
         help-bar @(rf/subscribe [::app.subs/help-bar])
         debug-info? @(rf/subscribe [::app.subs/debug-info])
         worker-active? @(rf/subscribe [::worker.subs/some-active?])
-        md? @(rf/subscribe [::window.subs/md?])
         xl? @(rf/subscribe [::window.subs/xl?])]
+    [:div.grow.flex.relative
+     {:data-theme "light"
+      :style {:background "var(--secondary)"}}
+     [frame.views/root]
+     [:div.absolute.inset-0.pointer-events-none.inset-shadow]
+     (when read-only? [read-only-overlay])
+     (when debug-info? [debug-info])
+     (when worker-active?
+       [:div.absolute.bottom-2.right-2.text-gray-500
+        [views/loading-indicator]])
+     (when (and help-bar (seq help-message) xl?)
+       [views/help help-message])
+     (when backdrop
+       [:div.absolute.inset-0
+        {:on-click #(rf/dispatch [::app.events/set-backdrop false])}])]))
+
+(defn frame-panel []
+  (let [ruler-visible? @(rf/subscribe [::ruler.subs/visible?])
+        md? @(rf/subscribe [::window.subs/md?])]
     [:div.flex.flex-col.flex-1.h-full.gap-px.overflow-hidden
      [:div
       [toolbar.tools/root]
@@ -150,21 +169,7 @@
           :class "rtl:scale-x-[-1]"}
          [ruler.views/ruler :vertical]])
       [:div.relative.grow.flex
-       [:div.grow.flex.relative
-        {:data-theme "light"
-         :style {:background "var(--secondary)"}}
-        [frame.views/root]
-        [:div.absolute.inset-0.pointer-events-none.inset-shadow]
-        (when read-only? [read-only-overlay])
-        (when debug-info? [debug-info])
-        (when worker-active?
-          [:div.absolute.bottom-2.right-2.text-gray-500
-           [views/loading-indicator]])
-        (when (and help-bar (seq help-message) xl?)
-          [views/help help-message])
-        (when backdrop
-          [:div.absolute.inset-0
-           {:on-click #(rf/dispatch [::app.events/set-backdrop false])}])]
+       [frame]
        (when-not md?
          [:div.bg-primary.flex.items-center
           [toolbar.object/root]])]]]))
@@ -244,31 +249,82 @@
      [toolbar.status/root]
      (when md? [repl.views/root])]))
 
+(defn drawer
+  [{:keys [label direction content disabled snap-points]
+    :as attrs}]
+  (reagent/with-let [snap (reagent/atom nil)]
+    [:> Drawer.Root
+     (cond-> {:direction direction}
+       snap-points
+       (assoc :snapPoints (clj->js snap-points)
+              :activeSnapPoint @snap
+              :setActiveSnapPoint (fn [v] (reset! snap v))))
+     [:> Drawer.Trigger
+      {:class "button p-1 rounded h-auto flex flex-col flex-1 text-2xs gap-1
+               overflow-hidden items-center"
+       :disabled disabled}
+      [views/icon (:icon attrs)]
+      [:span.truncate.w-full (i18n.views/t label)]]
+     [:> Drawer.Portal
+      [:> Drawer.Overlay
+       {:class "backdrop"}]
+      [:> Drawer.Content
+       {:class ["inset-0 fixed z-0 outline-none bg-primary flex shadow-lg"
+                (case direction
+                  "left"
+                  (cond->
+                   "right-auto max-w-[80dvw] min-w-[60dvw] py-safe pl-safe"
+                    @(rf/subscribe [::app.subs/mac?]) (str " pt-8"))
+
+                  "right"
+                  "left-auto max-w-[80dvw] min-w-[60dvw] py-safe pr-safe"
+
+                  "bottom"
+                  "top-auto max-h-[60dvh] min-h-[30dvh] px-safe pb-safe"
+
+                  "top"
+                  "bottom-auto max-h-[60dvh] min-h-[30dvh] px-safe pt-safe")]
+        :style {:margin (cond
+                          (or (= direction "left")
+                              (= direction "right"))
+                          "- env(safe-area-inset-top) 0
+                           - env(safe-area-inset-bottom) 0"
+
+                          :else
+                          "0 - env(safe-area-inset-right)
+                           0 - env(safe-area-inset-left)")}}
+       [:> Drawer.Title {:class "sr-only"} (i18n.views/t label)]
+       [:> Drawer.Description
+        {:as-child true}
+        [:div.flex.flex-1.overflow-hidden
+         {:class (when (= direction "bottom") "w-full")}
+         content]]]]]))
+
 (defn bottom-bar []
   (let [some-selected? @(rf/subscribe [::element.subs/some-selected?])
         active-tool @(rf/subscribe [::tool.subs/active])]
     [:div.flex.justify-evenly.p-2.gap-1.rtl:flex-row-reverse
 
-     [views/drawer
+     [drawer
       {:icon "tree"
        :label [::tree "Tree"]
        :direction "left"
        :content [tree.views/root]}]
 
-     [views/drawer
+     [drawer
       {:icon "code"
        :label [::xml "XML"]
        :direction "left"
        :content [xml-panel]}]
      [:span.v-divider]
 
-     [views/drawer
+     [drawer
       {:icon "animation"
        :label [::timeline "Timeline"]
        :direction "bottom"
        :content [timeline.views/root]}]
 
-     [views/drawer
+     [drawer
       {:icon "shell"
        :label [::shell "Shell"]
        :direction "bottom"
@@ -276,13 +332,13 @@
 
      [:span.v-divider]
 
-     [views/drawer
+     [drawer
       {:icon "history"
        :label [::history "History"]
        :direction "right"
        :content [history.views/root]}]
 
-     [views/drawer
+     [drawer
       {:icon "properties"
        :label [::attributes "Attributes"]
        :direction "right"

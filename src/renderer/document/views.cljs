@@ -4,11 +4,11 @@
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
+   [renderer.action.views :as action.views]
    [renderer.app.subs :as-alias app.subs]
    [renderer.document.events :as-alias document.events]
    [renderer.document.subs :as-alias document.subs]
    [renderer.events :as-alias events]
-   [renderer.history.events :as-alias history.events]
    [renderer.history.subs :as-alias history.subs]
    [renderer.history.views :as history.views]
    [renderer.i18n.views :as i18n.views]
@@ -17,46 +17,35 @@
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]))
 
-(defn actions
-  []
+(defn actions []
   (let [undos @(rf/subscribe [::history.subs/undos])
         redos @(rf/subscribe [::history.subs/redos])
-        md? @(rf/subscribe [::window.subs/md?])]
+        md? @(rf/subscribe [::window.subs/md?])
+        new-action (action.views/entity :document/new)
+        open-action (action.views/entity :document/open)
+        save-action (action.views/entity :document/save)
+        download-action (action.views/entity :document/download)
+        undo-action (action.views/entity :history/undo)
+        redo-action (action.views/entity :history/redo)]
     [views/toolbar
 
-     [views/icon-button
-      "file"
-      {:title (i18n.views/t [::new "New"])
-       :on-click #(rf/dispatch [::document.events/new])}]
-
-     [views/icon-button
-      "folder"
-      {:title (i18n.views/t [::open "Open"])
-       :on-click #(rf/dispatch [::document.events/open])}]
-
-     [views/icon-button
-      "save"
-      {:title (i18n.views/t [::save "Save"])
-       :on-click #(rf/dispatch [::document.events/save])
-       :disabled @(rf/subscribe [::document.subs/active-saved?])}]
+     (->> [new-action
+           open-action
+           (or save-action download-action)]
+          (map #(views/action-icon-button % :title (action.views/label %)))
+          (into [:<>]))
 
      [:span.v-divider]
 
      [history.views/action-button
-      {:icon "undo"
-       :title [::undo "Undo"]
-       :options undos
-       :options-label [::undo-stack "Undo stack"]
-       :show-options md?
-       :action [::history.events/undo]}]
+      (merge undo-action {:options undos
+                          :options-label [::undo-stack "Undo stack"]
+                          :show-options md?})]
 
      [history.views/action-button
-      {:icon "redo"
-       :title [::redo "Redo"]
-       :options redos
-       :options-label [::redo-stack "Redo stack"]
-       :show-options md?
-       :action [::history.events/redo]}]]))
+      (merge redo-action {:options redos
+                          :options-label [::redo-stack "Redo stack"]
+                          :show-options md?})]]))
 
 (defn close-button
   [id saved]
@@ -103,55 +92,67 @@
     (reset! dragged-over? false)
     (rf/dispatch [::document.events/swap-position dropped-id id])))
 
-(defn tab
+(defn document-title
   [id]
   (let [document @(rf/subscribe [::document.subs/entity id])
-        {:keys [title]} document
-        active? (= id @(rf/subscribe [::document.subs/active-id]))]
-    (reagent/with-let [dragged-over? (reagent/atom false)]
-      (let [saved? @(rf/subscribe [::document.subs/saved? id])]
-        [:> ContextMenu/Root
-         [:> ContextMenu/Trigger
-          {:as-child true}
-          [:div.tab
-           {:class ["flex items-center h-full relative text-left px-2 py-0
-                     overflow-hidden hover:[&_button]:visible outline-default
-                     hover:text-foreground outline-inset"
-                    (if active?
-                      "bg-primary text-foreground [&_button]:visible"
-                      "bg-secondary text-foreground-muted")
-                    (when-not saved?
-                      "[&_button]:visible")]
-            :on-wheel #(when-not (zero? (.-deltaY %))
-                         (rf/dispatch [::document.events/cycle (.-deltaY %)]))
-            :on-click #(rf/dispatch [::document.events/set-active id])
-            :on-pointer-up #(when (= (.-button %) 1)
-                              (rf/dispatch [::document.events/close id true]))
-            :draggable true
-            :tab-index 0
-            :on-key-down #(when (= (.-key %) "Enter")
-                            (rf/dispatch [::document.events/set-active id]))
-            :on-drag-start #(.setData (.-dataTransfer %) "id" (str id))
-            :on-drag-over #(.preventDefault %)
-            :on-drag-enter #(reset! dragged-over? true)
-            :on-drag-leave #(reset! dragged-over? false)
-            :on-drop (partial on-tab-drop id dragged-over?)
-            :ref #(when (and % active?)
-                    (rf/dispatch [::events/scroll-into-view %]))}
-           [:div.pointer-events-none.px-2.gap-1.flex.overflow-hidden
-            (when-not saved?
-              [:span.md:hidden "•"])
-            [:span.truncate title]]
-           [close-button id saved?]]]
-         [:> ContextMenu/Portal
-          (into
-           [:> ContextMenu/Content
-            {:class "menu-content context-menu-content"
-             :on-escape-key-down #(.stopPropagation %)}]
-           (map views/context-menu-item (context-menu id)))]]))))
+        saved? @(rf/subscribe [::document.subs/saved? id])
+        {:keys [title]} document]
+    [:div.pointer-events-none.px-2.gap-1.flex.overflow-hidden
+     (when-not saved?
+       [:span.md:hidden "•"])
+     [:span.truncate title]]))
 
-(defn documents-dropdown-button
-  []
+(defn tab-button-classes
+  [active? saved?]
+  ["flex items-center h-full relative text-left px-2 py-0 overflow-hidden
+    hover:[&_button]:visible outline-default hover:text-foreground
+    outline-inset"
+   (if active?
+     "bg-primary text-foreground [&_button]:visible"
+     "bg-secondary text-foreground-muted")
+   (when-not saved?
+     "[&_button]:visible")])
+
+(defn tab-button
+  [id]
+  (reagent/with-let [dragged-over? (reagent/atom false)]
+    (let [saved? @(rf/subscribe [::document.subs/saved? id])
+          active? @(rf/subscribe [::document.subs/active? id])]
+      [:div.tab
+       {:class (tab-button-classes active? saved?)
+        :on-wheel #(when-not (zero? (.-deltaY %))
+                     (rf/dispatch [::document.events/cycle (.-deltaY %)]))
+        :on-click #(rf/dispatch [::document.events/set-active id])
+        :on-pointer-up #(when (= (.-button %) 1)
+                          (rf/dispatch [::document.events/close id true]))
+        :draggable true
+        :tab-index 0
+        :on-key-down #(when (= (.-key %) "Enter")
+                        (rf/dispatch [::document.events/set-active id]))
+        :on-drag-start #(.setData (.-dataTransfer %) "id" (str id))
+        :on-drag-over #(.preventDefault %)
+        :on-drag-enter #(reset! dragged-over? true)
+        :on-drag-leave #(reset! dragged-over? false)
+        :on-drop (partial on-tab-drop id dragged-over?)
+        :ref #(when (and % active?)
+                (rf/dispatch [::events/scroll-into-view %]))}
+       [document-title id]
+       [close-button id saved?]])))
+
+(defn tab
+  [id]
+  [:> ContextMenu/Root
+   [:> ContextMenu/Trigger
+    {:as-child true}
+    [tab-button id]]
+   [:> ContextMenu/Portal
+    (->> (context-menu id)
+         (map views/context-menu-item)
+         (into [:> ContextMenu/Content
+                {:class "menu-content context-menu-content"
+                 :on-escape-key-down #(.stopPropagation %)}]))]])
+
+(defn documents-dropdown-button []
   (let [documents @(rf/subscribe [::document.subs/entities])
         md? @(rf/subscribe [::window.subs/md?])
         document-count (count documents)]
@@ -193,11 +194,18 @@
                [views/dropdownmenu-arrow]]
               (map views/dropdown-menu-item)))]]))
 
-(defn tab-bar
-  []
+(defn mobile-tabs []
   (let [documents @(rf/subscribe [::document.subs/entities])
-        tabs @(rf/subscribe [::document.subs/tabs])
-        active-id @(rf/subscribe [::document.subs/active-id])
+        active-id @(rf/subscribe [::document.subs/active-id])]
+    [:div.flex.overflow-hidden.gap-px
+     (when (second documents)
+       [views/toolbar
+        {:class "bg-primary"}
+        [documents-dropdown-button]])
+     [tab active-id]]))
+
+(defn tab-bar []
+  (let [tabs @(rf/subscribe [::document.subs/tabs])
         md? @(rf/subscribe [::window.subs/md?])
         tree-visible @(rf/subscribe [::panel.subs/visible? :tree])]
     [:div.flex.justify-between.gap-px.overflow-hidden
@@ -208,12 +216,7 @@
         (for [document-id tabs]
           ^{:key document-id}
           [tab document-id])
-        [:div.flex.overflow-hidden.gap-px
-         (when (second documents)
-           [views/toolbar
-            {:class "bg-primary"}
-            [documents-dropdown-button]])
-         [tab active-id]])
+        [mobile-tabs])
       (when-not md?
         [actions])
       [:div.drag.flex-1]]

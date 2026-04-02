@@ -4,40 +4,32 @@
    [re-frame.core :as rf]
    [reagent.core :as reagent]
    [renderer.document.subs :as-alias document.subs]
-   [renderer.element.events :as-alias element.events]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.event.impl.pointer :as event.impl.pointer]))
 
-(defn context-menu
-  []
-  ;; TODO: Add group actions and more.
-  [{:label [::cut "Cut"]
-    :action [::element.events/cut]}
-   {:label [::copy "Copy"]
-    :action [::element.events/copy]}
-   {:label [::paste "Paste"]
-    :action [::element.events/paste]}
-   {:type :separator}
-   {:label [::raise "Raise"]
-    :action [::element.events/raise]}
-   {:label [::lower "Lower"]
-    :action [::element.events/lower]}
-   {:label [::raise-top "Raise to top"]
-    :action [::element.events/raise-to-top]}
-   {:label [::lower-bottom "Lower to bottom"]
-    :action [::element.events/lower-to-bottom]}
-   {:type :separator}
-   {:label [::animate "Animate"]
-    :action [::element.events/animate :animate]}
-   {:label [::animate-transform "Animate Transform"]
-    :action [::element.events/animate :animateTransform]}
-   {:label [::animate-motion "Animate Motion"]
-    :action [::element.events/animate :animateMotion]}
-   {:type :separator}
-   {:label [::duplicate "Duplicate"]
-    :action [::element.events/duplicate]}
-   {:label [::delete "Delete"]
-    :action [::element.events/delete]}])
+(def context-menu-actions
+  [:clipboard/cut
+   :clipboard/copy
+   :clipboard/paste
+   :clipboard/paste-styles
+   :separator
+   :object/raise
+   :object/lower
+   :object/raise-to-top
+   :object/lower-to-bottom
+   :separator
+   :object/group
+   :object/ungroup
+   :separator
+   :object/lock
+   :object/unlock
+   :separator
+   :animate/animate
+   :animate/transform
+   :animate/motion
+   :separator
+   :element/duplicate
+   :element/delete])
 
 (defn ghost-element
   "Renders a ghost element on top of the actual element to ensure that the user

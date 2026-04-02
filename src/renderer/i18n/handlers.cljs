@@ -5,7 +5,8 @@
    [renderer.app.db :refer [App]]
    [renderer.i18n.db
     :as i18n.db
-    :refer [LanguageCodeIdentifier Language Languages LanguageId Translation]]
+    :refer [LanguageCodeIdentifier Language LanguageRegistry LanguageId
+            Translation]]
    [taoensso.tempura :as tempura]))
 
 (m/=> register-language [:-> App Language App])
@@ -32,12 +33,14 @@
     (throw (ex-info "Language not registered" {:id lang-id}))
     (assoc-in db [:languages lang-id :dictionary k] v)))
 
-(m/=> supported-lang? [:-> Languages [:maybe LanguageCodeIdentifier] boolean?])
+(m/=> supported-lang? [:-> LanguageRegistry [:maybe LanguageCodeIdentifier]
+                       boolean?])
 (defn supported-lang?
   [languages lang]
   (contains? languages lang))
 
-(m/=> computed-lang [:-> Languages LanguageId [:maybe LanguageCodeIdentifier]
+(m/=> computed-lang [:-> LanguageRegistry LanguageId
+                     [:maybe LanguageCodeIdentifier]
                      LanguageCodeIdentifier])
 (defn computed-lang
   [languages user-lang system-lang]
@@ -48,7 +51,7 @@
       "en-US")
     user-lang))
 
-(m/=> tempura-options [:-> Languages map?])
+(m/=> tempura-options [:-> LanguageRegistry map?])
 (defn tempura-options
   [languages]
   {:dict (->> languages

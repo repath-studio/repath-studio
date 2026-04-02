@@ -7,9 +7,9 @@
    [renderer.views :as views]))
 
 (rf/reg-sub
- :renderer.icon.subs/icon
+ :renderer.icon.subs/path-data
  (fn [_ [_ id]]
-   (get icon.defaults/icons id)))
+   (get-in icon.defaults/icons [id :path])))
 
 (defscene ^:export buttons
   :title "Buttons"
