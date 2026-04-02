@@ -257,7 +257,7 @@
             :items panel-submenu
             :available [::window.subs/md?]}
            {:type :separator
-            :available [::window.subs/md?]}
+            :available [::app.subs/desktop?]}
            :view/toggle-fullscreen]})
 
 (defn help-menu []
@@ -291,7 +291,8 @@
   (when-let [action (cond-> item
                       (keyword? item)
                       action-menu-item)]
-    (menu-item action)))
+    (when (action.views/available? action)
+      (menu-item action))))
 
 (defmethod menu-item :separator [_]
   [:> Menubar/Separator {:class "menu-separator"}])
