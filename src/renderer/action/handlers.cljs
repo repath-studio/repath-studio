@@ -5,7 +5,7 @@
    [renderer.action.db :as action.db :refer [Action ActionId]]
    [renderer.app.db :refer [App]]))
 
-(m/=> entities [:-> App [:vector Action]])
+(m/=> entities [:-> App [:* Action]])
 (defn entities
   [db]
   (-> db :actions vals))

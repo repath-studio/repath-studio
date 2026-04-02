@@ -3,6 +3,7 @@
    ["paper" :refer [paper]]
    [config :as config]
    [re-frame.core :as rf]
+   [renderer.action.effects :as-alias action.effects]
    [renderer.app.db :as app.db]
    [renderer.app.effects :as-alias app.effects]
    [renderer.effects :as-alias effects]
@@ -187,6 +188,10 @@
 
 (rf/reg-fx
  ::effects/set-meta
+ (fn [_]))
+
+(rf/reg-fx
+ ::action.effects/update-keydown-rules
  (fn [_]))
 
 (rf/reg-event-db

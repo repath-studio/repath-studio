@@ -98,15 +98,16 @@
   [items label]
   (for [item items]
     (if (:items item)
-      (cmdk-group-inner (:items item) (:label item))
+      (->> (cmdk-group-inner (:items item) (:label item))
+           (into [:<>]))
       (when-let [action (cond-> item (keyword? item) action.views/entity)]
         [cmdk-item (update action :label #(vector label %))]))))
 
 (defn cmdk-group
   [{:keys [label items]}]
-  [:> Command/CommandGroup
-   {:heading (i18n.views/t label)}
-   (cmdk-group-inner items nil)])
+  (->> (cmdk-group-inner items nil)
+       (into [:> Command/CommandGroup
+              {:heading (i18n.views/t label)}])))
 
 (defn cmdk []
   [:> Command/Command

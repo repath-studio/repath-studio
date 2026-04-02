@@ -17,8 +17,7 @@
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]))
 
-(defn recent-submenu
-  []
+(defn recent-submenu []
   (let [recent-documents @(rf/subscribe [::document.subs/recent])
         recent-items (->> recent-documents
                           (mapv (fn [{:keys [path title id]

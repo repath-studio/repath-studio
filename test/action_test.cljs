@@ -8,8 +8,7 @@
    [renderer.action.subs :as-alias action.subs]
    [renderer.app.events :as-alias app.events]
    [renderer.history.events :as-alias history.events]
-   [renderer.history.subs :as-alias history.subs]
-   [renderer.utils.key :as utils.key]))
+   [renderer.history.subs :as-alias history.subs]))
 
 (deftest action
   (rf.test/run-test-sync
@@ -18,10 +17,10 @@
    (let [existing-action (rf/subscribe [::action.subs/entity :document/new])
          new-action (rf/subscribe [::action.subs/entity :history/undo-twice])
          undo-twice-action {:id :history/undo-twice
-                            :label [::undo "Undo twice"]
+                            :label [:history/undo-twice "Undo twice"]
                             :icon "undo"
                             :event [::history.events/undo-by 2]
-                            :shortcuts [{:keyCode (utils.key/codes "Z")
+                            :shortcuts [{:keyCode 90
                                          :ctrlKey true
                                          :altKey true}]
                             :enabled [::history.subs/undos?]}]

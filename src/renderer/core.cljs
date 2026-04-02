@@ -6,7 +6,6 @@
    [reagent.dom.client :as ra.dom.client]
    [renderer.a11y.core]
    [renderer.action.core]
-   [renderer.action.defaults :as action.defaults]
    [renderer.action.subs]
    [renderer.app.core]
    [renderer.app.events :as-alias app.events]
@@ -41,7 +40,6 @@
    [renderer.timeline.core]
    [renderer.tool.core]
    [renderer.tree.events]
-   [renderer.utils.key :as utils.key]
    [renderer.window.core]
    [renderer.worker.core]
    [replumb.repl :as replumb.repl]
@@ -82,11 +80,8 @@
   (bootstrap/init replumb.repl/st {:path "js/bootstrap"
                                    :load-on-init '[user]} bootstrap-cb!)
 
-  (rf/dispatch-sync [::app.events/initialize])
-
   (rf/dispatch [::re-pressed/add-keyboard-event-listener "keydown"])
-  (rf/dispatch [::re-pressed/set-keydown-rules (utils.key/actions->keydown-rules
-                                                action.defaults/actions)])
+  (rf/dispatch-sync [::app.events/initialize])
 
   (mount-root!)
   (js/console.log easter-egg))

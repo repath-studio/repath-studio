@@ -5,6 +5,7 @@
   (:import
    [goog.events KeyCodes]))
 
+(m/=> arrow? [:-> string? boolean?])
 (defn arrow?
   [k]
   (contains? #{"ArrowUp" "ArrowDown" "ArrowLeft" "ArrowRight"} k))
@@ -40,52 +41,3 @@
 (defn code->key
   [key-code]
   (get key-chars key-code))
-
-(defn shortcut-modifier-count
-  [shortcut]
-  (count (filter shortcut [:ctrlKey :shiftKey :altKey])))
-
-(defn max-modifier-count
-  [action]
-  (apply max 0 (map shortcut-modifier-count (:shortcuts action))))
-
-(defn actions->keydown-rules
-  [actions]
-  {:event-keys (->> actions
-                    (filter :shortcuts)
-                    (sort-by max-modifier-count >)
-                    (mapv (fn [{:keys [event shortcuts]}]
-                            (into [event] (map vector shortcuts)))))
-   :clear-keys []
-   :always-listen-keys []
-   :prevent-default-keys [{:keyCode (codes "EQUALS")}
-                          {:keyCode (codes "DASH")}
-                          {:keyCode (codes "RIGHT")}
-                          {:keyCode (codes "LEFT")}
-                          {:keyCode (codes "UP")}
-                          {:keyCode (codes "DOWN")}
-                          {:keyCode (codes "F1")}
-                          {:keyCode (codes "F11")}
-                          {:keyCode (codes "F")
-                           :altKey true}
-                          {:keyCode (codes "E")
-                           :altKey true}
-                          {:keyCode (codes "A")
-                           :ctrlKey true}
-                          {:keyCode (codes "O")
-                           :ctrlKey true}
-                          {:keyCode (codes "S")
-                           :ctrlKey true}
-                          {:keyCode (codes "G")
-                           :ctrlKey true}
-                          {:keyCode (codes "P")
-                           :ctrlKey true}
-                          {:keyCode (codes "W")
-                           :ctrlKey true}
-                          {:keyCode (codes "K")
-                           :ctrlKey true}
-                          {:keyCode (codes "W")
-                           :ctrlKey true}
-                          {:keyCode (codes "D")
-                           :ctrlKey true
-                           :shiftKey true}]})

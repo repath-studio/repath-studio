@@ -1,22 +1,17 @@
 (ns renderer.action.events
   (:require
    [re-frame.core :as rf]
-   [re-pressed.core :as re-pressed]
-   [renderer.action.handlers :as action.handlers]
-   [renderer.utils.key :as utils.key]))
+   [renderer.action.effects :as-alias action.effects]
+   [renderer.action.handlers :as action.handlers]))
 
 (rf/reg-event-fx
  ::register-action
  (fn [{:keys [db]} [_ action]]
    {:db (action.handlers/register db action)
-    :dispatch [::re-pressed/set-keydown-rules
-               (-> (action.handlers/entities db)
-                   (utils.key/actions->keydown-rules))]}))
+    ::action.effects/update-keydown-rules (action.handlers/entities db)}))
 
 (rf/reg-event-fx
  ::deregister-action
- (fn [db [_ action-id]]
-   {:db (action.handlers/deregister db action-id)
-    :dispatch [::re-pressed/set-keydown-rules
-               (-> (action.handlers/entities db)
-                   (utils.key/actions->keydown-rules))]}))
+ (fn [{:keys [db]} [_ id]]
+   {:db (action.handlers/deregister db id)
+    ::action.effects/update-keydown-rules (action.handlers/entities db)}))
