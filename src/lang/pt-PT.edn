@@ -148,7 +148,13 @@
   :privacy-policy "Política de Privacidade"
   :submit-an-issue "Reportar problema"
   :report-errors "Reportar erros automaticamente"
-  :about "Acerca de"}
+  :about "Acerca de"
+  :snap "Ajustar"
+  :centers "centros"
+  :midpoints "pontos médios"
+  :corners "cantos"
+  :nodes "nós"}
+
  :renderer.a11y.db
  {:blur "Desfoque"
   :heavy-blur "Desfoque intenso"
@@ -696,12 +702,7 @@
   :swap-color "Trocar preenchimento com contorno"}
 
  :renderer.snap.views
- {:snap "Ajustar"
-  :snap-options "Opções de ajuste"
-  :centers "centros"
-  :midpoints "pontos médios"
-  :corners "cantos"
-  :nodes "nós"
+ {:snap-options "Opções de ajuste"
   :to " a "}
 
  :renderer.utils.bounds

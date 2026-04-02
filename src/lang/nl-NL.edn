@@ -148,7 +148,13 @@
   :privacy-policy "Privacybeleid"
   :submit-an-issue "Een probleem melden"
   :report-errors "Fouten automatisch melden"
-  :about "Over"}
+  :about "Over"
+  :snap "Uitlijnen"
+  :centers "middelpunten"
+  :midpoints "middenpunten"
+  :corners "hoeken"
+  :nodes "knooppunten"}
+
  :renderer.a11y.db
  {:blur "Vervaging"
   :heavy-blur "Sterke vervaging"
@@ -714,12 +720,7 @@
   :swap-color "Vulling en lijn verwisselen"}
 
  :renderer.snap.views
- {:snap "Uitlijnen"
-  :snap-options "Uitlijnopties"
-  :centers "middelpunten"
-  :midpoints "middenpunten"
-  :corners "hoeken"
-  :nodes "knooppunten"
+ {:snap-options "Uitlijnopties"
   :to " naar "}
 
  :renderer.utils.bounds

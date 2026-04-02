@@ -148,7 +148,13 @@
   :privacy-policy "Integritetspolicy"
   :submit-an-issue "Rapportera ett problem"
   :report-errors "Rapportera fel automatiskt"
-  :about "Om"}
+  :about "Om"
+  :snap "Fäst"
+  :centers "centrum"
+  :midpoints "mittpunkter"
+  :corners "hörn"
+  :nodes "noder"}
+
  :renderer.a11y.db
  {:blur "Suddig"
   :heavy-blur "Kraftig suddig"
@@ -699,12 +705,7 @@
   :swap-color "Växla fyllning med linje"}
 
  :renderer.snap.views
- {:snap "Fäst"
-  :snap-options "Fästalternativ"
-  :centers "centrum"
-  :midpoints "mittpunkter"
-  :corners "hörn"
-  :nodes "noder"
+ {:snap-options "Fästalternativ"
   :to " till "}
 
  :renderer.utils.bounds

@@ -148,7 +148,13 @@
   :privacy-policy "Politique de confidentialité"
   :submit-an-issue "Signaler un problème"
   :report-errors "Signaler les erreurs automatiquement"
-  :about "À propos"}
+  :about "À propos"
+  :snap "Magnétisme"
+  :centers "centres"
+  :midpoints "points médians"
+  :corners "coins"
+  :nodes "nœuds"}
+
  :renderer.a11y.db
  {:blur "Flou"
   :heavy-blur "Flou intense"
@@ -709,12 +715,7 @@
   :swap-color "Échanger le remplissage avec le contour"}
 
  :renderer.snap.views
- {:snap "Magnétisme"
-  :snap-options "Options de magnétisme"
-  :centers "centres"
-  :midpoints "points médians"
-  :corners "coins"
-  :nodes "nœuds"
+ {:snap-options "Options de magnétisme"
   :to " vers "}
 
  :renderer.utils.bounds

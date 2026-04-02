@@ -147,7 +147,13 @@
   :privacy-policy "隐私政策"
   :submit-an-issue "报告问题"
   :report-errors "自动报告错误"
-  :about "关于"}
+  :about "关于"
+  :snap "吸附"
+  :centers "中心"
+  :midpoints "中点"
+  :corners "角点"
+  :nodes "节点"}
+
  :renderer.a11y.db
  {:blur "模糊"
   :heavy-blur "重度模糊"
@@ -621,12 +627,7 @@
   :swap-color "交换填充和描边"}
 
  :renderer.snap.views
- {:snap "吸附"
-  :snap-options "吸附选项"
-  :centers "中心"
-  :midpoints "中点"
-  :corners "角点"
-  :nodes "节点"
+ {:snap-options "吸附选项"
   :to " 到 "}
 
  :renderer.utils.bounds

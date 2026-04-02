@@ -148,7 +148,13 @@
   :privacy-policy "Datenschutzrichtlinie"
   :submit-an-issue "Problem melden"
   :report-errors "Fehler automatisch melden"
-  :about "Über"}
+  :about "Über"
+  :snap "Einrasten"
+  :centers "Zentren"
+  :midpoints "Mittelpunkte"
+  :corners "Ecken"
+  :nodes "Knoten"}
+
  :renderer.a11y.db
  {:blur "Unschärfe"
   :heavy-blur "Starke Unschärfe"
@@ -715,12 +721,7 @@
   :swap-color "Füllung mit Kontur tauschen"}
 
  :renderer.snap.views
- {:snap "Einrasten"
-  :snap-options "Einrast-Optionen"
-  :centers "Zentren"
-  :midpoints "Mittelpunkte"
-  :corners "Ecken"
-  :nodes "Knoten"
+ {:snap-options "Einrast-Optionen"
   :to " zu "}
 
  :renderer.utils.bounds

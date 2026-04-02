@@ -18,6 +18,8 @@
    [renderer.panel.subs :as-alias panel.subs]
    [renderer.ruler.events :as-alias ruler.events]
    [renderer.ruler.subs :as-alias ruler.subs]
+   [renderer.snap.events :as-alias snap.events]
+   [renderer.snap.subs :as-alias snap.subs]
    [renderer.theme.events :as-alias theme.events]
    [renderer.theme.subs :as-alias theme.subs]
    [renderer.tool.events :as-alias tool.events]
@@ -828,6 +830,41 @@
    :event [::theme.events/set-mode :system]
    :active [::theme.subs/selected-mode? :system]})
 
+(def toggle-snap
+  {:id :snap/toggle
+   :label [::snap "Snap"]
+   :icon "magnet"
+   :event [::snap.events/toggle]
+   :active [::snap.subs/enabled?]})
+
+(def toggle-snap-centers
+  {:id :snap/toggle-centers
+   :label [::centers "centers"]
+   :icon "magnet"
+   :event [::snap.events/toggle-option :centers]
+   :active [::snap.subs/option-enabled? :centers]})
+
+(def toggle-snap-midpoints
+  {:id :snap/toggle-midpoints
+   :label [::midpoints "midpoints"]
+   :icon "magnet"
+   :event [::snap.events/toggle-option :midpoints]
+   :active [::snap.subs/option-enabled? :midpoints]})
+
+(def toggle-snap-corners
+  {:id :snap/toggle-corners
+   :label [::corners "corners"]
+   :icon "magnet"
+   :event [::snap.events/toggle-option :corners]
+   :active [::snap.subs/option-enabled? :corners]})
+
+(def toggle-snap-nodes
+  {:id :snap/toggle-nodes
+   :label [::nodes "nodes"]
+   :icon "magnet"
+   :event [::snap.events/toggle-option :nodes]
+   :active [::snap.subs/option-enabled? :nodes]})
+
 (def actions
   [document-new
    document-open
@@ -931,7 +968,12 @@
    tool-activate-fill
    set-system-theme-mode
    set-dark-theme-mode
-   set-light-theme-mode])
+   set-light-theme-mode
+   toggle-snap
+   toggle-snap-centers
+   toggle-snap-midpoints
+   toggle-snap-corners
+   toggle-snap-nodes])
 
 (def registry
   (zipmap (map :id actions) actions))

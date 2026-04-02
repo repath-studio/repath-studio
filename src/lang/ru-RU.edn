@@ -148,7 +148,13 @@
   :privacy-policy "Политика Конфиденциальности"
   :submit-an-issue "Сообщить о проблеме"
   :report-errors "Сообщать об ошибках автоматически"
-  :about "О программе"}
+  :about "О программе"
+  :snap "Привязка"
+  :centers "центры"
+  :midpoints "средние точки"
+  :corners "углы"
+  :nodes "узлы"}
+
  :renderer.a11y.db
  {:blur "Размытие"
   :heavy-blur "Сильное размытие"
@@ -694,12 +700,7 @@
   :swap-color "Поменять местами заливку и обводку"}
 
  :renderer.snap.views
- {:snap "Привязка"
-  :snap-options "Параметры привязки"
-  :centers "центры"
-  :midpoints "средние точки"
-  :corners "углы"
-  :nodes "узлы"
+ {:snap-options "Параметры привязки"
   :to " к "}
 
  :renderer.utils.bounds

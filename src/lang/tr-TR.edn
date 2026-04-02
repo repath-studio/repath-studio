@@ -148,7 +148,13 @@
   :privacy-policy "Gizlilik Politikası"
   :submit-an-issue "Sorun bildir"
   :report-errors "Hataları otomatik olarak bildir"
-  :about "Hakkında"}
+  :about "Hakkında"
+  :snap "Yapış"
+  :centers "merkezler"
+  :midpoints "orta noktalar"
+  :corners "köşeler"
+  :nodes "düğümler"}
+
  :renderer.a11y.db
  {:blur "Bulanık"
   :heavy-blur "Yoğun bulanık"
@@ -693,12 +699,7 @@
   :swap-color "Dolgu ile çizgi rengini değiştir"}
 
  :renderer.snap.views
- {:snap "Yapış"
-  :snap-options "Yapışma seçenekleri"
-  :centers "merkezler"
-  :midpoints "orta noktalar"
-  :corners "köşeler"
-  :nodes "düğümler"
+ {:snap-options "Yapışma seçenekleri"
   :to " ile "}
 
  :renderer.utils.bounds

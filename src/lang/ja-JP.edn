@@ -148,7 +148,13 @@
   :privacy-policy "プライバシーポリシー"
   :submit-an-issue "問題を報告"
   :report-errors "エラーを自動的に報告"
-  :about "このアプリについて"}
+  :about "このアプリについて"
+  :snap "スナップ"
+  :centers "中心"
+  :midpoints "中点"
+  :corners "角"
+  :nodes "ノード"}
+
  :renderer.a11y.db
  {:blur "ブラー"
   :heavy-blur "強いブラー"
@@ -659,12 +665,7 @@
   :swap-color "塗りと線の色を交換"}
 
  :renderer.snap.views
- {:snap "スナップ"
-  :snap-options "スナップオプション"
-  :centers "中心"
-  :midpoints "中点"
-  :corners "角"
-  :nodes "ノード"
+ {:snap-options "スナップオプション"
   :to " に "}
 
  :renderer.utils.bounds

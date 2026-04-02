@@ -5,46 +5,33 @@
    [clojure.string :as string]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
+   [renderer.action.views :as action.views]
    [renderer.document.subs :as-alias document.subs]
    [renderer.i18n.views :as i18n.views]
-   [renderer.snap.events :as-alias snap.events]
    [renderer.snap.subs :as-alias snap.subs]
    [renderer.utils.svg :as utils.svg]
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]))
 
-(defn snap-options
-  []
-  [{:id :centers
-    :event [::snap.events/toggle-option :centers]
-    :active [::snap.subs/option-enabled? :centers]
-    :label [::centers "centers"]}
-   {:id :midpoints
-    :event [::snap.events/toggle-option :midpoints]
-    :active [::snap.subs/option-enabled? :midpoints]
-    :label [::midpoints "midpoints"]}
-   {:id :corners
-    :event [::snap.events/toggle-option :corners]
-    :active [::snap.subs/option-enabled? :corners]
-    :label [::corners "corners"]}
-   {:id :nodes
-    :event [::snap.events/toggle-option :nodes]
-    :active [::snap.subs/option-enabled? :nodes]
-    :label [::nodes "nodes"]}])
+(def snap-options
+  [:snap/toggle-centers
+   :snap/toggle-midpoints
+   :snap/toggle-corners
+   :snap/toggle-nodes])
 
-(defn root
-  []
+(defn root []
   (let [active? (rf/subscribe [::snap.subs/active?])
-        md? @(rf/subscribe [::window.subs/md?])]
+        md? @(rf/subscribe [::window.subs/md?])
+        toggle-snap-action (action.views/entity :snap/toggle)]
     (reagent/with-let [open (reagent/atom false)]
       [:button.button.rounded-sm.items-center.gap-1.md:flex.justify-items-center
-       {:title (i18n.views/t [::snap "Snap"])
+       {:title (action.views/label toggle-snap-action)
         :class ["active:bg-overlay"
                 (when md? "px-1")
                 (when @active? "accent")
                 (when @open "bg-overlay!")]
-        :on-click #(rf/dispatch [::snap.events/toggle])}
-       [views/icon "magnet"]
+        :on-click (action.views/dispatch toggle-snap-action)}
+       [views/icon (:icon toggle-snap-action)]
        (when md?
          [:> DropdownMenu/Root
           {:on-open-change #(reset! open %)}
@@ -56,8 +43,8 @@
              :title (i18n.views/t [::snap-options "Snap options"])}
             [views/icon "chevron-up"]]]
           [:> DropdownMenu/Portal
-           (->> (snap-options)
-                (map views/dropdown-menu-item)
+           (->> snap-options
+                (map (comp views/dropdown-menu-item action.views/entity))
                 (into [:> DropdownMenu/Content
                        {:side "top"
                         :align "end"

@@ -148,7 +148,12 @@
   :privacy-policy "سياسة الخصوصية"
   :submit-an-issue "إرسال مشكلة"
   :report-errors "الإبلاغ عن الأخطاء تلقائياً"
-  :about "حول"}
+  :about "حول"
+  :snap "التقاط"
+  :centers "المراكز"
+  :midpoints "نقاط المنتصف"
+  :corners "الزوايا"
+  :nodes "العقد"}
 
  :renderer.a11y.db
  {:blur "ضبابية البصر"
@@ -675,12 +680,7 @@
   :swap-color "تبديل الملء مع الخط"}
 
  :renderer.snap.views
- {:snap "التقاط"
-  :snap-options "خيارات الالتقاط"
-  :centers "المراكز"
-  :midpoints "نقاط المنتصف"
-  :corners "الزوايا"
-  :nodes "العقد"
+ {:snap-options "خيارات الالتقاط"
   :to " إلى "}
 
  :renderer.utils.bounds

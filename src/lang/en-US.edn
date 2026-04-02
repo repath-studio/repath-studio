@@ -148,7 +148,12 @@
   :privacy-policy "Privacy Policy"
   :submit-an-issue "Submit an issue"
   :report-errors "Report errors automatically"
-  :about "About"}
+  :about "About"
+  :snap "Snap"
+  :centers "centers"
+  :midpoints "midpoints"
+  :corners "corners"
+  :nodes "nodes"}
 
  :renderer.a11y.db
  {:blur "Blur"
@@ -686,12 +691,7 @@
   :swap-color "Swap fill with stroke"}
 
  :renderer.snap.views
- {:snap "Snap"
-  :snap-options "Snap options"
-  :centers "centers"
-  :midpoints "midpoints"
-  :corners "corners"
-  :nodes "nodes"
+ {:snap-options "Snap options"
   :to " to "}
 
  :renderer.utils.bounds

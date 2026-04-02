@@ -148,7 +148,13 @@
   :privacy-policy "Πολιτική Απορρήτου"
   :submit-an-issue "Υποβολή προβλήματος"
   :report-errors "Αναφορά σφαλμάτων αυτόματα"
-  :about "Σχετικά"}
+  :about "Σχετικά"
+  :snap "Προσκόλληση"
+  :centers "κέντρο"
+  :midpoints "μέση απόσταση"
+  :corners "γωνία"
+  :nodes "κόμβος"}
+
  :renderer.a11y.db
  {:blur "Θόλωση όρασης"
   :heavy-blur "Έντονη θόλωση όρασης"
@@ -720,12 +726,7 @@
   :swap-color "Ανταλλάξτε το γέμισμα με τη γραμμή"}
 
  :renderer.snap.views
- {:snap "Προσκόλληση"
-  :snap-options "Ρυθμίσεις προσκόλλησης"
-  :centers "κέντρο"
-  :midpoints "μέση απόσταση"
-  :corners "γωνία"
-  :nodes "κόμβος"
+ {:snap-options "Ρυθμίσεις προσκόλλησης"
   :to " προς "}
 
  :renderer.utils.bounds

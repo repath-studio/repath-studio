@@ -148,7 +148,13 @@
   :privacy-policy "Privacy Policy"
   :submit-an-issue "Segnala un problema"
   :report-errors "Segnala errori automaticamente"
-  :about "Informazioni"}
+  :about "Informazioni"
+  :snap "Aggancia"
+  :centers "centri"
+  :midpoints "punti medi"
+  :corners "angoli"
+  :nodes "nodi"}
+
  :renderer.a11y.db
  {:blur "Sfocatura"
   :heavy-blur "Sfocatura intensa"
@@ -711,12 +717,7 @@
   :swap-color "Scambia riempimento con contorno"}
 
  :renderer.snap.views
- {:snap "Aggancia"
-  :snap-options "Opzioni aggancio"
-  :centers "centri"
-  :midpoints "punti medi"
-  :corners "angoli"
-  :nodes "nodi"
+ {:snap-options "Opzioni aggancio"
   :to " a "}
 
  :renderer.utils.bounds
