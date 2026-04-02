@@ -22,14 +22,17 @@
   (let [undos @(rf/subscribe [::history.subs/undos])
         redos @(rf/subscribe [::history.subs/redos])
         md? @(rf/subscribe [::window.subs/md?])
-        new-action @(rf/subscribe [::action.subs/entity :document/new])
-        open-action @(rf/subscribe [::action.subs/entity :document/open])
-        save-action @(rf/subscribe [::action.subs/entity :document/save])
-        undo-action @(rf/subscribe [::action.subs/entity :history/undo])
-        redo-action @(rf/subscribe [::action.subs/entity :history/redo])]
+        new-action (action.views/entity :document/new)
+        open-action (action.views/entity :document/open)
+        save-action (action.views/entity :document/save)
+        download-action (action.views/entity :document/download)
+        undo-action (action.views/entity :history/undo)
+        redo-action (action.views/entity :history/redo)]
     [views/toolbar
 
-     (->> [new-action open-action save-action]
+     (->> [new-action
+           open-action
+           (or save-action download-action)]
           (map #(views/action-icon-button % :title (action.views/label %)))
           (into [:<>]))
 

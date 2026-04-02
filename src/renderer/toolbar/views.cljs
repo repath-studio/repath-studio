@@ -2,14 +2,13 @@
   (:require
    ["@radix-ui/react-tooltip" :as Tooltip]
    [re-frame.core :as rf]
-   [renderer.action.subs :as-alias action.subs]
    [renderer.action.views :as action.views]
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]))
 
 (defn button
   [id]
-  (when-let [action @(rf/subscribe [::action.subs/entity id])]
+  (when-let [action (action.views/entity id)]
     [:> Tooltip/Root
      [:> Tooltip/Trigger
       {:as-child true}

@@ -4,7 +4,7 @@
    ["path-browserify" :as path-browserify]
    [config :as config]
    [re-frame.core :as rf]
-   [renderer.action.subs :as-alias action.subs]
+   [renderer.action.views :as action.views]
    [renderer.db :as db]
    [renderer.document.events :as-alias document.events]
    [renderer.i18n.views :as i18n.views]
@@ -56,7 +56,7 @@
 
 (defn command
   [id]
-  (let [{:keys [icon label event]} @(rf/subscribe [::action.subs/entity id])
+  (let [{:keys [icon label event]} (action.views/entity id)
         xl? @(rf/subscribe [::window.subs/xl?])]
     [:div.flex.items-center.gap-2.flex-wrap
      [views/icon icon]

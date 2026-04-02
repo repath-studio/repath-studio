@@ -5,7 +5,6 @@
    ["@radix-ui/react-tooltip" :as Tooltip]
    ["@repath-studio/react-color" :refer [ChromePicker PhotoshopPicker]]
    [re-frame.core :as rf]
-   [renderer.action.subs :as-alias action.subs]
    [renderer.action.views :as action.views]
    [renderer.app.subs :as-alias app.subs]
    [renderer.document.events :as-alias document.events]
@@ -95,8 +94,8 @@
 
 (defn zoom-button-group
   [zoom]
-  (let [zoom-out-action @(rf/subscribe [::action.subs/entity :zoom/out])
-        zoom-in-action @(rf/subscribe [::action.subs/entity :zoom/in])]
+  (let [zoom-out-action (action.views/entity :zoom/out)
+        zoom-in-action (action.views/entity :zoom/in)]
     [views/button-group
      (-> zoom-out-action
          (assoc :icon "minus")
