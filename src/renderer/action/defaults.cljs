@@ -425,49 +425,57 @@
   {:id :animate/animate
    :label [::animate "Animate"]
    :icon "animation"
-   :event [::element.events/animate :animate]})
+   :event [::element.events/animate :animate]
+   :enabled [::element.subs/some-selected?]})
 
 (def animate-transform
   {:id :animate/transform
    :label [::animate-transform "Animate Transform"]
    :icon "animation"
-   :event [::element.events/animate :animateTransform]})
+   :event [::element.events/animate :animateTransform]
+   :enabled [::element.subs/some-selected?]})
 
 (def animate-motion
   {:id :animate/motion
    :label [::animate-motion "Animate Motion"]
    :icon "animation"
-   :event [::element.events/animate :animateMotion]})
+   :event [::element.events/animate :animateMotion]
+   :enabled [::element.subs/some-selected?]})
 
 (def path-simplify
   {:id :path/simplify
    :label [::path-simplify "Simplify"]
    :icon "bezier-curve"
-   :event [::element.events/manipulate-path :simplify]})
+   :event [::element.events/manipulate-path :simplify]
+   :enabled [::element.subs/has-selected-tag? :path]})
 
 (def path-smooth
   {:id :path/smooth
    :label [::path-smooth "Smooth"]
    :icon "bezier-curve"
-   :event [::element.events/manipulate-path :smooth]})
+   :event [::element.events/manipulate-path :smooth]
+   :enabled [::element.subs/has-selected-tag? :path]})
 
 (def path-flatten
   {:id :path/flatten
    :label [::path-flatten "Flatten"]
    :icon "bezier-curve"
-   :event [::element.events/manipulate-path :flatten]})
+   :event [::element.events/manipulate-path :flatten]
+   :enabled [::element.subs/has-selected-tag? :path]})
 
 (def path-reverse
   {:id :path/reverse
    :label [::path-reverse "Reverse"]
    :icon "bezier-curve"
-   :event [::element.events/manipulate-path :reverse]})
+   :event [::element.events/manipulate-path :reverse]
+   :enabled [::element.subs/has-selected-tag? :path]})
 
 (def image-trace
   {:id :image/trace
    :label [::image-trace "Trace"]
    :icon "image"
-   :event [::element.events/trace]})
+   :event [::element.events/trace]
+   :enabled [::element.subs/has-selected-tag? :image]})
 
 (def zoom-in
   {:id :zoom/in

@@ -66,6 +66,12 @@
    (->> selected-elements (map :tag) set)))
 
 (rf/reg-sub
+ ::has-selected-tag?
+ :<- [::selected-tags]
+ (fn [selected-tags [_ tag]]
+   (contains? selected-tags tag)))
+
+(rf/reg-sub
  ::some-selected?
  :<- [::selected]
  (comp boolean seq))

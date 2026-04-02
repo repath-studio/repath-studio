@@ -163,12 +163,12 @@
            {:id :image
             :type :sub-menu
             :label [::image "Image"]
-            :enabled [::element.subs/some-selected?]
+            :enabled [::element.subs/has-selected-tag? :image]
             :items image-submenu}
            {:id :path
             :label [::path "Path"]
             :type :sub-menu
-            :enabled [::element.subs/some-selected?]
+            :enabled [::element.subs/has-selected-tag? :path]
             :items path-submenu}]})
 
 (def zoom-submenu
