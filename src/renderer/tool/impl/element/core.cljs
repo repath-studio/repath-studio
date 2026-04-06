@@ -1,5 +1,7 @@
 (ns renderer.tool.impl.element.core
   (:require
+   [re-frame.core :as rf]
+   [renderer.action.events :as-alias action.events]
    [renderer.element.handlers :as element.handlers]
    [renderer.i18n.views :as i18n.views]
    [renderer.tool.handlers :as tool.handlers]
@@ -34,3 +36,20 @@
 (defmethod tool.hierarchy/snapping-elements ::tool.hierarchy/element
   [db]
   (element.handlers/visible db))
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :tools/elements
+               :label [::elements "Elements"]
+               :actions [:tool/circle
+                         :tool/ellipse
+                         :tool/rect
+                         :tool/line
+                         :tool/polyline
+                         :tool/polygon
+                         :tool/image
+                         :tool/text]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :tools/containers
+               :label [::containers "Containers"]
+               :actions [:tool/svg]}])

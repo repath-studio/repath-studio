@@ -662,7 +662,7 @@
  {:label "Pennello"
   :draw-brush "Disegna pennello"}
 
- :renderer.tool.impl.draw.pen
+ :renderer.tool.impl.draw.pencil
  {:label "Penna"
   :draw-line "Disegna linea"}
 

@@ -56,14 +56,14 @@
 
 (defn command
   [id]
-  (let [{:keys [icon label event]} (action.views/entity id)
+  (let [action (action.views/deref-action id)
         xl? @(rf/subscribe [::window.subs/xl?])]
-    [:div.flex.items-center.gap-2.flex-wrap
-     [views/icon icon]
+    [:div.flex.items-center.gap-3.flex-wrap
+     [views/icon (:icon action)]
      [:button.button-link.text-lg
-      {:on-click #(rf/dispatch event)}
-      (i18n.views/t label)]
-     (when xl? [views/shortcuts event])]))
+      {:on-click (action.views/dispatch action)}
+      (action.views/label action)]
+     (when xl? [views/shortcuts action])]))
 
 (defn root
   [recent-documents]
@@ -102,7 +102,7 @@
          [:h2.mb-3.mt-8.text-2xl
           (i18n.views/t [::help "Help"])]
 
-         (->> [:app/command-panel
+         (->> [:dialog/command-panel
                :help/website
                :help/source-code
                :help/changelog]

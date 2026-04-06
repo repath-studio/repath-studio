@@ -21,12 +21,12 @@
   (let [undos @(rf/subscribe [::history.subs/undos])
         redos @(rf/subscribe [::history.subs/redos])
         md? @(rf/subscribe [::window.subs/md?])
-        new-action (action.views/entity :document/new)
-        open-action (action.views/entity :document/open)
-        save-action (action.views/entity :document/save)
-        download-action (action.views/entity :document/download)
-        undo-action (action.views/entity :history/undo)
-        redo-action (action.views/entity :history/redo)]
+        new-action (action.views/deref-action :document/new)
+        open-action (action.views/deref-action :document/open)
+        save-action (action.views/deref-action :document/save)
+        download-action (action.views/deref-action :document/download)
+        undo-action (action.views/deref-action :history/undo)
+        redo-action (action.views/deref-action :history/redo)]
     [views/toolbar
 
      (->> [new-action
@@ -75,8 +75,8 @@
              {:label [::close-others "Close others"]
               :event [::document.events/close-others id]
               :enabled (boolean (seq (rest tabs)))}
-             (action.views/entity :document/close-saved)
-             (action.views/entity :document/close-all)]
+             (action.views/deref-action :document/close-saved)
+             (action.views/deref-action :document/close-all)]
       desktop?
       (concat [{:type :separator}
                {:label [::open-directory "Open containing directory"]
@@ -169,7 +169,7 @@
 
         :always
         (map (comp #(dissoc % :icon)
-                   action.views/entity))
+                   action.views/deref-action))
 
         (and (seq documents)
              (not md?))

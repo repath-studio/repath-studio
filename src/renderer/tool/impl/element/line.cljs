@@ -2,19 +2,19 @@
   "https://www.w3.org/TR/SVG/shapes.html#LineElement"
   (:require
    [clojure.core.matrix :as matrix]
+   [re-frame.core :as rf]
+   [renderer.action.events :as-alias action.events]
    [renderer.document.handlers :as document.handlers]
    [renderer.element.handlers :as element.handlers]
    [renderer.history.handlers :as history.handlers]
+   [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.tool.subs :as-alias tool.subs]
+   [renderer.utils.key :as utils.key]
    [renderer.utils.length :as utils.length]))
 
 (tool.hierarchy/derive-tool :line ::tool.hierarchy/element)
-
-(defmethod tool.hierarchy/properties :line
-  []
-  {:icon "line-tool"
-   :label [::label "Line"]})
 
 (defmethod tool.hierarchy/on-drag-start :line
   [db _e]
@@ -47,3 +47,11 @@
   (-> db
       (history.handlers/finalize [::create-line "Create line"])
       (tool.handlers/activate :transform)))
+
+(rf/dispatch [::action.events/register-action
+              {:id :tool/line
+               :label [::label "Line"]
+               :icon "line"
+               :event [::tool.events/activate :line]
+               :active [::tool.subs/active? :line]
+               :shortcuts [{:keyCode (utils.key/codes "L")}]}])

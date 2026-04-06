@@ -8,6 +8,12 @@
  :-> :tool)
 
 (rf/reg-sub
+ ::active?
+ :<- [::active]
+ (fn [active [_ tool-id]]
+   (= active tool-id)))
+
+(rf/reg-sub
  ::cached
  :-> :cached-tool)
 

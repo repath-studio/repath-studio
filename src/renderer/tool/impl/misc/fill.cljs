@@ -1,19 +1,19 @@
 (ns renderer.tool.impl.misc.fill
   (:require
+   [re-frame.core :as rf]
+   [renderer.action.events :as-alias action.events]
    [renderer.document.handlers :as document.handlers]
    [renderer.element.handlers :as element.handlers]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
+   [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
-   [renderer.utils.element :as utils.element]))
+   [renderer.tool.subs :as-alias tool.subs]
+   [renderer.utils.element :as utils.element]
+   [renderer.utils.key :as utils.key]))
 
 (tool.hierarchy/derive-tool :fill ::tool.hierarchy/tool)
-
-(defmethod tool.hierarchy/properties :fill
-  []
-  {:icon "fill"
-   :label [::label "Fill"]})
 
 (defmethod tool.hierarchy/help [:fill :idle]
   []
@@ -53,3 +53,11 @@
   (-> db
       (assoc :clicked-element (-> e :element))
       (history.handlers/reset-state)))
+
+(rf/dispatch [::action.events/register-action
+              {:id :tool/fill
+               :label [::label "Fill"]
+               :icon "fill"
+               :event [::tool.events/activate :fill]
+               :active [::tool.subs/active? :fill]
+               :shortcuts [{:keyCode (utils.key/codes "F")}]}])

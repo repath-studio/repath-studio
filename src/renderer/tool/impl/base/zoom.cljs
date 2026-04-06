@@ -2,14 +2,18 @@
   (:require
    [re-frame.core :as rf]
    [reagent.core :as reagent]
+   [renderer.action.events :as-alias action.events]
    [renderer.app.effects :as-alias app.effects]
    [renderer.app.handlers :as app.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.frame.handlers :as frame.handlers]
    [renderer.i18n.views :as i18n.views]
    [renderer.snap.handlers :as snap.handlers]
+   [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.tool.subs :as-alias tool.subs]
+   [renderer.utils.key :as utils.key]
    [renderer.utils.svg :as utils.svg]
    [renderer.views :as views]))
 
@@ -21,11 +25,6 @@
  ::set-select-box
  (fn [value]
    (reset! select-box value)))
-
-(defmethod tool.hierarchy/properties :zoom
-  []
-  {:icon "magnifier"
-   :label [::label "Zoom"]})
 
 (defmethod tool.hierarchy/help [:zoom :idle]
   []
@@ -91,3 +90,11 @@
 (defmethod tool.hierarchy/render :zoom
   []
   [element.hierarchy/render @select-box])
+
+(rf/dispatch [::action.events/register-action
+              {:id :tool/zoom
+               :label [::tool-zoom "Zoom"]
+               :icon "magnifier"
+               :event [::tool.events/activate :zoom]
+               :active [::tool.subs/active? :zoom]
+               :shortcuts [{:keyCode (utils.key/codes "Z")}]}])

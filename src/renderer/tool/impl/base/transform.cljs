@@ -4,6 +4,7 @@
    [malli.core :as m]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
+   [renderer.action.events :as-alias action.events]
    [renderer.app.db :refer [App]]
    [renderer.app.handlers :as app.handlers]
    [renderer.app.subs :as-alias app.subs]
@@ -17,12 +18,14 @@
    [renderer.i18n.views :as i18n.views]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.db :refer [Handle]]
+   [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.tool.views :as tool.views]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
+   [renderer.utils.extra :refer [partial-right]]
    [renderer.utils.key :as utils.key]
    [renderer.utils.length :as utils.length]
    [renderer.utils.svg :as utils.svg]
@@ -46,11 +49,6 @@
  ::set-select-box
  (fn [value]
    (reset! select-box value)))
-
-(defmethod tool.hierarchy/properties :transform
-  []
-  {:icon "pointer"
-   :label [::label "Transform"]})
 
 (defmethod tool.hierarchy/help [:transform :idle]
   []
@@ -315,9 +313,9 @@
     (:bbox hovered-svg)
     (element.handlers/translate id (matrix/mul (start-point hovered-svg) -1))))
 
-(m/=> translate-el [:-> App uuid? Vec2 Element boolean? App])
+(m/=> translate-el [:-> App uuid? map? App])
 (defn translate-el
-  [db id offset hovered-svg auto-parent?]
+  [db id {:keys [offset hovered-svg auto-parent]}]
   (let [el (element.handlers/entity db id)
         container-el (element.handlers/parent-container db id)
         parent-el (element.handlers/parent db id)]
@@ -325,7 +323,7 @@
       :always
       (element.handlers/translate id offset)
 
-      (and auto-parent?
+      (and auto-parent
            (not= (:id parent-el) (:id hovered-svg))
            (not (utils.element/svg? el)))
       (swap-parent id hovered-svg container-el))))
@@ -344,8 +342,9 @@
                  :horizontal [0 offset-y]
                  offset)]
     (->> (element.handlers/top-ancestor-ids db)
-         (reduce (fn [db id]
-                   (translate-el db id offset hovered-svg auto-parent?)) db))))
+         (reduce (partial-right translate-el {:offset offset
+                                              :hovered-svg hovered-svg
+                                              :auto-parent auto-parent?}) db))))
 
 (defn drag-start->state
   [clicked-element]
@@ -552,3 +551,11 @@
        [utils.svg/times pivot-point])
 
      [element.hierarchy/render @select-box]]))
+
+(rf/dispatch [::action.events/register-action
+              {:id :tool/transform
+               :label [::label "Transform"]
+               :icon "pointer"
+               :event [::tool.events/activate :transform]
+               :active [::tool.subs/active? :transform]
+               :shortcuts [{:keyCode (utils.key/codes "S")}]}])

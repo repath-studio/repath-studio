@@ -11,11 +11,6 @@
 
 (tool.hierarchy/derive-tool :blob ::tool.hierarchy/element)
 
-(defmethod tool.hierarchy/properties :blob
-  []
-  {:icon "blob"
-   :label [::label "Blob"]})
-
 (defn pointer-delta
   [db]
   (matrix/distance (tool.handlers/snapped-position db)

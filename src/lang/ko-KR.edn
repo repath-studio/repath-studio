@@ -606,7 +606,7 @@
  {:label "브러시"
   :draw-brush "브러시 그리기"}
 
- :renderer.tool.impl.draw.pen
+ :renderer.tool.impl.draw.pencil
  {:label "펜"
   :draw-line "선 그리기"}
 

@@ -100,7 +100,7 @@
     (if (:items item)
       (->> (cmdk-group-inner (:items item) (:label item))
            (into [:<>]))
-      (when-let [action (cond-> item (keyword? item) action.views/entity)]
+      (when-let [action (cond-> item (keyword? item) action.views/deref-action)]
         [cmdk-item (update action :label #(vector label %))]))))
 
 (defn cmdk-group

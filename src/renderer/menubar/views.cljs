@@ -264,7 +264,7 @@
   {:id :help
    :label [::help "Help"]
    :type :root
-   :items [:app/command-panel
+   :items [:dialog/command-panel
            :separator
            :help/website
            :help/source-code
@@ -273,13 +273,13 @@
            :help/privacy-policy
            :separator
            :help/submit-issue
-           :help/report-errors
+           :error/toggle-reporting
            :separator
-           :help/about]})
+           :dialog/about]})
 
 (defn action-menu-item
   [id]
-  (when-let [action (action.views/entity id)]
+  (when-let [action (action.views/deref-action id)]
     (cond-> action
       (:active action)
       (assoc :type :checkbox))))

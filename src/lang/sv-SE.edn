@@ -650,7 +650,7 @@
  {:label "Pensel"
   :draw-brush "Rita pensel"}
 
- :renderer.tool.impl.draw.pen
+ :renderer.tool.impl.draw.pencil
  {:label "Penna"
   :draw-line "Rita linje"}
 

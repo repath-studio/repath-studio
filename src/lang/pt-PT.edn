@@ -646,7 +646,7 @@
  {:label "Pincel"
   :draw-brush "Desenhar com pincel"}
 
- :renderer.tool.impl.draw.pen
+ :renderer.tool.impl.draw.pencil
  {:label "Caneta"
   :draw-line "Desenhar linha"}
 

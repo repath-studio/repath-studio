@@ -10,7 +10,6 @@
    [renderer.app.subs :as-alias app.subs]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
-   [renderer.element.views :as element.views]
    [renderer.event.impl.wheel :as event.impl.wheel]
    [renderer.frame.events :as-alias frame.events]
    [renderer.i18n.views :as i18n.views]
@@ -63,6 +62,13 @@
                         (js->clj :keywordize-keys true))]
        (rf/dispatch-sync [::frame.events/resize dom-rect])))))
 
+(def context-menu-action-groups
+  [:edit/clipboard
+   :object/grouping
+   :object/locking
+   :object/animate
+   :object/entity])
+
 (defn root
   "Our canvas is wrapped within an iframe element that hosts anything
    that needs to be rendered.
@@ -103,8 +109,10 @@
             [:> ContextMenu/Trigger
              [element.hierarchy/render root-el]]
             [:> ContextMenu/Portal
-             (->> element.views/context-menu-actions
-                  (keep action.views/entity)
+             (->> context-menu-action-groups
+                  (map (comp :actions action.views/deref-action-group))
+                  (interpose {:type :separator})
+                  (flatten)
                   (map views/context-menu-item)
                   (into [:> ContextMenu/Content
                          {:class "menu-content context-menu-content"

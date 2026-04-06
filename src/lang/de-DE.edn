@@ -665,7 +665,7 @@
  {:label "Pinsel"
   :draw-brush "Mit Pinsel zeichnen"}
 
- :renderer.tool.impl.draw.pen
+ :renderer.tool.impl.draw.pencil
  {:label "Stift"
   :draw-line "Linie zeichnen"}
 

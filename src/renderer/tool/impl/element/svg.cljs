@@ -1,20 +1,20 @@
 (ns renderer.tool.impl.element.svg
   "https://www.w3.org/TR/SVG/struct.html#SVGElement"
   (:require
+   [re-frame.core :as rf]
+   [renderer.action.events :as-alias action.events]
    [renderer.element.handlers :as element.handlers]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
+   [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.tool.subs :as-alias tool.subs]
+   [renderer.utils.key :as utils.key]
    [renderer.utils.length :as utils.length]
    [renderer.views :as views]))
 
 (tool.hierarchy/derive-tool :svg ::tool.hierarchy/element)
-
-(defmethod tool.hierarchy/properties :svg
-  []
-  {:icon "svg"
-   :label [::label "Svg"]})
 
 (defmethod tool.hierarchy/help [:svg :create]
   []
@@ -54,3 +54,11 @@
   (-> db
       (history.handlers/finalize [::create-svg "Create SVG"])
       (tool.handlers/activate :transform)))
+
+(rf/dispatch [::action.events/register-action
+              {:id :tool/svg
+               :label [::label "Svg"]
+               :icon "svg"
+               :event [::tool.events/activate :svg]
+               :active [::tool.subs/active? :svg]
+               :shortcuts [{:keyCode (utils.key/codes "S")}]}])

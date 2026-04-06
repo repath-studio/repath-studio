@@ -645,7 +645,7 @@
  {:label "Кисть"
   :draw-brush "Рисовать кистью"}
 
- :renderer.tool.impl.draw.pen
+ :renderer.tool.impl.draw.pencil
  {:label "Перо"
   :draw-line "Рисовать линию"}
 

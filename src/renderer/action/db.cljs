@@ -4,6 +4,7 @@
    [renderer.i18n.db :refer [Translation]]))
 
 (def ActionId keyword?)
+(def ActionGroupId keyword?)
 
 (def Shortcut
   [:map {:closed true}
@@ -11,6 +12,12 @@
    [:ctrlKey {:optional true} boolean?]
    [:shiftKey {:optional true} boolean?]
    [:altKey {:optional true} boolean?]])
+
+(def ActionGroup
+  [:map {:closed true}
+   [:id ActionGroupId]
+   [:label Translation]
+   [:actions [:vector ActionId]]])
 
 (def Action
   [:map {:closed true}
@@ -24,8 +31,13 @@
    [:active {:optional true} vector?]])
 
 (def valid-action? (m/validator Action))
+(def valid-action-group? (m/validator ActionGroup))
 
 (def explain-action (m/explainer Action))
+(def explain-action-group (m/explainer ActionGroup))
 
 (def ActionRegistry
   [:map-of ActionId Action])
+
+(def ActionGroupRegistry
+  [:map-of ActionGroupId ActionGroup])

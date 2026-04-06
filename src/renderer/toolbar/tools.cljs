@@ -2,115 +2,101 @@
   (:require
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
    ["@radix-ui/react-tooltip" :as Tooltip]
-   [clojure.string :as string]
    [re-frame.core :as rf]
-   [renderer.app.subs :as-alias app.subs]
+   [renderer.action.views :as action.views]
    [renderer.i18n.views :as i18n.views]
-   [renderer.tool.events :as-alias tool.events]
-   [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]))
 
 (defn button
-  [bordered tool]
-  (let [active-tool @(rf/subscribe [::tool.subs/active])
+  [bordered action]
+  (let [xl? @(rf/subscribe [::window.subs/xl?])
+        active (action.views/checked? action)
         cached-tool @(rf/subscribe [::tool.subs/cached])
-        xl? @(rf/subscribe [::window.subs/xl?])
-        active (= active-tool tool)
-        primary (= cached-tool tool)
-        properties (tool.hierarchy/properties tool)
-        label (or (some-> properties :label i18n.views/t)
-                  (string/capitalize (name tool)))]
-    (when (:icon properties)
-      [:> Tooltip/Root
-       [:> Tooltip/Trigger
-        {:as-child true}
-        [:span
-         [views/radio-icon-button (:icon properties) active
-          {:class [(when primary "outline outline-inset outline-accent")
-                   (when bordered "border border-border")]
-           :aria-label label
-           :on-click #(rf/dispatch [::tool.events/activate tool])}]]]
-       [:> Tooltip/Portal
-        [:> Tooltip/Content
-         {:class "tooltip-content"
-          :sideOffset 10
-          :side "top"
-          :on-escape-key-down #(.stopPropagation %)}
-         [:div.flex.gap-2.items-center
-          label
-          (when xl? [views/shortcuts [::tool.events/activate tool]])]]]])))
+        primary (= cached-tool (keyword (name (:id action))))]
+    [:> Tooltip/Root
+     [:> Tooltip/Trigger
+      {:as-child true}
+      [:span
+       [views/radio-icon-button (:icon action) active
+        {:class [(when primary "outline outline-inset outline-accent")
+                 (when bordered "border border-border")]
+         :aria-label (action.views/label action)
+         :on-click (action.views/dispatch action)}]]]
+     [:> Tooltip/Portal
+      [:> Tooltip/Content
+       {:class "tooltip-content"
+        :sideOffset 10
+        :side "top"
+        :on-escape-key-down #(.stopPropagation %)}
+       [:div.flex.gap-2.items-center
+        (action.views/label action)
+        (when xl? [views/shortcuts action])]]]]))
 
 (defn button-group
-  [items]
-  (into [:div {:class "flex justify-center md:gap-1 gap-0.5"}]
-        (map (partial button false) items)))
+  [action-group]
+  (some->> (:actions action-group)
+           (map (partial button false))
+           (into [:div {:class "flex justify-center md:gap-1 gap-0.5"}])))
 
 (defn dropdown-button
-  [{:keys [label tools]}]
+  [{:keys [label actions]}]
   (let [active-tool @(rf/subscribe [::tool.subs/active])
-        contains-active? (some #{active-tool} tools)
-        top-tool (if contains-active? active-tool (first tools))
-        icon (:icon (tool.hierarchy/properties top-tool))]
-    (if (second tools)
+        contains-active? (some #{active-tool} actions)
+        top-tool (if contains-active? active-tool (first actions))]
+    (if (second actions)
       [:> DropdownMenu/Root
        [:> DropdownMenu/Trigger
         {:as-child true}
-        [:button.button.flex.items-center.justify-center.px-2.font-mono
-         {:class ["rounded-sm gap-1 border border-border"
-                  (when contains-active?
-                    "bg-accent text-accent-foreground! hover:bg-accent-light
-                     aria-expanded:bg-accent-light active:bg-accent-light")]
-          :aria-label (i18n.views/t label)}
-         [views/icon icon]
-         [views/icon "chevron-down"]]]
+        [:div
+         [:> Tooltip/Root
+          [:> Tooltip/Trigger
+           {:as-child true}
+           [:button.button.flex.items-center.justify-center.px-2.font-mono
+            {:class ["rounded-sm gap-1 border border-border"
+                     (when contains-active?
+                       "bg-accent text-accent-foreground! hover:bg-accent-light
+                       aria-expanded:bg-accent-light active:bg-accent-light")]}
+            [views/icon (:icon top-tool)]
+            [views/icon "chevron-down"]]]
+          [:> Tooltip/Portal
+           [:> Tooltip/Content
+            {:class "tooltip-content"
+             :sideOffset 10
+             :side "top"
+             :on-escape-key-down #(.stopPropagation %)}
+            [:div.flex.gap-2.items-center
+             (i18n.views/t label)]]]]]]
+
        [:> DropdownMenu/Portal
-        (->> tools
-             (mapv (fn [tool]
-                     (let [properties (tool.hierarchy/properties tool)]
-                       {:label (:label properties)
-                        :event [::tool.events/activate tool]
-                        :icon (:icon properties)})))
+        (->> actions
+             (map views/dropdown-menu-item)
              (into [:> DropdownMenu/Content
                     {:side "bottom"
                      :align "middle"
                      :class "menu-content rounded-sm"
                      :on-key-down #(.stopPropagation %)
                      :on-escape-key-down #(.stopPropagation %)}
-                    [views/dropdownmenu-arrow]]
-                   (map views/dropdown-menu-item)))]]
+                    [views/dropdownmenu-arrow]]))]]
       [button true top-tool])))
 
-(defn groups []
-  [{:id :transform
-    :label [::transform "Transform tools"]
-    :tools [:transform :edit :pan :zoom]}
-   {:id :containers
-    :label [::containers "Container tools"]
-    :tools [:svg]}
-   {:id :shapes
-    :label [::shapes "Shape tools"]
-    :tools [:circle :ellipse :rect :line :polyline :polygon :image :text]}
-   {:id :drawing
-    :label [::drawing "Drawing tools"]
-    :tools [:brush :pen]}
-   {:id :misc
-    :label [::misc "Miscallaneous tools"]
-    :tools (cond-> [:fill :measure]
-             @(rf/subscribe [::app.subs/supported-feature? :eye-dropper])
-             (conj :dropper))}])
+(def action-groups
+  [:tools/transform
+   :tools/containers
+   :tools/elements
+   :tools/draw
+   :tools/misc])
 
 (defn root
   []
   (let [xl @(rf/subscribe [::window.subs/xl?])]
     (if xl
-      (->> (groups)
-           (map :tools)
-           (map button-group)
+      (->> action-groups
+           (keep (comp button-group action.views/deref-action-group))
            (interpose [:span.v-divider])
            (into [views/toolbar {:class "justify-center bg-primary"}]))
-      (->> (groups)
-           (map dropdown-button)
+      (->> action-groups
+           (keep (comp dropdown-button action.views/deref-action-group))
            (into [views/toolbar {:class "bg-primary justify-center py-2
                                          gap-2"}])))))
