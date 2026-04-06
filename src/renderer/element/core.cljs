@@ -193,7 +193,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :align/left
-               :label [::align-left "Left"]
+               :label [::align-left "Align left"]
                :icon "objects-align-left"
                :event [::element.events/align :left]
                :enabled [::element.subs/not-every-top-level?]}])
@@ -207,14 +207,14 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :align/right
-               :label [::align-right "Right"]
+               :label [::align-right "Align right"]
                :icon "objects-align-right"
                :event [::element.events/align :right]
                :enabled [::element.subs/not-every-top-level?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :align/top
-               :label [::align-top "Top"]
+               :label [::align-top "Align top"]
                :icon "objects-align-top"
                :event [::element.events/align :top]
                :enabled [::element.subs/not-every-top-level?]}])
@@ -228,7 +228,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :align/bottom
-               :label [::align-bottom "Bottom"]
+               :label [::align-bottom "Align bottom"]
                :icon "objects-align-bottom"
                :event [::element.events/align :bottom]
                :enabled [::element.subs/not-every-top-level?]}])

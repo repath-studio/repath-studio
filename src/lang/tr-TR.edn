@@ -61,99 +61,9 @@
   :accessibility-filter "Erişilebilirlik filtresi"
   :language "Dil"
   :panel "Panel"
-  :help "Yardım"}
-
- :renderer.action.defaults
- {:new "Yeni"
-  :open "Aç..."
+  :help "Yardım"
   :recent "Son Kullanılan"
-  :recent-clear "Son kullanılanları temizle"
-  :print "Yazdır"
-  :save "Kaydet"
-  :save-as "Farklı kaydet..."
-  :download "İndir"
-  :close "Kapat"
-  :close-all "Tümünü kapat"
-  :close-saved "Kaydedilenleri kapat"
-  :exit "Çıkış"
-  :undo "Geri al"
-  :redo "Yinele"
-  :cut "Kes"
-  :copy "Kopyala"
-  :paste "Yapıştır"
-  :paste-in-place "Yerinde yapıştır"
-  :paste-styles "Stilleri yapıştır"
-  :duplicate "Çoğalt"
-  :select-all "Tümünü seç"
-  :deselect-all "Tüm seçimi kaldır"
-  :invert-selection "Seçimi ters çevir"
-  :select-same-tags "Aynı etiketleri seç"
-  :delete "Sil"
-  :object-to-path "Nesneyi yola dönüştür"
-  :stroke-to-path "Çizgiyi yola dönüştür"
-  :group "Grupla"
-  :ungroup "Grubu çöz"
-  :lock "Kilitle"
-  :unlock "Kilidi aç"
-  :align-left "Sola hizala"
-  :align-right "Sağa hizala"
-  :align-top "Yukarı hizala"
-  :align-bottom "Aşağı hizala"
-  :center-vertically "Dikey ortala"
-  :center-horizontally "Yatay ortala"
-  :animate "Animasyon"
-  :animate-transform "Dönüşüm Animasyonu"
-  :animate-motion "Hareket Animasyonu"
-  :boolean-exclude "Dışla"
-  :boolean-unite "Birleştir"
-  :boolean-intersect "Kesişim"
-  :boolean-subtract "Çıkar"
-  :boolean-divide "Böl"
-  :raise "Öne getir"
-  :lower "Arkaya gönder"
-  :raise-to-top "En öne getir"
-  :lower-to-bottom "En arkaya gönder"
-  :image-trace "İz sür"
-  :path-simplify "Basitleştir"
-  :path-smooth "Yumuşat"
-  :path-flatten "Düzleştir"
-  :path-reverse "Ters çevir"
-  :zoom-in "Yakınlaştır"
-  :zoom-out "Uzaklaştır"
-  :zoom-set-50 "%50'ye ayarla"
-  :zoom-set-100 "%100'e ayarla"
-  :zoom-set-200 "%200'e ayarla"
-  :zoom-focus-selected "Seçilene odaklan"
-  :zoom-fit-selected "Seçilene sığdır"
-  :zoom-fill-selected "Seçileni doldur"
-  :dark "Koyu"
-  :light "Açık"
-  :system "Sistem"
-  :grid "Izgara"
-  :rulers "Cetveller"
-  :help-bar "Yardım çubuğu"
-  :debug-info "Hata ayıklama bilgisi"
-  :panel-element-tree "Öğe ağacı"
-  :panel-properties "Özellikler"
-  :panel-xml-view "XML görünümü"
-  :panel-history-tree "Geçmiş ağacı"
-  :panel-shell-history "Kabuk geçmişi"
-  :panel-timeline-editor "Zaman çizelgesi düzenleyicisi"
-  :fullscreen "Tam ekran"
-  :command-panel "Komut paneli"
-  :website "Web sitesi"
-  :source-code "Kaynak kodu"
-  :license "Lisans"
-  :changelog "Değişiklik günlüğü"
-  :privacy-policy "Gizlilik Politikası"
-  :submit-an-issue "Sorun bildir"
-  :report-errors "Hataları otomatik olarak bildir"
-  :about "Hakkında"
-  :snap "Yapış"
-  :centers "merkezler"
-  :midpoints "orta noktalar"
-  :corners "köşeler"
-  :nodes "düğümler"}
+  :recent-clear "Son kullanılanları temizle"}
 
  :renderer.a11y.db
  {:blur "Bulanık"
@@ -455,7 +365,9 @@
 
  :renderer.tool.impl.element.core
  {:help "Bir öğe oluşturmak için tıklayın ve sürükleyin."
-  :edge "kenar"}
+  :edge "kenar"
+  :elements "Öğeler"
+  :containers "Kapsayıcılar"}
 
  :renderer.tool.impl.element.poly
  {:add-points "Daha fazla nokta eklemek için tıklayın."
@@ -607,7 +519,8 @@
   :select-element "Eleman seç"
   :edit "Düzenle"
   :centroid "Ağırlık merkezi"
-  :handle "tutamak"}
+  :handle "tutamak"
+  :tool-edit "Düzenle"}
 
  :renderer.tool.impl.base.transform
  {:label "Dönüştür"
@@ -633,12 +546,14 @@
  :renderer.tool.impl.base.pan
  {:label "Kaydır"
   :idle-help "Kaydırmak için tıklayın ve sürükleyin."
-  :pan-help "Kaydırmak için sürükleyin."}
+  :pan-help "Kaydırmak için sürükleyin."
+  :tool-pan "Kaydır"}
 
  :renderer.tool.impl.base.zoom
  {:label "Yakınlaştır"
   :zoom-in [:div "Yakınlaştırmak için tıklayın veya bir alan seçin."]
-  :zoom-out [:div "Uzaklaştırmak için %1 tuşunu basılı tutun."]}
+  :zoom-out [:div "Uzaklaştırmak için %1 tuşunu basılı tutun."]
+  :tool-zoom "Yakınlaştır"}
 
  :renderer.tool.impl.draw.brush
  {:label "Fırça"
@@ -649,7 +564,8 @@
   :draw-line "Çizgi çiz"}
 
  :renderer.tool.impl.draw.core
- {:help "Çizmek için tıklayın ve sürükleyin."}
+ {:help "Çizmek için tıklayın ve sürükleyin."
+  :draw "Çiz"}
 
  :renderer.tool.impl.element.circle
  {:label "Daire"
@@ -758,4 +674,146 @@
  {:permission-denied "Dosyaya erişim izni reddedildi."}
 
  :renderer.panel.views
- {:close-panel "Paneli kapat"}}
+ {:close-panel "Paneli kapat"}
+
+ :renderer.app.core
+ {:grid "Izgara"
+  :help-bar "Yardım çubuğu"
+  :debug-info "Hata ayıklama bilgisi"}
+
+ :renderer.dialog.core
+ {:command-panel "Komut paneli"
+  :about "Hakkında"}
+
+ :renderer.document.core
+ {:new "Yeni"
+  :open "Aç..."
+  :print "Yazdır"
+  :save "Kaydet"
+  :save-as "Farklı kaydet..."
+  :download "İndir"
+  :close "Kapat"
+  :close-all "Tümünü kapat"
+  :close-saved "Kaydedilenleri kapat"
+  :svg "SVG"
+  :png "PNG"
+  :jpg "JPG"
+  :webp "WEBP"
+  :gif "GIF"}
+
+ :renderer.element.core
+ {:cut "Kes"
+  :copy "Kopyala"
+  :paste "Yapıştır"
+  :paste-in-place "Yerinde yapıştır"
+  :paste-styles "Stilleri yapıştır"
+  :duplicate "Çoğalt"
+  :select-all "Tümünü seç"
+  :deselect-all "Tüm seçimi kaldır"
+  :invert-selection "Seçimi ters çevir"
+  :select-same-tags "Aynı etiketleri seç"
+  :delete "Sil"
+  :object-to-path "Nesneyi yola dönüştür"
+  :stroke-to-path "Çizgiyi yola dönüştür"
+  :group "Grupla"
+  :ungroup "Grubu çöz"
+  :lock "Kilitle"
+  :unlock "Kilidi aç"
+  :align-left "Sola hizala"
+  :align-right "Sağa hizala"
+  :align-top "Yukarı hizala"
+  :align-bottom "Aşağı hizala"
+  :center-vertically "Dikey ortala"
+  :center-horizontally "Yatay ortala"
+  :animate "Animasyon"
+  :animate-transform "Dönüşüm Animasyonu"
+  :animate-motion "Hareket Animasyonu"
+  :boolean-exclude "Dışla"
+  :boolean-unite "Birleştir"
+  :boolean-intersect "Kesişim"
+  :boolean-subtract "Çıkar"
+  :boolean-divide "Böl"
+  :raise "Öne getir"
+  :lower "Arkaya gönder"
+  :raise-to-top "En öne getir"
+  :lower-to-bottom "En arkaya gönder"
+  :image-trace "İz sür"
+  :path-simplify "Basitleştir"
+  :path-smooth "Yumuşat"
+  :path-flatten "Düzleştir"
+  :path-reverse "Ters çevir"
+  :index-operations "İndeks İşlemleri"
+  :boolean-operations "Boole İşlemleri"
+  :horizontal-alignment "Yatay Hizalama"
+  :vertical-alignment "Dikey Hizalama"
+  :clipboard "Pano"
+  :grouping "Gruplama"
+  :locking "Kilitleme"
+  :entity "Varlık"}
+
+ :renderer.error.core
+ {:report-errors "Hataları otomatik olarak bildir"}
+
+ :renderer.frame.core
+ {:zoom-in "Yakınlaştır"
+  :zoom-out "Uzaklaştır"
+  :zoom-set-50 "%50'ye ayarla"
+  :zoom-set-100 "%100'e ayarla"
+  :zoom-set-200 "%200'e ayarla"
+  :zoom-focus-selected "Seçilene odaklan"
+  :zoom-fit-selected "Seçilene sığdır"
+  :zoom-fill-selected "Seçileni doldur"}
+
+ :renderer.history.core
+ {:undo "Geri al"
+  :redo "Yinele"
+  :history "History"}
+
+ :renderer.menubar.core
+ {:website "Web sitesi"
+  :source-code "Kaynak kodu"
+  :license "Lisans"
+  :changelog "Değişiklik günlüğü"
+  :privacy-policy "Gizlilik Politikası"
+  :submit-an-issue "Sorun bildir"
+  :menubar-file "Dosya Menüsü"
+  :menubar-edit "Düzenleme Menüsü"
+  :menubar-object "Nesne Menüsü"
+  :menubar-view "Görünüm Menüsü"
+  :menubar-help "Yardım Menüsü"}
+
+ :renderer.panel.core
+ {:panel-element-tree "Öğe ağacı"
+  :panel-properties "Özellikler"
+  :panel-xml-view "XML görünümü"
+  :panel-history-tree "Geçmiş ağacı"
+  :panel-shell-history "Kabuk geçmişi"
+  :panel-timeline-editor "Zaman çizelgesi düzenleyicisi"}
+
+ :renderer.ruler.core
+ {:rulers "Cetveller"}
+
+ :renderer.snap.core
+ {:snap "Yapış"
+  :centers "merkezler"
+  :midpoints "orta noktalar"
+  :corners "köşeler"
+  :nodes "düğümler"}
+
+ :renderer.theme.core
+ {:dark "Koyu"
+  :light "Açık"
+  :system "Sistem"}
+
+ :renderer.window.core
+ {:exit "Çıkış"
+  :fullscreen "Tam ekran"}
+
+ :renderer.tool.core
+ {:cancel "İptal"}
+
+ :renderer.tool.impl.base.core
+ {:transform "Dönüştür"}
+
+ :renderer.tool.impl.misc.core
+ {:misc "Miscallaneous"}}

@@ -61,99 +61,9 @@
   :accessibility-filter "Accessibility filter"
   :language "Language"
   :panel "Panel"
-  :help "Help"}
-
- :renderer.action.defaults
- {:new "New"
-  :open "Open..."
+  :help "Help"
   :recent "Recent"
-  :recent-clear "Clear recent"
-  :print "Print"
-  :save "Save"
-  :save-as "Save as..."
-  :download "Download"
-  :close "Close"
-  :close-all "Close all"
-  :close-saved "Close saved"
-  :exit "Exit"
-  :undo "Undo"
-  :redo "Redo"
-  :cut "Cut"
-  :copy "Copy"
-  :paste "Paste"
-  :paste-in-place "Paste in place"
-  :paste-styles "Paste styles"
-  :duplicate "Duplicate"
-  :select-all "Select all"
-  :deselect-all "Deselect all"
-  :invert-selection "Invert selection"
-  :select-same-tags "Select same tags"
-  :delete "Delete"
-  :object-to-path "Object to path"
-  :stroke-to-path "Stroke to path"
-  :group "Group"
-  :ungroup "Ungroup"
-  :lock "Lock"
-  :unlock "Unlock"
-  :align-left "Align left"
-  :align-right "Align right"
-  :align-top "Align top"
-  :align-bottom "Align bottom"
-  :center-vertically "Center vertically"
-  :center-horizontally "Center horizontally"
-  :animate "Animate"
-  :animate-transform "Animate Transform"
-  :animate-motion "Animate Motion"
-  :boolean-exclude "Exclude"
-  :boolean-unite "Unite"
-  :boolean-intersect "Intersect"
-  :boolean-subtract "Subtract"
-  :boolean-divide "Divide"
-  :raise "Raise"
-  :lower "Lower"
-  :raise-to-top "Raise to top"
-  :lower-to-bottom "Lower to bottom"
-  :image-trace "Trace"
-  :path-simplify "Simplify"
-  :path-smooth "Smooth"
-  :path-flatten "Flatten"
-  :path-reverse "Reverse"
-  :zoom-out "Zoom out"
-  :zoom-in "Zoom in"
-  :zoom-set-50 "Set to 50%"
-  :zoom-set-100 "Set to 100%"
-  :zoom-set-200 "Set to 200%"
-  :zoom-focus-selected "Focus selected"
-  :zoom-fit-selected "Fit selected"
-  :zoom-fill-selected "Fill selected"
-  :dark "Dark"
-  :light "Light"
-  :system "System"
-  :grid "Grid"
-  :rulers "Rulers"
-  :help-bar "Help bar"
-  :debug-info "Debug info"
-  :panel-element-tree "Element tree"
-  :panel-properties "Properties"
-  :panel-xml-view "XML view"
-  :panel-history-tree "History tree"
-  :panel-shell-history "Shell history"
-  :panel-timeline-editor "Timeline editor"
-  :fullscreen "Fullscreen"
-  :command-panel "Command panel"
-  :website "Website"
-  :source-code "Source Code"
-  :license "License"
-  :changelog "Changelog"
-  :privacy-policy "Privacy Policy"
-  :submit-an-issue "Submit an issue"
-  :report-errors "Report errors automatically"
-  :about "About"
-  :snap "Snap"
-  :centers "centers"
-  :midpoints "midpoints"
-  :corners "corners"
-  :nodes "nodes"}
+  :recent-clear "Clear recent"}
 
  :renderer.a11y.db
  {:blur "Blur"
@@ -453,7 +363,9 @@
 
  :renderer.tool.impl.element.core
  {:help "Click and drag to create an element."
-  :edge "edge"}
+  :edge "edge"
+  :elements "Elements"
+  :containers "Containers"}
 
  :renderer.tool.impl.element.poly
  {:add-points "Click to add more points."
@@ -603,7 +515,8 @@
   :select-element "Select element"
   :edit "Edit"
   :centroid "Centroid"
-  :handle "handle"}
+  :handle "handle"
+  :tool-edit "Edit"}
 
  :renderer.tool.impl.base.transform
  {:label "Transform"
@@ -625,12 +538,14 @@
  :renderer.tool.impl.base.pan
  {:label "Pan"
   :idle-help "Click and drag to pan."
-  :pan-help "Drag to pan."}
+  :pan-help "Drag to pan."
+  :tool-pan "Pan"}
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
   :zoom-in [:div "Click or select an area to zoom in."]
-  :zoom-out [:div "Hold %1 to zoom out."]}
+  :zoom-out [:div "Hold %1 to zoom out."]
+  :tool-zoom "Zoom"}
 
  :renderer.tool.impl.draw.brush
  {:label "Brush"
@@ -641,7 +556,8 @@
   :draw-line "Draw line"}
 
  :renderer.tool.impl.draw.core
- {:help "Click and drag to draw."}
+ {:help "Click and drag to draw."
+  :draw "Draw"}
 
  :renderer.tool.impl.element.circle
  {:label "Circle"
@@ -749,4 +665,146 @@
  {:permission-denied "Permission to access the file was denied."}
 
  :renderer.panel.views
- {:close-panel "Close panel"}}
+ {:close-panel "Close panel"}
+
+ :renderer.app.core
+ {:grid "Grid"
+  :help-bar "Help bar"
+  :debug-info "Debug info"}
+
+ :renderer.dialog.core
+ {:command-panel "Command panel"
+  :about "About"}
+
+ :renderer.document.core
+ {:new "New"
+  :open "Open…"
+  :print "Print"
+  :save "Save"
+  :save-as "Save as…"
+  :download "Download"
+  :close "Close"
+  :close-all "Close all"
+  :close-saved "Close saved"
+  :svg "SVG"
+  :png "PNG"
+  :jpg "JPG"
+  :webp "WEBP"
+  :gif "GIF"}
+
+ :renderer.element.core
+ {:cut "Cut"
+  :copy "Copy"
+  :paste "Paste"
+  :paste-in-place "Paste in place"
+  :paste-styles "Paste styles"
+  :duplicate "Duplicate"
+  :select-all "Select all"
+  :deselect-all "Deselect all"
+  :invert-selection "Invert selection"
+  :select-same-tags "Select same tags"
+  :delete "Delete"
+  :object-to-path "Object to path"
+  :stroke-to-path "Stroke to path"
+  :group "Group"
+  :ungroup "Ungroup"
+  :lock "Lock"
+  :unlock "Unlock"
+  :align-left "Align left"
+  :align-right "Align right"
+  :align-top "Align top"
+  :align-bottom "Align bottom"
+  :center-vertically "Center vertically"
+  :center-horizontally "Center horizontally"
+  :animate "Animate"
+  :animate-transform "Animate Transform"
+  :animate-motion "Animate Motion"
+  :boolean-exclude "Exclude"
+  :boolean-unite "Unite"
+  :boolean-intersect "Intersect"
+  :boolean-subtract "Subtract"
+  :boolean-divide "Divide"
+  :raise "Raise"
+  :lower "Lower"
+  :raise-to-top "Raise to top"
+  :lower-to-bottom "Lower to bottom"
+  :image-trace "Trace"
+  :path-simplify "Simplify"
+  :path-smooth "Smooth"
+  :path-flatten "Flatten"
+  :path-reverse "Reverse"
+  :index-operations "Index operations"
+  :boolean-operations "Boolean operations"
+  :horizontal-alignment "Horizontal alignment"
+  :vertical-alignment "Vertical alignment"
+  :clipboard "Clipboard"
+  :grouping "Grouping"
+  :locking "Locking"
+  :entity "Entity"}
+
+ :renderer.error.core
+ {:report-errors "Report errors automatically"}
+
+ :renderer.frame.core
+ {:zoom-out "Out"
+  :zoom-in "In"
+  :zoom-set-50 "Set to 50%"
+  :zoom-set-100 "Set to 100%"
+  :zoom-set-200 "Set to 200%"
+  :zoom-focus-selected "Focus selected"
+  :zoom-fit-selected "Fit selected"
+  :zoom-fill-selected "Fill selected"}
+
+ :renderer.history.core
+ {:undo "Undo"
+  :redo "Redo"
+  :history "History"}
+
+ :renderer.menubar.core
+ {:website "Website"
+  :source-code "Source Code"
+  :license "License"
+  :changelog "Changelog"
+  :privacy-policy "Privacy Policy"
+  :submit-an-issue "Submit an issue"
+  :menubar-file "File menu"
+  :menubar-edit "Edit menu"
+  :menubar-object "Object menu"
+  :menubar-view "View menu"
+  :menubar-help "Help menu"}
+
+ :renderer.panel.core
+ {:panel-element-tree "Element tree"
+  :panel-properties "Properties"
+  :panel-xml-view "XML view"
+  :panel-history-tree "History tree"
+  :panel-shell-history "Shell history"
+  :panel-timeline-editor "Timeline editor"}
+
+ :renderer.ruler.core
+ {:rulers "Rulers"}
+
+ :renderer.snap.core
+ {:snap "Snap"
+  :centers "centers"
+  :midpoints "midpoints"
+  :corners "corners"
+  :nodes "nodes"}
+
+ :renderer.theme.core
+ {:dark "Dark"
+  :light "Light"
+  :system "System"}
+
+ :renderer.window.core
+ {:exit "Exit"
+  :fullscreen "Fullscreen"}
+
+ :renderer.tool.core
+ {:cancel "Cancel"}
+
+ :renderer.tool.impl.base.core
+ {:transform "Transform"}
+
+ :renderer.tool.impl.misc.core
+ {:misc "Miscallaneous"}}

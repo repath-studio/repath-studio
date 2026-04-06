@@ -7,7 +7,7 @@
   :xml "XML"
   :timeline "Tidslinje"
   :shell "Skal"
-  :history "Historik"
+  :history "Historia"
   :attributes "Attribut"}
 
  :renderer.home.views
@@ -61,99 +61,9 @@
   :accessibility-filter "Tillgänglighetsfilter"
   :language "Språk"
   :panel "Panel"
-  :help "Hjälp"}
-
- :renderer.action.defaults
- {:new "Ny"
-  :open "Öppna..."
+  :help "Hjälp"
   :recent "Senaste"
-  :recent-clear "Rensa senaste"
-  :print "Skriv ut"
-  :save "Spara"
-  :save-as "Spara som..."
-  :download "Ladda ner"
-  :close "Stäng"
-  :close-all "Stäng alla"
-  :close-saved "Stäng sparade"
-  :exit "Avsluta"
-  :undo "Ångra"
-  :redo "Gör om"
-  :cut "Klipp ut"
-  :copy "Kopiera"
-  :paste "Klistra in"
-  :paste-in-place "Klistra in på plats"
-  :paste-styles "Klistra in stilar"
-  :duplicate "Duplicera"
-  :select-all "Markera allt"
-  :deselect-all "Avmarkera allt"
-  :invert-selection "Invertera markering"
-  :select-same-tags "Markera samma taggar"
-  :delete "Ta bort"
-  :object-to-path "Objekt till bana"
-  :stroke-to-path "Linje till bana"
-  :group "Gruppera"
-  :ungroup "Dela upp grupp"
-  :lock "Lås"
-  :unlock "Lås upp"
-  :align-left "Justera vänster"
-  :align-right "Justera höger"
-  :align-top "Justera topp"
-  :align-bottom "Justera botten"
-  :center-vertically "Centrera vertikalt"
-  :center-horizontally "Centrera horisontellt"
-  :animate "Animera"
-  :animate-transform "Animera transformation"
-  :animate-motion "Animera rörelse"
-  :boolean-exclude "Exkludera"
-  :boolean-unite "Förena"
-  :boolean-intersect "Skära"
-  :boolean-subtract "Subtrahera"
-  :boolean-divide "Dela"
-  :raise "Lyft fram"
-  :lower "Lägg bak"
-  :raise-to-top "Lyft till toppen"
-  :lower-to-bottom "Lägg längst bak"
-  :image-trace "Spåra"
-  :path-simplify "Förenkla"
-  :path-smooth "Jämna ut"
-  :path-flatten "Platta ut"
-  :path-reverse "Vänd"
-  :zoom-in "Zooma in"
-  :zoom-out "Zooma ut"
-  :zoom-set-50 "Sätt till 50%"
-  :zoom-set-100 "Sätt till 100%"
-  :zoom-set-200 "Sätt till 200%"
-  :zoom-focus-selected "Fokusera markerat"
-  :zoom-fit-selected "Anpassa markerat"
-  :zoom-fill-selected "Fyll markerat"
-  :dark "Mörk"
-  :light "Ljus"
-  :system "System"
-  :grid "Rutnät"
-  :rulers "Linjaler"
-  :help-bar "Hjälpfält"
-  :debug-info "Felsökningsinformation"
-  :panel-element-tree "Elementträd"
-  :panel-properties "Egenskaper"
-  :panel-xml-view "XML-vy"
-  :panel-history-tree "Historikträd"
-  :panel-shell-history "Skalhistorik"
-  :panel-timeline-editor "Tidslinjeeditor"
-  :fullscreen "Helskärm"
-  :command-panel "Kommandopanel"
-  :website "Webbplats"
-  :source-code "Källkod"
-  :license "Licens"
-  :changelog "Ändringslogg"
-  :privacy-policy "Integritetspolicy"
-  :submit-an-issue "Rapportera ett problem"
-  :report-errors "Rapportera fel automatiskt"
-  :about "Om"
-  :snap "Fäst"
-  :centers "centrum"
-  :midpoints "mittpunkter"
-  :corners "hörn"
-  :nodes "noder"}
+  :recent-clear "Rensa senaste"}
 
  :renderer.a11y.db
  {:blur "Suddig"
@@ -461,7 +371,9 @@
 
  :renderer.tool.impl.element.core
  {:help "Klicka och dra för att skapa ett element."
-  :edge "kant"}
+  :edge "kant"
+  :elements "Element"
+  :containers "Behållare"}
 
  :renderer.tool.impl.element.poly
  {:add-points "Klicka för att lägga till fler punkter."
@@ -614,7 +526,8 @@
   :select-element "Välj element"
   :edit "Redigera"
   :centroid "Centroid"
-  :handle "handtag"}
+  :handle "handtag"
+  :tool-edit "Redigera"}
 
  :renderer.tool.impl.base.transform
  {:label "Transformera"
@@ -639,12 +552,14 @@
  :renderer.tool.impl.base.pan
  {:label "Panorera"
   :idle-help "Klicka och dra för att panorera."
-  :pan-help "Dra för att panorera."}
+  :pan-help "Dra för att panorera."
+  :tool-pan "Panorera"}
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
   :zoom-in [:div "Klicka eller markera ett område för att zooma in."]
-  :zoom-out [:div "Håll %1 för att zooma ut."]}
+  :zoom-out [:div "Håll %1 för att zooma ut."]
+  :tool-zoom "Zooma"}
 
  :renderer.tool.impl.draw.brush
  {:label "Pensel"
@@ -655,7 +570,8 @@
   :draw-line "Rita linje"}
 
  :renderer.tool.impl.draw.core
- {:help "Klicka och dra för att rita."}
+ {:help "Klicka och dra för att rita."
+  :draw "Rita"}
 
  :renderer.tool.impl.element.circle
  {:label "Cirkel"
@@ -763,4 +679,146 @@
  {:permission-denied "Tillstånd att komma åt filen nekades."}
 
  :renderer.panel.views
- {:close-panel "Stäng panel"}}
+ {:close-panel "Stäng panel"}
+
+ :renderer.app.core
+ {:grid "Rutnät"
+  :help-bar "Hjälpfält"
+  :debug-info "Felsökningsinformation"}
+
+ :renderer.dialog.core
+ {:command-panel "Kommandopanel"
+  :about "Om"}
+
+ :renderer.document.core
+ {:new "Ny"
+  :open "Öppna..."
+  :print "Skriv ut"
+  :save "Spara"
+  :save-as "Spara som..."
+  :download "Ladda ner"
+  :close "Stäng"
+  :close-all "Stäng alla"
+  :close-saved "Stäng sparade"
+  :svg "SVG"
+  :png "PNG"
+  :jpg "JPG"
+  :webp "WEBP"
+  :gif "GIF"}
+
+ :renderer.element.core
+ {:cut "Klipp ut"
+  :copy "Kopiera"
+  :paste "Klistra in"
+  :paste-in-place "Klistra in på plats"
+  :paste-styles "Klistra in stilar"
+  :duplicate "Duplicera"
+  :select-all "Markera allt"
+  :deselect-all "Avmarkera allt"
+  :invert-selection "Invertera markering"
+  :select-same-tags "Markera samma taggar"
+  :delete "Ta bort"
+  :object-to-path "Objekt till bana"
+  :stroke-to-path "Linje till bana"
+  :group "Gruppera"
+  :ungroup "Dela upp grupp"
+  :lock "Lås"
+  :unlock "Lås upp"
+  :align-left "Justera vänster"
+  :align-right "Justera höger"
+  :align-top "Justera topp"
+  :align-bottom "Justera botten"
+  :center-vertically "Centrera vertikalt"
+  :center-horizontally "Centrera horisontellt"
+  :animate "Animera"
+  :animate-transform "Animera transformation"
+  :animate-motion "Animera rörelse"
+  :boolean-exclude "Exkludera"
+  :boolean-unite "Förena"
+  :boolean-intersect "Skära"
+  :boolean-subtract "Subtrahera"
+  :boolean-divide "Dela"
+  :raise "Lyft fram"
+  :lower "Lägg bak"
+  :raise-to-top "Lyft till toppen"
+  :lower-to-bottom "Lägg längst bak"
+  :image-trace "Spåra"
+  :path-simplify "Förenkla"
+  :path-smooth "Jämna ut"
+  :path-flatten "Platta ut"
+  :path-reverse "Vänd"
+  :index-operations "Indexoperationer"
+  :boolean-operations "Booleska Operationer"
+  :horizontal-alignment "Horisontell Justering"
+  :vertical-alignment "Vertikal Justering"
+  :clipboard "Urklipp"
+  :grouping "Gruppering"
+  :locking "Låsning"
+  :entity "Entitet"}
+
+ :renderer.error.core
+ {:report-errors "Rapportera fel automatiskt"}
+
+ :renderer.frame.core
+ {:zoom-in "Zooma in"
+  :zoom-out "Zooma ut"
+  :zoom-set-50 "Sätt till 50%"
+  :zoom-set-100 "Sätt till 100%"
+  :zoom-set-200 "Sätt till 200%"
+  :zoom-focus-selected "Fokusera markerat"
+  :zoom-fit-selected "Anpassa markerat"
+  :zoom-fill-selected "Fyll markerat"}
+
+ :renderer.history.core
+ {:undo "Ångra"
+  :redo "Gör om"
+  :history "History"}
+
+ :renderer.menubar.core
+ {:website "Webbplats"
+  :source-code "Källkod"
+  :license "Licens"
+  :changelog "Ändringslogg"
+  :privacy-policy "Integritetspolicy"
+  :submit-an-issue "Rapportera ett problem"
+  :menubar-file "Arkivmeny"
+  :menubar-edit "Redigeringsmeny"
+  :menubar-object "Objektmeny"
+  :menubar-view "Visningsmeny"
+  :menubar-help "Hjälpmeny"}
+
+ :renderer.panel.core
+ {:panel-element-tree "Elementträd"
+  :panel-properties "Egenskaper"
+  :panel-xml-view "XML-vy"
+  :panel-history-tree "Historikträd"
+  :panel-shell-history "Skalhistorik"
+  :panel-timeline-editor "Tidslinjeeditor"}
+
+ :renderer.ruler.core
+ {:rulers "Linjaler"}
+
+ :renderer.snap.core
+ {:snap "Fäst"
+  :centers "centrum"
+  :midpoints "mittpunkter"
+  :corners "hörn"
+  :nodes "noder"}
+
+ :renderer.theme.core
+ {:dark "Mörk"
+  :light "Ljus"
+  :system "System"}
+
+ :renderer.window.core
+ {:exit "Avsluta"
+  :fullscreen "Helskärm"}
+
+ :renderer.tool.core
+ {:cancel "Avbryt"}
+
+ :renderer.tool.impl.base.core
+ {:transform "Transformera"}
+
+ :renderer.tool.impl.misc.core
+ {:misc "Miscallaneous"}}

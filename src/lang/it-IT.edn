@@ -61,99 +61,9 @@
   :accessibility-filter "Filtro accessibilità"
   :language "Lingua"
   :panel "Pannello"
-  :help "Aiuto"}
-
- :renderer.action.defaults
- {:new "Nuovo"
-  :open "Apri..."
+  :help "Aiuto"
   :recent "Recenti"
-  :recent-clear "Cancella recenti"
-  :print "Stampa"
-  :save "Salva"
-  :save-as "Salva come..."
-  :download "Scarica"
-  :close "Chiudi"
-  :close-all "Chiudi tutto"
-  :close-saved "Chiudi salvati"
-  :exit "Esci"
-  :undo "Annulla"
-  :redo "Ripeti"
-  :cut "Taglia"
-  :copy "Copia"
-  :paste "Incolla"
-  :paste-in-place "Incolla in posizione"
-  :paste-styles "Incolla stili"
-  :duplicate "Duplica"
-  :select-all "Seleziona tutto"
-  :deselect-all "Deseleziona tutto"
-  :invert-selection "Inverti selezione"
-  :select-same-tags "Seleziona stessi tag"
-  :delete "Elimina"
-  :object-to-path "Oggetto a tracciato"
-  :stroke-to-path "Contorno a tracciato"
-  :group "Raggruppa"
-  :ungroup "Separa"
-  :lock "Blocca"
-  :unlock "Sblocca"
-  :align-left "Allinea a sinistra"
-  :align-right "Allinea a destra"
-  :align-top "Allinea in alto"
-  :align-bottom "Allinea in basso"
-  :center-vertically "Centra verticalmente"
-  :center-horizontally "Centra orizzontalmente"
-  :animate "Anima"
-  :animate-transform "Anima trasformazione"
-  :animate-motion "Anima movimento"
-  :boolean-exclude "Escludi"
-  :boolean-unite "Unisci"
-  :boolean-intersect "Interseca"
-  :boolean-subtract "Sottrai"
-  :boolean-divide "Dividi"
-  :raise "Porta avanti"
-  :lower "Porta dietro"
-  :raise-to-top "Porta in primo piano"
-  :lower-to-bottom "Porta in fondo"
-  :image-trace "Traccia"
-  :path-simplify "Semplifica"
-  :path-smooth "Arrotonda"
-  :path-flatten "Appiattisci"
-  :path-reverse "Inverti"
-  :zoom-in "Ingrandisci"
-  :zoom-out "Riduci"
-  :zoom-set-50 "Imposta al 50%"
-  :zoom-set-100 "Imposta al 100%"
-  :zoom-set-200 "Imposta al 200%"
-  :zoom-focus-selected "Focalizza selezionato"
-  :zoom-fit-selected "Adatta selezionato"
-  :zoom-fill-selected "Riempi selezionato"
-  :dark "Scuro"
-  :light "Chiaro"
-  :system "Sistema"
-  :grid "Griglia"
-  :rulers "Righelli"
-  :help-bar "Barra aiuto"
-  :debug-info "Info debug"
-  :panel-element-tree "Albero elementi"
-  :panel-properties "Proprietà"
-  :panel-xml-view "Vista XML"
-  :panel-history-tree "Albero cronologia"
-  :panel-shell-history "Cronologia shell"
-  :panel-timeline-editor "Editor timeline"
-  :fullscreen "Schermo intero"
-  :command-panel "Pannello comandi"
-  :website "Sito web"
-  :source-code "Codice sorgente"
-  :license "Licenza"
-  :changelog "Changelog"
-  :privacy-policy "Privacy Policy"
-  :submit-an-issue "Segnala un problema"
-  :report-errors "Segnala errori automaticamente"
-  :about "Informazioni"
-  :snap "Aggancia"
-  :centers "centri"
-  :midpoints "punti medi"
-  :corners "angoli"
-  :nodes "nodi"}
+  :recent-clear "Cancella recenti"}
 
  :renderer.a11y.db
  {:blur "Sfocatura"
@@ -469,7 +379,9 @@
 
  :renderer.tool.impl.element.core
  {:help "Clicca e trascina per creare un elemento."
-  :edge "bordo"}
+  :edge "bordo"
+  :elements "Elementi"
+  :containers "Contenitori"}
 
  :renderer.tool.impl.element.poly
  {:add-points "Clicca per aggiungere più punti."
@@ -625,7 +537,8 @@
   :select-element "Seleziona elemento"
   :edit "Modifica"
   :centroid "Centroide"
-  :handle "maniglia"}
+  :handle "maniglia"
+  :tool-edit "Modifica"}
 
  :renderer.tool.impl.base.transform
  {:label "Trasforma"
@@ -651,12 +564,14 @@
  :renderer.tool.impl.base.pan
  {:label "Panoramica"
   :idle-help "Clicca e trascina per panoramica."
-  :pan-help "Trascina per panoramica."}
+  :pan-help "Trascina per panoramica."
+  :tool-pan "Sposta"}
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
   :zoom-in [:div "Clicca o seleziona un'area per ingrandire."]
-  :zoom-out [:div "Tieni premuto %1 per ridurre."]}
+  :zoom-out [:div "Tieni premuto %1 per ridurre."]
+  :tool-zoom "Zoom"}
 
  :renderer.tool.impl.draw.brush
  {:label "Pennello"
@@ -667,7 +582,8 @@
   :draw-line "Disegna linea"}
 
  :renderer.tool.impl.draw.core
- {:help "Clicca e trascina per disegnare."}
+ {:help "Clicca e trascina per disegnare."
+  :draw "Disegna"}
 
  :renderer.tool.impl.element.circle
  {:label "Cerchio"
@@ -776,4 +692,146 @@
  {:permission-denied "Permesso di accesso al file negato."}
 
  :renderer.panel.views
- {:close-panel "Chiudi pannello"}}
+ {:close-panel "Chiudi pannello"}
+
+ :renderer.app.core
+ {:grid "Griglia"
+  :help-bar "Barra aiuto"
+  :debug-info "Info debug"}
+
+ :renderer.dialog.core
+ {:command-panel "Pannello comandi"
+  :about "Informazioni"}
+
+ :renderer.document.core
+ {:new "Nuovo"
+  :open "Apri..."
+  :print "Stampa"
+  :save "Salva"
+  :save-as "Salva come..."
+  :download "Scarica"
+  :close "Chiudi"
+  :close-all "Chiudi tutto"
+  :close-saved "Chiudi salvati"
+  :svg "SVG"
+  :png "PNG"
+  :jpg "JPG"
+  :webp "WEBP"
+  :gif "GIF"}
+
+ :renderer.element.core
+ {:cut "Taglia"
+  :copy "Copia"
+  :paste "Incolla"
+  :paste-in-place "Incolla in posizione"
+  :paste-styles "Incolla stili"
+  :duplicate "Duplica"
+  :select-all "Seleziona tutto"
+  :deselect-all "Deseleziona tutto"
+  :invert-selection "Inverti selezione"
+  :select-same-tags "Seleziona stessi tag"
+  :delete "Elimina"
+  :object-to-path "Oggetto a tracciato"
+  :stroke-to-path "Contorno a tracciato"
+  :group "Raggruppa"
+  :ungroup "Separa"
+  :lock "Blocca"
+  :unlock "Sblocca"
+  :align-left "Allinea a sinistra"
+  :align-right "Allinea a destra"
+  :align-top "Allinea in alto"
+  :align-bottom "Allinea in basso"
+  :center-vertically "Centra verticalmente"
+  :center-horizontally "Centra orizzontalmente"
+  :animate "Anima"
+  :animate-transform "Anima trasformazione"
+  :animate-motion "Anima movimento"
+  :boolean-exclude "Escludi"
+  :boolean-unite "Unisci"
+  :boolean-intersect "Interseca"
+  :boolean-subtract "Sottrai"
+  :boolean-divide "Dividi"
+  :raise "Porta avanti"
+  :lower "Porta dietro"
+  :raise-to-top "Porta in primo piano"
+  :lower-to-bottom "Porta in fondo"
+  :image-trace "Traccia"
+  :path-simplify "Semplifica"
+  :path-smooth "Arrotonda"
+  :path-flatten "Appiattisci"
+  :path-reverse "Inverti"
+  :index-operations "Operazioni di Indice"
+  :boolean-operations "Operazioni Booleane"
+  :horizontal-alignment "Allineamento Orizzontale"
+  :vertical-alignment "Allineamento Verticale"
+  :clipboard "Appunti"
+  :grouping "Raggruppamento"
+  :locking "Blocco"
+  :entity "Entità"}
+
+ :renderer.error.core
+ {:report-errors "Segnala errori automaticamente"}
+
+ :renderer.frame.core
+ {:zoom-in "Ingrandisci"
+  :zoom-out "Riduci"
+  :zoom-set-50 "Imposta al 50%"
+  :zoom-set-100 "Imposta al 100%"
+  :zoom-set-200 "Imposta al 200%"
+  :zoom-focus-selected "Focalizza selezionato"
+  :zoom-fit-selected "Adatta selezionato"
+  :zoom-fill-selected "Riempi selezionato"}
+
+ :renderer.history.core
+ {:undo "Annulla"
+  :redo "Ripeti"
+  :history "History"}
+
+ :renderer.menubar.core
+ {:website "Sito web"
+  :source-code "Codice sorgente"
+  :license "Licenza"
+  :changelog "Changelog"
+  :privacy-policy "Privacy Policy"
+  :submit-an-issue "Segnala un problema"
+  :menubar-file "Menu File"
+  :menubar-edit "Menu Modifica"
+  :menubar-object "Menu Oggetto"
+  :menubar-view "Menu Visualizza"
+  :menubar-help "Menu Aiuto"}
+
+ :renderer.panel.core
+ {:panel-element-tree "Albero elementi"
+  :panel-properties "Proprietà"
+  :panel-xml-view "Vista XML"
+  :panel-history-tree "Albero cronologia"
+  :panel-shell-history "Cronologia shell"
+  :panel-timeline-editor "Editor timeline"}
+
+ :renderer.ruler.core
+ {:rulers "Righelli"}
+
+ :renderer.snap.core
+ {:snap "Aggancia"
+  :centers "centri"
+  :midpoints "punti medi"
+  :corners "angoli"
+  :nodes "nodi"}
+
+ :renderer.theme.core
+ {:dark "Scuro"
+  :light "Chiaro"
+  :system "Sistema"}
+
+ :renderer.window.core
+ {:exit "Esci"
+  :fullscreen "Schermo intero"}
+
+ :renderer.tool.core
+ {:cancel "Annulla"}
+
+ :renderer.tool.impl.base.core
+ {:transform "Trasforma"}
+
+ :renderer.tool.impl.misc.core
+ {:misc "Miscallaneous"}}

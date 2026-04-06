@@ -61,99 +61,9 @@
   :accessibility-filter "アクセシビリティフィルタ"
   :language "言語"
   :panel "パネル"
-  :help "ヘルプ"}
-
- :renderer.action.defaults
- {:new "新規"
-  :open "開く..."
+  :help "ヘルプ"
   :recent "最近使用"
-  :recent-clear "最近使用をクリア"
-  :print "印刷"
-  :save "保存"
-  :save-as "名前を付けて保存..."
-  :download "ダウンロード"
-  :close "閉じる"
-  :close-all "すべて閉じる"
-  :close-saved "保存済みを閉じる"
-  :exit "終了"
-  :undo "元に戻す"
-  :redo "やり直し"
-  :cut "切り取り"
-  :copy "コピー"
-  :paste "貼り付け"
-  :paste-in-place "同じ場所に貼り付け"
-  :paste-styles "スタイルを貼り付け"
-  :duplicate "複製"
-  :select-all "すべて選択"
-  :deselect-all "すべて選択解除"
-  :invert-selection "選択を反転"
-  :select-same-tags "同じタグを選択"
-  :delete "削除"
-  :object-to-path "オブジェクトをパスに"
-  :stroke-to-path "ストロークをパスに"
-  :group "グループ"
-  :ungroup "グループ解除"
-  :lock "ロック"
-  :unlock "ロック解除"
-  :align-left "左揃え"
-  :align-right "右揃え"
-  :align-top "上揃え"
-  :align-bottom "下揃え"
-  :center-vertically "垂直中央揃え"
-  :center-horizontally "水平中央揃え"
-  :animate "アニメーション"
-  :animate-transform "変形をアニメーション"
-  :animate-motion "モーションをアニメーション"
-  :boolean-exclude "除外"
-  :boolean-unite "結合"
-  :boolean-intersect "交差"
-  :boolean-subtract "減算"
-  :boolean-divide "分割"
-  :raise "前面へ"
-  :lower "背面へ"
-  :raise-to-top "最前面へ"
-  :lower-to-bottom "最背面へ"
-  :image-trace "トレース"
-  :path-simplify "単純化"
-  :path-smooth "スムーズ"
-  :path-flatten "平坦化"
-  :path-reverse "反転"
-  :zoom-in "ズームイン"
-  :zoom-out "ズームアウト"
-  :zoom-set-50 "50%に設定"
-  :zoom-set-100 "100%に設定"
-  :zoom-set-200 "200%に設定"
-  :zoom-focus-selected "選択項目にフォーカス"
-  :zoom-fit-selected "選択項目にフィット"
-  :zoom-fill-selected "選択項目を画面に合わせる"
-  :dark "ダーク"
-  :light "ライト"
-  :system "システム"
-  :grid "グリッド"
-  :rulers "ルーラー"
-  :help-bar "ヘルプバー"
-  :debug-info "デバッグ情報"
-  :panel-element-tree "要素ツリー"
-  :panel-properties "プロパティ"
-  :panel-xml-view "XML表示"
-  :panel-history-tree "履歴ツリー"
-  :panel-shell-history "シェル履歴"
-  :panel-timeline-editor "タイムラインエディタ"
-  :fullscreen "フルスクリーン"
-  :command-panel "コマンドパネル"
-  :website "ウェブサイト"
-  :source-code "ソースコード"
-  :license "ライセンス"
-  :changelog "変更履歴"
-  :privacy-policy "プライバシーポリシー"
-  :submit-an-issue "問題を報告"
-  :report-errors "エラーを自動的に報告"
-  :about "このアプリについて"
-  :snap "スナップ"
-  :centers "中心"
-  :midpoints "中点"
-  :corners "角"
-  :nodes "ノード"}
+  :recent-clear "最近使用をクリア"}
 
  :renderer.a11y.db
  {:blur "ブラー"
@@ -418,7 +328,9 @@
 
  :renderer.tool.impl.element.core
  {:help "クリックしてドラッグして要素を作成します。"
-  :edge "エッジ"}
+  :edge "エッジ"
+  :elements "要素"
+  :containers "コンテナ"}
 
  :renderer.tool.impl.element.poly
  {:add-points "クリックしてポイントを追加。"
@@ -577,7 +489,8 @@
   :select-element "要素を選択"
   :edit "編集"
   :centroid "重心"
-  :handle "ハンドル"}
+  :handle "ハンドル"
+  :tool-edit "編集"}
 
  :renderer.tool.impl.base.transform
  {:label "変形"
@@ -599,12 +512,14 @@
  :renderer.tool.impl.base.pan
  {:label "パン"
   :idle-help "クリックしてドラッグしてパン。"
-  :pan-help "ドラッグしてパン。"}
+  :pan-help "ドラッグしてパン。"
+  :tool-pan "パン"}
 
  :renderer.tool.impl.base.zoom
  {:label "ズーム"
   :zoom-in [:div "クリックするか範囲を選択してズームイン。"]
-  :zoom-out [:div "%1を押しながらズームアウト。"]}
+  :zoom-out [:div "%1を押しながらズームアウト。"]
+  :tool-zoom "ズーム"}
 
  :renderer.tool.impl.draw.brush
  {:label "ブラシ"
@@ -615,7 +530,8 @@
   :draw-line "線を描画"}
 
  :renderer.tool.impl.draw.core
- {:help "クリックしてドラッグして描画。"}
+ {:help "クリックしてドラッグして描画。"
+  :draw "描画"}
 
  :renderer.tool.impl.element.circle
  {:label "円"
@@ -721,4 +637,147 @@
  {:permission-denied "ファイルへのアクセス許可が拒否されました."}
 
  :renderer.panel.views
- {:close-panel "パネルを閉じる"}}
+ {:close-panel "パネルを閉じる"}
+
+ :renderer.app.core
+ {:grid "グリッド"
+  :help-bar "ヘルプバー"
+  :debug-info "デバッグ情報"}
+
+ :renderer.dialog.core
+ {:command-panel "コマンドパネル"
+  :about "このアプリについて"}
+
+ :renderer.document.core
+ {:new "新規"
+  :open "開く..."
+  :print "印刷"
+  :save "保存"
+  :save-as "名前を付けて保存..."
+  :download "ダウンロード"
+  :close "閉じる"
+  :close-all "すべて閉じる"
+  :close-saved "保存済みを閉じる"
+
+  :svg "SVG"
+  :png "PNG"
+  :jpg "JPG"
+  :webp "WEBP"
+  :gif "GIF"}
+
+ :renderer.element.core
+ {:cut "切り取り"
+  :copy "コピー"
+  :paste "貼り付け"
+  :paste-in-place "同じ場所に貼り付け"
+  :paste-styles "スタイルを貼り付け"
+  :duplicate "複製"
+  :select-all "すべて選択"
+  :deselect-all "すべて選択解除"
+  :invert-selection "選択を反転"
+  :select-same-tags "同じタグを選択"
+  :delete "削除"
+  :object-to-path "オブジェクトをパスに"
+  :stroke-to-path "ストロークをパスに"
+  :group "グループ"
+  :ungroup "グループ解除"
+  :lock "ロック"
+  :unlock "ロック解除"
+  :align-left "左揃え"
+  :align-right "右揃え"
+  :align-top "上揃え"
+  :align-bottom "下揃え"
+  :center-vertically "垂直中央揃え"
+  :center-horizontally "水平中央揃え"
+  :animate "アニメーション"
+  :animate-transform "変形をアニメーション"
+  :animate-motion "モーションをアニメーション"
+  :boolean-exclude "除外"
+  :boolean-unite "結合"
+  :boolean-intersect "交差"
+  :boolean-subtract "減算"
+  :boolean-divide "分割"
+  :raise "前面へ"
+  :lower "背面へ"
+  :raise-to-top "最前面へ"
+  :lower-to-bottom "最背面へ"
+  :image-trace "トレース"
+  :path-simplify "単純化"
+  :path-smooth "スムーズ"
+  :path-flatten "平坦化"
+  :path-reverse "反転"
+  :index-operations "インデックス操作"
+  :boolean-operations "ブール演算"
+  :horizontal-alignment "水平配置"
+  :vertical-alignment "垂直配置"
+  :clipboard "クリップボード"
+  :grouping "グループ化"
+  :locking "ロック"
+  :entity "エンティティ"}
+
+ :renderer.error.core
+ {:report-errors "エラーを自動的に報告"}
+
+ :renderer.frame.core
+ {:zoom-in "ズームイン"
+  :zoom-out "ズームアウト"
+  :zoom-set-50 "50%に設定"
+  :zoom-set-100 "100%に設定"
+  :zoom-set-200 "200%に設定"
+  :zoom-focus-selected "選択項目にフォーカス"
+  :zoom-fit-selected "選択項目にフィット"
+  :zoom-fill-selected "選択項目を画面に合わせる"}
+
+ :renderer.history.core
+ {:undo "元に戻す"
+  :redo "やり直し"
+  :history "History"}
+
+ :renderer.menubar.core
+ {:website "ウェブサイト"
+  :source-code "ソースコード"
+  :license "ライセンス"
+  :changelog "変更履歴"
+  :privacy-policy "プライバシーポリシー"
+  :submit-an-issue "問題を報告"
+  :menubar-file "ファイルメニュー"
+  :menubar-edit "編集メニュー"
+  :menubar-object "オブジェクトメニュー"
+  :menubar-view "ビューメニュー"
+  :menubar-help "ヘルプメニュー"}
+
+ :renderer.panel.core
+ {:panel-element-tree "要素ツリー"
+  :panel-properties "プロパティ"
+  :panel-xml-view "XML表示"
+  :panel-history-tree "履歴ツリー"
+  :panel-shell-history "シェル履歴"
+  :panel-timeline-editor "タイムラインエディタ"}
+
+ :renderer.ruler.core
+ {:rulers "ルーラー"}
+
+ :renderer.snap.core
+ {:snap "スナップ"
+  :centers "中心"
+  :midpoints "中点"
+  :corners "角"
+  :nodes "ノード"}
+
+ :renderer.theme.core
+ {:dark "ダーク"
+  :light "ライト"
+  :system "システム"}
+
+ :renderer.window.core
+ {:exit "終了"
+  :fullscreen "フルスクリーン"}
+
+ :renderer.tool.core
+ {:cancel "キャンセル"}
+
+ :renderer.tool.impl.base.core
+ {:transform "変形"}
+
+ :renderer.tool.impl.misc.core
+ {:misc "Miscallaneous"}}
