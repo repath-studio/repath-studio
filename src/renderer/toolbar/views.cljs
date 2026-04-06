@@ -9,21 +9,22 @@
 
 (defn button
   [action]
-  [:> Tooltip/Root
-   [:> Tooltip/Trigger
-    {:as-child true}
-    [:span
-     [views/action-icon-button action]]]
-   [:> Tooltip/Portal
-    [:> Tooltip/Content
-     {:class "tooltip-content"
-      :side "left"
-      :sideOffset 5
-      :on-escape-key-down #(.stopPropagation %)}
-     [:div.flex.gap-2.items-center
-      [action.views/label action]
-      (when @(rf/subscribe [::window.subs/xl?])
-        [views/shortcuts action])]]]])
+  (let [xl? @(rf/subscribe [::window.subs/xl?])]
+    [:> Tooltip/Root
+     [:> Tooltip/Trigger
+      {:as-child true}
+      [:span
+       [views/action-icon-button action]]]
+     [:> Tooltip/Portal
+      [:> Tooltip/Content
+       {:class "tooltip-content"
+        :side "left"
+        :sideOffset 5
+        :on-escape-key-down #(.stopPropagation %)}
+       [:div.flex.gap-2.items-center
+        [action.views/label action]
+        (when xl?
+          [views/shortcuts action])]]]]))
 
 (defn button-group
   [action-group]

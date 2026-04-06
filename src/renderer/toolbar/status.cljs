@@ -131,7 +131,7 @@
       :side "top"
       :on-escape-key-down #(.stopPropagation %)}
      [:div.flex.gap-2.items-center
-      (action.views/label action)
+      [action.views/label action]
       (when @(rf/subscribe [::window.subs/xl?])
         [views/shortcuts action])]]]])
 

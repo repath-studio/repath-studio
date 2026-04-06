@@ -306,7 +306,7 @@
    [:> Menubar/ItemIndicator
     {:class "menu-item-indicator"}
     [views/icon "checkmark"]]
-   [:div (action.views/label action)]
+   [:div [action.views/label action]]
    (when @(rf/subscribe [::window.subs/xl?])
      [views/shortcuts action])])
 
@@ -316,7 +316,7 @@
    [:> Menubar/SubTrigger
     {:class "sub-menu-item menu-item"
      :disabled (action.views/disabled? action)}
-    [:div (action.views/label action)]
+    [:div [action.views/label action]]
     [:div.rtl:mr-auto.text-inherit
      {:class "mr-[-1rem] rtl:ml-[-1rem] rtl:scale-x-[-1]"}
      [views/icon "chevron-right"]]]
@@ -350,7 +350,7 @@
       [:span
        {:class (when (and menubar-indicator? (= computed-lang "en-US"))
                  "md:first-letter:underline")}
-       (or (action.views/label action)
+       (or [action.views/label action]
            [views/icon "menu" {:aria-label (i18n.views/t [::menu "Menu"])}])]]
      [:> Menubar/Portal
       (into [:> Menubar/Content
@@ -369,7 +369,7 @@
    {:class "menu-item"
     :on-select (action.views/dispatch action)
     :disabled (action.views/disabled? action)}
-   [:div (action.views/label action)]
+   [:div [action.views/label action]]
    (when @(rf/subscribe [::window.subs/xl?])
      [views/shortcuts action])])
 

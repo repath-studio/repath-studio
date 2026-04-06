@@ -146,7 +146,7 @@
      [:> ContextMenu/ItemIndicator
       {:class "menu-item-indicator"}
       [icon "checkmark"]]
-     [:div (action.views/label action)]
+     [:div [action.views/label action]]
      [shortcuts action]]
 
     :else
@@ -154,7 +154,7 @@
      {:class "menu-item context-menu-item"
       :onSelect (action.views/dispatch action)
       :disabled (action.views/disabled? action)}
-     [:div (action.views/label action)]
+     [:div [action.views/label action]]
      [shortcuts action]]))
 
 (defn dropdown-menu-item
@@ -173,7 +173,7 @@
      [:> DropdownMenu/ItemIndicator
       {:class "menu-item-indicator"}
       [icon "checkmark"]]
-     [:div (action.views/label action)]
+     [:div [action.views/label action]]
      [shortcuts action]]
 
     :else
@@ -184,7 +184,7 @@
      (when (:icon action)
        [icon (:icon action)
         {:class "menu-item-indicator"}])
-     [:div (action.views/label action)]
+     [:div [action.views/label action]]
      [shortcuts action]]))
 
 (defn scroll-area

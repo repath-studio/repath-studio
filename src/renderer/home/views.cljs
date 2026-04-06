@@ -62,7 +62,7 @@
      [views/icon (:icon action)]
      [:button.button-link.text-lg
       {:on-click (action.views/dispatch action)}
-      (action.views/label action)]
+      [action.views/label action]]
      (when xl? [views/shortcuts action])]))
 
 (defn root

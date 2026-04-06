@@ -10,7 +10,7 @@
    [renderer.window.subs :as-alias window.subs]))
 
 (defn button
-  [bordered action]
+  [action bordered]
   (let [xl? @(rf/subscribe [::window.subs/xl?])
         active (action.views/checked? action)
         cached-tool @(rf/subscribe [::tool.subs/cached])
@@ -31,13 +31,13 @@
         :side "top"
         :on-escape-key-down #(.stopPropagation %)}
        [:div.flex.gap-2.items-center
-        (action.views/label action)
+        [action.views/label action]
         (when xl? [views/shortcuts action])]]]]))
 
 (defn button-group
   [action-group]
   (some->> (:actions action-group)
-           (map (partial button false))
+           (map (fn [action] [button action false]))
            (into [:div {:class "flex justify-center md:gap-1 gap-0.5"}])))
 
 (defn dropdown-button
@@ -79,7 +79,7 @@
                      :on-key-down #(.stopPropagation %)
                      :on-escape-key-down #(.stopPropagation %)}
                     [views/dropdownmenu-arrow]]))]]
-      [button true top-tool])))
+      [button top-tool true])))
 
 (def action-groups
   [:tools/transform

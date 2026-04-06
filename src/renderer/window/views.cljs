@@ -24,7 +24,7 @@
    [:> DropdownMenu/ItemIndicator
     {:class "menu-item-indicator"}
     [views/icon "checkmark"]]
-   [:div (action.views/label action)]
+   [:div [action.views/label action]]
    (if (= id "system")
      [:span.font-mono.text-foreground-disabled (or system-abbr "EN")]
      [:span.font-mono.text-foreground-muted abbr])])
