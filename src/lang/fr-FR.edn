@@ -659,7 +659,7 @@
  {:label "Pinceau"
   :draw-brush "Dessiner au pinceau"}
 
- :renderer.tool.impl.draw.pen
+ :renderer.tool.impl.draw.pencil
  {:label "Stylo"
   :draw-line "Dessiner une ligne"}
 

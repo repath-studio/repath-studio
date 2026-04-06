@@ -10,7 +10,6 @@
    [renderer.element.events :as-alias element.events]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
-   [renderer.element.views :as element.views]
    [renderer.events :as-alias events]
    [renderer.frame.events :as-alias frame.events]
    [renderer.i18n.views :as i18n.views]
@@ -291,8 +290,14 @@
     {:class "flex h-full w-full overflow-hidden"}
     [inner-sidebar]]
    [:> ContextMenu/Portal
-    (->> element.views/context-menu-actions
-         (keep action.views/entity)
+    (->> [:edit/clipboard
+          :object/grouping
+          :object/locking
+          :object/animate
+          :object/entity]
+         (map (comp :actions action.views/deref-action-group))
+         (interpose {:type :separator})
+         (flatten)
          (map views/context-menu-item)
          (into [:> ContextMenu/Content
                 {:class "menu-content context-menu-content"

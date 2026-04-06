@@ -1,25 +1,25 @@
 (ns renderer.tool.impl.base.edit
   (:require
+
    [clojure.core.matrix :as matrix]
    [re-frame.core :as rf]
+   [renderer.action.events :as-alias action.events]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
    [renderer.snap.handlers :as snap.handlers]
+   [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.element :as utils.element]
+   [renderer.utils.key :as utils.key]
    [renderer.utils.svg :as utils.svg]
    [renderer.views :as views]))
 
 (tool.hierarchy/derive-tool :edit ::tool.hierarchy/tool)
-
-(defmethod tool.hierarchy/properties :edit
-  []
-  {:icon "edit"
-   :label [::label "Edit"]})
 
 (defmethod tool.hierarchy/help [:edit :idle]
   []
@@ -120,3 +120,11 @@
                      [utils.svg/dot pos
                       [:title (i18n.views/t [::centroid "Centroid"])]]))]))
          (into [:g]))))
+
+(rf/dispatch [::action.events/register-action
+              {:id :tool/edit
+               :label [::tool-edit "Edit"]
+               :icon "edit"
+               :event [::tool.events/activate :edit]
+               :active [::tool.subs/active? :edit]
+               :shortcuts [{:keyCode (utils.key/codes "E")}]}])

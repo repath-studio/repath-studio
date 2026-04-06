@@ -1,21 +1,21 @@
 (ns renderer.tool.impl.element.rect
   "https://www.w3.org/TR/SVG/shapes.html#RectElement"
   (:require
+   [re-frame.core :as rf]
+   [renderer.action.events :as-alias action.events]
    [renderer.document.handlers :as document.handlers]
    [renderer.element.handlers :as element.handlers]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
+   [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.tool.subs :as-alias tool.subs]
+   [renderer.utils.key :as utils.key]
    [renderer.utils.length :as utils.length]
    [renderer.views :as views]))
 
 (tool.hierarchy/derive-tool :rect ::tool.hierarchy/element)
-
-(defmethod tool.hierarchy/properties :rect
-  []
-  {:icon "rectangle-tool"
-   :label [::label "Rectangle"]})
 
 (defmethod tool.hierarchy/help [:rect :create]
   []
@@ -62,3 +62,11 @@
   (-> db
       (history.handlers/finalize [::create-rectangle "Create rectangle"])
       (tool.handlers/activate :transform)))
+
+(rf/dispatch [::action.events/register-action
+              {:id :tool/rect
+               :label [::label "Rectangle"]
+               :icon "rectangle"
+               :event [::tool.events/activate :rect]
+               :active [::tool.subs/active? :rect]
+               :shortcuts [{:keyCode (utils.key/codes "R")}]}])

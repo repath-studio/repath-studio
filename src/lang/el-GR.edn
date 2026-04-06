@@ -671,7 +671,7 @@
  {:label "Πινέλο"
   :draw-brush "Πινέλο σχεδίασης"}
 
- :renderer.tool.impl.draw.pen
+ :renderer.tool.impl.draw.pencil
  {:label "Στυλό"
   :draw-line "Σχεδίαση γραμμής"}
 

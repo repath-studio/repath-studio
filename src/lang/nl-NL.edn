@@ -665,7 +665,7 @@
  {:label "Penseel"
   :draw-brush "Penseel tekenen"}
 
- :renderer.tool.impl.draw.pen
+ :renderer.tool.impl.draw.pencil
  {:label "Pen"
   :draw-line "Lijn tekenen"}
 

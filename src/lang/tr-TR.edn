@@ -644,7 +644,7 @@
  {:label "Fırça"
   :draw-brush "Fırça çiz"}
 
- :renderer.tool.impl.draw.pen
+ :renderer.tool.impl.draw.pencil
  {:label "Kalem"
   :draw-line "Çizgi çiz"}
 

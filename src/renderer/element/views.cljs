@@ -7,30 +7,6 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.event.impl.pointer :as event.impl.pointer]))
 
-(def context-menu-actions
-  [:clipboard/cut
-   :clipboard/copy
-   :clipboard/paste
-   :clipboard/paste-styles
-   :separator
-   :object/raise
-   :object/lower
-   :object/raise-to-top
-   :object/lower-to-bottom
-   :separator
-   :object/group
-   :object/ungroup
-   :separator
-   :object/lock
-   :object/unlock
-   :separator
-   :animate/animate
-   :animate/transform
-   :animate/motion
-   :separator
-   :element/duplicate
-   :element/delete])
-
 (defn ghost-element
   "Renders a ghost element on top of the actual element to ensure that the user
    can interact with it."

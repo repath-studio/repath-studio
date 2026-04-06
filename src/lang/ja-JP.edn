@@ -610,7 +610,7 @@
  {:label "ブラシ"
   :draw-brush "ブラシで描画"}
 
- :renderer.tool.impl.draw.pen
+ :renderer.tool.impl.draw.pencil
  {:label "ペン"
   :draw-line "線を描画"}
 

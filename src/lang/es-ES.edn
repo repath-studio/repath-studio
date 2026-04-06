@@ -652,7 +652,7 @@
  {:label "Pincel"
   :draw-brush "Dibujar con pincel"}
 
- :renderer.tool.impl.draw.pen
+ :renderer.tool.impl.draw.pencil
  {:label "Pluma"
   :draw-line "Dibujar línea"}
 

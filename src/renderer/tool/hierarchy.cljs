@@ -20,7 +20,6 @@
 (defmulti snapping-points (fn [db _e] (:tool db)) :hierarchy hierarchy)
 (defmulti snapping-elements (fn [db _e] (:tool db)) :hierarchy hierarchy)
 (defmulti render identity :hierarchy hierarchy)
-(defmulti properties identity :hierarchy hierarchy)
 (defmulti help (fn [tool state] [tool state]) :hierarchy hierarchy)
 
 (defmulti right-panel identity :hierarchy hierarchy)
@@ -37,7 +36,6 @@
 (defmethod on-activate :default [db] db)
 (defmethod on-deactivate :default [db] db)
 (defmethod render :default [])
-(defmethod properties :default [])
 (defmethod snapping-points :default [])
 (defmethod snapping-elements :default [])
 (defmethod help :default [_tool _state] "")

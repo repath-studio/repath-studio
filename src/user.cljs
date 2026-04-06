@@ -346,6 +346,28 @@
   [id]
   (rf/dispatch-sync [::action.events/deregister-action id]))
 
+(defn ^:export register-action-group
+  "Registers an action group."
+  [action-group]
+  (rf/dispatch-sync [::action.events/register-action-group action-group]))
+
+(defn ^:export deregister-action-group
+  "Deregisters an action group."
+  [id]
+  (rf/dispatch-sync [::action.events/deregister-action-group id]))
+
+(defn ^:export add-action-to-group
+  "Adds an action to an action group."
+  [group-id action-id]
+  (rf/dispatch-sync [::action.events/add-action-to-group group-id action-id]))
+
+(defn ^:export remove-action-from-group
+  "Removes an action from an action group."
+  [group-id action-id]
+  (rf/dispatch-sync [::action.events/remove-action-from-group
+                     group-id
+                     action-id]))
+
 (defn ^:export help
   "Lists available functions."
   []

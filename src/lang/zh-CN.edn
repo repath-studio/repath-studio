@@ -572,7 +572,7 @@
  {:label "画笔"
   :draw-brush "画笔绘制"}
 
- :renderer.tool.impl.draw.pen
+ :renderer.tool.impl.draw.pencil
  {:label "钢笔"
   :draw-line "绘制线条"}
 

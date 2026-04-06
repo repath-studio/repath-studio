@@ -1,21 +1,20 @@
 (ns renderer.tool.impl.element.ellipse
   "https://www.w3.org/TR/SVG/shapes.html#EllipseElement"
   (:require
+   [re-frame.core :as rf]
+   [renderer.action.events :as-alias action.events]
    [renderer.document.handlers :as document.handlers]
    [renderer.element.handlers :as element.handlers]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
+   [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.length :as utils.length]
    [renderer.views :as views]))
 
 (tool.hierarchy/derive-tool :ellipse ::tool.hierarchy/element)
-
-(defmethod tool.hierarchy/properties :ellipse
-  []
-  {:icon "ellipse-tool"
-   :label [::label "Ellipse"]})
 
 (defmethod tool.hierarchy/help [:ellipse :create]
   []
@@ -58,3 +57,10 @@
   (-> db
       (history.handlers/finalize [::create-ellipse "Create ellipse"])
       (tool.handlers/activate :transform)))
+
+(rf/dispatch [::action.events/register-action
+              {:id :tool/ellipse
+               :label [::label "Ellipse"]
+               :icon "ellipse-tool"
+               :event [::tool.events/activate :ellipse]
+               :active [::tool.subs/active? :ellipse]}])

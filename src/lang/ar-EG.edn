@@ -625,7 +625,7 @@
  {:label "فرشاة"
   :draw-brush "رسم بالفرشاة"}
 
- :renderer.tool.impl.draw.pen
+ :renderer.tool.impl.draw.pencil
  {:label "قلم"
   :draw-line "رسم خط"}
 

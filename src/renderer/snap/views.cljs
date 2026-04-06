@@ -22,7 +22,7 @@
 (defn root []
   (let [active? (rf/subscribe [::snap.subs/active?])
         md? @(rf/subscribe [::window.subs/md?])
-        toggle-snap-action (action.views/entity :snap/toggle)]
+        toggle-snap-action (action.views/deref-action :snap/toggle)]
     (reagent/with-let [open (reagent/atom false)]
       [:button.button.rounded-sm.items-center.gap-1.md:flex.justify-items-center
        {:title (action.views/label toggle-snap-action)
@@ -44,7 +44,7 @@
             [views/icon "chevron-up"]]]
           [:> DropdownMenu/Portal
            (->> snap-options
-                (map (comp views/dropdown-menu-item action.views/entity))
+                (map (comp views/dropdown-menu-item action.views/deref-action))
                 (into [:> DropdownMenu/Content
                        {:side "top"
                         :align "end"

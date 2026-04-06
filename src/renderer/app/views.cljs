@@ -1,11 +1,13 @@
 (ns renderer.app.views
   (:require
    ["@radix-ui/react-direction" :as Direction]
+   ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
    ["@radix-ui/react-tooltip" :as Tooltip]
    ["vaul" :refer [Drawer]]
    [clojure.string :as string]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
+   [renderer.action.views :as action.views]
    [renderer.app.events :as-alias app.events]
    [renderer.app.subs :as-alias app.subs]
    [renderer.dialog.views :as dialog.views]
@@ -30,9 +32,9 @@
    [renderer.timeline.views :as timeline.views]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
-   [renderer.toolbar.object :as toolbar.object]
    [renderer.toolbar.status :as toolbar.status]
    [renderer.toolbar.tools :as toolbar.tools]
+   [renderer.toolbar.views :as toolbar.views]
    [renderer.tree.views :as tree.views]
    [renderer.utils.length :as utils.length]
    [renderer.views :as views]
@@ -146,6 +148,34 @@
        [:div.absolute.inset-0
         {:on-click #(rf/dispatch [::app.events/set-backdrop false])}])]))
 
+(def object-toolbar
+  {:orientation :vertical
+   :actions [:object/index-operations
+             :object/horizontal-alignment
+             :object/vertical-alignment
+             :object/boolean-operations]})
+
+(defn context-dropdown-button []
+  [:> DropdownMenu/Root
+   [:> DropdownMenu/Trigger
+    {:as-child true}
+    [:button.button.flex.items-center.justify-center.px-2.font-mono.rounded
+     {:aria-label (i18n.views/t [::more-actions "More object actions"])}
+     [views/icon "ellipsis-h"]]]
+   [:> DropdownMenu/Portal
+    (->> frame.views/context-menu-action-groups
+         (map (comp :actions action.views/deref-action-group))
+         (interpose {:type :separator})
+         (flatten)
+         (map views/dropdown-menu-item)
+         (into [:> DropdownMenu/Content
+                {:side "left"
+                 :align "end"
+                 :class "menu-content rounded-sm"
+                 :on-key-down #(.stopPropagation %)
+                 :on-escape-key-down #(.stopPropagation %)}
+                [views/dropdownmenu-arrow]]))]])
+
 (defn frame-panel []
   (let [ruler-visible? @(rf/subscribe [::ruler.subs/visible?])
         md? @(rf/subscribe [::window.subs/md?])]
@@ -172,7 +202,9 @@
        [frame]
        (when-not md?
          [:div.bg-primary.flex.items-center
-          [toolbar.object/root]])]]]))
+          [toolbar.views/action-toolbar object-toolbar
+           [:span.h-divider]
+           [context-dropdown-button]]])]]]))
 
 (defn xml-panel []
   (let [xml @(rf/subscribe [::element.subs/xml])
@@ -380,7 +412,7 @@
            [right-panel active-tool]]])]
       (when md?
         [:div.bg-primary.flex
-         [toolbar.object/root]])]]))
+         [toolbar.views/action-toolbar object-toolbar]])]]))
 
 (defn main-panel-group []
   (let [tree? @(rf/subscribe [::panel.subs/visible? :tree])
