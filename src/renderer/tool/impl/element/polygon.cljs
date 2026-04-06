@@ -22,6 +22,6 @@
 (rf/dispatch [::action.events/register-action
               {:id :tool/polygon
                :label [::label "Polygon"]
-               :icon "polygon"
+               :icon "polygon-tool"
                :event [::tool.events/activate :polygon]
                :active [::tool.subs/active? :polygon]}])

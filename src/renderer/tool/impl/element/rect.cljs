@@ -66,7 +66,7 @@
 (rf/dispatch [::action.events/register-action
               {:id :tool/rect
                :label [::label "Rectangle"]
-               :icon "rectangle"
+               :icon "rectangle-tool"
                :event [::tool.events/activate :rect]
                :active [::tool.subs/active? :rect]
                :shortcuts [{:keyCode (utils.key/codes "R")}]}])

@@ -51,7 +51,7 @@
 (rf/dispatch [::action.events/register-action
               {:id :tool/line
                :label [::label "Line"]
-               :icon "line"
+               :icon "line-tool"
                :event [::tool.events/activate :line]
                :active [::tool.subs/active? :line]
                :shortcuts [{:keyCode (utils.key/codes "L")}]}])
