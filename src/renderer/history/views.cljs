@@ -6,7 +6,6 @@
    [clojure.core.matrix :as matrix]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
-   [renderer.dialog.events :as-alias dialog.events]
    [renderer.history.events :as-alias history.events]
    [renderer.history.handlers :as history.handlers]
    [renderer.history.subs :as-alias history.subs]

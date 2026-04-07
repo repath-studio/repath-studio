@@ -65,7 +65,7 @@
 
 (defn action-button
   [action-id & {:as props}]
-  (let [action (action.views/entity action-id)]
+  (when-let [action (action.views/entity action-id)]
     [:button
      (merge-with-class {:class "button"
                         :disabled (action.views/disabled? action)
