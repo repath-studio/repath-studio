@@ -17,7 +17,7 @@
 
 (defn button
   [{:keys [action label auto-focus class]}]
-  [:button.button.px-1.rounded.font-medium.w-full
+  [:button.button.px-1.rounded.font-medium.w-full.bg-overlay.sm:bg-transparent
    {:class class
     :auto-focus auto-focus
     :on-click #(rf/dispatch [::dialog.events/close action])}
@@ -25,9 +25,10 @@
 
 (defn button-bar
   [& children]
-  (into [:div.flex.gap-2] children))
+  (into [:div.flex.flex-wrap.gap-3.sm:flex-nowrap.sm:gap-2] children))
 
-(defn about []
+(defn about
+  []
   (let [user-agent @(rf/subscribe [::app.subs/user-agent])]
     [:div
      [:div.flex.gap-3.items-start.pb-2
@@ -116,7 +117,8 @@
        (into [:> Command/CommandGroup
               {:heading (i18n.views/t label)}])))
 
-(defn cmdk []
+(defn cmdk
+  []
   [:> Command/Command
    {:label "Command Menu"
     :on-key-down #(.stopPropagation %)}
@@ -133,7 +135,8 @@
        ^{:key (:id menu)}
        [cmdk-group menu])]]])
 
-(defn root []
+(defn root
+  []
   (let [active-dialog @(rf/subscribe [::dialog.subs/active])
         {:keys [title content attrs]} active-dialog]
     [:> Dialog/Root
