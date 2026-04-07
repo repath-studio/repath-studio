@@ -33,6 +33,9 @@
  :renderer.app.events
  {:create-doc "Δημιουργία εγγράφου"}
 
+ :renderer.dialog.events
+ {:are-you-sure "Είστε βέβαιοι ότι θέλετε να συνεχίσετε;"}
+
  :renderer.dialog.views
  {:search-command "Αναζήτηση εντολής"
   :no-results "Δεν βρέθηκαν αποτελέσματα."
@@ -42,11 +45,13 @@
   :dont-save "Μη αποθήκευση"
   :cancel "Ακύρωση"
   :ok "Εντάξει"
+  :action-cannot-undone "Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
   :changes-will-be-lost [:p "Οι αλλαγές στο %1 θα χαθούνε εάν κλείσετε το
                              έγγραφο χωρίς αποθήκευση."]}
 
  :renderer.menubar.views
  {:file "Αρχείο"
+  :recent "Πρόσφατα"
   :export-as "Εξαγωγή ως"
   :edit "Επεξεργασία"
   :object "Αντικείμενο"
@@ -61,9 +66,7 @@
   :accessibility-filter "Φίλτρο προσβασιμότητας"
   :language "Γλώσσα"
   :panel "Πάνελ"
-  :help "Βοήθεια"
-  :recent "Πρόσφατα"
-  :recent-clear "Καθαρισμός πρόσφατων"}
+  :help "Βοήθεια"}
 
  :renderer.a11y.db
  {:blur "Θόλωση όρασης"
@@ -650,15 +653,8 @@
   :bounds-center "κέντρο ορίων"
   :bounds-midpoint "μέσο σημείο ορίων"}
 
- :renderer.history.events
- {:clear-history "Εκκαθάριση ιστορικού"}
-
  :renderer.history.views
  {:center-view "Κεντρική προβολή"
-  :clear-history "Εκκαθάριση ιστορικού"
-  :action-cannot-undone "Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
-  :clear-history-description "Είστε σίγουροι οτι θέλετε να διαγράψετε το
-                              ιστορικό του εγγράφου?"
   :select-element "Επιλογή στοιχείου"
   :delete-selection "Διαγραφή επιλεγμένου"
   :oldest "Παλαιότερο"
@@ -715,6 +711,7 @@
  :renderer.document.core
  {:new "Νέο"
   :open "Άνοιγμα..."
+  :recent-clear "Καθαρισμός πρόσφατων"
   :print "Εκτύπωση"
   :save "Αποθήκευση"
   :save-as "Αποθήκευση ως..."
@@ -794,7 +791,8 @@
  :renderer.history.core
  {:undo "Αναίρεση"
   :redo "Επαναφορά"
-  :history "History"}
+  :history "Ιστορικό"
+  :clear-history "Εκκαθάριση ιστορικού"}
 
  :renderer.menubar.core
  {:website "Ιστότοπος"

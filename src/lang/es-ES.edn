@@ -33,6 +33,9 @@
  :renderer.app.events
  {:create-doc "Crear documento"}
 
+ :renderer.dialog.events
+ {:are-you-sure "¿Seguro que quieres continuar?"}
+
  :renderer.dialog.views
  {:search-command "Buscar un comando"
   :no-results "No se encontraron resultados."
@@ -42,11 +45,13 @@
   :dont-save "No guardar"
   :cancel "Cancelar"
   :ok "Aceptar"
+  :action-cannot-undone "Esta acción no se puede deshacer."
   :changes-will-be-lost [:p "Sus cambios en %1 se perderán si cierra el
                              documento sin guardar."]}
 
  :renderer.menubar.views
  {:file "Archivo"
+  :recent "Reciente"
   :export-as "Exportar como"
   :edit "Editar"
   :object "Objeto"
@@ -61,9 +66,7 @@
   :accessibility-filter "Filtro de accesibilidad"
   :language "Idioma"
   :panel "Panel"
-  :help "Ayuda"
-  :recent "Reciente"
-  :recent-clear "Limpiar recientes"}
+  :help "Ayuda"}
 
  :renderer.a11y.db
  {:blur "Desenfoque"
@@ -632,15 +635,8 @@
   :bounds-center "centro de límites"
   :bounds-midpoint "punto medio de límites"}
 
- :renderer.history.events
- {:clear-history "Limpiar historial"}
-
  :renderer.history.views
  {:center-view "Centrar vista"
-  :clear-history "Limpiar historial"
-  :action-cannot-undone "Esta acción no se puede deshacer."
-  :clear-history-description "¿Está seguro de que desea limpiar el historial
-                              del documento?"
   :select-element "Seleccionar elemento"
   :delete-selection "Eliminar selección"
   :oldest "Más antiguo"
@@ -698,6 +694,7 @@
  :renderer.document.core
  {:new "Nuevo"
   :open "Abrir..."
+  :recent-clear "Limpiar recientes"
   :print "Imprimir"
   :save "Guardar"
   :save-as "Guardar como..."
@@ -777,7 +774,8 @@
  :renderer.history.core
  {:undo "Deshacer"
   :redo "Rehacer"
-  :history "History"}
+  :history "Historia"
+  :clear-history "Limpiar historial"}
 
  :renderer.menubar.core
  {:website "Sitio web"

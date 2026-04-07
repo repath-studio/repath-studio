@@ -33,6 +33,9 @@
  :renderer.app.events
  {:create-doc "Belge oluştur"}
 
+ :renderer.dialog.events
+ {:are-you-sure "Devam etmek istediğinizden emin misiniz?"}
+
  :renderer.dialog.views
  {:search-command "Komut ara"
   :no-results "Sonuç bulunamadı."
@@ -42,11 +45,13 @@
   :dont-save "Kaydetme"
   :cancel "İptal"
   :ok "Tamam"
+  :action-cannot-undone "Bu eylem geri alınamaz."
   :changes-will-be-lost [:p "Belgeyi kaydetmeden kapatırsanız
                              %1 için yaptığınız değişiklikler kaybolacak."]}
 
  :renderer.menubar.views
  {:file "Dosya"
+  :recent "Son Kullanılan"
   :export-as "Farklı dışa aktar"
   :edit "Düzenle"
   :object "Nesne"
@@ -61,9 +66,7 @@
   :accessibility-filter "Erişilebilirlik filtresi"
   :language "Dil"
   :panel "Panel"
-  :help "Yardım"
-  :recent "Son Kullanılan"
-  :recent-clear "Son kullanılanları temizle"}
+  :help "Yardım"}
 
  :renderer.a11y.db
  {:blur "Bulanık"
@@ -623,15 +626,8 @@
   :bounds-center "sınır merkezi"
   :bounds-midpoint "sınır orta noktası"}
 
- :renderer.history.events
- {:clear-history "Geçmişi temizle"}
-
  :renderer.history.views
  {:center-view "Görünümü ortala"
-  :clear-history "Geçmişi temizle"
-  :action-cannot-undone "Bu eylem geri alınamaz."
-  :clear-history-description "Belge geçmişini temizlemek istediğinizden emin
-                              misiniz?"
   :select-element "Öğe seç"
   :delete-selection "Seçimi sil"
   :oldest "En eski"
@@ -688,6 +684,7 @@
  :renderer.document.core
  {:new "Yeni"
   :open "Aç..."
+  :recent-clear "Son kullanılanları temizle"
   :print "Yazdır"
   :save "Kaydet"
   :save-as "Farklı kaydet..."
@@ -767,7 +764,8 @@
  :renderer.history.core
  {:undo "Geri al"
   :redo "Yinele"
-  :history "History"}
+  :history "Geçmiş"
+  :clear-history "Geçmişi temizle"}
 
  :renderer.menubar.core
  {:website "Web sitesi"

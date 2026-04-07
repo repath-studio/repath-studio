@@ -33,6 +33,9 @@
  :renderer.app.events
  {:create-doc "Create document"}
 
+ :renderer.dialog.events
+ {:are-you-sure "Are you sure you want to continue?"}
+
  :renderer.dialog.views
  {:search-command "Search for a command"
   :no-results "No results found."
@@ -42,11 +45,13 @@
   :dont-save "Don't save"
   :cancel "Cancel"
   :ok "OK"
+  :action-cannot-undone "This action cannot be undone."
   :changes-will-be-lost [:p "Your changes to %1 will be lost if you close the
                              document without saving."]}
 
  :renderer.menubar.views
  {:file "File"
+  :recent "Recent"
   :export-as "Export as"
   :edit "Edit"
   :object "Object"
@@ -61,9 +66,7 @@
   :accessibility-filter "Accessibility filter"
   :language "Language"
   :panel "Panel"
-  :help "Help"
-  :recent "Recent"
-  :recent-clear "Clear recent"}
+  :help "Help"}
 
  :renderer.a11y.db
  {:blur "Blur"
@@ -128,8 +131,9 @@
                 attribute on its target element, thereby allowing animations to
                 control translation, scaling, rotation, and/or skewing"}
 
- :renderer.element.impl.box {:position-handle "position handle"
-                             :size-handle "size handle"}
+ :renderer.element.impl.box
+ {:position-handle "position handle"
+  :size-handle "size handle"}
 
  :renderer.element.impl.shape.circle
  {:label "Circle"
@@ -615,15 +619,8 @@
   :bounds-center "bounds center"
   :bounds-midpoint "bounds midpoint"}
 
- :renderer.history.events
- {:clear-history "Clear history"}
-
  :renderer.history.views
  {:center-view "Center view"
-  :clear-history "Clear history"
-  :action-cannot-undone "This action cannot be undone."
-  :clear-history-description "Are you sure you wish to clear the document
-                              history?"
   :select-element "Select element"
   :delete-selection "Delete selection"
   :oldest "Oldest"
@@ -679,6 +676,7 @@
  :renderer.document.core
  {:new "New"
   :open "Open…"
+  :recent-clear "Clear recent"
   :print "Print"
   :save "Save"
   :save-as "Save as…"
@@ -758,7 +756,8 @@
  :renderer.history.core
  {:undo "Undo"
   :redo "Redo"
-  :history "History"}
+  :history "History"
+  :clear-history "Clear history"}
 
  :renderer.menubar.core
  {:website "Website"

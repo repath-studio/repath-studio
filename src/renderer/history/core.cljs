@@ -2,6 +2,7 @@
   (:require
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
+   [renderer.dialog.events :as-alias dialog.events]
    [renderer.history.events :as history.events]
    [renderer.history.subs :as history.subs]
    [renderer.utils.key :as utils.key]))
@@ -26,6 +27,14 @@
                            {:keyCode (utils.key/codes "Y")
                             :ctrlKey true}]
                :enabled [::history.subs/redos?]}])
+
+(rf/dispatch [::action.events/register-action
+              {:id :history/clear
+               :label [::clear-history "Clear history"]
+               :icon "delete"
+               :event [::dialog.events/confirm-irreversible-action
+                       {:confirm-action [::history.events/clear]
+                        :confirm-label [::clear-history "Clear history"]}]}])
 
 (rf/dispatch [::action.events/register-action-group
               {:id :edit/history

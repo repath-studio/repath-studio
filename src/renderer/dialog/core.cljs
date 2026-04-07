@@ -12,11 +12,13 @@
                :icon "info"
                :event [::dialog.events/show-about]}])
 
+(def cmdk-title [::command-panel "Command panel"])
+
 (rf/dispatch [::action.events/register-action
               {:id :dialog/command-panel
-               :label [::command-panel "Command panel"]
+               :label cmdk-title
                :icon "command"
-               :event [::dialog.events/show-cmdk]
+               :event [::dialog.events/show-cmdk cmdk-title]
                :shortcuts [{:keyCode (utils.key/codes "F1")}
                            {:keyCode (utils.key/codes "K")
                             :ctrlKey true}]}])

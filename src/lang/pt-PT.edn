@@ -33,6 +33,9 @@
  :renderer.app.events
  {:create-doc "Criar documento"}
 
+ :renderer.dialog.events
+ {:are-you-sure "Tem a certeza de que pretende continuar?"}
+
  :renderer.dialog.views
  {:search-command "Procurar comando"
   :no-results "Nenhum resultado encontrado."
@@ -42,11 +45,13 @@
   :dont-save "Não guardar"
   :cancel "Cancelar"
   :ok "OK"
+  :action-cannot-undone "Esta ação não pode ser desfeita."
   :changes-will-be-lost [:p "As suas alterações em %1 serão perdidas se fechar o
                              documento sem guardar."]}
 
  :renderer.menubar.views
  {:file "Ficheiro"
+  :recent "Recente"
   :export-as "Exportar como"
   :edit "Editar"
   :object "Objeto"
@@ -61,9 +66,7 @@
   :accessibility-filter "Filtro de acessibilidade"
   :language "Idioma"
   :panel "Painel"
-  :help "Ajuda"
-  :recent "Recente"
-  :recent-clear "Limpar recentes"}
+  :help "Ajuda"}
 
  :renderer.a11y.db
  {:blur "Desfoque"
@@ -626,15 +629,8 @@
   :bounds-center "centro dos limites"
   :bounds-midpoint "ponto médio dos limites"}
 
- :renderer.history.events
- {:clear-history "Limpar histórico"}
-
  :renderer.history.views
  {:center-view "Centrar vista"
-  :clear-history "Limpar histórico"
-  :action-cannot-undone "Esta ação não pode ser desfeita."
-  :clear-history-description "Tem a certeza de que deseja limpar o histórico do
-                              documento?"
   :select-element "Selecionar elemento"
   :delete-selection "Eliminar seleção"
   :oldest "Mais antigo"
@@ -770,7 +766,8 @@
  :renderer.history.core
  {:undo "Desfazer"
   :redo "Refazer"
-  :history "History"}
+  :history "Histórico"
+  :clear-history "Limpar histórico"}
 
  :renderer.menubar.core
  {:website "Website"

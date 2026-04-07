@@ -3,6 +3,7 @@
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.app.subs :as-alias app.subs]
+   [renderer.dialog.events :as-alias dialog.events]
    [renderer.document.effects]
    [renderer.document.events :as document.events]
    [renderer.document.subs :as document.subs]
@@ -78,6 +79,17 @@
                :shortcuts [{:keyCode (utils.key/codes "W")
                             :ctrlKey true
                             :altKey true}]}])
+
+(def clear-recent-label [::recent-clear "Clear recent"])
+
+(rf/dispatch [::action.events/register-action
+              {:id :document/clear-recent
+               :label clear-recent-label
+               :icon "delete"
+               :enabled [::document.subs/some-recent?]
+               :event [::dialog.events/confirm-irreversible-action
+                       {:confirm-action [::document.events/clear-recent]
+                        :confirm-label clear-recent-label}]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :document/close-saved

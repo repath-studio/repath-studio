@@ -30,10 +30,7 @@
     (cond-> recent-items
       (seq recent-items)
       (concat [:separator
-               {:id :clear-recent
-                :label [::recent-clear "Clear recent"]
-                :icon "delete"
-                :event [::document.events/clear-recent]}]))))
+               :document/clear-recent]))))
 
 (def export-submenu
   [:export/svg
@@ -53,7 +50,7 @@
            {:id :recent
             :label [::recent "Recent"]
             :type :sub-menu
-            :enabled [::document.subs/recent?]
+            :enabled [::document.subs/some-recent?]
             :available [::app.subs/supported-feature? :file-system]
             :items (recent-submenu)}
            :separator

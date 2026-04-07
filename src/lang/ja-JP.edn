@@ -33,6 +33,9 @@
  :renderer.app.events
  {:create-doc "ドキュメントを作成"}
 
+ :renderer.dialog.events
+ {:are-you-sure "続行してもよろしいですか？"}
+
  :renderer.dialog.views
  {:search-command "コマンドを検索"
   :no-results "結果が見つかりません。"
@@ -42,11 +45,13 @@
   :dont-save "保存しない"
   :cancel "キャンセル"
   :ok "OK"
+  :action-cannot-undone "この操作は元に戻せません。"
   :changes-will-be-lost [:p "%1 への変更は、保存せずにドキュメントを
                              閉じると失われます。"]}
 
  :renderer.menubar.views
  {:file "ファイル"
+  :recent "最近使用"
   :export-as "形式を指定してエクスポート"
   :edit "編集"
   :object "オブジェクト"
@@ -61,9 +66,7 @@
   :accessibility-filter "アクセシビリティフィルタ"
   :language "言語"
   :panel "パネル"
-  :help "ヘルプ"
-  :recent "最近使用"
-  :recent-clear "最近使用をクリア"}
+  :help "ヘルプ"}
 
  :renderer.a11y.db
  {:blur "ブラー"
@@ -589,14 +592,8 @@
   :bounds-center "境界中心"
   :bounds-midpoint "境界中点"}
 
- :renderer.history.events
- {:clear-history "履歴をクリア"}
-
  :renderer.history.views
  {:center-view "ビューを中央に"
-  :clear-history "履歴をクリア"
-  :action-cannot-undone "この操作は元に戻せません。"
-  :clear-history-description "ドキュメントの履歴をクリアしてもよろしいですか？"
   :select-element "要素を選択"
   :delete-selection "選択を削除"
   :oldest "最古"
@@ -731,7 +728,8 @@
  :renderer.history.core
  {:undo "元に戻す"
   :redo "やり直し"
-  :history "History"}
+  :history "履歴"
+  :clear-history "履歴をクリア"}
 
  :renderer.menubar.core
  {:website "ウェブサイト"

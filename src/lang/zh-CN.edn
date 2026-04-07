@@ -33,6 +33,9 @@
  :renderer.app.events
  {:create-doc "创建文档"}
 
+ :renderer.dialog.events
+ {:are-you-sure "您确定要继续吗？"}
+
  :renderer.dialog.views
  {:search-command "搜索命令"
   :no-results "未找到结果。"
@@ -42,10 +45,12 @@
   :dont-save "不保存"
   :cancel "取消"
   :ok "确定"
+  :action-cannot-undone "此操作无法撤销。"
   :changes-will-be-lost [:p "如果您不保存就关闭文档，您对 %1 的更改将丢失。"]}
 
  :renderer.menubar.views
  {:file "文件"
+  :recent "最近"
   :export-as "导出为"
   :edit "编辑"
   :object "对象"
@@ -60,9 +65,7 @@
   :accessibility-filter "辅助功能过滤器"
   :language "语言"
   :panel "面板"
-  :help "帮助"
-  :recent "最近"
-  :recent-clear "清除最近"}
+  :help "帮助"}
 
  :renderer.a11y.db
  {:blur "模糊"
@@ -551,14 +554,8 @@
   :bounds-center "边界中心"
   :bounds-midpoint "边界中点"}
 
- :renderer.history.events
- {:clear-history "清除历史"}
-
  :renderer.history.views
  {:center-view "居中视图"
-  :clear-history "清除历史"
-  :action-cannot-undone "此操作无法撤销。"
-  :clear-history-description "您确定要清除文档历史吗？"
   :select-element "选择元素"
   :delete-selection "删除选择"
   :oldest "最旧的"
@@ -613,6 +610,7 @@
  :renderer.document.core
  {:new "新建"
   :open "打开..."
+  :recent-clear "清除最近"
   :print "打印"
   :save "保存"
   :save-as "另存为..."
@@ -692,7 +690,8 @@
  :renderer.history.core
  {:undo "撤销"
   :redo "重做"
-  :history "History"}
+  :history "历史"
+  :clear-history "清除历史"}
 
  :renderer.menubar.core
  {:website "网站"
