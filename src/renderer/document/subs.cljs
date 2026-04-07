@@ -35,7 +35,7 @@
  (comp boolean seq))
 
 (rf/reg-sub
- ::recent?
+ ::some-recent?
  :<- [::recent]
  (comp boolean seq))
 

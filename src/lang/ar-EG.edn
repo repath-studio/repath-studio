@@ -33,6 +33,9 @@
  :renderer.app.events
  {:create-doc "إنشاء مستند"}
 
+ :renderer.dialog.events
+ {:are-you-sure "هل أنت متأكد أنك تريد المتابعة؟"}
+
  :renderer.dialog.views
  {:search-command "البحث عن أمر"
   :no-results "لا توجد نتائج."
@@ -42,11 +45,13 @@
   :dont-save "عدم الحفظ"
   :cancel "إلغاء"
   :ok "موافق"
+  :action-cannot-undone "لا يمكن التراجع عن هذا الإجراء."
   :changes-will-be-lost [:p "ستفقد التغييرات في %1 إذا أغلقت المستند
                              بدون حفظ."]}
 
  :renderer.menubar.views
  {:file "ملف"
+  :recent "الحديثة"
   :export-as "تصدير كـ"
   :edit "تحرير"
   :object "كائن"
@@ -66,7 +71,6 @@
  :renderer.action.defaults
  {:new "جديد"
   :open "فتح..."
-  :recent "الحديثة"
   :recent-clear "مسح الحديثة"
   :print "طباعة"
   :save "حفظ"
@@ -78,6 +82,7 @@
   :exit "خروج"
   :undo "تراجع"
   :redo "إعادة"
+  :clear-history "مسح التاريخ"
   :cut "قص"
   :copy "نسخ"
   :paste "لصق"
@@ -688,15 +693,8 @@
   :bounds-center "مركز الحدود"
   :bounds-midpoint "نقطة منتصف الحدود"}
 
- :renderer.history.events
- {:clear-history "مسح التاريخ"}
-
  :renderer.history.views
  {:center-view "عرض المركز"
-  :clear-history "مسح التاريخ"
-  :action-cannot-undone "لا يمكن التراجع عن هذا الإجراء."
-  :clear-history-description "هل أنت متأكد من رغبتك في مسح تاريخ
-                              المستند؟"
   :select-element "تحديد عنصر"
   :delete-selection "حذف التحديد"
   :oldest "الأقدم"

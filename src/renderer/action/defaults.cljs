@@ -104,6 +104,15 @@
    :event [::document.events/print]
    :enabled [::document.subs/entities?]})
 
+(def document-clear-recent
+  {:id :document/clear-recent
+   :label [::recent-clear "Clear recent"]
+   :icon "delete"
+   :enabled [::document.subs/some-recent?]
+   :event [::dialog.events/confirm-irreversible-action
+           {:confirm-action [::document.events/clear-recent]
+            :confirm-label [::recent-clear "Clear recent"]}]})
+
 (def export-svg
   {:id :export/svg
    :label [::svg "SVG"]
@@ -159,6 +168,14 @@
                {:keyCode (utils.key/codes "Y")
                 :ctrlKey true}]
    :enabled [::history.subs/redos?]})
+
+(def history-clear
+  {:id :history/clear
+   :label [::clear-history "Clear history"]
+   :icon "delete"
+   :event [::dialog.events/confirm-irreversible-action
+           {:confirm-action  [::history.events/clear]
+            :confirm-label [::clear-history "Clear history"]}]})
 
 (def clipboard-cut
   {:id :clipboard/cut
@@ -645,7 +662,7 @@
   {:id :app/command-panel
    :label [::command-panel "Command panel"]
    :icon "command"
-   :event [::dialog.events/show-cmdk]
+   :event [::dialog.events/show-cmdk [::command-panel "Command panel"]]
    :shortcuts [{:keyCode (utils.key/codes "F1")}
                {:keyCode (utils.key/codes "K")
                 :ctrlKey true}]})
@@ -875,6 +892,7 @@
    document-close-all
    document-close-saved
    document-print
+   document-clear-recent
    export-svg
    export-png
    export-jpg
@@ -882,6 +900,7 @@
    export-gif
    history-undo
    history-redo
+   history-clear
    clipboard-cut
    clipboard-copy
    clipboard-paste

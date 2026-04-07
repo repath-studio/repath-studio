@@ -3,12 +3,13 @@
    [config :as config]
    [re-frame.core :as rf]
    [renderer.dialog.handlers :as dialog.handlers]
-   [renderer.dialog.views :as dialog.views]))
+   [renderer.dialog.views :as dialog.views]
+   [renderer.i18n.handlers :as i18n.handlers]))
 
 (rf/reg-event-db
  ::show-cmdk
- (fn [db [_]]
-   (dialog.handlers/create db {:title [:div.sr-only "Command panel"]
+ (fn [db [_ title]]
+   (dialog.handlers/create db {:title [:div.sr-only (i18n.handlers/t db title)]
                                :content [dialog.views/cmdk]
                                :attrs {:class "top-5 md:top-10 translate-y-0 p-0
                                                w-150"}})))
@@ -20,10 +21,13 @@
                                :content [dialog.views/about]})))
 
 (rf/reg-event-db
- ::show-confirmation
+ ::confirm-irreversible-action
  (fn [db [_ data]]
-   (dialog.handlers/create db {:title (:title data)
-                               :content [dialog.views/confirmation data]})))
+   (dialog.handlers/create
+    db
+    {:title (i18n.handlers/t db [::are-you-sure
+                                 "Are you sure you want to continue?"])
+     :content [dialog.views/confirmation data]})))
 
 (rf/reg-event-fx
  ::close

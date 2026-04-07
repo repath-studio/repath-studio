@@ -12,22 +12,22 @@
 (defn reporting-confirmation-dialog-content
   [db]
   [dialog.views/confirmation
-   {:description (i18n.handlers/t
-                  db
-                  [::reporting-description
-                   [:div
-                    [:p "Would you like to help us improve by sending anonymous
+   {:content (i18n.handlers/t
+              db
+              [::reporting-description
+               [:div
+                [:p "Would you like to help us improve by sending anonymous
                          error reports? You can change your preference at any
                          time from our \"%1\" menu."]
-                    [:p "For more information, please read our %2."]]]
-                  [[:strong (i18n.handlers/t db [::menubar.views/help "Help"])]
-                   [:a.button-link.underline
-                    {:href "https://repath.studio/policies/privacy/"
-                     :target "_blank"}
-                    (i18n.handlers/t db [::privacy-policy "privacy policy"])]])
+                [:p "For more information, please read our %2."]]]
+              [[:strong (i18n.handlers/t db [::menubar.views/help "Help"])]
+               [:a.button-link.underline
+                {:href "https://repath.studio/policies/privacy/"
+                 :target "_blank"}
+                (i18n.handlers/t db [::privacy-policy "privacy policy"])]])
     :confirm-action [::set-reporting true]
     :cancel-action [::set-reporting false]
-    :cancel-label (i18n.handlers/t db [::no-thank-you "No, thank you"])}])
+    :cancel-label [::no-thank-you "No, thank you"]}])
 
 (defn reporting-confirmation-dialog
   [db]
