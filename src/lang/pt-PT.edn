@@ -33,6 +33,9 @@
  :renderer.app.events
  {:create-doc "Criar documento"}
 
+ :renderer.dialog.events
+ {:are-you-sure "Tem a certeza de que pretende continuar?"}
+
  :renderer.dialog.views
  {:search-command "Procurar comando"
   :no-results "Nenhum resultado encontrado."

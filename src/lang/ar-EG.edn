@@ -33,6 +33,9 @@
  :renderer.app.events
  {:create-doc "إنشاء مستند"}
 
+ :renderer.dialog.events
+ {:are-you-sure "هل أنت متأكد أنك تريد المتابعة؟"}
+
  :renderer.dialog.views
  {:search-command "البحث عن أمر"
   :no-results "لا توجد نتائج."

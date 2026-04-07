@@ -33,6 +33,9 @@
  :renderer.app.events
  {:create-doc "Document aanmaken"}
 
+ :renderer.dialog.events
+ {:are-you-sure "Weet u zeker dat u wilt doorgaan?"}
+
  :renderer.dialog.views
  {:search-command "Zoek naar een commando"
   :no-results "Geen resultaten gevonden."

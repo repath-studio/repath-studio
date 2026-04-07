@@ -662,7 +662,7 @@
   {:id :app/command-panel
    :label [::command-panel "Command panel"]
    :icon "command"
-   :event [::dialog.events/show-cmdk]
+   :event [::dialog.events/show-cmdk [::command-panel "Command panel"]]
    :shortcuts [{:keyCode (utils.key/codes "F1")}
                {:keyCode (utils.key/codes "K")
                 :ctrlKey true}]})

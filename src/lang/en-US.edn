@@ -33,6 +33,9 @@
  :renderer.app.events
  {:create-doc "Create document"}
 
+ :renderer.dialog.events
+ {:are-you-sure "Are you sure you want to continue?"}
+
  :renderer.dialog.views
  {:search-command "Search for a command"
   :no-results "No results found."
@@ -220,8 +223,9 @@
                 attribute on its target element, thereby allowing animations to
                 control translation, scaling, rotation, and/or skewing"}
 
- :renderer.element.impl.box {:position-handle "position handle"
-                             :size-handle "size handle"}
+ :renderer.element.impl.box
+ {:position-handle "position handle"
+  :size-handle "size handle"}
 
  :renderer.element.impl.shape.circle
  {:label "Circle"

@@ -33,6 +33,9 @@
  :renderer.app.events
  {:create-doc "Δημιουργία εγγράφου"}
 
+ :renderer.dialog.events
+ {:are-you-sure "Είστε βέβαιοι ότι θέλετε να συνεχίσετε;"}
+
  :renderer.dialog.views
  {:search-command "Αναζήτηση εντολής"
   :no-results "Δεν βρέθηκαν αποτελέσματα."

@@ -33,6 +33,9 @@
  :renderer.app.events
  {:create-doc "Создать документ"}
 
+ :renderer.dialog.events
+ {:are-you-sure "Вы уверены, что хотите продолжить?"}
+
  :renderer.dialog.views
  {:search-command "Поиск команды"
   :no-results "Результаты не найдены."

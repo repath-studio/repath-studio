@@ -33,6 +33,9 @@
  :renderer.app.events
  {:create-doc "ドキュメントを作成"}
 
+ :renderer.dialog.events
+ {:are-you-sure "続行してもよろしいですか？"}
+
  :renderer.dialog.views
  {:search-command "コマンドを検索"
   :no-results "結果が見つかりません。"

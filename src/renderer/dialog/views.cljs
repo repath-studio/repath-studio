@@ -47,7 +47,8 @@
   [:div
    (cond
      (nil? content)
-     [:p (i18n.views/t [::are-you-sure "Are you sure you want to continue?"])]
+     [:p (i18n.views/t [::action-cannot-undone
+                        "This action cannot be undone."])]
 
      (string? content)
      [:p content]
@@ -61,10 +62,6 @@
              :action confirm-action
              :auto-focus true
              :class "accent"}]]])
-
-(defn irreversible-title
-  []
-  (i18n.views/t [::action-cannot-undone "This action cannot be undone."]))
 
 (defn save
   [{:keys [id title]}]

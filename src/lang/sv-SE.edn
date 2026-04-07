@@ -33,6 +33,9 @@
  :renderer.app.events
  {:create-doc "Skapa dokument"}
 
+ :renderer.dialog.events
+ {:are-you-sure "Är du säker på att du vill fortsätta?"}
+
  :renderer.dialog.views
  {:search-command "Sök efter ett kommando"
   :no-results "Inga resultat hittades."

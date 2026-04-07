@@ -33,6 +33,9 @@
  :renderer.app.events
  {:create-doc "Belge oluştur"}
 
+ :renderer.dialog.events
+ {:are-you-sure "Devam etmek istediğinizden emin misiniz?"}
+
  :renderer.dialog.views
  {:search-command "Komut ara"
   :no-results "Sonuç bulunamadı."

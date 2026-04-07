@@ -33,6 +33,9 @@
  :renderer.app.events
  {:create-doc "创建文档"}
 
+ :renderer.dialog.events
+ {:are-you-sure "您确定要继续吗？"}
+
  :renderer.dialog.views
  {:search-command "搜索命令"
   :no-results "未找到结果。"
