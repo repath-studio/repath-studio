@@ -20,9 +20,9 @@
                                :content [dialog.views/about]})))
 
 (rf/reg-event-db
- ::show-confirmation
+ ::confirm-irreversible-action
  (fn [db [_ data]]
-   (dialog.handlers/create db {:title (:title data)
+   (dialog.handlers/create db {:title (dialog.views/irreversible-title)
                                :content [dialog.views/confirmation data]})))
 
 (rf/reg-event-fx

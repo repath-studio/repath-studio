@@ -42,11 +42,13 @@
   :dont-save "Ne pas enregistrer"
   :cancel "Annuler"
   :ok "OK"
+  :action-cannot-undone "Cette action ne peut pas être annulée."
   :changes-will-be-lost [:p "Vos modifications à %1 seront perdues si vous
                              fermez le document sans enregistrer."]}
 
  :renderer.menubar.views
  {:file "Fichier"
+  :recent "Récent"
   :export-as "Exporter sous"
   :edit "Éditer"
   :object "Objet"
@@ -66,7 +68,6 @@
  :renderer.action.defaults
  {:new "Nouveau"
   :open "Ouvrir..."
-  :recent "Récent"
   :recent-clear "Effacer les récents"
   :print "Imprimer"
   :save "Enregistrer"
@@ -78,6 +79,7 @@
   :exit "Quitter"
   :undo "Annuler"
   :redo "Refaire"
+  :clear-history "Effacer l'historique"
   :cut "Couper"
   :copy "Copier"
   :paste "Coller"
@@ -723,15 +725,8 @@
   :bounds-center "centre des limites"
   :bounds-midpoint "point médian des limites"}
 
- :renderer.history.events
- {:clear-history "Effacer l'historique"}
-
  :renderer.history.views
  {:center-view "Centrer la vue"
-  :clear-history "Effacer l'historique"
-  :action-cannot-undone "Cette action ne peut pas être annulée."
-  :clear-history-description "Êtes-vous sûr de vouloir effacer l'historique du
-                              document ?"
   :select-element "Sélectionner l'élément"
   :delete-selection "Supprimer la sélection"
   :oldest "Plus ancien"

@@ -63,6 +63,16 @@
            :on-click (action.views/dispatch action)}
           attrs)])
 
+(defn action-button
+  [action-id & {:as props}]
+  (let [action (action.views/entity action-id)]
+    [:button
+     (merge-with-class {:class "button"
+                        :disabled (action.views/disabled? action)
+                        :on-click (action.views/dispatch action)}
+                       props)
+     [action.views/label action]]))
+
 (defn loading-indicator []
   [icon "spinner" {:class "animate-spin"}])
 

@@ -42,11 +42,13 @@
   :dont-save "保存しない"
   :cancel "キャンセル"
   :ok "OK"
+  :action-cannot-undone "この操作は元に戻せません。"
   :changes-will-be-lost [:p "%1 への変更は、保存せずにドキュメントを
                              閉じると失われます。"]}
 
  :renderer.menubar.views
  {:file "ファイル"
+  :recent "最近使用"
   :export-as "形式を指定してエクスポート"
   :edit "編集"
   :object "オブジェクト"
@@ -66,7 +68,6 @@
  :renderer.action.defaults
  {:new "新規"
   :open "開く..."
-  :recent "最近使用"
   :recent-clear "最近使用をクリア"
   :print "印刷"
   :save "保存"
@@ -78,6 +79,7 @@
   :exit "終了"
   :undo "元に戻す"
   :redo "やり直し"
+  :clear-history "履歴をクリア"
   :cut "切り取り"
   :copy "コピー"
   :paste "貼り付け"
@@ -673,14 +675,8 @@
   :bounds-center "境界中心"
   :bounds-midpoint "境界中点"}
 
- :renderer.history.events
- {:clear-history "履歴をクリア"}
-
  :renderer.history.views
  {:center-view "ビューを中央に"
-  :clear-history "履歴をクリア"
-  :action-cannot-undone "この操作は元に戻せません。"
-  :clear-history-description "ドキュメントの履歴をクリアしてもよろしいですか？"
   :select-element "要素を選択"
   :delete-selection "選択を削除"
   :oldest "最古"

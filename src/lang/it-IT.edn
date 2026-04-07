@@ -42,11 +42,13 @@
   :dont-save "Non salvare"
   :cancel "Annulla"
   :ok "OK"
+  :action-cannot-undone "Questa azione non può essere annullata."
   :changes-will-be-lost [:p "Le tue modifiche a %1 andranno perse se chiudi il
                              documento senza salvare."]}
 
  :renderer.menubar.views
  {:file "File"
+  :recent "Recenti"
   :export-as "Esporta come"
   :edit "Modifica"
   :object "Oggetto"
@@ -66,7 +68,6 @@
  :renderer.action.defaults
  {:new "Nuovo"
   :open "Apri..."
-  :recent "Recenti"
   :recent-clear "Cancella recenti"
   :print "Stampa"
   :save "Salva"
@@ -78,6 +79,7 @@
   :exit "Esci"
   :undo "Annulla"
   :redo "Ripeti"
+  :clear-history "Cancella cronologia"
   :cut "Taglia"
   :copy "Copia"
   :paste "Incolla"
@@ -725,15 +727,8 @@
   :bounds-center "centro dei limiti"
   :bounds-midpoint "punto medio dei limiti"}
 
- :renderer.history.events
- {:clear-history "Cancella cronologia"}
-
  :renderer.history.views
  {:center-view "Centra vista"
-  :clear-history "Cancella cronologia"
-  :action-cannot-undone "Questa azione non può essere annullata."
-  :clear-history-description "Sei sicuro di voler cancellare la cronologia del
-                              documento?"
   :select-element "Seleziona elemento"
   :delete-selection "Elimina selezione"
   :oldest "Più vecchio"

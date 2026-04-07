@@ -42,11 +42,13 @@
   :dont-save "Don't save"
   :cancel "Cancel"
   :ok "OK"
+  :action-cannot-undone "This action cannot be undone."
   :changes-will-be-lost [:p "Your changes to %1 will be lost if you close the
                              document without saving."]}
 
  :renderer.menubar.views
  {:file "File"
+  :recent "Recent"
   :export-as "Export as"
   :edit "Edit"
   :object "Object"
@@ -66,7 +68,6 @@
  :renderer.action.defaults
  {:new "New"
   :open "Open..."
-  :recent "Recent"
   :recent-clear "Clear recent"
   :print "Print"
   :save "Save"
@@ -78,6 +79,7 @@
   :exit "Exit"
   :undo "Undo"
   :redo "Redo"
+  :clear-history "Clear history"
   :cut "Cut"
   :copy "Copy"
   :paste "Paste"
@@ -699,15 +701,8 @@
   :bounds-center "bounds center"
   :bounds-midpoint "bounds midpoint"}
 
- :renderer.history.events
- {:clear-history "Clear history"}
-
  :renderer.history.views
  {:center-view "Center view"
-  :clear-history "Clear history"
-  :action-cannot-undone "This action cannot be undone."
-  :clear-history-description "Are you sure you wish to clear the document
-                              history?"
   :select-element "Select element"
   :delete-selection "Delete selection"
   :oldest "Oldest"

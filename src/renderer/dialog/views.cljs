@@ -42,19 +42,29 @@
                :class "accent"}]]]))
 
 (defn confirmation
-  [{:keys [description confirm-action confirm-label cancel-action
+  [{:keys [content confirm-action confirm-label cancel-action
            cancel-label]}]
   [:div
-   (cond->> description
-     (string? description)
-     (into [:p]))
+   (cond
+     (nil? content)
+     [:p (i18n.views/t [::are-you-sure "Are you sure you want to continue?"])]
+
+     (string? content)
+     [:p content]
+
+     :else content)
+
    [button-bar
-    [button {:label (or cancel-label (i18n.views/t [::cancel "Cancel"]))
+    [button {:label (i18n.views/t (or cancel-label [::cancel "Cancel"]))
              :action cancel-action}]
-    [button {:label (or confirm-label (i18n.views/t [::ok "OK"]))
+    [button {:label (i18n.views/t (or confirm-label [::ok "OK"]))
              :action confirm-action
              :auto-focus true
              :class "accent"}]]])
+
+(defn irreversible-title
+  []
+  (i18n.views/t [::action-cannot-undone "This action cannot be undone."]))
 
 (defn save
   [{:keys [id title]}]
@@ -82,7 +92,7 @@
     [:> Command/CommandItem
      {:on-select #(rf/dispatch [::dialog.events/close event])
       :class "flex p-2 rounded-md items-center justify-between
-                data-[selected=true]:bg-overlay"}
+              data-[selected=true]:bg-overlay"}
      [:div.flex.items-center.gap-2
       [:div.w-7.h-7.rounded.line-height-6.flex.justify-center.items-center
        {:class (when icon "bg-overlay")}

@@ -128,16 +128,6 @@
                        :siblings 1}
       :renderCustomNodeElement node}]))
 
-(defn clear-dialog
-  []
-  {:title (i18n.views/t [::action-cannot-undone
-                         "This action cannot be undone."])
-   :description (i18n.views/t [::clear-history-description
-                               "Are you sure you wish to clear the document
-                                history?"])
-   :confirm-label (i18n.views/t [::clear-history "Clear history"])
-   :confirm-action [::history.events/clear]})
-
 (defn legend
   []
   (let [start-color (history.handlers/age-ratio->color 0)
@@ -172,7 +162,4 @@
         {:on-click #(rf/dispatch [::history.events/tree-view-updated
                                   0.5 (center ref)])}
         (i18n.views/t [::center-view "Center view"])]
-       [:button.button.flex-1
-        {:on-click #(rf/dispatch [::dialog.events/show-confirmation
-                                  (clear-dialog)])}
-        (i18n.views/t [::clear-history "Clear history"])]]]]))
+       [views/action-button :history/clear {:class "flex-1"}]]]]))

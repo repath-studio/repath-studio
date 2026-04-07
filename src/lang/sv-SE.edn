@@ -42,11 +42,13 @@
   :dont-save "Spara inte"
   :cancel "Avbryt"
   :ok "OK"
+  :action-cannot-undone "Denna åtgärd kan inte ångras."
   :changes-will-be-lost [:p "Dina ändringar av %1 kommer att förloras om du
                              stänger dokumentet utan att spara."]}
 
  :renderer.menubar.views
  {:file "Arkiv"
+  :recent "Senaste"
   :export-as "Exportera som"
   :edit "Redigera"
   :object "Objekt"
@@ -66,7 +68,6 @@
  :renderer.action.defaults
  {:new "Ny"
   :open "Öppna..."
-  :recent "Senaste"
   :recent-clear "Rensa senaste"
   :print "Skriv ut"
   :save "Spara"
@@ -78,6 +79,7 @@
   :exit "Avsluta"
   :undo "Ångra"
   :redo "Gör om"
+  :clear-history "Rensa historik"
   :cut "Klipp ut"
   :copy "Kopiera"
   :paste "Klistra in"
@@ -713,15 +715,8 @@
   :bounds-center "gränscentrum"
   :bounds-midpoint "gränsmittpunkt"}
 
- :renderer.history.events
- {:clear-history "Rensa historik"}
-
  :renderer.history.views
  {:center-view "Centrera vy"
-  :clear-history "Rensa historik"
-  :action-cannot-undone "Denna åtgärd kan inte ångras."
-  :clear-history-description "Är du säker på att du vill rensa
-                              dokumenthistoriken?"
   :select-element "Markera element"
   :delete-selection "Ta bort markering"
   :oldest "Äldsta"

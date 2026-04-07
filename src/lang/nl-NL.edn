@@ -42,11 +42,13 @@
   :dont-save "Niet opslaan"
   :cancel "Annuleren"
   :ok "OK"
+  :action-cannot-undone "Deze actie kan niet ongedaan gemaakt worden."
   :changes-will-be-lost [:p "Uw wijzigingen aan %1 gaan verloren als u het
                              document sluit zonder op te slaan."]}
 
  :renderer.menubar.views
  {:file "Bestand"
+  :recent "Recent"
   :export-as "Exporteren als"
   :edit "Bewerken"
   :object "Object"
@@ -66,7 +68,6 @@
  :renderer.action.defaults
  {:new "Nieuw"
   :open "Openen..."
-  :recent "Recent"
   :recent-clear "Recent wissen"
   :print "Afdrukken"
   :save "Opslaan"
@@ -78,6 +79,7 @@
   :exit "Afsluiten"
   :undo "Ongedaan maken"
   :redo "Opnieuw"
+  :clear-history "Geschiedenis wissen"
   :cut "Knippen"
   :copy "Kopiëren"
   :paste "Plakken"
@@ -728,15 +730,8 @@
   :bounds-center "grensmiddelpunt"
   :bounds-midpoint "grensmiddenpunt"}
 
- :renderer.history.events
- {:clear-history "Geschiedenis wissen"}
-
  :renderer.history.views
  {:center-view "Weergave centreren"
-  :clear-history "Geschiedenis wissen"
-  :action-cannot-undone "Deze actie kan niet ongedaan gemaakt worden."
-  :clear-history-description "Weet u zeker dat u de documentgeschiedenis wilt
-                              wissen?"
   :select-element "Element selecteren"
   :delete-selection "Selectie verwijderen"
   :oldest "Oudste"

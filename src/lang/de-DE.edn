@@ -42,11 +42,13 @@
   :dont-save "Nicht speichern"
   :cancel "Abbrechen"
   :ok "OK"
+  :action-cannot-undone "Diese Aktion kann nicht rückgängig gemacht werden."
   :changes-will-be-lost [:p "Ihre Änderungen an %1 gehen verloren, wenn Sie
                              das Dokument ohne Speichern schließen."]}
 
  :renderer.menubar.views
  {:file "Datei"
+  :recent "Zuletzt verwendet"
   :export-as "Exportieren als"
   :edit "Bearbeiten"
   :object "Objekt"
@@ -66,7 +68,6 @@
  :renderer.action.defaults
  {:new "Neu"
   :open "Öffnen..."
-  :recent "Zuletzt verwendet"
   :recent-clear "Verlauf löschen"
   :print "Drucken"
   :save "Speichern"
@@ -78,6 +79,7 @@
   :exit "Beenden"
   :undo "Rückgängig"
   :redo "Wiederholen"
+  :clear-history "Verlauf löschen"
   :cut "Ausschneiden"
   :copy "Kopieren"
   :paste "Einfügen"
@@ -729,15 +731,8 @@
   :bounds-center "Begrenzungszentrum"
   :bounds-midpoint "Begrenzungsmittelpunkt"}
 
- :renderer.history.events
- {:clear-history "Verlauf löschen"}
-
  :renderer.history.views
  {:center-view "Ansicht zentrieren"
-  :clear-history "Verlauf löschen"
-  :action-cannot-undone "Diese Aktion kann nicht rückgängig gemacht werden."
-  :clear-history-description "Sind Sie sicher, dass Sie den Dokumentverlauf
-                              löschen möchten?"
   :select-element "Element auswählen"
   :delete-selection "Auswahl löschen"
   :oldest "Älteste"

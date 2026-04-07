@@ -42,11 +42,13 @@
   :dont-save "Μη αποθήκευση"
   :cancel "Ακύρωση"
   :ok "Εντάξει"
+  :action-cannot-undone "Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
   :changes-will-be-lost [:p "Οι αλλαγές στο %1 θα χαθούνε εάν κλείσετε το
                              έγγραφο χωρίς αποθήκευση."]}
 
  :renderer.menubar.views
  {:file "Αρχείο"
+  :recent "Πρόσφατα"
   :export-as "Εξαγωγή ως"
   :edit "Επεξεργασία"
   :object "Αντικείμενο"
@@ -66,7 +68,6 @@
  :renderer.action.defaults
  {:new "Νέο"
   :open "Άνοιγμα..."
-  :recent "Πρόσφατα"
   :recent-clear "Καθαρισμός πρόσφατων"
   :print "Εκτύπωση"
   :save "Αποθήκευση"
@@ -78,6 +79,7 @@
   :exit "Έξοδος"
   :undo "Αναίρεση"
   :redo "Επαναφορά"
+  :clear-history "Εκκαθάριση ιστορικού"
   :cut "Αποκοπή"
   :copy "Αντιγραφή"
   :paste "Επικόλληση"
@@ -734,15 +736,8 @@
   :bounds-center "κέντρο ορίων"
   :bounds-midpoint "μέσο σημείο ορίων"}
 
- :renderer.history.events
- {:clear-history "Εκκαθάριση ιστορικού"}
-
  :renderer.history.views
  {:center-view "Κεντρική προβολή"
-  :clear-history "Εκκαθάριση ιστορικού"
-  :action-cannot-undone "Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
-  :clear-history-description "Είστε σίγουροι οτι θέλετε να διαγράψετε το
-                              ιστορικό του εγγράφου?"
   :select-element "Επιλογή στοιχείου"
   :delete-selection "Διαγραφή επιλεγμένου"
   :oldest "Παλαιότερο"

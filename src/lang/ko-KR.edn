@@ -42,11 +42,13 @@
   :dont-save "저장하지 않음"
   :cancel "취소"
   :ok "확인"
+  :action-cannot-undone "이 작업은 실행 취소할 수 없습니다."
   :changes-will-be-lost [:p "저장하지 않고 문서를 닫으면
                              %1에 대한 변경사항이 손실됩니다."]}
 
  :renderer.menubar.views
  {:file "파일"
+  :recent "최근"
   :export-as "내보내기"
   :edit "편집"
   :object "객체"
@@ -66,7 +68,6 @@
  :renderer.action.defaults
  {:new "새로 만들기"
   :open "열기..."
-  :recent "최근"
   :recent-clear "최근 기록 지우기"
   :print "인쇄"
   :save "저장"
@@ -78,6 +79,7 @@
   :exit "종료"
   :undo "실행 취소"
   :redo "다시 실행"
+  :clear-history "기록 지우기"
   :cut "잘라내기"
   :copy "복사"
   :paste "붙여넣기"
@@ -669,14 +671,8 @@
   :bounds-center "경계 중심"
   :bounds-midpoint "경계 중점"}
 
- :renderer.history.events
- {:clear-history "기록 지우기"}
-
  :renderer.history.views
  {:center-view "뷰 중앙"
-  :clear-history "기록 지우기"
-  :action-cannot-undone "이 작업은 실행 취소할 수 없습니다."
-  :clear-history-description "문서 기록을 지우시겠습니까?"
   :select-element "요소 선택"
   :delete-selection "선택 삭제"
   :oldest "가장 오래된"
