@@ -6,6 +6,7 @@
    [renderer.a11y.subs :as-alias a11y.subs]
    [renderer.action.views :as action.views]
    [renderer.app.subs :as-alias app.subs]
+   [renderer.dialog.events :as-alias dialog.events]
    [renderer.document.events :as-alias document.events]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.subs :as-alias element.subs]
@@ -15,7 +16,6 @@
    [renderer.menubar.events :as-alias menubar.events]
    [renderer.menubar.subs :as-alias menubar.subs]
    [renderer.views :as views]
-   [renderer.dialog.events :as-alias dialog.events]
    [renderer.window.subs :as-alias window.subs]))
 
 (defn clear-recent-dialog
@@ -23,7 +23,8 @@
   {:title (i18n.views/t [:renderer.history.views/action-cannot-undone
                          "This action cannot be undone."])
    :description (i18n.views/t [::clear-recent-description
-                               "Are you sure you wish to clear the recent documents?"])
+                               "Are you sure you wish to clear the recent
+                                documents?"])
    :confirm-label (i18n.views/t [::recent-clear "Clear recent"])
    :confirm-action [::document.events/clear-recent]})
 
@@ -43,7 +44,8 @@
                {:id :clear-recent
                 :label [::recent-clear "Clear recent"]
                 :icon "delete"
-                :event [::dialog.events/show-confirmation (clear-recent-dialog)]}]))))
+                :event [::dialog.events/show-confirmation
+                        (clear-recent-dialog)]}]))))
 
 (def export-submenu
   [:export/svg
