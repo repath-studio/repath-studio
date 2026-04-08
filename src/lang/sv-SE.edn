@@ -56,16 +56,12 @@
   :edit "Redigera"
   :object "Objekt"
   :align "Justera"
-  :animate "Animera"
-  :boolean-operation "Boolesk operation"
   :image "Bild"
   :path "Bana"
   :view "Visa"
   :zoom "Zoom"
-  :theme-mode "Tema-läge"
   :accessibility-filter "Tillgänglighetsfilter"
   :language "Språk"
-  :panel "Panel"
   :help "Hjälp"}
 
  :renderer.a11y.db
@@ -786,7 +782,8 @@
   :menubar-help "Hjälpmeny"}
 
  :renderer.panel.core
- {:panel-element-tree "Elementträd"
+ {:panel "Panel"
+  :panel-element-tree "Elementträd"
   :panel-properties "Egenskaper"
   :panel-xml-view "XML-vy"
   :panel-history-tree "Historikträd"
@@ -804,7 +801,8 @@
   :nodes "noder"}
 
  :renderer.theme.core
- {:dark "Mörk"
+ {:theme-mode "Tema-läge"
+  :dark "Mörk"
   :light "Ljus"
   :system "System"}
 

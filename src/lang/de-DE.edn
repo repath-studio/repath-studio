@@ -56,16 +56,12 @@
   :edit "Bearbeiten"
   :object "Objekt"
   :align "Ausrichten"
-  :animate "Animieren"
-  :boolean-operation "Boolesche Operation"
   :image "Bild"
   :path "Pfad"
   :view "Ansicht"
   :zoom "Zoom"
-  :theme-mode "Thema-Modus"
   :accessibility-filter "Barrierefreiheitsfilter"
   :language "Sprache"
-  :panel "Panel"
   :help "Hilfe"}
 
  :renderer.a11y.db
@@ -804,7 +800,8 @@
   :menubar-help "Menü Hilfe"}
 
  :renderer.panel.core
- {:panel-element-tree "Elementbaum"
+ {:panel "Panel"
+  :panel-element-tree "Elementbaum"
   :panel-properties "Eigenschaften"
   :panel-xml-view "XML-Ansicht"
   :panel-history-tree "Verlaufsbaum"
@@ -822,7 +819,8 @@
   :nodes "Knoten"}
 
  :renderer.theme.core
- {:dark "Dunkel"
+ {:theme-mode "Thema-Modus"
+  :dark "Dunkel"
   :light "Hell"
   :system "System"}
 

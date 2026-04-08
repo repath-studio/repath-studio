@@ -56,16 +56,12 @@
   :edit "편집"
   :object "객체"
   :align "정렬"
-  :animate "애니메이션"
-  :boolean-operation "불린 연산"
   :image "이미지"
   :path "패스"
   :view "보기"
   :zoom "확대/축소"
-  :theme-mode "테마 모드"
   :accessibility-filter "접근성 필터"
   :language "언어"
-  :panel "패널"
   :help "도움말"}
 
  :renderer.a11y.db
@@ -740,7 +736,8 @@
   :menubar-help "도움말 메뉴"}
 
  :renderer.panel.core
- {:panel-element-tree "요소 트리"
+ {:panel "패널"
+  :panel-element-tree "요소 트리"
   :panel-properties "속성"
   :panel-xml-view "XML 보기"
   :panel-history-tree "기록 트리"
@@ -758,7 +755,8 @@
   :nodes "노드"}
 
  :renderer.theme.core
- {:dark "다크"
+ {:theme-mode "테마 모드"
+  :dark "다크"
   :light "라이트"
   :system "시스템"}
 

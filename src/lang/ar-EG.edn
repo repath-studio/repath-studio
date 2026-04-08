@@ -56,16 +56,12 @@
   :edit "تحرير"
   :object "كائن"
   :align "محاذاة"
-  :animate "تحريك"
-  :boolean-operation "عملية منطقية"
   :image "صورة"
   :path "مسار"
   :view "عرض"
   :zoom "تكبير"
-  :theme-mode "وضع السمة"
   :accessibility-filter "مرشح إمكانية الوصول"
   :language "اللغة"
-  :panel "لوحة"
   :help "مساعدة"}
 
  :renderer.a11y.db
@@ -761,7 +757,8 @@
   :menubar-help "قائمة المساعدة"}
 
  :renderer.panel.core
- {:panel-element-tree "شجرة العناصر"
+ {:panel "لوحة"
+  :panel-element-tree "شجرة العناصر"
   :panel-properties "الخصائص"
   :panel-xml-view "عرض XML"
   :panel-history-tree "شجرة التاريخ"
@@ -779,7 +776,8 @@
   :nodes "العقد"}
 
  :renderer.theme.core
- {:dark "مظلم"
+ {:theme-mode "وضع السمة"
+  :dark "مظلم"
   :light "فاتح"
   :system "النظام"}
 

@@ -44,73 +44,46 @@
   {:id :file
    :label [::file "File"]
    :type :root
-   :items [:document/new
-           :separator
-           :document/open
-           {:id :recent
-            :label [::recent "Recent"]
-            :type :sub-menu
-            :enabled [::document.subs/some-recent?]
-            :available [::app.subs/supported-feature? :file-system]
-            :items (recent-submenu)}
-           :separator
-           :document/save
-           :document/save-as
-           :document/download
-           {:id :export
-            :label [::export-as "Export as"]
-            :type :sub-menu
-            :enabled [::document.subs/entities?]
-            :items export-submenu}
-           :separator
-           :document/print
-           :separator
-           :document/close
-           :window/close]})
+   :actions [:document/new
+             :separator
+             :document/open
+             {:id :recent
+              :label [::recent "Recent"]
+              :type :sub-menu
+              :enabled [::document.subs/some-recent?]
+              :available [::app.subs/supported-feature? :file-system]
+              :actions (recent-submenu)}
+             :separator
+             :document/save
+             :document/save-as
+             :document/download
+             {:id :export
+              :label [::export-as "Export as"]
+              :type :sub-menu
+              :enabled [::document.subs/entities?]
+              :actions export-submenu}
+             :separator
+             :document/print
+             :separator
+             :document/close
+             :window/close]})
 
 (defn edit-menu []
   {:id :edit
    :label [::edit "Edit"]
    :type :root
    :enabled [::document.subs/entities?]
-   :items [:history/undo
-           :history/redo
-           :separator
-           :clipboard/cut
-           :clipboard/copy
-           :clipboard/paste
-           :clipboard/paste-in-place
-           :clipboard/paste-styles
-           :separator
-           :element/duplicate
-           :separator
-           :element/select-all
-           :element/deselect-all
-           :element/invert-selection
-           :element/select-same-tags
-           :separator
-           :element/delete]})
-
-(def align-submenu
-  [:align/left
-   :align/center-horizontal
-   :align/right
-   :separator
-   :align/top
-   :align/center-vertical
-   :align/bottom])
-
-(def boolean-submenu
-  [:boolean/exclude
-   :boolean/unite
-   :boolean/intersect
-   :boolean/subtract
-   :boolean/divide])
-
-(def animate-submenu
-  [:animate/animate
-   :animate/transform
-   :animate/motion])
+   :actions (->> [[:history/undo
+                   :history/redo]
+                  (:actions (action.views/deref-action-group :edit/clipboard))
+                  [:element/duplicate]
+                  [:element/select-all
+                   :element/deselect-all
+                   :element/invert-selection
+                   :element/select-same-tags]
+                  [:element/delete]]
+                 (interpose :separator)
+                 (flatten))})
 
 (def path-submenu
   [:path/simplify
@@ -126,46 +99,43 @@
    :label [::object "Object"]
    :type :root
    :enabled [::document.subs/entities?]
-   :items [:object/to-path
-           :object/stroke-to-path
-           :separator
-           :object/group
-           :object/ungroup
-           :separator
-           :object/lock
-           :object/unlock
-           :separator
-           {:id :align
-            :label [::align "Align"]
-            :type :sub-menu
-            :enabled [::element.subs/not-every-top-level?]
-            :items align-submenu}
-           {:id :animate
-            :label [::animate "Animate"]
-            :type :sub-menu
-            :enabled [::element.subs/some-selected?]
-            :items animate-submenu}
-           {:id :boolean
-            :label [::boolean-operation "Boolean operation"]
-            :type :sub-menu
-            :enabled [::element.subs/multiple-selected?]
-            :items boolean-submenu}
-           :separator
-           :object/raise
-           :object/lower
-           :object/raise-to-top
-           :object/lower-to-bottom
-           :separator
-           {:id :image
-            :type :sub-menu
-            :label [::image "Image"]
-            :enabled [::element.subs/has-selected-tag? :image]
-            :items image-submenu}
-           {:id :path
-            :label [::path "Path"]
-            :type :sub-menu
-            :enabled [::element.subs/has-selected-tag? :path]
-            :items path-submenu}]})
+   :actions [:object/to-path
+             :object/stroke-to-path
+             :separator
+             :object/group
+             :object/ungroup
+             :separator
+             :object/lock
+             :object/unlock
+             :separator
+             {:id :align
+              :label [::align "Align"]
+              :type :sub-menu
+              :enabled [::element.subs/not-every-top-level?]
+              :actions (->> [:object/horizontal-alignment
+                             :object/vertical-alignment]
+                            (map (comp :actions
+                                       action.views/deref-action-group))
+                            (interpose :separator)
+                            (flatten))}
+             (action.views/deref-action-group :object/animate)
+             (action.views/deref-action-group :object/boolean-operations)
+             :separator
+             :object/raise
+             :object/lower
+             :object/raise-to-top
+             :object/lower-to-bottom
+             :separator
+             {:id :image
+              :type :sub-menu
+              :label [::image "Image"]
+              :enabled [::element.subs/has-selected-tag? :image]
+              :actions image-submenu}
+             {:id :path
+              :label [::path "Path"]
+              :type :sub-menu
+              :enabled [::element.subs/has-selected-tag? :path]
+              :actions path-submenu}]})
 
 (def zoom-submenu
   [:zoom/in
@@ -206,73 +176,53 @@
                :event [::i18n.events/set-user-lang "system"]
                :active [::i18n.subs/selected-lang? "system"]}])))
 
-(def theme-mode-submenu
-  [:theme/set-system-mode
-   :theme/set-dark-mode
-   :theme/set-light-mode])
-
-(def panel-submenu
-  [:panel/toggle-tree
-   :panel/toggle-properties
-   :panel/toggle-xml
-   :panel/toggle-history
-   :panel/toggle-repl-history
-   :panel/toggle-timeline])
-
 (defn view-menu []
   {:id :view
    :label [::view "View"]
    :type :root
-   :items [{:id :zoom
-            :label [::zoom "Zoom"]
-            :type :sub-menu
-            :enabled [::document.subs/entities?]
-            :items zoom-submenu}
-           {:id :theme-mode
-            :label [::theme-mode "Theme mode"]
-            :type :sub-menu
-            :items theme-mode-submenu}
-           {:id :a11y
-            :label [::accessibility-filter "Accessibility filter"]
-            :type :sub-menu
-            :enabled [::document.subs/entities?]
-            :items (a11y-submenu)}
-           {:id :lang
-            :label [::language "Language"]
-            :type :sub-menu
-            :items (languages-submenu)}
-           :separator
-           :view/toggle-grid
-           :view/toggle-rulers
-           :view/toggle-help-bar
-           :view/toggle-debug-info
-           {:type :separator
-            :available [::window.subs/md?]}
-           {:id :panel
-            :label [::panel "Panel"]
-            :type :sub-menu
-            :items panel-submenu
-            :available [::window.subs/md?]}
-           {:type :separator
-            :available [::app.subs/desktop?]}
-           :view/toggle-fullscreen]})
+   :actions [{:id :zoom
+              :label [::zoom "Zoom"]
+              :type :sub-menu
+              :enabled [::document.subs/entities?]
+              :actions zoom-submenu}
+             (action.views/deref-action-group :theme/mode)
+             {:id :a11y
+              :label [::accessibility-filter "Accessibility filter"]
+              :type :sub-menu
+              :enabled [::document.subs/entities?]
+              :actions (a11y-submenu)}
+             {:id :lang
+              :label [::language "Language"]
+              :type :sub-menu
+              :actions (languages-submenu)}
+             :separator
+             :view/toggle-grid
+             :view/toggle-rulers
+             :view/toggle-help-bar
+             :view/toggle-debug-info
+             {:type :separator
+              :available [::window.subs/md?]}
+             (action.views/deref-action-group :view/panel)
+             {:type :separator
+              :available [::app.subs/desktop?]}
+             :view/toggle-fullscreen]})
 
 (defn help-menu []
   {:id :help
    :label [::help "Help"]
    :type :root
-   :items [:dialog/command-panel
-           :separator
-           :help/website
-           :help/source-code
-           :help/license
-           :help/changelog
-           :help/privacy-policy
-           :separator
-           :help/submit-issue
-           :error/toggle-reporting
-           :separator
-           :dialog/about]})
+   :actions [:dialog/command-panel
+             :separator
+             :help/website
+             :help/source-code
+             :help/license
+             :help/changelog
+             :help/privacy-policy
+             :separator
+             :help/submit-issue
+             :error/toggle-reporting
+             :separator
+             :dialog/about]})
 
 (defn action-menu-item
   [id]
@@ -281,7 +231,19 @@
       (:active action)
       (assoc :type :checkbox))))
 
-(defmulti menu-item :type)
+(defmulti menu-item
+  (fn [action]
+    (cond
+      (:type action)
+      (:type action)
+
+      (:active action)
+      :checkbox
+
+      (:actions action)
+      :sub-menu
+
+      :else :default)))
 
 (defn resolve-item
   [item]
@@ -308,25 +270,26 @@
 
 (defmethod menu-item :sub-menu
   [action]
-  [:> Menubar/Sub
-   [:> Menubar/SubTrigger
-    {:class "sub-menu-item menu-item"
-     :disabled (action.views/disabled? action)}
-    [:div [action.views/label action]]
-    [:div.rtl:mr-auto.text-inherit
-     {:class "mr-[-1rem] rtl:ml-[-1rem] rtl:scale-x-[-1]"}
-     [views/icon "chevron-right"]]]
-   [:> Menubar/Portal
-    (into [:> Menubar/SubContent
-           {:class "menu-content min-w-[45dvw]! sm:min-w-[200px]!
+  (when (seq (:actions action))
+    [:> Menubar/Sub
+     [:> Menubar/SubTrigger
+      {:class "sub-menu-item menu-item"
+       :disabled (action.views/disabled? action)}
+      [:div [action.views/label action]]
+      [:div.rtl:mr-auto.text-inherit
+       {:class "mr-[-1rem] rtl:ml-[-1rem] rtl:scale-x-[-1]"}
+       [views/icon "chevron-right"]]]
+     [:> Menubar/Portal
+      (into [:> Menubar/SubContent
+             {:class "menu-content min-w-[45dvw]! sm:min-w-[200px]!
                         max-w-[50dvw]"
-            :align "start"
-            :loop true
-            :on-escape-key-down #(.stopPropagation %)}]
-          (map resolve-item (:items action)))]])
+              :align "start"
+              :loop true
+              :on-escape-key-down #(.stopPropagation %)}]
+            (map resolve-item (:actions action)))]]))
 
 (defmethod menu-item :root
-  [{:keys [items id]
+  [{:keys [actions id]
     :as action}]
   (let [desktop? @(rf/subscribe [::app.subs/desktop?])
         computed-lang @(rf/subscribe [::i18n.subs/lang])
@@ -350,14 +313,14 @@
            [views/icon "menu" {:aria-label (i18n.views/t [::menu "Menu"])}])]]
      [:> Menubar/Portal
       (into [:> Menubar/Content
-             {:class (when items "menu-content min-w-[45dvw]! sm:min-w-[200px]!
-                                  max-w-[45dvw]")
+             {:class (when actions "menu-content min-w-[45dvw]!
+                                    sm:min-w-[200px]! max-w-[45dvw]")
               :align "start"
               :side-offset 4
               :loop true
               :on-escape-key-down #(.stopPropagation %)
               :on-close-auto-focus #(.preventDefault %)}]
-            (map resolve-item items))]]))
+            (map resolve-item actions))]]))
 
 (defmethod menu-item :default
   [action]
@@ -378,7 +341,7 @@
 (defn mobile-root []
   [{:id :root
     :type :root
-    :items (mapv #(assoc % :type :sub-menu) (submenus))}])
+    :actions (mapv #(assoc % :type :sub-menu) (submenus))}])
 
 (defn root []
   (let [active-menu @(rf/subscribe [::menubar.subs/active-menu])

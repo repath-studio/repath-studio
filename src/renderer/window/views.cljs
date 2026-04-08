@@ -113,13 +113,14 @@
 
 (defn theme-mode-select
   [mode]
-  [dropdown
-   [:button.button
-    {:title (i18n.views/t [::menubar.views/theme-mode "Theme Mode"])
-     :class "flex gap-1 items-center px-3 bg-primary outline-inset"}
-    [views/icon (name mode)]]
-   (->> menubar.views/theme-mode-submenu
-        (mapv (comp views/dropdown-menu-item menubar.views/action-menu-item)))])
+  (let [{:keys [label actions]} (action.views/deref-action-group :theme/mode)]
+    [dropdown
+     [:button.button
+      {:title (i18n.views/t label)
+       :class "flex gap-1 items-center px-3 bg-primary outline-inset"}
+      [views/icon (name mode)]]
+     (->> actions
+          (mapv views/dropdown-menu-item))]))
 
 (defn window-controls []
   (->> (window-control-buttons)

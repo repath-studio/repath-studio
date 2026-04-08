@@ -55,16 +55,12 @@
   :edit "编辑"
   :object "对象"
   :align "对齐"
-  :animate "动画"
-  :boolean-operation "布尔运算"
   :image "图像"
   :path "路径"
   :view "视图"
   :zoom "缩放"
-  :theme-mode "主题模式"
   :accessibility-filter "辅助功能过滤器"
   :language "语言"
-  :panel "面板"
   :help "帮助"}
 
  :renderer.a11y.db
@@ -707,7 +703,8 @@
   :menubar-help "帮助菜单"}
 
  :renderer.panel.core
- {:panel-element-tree "元素树"
+ {:panel "面板"
+  :panel-element-tree "元素树"
   :panel-properties "属性"
   :panel-xml-view "XML 视图"
   :panel-history-tree "历史树"
@@ -725,7 +722,8 @@
   :nodes "节点"}
 
  :renderer.theme.core
- {:dark "深色"
+ {:theme-mode "主题模式"
+  :dark "深色"
   :light "浅色"
   :system "系统"}
 

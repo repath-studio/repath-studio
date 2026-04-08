@@ -345,6 +345,7 @@
 (rf/dispatch [::action.events/register-action-group
               {:id :object/boolean-operations
                :label [::boolean-operations "Boolean operations"]
+               :enabled [::element.subs/multiple-selected?]
                :actions [:boolean/unite
                          :boolean/intersect
                          :boolean/subtract
@@ -371,6 +372,7 @@
                :actions [:clipboard/cut
                          :clipboard/copy
                          :clipboard/paste
+                         :clipboard/paste-in-place
                          :clipboard/paste-styles]}])
 
 (rf/dispatch [::action.events/register-action-group
@@ -388,6 +390,7 @@
 (rf/dispatch [::action.events/register-action-group
               {:id :object/animate
                :label [::animate "Animate"]
+               :enabled [::element.subs/some-selected?]
                :actions [:animate/animate
                          :animate/transform
                          :animate/motion]}])

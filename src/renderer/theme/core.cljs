@@ -26,3 +26,10 @@
                :icon "system"
                :event [::theme.events/set-mode :system]
                :active [::theme.subs/selected-mode? :system]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :theme/mode
+               :label [::theme-mode "Theme mode"]
+               :actions [:theme/set-system-mode
+                         :theme/set-dark-mode
+                         :theme/set-light-mode]}])

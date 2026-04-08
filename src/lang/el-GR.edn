@@ -56,16 +56,12 @@
   :edit "Επεξεργασία"
   :object "Αντικείμενο"
   :align "Στοίχιση"
-  :animate "Κίνηση"
-  :boolean-operation "Λογική λειτουργία"
   :image "Εικόνα"
   :path "Διαδρομή"
   :view "Προβολή"
   :zoom "Μεγέθυνση"
-  :theme-mode "Λειτουργία θέματος"
   :accessibility-filter "Φίλτρο προσβασιμότητας"
   :language "Γλώσσα"
-  :panel "Πάνελ"
   :help "Βοήθεια"}
 
  :renderer.a11y.db
@@ -808,7 +804,8 @@
   :menubar-help "Μενού Βοήθειας"}
 
  :renderer.panel.core
- {:panel-element-tree "Δέντρο στοιχείων"
+ {:panel "Πάνελ"
+  :panel-element-tree "Δέντρο στοιχείων"
   :panel-properties "Ιδιότητες"
   :panel-xml-view "Προβολή XML"
   :panel-history-tree "Δέντρο ιστορικού"
@@ -826,7 +823,8 @@
   :nodes "κόμβος"}
 
  :renderer.theme.core
- {:dark "Σκοτεινό"
+ {:theme-mode "Λειτουργία θέματος"
+  :dark "Σκοτεινό"
   :light "Φωτεινό"
   :system "Σύστημα"}
 

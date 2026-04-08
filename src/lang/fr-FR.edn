@@ -56,16 +56,12 @@
   :edit "Éditer"
   :object "Objet"
   :align "Aligner"
-  :animate "Animer"
-  :boolean-operation "Opération booléenne"
   :image "Image"
   :path "Tracé"
   :view "Affichage"
   :zoom "Zoom"
-  :theme-mode "Mode de thème"
   :accessibility-filter "Filtre d'accessibilité"
   :language "Langue"
-  :panel "Panneau"
   :help "Aide"}
 
  :renderer.a11y.db
@@ -798,7 +794,8 @@
   :menubar-help "Menu Aide"}
 
  :renderer.panel.core
- {:panel-element-tree "Arbre des éléments"
+ {:panel "Panneau"
+  :panel-element-tree "Arbre des éléments"
   :panel-properties "Propriétés"
   :panel-xml-view "Vue XML"
   :panel-history-tree "Arbre d'historique"
@@ -816,7 +813,8 @@
   :nodes "nœuds"}
 
  :renderer.theme.core
- {:dark "Sombre"
+ {:theme-mode "Mode de thème"
+  :dark "Sombre"
   :light "Clair"
   :system "Système"}
 

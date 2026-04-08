@@ -56,16 +56,12 @@
   :edit "Bewerken"
   :object "Object"
   :align "Uitlijnen"
-  :animate "Animeren"
-  :boolean-operation "Booleaanse bewerking"
   :image "Afbeelding"
   :path "Pad"
   :view "Weergave"
   :zoom "Zoom"
-  :theme-mode "Thema-modus"
   :accessibility-filter "Toegankelijkheidsfilter"
   :language "Taal"
-  :panel "Paneel"
   :help "Help"}
 
  :renderer.a11y.db
@@ -802,7 +798,8 @@
   :menubar-help "Helpmenu"}
 
  :renderer.panel.core
- {:panel-element-tree "Elementenboom"
+ {:panel "Paneel"
+  :panel-element-tree "Elementenboom"
   :panel-properties "Eigenschappen"
   :panel-xml-view "XML-weergave"
   :panel-history-tree "Geschiedenisboom"
@@ -820,7 +817,8 @@
   :nodes "knooppunten"}
 
  :renderer.theme.core
- {:dark "Donker"
+ {:theme-mode "Thema-modus"
+  :dark "Donker"
   :light "Licht"
   :system "Systeem"}
 

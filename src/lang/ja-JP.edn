@@ -56,16 +56,12 @@
   :edit "編集"
   :object "オブジェクト"
   :align "整列"
-  :animate "アニメーション"
-  :boolean-operation "ブール演算"
   :image "画像"
   :path "パス"
   :view "表示"
   :zoom "ズーム"
-  :theme-mode "テーマモード"
   :accessibility-filter "アクセシビリティフィルタ"
   :language "言語"
-  :panel "パネル"
   :help "ヘルプ"}
 
  :renderer.a11y.db
@@ -745,7 +741,8 @@
   :menubar-help "ヘルプメニュー"}
 
  :renderer.panel.core
- {:panel-element-tree "要素ツリー"
+ {:panel "パネル"
+  :panel-element-tree "要素ツリー"
   :panel-properties "プロパティ"
   :panel-xml-view "XML表示"
   :panel-history-tree "履歴ツリー"
@@ -763,7 +760,8 @@
   :nodes "ノード"}
 
  :renderer.theme.core
- {:dark "ダーク"
+ {:theme-mode "テーマモード"
+  :dark "ダーク"
   :light "ライト"
   :system "システム"}
 

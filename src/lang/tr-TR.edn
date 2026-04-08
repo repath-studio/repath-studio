@@ -56,16 +56,12 @@
   :edit "Düzenle"
   :object "Nesne"
   :align "Hizala"
-  :animate "Animasyon"
-  :boolean-operation "Boolean işlem"
   :image "Resim"
   :path "Yol"
   :view "Görünüm"
   :zoom "Yakınlaştır"
-  :theme-mode "Tema modu"
   :accessibility-filter "Erişilebilirlik filtresi"
   :language "Dil"
-  :panel "Panel"
   :help "Yardım"}
 
  :renderer.a11y.db
@@ -781,7 +777,8 @@
   :menubar-help "Yardım Menüsü"}
 
  :renderer.panel.core
- {:panel-element-tree "Öğe ağacı"
+ {:panel "Panel"
+  :panel-element-tree "Öğe ağacı"
   :panel-properties "Özellikler"
   :panel-xml-view "XML görünümü"
   :panel-history-tree "Geçmiş ağacı"
@@ -799,7 +796,8 @@
   :nodes "düğümler"}
 
  :renderer.theme.core
- {:dark "Koyu"
+ {:theme-mode "Tema modu"
+  :dark "Koyu"
   :light "Açık"
   :system "Sistem"}
 

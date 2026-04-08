@@ -17,6 +17,7 @@
   [:map {:closed true}
    [:id ActionGroupId]
    [:label Translation]
+   [:enabled {:optional true} vector?]
    [:actions [:vector ActionId]]])
 
 (def Action
