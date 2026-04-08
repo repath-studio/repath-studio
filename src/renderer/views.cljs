@@ -130,7 +130,8 @@
   [action]
   (let [event-shortcuts (:shortcuts action)]
     (when (seq event-shortcuts)
-      (into [:span.inline-flex.text-foreground-muted {:class "gap-1.5"}]
+      (into [:span.text-foreground-muted.hidden.lg:inline-flex
+             {:class "gap-1.5"}]
             (comp (map format-shortcut)
                   (interpose [:span]))
             event-shortcuts))))

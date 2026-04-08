@@ -304,8 +304,7 @@
     {:class "menu-item-indicator"}
     [views/icon "checkmark"]]
    [:div [action.views/label action]]
-   (when @(rf/subscribe [::window.subs/xl?])
-     [views/shortcuts action])])
+   [views/shortcuts action]])
 
 (defmethod menu-item :sub-menu
   [action]
@@ -367,8 +366,7 @@
     :on-select (action.views/dispatch action)
     :disabled (action.views/disabled? action)}
    [:div [action.views/label action]]
-   (when @(rf/subscribe [::window.subs/xl?])
-     [views/shortcuts action])])
+   [views/shortcuts action]])
 
 (defn submenus []
   [(file-menu)

@@ -12,8 +12,7 @@
    [renderer.document.events :as-alias document.events]
    [renderer.i18n.views :as i18n.views]
    [renderer.menubar.views :as menubar.views]
-   [renderer.views :as views]
-   [renderer.window.subs :as-alias window.subs]))
+   [renderer.views :as views]))
 
 (defn button
   [{:keys [event label auto-focus class]}]
@@ -99,8 +98,7 @@
                  (remove nil?)
                  (map i18n.views/t)
                  (string/join " - "))]]
-     (when @(rf/subscribe [::window.subs/xl?])
-       [views/shortcuts action])]))
+     [views/shortcuts action]]))
 
 (defn cmdk-group-inner
   [items label]

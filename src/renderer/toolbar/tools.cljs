@@ -11,8 +11,7 @@
 
 (defn button
   [action bordered]
-  (let [xl? @(rf/subscribe [::window.subs/xl?])
-        active (action.views/checked? action)
+  (let [active (action.views/checked? action)
         cached-tool @(rf/subscribe [::tool.subs/cached])
         primary (= cached-tool (keyword (name (:id action))))]
     [:> Tooltip/Root
@@ -32,7 +31,7 @@
         :on-escape-key-down #(.stopPropagation %)}
        [:div.flex.gap-2.items-center
         [action.views/label action]
-        (when xl? [views/shortcuts action])]]]]))
+        [views/shortcuts action]]]]]))
 
 (defn button-group
   [action-group]
