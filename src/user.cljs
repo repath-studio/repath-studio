@@ -153,14 +153,17 @@
   (rf/dispatch-sync [::document.events/set-attr :stroke color]))
 
 (defn ^:export db
+  "Returns the application database."
   []
   @rf.db/app-db)
 
 (defn ^:export document
+  "Returns the active document."
   []
   (get-in (db) [:documents (:active-document (db))]))
 
 (defn ^:export elements
+  "Returns the elements of the active document."
   []
   (:elements (document)))
 
@@ -321,6 +324,11 @@
   [id]
   (rf/dispatch-sync [::a11y.events/deregister-filter id]))
 
+(defn ^:export languages
+  "Returns the registered languages."
+  []
+  (-> (db) :languages keys))
+
 (defn ^:export register-language
   "Registers a language."
   [language]
@@ -336,6 +344,11 @@
   [id]
   (rf/dispatch-sync [::i18n.events/deregister-language id]))
 
+(defn ^:export actions
+  "Returns the registered actions."
+  []
+  (-> (db) :actions keys))
+
 (defn ^:export register-action
   "Registers an action."
   [action]
@@ -345,6 +358,11 @@
   "Deregisters an action."
   [id]
   (rf/dispatch-sync [::action.events/deregister-action id]))
+
+(defn ^:export action-groups
+  "Returns the registered action groups."
+  []
+  (-> (db) :action-groups keys))
 
 (defn ^:export register-action-group
   "Registers an action group."
@@ -369,7 +387,7 @@
                      action-id]))
 
 (defn ^:export help
-  "Lists available functions."
+  "Lists the available functions."
   []
   (doseq [x (sort-by str (vals (ns-publics 'user)))]
     (print (:name (meta x)) " - " (:doc (meta x))))
