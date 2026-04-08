@@ -88,7 +88,7 @@
      message
      (when underlying
        ;; TODO: also show stack?
-       [:span.ml-2.5 (.-message underlying)])]))
+       [:span.ml-2 (.-message underlying)])]))
 
 (defmethod item :output
   [{:keys [value]} opts]
