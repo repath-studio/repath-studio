@@ -16,12 +16,12 @@
    [renderer.window.subs :as-alias window.subs]))
 
 (defn button
-  [{:keys [action label auto-focus class]}]
+  [{:keys [event label auto-focus class]}]
   [:button.button.px-1.rounded.font-medium.w-full.bg-overlay.sm:bg-transparent
    {:class class
     :auto-focus auto-focus
-    :on-click #(rf/dispatch [::dialog.events/close action])}
-   (or label (i18n.views/t [::cancel "Cancel"]))])
+    :on-click #(rf/dispatch [::dialog.events/close event])}
+   (i18n.views/t label)])
 
 (defn button-bar
   [& children]
@@ -38,12 +38,12 @@
        [:span.block
         [:strong (i18n.views/t [::browser "Browser:"])] user-agent]]]
      [button-bar
-      [button {:label (i18n.views/t [::ok "OK"])
+      [button {:label [::ok "OK"]
                :auto-focus true
                :class "accent"}]]]))
 
 (defn confirmation
-  [{:keys [content confirm-action confirm-label cancel-action
+  [{:keys [content confirm-event confirm-label cancel-event
            cancel-label]}]
   [:div
    (cond
@@ -57,10 +57,10 @@
      :else content)
 
    [button-bar
-    [button {:label (i18n.views/t (or cancel-label [::cancel "Cancel"]))
-             :action cancel-action}]
-    [button {:label (i18n.views/t (or confirm-label [::ok "OK"]))
-             :action confirm-action
+    [button {:label (or cancel-label [::cancel "Cancel"])
+             :event cancel-event}]
+    [button {:label (or confirm-label [::ok "OK"])
+             :event confirm-event
              :auto-focus true
              :class "accent"}]]])
 
@@ -73,14 +73,14 @@
           saving."]]
     [[:strong title]])
    [button-bar
-    [button {:label (i18n.views/t [::dont-save "Don't save"])
-             :action [::document.events/close id false]}]
-    [button {:label (i18n.views/t [::cancel "Cancel"])}]
-    [button {:label (i18n.views/t [::save "Save"])
+    [button {:label [::dont-save "Don't save"]
+             :event [::document.events/close id false]}]
+    [button {:label [::cancel "Cancel"]}]
+    [button {:label [::save "Save"]
              :auto-focus true
              :class "accent"
-             :action [::document.events/save {:id id
-                                              :close true}]}]]])
+             :event [::document.events/save {:id id
+                                             :close true}]}]]])
 
 (defn cmdk-item
   [{:keys [label event icon]

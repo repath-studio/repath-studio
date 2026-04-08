@@ -25,8 +25,8 @@
                 {:href "https://repath.studio/policies/privacy/"
                  :target "_blank"}
                 (i18n.handlers/t db [::privacy-policy "privacy policy"])]])
-    :confirm-action [::set-reporting true]
-    :cancel-action [::set-reporting false]
+    :confirm-event [::set-reporting true]
+    :cancel-event [::set-reporting false]
     :cancel-label [::no-thank-you "No, thank you"]}])
 
 (defn reporting-confirmation-dialog

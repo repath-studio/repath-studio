@@ -88,7 +88,7 @@
                :icon "delete"
                :enabled [::document.subs/some-recent?]
                :event [::dialog.events/confirm-irreversible-action
-                       {:confirm-action [::document.events/clear-recent]
+                       {:confirm-event [::document.events/clear-recent]
                         :confirm-label clear-recent-label}]}])
 
 (rf/dispatch [::action.events/register-action

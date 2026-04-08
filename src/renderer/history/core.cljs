@@ -33,7 +33,7 @@
                :label [::clear-history "Clear history"]
                :icon "delete"
                :event [::dialog.events/confirm-irreversible-action
-                       {:confirm-action [::history.events/clear]
+                       {:confirm-event [::history.events/clear]
                         :confirm-label [::clear-history "Clear history"]}]}])
 
 (rf/dispatch [::action.events/register-action-group
