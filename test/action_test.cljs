@@ -5,13 +5,11 @@
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.action.subs :as-alias action.subs]
-   [renderer.app.events :as-alias app.events]
    [renderer.history.events :as-alias history.events]
    [renderer.history.subs :as-alias history.subs]))
 
 (deftest action
   (rf.test/run-test-sync
-   (rf/dispatch [::app.events/initialize])
 
    (let [new-action (rf/subscribe [::action.subs/action :history/undo-twice])
          new-group (rf/subscribe [::action.subs/action-group

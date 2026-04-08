@@ -3,7 +3,6 @@
    [cljs.test :refer-macros [deftest is testing]]
    [day8.re-frame.test :as rf.test]
    [re-frame.core :as rf]
-   [renderer.app.events :as-alias app.events]
    [renderer.document.events :as-alias document.events]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.events :as-alias element.events]
@@ -13,7 +12,6 @@
 
 (deftest history
   (rf.test/run-test-sync
-   (rf/dispatch [::app.events/initialize])
 
    (let [undos? (rf/subscribe [::history.subs/undos?])
          redos? (rf/subscribe [::history.subs/redos?])

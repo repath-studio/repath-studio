@@ -20,7 +20,6 @@
 
 (deftest polygons
   (rf.test/run-test-sync
-   (rf/dispatch [::app.events/initialize])
 
    ;; Instrumentation and db validation affects performance, so we disable it.
    (m.instrument/unstrument!)

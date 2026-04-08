@@ -3,14 +3,12 @@
    [cljs.test :refer-macros [deftest is testing]]
    [day8.re-frame.test :as rf.test]
    [re-frame.core :as rf]
-   [renderer.app.events :as-alias app.events]
    [renderer.icon.defaults :as icon.defaults]
    [renderer.icon.events :as-alias icon.events]
    [renderer.icon.subs :as-alias icon.subs]))
 
 (deftest icon
   (rf.test/run-test-sync
-   (rf/dispatch [::app.events/initialize])
 
    (let [file-icon-path (rf/subscribe [::icon.subs/path-data "file"])
          registered-icon-path (rf/subscribe [::icon.subs/path-data "new-icon"])

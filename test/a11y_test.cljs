@@ -4,12 +4,10 @@
    [day8.re-frame.test :as rf.test]
    [re-frame.core :as rf]
    [renderer.a11y.events :as-alias a11y.events]
-   [renderer.a11y.subs :as-alias a11y.subs]
-   [renderer.app.events :as-alias app.events]))
+   [renderer.a11y.subs :as-alias a11y.subs]))
 
 (deftest filters
   (rf.test/run-test-sync
-   (rf/dispatch [::app.events/initialize])
 
    (let [a11y-filters (rf/subscribe [::a11y.subs/filters])]
 
