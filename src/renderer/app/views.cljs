@@ -148,13 +148,6 @@
        [:div.absolute.inset-0
         {:on-click #(rf/dispatch [::app.events/set-backdrop false])}])]))
 
-(def object-toolbar
-  {:orientation :vertical
-   :actions [:object/index-operations
-             :object/horizontal-alignment
-             :object/vertical-alignment
-             :object/boolean-operations]})
-
 (defn context-dropdown-button []
   [:> DropdownMenu/Root
    [:> DropdownMenu/Trigger
@@ -202,7 +195,11 @@
        [frame]
        (when-not md?
          [:div.bg-primary.flex.items-center
-          [toolbar.views/action-toolbar object-toolbar
+          [toolbar.views/action-toolbar
+           {:orientation :vertical
+            :actions [:object/index-operations
+                      :object/horizontal-alignment
+                      :object/vertical-alignment]}
            [:span.h-divider]
            [context-dropdown-button]]])]]]))
 
@@ -412,7 +409,12 @@
            [right-panel active-tool]]])]
       (when md?
         [:div.bg-primary.flex
-         [toolbar.views/action-toolbar object-toolbar]])]]))
+         [toolbar.views/action-toolbar
+          {:orientation :vertical
+           :actions [:object/index-operations
+                     :object/horizontal-alignment
+                     :object/vertical-alignment
+                     :object/boolean-operations]}]])]]))
 
 (defn main-panel-group []
   (let [tree? @(rf/subscribe [::panel.subs/visible? :tree])
