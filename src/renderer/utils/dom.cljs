@@ -20,3 +20,8 @@
   (some-> (.-dataTransfer e)
           (.getData "id")
           (uuid)))
+
+(defn content-overflow?
+  [el]
+  (and el (or (> (.-scrollWidth el) (.-clientWidth el))
+              (> (.-scrollHeight el) (.-clientHeight el)))))

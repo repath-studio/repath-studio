@@ -2,12 +2,14 @@
   (:require
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
    ["@radix-ui/react-tooltip" :as Tooltip]
+   ["react" :as react]
    [re-frame.core :as rf]
+   [reagent.core :as reagent]
    [renderer.action.views :as action.views]
    [renderer.i18n.views :as i18n.views]
    [renderer.tool.subs :as-alias tool.subs]
-   [renderer.views :as views]
-   [renderer.window.subs :as-alias window.subs]))
+   [renderer.utils.dom :as utils.dom]
+   [renderer.views :as views]))
 
 (defn button
   [action bordered]
@@ -89,13 +91,40 @@
 
 (defn root
   []
-  (let [xl @(rf/subscribe [::window.subs/xl?])]
-    (if xl
-      (->> action-groups
-           (keep (comp button-group action.views/deref-action-group))
-           (interpose [:span.v-divider])
-           (into [views/toolbar {:class "justify-center bg-primary"}]))
-      (->> action-groups
-           (keep (comp dropdown-button action.views/deref-action-group))
-           (into [views/toolbar {:class "bg-primary justify-center py-2
-                                         gap-2"}])))))
+  (let [overflow? (reagent/atom false)
+        measure-ref (react/createRef)
+        observer (js/ResizeObserver.
+                  (fn [_entries]
+                    (let [el (.-current measure-ref)]
+                      (reset! overflow?
+                              (utils.dom/content-overflow? el)))))]
+    (reagent/create-class
+     {:component-did-mount
+      #(.observe observer (.-current measure-ref))
+
+      :component-will-unmount
+      #(.disconnect observer)
+
+      :reagent-render
+      (fn []
+        (let [groups (keep action.views/deref-action-group
+                           action-groups)]
+          [:div.relative
+           (->> groups
+                (map button-group)
+                (interpose [:span.v-divider])
+                (into [views/toolbar
+                       {:ref measure-ref
+                        :class "absolute invisible w-full overflow-hidden"}]))
+           (if @overflow?
+             (->> groups
+                  (map dropdown-button)
+                  (into [views/toolbar
+                         {:class "bg-primary justify-center
+                                  py-2 gap-2"}]))
+             (->> groups
+                  (map button-group)
+                  (interpose [:span.v-divider])
+                  (into [views/toolbar
+                         {:class "justify-center
+                                  bg-primary"}])))]))})))
