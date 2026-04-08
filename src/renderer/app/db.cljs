@@ -119,8 +119,7 @@
    [:kdtree {:optional true} [:maybe map?]]
    [:viewbox-kdtree {:optional true} [:maybe map?]]
    [:actions {:default {}} ActionRegistry]
-   [:action-groups {:default {}}
-    ActionGroupRegistry]
+   [:action-groups {:default {}} ActionGroupRegistry]
    [:a11y {:default {:filters a11y.db/default-filters}} A11y]
    [:re-pressed.core/keydown {:optional true} map?]])
 

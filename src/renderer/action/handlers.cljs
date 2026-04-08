@@ -7,10 +7,10 @@
     :refer [Action ActionGroup ActionGroupId ActionId]]
    [renderer.app.db :refer [App]]))
 
-(m/=> entities [:-> App [:* Action]])
+(m/=> entities [:-> App [:vector Action]])
 (defn entities
   [db]
-  (-> db :actions vals))
+  (-> db :actions vals vec))
 
 (m/=> register-action [:-> App Action App])
 (defn register-action
