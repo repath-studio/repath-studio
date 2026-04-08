@@ -5,7 +5,6 @@
    [renderer.a11y.subs :as-alias a11y.subs]
    [renderer.action.views :as action.views]
    [renderer.app.subs :as-alias app.subs]
-   [renderer.document.events :as-alias document.events]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.subs :as-alias element.subs]
    [renderer.i18n.subs :as-alias i18n.subs]
@@ -16,15 +15,7 @@
    [renderer.window.subs :as-alias window.subs]))
 
 (defn recent-submenu []
-  (let [recent-documents @(rf/subscribe [::document.subs/recent])
-        recent-items (->> recent-documents
-                          (mapv (fn [{:keys [path title id]
-                                      :as recent}]
-                                  {:id id
-                                   :label [(keyword id) (or path title)]
-                                   :icon "folder"
-                                   :event [::document.events/open-recent
-                                           recent]})))]
+  (let [recent-items @(rf/subscribe [::document.subs/recent-actions])]
     (cond-> recent-items
       (seq recent-items)
       (concat [:separator
@@ -204,9 +195,7 @@
 
 (defn resolve-item
   [item]
-  (when-let [action (cond-> item
-                      (keyword? item)
-                      action.views/deref-action)]
+  (when-let [action (cond-> item (keyword? item) action.views/deref-action)]
     (when (action.views/available? action)
       (menu-item action))))
 
