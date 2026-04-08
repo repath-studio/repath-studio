@@ -101,18 +101,21 @@
 
 (defn cmdk-group-inner
   [items label]
-  (for [item items]
-    (if (:items item)
-      (->> (cmdk-group-inner (:items item) (:label item))
-           (into [:<>]))
-      (when-let [action (cond-> item (keyword? item) action.views/deref-action)]
-        [cmdk-item (update action :label #(vector label %))]))))
+  (mapcat (fn [item]
+            (if (:actions item)
+              (cmdk-group-inner (:actions item) (:label item))
+              (when-let [action (cond-> item
+                                  (keyword? item)
+                                  action.views/deref-action)]
+                [[cmdk-item (update action :label #(vector label %))]])))
+          items))
 
 (defn cmdk-group
-  [{:keys [label items]}]
-  (->> (cmdk-group-inner items nil)
-       (into [:> Command/CommandGroup
-              {:heading (i18n.views/t label)}])))
+  [{:keys [label actions]}]
+  (when (seq actions)
+    (->> (cmdk-group-inner actions nil)
+         (into [:> Command/CommandGroup
+                {:heading (i18n.views/t label)}]))))
 
 (defn cmdk
   []
@@ -123,14 +126,13 @@
     {:class "p-3 bg-primary border-b border-border w-full"
      :placeholder (i18n.views/t [::search-command "Search for a command"])}]
    [views/scroll-area
-    [:> Command/CommandList
-     {:class "p-1 max-h-[50dvh]"}
-     [:> Command/CommandEmpty
-      {:class "p-2"}
-      (i18n.views/t [::no-results "No results found."])]
-     (for [menu (menubar.views/submenus)]
-       ^{:key (:id menu)}
-       [cmdk-group menu])]]])
+    (->> (menubar.views/submenus)
+         (keep cmdk-group)
+         (into [:> Command/CommandList
+                {:class "p-1 max-h-[50dvh]"}
+                [:> Command/CommandEmpty
+                 {:class "p-2"}
+                 (i18n.views/t [::no-results "No results found."])]]))]])
 
 (defn root
   []
