@@ -41,11 +41,17 @@
            (map (fn [action] [button action false]))
            (into [:div {:class "flex justify-center md:gap-1 gap-0.5"}])))
 
+(defn tool-action
+  [actions tool-id]
+  (some #(when (= tool-id (keyword (name (:id %)))) %) actions))
+
 (defn dropdown-button
   [{:keys [label actions]}]
   (let [active-tool @(rf/subscribe [::tool.subs/active])
-        contains-active? (some #{active-tool} actions)
-        top-tool (if contains-active? active-tool (first actions))]
+        cached-tool @(rf/subscribe [::tool.subs/cached])
+        active-action (tool-action actions active-tool)
+        cached-action (tool-action actions cached-tool)
+        top-tool (or active-action cached-action (first actions))]
     (if (second actions)
       [:> DropdownMenu/Root
        [:> DropdownMenu/Trigger
@@ -56,9 +62,10 @@
            {:as-child true}
            [:button.button.flex.items-center.justify-center.px-2.font-mono
             {:class ["rounded-sm gap-1 border border-border"
-                     (when contains-active?
+                     (when cached-action "outline outline-inset outline-accent")
+                     (when active-action
                        "bg-accent text-accent-foreground! hover:bg-accent-light
-                       aria-expanded:bg-accent-light active:bg-accent-light")]}
+                        aria-expanded:bg-accent-light active:bg-accent-light")]}
             [views/icon (:icon top-tool)]
             [views/icon "chevron-down"]]]
           [:> Tooltip/Portal
@@ -107,8 +114,7 @@
 
       :reagent-render
       (fn []
-        (let [groups (keep action.views/deref-action-group
-                           action-groups)]
+        (let [groups (keep action.views/deref-action-group action-groups)]
           [:div.relative
            (->> groups
                 (map button-group)
@@ -120,11 +126,9 @@
              (->> groups
                   (map dropdown-button)
                   (into [views/toolbar
-                         {:class "bg-primary justify-center
-                                  py-2 gap-2"}]))
+                         {:class "bg-primary justify-center py-2 gap-2"}]))
              (->> groups
                   (map button-group)
                   (interpose [:span.v-divider])
                   (into [views/toolbar
-                         {:class "justify-center
-                                  bg-primary"}])))]))})))
+                         {:class "justify-center bg-primary"}])))]))})))
