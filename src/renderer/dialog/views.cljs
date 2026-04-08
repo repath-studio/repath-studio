@@ -30,12 +30,11 @@
   []
   (let [user-agent @(rf/subscribe [::app.subs/user-agent])]
     [:div
-     [:div.flex.gap-3.items-start.pb-2
-      [:p
-       [:span.block
-        [:strong (i18n.views/t [::version "Version:"])] config/version]
-       [:span.block
-        [:strong (i18n.views/t [::browser "Browser:"])] user-agent]]]
+     [:p
+      [:span.block
+       [:strong (i18n.views/t [::version "Version:"])] config/version]
+      [:span.block
+       [:strong (i18n.views/t [::browser "Browser:"])] user-agent]]
      [button-bar
       [button {:label [::ok "OK"]
                :auto-focus true
