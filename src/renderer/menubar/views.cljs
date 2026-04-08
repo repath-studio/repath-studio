@@ -49,7 +49,6 @@
              :document/open
              {:id :recent
               :label [::recent "Recent"]
-              :type :sub-menu
               :enabled [::document.subs/some-recent?]
               :available [::app.subs/supported-feature? :file-system]
               :actions (recent-submenu)}
@@ -59,7 +58,6 @@
              :document/download
              {:id :export
               :label [::export-as "Export as"]
-              :type :sub-menu
               :enabled [::document.subs/entities?]
               :actions export-submenu}
              :separator
@@ -110,7 +108,6 @@
              :separator
              {:id :align
               :label [::align "Align"]
-              :type :sub-menu
               :enabled [::element.subs/not-every-top-level?]
               :actions (->> [:object/horizontal-alignment
                              :object/vertical-alignment]
@@ -127,13 +124,11 @@
              :object/lower-to-bottom
              :separator
              {:id :image
-              :type :sub-menu
               :label [::image "Image"]
               :enabled [::element.subs/has-selected-tag? :image]
               :actions image-submenu}
              {:id :path
               :label [::path "Path"]
-              :type :sub-menu
               :enabled [::element.subs/has-selected-tag? :path]
               :actions path-submenu}]})
 
@@ -153,7 +148,6 @@
   (mapv (fn [{:keys [id label]}]
           {:id id
            :label label
-           :type :checkbox
            :icon "a11y"
            :active [::a11y.subs/filter-active? id]
            :event [::a11y.events/toggle-active-filter id]})
@@ -165,13 +159,11 @@
                {:id k
                 :abbr (:code v)
                 :label [k (:locale v)]
-                :type :checkbox
                 :icon "language"
                 :event [::i18n.events/set-user-lang k]
                 :active [::i18n.subs/selected-lang? k]}))
        (into [{:id "system"
                :label [::system "System"]
-               :type :checkbox
                :icon "language"
                :event [::i18n.events/set-user-lang "system"]
                :active [::i18n.subs/selected-lang? "system"]}])))
@@ -182,18 +174,15 @@
    :type :root
    :actions [{:id :zoom
               :label [::zoom "Zoom"]
-              :type :sub-menu
               :enabled [::document.subs/entities?]
               :actions zoom-submenu}
              (action.views/deref-action-group :theme/mode)
              {:id :a11y
               :label [::accessibility-filter "Accessibility filter"]
-              :type :sub-menu
               :enabled [::document.subs/entities?]
               :actions (a11y-submenu)}
              {:id :lang
               :label [::language "Language"]
-              :type :sub-menu
               :actions (languages-submenu)}
              :separator
              :view/toggle-grid
@@ -224,13 +213,6 @@
              :separator
              :dialog/about]})
 
-(defn action-menu-item
-  [id]
-  (when-let [action (action.views/deref-action id)]
-    (cond-> action
-      (:active action)
-      (assoc :type :checkbox))))
-
 (defmulti menu-item
   (fn [action]
     (cond
@@ -243,13 +225,14 @@
       (:actions action)
       :sub-menu
 
-      :else :default)))
+      :else
+      :default)))
 
 (defn resolve-item
   [item]
   (when-let [action (cond-> item
                       (keyword? item)
-                      action-menu-item)]
+                      action.views/deref-action)]
     (when (action.views/available? action)
       (menu-item action))))
 
