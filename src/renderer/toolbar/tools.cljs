@@ -79,7 +79,7 @@
 
        [:> DropdownMenu/Portal
         (->> actions
-             (map views/dropdown-menu-item)
+             (map (comp views/dropdown-menu-item #(dissoc % :active)))
              (into [:> DropdownMenu/Content
                     {:side "bottom"
                      :align "middle"
@@ -103,8 +103,7 @@
         observer (js/ResizeObserver.
                   (fn [_entries]
                     (let [el (.-current measure-ref)]
-                      (reset! overflow?
-                              (utils.dom/content-overflow? el)))))]
+                      (reset! overflow? (utils.dom/content-overflow? el)))))]
     (reagent/create-class
      {:component-did-mount
       #(.observe observer (.-current measure-ref))
@@ -131,4 +130,4 @@
                   (map button-group)
                   (interpose [:span.v-divider])
                   (into [views/toolbar
-                         {:class "justify-center bg-primary"}])))]))})))
+                         {:class "bg-primary justify-center py-2"}])))]))})))
