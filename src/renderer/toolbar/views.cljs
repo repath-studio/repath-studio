@@ -24,6 +24,7 @@
 (defn button-group
   [action-group]
   (->> action-group
+       action.views/deref-action-group
        :actions
        (map button)
        (into [:<>])))
@@ -32,8 +33,9 @@
   [{:keys [actions orientation]} & more]
   (let [vertical? (= orientation :vertical)]
     (->> actions
-         (map (comp button-group action.views/deref-action-group))
+         (map button-group)
          (interpose [:span {:class (if vertical? "h-divider" "v-divider")}])
+         (into [:<>])
          (conj more)
          (into [views/toolbar
                 {:class "flex-col px-2 md:px-1 gap-2 md:gap-1"}]))))
