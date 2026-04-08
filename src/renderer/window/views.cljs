@@ -108,7 +108,7 @@
      :class "flex gap-1 items-center px-3 uppercase bg-primary font-mono
              outline-inset"}
     code]
-   (->> (menubar.views/languages-submenu)
+   (->> @(rf/subscribe [::i18n.subs/language-actions])
         (mapv (partial language-item system-code)))])
 
 (defn theme-mode-select

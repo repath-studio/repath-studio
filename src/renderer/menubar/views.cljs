@@ -2,14 +2,12 @@
   (:require
    ["@radix-ui/react-menubar" :as Menubar]
    [re-frame.core :as rf]
-   [renderer.a11y.events :as-alias a11y.events]
    [renderer.a11y.subs :as-alias a11y.subs]
    [renderer.action.views :as action.views]
    [renderer.app.subs :as-alias app.subs]
    [renderer.document.events :as-alias document.events]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.subs :as-alias element.subs]
-   [renderer.i18n.events :as-alias i18n.events]
    [renderer.i18n.subs :as-alias i18n.subs]
    [renderer.i18n.views :as i18n.views]
    [renderer.menubar.events :as-alias menubar.events]
@@ -144,30 +142,6 @@
    :zoom/fit-selected
    :zoom/fill-selected])
 
-(defn a11y-submenu []
-  (mapv (fn [{:keys [id label]}]
-          {:id id
-           :label label
-           :icon "a11y"
-           :active [::a11y.subs/filter-active? id]
-           :event [::a11y.events/toggle-active-filter id]})
-        @(rf/subscribe [::a11y.subs/filters])))
-
-(defn languages-submenu []
-  (->> @(rf/subscribe [::i18n.subs/languages])
-       (mapv (fn [[k v]]
-               {:id k
-                :abbr (:code v)
-                :label [k (:locale v)]
-                :icon "language"
-                :event [::i18n.events/set-user-lang k]
-                :active [::i18n.subs/selected-lang? k]}))
-       (into [{:id "system"
-               :label [::system "System"]
-               :icon "language"
-               :event [::i18n.events/set-user-lang "system"]
-               :active [::i18n.subs/selected-lang? "system"]}])))
-
 (defn view-menu []
   {:id :view
    :label [::view "View"]
@@ -180,10 +154,10 @@
              {:id :a11y
               :label [::accessibility-filter "Accessibility filter"]
               :enabled [::document.subs/entities?]
-              :actions (a11y-submenu)}
+              :actions @(rf/subscribe [::a11y.subs/filter-actions])}
              {:id :lang
               :label [::language "Language"]
-              :actions (languages-submenu)}
+              :actions @(rf/subscribe [::i18n.subs/language-actions])}
              :separator
              :view/toggle-grid
              :view/toggle-rulers
@@ -265,7 +239,7 @@
      [:> Menubar/Portal
       (into [:> Menubar/SubContent
              {:class "menu-content min-w-[45dvw]! sm:min-w-[200px]!
-                        max-w-[50dvw]"
+                      max-w-[50dvw]"
               :align "start"
               :loop true
               :on-escape-key-down #(.stopPropagation %)}]
@@ -281,12 +255,12 @@
      {:value (name id)}
      [:> Menubar/Trigger
       {:class ["button-size py-1 md:min-h-auto md:px-3 xl:py-1.5 flex
-                    outline-none select-none items-center justify-center
-                    data-[state=open]:bg-overlay leading-none
-                    hover:bg-overlay hover:text-foreground-hovered
-                    focus:bg-overlay focus:text-foreground-hovered
-                    disabled:text-foreground-disabled rounded-sm
-                    disabled:pointer-events-none"
+                outline-none select-none items-center justify-center
+                data-[state=open]:bg-overlay leading-none
+                hover:bg-overlay hover:text-foreground-hovered
+                focus:bg-overlay focus:text-foreground-hovered
+                disabled:text-foreground-disabled rounded-sm
+                disabled:pointer-events-none"
                (when desktop? "min-h-auto")]
        :disabled (action.views/disabled? action)}
       [:span
