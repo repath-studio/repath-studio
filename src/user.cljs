@@ -327,7 +327,7 @@
 (defn ^:export languages
   "Returns the registered languages."
   []
-  (-> (db) :languages keys))
+  (-> (db) :languages keys sort))
 
 (defn ^:export register-language
   "Registers a language."
@@ -347,7 +347,7 @@
 (defn ^:export actions
   "Returns the registered actions."
   []
-  (-> (db) :actions keys))
+  (-> (db) :actions keys sort))
 
 (defn ^:export register-action
   "Registers an action."
@@ -362,7 +362,7 @@
 (defn ^:export action-groups
   "Returns the registered action groups."
   []
-  (-> (db) :action-groups keys))
+  (-> (db) :action-groups keys sort))
 
 (defn ^:export register-action-group
   "Registers an action group."
