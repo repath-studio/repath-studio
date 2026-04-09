@@ -5,21 +5,19 @@
    [clojure.string :as string]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
+   [renderer.action.events :as-alias action.events]
    [renderer.app.handlers :as app.handlers]
    [renderer.document.handlers :as document.handlers]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.history.handlers :as history.handlers]
+   [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
-   [renderer.tool.subs :as-alias tool.subs]))
+   [renderer.tool.subs :as-alias tool.subs]
+   [renderer.utils.key :as utils.key]))
 
 (tool.hierarchy/derive-tool :brush ::tool.hierarchy/draw)
-
-(defmethod tool.hierarchy/properties :brush
-  []
-  {:icon "brush"
-   :label [::label "Brush"]})
 
 (defonce brush (reagent/atom nil))
 
@@ -76,3 +74,11 @@
   []
   (when-not (= :create @(rf/subscribe [::tool.subs/state]))
     [element.hierarchy/render @brush]))
+
+(rf/dispatch [::action.events/register-action
+              {:id :tool/brush
+               :label [::label "Brush"]
+               :icon "brush"
+               :event [::tool.events/activate :brush]
+               :active [::tool.subs/active? :brush]
+               :shortcuts [{:keyCode (utils.key/codes "B")}]}])

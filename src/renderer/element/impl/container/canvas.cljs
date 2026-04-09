@@ -32,6 +32,23 @@
 
 (defmethod attribute.hierarchy/initial [:canvas :fill] [] "")
 
+(defn a11y-filter
+  [{:keys [id tag attrs]}]
+  [:filter {:id id
+            :key id}
+   [tag attrs]])
+
+(defn snap-info
+  []
+  (let [nearest-neighbor @(rf/subscribe [::snap.subs/nearest-neighbor])
+        snapped-el-id (-> nearest-neighbor meta :id)
+        snapped-el @(rf/subscribe [::element.subs/entity snapped-el-id])]
+    (when snapped-el
+      [utils.svg/bounding-box (:bbox snapped-el) true])
+
+    (when nearest-neighbor
+      [snap.views/canvas-label nearest-neighbor])))
+
 (defmethod element.hierarchy/render :canvas
   [el]
   (let [{:keys [attrs children]} el
@@ -46,12 +63,8 @@
         grid @(rf/subscribe [::app.subs/grid])
         state @(rf/subscribe [::tool.subs/state])
         pointer-handler (partial event.impl.pointer/handler! el)
-        snap? @(rf/subscribe [::snap.subs/active?])
-        nearest-neighbor @(rf/subscribe [::snap.subs/nearest-neighbor])
-        a11y-filters @(rf/subscribe [::a11y.subs/filters])
-        snapped-el-id (-> nearest-neighbor meta :id)
-        snapped-el (when snapped-el-id
-                     @(rf/subscribe [::element.subs/entity snapped-el-id]))]
+        filters @(rf/subscribe [::a11y.subs/filters])
+        snap? @(rf/subscribe [::snap.subs/active?])]
     [:svg#canvas {:on-pointer-up pointer-handler
                   :on-pointer-down pointer-handler
                   :on-pointer-move pointer-handler
@@ -71,22 +84,15 @@
        ^{:key (:id el)}
        [element.hierarchy/render el])
 
-     (into [:defs]
-           (map (fn [{:keys [id tag attrs]}]
-                  [:filter {:id id
-                            :key id}
-                   [tag attrs]]))
-           a11y-filters)
+     (->> filters
+          (map a11y-filter)
+          (into [:defs]))
 
      (when grid
        [ruler.views/grid])
 
      (when (and snap? (not= state :select))
-       [:<>
-        (when snapped-el
-          [utils.svg/bounding-box (:bbox snapped-el) true])
-        (when nearest-neighbor
-          [snap.views/canvas-label nearest-neighbor])])
+       [snap-info])
 
      (when-not read-only?
        [tool.hierarchy/render (or cached-tool active-tool)])]))

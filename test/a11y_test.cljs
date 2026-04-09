@@ -14,7 +14,7 @@
    (let [a11y-filters (rf/subscribe [::a11y.subs/filters])]
 
      (testing "defaults"
-       (is (= (count @a11y-filters) 10)))
+       (is (= (count @a11y-filters) 0)))
 
      (testing "register"
        (rf/dispatch [::a11y.events/register-filter
@@ -25,12 +25,12 @@
                               :type "matrix"
                               :stdDeviation "3"}}])
 
-       (is (= (count @a11y-filters) 11)))
+       (is (= (count @a11y-filters) 1)))
 
      (testing "deregister"
        (rf/dispatch [::a11y.events/deregister-filter :blur-x3])
 
-       (is (= (count @a11y-filters) 10)))
+       (is (= (count @a11y-filters) 0)))
 
      (testing "active filter"
        (let [active-filter (rf/subscribe [::a11y.subs/active-filter])]

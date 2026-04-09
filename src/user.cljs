@@ -153,14 +153,17 @@
   (rf/dispatch-sync [::document.events/set-attr :stroke color]))
 
 (defn ^:export db
+  "Returns the application database."
   []
   @rf.db/app-db)
 
 (defn ^:export document
+  "Returns the active document."
   []
   (get-in (db) [:documents (:active-document (db))]))
 
 (defn ^:export elements
+  "Returns the elements of the active document."
   []
   (:elements (document)))
 
@@ -321,6 +324,11 @@
   [id]
   (rf/dispatch-sync [::a11y.events/deregister-filter id]))
 
+(defn ^:export languages
+  "Returns the registered languages."
+  []
+  (-> (db) :languages keys sort))
+
 (defn ^:export register-language
   "Registers a language."
   [language]
@@ -336,6 +344,11 @@
   [id]
   (rf/dispatch-sync [::i18n.events/deregister-language id]))
 
+(defn ^:export actions
+  "Returns the registered actions."
+  []
+  (-> (db) :actions keys sort))
+
 (defn ^:export register-action
   "Registers an action."
   [action]
@@ -346,8 +359,35 @@
   [id]
   (rf/dispatch-sync [::action.events/deregister-action id]))
 
+(defn ^:export action-groups
+  "Returns the registered action groups."
+  []
+  (-> (db) :action-groups keys sort))
+
+(defn ^:export register-action-group
+  "Registers an action group."
+  [action-group]
+  (rf/dispatch-sync [::action.events/register-action-group action-group]))
+
+(defn ^:export deregister-action-group
+  "Deregisters an action group."
+  [id]
+  (rf/dispatch-sync [::action.events/deregister-action-group id]))
+
+(defn ^:export add-action-to-group
+  "Adds an action to an action group."
+  [group-id action-id]
+  (rf/dispatch-sync [::action.events/add-action-to-group group-id action-id]))
+
+(defn ^:export remove-action-from-group
+  "Removes an action from an action group."
+  [group-id action-id]
+  (rf/dispatch-sync [::action.events/remove-action-from-group
+                     group-id
+                     action-id]))
+
 (defn ^:export help
-  "Lists available functions."
+  "Lists the available functions."
   []
   (doseq [x (sort-by str (vals (ns-publics 'user)))]
     (print (:name (meta x)) " - " (:doc (meta x))))

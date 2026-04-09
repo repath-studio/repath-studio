@@ -8,8 +8,7 @@
    [renderer.db :as db]
    [renderer.document.events :as-alias document.events]
    [renderer.i18n.views :as i18n.views]
-   [renderer.views :as views]
-   [renderer.window.subs :as-alias window.subs]))
+   [renderer.views :as views]))
 
 (defn document-size-select []
   [:> Select/Root
@@ -55,15 +54,13 @@
      [:span.text-lg.text-foreground-muted (.dirname path-browserify path)])])
 
 (defn command
-  [id]
-  (let [{:keys [icon label event]} (action.views/entity id)
-        xl? @(rf/subscribe [::window.subs/xl?])]
-    [:div.flex.items-center.gap-2.flex-wrap
-     [views/icon icon]
-     [:button.button-link.text-lg
-      {:on-click #(rf/dispatch event)}
-      (i18n.views/t label)]
-     (when xl? [views/shortcuts event])]))
+  [action]
+  [:div.flex.items-center.gap-3.flex-wrap
+   [views/icon (:icon action)]
+   [:button.button-link.text-lg
+    {:on-click (action.views/dispatch action)}
+    [action.views/label action]]
+   [views/shortcuts action]])
 
 (defn root
   [recent-documents]
@@ -85,11 +82,11 @@
          [:h2.mb-3.mt-8.text-2xl (i18n.views/t [::start "Start"])]
 
          [:div.flex.items-center.gap-2.flex-wrap
-          [command :document/new]
+          [command (action.views/deref-action :document/new)]
           [:span (i18n.views/t [::or "or"])]
           [document-size-select]]
 
-         [command :document/open]
+         [command (action.views/deref-action :document/open)]
 
          (when (seq recent-documents)
            [:<> [:h2.mb-3.mt-8.text-2xl
@@ -102,9 +99,10 @@
          [:h2.mb-3.mt-8.text-2xl
           (i18n.views/t [::help "Help"])]
 
-         (->> [:app/command-panel
-               :help/website
-               :help/source-code
-               :help/changelog]
+         (->> (conj [(action.views/deref-action :dialog/command-panel)]
+                    (->> :app/help
+                         (action.views/deref-action-group)
+                         :actions))
+              (flatten)
               (map command)
               (into [:div]))]]]]]]])

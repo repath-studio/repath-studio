@@ -56,111 +56,13 @@
   :edit "Editar"
   :object "Objeto"
   :align "Alinhar"
-  :animate "Animar"
-  :boolean-operation "Operação booleana"
-  :image "Imagem"
-  :path "Caminho"
   :view "Ver"
   :zoom "Zoom"
-  :theme-mode "Modo de tema"
   :accessibility-filter "Filtro de acessibilidade"
   :language "Idioma"
-  :panel "Painel"
   :help "Ajuda"}
 
- :renderer.action.defaults
- {:new "Novo"
-  :open "Abrir..."
-  :recent-clear "Limpar recentes"
-  :print "Imprimir"
-  :save "Guardar"
-  :save-as "Guardar como..."
-  :download "Transferir"
-  :close "Fechar"
-  :close-all "Fechar tudo"
-  :close-saved "Fechar guardados"
-  :exit "Sair"
-  :undo "Desfazer"
-  :redo "Refazer"
-  :clear-history "Limpar histórico"
-  :cut "Cortar"
-  :copy "Copiar"
-  :paste "Colar"
-  :paste-in-place "Colar no local"
-  :paste-styles "Colar estilos"
-  :duplicate "Duplicar"
-  :select-all "Selecionar tudo"
-  :deselect-all "Desselecionar tudo"
-  :invert-selection "Inverter seleção"
-  :select-same-tags "Selecionar mesmas etiquetas"
-  :delete "Eliminar"
-  :object-to-path "Objeto para caminho"
-  :stroke-to-path "Contorno para caminho"
-  :group "Agrupar"
-  :ungroup "Desagrupar"
-  :lock "Bloquear"
-  :unlock "Desbloquear"
-  :align-left "Alinhar à esquerda"
-  :align-right "Alinhar à direita"
-  :align-top "Alinhar no topo"
-  :align-bottom "Alinhar em baixo"
-  :center-vertically "Centrar verticalmente"
-  :center-horizontally "Centrar horizontalmente"
-  :animate "Animar"
-  :animate-transform "Animar transformação"
-  :animate-motion "Animar movimento"
-  :boolean-exclude "Excluir"
-  :boolean-unite "Unir"
-  :boolean-intersect "Intersetar"
-  :boolean-subtract "Subtrair"
-  :boolean-divide "Dividir"
-  :raise "Subir"
-  :lower "Descer"
-  :raise-to-top "Subir para frente"
-  :lower-to-bottom "Enviar para trás"
-  :image-trace "Vetorizar"
-  :path-simplify "Simplificar"
-  :path-smooth "Suavizar"
-  :path-flatten "Achatar"
-  :path-reverse "Inverter"
-  :zoom-in "Ampliar"
-  :zoom-out "Reduzir"
-  :zoom-set-50 "Definir para 50%"
-  :zoom-set-100 "Definir para 100%"
-  :zoom-set-200 "Definir para 200%"
-  :zoom-focus-selected "Focar seleção"
-  :zoom-fit-selected "Ajustar à seleção"
-  :zoom-fill-selected "Preencher com seleção"
-  :dark "Escuro"
-  :light "Claro"
-  :system "Sistema"
-  :grid "Grelha"
-  :rulers "Réguas"
-  :help-bar "Barra de ajuda"
-  :debug-info "Informação de depuração"
-  :panel-element-tree "Árvore de elementos"
-  :panel-properties "Propriedades"
-  :panel-xml-view "Vista XML"
-  :panel-history-tree "Árvore de histórico"
-  :panel-shell-history "Histórico da consola"
-  :panel-timeline-editor "Editor de cronologia"
-  :fullscreen "Ecrã completo"
-  :command-panel "Painel de comandos"
-  :website "Website"
-  :source-code "Código-fonte"
-  :license "Licença"
-  :changelog "Registo de alterações"
-  :privacy-policy "Política de Privacidade"
-  :submit-an-issue "Reportar problema"
-  :report-errors "Reportar erros automaticamente"
-  :about "Acerca de"
-  :snap "Ajustar"
-  :centers "centros"
-  :midpoints "pontos médios"
-  :corners "cantos"
-  :nodes "nós"}
-
- :renderer.a11y.db
+ :renderer.a11y.core
  {:blur "Desfoque"
   :heavy-blur "Desfoque intenso"
   :protanopia "Protanopia"
@@ -452,7 +354,9 @@
 
  :renderer.tool.impl.element.core
  {:help "Clique e arraste para criar um elemento."
-  :edge "borda"}
+  :edge "borda"
+  :elements "Elementos"
+  :containers "Contêineres"}
 
  :renderer.tool.impl.element.poly
  {:add-points "Clique para adicionar mais pontos."
@@ -616,7 +520,8 @@
   :select-element "Selecionar elemento"
   :edit "Editar"
   :centroid "Centróide"
-  :handle "alça"}
+  :handle "alça"
+  :tool-edit "Editar"}
 
  :renderer.tool.impl.base.transform
  {:label "Transformar"
@@ -640,23 +545,26 @@
  :renderer.tool.impl.base.pan
  {:label "Panorâmica"
   :idle-help "Clique e arraste para fazer panorâmica."
-  :pan-help "Arraste para fazer panorâmica."}
+  :pan-help "Arraste para fazer panorâmica."
+  :tool-pan "Deslocar"}
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
   :zoom-in [:div "Clique ou selecione uma área para ampliar."]
-  :zoom-out [:div "Mantenha %1 para reduzir."]}
+  :zoom-out [:div "Mantenha %1 para reduzir."]
+  :tool-zoom "Zoom"}
 
  :renderer.tool.impl.draw.brush
  {:label "Pincel"
   :draw-brush "Desenhar com pincel"}
 
- :renderer.tool.impl.draw.pen
+ :renderer.tool.impl.draw.pencil
  {:label "Caneta"
   :draw-line "Desenhar linha"}
 
  :renderer.tool.impl.draw.core
- {:help "Clique e arraste para desenhar."}
+ {:help "Clique e arraste para desenhar."
+  :draw "Desenhar"}
 
  :renderer.tool.impl.element.circle
  {:label "Círculo"
@@ -759,4 +667,153 @@
  {:permission-denied "A permissão para aceder ao ficheiro foi negada."}
 
  :renderer.panel.views
- {:close-panel "Fechar painel"}}
+ {:close-panel "Fechar painel"}
+
+ :renderer.app.core
+ {:grid "Grelha"
+  :help-bar "Barra de ajuda"
+  :debug-info "Informação de depuração"}
+
+ :renderer.dialog.core
+ {:command-panel "Painel de comandos"
+  :about "Acerca de"}
+
+ :renderer.document.core
+ {:new "Novo"
+  :open "Abrir..."
+  :print "Imprimir"
+  :save "Guardar"
+  :save-as "Guardar como..."
+  :download "Transferir"
+  :close "Fechar"
+  :close-all "Fechar tudo"
+  :close-saved "Fechar guardados"
+  :svg "SVG"
+  :png "PNG"
+  :jpg "JPG"
+  :webp "WEBP"
+  :gif "GIF"}
+
+ :renderer.element.core
+ {:cut "Cortar"
+  :copy "Copiar"
+  :paste "Colar"
+  :paste-in-place "Colar no local"
+  :paste-styles "Colar estilos"
+  :duplicate "Duplicar"
+  :select-all "Selecionar tudo"
+  :deselect-all "Desselecionar tudo"
+  :invert-selection "Inverter seleção"
+  :select-same-tags "Selecionar mesmas etiquetas"
+  :delete "Eliminar"
+  :object-to-path "Objeto para caminho"
+  :stroke-to-path "Contorno para caminho"
+  :group "Agrupar"
+  :ungroup "Desagrupar"
+  :lock "Bloquear"
+  :unlock "Desbloquear"
+  :align-left "Alinhar à esquerda"
+  :align-right "Alinhar à direita"
+  :align-top "Alinhar no topo"
+  :align-bottom "Alinhar em baixo"
+  :center-vertically "Centrar verticalmente"
+  :center-horizontally "Centrar horizontalmente"
+  :animate "Animar"
+  :animate-transform "Animar transformação"
+  :animate-motion "Animar movimento"
+  :boolean-exclude "Excluir"
+  :boolean-unite "Unir"
+  :boolean-intersect "Intersetar"
+  :boolean-subtract "Subtrair"
+  :boolean-divide "Dividir"
+  :raise "Subir"
+  :lower "Descer"
+  :raise-to-top "Subir para frente"
+  :lower-to-bottom "Enviar para trás"
+  :image-trace "Vetorizar"
+  :path-simplify "Simplificar"
+  :path-smooth "Suavizar"
+  :path-flatten "Achatar"
+  :path-reverse "Inverter"
+  :index-operations "Operações de Índice"
+  :boolean-operations "Operações Booleanas"
+  :horizontal-alignment "Alinhamento Horizontal"
+  :vertical-alignment "Alinhamento Vertical"
+  :clipboard "Área de Transferência"
+  :grouping "Agrupamento"
+  :locking "Bloqueio"
+  :entity "Entidade"
+  :image "Imagem"
+  :path "Caminho"
+  :select "Selecionar"}
+
+ :renderer.error.core
+ {:report-errors "Reportar erros automaticamente"}
+
+ :renderer.frame.core
+ {:zoom-in "Ampliar"
+  :zoom-out "Reduzir"
+  :zoom-set-50 "Definir para 50%"
+  :zoom-set-100 "Definir para 100%"
+  :zoom-set-200 "Definir para 200%"
+  :zoom-focus-selected "Focar seleção"
+  :zoom-fit-selected "Ajustar à seleção"
+  :zoom-fill-selected "Preencher com seleção"}
+
+ :renderer.history.core
+ {:undo "Desfazer"
+  :redo "Refazer"
+  :history "Histórico"
+  :clear-history "Limpar histórico"}
+
+ :renderer.menubar.core
+ {:website "Website"
+  :source-code "Código-fonte"
+  :license "Licença"
+  :changelog "Registo de alterações"
+  :privacy-policy "Política de Privacidade"
+  :submit-an-issue "Reportar problema"
+  :menubar-file "Menu Arquivo"
+  :menubar-edit "Menu Editar"
+  :menubar-object "Menu Objeto"
+  :menubar-view "Menu Visualização"
+  :menubar-help "Menu Ajuda"
+  :help "Ajuda"}
+
+ :renderer.panel.core
+ {:panel "Painel"
+  :panel-element-tree "Árvore de elementos"
+  :panel-properties "Propriedades"
+  :panel-xml-view "Vista XML"
+  :panel-history-tree "Árvore de histórico"
+  :panel-shell-history "Histórico da consola"
+  :panel-timeline-editor "Editor de cronologia"}
+
+ :renderer.ruler.core
+ {:rulers "Réguas"}
+
+ :renderer.snap.core
+ {:snap "Ajustar"
+  :centers "centros"
+  :midpoints "pontos médios"
+  :corners "cantos"
+  :nodes "nós"}
+
+ :renderer.theme.core
+ {:theme-mode "Modo de tema"
+  :dark "Escuro"
+  :light "Claro"
+  :system "Sistema"}
+
+ :renderer.window.core
+ {:exit "Sair"
+  :fullscreen "Ecrã completo"}
+
+ :renderer.tool.core
+ {:cancel "Cancelar"}
+
+ :renderer.tool.impl.base.core
+ {:transform "Transformar"}
+
+ :renderer.tool.impl.misc.core
+ {:misc "Miscallaneous"}}

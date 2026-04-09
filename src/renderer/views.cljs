@@ -65,7 +65,7 @@
 
 (defn action-button
   [action-id & {:as props}]
-  (when-let [action (action.views/entity action-id)]
+  (when-let [action (action.views/deref-action action-id)]
     [:button
      (merge-with-class {:class "button"
                         :disabled (action.views/disabled? action)
@@ -130,7 +130,8 @@
   [action]
   (let [event-shortcuts (:shortcuts action)]
     (when (seq event-shortcuts)
-      (into [:span.inline-flex.text-foreground-muted {:class "gap-1.5"}]
+      (into [:span.text-foreground-muted.hidden.lg:inline-flex
+             {:class "gap-1.5"}]
             (comp (map format-shortcut)
                   (interpose [:span]))
             event-shortcuts))))
@@ -156,7 +157,7 @@
      [:> ContextMenu/ItemIndicator
       {:class "menu-item-indicator"}
       [icon "checkmark"]]
-     [:div (action.views/label action)]
+     [:div [action.views/label action]]
      [shortcuts action]]
 
     :else
@@ -164,7 +165,7 @@
      {:class "menu-item context-menu-item"
       :onSelect (action.views/dispatch action)
       :disabled (action.views/disabled? action)}
-     [:div (action.views/label action)]
+     [:div [action.views/label action]]
      [shortcuts action]]))
 
 (defn dropdown-menu-item
@@ -183,7 +184,7 @@
      [:> DropdownMenu/ItemIndicator
       {:class "menu-item-indicator"}
       [icon "checkmark"]]
-     [:div (action.views/label action)]
+     [:div [action.views/label action]]
      [shortcuts action]]
 
     :else
@@ -194,7 +195,7 @@
      (when (:icon action)
        [icon (:icon action)
         {:class "menu-item-indicator"}])
-     [:div (action.views/label action)]
+     [:div [action.views/label action]]
      [shortcuts action]]))
 
 (defn scroll-area

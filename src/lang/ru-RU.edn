@@ -57,110 +57,13 @@
   :object "Объект"
   :align "Выровнять"
   :animate "Анимировать"
-  :boolean-operation "Булева операция"
-  :image "Изображение"
-  :path "Контур"
   :view "Вид"
   :zoom "Масштаб"
-  :theme-mode "Режим темы"
   :accessibility-filter "Фильтр доступности"
   :language "Язык"
-  :panel "Панель"
   :help "Справка"}
 
- :renderer.action.defaults
- {:new "Новый"
-  :open "Открыть..."
-  :recent-clear "Очистить недавние"
-  :print "Печать"
-  :save "Сохранить"
-  :save-as "Сохранить как..."
-  :download "Скачать"
-  :close "Закрыть"
-  :close-all "Закрыть всё"
-  :close-saved "Закрыть сохранённые"
-  :exit "Выход"
-  :undo "Отменить"
-  :redo "Повторить"
-  :clear-history "Очистить историю"
-  :cut "Вырезать"
-  :copy "Копировать"
-  :paste "Вставить"
-  :paste-in-place "Вставить на место"
-  :paste-styles "Вставить стили"
-  :duplicate "Дублировать"
-  :select-all "Выделить всё"
-  :deselect-all "Снять выделение"
-  :invert-selection "Инвертировать выделение"
-  :select-same-tags "Выделить одинаковые теги"
-  :delete "Удалить"
-  :object-to-path "Объект в контур"
-  :stroke-to-path "Обводка в контур"
-  :group "Группировать"
-  :ungroup "Разгруппировать"
-  :lock "Заблокировать"
-  :unlock "Разблокировать"
-  :align "Выровнять"
-  :align-left "Выровнять по левому краю"
-  :align-right "Выровнять по правому краю"
-  :align-top "Выровнять по верхнему краю"
-  :align-bottom "Выровнять по нижнему краю"
-  :center-vertically "Центрировать по вертикали"
-  :center-horizontally "Центрировать по горизонтали"
-  :animate-transform "Анимировать трансформацию"
-  :animate-motion "Анимировать движение"
-  :boolean-exclude "Исключить"
-  :boolean-unite "Объединить"
-  :boolean-intersect "Пересечение"
-  :boolean-subtract "Вычесть"
-  :boolean-divide "Разделить"
-  :raise "Поднять"
-  :lower "Опустить"
-  :raise-to-top "Поднять на передний план"
-  :lower-to-bottom "Отправить на задний план"
-  :image-trace "Трассировка"
-  :path-simplify "Упростить"
-  :path-smooth "Сгладить"
-  :path-flatten "Выровнять"
-  :path-reverse "Обратить"
-  :zoom-in "Увеличить"
-  :zoom-out "Уменьшить"
-  :zoom-set-50 "Установить 50%"
-  :zoom-set-100 "Установить 100%"
-  :zoom-set-200 "Установить 200%"
-  :zoom-focus-selected "Сфокусировать на выделенном"
-  :zoom-fit-selected "Уместить выделенное"
-  :zoom-fill-selected "Заполнить выделенным"
-  :dark "Тёмная"
-  :light "Светлая"
-  :system "Системная"
-  :grid "Сетка"
-  :rulers "Линейки"
-  :help-bar "Панель справки"
-  :debug-info "Отладочная информация"
-  :panel-element-tree "Дерево элементов"
-  :panel-properties "Свойства"
-  :panel-xml-view "XML вид"
-  :panel-history-tree "Дерево истории"
-  :panel-shell-history "История консоли"
-  :panel-timeline-editor "Редактор временной шкалы"
-  :fullscreen "Полный экран"
-  :command-panel "Панель команд"
-  :website "Веб-сайт"
-  :source-code "Исходный код"
-  :license "Лицензия"
-  :changelog "Журнал изменений"
-  :privacy-policy "Политика Конфиденциальности"
-  :submit-an-issue "Сообщить о проблеме"
-  :report-errors "Сообщать об ошибках автоматически"
-  :about "О программе"
-  :snap "Привязка"
-  :centers "центры"
-  :midpoints "средние точки"
-  :corners "углы"
-  :nodes "узлы"}
-
- :renderer.a11y.db
+ :renderer.a11y.core
  {:blur "Размытие"
   :heavy-blur "Сильное размытие"
   :protanopia "Протанопия"
@@ -447,7 +350,9 @@
 
  :renderer.tool.impl.element.core
  {:help "Щёлкните и перетащите для создания элемента."
-  :edge "край"}
+  :edge "край"
+  :elements "Элементы"
+  :containers "Контейнеры"}
 
  :renderer.tool.impl.element.poly
  {:add-points "Щёлкните для добавления дополнительных точек."
@@ -612,7 +517,8 @@
   :select-element "Выбрать элемент"
   :edit "Редактировать"
   :centroid "Центроид"
-  :handle "ручка"}
+  :handle "ручка"
+  :tool-edit "Редактирование"}
 
  :renderer.tool.impl.base.transform
  {:label "Трансформация"
@@ -639,23 +545,26 @@
  :renderer.tool.impl.base.pan
  {:label "Панорамирование"
   :idle-help "Щёлкните и перетащите для панорамирования."
-  :pan-help "Перетащите для панорамирования."}
+  :pan-help "Перетащите для панорамирования."
+  :tool-pan "Панорамирование"}
 
  :renderer.tool.impl.base.zoom
  {:label "Масштабирование"
   :zoom-in [:div "Щёлкните или выделите область для увеличения."]
-  :zoom-out [:div "Удерживайте %1 для уменьшения."]}
+  :zoom-out [:div "Удерживайте %1 для уменьшения."]
+  :tool-zoom "Масштабирование"}
 
  :renderer.tool.impl.draw.brush
  {:label "Кисть"
   :draw-brush "Рисовать кистью"}
 
- :renderer.tool.impl.draw.pen
+ :renderer.tool.impl.draw.pencil
  {:label "Перо"
   :draw-line "Рисовать линию"}
 
  :renderer.tool.impl.draw.core
- {:help "Щёлкните и перетащите для рисования."}
+ {:help "Щёлкните и перетащите для рисования."
+  :draw "Рисование"}
 
  :renderer.tool.impl.element.circle
  {:label "Круг"
@@ -758,4 +667,153 @@
  {:permission-denied "В доступе к файлу отказано."}
 
  :renderer.panel.views
- {:close-panel "Закрыть панель"}}
+ {:close-panel "Закрыть панель"}
+
+ :renderer.app.core
+ {:grid "Сетка"
+  :help-bar "Панель справки"
+  :debug-info "Отладочная информация"}
+
+ :renderer.dialog.core
+ {:command-panel "Панель команд"
+  :about "О программе"}
+
+ :renderer.document.core
+ {:new "Новый"
+  :open "Открыть..."
+  :recent-clear "Очистить недавние"
+  :print "Печать"
+  :save "Сохранить"
+  :save-as "Сохранить как..."
+  :download "Скачать"
+  :close "Закрыть"
+  :close-all "Закрыть всё"
+  :close-saved "Закрыть сохранённые"
+  :svg "SVG"
+  :png "PNG"
+  :jpg "JPG"
+  :webp "WEBP"
+  :gif "GIF"}
+
+ :renderer.element.core
+ {:cut "Вырезать"
+  :copy "Копировать"
+  :paste "Вставить"
+  :paste-in-place "Вставить на место"
+  :paste-styles "Вставить стили"
+  :duplicate "Дублировать"
+  :select-all "Выделить всё"
+  :deselect-all "Снять выделение"
+  :invert-selection "Инвертировать выделение"
+  :select-same-tags "Выделить одинаковые теги"
+  :delete "Удалить"
+  :object-to-path "Объект в контур"
+  :stroke-to-path "Обводка в контур"
+  :group "Группировать"
+  :ungroup "Разгруппировать"
+  :lock "Заблокировать"
+  :unlock "Разблокировать"
+  :align-left "Выровнять по левому краю"
+  :align-right "Выровнять по правому краю"
+  :align-top "Выровнять по верхнему краю"
+  :align-bottom "Выровнять по нижнему краю"
+  :center-vertically "Центрировать по вертикали"
+  :center-horizontally "Центрировать по горизонтали"
+  :animate-transform "Анимировать трансформацию"
+  :animate-motion "Анимировать движение"
+  :boolean-exclude "Исключить"
+  :boolean-unite "Объединить"
+  :boolean-intersect "Пересечение"
+  :boolean-subtract "Вычесть"
+  :boolean-divide "Разделить"
+  :raise "Поднять"
+  :lower "Опустить"
+  :raise-to-top "Поднять на передний план"
+  :lower-to-bottom "Отправить на задний план"
+  :image-trace "Трассировка"
+  :path-simplify "Упростить"
+  :path-smooth "Сгладить"
+  :path-flatten "Выровнять"
+  :path-reverse "Обратить"
+  :index-operations "Операции индексирования"
+  :boolean-operations "Логические операции"
+  :horizontal-alignment "Горизонтальное выравнивание"
+  :vertical-alignment "Вертикальное выравнивание"
+  :clipboard "Буфер обмена"
+  :grouping "Группировка"
+  :locking "Блокировка"
+  :entity "Сущность"
+  :image "Изображение"
+  :path "Контур"
+  :select "Выделение"}
+
+ :renderer.error.core
+ {:report-errors "Сообщать об ошибках автоматически"}
+
+ :renderer.frame.core
+ {:zoom-in "Увеличить"
+  :zoom-out "Уменьшить"
+  :zoom-set-50 "Установить 50%"
+  :zoom-set-100 "Установить 100%"
+  :zoom-set-200 "Установить 200%"
+  :zoom-focus-selected "Сфокусировать на выделенном"
+  :zoom-fit-selected "Уместить выделенное"
+  :zoom-fill-selected "Заполнить выделенным"}
+
+ :renderer.history.core
+ {:undo "Отменить"
+  :redo "Повторить"
+  :history "История"
+  :clear-history "Очистить историю"}
+
+ :renderer.menubar.core
+ {:website "Веб-сайт"
+  :source-code "Исходный код"
+  :license "Лицензия"
+  :changelog "Журнал изменений"
+  :privacy-policy "Политика Конфиденциальности"
+  :submit-an-issue "Сообщить о проблеме"
+  :menubar-file "Меню Файл"
+  :menubar-edit "Меню Редактирование"
+  :menubar-object "Меню Объект"
+  :menubar-view "Меню Вид"
+  :menubar-help "Меню Справка"
+  :help "Справка"}
+
+ :renderer.panel.core
+ {:panel "Панель"
+  :panel-element-tree "Дерево элементов"
+  :panel-properties "Свойства"
+  :panel-xml-view "XML вид"
+  :panel-history-tree "Дерево истории"
+  :panel-shell-history "История консоли"
+  :panel-timeline-editor "Редактор временной шкалы"}
+
+ :renderer.ruler.core
+ {:rulers "Линейки"}
+
+ :renderer.snap.core
+ {:snap "Привязка"
+  :centers "центры"
+  :midpoints "средние точки"
+  :corners "углы"
+  :nodes "узлы"}
+
+ :renderer.theme.core
+ {:theme-mode "Режим темы"
+  :dark "Тёмная"
+  :light "Светлая"
+  :system "Системная"}
+
+ :renderer.window.core
+ {:exit "Выход"
+  :fullscreen "Полный экран"}
+
+ :renderer.tool.core
+ {:cancel "Отмена"}
+
+ :renderer.tool.impl.base.core
+ {:transform "Трансформация"}
+
+ :renderer.tool.impl.misc.core
+ {:misc "Miscallaneous"}}

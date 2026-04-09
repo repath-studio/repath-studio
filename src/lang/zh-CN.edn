@@ -55,111 +55,13 @@
   :edit "编辑"
   :object "对象"
   :align "对齐"
-  :animate "动画"
-  :boolean-operation "布尔运算"
-  :image "图像"
-  :path "路径"
   :view "视图"
   :zoom "缩放"
-  :theme-mode "主题模式"
   :accessibility-filter "辅助功能过滤器"
   :language "语言"
-  :panel "面板"
   :help "帮助"}
 
- :renderer.action.defaults
- {:new "新建"
-  :open "打开..."
-  :recent-clear "清除最近"
-  :print "打印"
-  :save "保存"
-  :save-as "另存为..."
-  :download "下载"
-  :close "关闭"
-  :close-all "关闭全部"
-  :close-saved "关闭已保存"
-  :exit "退出"
-  :undo "撤销"
-  :redo "重做"
-  :clear-history "清除历史"
-  :cut "剪切"
-  :copy "复制"
-  :paste "粘贴"
-  :paste-in-place "原位粘贴"
-  :paste-styles "粘贴样式"
-  :duplicate "复制"
-  :select-all "全选"
-  :deselect-all "取消全选"
-  :invert-selection "反选"
-  :select-same-tags "选择相同标签"
-  :delete "删除"
-  :object-to-path "对象转路径"
-  :stroke-to-path "描边转路径"
-  :group "成组"
-  :ungroup "取消成组"
-  :lock "锁定"
-  :unlock "解锁"
-  :align-left "左对齐"
-  :align-right "右对齐"
-  :align-top "顶部对齐"
-  :align-bottom "底部对齐"
-  :center-vertically "垂直居中对齐"
-  :center-horizontally "水平居中对齐"
-  :animate "动画"
-  :animate-transform "变换动画"
-  :animate-motion "运动动画"
-  :boolean-exclude "排除"
-  :boolean-unite "合并"
-  :boolean-intersect "相交"
-  :boolean-subtract "差集"
-  :boolean-divide "分割"
-  :raise "上移"
-  :lower "下移"
-  :raise-to-top "置于顶层"
-  :lower-to-bottom "置于底层"
-  :image-trace "描摹"
-  :path-simplify "简化"
-  :path-smooth "平滑"
-  :path-flatten "展平"
-  :path-reverse "反转"
-  :zoom-in "放大"
-  :zoom-out "缩小"
-  :zoom-set-50 "设置为 50%"
-  :zoom-set-100 "设置为 100%"
-  :zoom-set-200 "设置为 200%"
-  :zoom-focus-selected "聚焦选择"
-  :zoom-fit-selected "适合选择"
-  :zoom-fill-selected "填充选择"
-  :dark "深色"
-  :light "浅色"
-  :system "系统"
-  :grid "网格"
-  :rulers "标尺"
-  :help-bar "帮助栏"
-  :debug-info "调试信息"
-  :panel-element-tree "元素树"
-  :panel-properties "属性"
-  :panel-xml-view "XML 视图"
-  :panel-history-tree "历史树"
-  :panel-shell-history "终端历史"
-  :panel-timeline-editor "时间轴编辑器"
-  :fullscreen "全屏"
-  :command-panel "命令面板"
-  :website "网站"
-  :source-code "源代码"
-  :license "许可证"
-  :changelog "更改日志"
-  :privacy-policy "隐私政策"
-  :submit-an-issue "报告问题"
-  :report-errors "自动报告错误"
-  :about "关于"
-  :snap "吸附"
-  :centers "中心"
-  :midpoints "中点"
-  :corners "角点"
-  :nodes "节点"}
-
- :renderer.a11y.db
+ :renderer.a11y.core
  {:blur "模糊"
   :heavy-blur "重度模糊"
   :protanopia "红色盲"
@@ -394,7 +296,9 @@
 
  :renderer.tool.impl.element.core
  {:help "点击并拖动以创建元素。"
-  :edge "边缘"}
+  :edge "边缘"
+  :elements "元素"
+  :containers "容器"}
 
  :renderer.tool.impl.element.poly
  {:add-points "点击添加更多点。"
@@ -545,7 +449,8 @@
   :select-element "选择元素"
   :edit "编辑"
   :centroid "质心"
-  :handle "句柄"}
+  :handle "句柄"
+  :tool-edit "编辑"}
 
  :renderer.tool.impl.base.transform
  {:label "变换"
@@ -566,23 +471,26 @@
  :renderer.tool.impl.base.pan
  {:label "平移"
   :idle-help "点击并拖动进行平移。"
-  :pan-help "拖动进行平移。"}
+  :pan-help "拖动进行平移。"
+  :tool-pan "平移"}
 
  :renderer.tool.impl.base.zoom
  {:label "缩放"
   :zoom-in [:div "点击或选择区域进行放大。"]
-  :zoom-out [:div "按住 %1 进行缩小。"]}
+  :zoom-out [:div "按住 %1 进行缩小。"]
+  :tool-zoom "缩放"}
 
  :renderer.tool.impl.draw.brush
  {:label "画笔"
   :draw-brush "画笔绘制"}
 
- :renderer.tool.impl.draw.pen
+ :renderer.tool.impl.draw.pencil
  {:label "钢笔"
   :draw-line "绘制线条"}
 
  :renderer.tool.impl.draw.core
- {:help "点击并拖动进行绘制。"}
+ {:help "点击并拖动进行绘制。"
+  :draw "绘制"}
 
  :renderer.tool.impl.element.circle
  {:label "圆形"
@@ -682,4 +590,154 @@
  {:permission-denied "访问文件的权限被拒绝."}
 
  :renderer.panel.views
- {:close-panel "关闭面板"}}
+ {:close-panel "关闭面板"}
+
+ :renderer.app.core
+ {:grid "网格"
+  :help-bar "帮助栏"
+  :debug-info "调试信息"}
+
+ :renderer.dialog.core
+ {:command-panel "命令面板"
+  :about "关于"}
+
+ :renderer.document.core
+ {:new "新建"
+  :open "打开..."
+  :recent-clear "清除最近"
+  :print "打印"
+  :save "保存"
+  :save-as "另存为..."
+  :download "下载"
+  :close "关闭"
+  :close-all "关闭全部"
+  :close-saved "关闭已保存"
+  :svg "SVG"
+  :png "PNG"
+  :jpg "JPG"
+  :webp "WEBP"
+  :gif "GIF"}
+
+ :renderer.element.core
+ {:cut "剪切"
+  :copy "复制"
+  :paste "粘贴"
+  :paste-in-place "原位粘贴"
+  :paste-styles "粘贴样式"
+  :duplicate "复制"
+  :select-all "全选"
+  :deselect-all "取消全选"
+  :invert-selection "反选"
+  :select-same-tags "选择相同标签"
+  :delete "删除"
+  :object-to-path "对象转路径"
+  :stroke-to-path "描边转路径"
+  :group "成组"
+  :ungroup "取消成组"
+  :lock "锁定"
+  :unlock "解锁"
+  :align-left "左对齐"
+  :align-right "右对齐"
+  :align-top "顶部对齐"
+  :align-bottom "底部对齐"
+  :center-vertically "垂直居中对齐"
+  :center-horizontally "水平居中对齐"
+  :animate "动画"
+  :animate-transform "变换动画"
+  :animate-motion "运动动画"
+  :boolean-exclude "排除"
+  :boolean-unite "合并"
+  :boolean-intersect "相交"
+  :boolean-subtract "差集"
+  :boolean-divide "分割"
+  :raise "上移"
+  :lower "下移"
+  :raise-to-top "置于顶层"
+  :lower-to-bottom "置于底层"
+  :image-trace "描摹"
+  :path-simplify "简化"
+  :path-smooth "平滑"
+  :path-flatten "展平"
+  :path-reverse "反转"
+  :index-operations "索引操作"
+  :boolean-operations "布尔运算"
+  :horizontal-alignment "水平对齐"
+  :vertical-alignment "竖直对齐"
+  :clipboard "剪贴板"
+  :grouping "分组"
+  :locking "锁定"
+  :entity "实体"
+  :image "图像"
+  :path "路径"
+  :select "选择"}
+
+ :renderer.error.core
+ {:report-errors "自动报告错误"}
+
+ :renderer.frame.core
+ {:zoom-in "放大"
+  :zoom-out "缩小"
+  :zoom-set-50 "设置为 50%"
+  :zoom-set-100 "设置为 100%"
+  :zoom-set-200 "设置为 200%"
+  :zoom-focus-selected "聚焦选择"
+  :zoom-fit-selected "适合选择"
+  :zoom-fill-selected "填充选择"}
+
+ :renderer.history.core
+ {:undo "撤销"
+  :redo "重做"
+  :history "历史"
+  :clear-history "清除历史"}
+
+ :renderer.menubar.core
+ {:website "网站"
+  :source-code "源代码"
+  :license "许可证"
+  :changelog "更改日志"
+  :privacy-policy "隐私政策"
+  :submit-an-issue "报告问题"
+  :menubar-file "文件菜单"
+  :menubar-edit "编辑菜单"
+  :menubar-object "对象菜单"
+  :menubar-view "视图菜单"
+  :menubar-help "帮助菜单"
+  :help "帮助"}
+
+ :renderer.panel.core
+ {:panel "面板"
+  :panel-element-tree "元素树"
+  :panel-properties "属性"
+  :panel-xml-view "XML 视图"
+  :panel-history-tree "历史树"
+  :panel-shell-history "终端历史"
+  :panel-timeline-editor "时间轴编辑器"}
+
+ :renderer.ruler.core
+ {:rulers "标尺"}
+
+ :renderer.snap.core
+ {:snap "吸附"
+  :centers "中心"
+  :midpoints "中点"
+  :corners "角点"
+  :nodes "节点"}
+
+ :renderer.theme.core
+ {:theme-mode "主题模式"
+  :dark "深色"
+  :light "浅色"
+  :system "系统"}
+
+ :renderer.window.core
+ {:exit "退出"
+  :fullscreen "全屏"}
+
+ :renderer.tool.core
+ {:cancel "取消"}
+
+ :renderer.tool.impl.base.core
+ {:transform "变形"}
+
+ :renderer.tool.impl.misc.core
+ {:misc "Miscallaneous"}}

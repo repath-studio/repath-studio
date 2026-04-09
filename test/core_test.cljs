@@ -47,3 +47,4 @@
   (rf/reg-global-interceptor app.events/schema-validator))
 
 (instrument!)
+(rf/dispatch-sync [::app.events/initialize])

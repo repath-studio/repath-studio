@@ -46,7 +46,7 @@
           :zoom/focus-selected
           :zoom/fit-selected
           :zoom/fill-selected]
-         (map action.views/entity)
+         (map action.views/deref-action)
          (map #(dissoc % :icon))
          (map views/dropdown-menu-item)
          (into [:> DropdownMenu/Content
@@ -96,12 +96,12 @@
   [zoom]
   [views/button-group
    (-> :zoom/out
-       action.views/entity
+       action.views/deref-action
        (assoc :icon "minus")
        views/action-icon-button)
 
    (-> :zoom/in
-       action.views/entity
+       action.views/deref-action
        (assoc :icon "plus")
        views/action-icon-button)
 
@@ -131,9 +131,8 @@
       :side "top"
       :on-escape-key-down #(.stopPropagation %)}
      [:div.flex.gap-2.items-center
-      (action.views/label action)
-      (when @(rf/subscribe [::window.subs/xl?])
-        [views/shortcuts action])]]]])
+      [action.views/label action]
+      [views/shortcuts action]]]]])
 
 (defn color-picker
   [props & children]
@@ -203,16 +202,18 @@
      [:div.grow.hidden.md:block]
      (when md?
        [:<>
-        (->> [:panel/toggle-xml
+        (->> [:panel/toggle-tree
+              :panel/toggle-xml
               :panel/toggle-timeline
-              :panel/toggle-history]
-             (map action.views/entity)
+              :panel/toggle-history
+              :panel/toggle-properties]
+             (map action.views/deref-action)
              (map radio-button)
              (into [:<>]))
         [:div.v-divider]])
      (->> [:view/toggle-grid
            :view/toggle-rulers]
-          (map action.views/entity)
+          (map action.views/deref-action)
           (map radio-button)
           (into [:<>]))
      [snap.views/root]

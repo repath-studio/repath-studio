@@ -56,111 +56,13 @@
   :edit "Éditer"
   :object "Objet"
   :align "Aligner"
-  :animate "Animer"
-  :boolean-operation "Opération booléenne"
-  :image "Image"
-  :path "Tracé"
   :view "Affichage"
   :zoom "Zoom"
-  :theme-mode "Mode de thème"
   :accessibility-filter "Filtre d'accessibilité"
   :language "Langue"
-  :panel "Panneau"
   :help "Aide"}
 
- :renderer.action.defaults
- {:new "Nouveau"
-  :open "Ouvrir..."
-  :recent-clear "Effacer les récents"
-  :print "Imprimer"
-  :save "Enregistrer"
-  :save-as "Enregistrer sous..."
-  :download "Télécharger"
-  :close "Fermer"
-  :close-all "Fermer tout"
-  :close-saved "Fermer les enregistrés"
-  :exit "Quitter"
-  :undo "Annuler"
-  :redo "Refaire"
-  :clear-history "Effacer l'historique"
-  :cut "Couper"
-  :copy "Copier"
-  :paste "Coller"
-  :paste-in-place "Coller en place"
-  :paste-styles "Coller les styles"
-  :duplicate "Dupliquer"
-  :select-all "Tout sélectionner"
-  :deselect-all "Tout désélectionner"
-  :invert-selection "Inverser la sélection"
-  :select-same-tags "Sélectionner les mêmes balises"
-  :delete "Supprimer"
-  :object-to-path "Objet vers tracé"
-  :stroke-to-path "Contour vers tracé"
-  :group "Grouper"
-  :ungroup "Dégrouper"
-  :lock "Verrouiller"
-  :unlock "Déverrouiller"
-  :align-left "Aligner à gauche"
-  :align-right "Aligner à droite"
-  :align-top "Aligner en haut"
-  :align-bottom "Aligner en bas"
-  :center-vertically "Centrer verticalement"
-  :center-horizontally "Centrer horizontalement"
-  :animate "Animer"
-  :animate-transform "Animer la transformation"
-  :animate-motion "Animer le mouvement"
-  :boolean-exclude "Exclure"
-  :boolean-unite "Unir"
-  :boolean-intersect "Intersecter"
-  :boolean-subtract "Soustraire"
-  :boolean-divide "Diviser"
-  :raise "Monter"
-  :lower "Descendre"
-  :raise-to-top "Monter au premier plan"
-  :lower-to-bottom "Envoyer à l'arrière-plan"
-  :image-trace "Vectoriser"
-  :path-simplify "Simplifier"
-  :path-smooth "Lisser"
-  :path-flatten "Aplatir"
-  :path-reverse "Inverser"
-  :zoom-in "Agrandir"
-  :zoom-out "Réduire"
-  :zoom-set-50 "Définir à 50%"
-  :zoom-set-100 "Définir à 100%"
-  :zoom-set-200 "Définir à 200%"
-  :zoom-focus-selected "Focaliser la sélection"
-  :zoom-fit-selected "Ajuster à la sélection"
-  :zoom-fill-selected "Remplir avec la sélection"
-  :dark "Sombre"
-  :light "Clair"
-  :system "Système"
-  :grid "Grille"
-  :rulers "Règles"
-  :help-bar "Barre d'aide"
-  :debug-info "Informations de débogage"
-  :panel-element-tree "Arbre des éléments"
-  :panel-properties "Propriétés"
-  :panel-xml-view "Vue XML"
-  :panel-history-tree "Arbre d'historique"
-  :panel-shell-history "Historique du terminal"
-  :panel-timeline-editor "Éditeur de chronologie"
-  :fullscreen "Plein écran"
-  :command-panel "Panneau de commandes"
-  :website "Site web"
-  :source-code "Code source"
-  :license "Licence"
-  :changelog "Journal des modifications"
-  :privacy-policy "Politique de confidentialité"
-  :submit-an-issue "Signaler un problème"
-  :report-errors "Signaler les erreurs automatiquement"
-  :about "À propos"
-  :snap "Magnétisme"
-  :centers "centres"
-  :midpoints "points médians"
-  :corners "coins"
-  :nodes "nœuds"}
-
- :renderer.a11y.db
+ :renderer.a11y.core
  {:blur "Flou"
   :heavy-blur "Flou intense"
   :protanopia "Protanopie"
@@ -460,7 +362,9 @@
 
  :renderer.tool.impl.element.core
  {:help "Cliquez et faites glisser pour créer un élément."
-  :edge "bord"}
+  :edge "bord"
+  :elements "Éléments"
+  :containers "Conteneurs"}
 
  :renderer.tool.impl.element.poly
  {:add-points "Cliquez pour ajouter plus de points."
@@ -626,7 +530,8 @@
   :select-element "Sélectionner un élément"
   :edit "Éditer"
   :centroid "Centroïde"
-  :handle "poignée"}
+  :handle "poignée"
+  :tool-edit "Éditer"}
 
  :renderer.tool.impl.base.transform
  {:label "Transformer"
@@ -653,23 +558,26 @@
  :renderer.tool.impl.base.pan
  {:label "Panoramique"
   :idle-help "Cliquez et faites glisser pour faire un panoramique."
-  :pan-help "Faites glisser pour faire un panoramique."}
+  :pan-help "Faites glisser pour faire un panoramique."
+  :tool-pan "Déplacer"}
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
   :zoom-in [:div "Cliquez ou sélectionnez une zone pour agrandir."]
-  :zoom-out [:div "Maintenez %1 pour réduire."]}
+  :zoom-out [:div "Maintenez %1 pour réduire."]
+  :tool-zoom "Zoom"}
 
  :renderer.tool.impl.draw.brush
  {:label "Pinceau"
   :draw-brush "Dessiner au pinceau"}
 
- :renderer.tool.impl.draw.pen
+ :renderer.tool.impl.draw.pencil
  {:label "Stylo"
   :draw-line "Dessiner une ligne"}
 
  :renderer.tool.impl.draw.core
- {:help "Cliquez et faites glisser pour dessiner."}
+ {:help "Cliquez et faites glisser pour dessiner."
+  :draw "Dessiner"}
 
  :renderer.tool.impl.element.circle
  {:label "Cercle"
@@ -773,4 +681,154 @@
  {:permission-denied "Permission d'accéder au fichier refusée."}
 
  :renderer.panel.views
- {:close-panel "Fermer le panneau"}}
+ {:close-panel "Fermer le panneau"}
+
+ :renderer.app.core
+ {:grid "Grille"
+  :help-bar "Barre d'aide"
+  :debug-info "Informations de débogage"}
+
+ :renderer.dialog.core
+ {:command-panel "Panneau de commandes"
+  :about "À propos"}
+
+ :renderer.document.core
+ {:new "Nouveau"
+  :open "Ouvrir..."
+  :recent-clear "Effacer les récents"
+  :print "Imprimer"
+  :save "Enregistrer"
+  :save-as "Enregistrer sous..."
+  :download "Télécharger"
+  :close "Fermer"
+  :close-all "Fermer tout"
+  :close-saved "Fermer les enregistrés"
+  :svg "SVG"
+  :png "PNG"
+  :jpg "JPG"
+  :webp "WEBP"
+  :gif "GIF"}
+
+ :renderer.element.core
+ {:cut "Couper"
+  :copy "Copier"
+  :paste "Coller"
+  :paste-in-place "Coller en place"
+  :paste-styles "Coller les styles"
+  :duplicate "Dupliquer"
+  :select-all "Tout sélectionner"
+  :deselect-all "Tout désélectionner"
+  :invert-selection "Inverser la sélection"
+  :select-same-tags "Sélectionner les mêmes balises"
+  :delete "Supprimer"
+  :object-to-path "Objet vers tracé"
+  :stroke-to-path "Contour vers tracé"
+  :group "Grouper"
+  :ungroup "Dégrouper"
+  :lock "Verrouiller"
+  :unlock "Déverrouiller"
+  :align-left "Aligner à gauche"
+  :align-right "Aligner à droite"
+  :align-top "Aligner en haut"
+  :align-bottom "Aligner en bas"
+  :center-vertically "Centrer verticalement"
+  :center-horizontally "Centrer horizontalement"
+  :animate "Animer"
+  :animate-transform "Animer la transformation"
+  :animate-motion "Animer le mouvement"
+  :boolean-exclude "Exclure"
+  :boolean-unite "Unir"
+  :boolean-intersect "Intersecter"
+  :boolean-subtract "Soustraire"
+  :boolean-divide "Diviser"
+  :raise "Monter"
+  :lower "Descendre"
+  :raise-to-top "Monter au premier plan"
+  :lower-to-bottom "Envoyer à l'arrière-plan"
+  :image-trace "Vectoriser"
+  :path-simplify "Simplifier"
+  :path-smooth "Lisser"
+  :path-flatten "Aplatir"
+  :path-reverse "Inverser"
+  :index-operations "Opérations d'Indexation"
+  :boolean-operations "Opérations Booléennes"
+  :horizontal-alignment "Alignement Horizontal"
+  :vertical-alignment "Alignement Vertical"
+  :clipboard "Presse-papiers"
+  :grouping "Groupement"
+  :locking "Verrouillage"
+  :entity "Entité"
+  :image "Image"
+  :path "Tracé"
+  :select "Sélectionner"}
+
+ :renderer.error.core
+ {:report-errors "Signaler les erreurs automatiquement"}
+
+ :renderer.frame.core
+ {:zoom-in "Agrandir"
+  :zoom-out "Réduire"
+  :zoom-set-50 "Définir à 50%"
+  :zoom-set-100 "Définir à 100%"
+  :zoom-set-200 "Définir à 200%"
+  :zoom-focus-selected "Focaliser la sélection"
+  :zoom-fit-selected "Ajuster à la sélection"
+  :zoom-fill-selected "Remplir avec la sélection"}
+
+ :renderer.history.core
+ {:undo "Annuler"
+  :redo "Refaire"
+  :history "Historique"
+  :clear-history "Effacer l'historique"}
+
+ :renderer.menubar.core
+ {:website "Site web"
+  :source-code "Code source"
+  :license "Licence"
+  :changelog "Journal des modifications"
+  :privacy-policy "Politique de confidentialité"
+  :submit-an-issue "Signaler un problème"
+  :menubar-file "Menu Fichier"
+  :menubar-edit "Menu Édition"
+  :menubar-object "Menu Objet"
+  :menubar-view "Menu Affichage"
+  :menubar-help "Menu Aide"
+  :help "Aide"}
+
+ :renderer.panel.core
+ {:panel "Panneau"
+  :panel-element-tree "Arbre des éléments"
+  :panel-properties "Propriétés"
+  :panel-xml-view "Vue XML"
+  :panel-history-tree "Arbre d'historique"
+  :panel-shell-history "Historique du terminal"
+  :panel-timeline-editor "Éditeur de chronologie"}
+
+ :renderer.ruler.core
+ {:rulers "Règles"}
+
+ :renderer.snap.core
+ {:snap "Magnétisme"
+  :centers "centres"
+  :midpoints "points médians"
+  :corners "coins"
+  :nodes "nœuds"}
+
+ :renderer.theme.core
+ {:theme-mode "Mode de thème"
+  :dark "Sombre"
+  :light "Clair"
+  :system "Système"}
+
+ :renderer.window.core
+ {:exit "Quitter"
+  :fullscreen "Plein écran"}
+
+ :renderer.tool.core
+ {:cancel "Annuler"}
+
+ :renderer.tool.impl.base.core
+ {:transform "Transformer"}
+
+ :renderer.tool.impl.misc.core
+ {:misc "Divers"}}

@@ -283,7 +283,7 @@
   [el selected-elements selected-tags tag]
   (let [multitag? (next selected-tags)]
     [:div.flex.bg-primary.py-5.px-4.gap-1.items-center
-     [:h1.flex-1.text-lg.overflow-hidden.text-ellipsis
+     [:h1.flex-1.text-lg.overflow-hidden.text-ellipsis.button-size
       (if-not (next selected-elements)
         (let [el-label (:label el)
               properties (element.hierarchy/properties tag)]

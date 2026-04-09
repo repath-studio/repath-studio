@@ -7,7 +7,7 @@
   :xml "XML"
   :timeline "Χρονολόγιο"
   :shell "Τερματικό"
-  :history "Ιστορικό"
+  :history "Ιστορία"
   :attributes "Χαρακτηριστικά"}
 
  :renderer.home.views
@@ -56,111 +56,13 @@
   :edit "Επεξεργασία"
   :object "Αντικείμενο"
   :align "Στοίχιση"
-  :animate "Κίνηση"
-  :boolean-operation "Λογική λειτουργία"
-  :image "Εικόνα"
-  :path "Διαδρομή"
   :view "Προβολή"
   :zoom "Μεγέθυνση"
-  :theme-mode "Λειτουργία θέματος"
   :accessibility-filter "Φίλτρο προσβασιμότητας"
   :language "Γλώσσα"
-  :panel "Πάνελ"
   :help "Βοήθεια"}
 
- :renderer.action.defaults
- {:new "Νέο"
-  :open "Άνοιγμα..."
-  :recent-clear "Καθαρισμός πρόσφατων"
-  :print "Εκτύπωση"
-  :save "Αποθήκευση"
-  :save-as "Αποθήκευση ως..."
-  :download "Λήψη"
-  :close "Κλείσιμο"
-  :close-all "Κλείσιμο όλων"
-  :close-saved "Κλείσιμο αποθηκευμένων"
-  :exit "Έξοδος"
-  :undo "Αναίρεση"
-  :redo "Επαναφορά"
-  :clear-history "Εκκαθάριση ιστορικού"
-  :cut "Αποκοπή"
-  :copy "Αντιγραφή"
-  :paste "Επικόλληση"
-  :paste-in-place "Επικόλληση επί τόπου"
-  :paste-styles "Επικόλληση μορφοποιήσεων"
-  :duplicate "Δημιουργία αντιγράφου"
-  :select-all "Επιλογή όλων"
-  :deselect-all "Αποεπιλογή όλων"
-  :invert-selection "Αντιστροφή επιλογής"
-  :select-same-tags "Επιλογή ίδιων ετικετών"
-  :delete "Διαγραφή"
-  :object-to-path "Μετατροπή αντικειμένου σε διαδρομή"
-  :stroke-to-path "Μετατροπή περιγράμματος σε διαδρομή"
-  :group "Ομαδοποίηση"
-  :ungroup "Αποομαδοποίηση"
-  :lock "Κλείδωμα"
-  :unlock "Ξεκλείδωμα"
-  :align-left "Στοίχιση αριστερά"
-  :align-right "Στοίχιση δεξιά"
-  :align-top "Στοίχιση στη κορυφή"
-  :align-bottom "Στοίχιση στη βάση"
-  :center-vertically "Κέντρο κάθετα"
-  :center-horizontally "Κέντρο οριζόντια"
-  :animate "Κίνηση"
-  :animate-transform "Κινούμενη μετατροπή"
-  :animate-motion "Κινούμενη κίνηση"
-  :boolean-exclude "Απόκλειση"
-  :boolean-unite "Ενωση"
-  :boolean-intersect "Τομή"
-  :boolean-subtract "Αφαίρεση"
-  :boolean-divide "Διαίρεση"
-  :raise "Ανέβασμα"
-  :lower "Κατέβασμα"
-  :raise-to-top "Μετακίνηση προς τα πάνω"
-  :lower-to-bottom "Μετακίνση προς τα κάτω"
-  :image-trace "Ίχνος"
-  :path-simplify "Απλοποίηση"
-  :path-smooth "Εξομάλυνση"
-  :path-flatten "Επιπεδοποίηση"
-  :path-reverse "Αντιστροφή"
-  :zoom-in "Μεγέθυνση"
-  :zoom-out "Σμίκρυνση"
-  :zoom-set-50 "Ορισμός σε 50%"
-  :zoom-set-100 "Ορισμός σε 100%"
-  :zoom-set-200 "Ορισμός σε 200%"
-  :zoom-focus-selected "Εστίαση επιλογής"
-  :zoom-fit-selected "Προσαρμογή επιλογής"
-  :zoom-fill-selected "Γέμισμα επιλογής"
-  :dark "Σκοτεινό"
-  :light "Φωτεινό"
-  :system "Σύστημα"
-  :grid "Πλέγμα"
-  :rulers "Χάρακες"
-  :help-bar "Μπάρα βοηθείας"
-  :debug-info "Πληροφορίες αποσφαλμάτωσης"
-  :panel-element-tree "Δέντρο στοιχείων"
-  :panel-properties "Ιδιότητες"
-  :panel-xml-view "Προβολή XML"
-  :panel-history-tree "Δέντρο ιστορικού"
-  :panel-shell-history "Ιστορικό γραμμής εντολών"
-  :panel-timeline-editor "Επεξεργαστής χρονολόγιας"
-  :fullscreen "Πλήρης οθόνη"
-  :command-panel "Πάνελ εντολών"
-  :website "Ιστότοπος"
-  :source-code "Πηγαίος κώδικας"
-  :license "Άδεια χρήσης"
-  :changelog "Αρχείο αλλαγών"
-  :privacy-policy "Πολιτική Απορρήτου"
-  :submit-an-issue "Υποβολή προβλήματος"
-  :report-errors "Αναφορά σφαλμάτων αυτόματα"
-  :about "Σχετικά"
-  :snap "Προσκόλληση"
-  :centers "κέντρο"
-  :midpoints "μέση απόσταση"
-  :corners "γωνία"
-  :nodes "κόμβος"}
-
- :renderer.a11y.db
+ :renderer.a11y.core
  {:blur "Θόλωση όρασης"
   :heavy-blur "Έντονη θόλωση όρασης"
   :protanopia "Πρωτανωπία"
@@ -470,7 +372,9 @@
 
  :renderer.tool.impl.element.core
  {:help "Κάντε κλίκ και σύρετε για να δημιουργήσετε ένα στοιχείο"
-  :edge "άκρη"}
+  :edge "άκρη"
+  :elements "Στοιχεία"
+  :containers "Κοντέινερ"}
 
  :renderer.tool.impl.element.poly
  {:add-points "Κάντε κλικ για να προσθέτε σημεία."
@@ -639,7 +543,8 @@
   :select-element "Επιλογή στοιχείου"
   :edit "Επεξεργασία"
   :centroid "Κέντρο μάζας"
-  :handle "χειριστήριο"}
+  :handle "χειριστήριο"
+  :tool-edit "Επεξεργασία"}
 
  :renderer.tool.impl.base.transform
  {:label "Μετασχηματισμός"
@@ -665,23 +570,26 @@
  :renderer.tool.impl.base.pan
  {:label "Μετατόπιση"
   :idle-help "Κάντε κλικ και σύρετε για μετατόπιση."
-  :pan-help "Σύρετε για μετατόπιση."}
+  :pan-help "Σύρετε για μετατόπιση."
+  :tool-pan "Κύλιση"}
 
  :renderer.tool.impl.base.zoom
  {:label "Μεγέθυνση"
   :zoom-in [:div "Κάντε κλικ ή επιλέξτε μια περιοχή για μεγέθυνση."]
-  :zoom-out [:div "Κρατήστε %1 για σμίκρυνση."]}
+  :zoom-out [:div "Κρατήστε %1 για σμίκρυνση."]
+  :tool-zoom "Ζουμ"}
 
  :renderer.tool.impl.draw.brush
  {:label "Πινέλο"
   :draw-brush "Πινέλο σχεδίασης"}
 
- :renderer.tool.impl.draw.pen
+ :renderer.tool.impl.draw.pencil
  {:label "Στυλό"
   :draw-line "Σχεδίαση γραμμής"}
 
  :renderer.tool.impl.draw.core
- {:help "Κάντε κλικ και σύρετε για να σχεδιάσετε."}
+ {:help "Κάντε κλικ και σύρετε για να σχεδιάσετε."
+  :draw "Σχεδίαση"}
 
  :renderer.tool.impl.element.circle
  {:label "Κύκλος"
@@ -783,4 +691,154 @@
  {:permission-denied "Η άδεια πρόσβασης στο αρχείο απορρίφθηκε."}
 
  :renderer.panel.views
- {:close-panel "Κλείσιμο πάνελ"}}
+ {:close-panel "Κλείσιμο πάνελ"}
+
+ :renderer.app.core
+ {:grid "Πλέγμα"
+  :help-bar "Μπάρα βοηθείας"
+  :debug-info "Πληροφορίες αποσφαλμάτωσης"}
+
+ :renderer.dialog.core
+ {:command-panel "Πάνελ εντολών"
+  :about "Σχετικά"}
+
+ :renderer.document.core
+ {:new "Νέο"
+  :open "Άνοιγμα..."
+  :recent-clear "Καθαρισμός πρόσφατων"
+  :print "Εκτύπωση"
+  :save "Αποθήκευση"
+  :save-as "Αποθήκευση ως..."
+  :download "Λήψη"
+  :close "Κλείσιμο"
+  :close-all "Κλείσιμο όλων"
+  :close-saved "Κλείσιμο αποθηκευμένων"
+  :svg "SVG"
+  :png "PNG"
+  :jpg "JPG"
+  :webp "WEBP"
+  :gif "GIF"}
+
+ :renderer.element.core
+ {:cut "Αποκοπή"
+  :copy "Αντιγραφή"
+  :paste "Επικόλληση"
+  :paste-in-place "Επικόλληση επί τόπου"
+  :paste-styles "Επικόλληση μορφοποιήσεων"
+  :duplicate "Δημιουργία αντιγράφου"
+  :select-all "Επιλογή όλων"
+  :deselect-all "Αποεπιλογή όλων"
+  :invert-selection "Αντιστροφή επιλογής"
+  :select-same-tags "Επιλογή ίδιων ετικετών"
+  :delete "Διαγραφή"
+  :object-to-path "Μετατροπή αντικειμένου σε διαδρομή"
+  :stroke-to-path "Μετατροπή περιγράμματος σε διαδρομή"
+  :group "Ομαδοποίηση"
+  :ungroup "Αποομαδοποίηση"
+  :lock "Κλείδωμα"
+  :unlock "Ξεκλείδωμα"
+  :align-left "Στοίχιση αριστερά"
+  :align-right "Στοίχιση δεξιά"
+  :align-top "Στοίχιση στη κορυφή"
+  :align-bottom "Στοίχιση στη βάση"
+  :center-vertically "Κέντρο κάθετα"
+  :center-horizontally "Κέντρο οριζόντια"
+  :animate "Κίνηση"
+  :animate-transform "Κινούμενη μετατροπή"
+  :animate-motion "Κινούμενη κίνηση"
+  :boolean-exclude "Απόκλειση"
+  :boolean-unite "Ενωση"
+  :boolean-intersect "Τομή"
+  :boolean-subtract "Αφαίρεση"
+  :boolean-divide "Διαίρεση"
+  :raise "Ανέβασμα"
+  :lower "Κατέβασμα"
+  :raise-to-top "Μετακίνηση προς τα πάνω"
+  :lower-to-bottom "Μετακίνση προς τα κάτω"
+  :image-trace "Ίχνος"
+  :path-simplify "Απλοποίηση"
+  :path-smooth "Εξομάλυνση"
+  :path-flatten "Επιπεδοποίηση"
+  :path-reverse "Αντιστροφή"
+  :index-operations "Δημιουργία Ευρετηρίου"
+  :boolean-operations "Λογικές Πράξεις"
+  :horizontal-alignment "Οριζόντια Ευθυγράμμιση"
+  :vertical-alignment "Κατακόρυφη Ευθυγράμμιση"
+  :clipboard "Πρόχειρο"
+  :grouping "Ομαδοποίηση"
+  :locking "Κλείδωμα"
+  :entity "Οντότητα"
+  :image "Εικόνα"
+  :path "Διαδρομή"
+  :select "Επιλογή"}
+
+ :renderer.error.core
+ {:report-errors "Αναφορά σφαλμάτων αυτόματα"}
+
+ :renderer.frame.core
+ {:zoom-in "Μεγέθυνση"
+  :zoom-out "Σμίκρυνση"
+  :zoom-set-50 "Ορισμός σε 50%"
+  :zoom-set-100 "Ορισμός σε 100%"
+  :zoom-set-200 "Ορισμός σε 200%"
+  :zoom-focus-selected "Εστίαση επιλογής"
+  :zoom-fit-selected "Προσαρμογή επιλογής"
+  :zoom-fill-selected "Γέμισμα επιλογής"}
+
+ :renderer.history.core
+ {:undo "Αναίρεση"
+  :redo "Επαναφορά"
+  :history "Ιστορικό"
+  :clear-history "Εκκαθάριση ιστορικού"}
+
+ :renderer.menubar.core
+ {:website "Ιστότοπος"
+  :source-code "Πηγαίος κώδικας"
+  :license "Άδεια χρήσης"
+  :changelog "Αρχείο αλλαγών"
+  :privacy-policy "Πολιτική Απορρήτου"
+  :submit-an-issue "Υποβολή προβλήματος"
+  :menubar-file "Μενού Αρχείου"
+  :menubar-edit "Μενού Επεξεργασίας"
+  :menubar-object "Μενού Αντικειμένου"
+  :menubar-view "Μενού Προβολής"
+  :menubar-help "Μενού Βοήθειας"
+  :help "Βοήθεια"}
+
+ :renderer.panel.core
+ {:panel "Πάνελ"
+  :panel-element-tree "Δέντρο στοιχείων"
+  :panel-properties "Ιδιότητες"
+  :panel-xml-view "Προβολή XML"
+  :panel-history-tree "Δέντρο ιστορικού"
+  :panel-shell-history "Ιστορικό γραμμής εντολών"
+  :panel-timeline-editor "Επεξεργαστής χρονολόγιας"}
+
+ :renderer.ruler.core
+ {:rulers "Χάρακες"}
+
+ :renderer.snap.core
+ {:snap "Προσκόλληση"
+  :centers "κέντρο"
+  :midpoints "μέση απόσταση"
+  :corners "γωνία"
+  :nodes "κόμβος"}
+
+ :renderer.theme.core
+ {:theme-mode "Λειτουργία θέματος"
+  :dark "Σκοτεινό"
+  :light "Φωτεινό"
+  :system "Σύστημα"}
+
+ :renderer.window.core
+ {:exit "Έξοδος"
+  :fullscreen "Πλήρης οθόνη"}
+
+ :renderer.tool.core
+ {:cancel "Ακύρωση"}
+
+ :renderer.tool.impl.base.core
+ {:transform "Μετασχηματισμός"}
+
+ :renderer.tool.impl.misc.core
+ {:misc "Διάφορα"}}

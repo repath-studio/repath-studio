@@ -1,26 +1,41 @@
 (ns renderer.toolbar.views
   (:require
    ["@radix-ui/react-tooltip" :as Tooltip]
-   [re-frame.core :as rf]
    [renderer.action.views :as action.views]
-   [renderer.views :as views]
-   [renderer.window.subs :as-alias window.subs]))
+   [renderer.views :as views]))
 
 (defn button
-  [id]
-  (when-let [action (action.views/entity id)]
-    [:> Tooltip/Root
-     [:> Tooltip/Trigger
-      {:as-child true}
-      [:span
-       [views/action-icon-button action]]]
-     [:> Tooltip/Portal
-      [:> Tooltip/Content
-       {:class "tooltip-content"
-        :side "left"
-        :sideOffset 5
-        :on-escape-key-down #(.stopPropagation %)}
-       [:div.flex.gap-2.items-center
-        (action.views/label action)
-        (when @(rf/subscribe [::window.subs/xl?])
-          [views/shortcuts action])]]]]))
+  [action]
+  [:> Tooltip/Root
+   [:> Tooltip/Trigger
+    {:as-child true}
+    [:span
+     [views/action-icon-button action]]]
+   [:> Tooltip/Portal
+    [:> Tooltip/Content
+     {:class "tooltip-content"
+      :side "left"
+      :sideOffset 5
+      :on-escape-key-down #(.stopPropagation %)}
+     [:div.flex.gap-2.items-center
+      [action.views/label action]
+      [views/shortcuts action]]]]])
+
+(defn button-group
+  [action-group]
+  (->> action-group
+       action.views/deref-action-group
+       :actions
+       (map button)
+       (into [:<>])))
+
+(defn action-toolbar
+  [{:keys [actions orientation]} & more]
+  (let [vertical? (= orientation :vertical)]
+    (->> actions
+         (map button-group)
+         (interpose [:span {:class (if vertical? "h-divider" "v-divider")}])
+         (into [:<>])
+         (conj more)
+         (into [views/toolbar
+                {:class "flex-col px-2 md:px-1 gap-2 md:gap-1"}]))))

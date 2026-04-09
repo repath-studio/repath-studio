@@ -7,7 +7,7 @@
   :xml "XML"
   :timeline "타임라인"
   :shell "쉘"
-  :history "기록"
+  :history "히스토리"
   :attributes "속성"}
 
  :renderer.home.views
@@ -56,111 +56,13 @@
   :edit "편집"
   :object "객체"
   :align "정렬"
-  :animate "애니메이션"
-  :boolean-operation "불린 연산"
-  :image "이미지"
-  :path "패스"
   :view "보기"
   :zoom "확대/축소"
-  :theme-mode "테마 모드"
   :accessibility-filter "접근성 필터"
   :language "언어"
-  :panel "패널"
   :help "도움말"}
 
- :renderer.action.defaults
- {:new "새로 만들기"
-  :open "열기..."
-  :recent-clear "최근 기록 지우기"
-  :print "인쇄"
-  :save "저장"
-  :save-as "다른 이름으로 저장..."
-  :download "다운로드"
-  :close "닫기"
-  :close-all "모두 닫기"
-  :close-saved "저장된 것 닫기"
-  :exit "종료"
-  :undo "실행 취소"
-  :redo "다시 실행"
-  :clear-history "기록 지우기"
-  :cut "잘라내기"
-  :copy "복사"
-  :paste "붙여넣기"
-  :paste-in-place "제자리에 붙여넣기"
-  :paste-styles "스타일 붙여넣기"
-  :duplicate "복제"
-  :select-all "모두 선택"
-  :deselect-all "모두 선택 해제"
-  :invert-selection "선택 반전"
-  :select-same-tags "같은 태그 선택"
-  :delete "삭제"
-  :object-to-path "객체를 패스로"
-  :stroke-to-path "획을 패스로"
-  :group "그룹"
-  :ungroup "그룹 해제"
-  :lock "잠금"
-  :unlock "잠금 해제"
-  :align-left "왼쪽 정렬"
-  :align-right "오른쪽 정렬"
-  :align-top "위쪽 정렬"
-  :align-bottom "아래쪽 정렬"
-  :center-vertically "수직 중앙 정렬"
-  :center-horizontally "수평 중앙 정렬"
-  :animate "애니메이션"
-  :animate-transform "변환 애니메이션"
-  :animate-motion "모션 애니메이션"
-  :boolean-exclude "제외"
-  :boolean-unite "합치기"
-  :boolean-intersect "교집합"
-  :boolean-subtract "빼기"
-  :boolean-divide "나누기"
-  :raise "앞으로"
-  :lower "뒤로"
-  :raise-to-top "맨 앞으로"
-  :lower-to-bottom "맨 뒤로"
-  :image-trace "추적"
-  :path-simplify "단순화"
-  :path-smooth "매끄럽게"
-  :path-flatten "평면화"
-  :path-reverse "역방향"
-  :zoom-in "확대"
-  :zoom-out "축소"
-  :zoom-set-50 "50%로 설정"
-  :zoom-set-100 "100%로 설정"
-  :zoom-set-200 "200%로 설정"
-  :zoom-focus-selected "선택 항목에 초점"
-  :zoom-fit-selected "선택 항목에 맞춤"
-  :zoom-fill-selected "선택 항목 채우기"
-  :dark "다크"
-  :light "라이트"
-  :system "시스템"
-  :grid "격자"
-  :rulers "눈금자"
-  :help-bar "도움말 바"
-  :debug-info "디버그 정보"
-  :panel-element-tree "요소 트리"
-  :panel-properties "속성"
-  :panel-xml-view "XML 보기"
-  :panel-history-tree "기록 트리"
-  :panel-shell-history "쉘 기록"
-  :panel-timeline-editor "타임라인 편집기"
-  :fullscreen "전체화면"
-  :command-panel "명령 패널"
-  :website "웹사이트"
-  :source-code "소스 코드"
-  :license "라이선스"
-  :changelog "변경 로그"
-  :privacy-policy "개인정보 보호정책"
-  :submit-an-issue "이슈 제출"
-  :report-errors "오류 자동 보고"
-  :about "정보"
-  :snap "스냅"
-  :centers "중심"
-  :midpoints "중점"
-  :corners "모서리"
-  :nodes "노드"}
-
- :renderer.a11y.db
+ :renderer.a11y.core
  {:blur "흐림"
   :heavy-blur "강한 흐림"
   :protanopia "적색맹"
@@ -430,7 +332,9 @@
 
  :renderer.tool.impl.element.core
  {:help "클릭하고 드래그하여 요소를 생성합니다."
-  :edge "가장자리"}
+  :edge "가장자리"
+  :elements "요소"
+  :containers "컨테이너"}
 
  :renderer.tool.impl.element.poly
  {:add-points "클릭하여 더 많은 점을 추가합니다."
@@ -578,7 +482,8 @@
   :select-element "요소 선택"
   :edit "편집"
   :centroid "도심"
-  :handle "핸들"}
+  :handle "핸들"
+  :tool-edit "편집"}
 
  :renderer.tool.impl.base.transform
  {:label "변환"
@@ -600,23 +505,26 @@
  :renderer.tool.impl.base.pan
  {:label "팬"
   :idle-help "클릭하고 드래그하여 팬합니다."
-  :pan-help "드래그하여 팬합니다."}
+  :pan-help "드래그하여 팬합니다."
+  :tool-pan "이동"}
 
  :renderer.tool.impl.base.zoom
  {:label "확대/축소"
   :zoom-in [:div "클릭하거나 영역을 선택하여 확대합니다."]
-  :zoom-out [:div "%1을 누르면 축소합니다."]}
+  :zoom-out [:div "%1을 누르면 축소합니다."]
+  :tool-zoom "줌"}
 
  :renderer.tool.impl.draw.brush
  {:label "브러시"
   :draw-brush "브러시 그리기"}
 
- :renderer.tool.impl.draw.pen
+ :renderer.tool.impl.draw.pencil
  {:label "펜"
   :draw-line "선 그리기"}
 
  :renderer.tool.impl.draw.core
- {:help "클릭하고 드래그하여 그립니다."}
+ {:help "클릭하고 드래그하여 그립니다."
+  :draw "그리기"}
 
  :renderer.tool.impl.element.circle
  {:label "원"
@@ -716,4 +624,153 @@
  {:permission-denied "파일에 대한 액세스 권한이 거부되었습니다."}
 
  :renderer.panel.views
- {:close-panel "패널 닫기"}}
+ {:close-panel "패널 닫기"}
+
+ :renderer.app.core
+ {:grid "격자"
+  :help-bar "도움말 바"
+  :debug-info "디버그 정보"}
+
+ :renderer.dialog.core
+ {:command-panel "명령 패널"
+  :about "정보"}
+
+ :renderer.document.core
+ {:new "새로 만들기"
+  :open "열기..."
+  :print "인쇄"
+  :save "저장"
+  :save-as "다른 이름으로 저장..."
+  :download "다운로드"
+  :close "닫기"
+  :close-all "모두 닫기"
+  :close-saved "저장된 것 닫기"
+  :svg "SVG"
+  :png "PNG"
+  :jpg "JPG"
+  :webp "WEBP"
+  :gif "GIF"}
+
+ :renderer.element.core
+ {:cut "잘라내기"
+  :copy "복사"
+  :paste "붙여넣기"
+  :paste-in-place "제자리에 붙여넣기"
+  :paste-styles "스타일 붙여넣기"
+  :duplicate "복제"
+  :select-all "모두 선택"
+  :deselect-all "모두 선택 해제"
+  :invert-selection "선택 반전"
+  :select-same-tags "같은 태그 선택"
+  :delete "삭제"
+  :object-to-path "객체를 패스로"
+  :stroke-to-path "획을 패스로"
+  :group "그룹"
+  :ungroup "그룹 해제"
+  :lock "잠금"
+  :unlock "잠금 해제"
+  :align-left "왼쪽 정렬"
+  :align-right "오른쪽 정렬"
+  :align-top "위쪽 정렬"
+  :align-bottom "아래쪽 정렬"
+  :center-vertically "수직 중앙 정렬"
+  :center-horizontally "수평 중앙 정렬"
+  :animate "애니메이션"
+  :animate-transform "변환 애니메이션"
+  :animate-motion "모션 애니메이션"
+  :boolean-exclude "제외"
+  :boolean-unite "합치기"
+  :boolean-intersect "교집합"
+  :boolean-subtract "빼기"
+  :boolean-divide "나누기"
+  :raise "앞으로"
+  :lower "뒤로"
+  :raise-to-top "맨 앞으로"
+  :lower-to-bottom "맨 뒤로"
+  :image-trace "추적"
+  :path-simplify "단순화"
+  :path-smooth "매끄럽게"
+  :path-flatten "평면화"
+  :path-reverse "역방향"
+  :index-operations "인덱스 작업"
+  :boolean-operations "부울 작업"
+  :horizontal-alignment "수평 정렬"
+  :vertical-alignment "수직 정렬"
+  :clipboard "클립보드"
+  :grouping "그룹화"
+  :locking "잠금"
+  :entity "엔티티"
+  :image "이미지"
+  :path "패스"
+  :select "선택"}
+
+ :renderer.error.core
+ {:report-errors "오류 자동 보고"}
+
+ :renderer.frame.core
+ {:zoom-in "확대"
+  :zoom-out "축소"
+  :zoom-set-50 "50%로 설정"
+  :zoom-set-100 "100%로 설정"
+  :zoom-set-200 "200%로 설정"
+  :zoom-focus-selected "선택 항목에 초점"
+  :zoom-fit-selected "선택 항목에 맞춤"
+  :zoom-fill-selected "선택 항목 채우기"}
+
+ :renderer.history.core
+ {:undo "실행 취소"
+  :redo "다시 실행"
+  :history "기록"
+  :clear-history "기록 지우기"}
+
+ :renderer.menubar.core
+ {:website "웹사이트"
+  :source-code "소스 코드"
+  :license "라이선스"
+  :changelog "변경 로그"
+  :privacy-policy "개인정보 보호정책"
+  :submit-an-issue "이슈 제출"
+  :menubar-file "파일 메뉴"
+  :menubar-edit "편집 메뉴"
+  :menubar-object "객체 메뉴"
+  :menubar-view "보기 메뉴"
+  :menubar-help "도움말 메뉴"
+  :help "도움말"}
+
+ :renderer.panel.core
+ {:panel "패널"
+  :panel-element-tree "요소 트리"
+  :panel-properties "속성"
+  :panel-xml-view "XML 보기"
+  :panel-history-tree "기록 트리"
+  :panel-shell-history "쉘 기록"
+  :panel-timeline-editor "타임라인 편집기"}
+
+ :renderer.ruler.core
+ {:rulers "눈금자"}
+
+ :renderer.snap.core
+ {:snap "스냅"
+  :centers "중심"
+  :midpoints "중점"
+  :corners "모서리"
+  :nodes "노드"}
+
+ :renderer.theme.core
+ {:theme-mode "테마 모드"
+  :dark "다크"
+  :light "라이트"
+  :system "시스템"}
+
+ :renderer.window.core
+ {:exit "종료"
+  :fullscreen "전체화면"}
+
+ :renderer.tool.core
+ {:cancel "취소"}
+
+ :renderer.tool.impl.base.core
+ {:transform "변형"}
+
+ :renderer.tool.impl.misc.core
+ {:misc "Miscallaneous"}}

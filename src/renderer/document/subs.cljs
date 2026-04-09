@@ -3,6 +3,7 @@
    [config :as config]
    [re-frame.core :as rf]
    [renderer.app.subs :as-alias app.subs]
+   [renderer.document.event :as-alias document.events]
    [renderer.document.handlers :as document.handlers]
    [renderer.timeline.subs :as-alias timeline.subs]
    [renderer.window.subs :as-alias window.subs]))
@@ -28,6 +29,18 @@
  ::recent
  (fn [db _]
    (-> db :recent reverse)))
+
+(rf/reg-sub
+ ::recent-actions
+ :<- [::recent]
+ (fn [recent _]
+   (->> recent
+        (mapv (fn [{:keys [path title id]
+                    :as recent}]
+                {:id id
+                 :label [(keyword id) (or path title)]
+                 :icon "folder"
+                 :event [::document.events/open-recent recent]})))))
 
 (rf/reg-sub
  ::entities?

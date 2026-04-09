@@ -3,12 +3,16 @@
    [clojure.core.matrix :as matrix]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
+   [renderer.action.events :as-alias action.events]
    [renderer.app.handlers :as app.handlers]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.handlers :as element.handlers]
    [renderer.i18n.views :as i18n.views]
+   [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.tool.subs :as-alias tool.subs]
+   [renderer.utils.key :as utils.key]
    [renderer.utils.length :as utils.length]
    [renderer.utils.math :as utils.math]
    [renderer.utils.svg :as utils.svg]))
@@ -21,11 +25,6 @@
  ::set-measure-attrs
  (fn [value]
    (reset! measure-attrs value)))
-
-(defmethod tool.hierarchy/properties :measure
-  []
-  {:icon "ruler-triangle"
-   :label [::label "Measure"]})
 
 (defmethod tool.hierarchy/help [:measure :idle]
   []
@@ -97,3 +96,11 @@
 (defmethod tool.hierarchy/snapping-elements :measure
   [db]
   (element.handlers/visible db))
+
+(rf/dispatch [::action.events/register-action
+              {:id :tool/measure
+               :label [::label "Measure"]
+               :icon "ruler-triangle"
+               :event [::tool.events/activate :measure]
+               :active [::tool.subs/active? :measure]
+               :shortcuts [{:keyCode (utils.key/codes "M")}]}])

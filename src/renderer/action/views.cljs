@@ -55,8 +55,13 @@
           :label
           i18n.views/t))
 
-(defn entity
+(defn deref-action
   [id]
-  (when-let [action @(rf/subscribe [::action.subs/entity id])]
+  (when-let [action @(rf/subscribe [::action.subs/action id])]
     (when (available? action)
       action)))
+
+(defn deref-action-group
+  [id]
+  (when-let [group @(rf/subscribe [::action.subs/action-group id])]
+    (update group :actions (partial keep deref-action))))

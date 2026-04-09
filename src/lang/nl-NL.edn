@@ -56,111 +56,13 @@
   :edit "Bewerken"
   :object "Object"
   :align "Uitlijnen"
-  :animate "Animeren"
-  :boolean-operation "Booleaanse bewerking"
-  :image "Afbeelding"
-  :path "Pad"
   :view "Weergave"
   :zoom "Zoom"
-  :theme-mode "Thema-modus"
   :accessibility-filter "Toegankelijkheidsfilter"
   :language "Taal"
-  :panel "Paneel"
   :help "Help"}
 
- :renderer.action.defaults
- {:new "Nieuw"
-  :open "Openen..."
-  :recent-clear "Recent wissen"
-  :print "Afdrukken"
-  :save "Opslaan"
-  :save-as "Opslaan als..."
-  :download "Downloaden"
-  :close "Sluiten"
-  :close-all "Alles sluiten"
-  :close-saved "Opgeslagen sluiten"
-  :exit "Afsluiten"
-  :undo "Ongedaan maken"
-  :redo "Opnieuw"
-  :clear-history "Geschiedenis wissen"
-  :cut "Knippen"
-  :copy "Kopiëren"
-  :paste "Plakken"
-  :paste-in-place "Plakken op locatie"
-  :paste-styles "Stijlen plakken"
-  :duplicate "Dupliceren"
-  :select-all "Alles selecteren"
-  :deselect-all "Alles deselecteren"
-  :invert-selection "Selectie omkeren"
-  :select-same-tags "Zelfde tags selecteren"
-  :delete "Verwijderen"
-  :object-to-path "Object naar pad"
-  :stroke-to-path "Lijn naar pad"
-  :group "Groeperen"
-  :ungroup "Groepering opheffen"
-  :lock "Vergrendelen"
-  :unlock "Ontgrendelen"
-  :align-left "Links uitlijnen"
-  :align-right "Rechts uitlijnen"
-  :align-top "Boven uitlijnen"
-  :align-bottom "Onder uitlijnen"
-  :center-vertically "Verticaal centreren"
-  :center-horizontally "Horizontaal centreren"
-  :animate "Animeren"
-  :animate-transform "Transformatie animeren"
-  :animate-motion "Beweging animeren"
-  :boolean-exclude "Uitsluiten"
-  :boolean-unite "Verenigen"
-  :boolean-intersect "Doorsnede"
-  :boolean-subtract "Aftrekken"
-  :boolean-divide "Verdelen"
-  :raise "Naar voren"
-  :lower "Naar achteren"
-  :raise-to-top "Naar voorgrond"
-  :lower-to-bottom "Naar achtergrond"
-  :image-trace "Traceren"
-  :path-simplify "Vereenvoudigen"
-  :path-smooth "Gladmaken"
-  :path-flatten "Afvlakken"
-  :path-reverse "Omkeren"
-  :zoom-in "Inzoomen"
-  :zoom-out "Uitzoomen"
-  :zoom-set-50 "Instellen op 50%"
-  :zoom-set-100 "Instellen op 100%"
-  :zoom-set-200 "Instellen op 200%"
-  :zoom-focus-selected "Focus op geselecteerd"
-  :zoom-fit-selected "Geselecteerd passend maken"
-  :zoom-fill-selected "Geselecteerd vullen"
-  :dark "Donker"
-  :light "Licht"
-  :system "Systeem"
-  :grid "Raster"
-  :rulers "Linealen"
-  :help-bar "Helpbalk"
-  :debug-info "Debug-informatie"
-  :panel-element-tree "Elementenboom"
-  :panel-properties "Eigenschappen"
-  :panel-xml-view "XML-weergave"
-  :panel-history-tree "Geschiedenisboom"
-  :panel-shell-history "Shell-geschiedenis"
-  :panel-timeline-editor "Tijdlijn-editor"
-  :fullscreen "Volledig scherm"
-  :command-panel "Commandopaneel"
-  :website "Website"
-  :source-code "Broncode"
-  :license "Licentie"
-  :changelog "Wijzigingslog"
-  :privacy-policy "Privacybeleid"
-  :submit-an-issue "Een probleem melden"
-  :report-errors "Fouten automatisch melden"
-  :about "Over"
-  :snap "Uitlijnen"
-  :centers "middelpunten"
-  :midpoints "middenpunten"
-  :corners "hoeken"
-  :nodes "knooppunten"}
-
- :renderer.a11y.db
+ :renderer.a11y.core
  {:blur "Vervaging"
   :heavy-blur "Sterke vervaging"
   :protanopia "Protanopie"
@@ -477,7 +379,9 @@
 
  :renderer.tool.impl.element.core
  {:help "Klik en sleep om een element te maken."
-  :edge "rand"}
+  :edge "rand"
+  :elements "Elementen"
+  :containers "Containers"}
 
  :renderer.tool.impl.element.poly
  {:add-points "Klik om meer punten toe te voegen."
@@ -633,7 +537,8 @@
   :select-element "Selecteer element"
   :edit "Bewerken"
   :centroid "Zwaartepunt"
-  :handle "handvat"}
+  :handle "handvat"
+  :tool-edit "Bewerken"}
 
  :renderer.tool.impl.base.transform
  {:label "Transformeren"
@@ -659,23 +564,26 @@
  :renderer.tool.impl.base.pan
  {:label "Pannen"
   :idle-help "Klik en sleep om te pannen."
-  :pan-help "Sleep om te pannen."}
+  :pan-help "Sleep om te pannen."
+  :tool-pan "Pannen"}
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
   :zoom-in [:div "Klik of selecteer een gebied om in te zoomen."]
-  :zoom-out [:div "Houd %1 ingedrukt om uit te zoomen."]}
+  :zoom-out [:div "Houd %1 ingedrukt om uit te zoomen."]
+  :tool-zoom "Zoomen"}
 
  :renderer.tool.impl.draw.brush
  {:label "Penseel"
   :draw-brush "Penseel tekenen"}
 
- :renderer.tool.impl.draw.pen
+ :renderer.tool.impl.draw.pencil
  {:label "Pen"
   :draw-line "Lijn tekenen"}
 
  :renderer.tool.impl.draw.core
- {:help "Klik en sleep om te tekenen."}
+ {:help "Klik en sleep om te tekenen."
+  :draw "Tekenen"}
 
  :renderer.tool.impl.element.circle
  {:label "Cirkel"
@@ -777,4 +685,154 @@
  {:permission-denied "Toestemming om het bestand te benaderen is geweigerd."}
 
  :renderer.panel.views
- {:close-panel "Paneel sluiten"}}
+ {:close-panel "Paneel sluiten"}
+
+ :renderer.app.core
+ {:grid "Raster"
+  :help-bar "Helpbalk"
+  :debug-info "Debug-informatie"}
+
+ :renderer.dialog.core
+ {:command-panel "Commandopaneel"
+  :about "Over"}
+
+ :renderer.document.core
+ {:new "Nieuw"
+  :open "Openen..."
+  :recent-clear "Recent wissen"
+  :print "Afdrukken"
+  :save "Opslaan"
+  :save-as "Opslaan als..."
+  :download "Downloaden"
+  :close "Sluiten"
+  :close-all "Alles sluiten"
+  :close-saved "Opgeslagen sluiten"
+  :svg "SVG"
+  :png "PNG"
+  :jpg "JPG"
+  :webp "WEBP"
+  :gif "GIF"}
+
+ :renderer.element.core
+ {:cut "Knippen"
+  :copy "Kopiëren"
+  :paste "Plakken"
+  :paste-in-place "Plakken op locatie"
+  :paste-styles "Stijlen plakken"
+  :duplicate "Dupliceren"
+  :select-all "Alles selecteren"
+  :deselect-all "Alles deselecteren"
+  :invert-selection "Selectie omkeren"
+  :select-same-tags "Zelfde tags selecteren"
+  :delete "Verwijderen"
+  :object-to-path "Object naar pad"
+  :stroke-to-path "Lijn naar pad"
+  :group "Groeperen"
+  :ungroup "Groepering opheffen"
+  :lock "Vergrendelen"
+  :unlock "Ontgrendelen"
+  :align-left "Links uitlijnen"
+  :align-right "Rechts uitlijnen"
+  :align-top "Boven uitlijnen"
+  :align-bottom "Onder uitlijnen"
+  :center-vertically "Verticaal centreren"
+  :center-horizontally "Horizontaal centreren"
+  :animate "Animeren"
+  :animate-transform "Transformatie animeren"
+  :animate-motion "Beweging animeren"
+  :boolean-exclude "Uitsluiten"
+  :boolean-unite "Verenigen"
+  :boolean-intersect "Doorsnede"
+  :boolean-subtract "Aftrekken"
+  :boolean-divide "Verdelen"
+  :raise "Naar voren"
+  :lower "Naar achteren"
+  :raise-to-top "Naar voorgrond"
+  :lower-to-bottom "Naar achtergrond"
+  :image-trace "Traceren"
+  :path-simplify "Vereenvoudigen"
+  :path-smooth "Gladmaken"
+  :path-flatten "Afvlakken"
+  :path-reverse "Omkeren"
+  :index-operations "Indexbewerkingen"
+  :boolean-operations "Booleaanse Bewerkingen"
+  :horizontal-alignment "Horizontale Uitlijning"
+  :vertical-alignment "Verticale Uitlijning"
+  :clipboard "Klembord"
+  :grouping "Groepering"
+  :locking "Vergrendeling"
+  :entity "Entiteit"
+  :image "Afbeelding"
+  :path "Pad"
+  :select "Selecteren"}
+
+ :renderer.error.core
+ {:report-errors "Fouten automatisch melden"}
+
+ :renderer.frame.core
+ {:zoom-in "Inzoomen"
+  :zoom-out "Uitzoomen"
+  :zoom-set-50 "Instellen op 50%"
+  :zoom-set-100 "Instellen op 100%"
+  :zoom-set-200 "Instellen op 200%"
+  :zoom-focus-selected "Focus op geselecteerd"
+  :zoom-fit-selected "Geselecteerd passend maken"
+  :zoom-fill-selected "Geselecteerd vullen"}
+
+ :renderer.history.core
+ {:undo "Ongedaan maken"
+  :redo "Opnieuw"
+  :history "Geschiedenis"
+  :clear-history "Geschiedenis wissen"}
+
+ :renderer.menubar.core
+ {:website "Website"
+  :source-code "Broncode"
+  :license "Licentie"
+  :changelog "Wijzigingslog"
+  :privacy-policy "Privacybeleid"
+  :submit-an-issue "Een probleem melden"
+  :menubar-file "Bestandsmenu"
+  :menubar-edit "Bewerkingsmenu"
+  :menubar-object "Objectmenu"
+  :menubar-view "Weergavemenu"
+  :menubar-help "Helpmenu"
+  :help "Help"}
+
+ :renderer.panel.core
+ {:panel "Paneel"
+  :panel-element-tree "Elementenboom"
+  :panel-properties "Eigenschappen"
+  :panel-xml-view "XML-weergave"
+  :panel-history-tree "Geschiedenisboom"
+  :panel-shell-history "Shell-geschiedenis"
+  :panel-timeline-editor "Tijdlijn-editor"}
+
+ :renderer.ruler.core
+ {:rulers "Linealen"}
+
+ :renderer.snap.core
+ {:snap "Uitlijnen"
+  :centers "middelpunten"
+  :midpoints "middenpunten"
+  :corners "hoeken"
+  :nodes "knooppunten"}
+
+ :renderer.theme.core
+ {:theme-mode "Thema-modus"
+  :dark "Donker"
+  :light "Licht"
+  :system "Systeem"}
+
+ :renderer.window.core
+ {:exit "Afsluiten"
+  :fullscreen "Volledig scherm"}
+
+ :renderer.tool.core
+ {:cancel "Annuleren"}
+
+ :renderer.tool.impl.base.core
+ {:transform "Transformeren"}
+
+ :renderer.tool.impl.misc.core
+ {:misc "Miscallaneous"}}

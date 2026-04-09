@@ -12,16 +12,15 @@
    [renderer.document.events :as-alias document.events]
    [renderer.i18n.views :as i18n.views]
    [renderer.menubar.views :as menubar.views]
-   [renderer.views :as views]
-   [renderer.window.subs :as-alias window.subs]))
+   [renderer.views :as views]))
 
 (defn button
-  [{:keys [action label auto-focus class]}]
+  [{:keys [event label auto-focus class]}]
   [:button.button.px-1.rounded.font-medium.w-full.bg-overlay.sm:bg-transparent
    {:class class
     :auto-focus auto-focus
-    :on-click #(rf/dispatch [::dialog.events/close action])}
-   (or label (i18n.views/t [::cancel "Cancel"]))])
+    :on-click #(rf/dispatch [::dialog.events/close event])}
+   (i18n.views/t label)])
 
 (defn button-bar
   [& children]
@@ -31,19 +30,18 @@
   []
   (let [user-agent @(rf/subscribe [::app.subs/user-agent])]
     [:div
-     [:div.flex.gap-3.items-start.pb-2
-      [:p
-       [:span.block
-        [:strong (i18n.views/t [::version "Version:"])] config/version]
-       [:span.block
-        [:strong (i18n.views/t [::browser "Browser:"])] user-agent]]]
+     [:p
+      [:span.block
+       [:strong (i18n.views/t [::version "Version:"])] config/version]
+      [:span.block
+       [:strong (i18n.views/t [::browser "Browser:"])] user-agent]]
      [button-bar
-      [button {:label (i18n.views/t [::ok "OK"])
+      [button {:label [::ok "OK"]
                :auto-focus true
                :class "accent"}]]]))
 
 (defn confirmation
-  [{:keys [content confirm-action confirm-label cancel-action
+  [{:keys [content confirm-event confirm-label cancel-event
            cancel-label]}]
   [:div
    (cond
@@ -57,10 +55,10 @@
      :else content)
 
    [button-bar
-    [button {:label (i18n.views/t (or cancel-label [::cancel "Cancel"]))
-             :action cancel-action}]
-    [button {:label (i18n.views/t (or confirm-label [::ok "OK"]))
-             :action confirm-action
+    [button {:label (or cancel-label [::cancel "Cancel"])
+             :event cancel-event}]
+    [button {:label (or confirm-label [::ok "OK"])
+             :event confirm-event
              :auto-focus true
              :class "accent"}]]])
 
@@ -73,14 +71,14 @@
           saving."]]
     [[:strong title]])
    [button-bar
-    [button {:label (i18n.views/t [::dont-save "Don't save"])
-             :action [::document.events/close id false]}]
-    [button {:label (i18n.views/t [::cancel "Cancel"])}]
-    [button {:label (i18n.views/t [::save "Save"])
+    [button {:label [::dont-save "Don't save"]
+             :event [::document.events/close id false]}]
+    [button {:label [::cancel "Cancel"]}]
+    [button {:label [::save "Save"]
              :auto-focus true
              :class "accent"
-             :action [::document.events/save {:id id
-                                              :close true}]}]]])
+             :event [::document.events/save {:id id
+                                             :close true}]}]]])
 
 (defn cmdk-item
   [{:keys [label event icon]
@@ -99,23 +97,25 @@
                  (remove nil?)
                  (map i18n.views/t)
                  (string/join " - "))]]
-     (when @(rf/subscribe [::window.subs/xl?])
-       [views/shortcuts action])]))
+     [views/shortcuts action]]))
 
 (defn cmdk-group-inner
   [items label]
-  (for [item items]
-    (if (:items item)
-      (->> (cmdk-group-inner (:items item) (:label item))
-           (into [:<>]))
-      (when-let [action (cond-> item (keyword? item) action.views/entity)]
-        [cmdk-item (update action :label #(vector label %))]))))
+  (mapcat (fn [item]
+            (if (:actions item)
+              (cmdk-group-inner (:actions item) (:label item))
+              (when-let [action (cond-> item
+                                  (keyword? item)
+                                  action.views/deref-action)]
+                [[cmdk-item (update action :label #(vector label %))]])))
+          items))
 
 (defn cmdk-group
-  [{:keys [label items]}]
-  (->> (cmdk-group-inner items nil)
-       (into [:> Command/CommandGroup
-              {:heading (i18n.views/t label)}])))
+  [{:keys [label actions]}]
+  (when (seq actions)
+    (->> (cmdk-group-inner actions nil)
+         (into [:> Command/CommandGroup
+                {:heading (i18n.views/t label)}]))))
 
 (defn cmdk
   []
@@ -126,14 +126,13 @@
     {:class "p-3 bg-primary border-b border-border w-full"
      :placeholder (i18n.views/t [::search-command "Search for a command"])}]
    [views/scroll-area
-    [:> Command/CommandList
-     {:class "p-1 max-h-[50dvh]"}
-     [:> Command/CommandEmpty
-      {:class "p-2"}
-      (i18n.views/t [::no-results "No results found."])]
-     (for [menu (menubar.views/submenus)]
-       ^{:key (:id menu)}
-       [cmdk-group menu])]]])
+    (->> (menubar.views/submenus)
+         (keep cmdk-group)
+         (into [:> Command/CommandList
+                {:class "p-1 max-h-[50dvh]"}
+                [:> Command/CommandEmpty
+                 {:class "p-2"}
+                 (i18n.views/t [::no-results "No results found."])]]))]])
 
 (defn root
   []

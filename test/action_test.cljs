@@ -3,7 +3,6 @@
    [cljs.test :refer-macros [deftest is testing]]
    [day8.re-frame.test :as rf.test]
    [re-frame.core :as rf]
-   [renderer.action.defaults :as action.defaults]
    [renderer.action.events :as-alias action.events]
    [renderer.action.subs :as-alias action.subs]
    [renderer.app.events :as-alias app.events]
@@ -14,8 +13,9 @@
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
 
-   (let [existing-action (rf/subscribe [::action.subs/entity :document/new])
-         new-action (rf/subscribe [::action.subs/entity :history/undo-twice])
+   (let [new-action (rf/subscribe [::action.subs/action :history/undo-twice])
+         new-group (rf/subscribe [::action.subs/action-group
+                                  :history/undo-group])
          undo-twice-action {:id :history/undo-twice
                             :label [:history/undo-twice "Undo twice"]
                             :icon "undo"
@@ -23,18 +23,32 @@
                             :shortcuts [{:keyCode 90
                                          :ctrlKey true
                                          :altKey true}]
-                            :enabled [::history.subs/undos?]}]
+                            :enabled [::history.subs/undos?]}
+         undo-group {:id :history/undo-group
+                     :label [:history/undo-group "Undo group"]
+                     :actions [:history/undo-twice]}]
 
      (testing "defaults"
-       (is (= @existing-action (get action.defaults/registry :document/new)))
-       (is (not @new-action)))
+       (is (not @new-action))
+       (is (not @new-group)))
 
-     (testing "register"
+     (testing "register action"
        (rf/dispatch [::action.events/register-action undo-twice-action])
 
        (is (= @new-action undo-twice-action)))
 
-     (testing "deregister"
+     (testing "deregister action"
        (rf/dispatch [::action.events/deregister-action :history/undo-twice])
 
-       (is (not @new-action))))))
+       (is (not @new-action)))
+
+     (testing "register action group"
+       (rf/dispatch [::action.events/register-action-group undo-group])
+
+       (is (= @new-group undo-group)))
+
+     (testing "deregister action group"
+       (rf/dispatch [::action.events/deregister-action-group
+                     :history/undo-group])
+
+       (is (not @new-group))))))

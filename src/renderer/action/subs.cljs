@@ -3,13 +3,23 @@
    [re-frame.core :as rf]))
 
 (rf/reg-sub
- ::registry
+ ::actions
  :-> :actions)
 
 (rf/reg-sub
- ::entity
- :<- [::registry]
- (fn [registry [_ id]]
+ ::action
+ :<- [::actions]
+ (fn [actions [_ id]]
    (if (= id :separator)
      {:type :separator}
-     (get registry id))))
+     (get actions id))))
+
+(rf/reg-sub
+ ::action-groups
+ :-> :action-groups)
+
+(rf/reg-sub
+ ::action-group
+ :<- [::action-groups]
+ (fn [groups [_ id]]
+   (get groups id)))
