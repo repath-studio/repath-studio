@@ -235,7 +235,7 @@
       [:span
        {:class (when (and menubar-indicator? (= computed-lang "en-US"))
                  "md:first-letter:underline")}
-       (or [action.views/label action]
+       (or (action.views/label action)
            [views/icon "menu" {:aria-label (i18n.views/t [::menu "Menu"])}])]]
      [:> Menubar/Portal
       (into [:> Menubar/Content
