@@ -202,9 +202,11 @@
      [:div.grow.hidden.md:block]
      (when md?
        [:<>
-        (->> [:panel/toggle-xml
+        (->> [:panel/toggle-tree
+              :panel/toggle-xml
               :panel/toggle-timeline
-              :panel/toggle-history]
+              :panel/toggle-history
+              :panel/toggle-properties]
              (map action.views/deref-action)
              (map radio-button)
              (into [:<>]))
