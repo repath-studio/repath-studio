@@ -3,11 +3,13 @@
    [cljs.test :refer-macros [deftest is testing]]
    [day8.re-frame.test :as rf.test]
    [re-frame.core :as rf]
+   [renderer.app.events :as-alias app.events]
    [renderer.window.events :as-alias window.events]
    [renderer.window.subs :as-alias window.subs]))
 
 (deftest window
   (rf.test/run-test-sync
+   (rf/dispatch [::app.events/initialize])
 
    (let [maximized (rf/subscribe [::window.subs/maximized?])
          fullscreen (rf/subscribe [::window.subs/fullscreen?])

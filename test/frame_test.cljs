@@ -3,12 +3,14 @@
    [cljs.test :refer-macros [deftest is testing]]
    [day8.re-frame.test :as rf.test]
    [re-frame.core :as rf]
+   [renderer.app.events :as-alias app.events]
    [renderer.document.subs :as-alias document.subs]
    [renderer.frame.events :as-alias frame.events]
    [renderer.frame.subs :as-alias frame.subs]))
 
 (deftest frame
   (rf.test/run-test-sync
+   (rf/dispatch [::app.events/initialize])
 
    (let [viewbox (rf/subscribe [::frame.subs/viewbox])
          zoom (rf/subscribe [::document.subs/zoom])

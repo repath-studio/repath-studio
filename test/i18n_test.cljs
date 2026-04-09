@@ -3,12 +3,14 @@
    [cljs.test :refer-macros [deftest is testing]]
    [day8.re-frame.test :as rf.test]
    [re-frame.core :as rf]
+   [renderer.app.events :as-alias app.events]
    [renderer.i18n.events :as-alias i18n.events]
    [renderer.i18n.subs :as-alias i18n.subs]
    [renderer.i18n.views :as i18n.views]))
 
 (deftest language
   (rf.test/run-test-sync
+   (rf/dispatch [::app.events/initialize])
 
    (testing "active language"
      (let [lang (rf/subscribe [::i18n.subs/user-lang])

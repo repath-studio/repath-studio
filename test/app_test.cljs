@@ -10,6 +10,7 @@
 
 (deftest app
   (rf.test/run-test-sync
+   (rf/dispatch [::app.events/initialize])
 
    (testing "platform"
      (let [platform (rf/subscribe [::app.subs/platform])

@@ -3,6 +3,7 @@
    [cljs.test :refer-macros [deftest is testing]]
    [day8.re-frame.test :as rf.test]
    [re-frame.core :as rf]
+   [renderer.app.events :as-alias app.events]
    [renderer.element.events :as-alias element.events]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.hierarchy :as tool.hierarchy]
@@ -10,6 +11,7 @@
 
 (deftest tool
   (rf.test/run-test-sync
+   (rf/dispatch [::app.events/initialize])
 
    (let [active-tool (rf/subscribe [::tool.subs/active])]
 

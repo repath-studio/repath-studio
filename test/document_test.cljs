@@ -3,6 +3,7 @@
    [cljs.test :refer-macros [deftest is testing]]
    [day8.re-frame.test :as rf.test]
    [re-frame.core :as rf]
+   [renderer.app.events :as-alias app.events]
    [renderer.document.db :as document.db]
    [renderer.document.events :as-alias document.events]
    [renderer.document.subs :as-alias document.subs]
@@ -10,6 +11,7 @@
 
 (deftest create
   (rf.test/run-test-sync
+   (rf/dispatch [::app.events/initialize])
 
    (let [document-entities? (rf/subscribe [::document.subs/entities?])
          active-document (rf/subscribe [::document.subs/active])
@@ -30,6 +32,7 @@
 
 (deftest close
   (rf.test/run-test-sync
+   (rf/dispatch [::app.events/initialize])
 
    (let [active-document (rf/subscribe [::document.subs/active])
          active-id (rf/subscribe [::document.subs/active-id])]
@@ -60,6 +63,7 @@
 
 (deftest save
   (rf.test/run-test-sync
+   (rf/dispatch [::app.events/initialize])
 
    (let [active-document (rf/subscribe [::document.subs/active])
          saved? (rf/subscribe [::document.subs/active-saved?])]
@@ -74,6 +78,7 @@
 
 (deftest load
   (rf.test/run-test-sync
+   (rf/dispatch [::app.events/initialize])
 
    (testing "load single"
      (let [title-bar (rf/subscribe [::document.subs/title-bar])]
@@ -112,6 +117,7 @@
 
 (deftest colors
   (rf.test/run-test-sync
+   (rf/dispatch [::app.events/initialize])
 
    (let [fill (rf/subscribe [::document.subs/fill])
          stroke (rf/subscribe [::document.subs/stroke])]
@@ -134,6 +140,7 @@
 
 (deftest elements
   (rf.test/run-test-sync
+   (rf/dispatch [::app.events/initialize])
 
    (testing "collapse/expand elements"
      (let [collapsed-ids (rf/subscribe [::document.subs/collapsed-ids])
