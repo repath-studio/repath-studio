@@ -3,7 +3,7 @@
    [config :as config]
    [malli.core :as m]
    [malli.transform :as m.transform]
-   [renderer.a11y.db :as a11y.db :refer [A11y]]
+   [renderer.a11y.db :refer [A11y]]
    [renderer.action.db :refer [ActionRegistry ActionGroupRegistry]]
    [renderer.db :refer [BBox Vec2 JS_Object]]
    [renderer.dialog.db :refer [Dialog]]
@@ -120,7 +120,7 @@
    [:viewbox-kdtree {:optional true} [:maybe map?]]
    [:actions {:default {}} ActionRegistry]
    [:action-groups {:default {}} ActionGroupRegistry]
-   [:a11y {:default {:filters a11y.db/default-filters}} A11y]
+   [:a11y {:default {:filters []}} A11y]
    [:re-pressed.core/keydown {:optional true} map?]])
 
 (def valid? (m/validator App))
