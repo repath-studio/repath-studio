@@ -56,8 +56,6 @@
   :edit "編集"
   :object "オブジェクト"
   :align "整列"
-  :image "画像"
-  :path "パス"
   :view "表示"
   :zoom "ズーム"
   :accessibility-filter "アクセシビリティフィルタ"
@@ -706,7 +704,9 @@
   :clipboard "クリップボード"
   :grouping "グループ化"
   :locking "ロック"
-  :entity "エンティティ"}
+  :entity "エンティティ"
+  :image "画像"
+  :path "パス"}
 
  :renderer.error.core
  {:report-errors "エラーを自動的に報告"}

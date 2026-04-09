@@ -56,8 +56,6 @@
   :edit "Bearbeiten"
   :object "Objekt"
   :align "Ausrichten"
-  :image "Bild"
-  :path "Pfad"
   :view "Ansicht"
   :zoom "Zoom"
   :accessibility-filter "Barrierefreiheitsfilter"
@@ -765,7 +763,9 @@
   :clipboard "Zwischenablage"
   :grouping "Gruppierung"
   :locking "Sperrung"
-  :entity "Element"}
+  :entity "Element"
+  :image "Bild"
+  :path "Pfad"}
 
  :renderer.error.core
  {:report-errors "Fehler automatisch melden"}

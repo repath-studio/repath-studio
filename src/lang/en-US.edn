@@ -56,8 +56,6 @@
   :edit "Edit"
   :object "Object"
   :align "Align"
-  :image "Image"
-  :path "Path"
   :view "View"
   :zoom "Zoom"
   :accessibility-filter "Accessibility filter"
@@ -734,7 +732,9 @@
   :clipboard "Clipboard"
   :grouping "Grouping"
   :locking "Locking"
-  :entity "Entity"}
+  :entity "Entity"
+  :image "Image"
+  :path "Path"}
 
  :renderer.error.core
  {:report-errors "Report errors automatically"}

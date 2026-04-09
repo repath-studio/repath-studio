@@ -56,8 +56,6 @@
   :edit "Redigera"
   :object "Objekt"
   :align "Justera"
-  :image "Bild"
-  :path "Bana"
   :view "Visa"
   :zoom "Zoom"
   :accessibility-filter "Tillgänglighetsfilter"
@@ -747,7 +745,9 @@
   :clipboard "Urklipp"
   :grouping "Gruppering"
   :locking "Låsning"
-  :entity "Entitet"}
+  :entity "Entitet"
+  :image "Bild"
+  :path "Bana"}
 
  :renderer.error.core
  {:report-errors "Rapportera fel automatiskt"}

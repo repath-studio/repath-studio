@@ -56,8 +56,6 @@
   :edit "Επεξεργασία"
   :object "Αντικείμενο"
   :align "Στοίχιση"
-  :image "Εικόνα"
-  :path "Διαδρομή"
   :view "Προβολή"
   :zoom "Μεγέθυνση"
   :accessibility-filter "Φίλτρο προσβασιμότητας"
@@ -769,7 +767,9 @@
   :clipboard "Πρόχειρο"
   :grouping "Ομαδοποίηση"
   :locking "Κλείδωμα"
-  :entity "Οντότητα"}
+  :entity "Οντότητα"
+  :image "Εικόνα"
+  :path "Διαδρομή"}
 
  :renderer.error.core
  {:report-errors "Αναφορά σφαλμάτων αυτόματα"}

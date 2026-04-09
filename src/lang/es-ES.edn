@@ -56,8 +56,6 @@
   :edit "Editar"
   :object "Objeto"
   :align "Alinear"
-  :image "Imagen"
-  :path "Trazado"
   :view "Vista"
   :zoom "Zoom"
   :accessibility-filter "Filtro de accesibilidad"
@@ -752,7 +750,9 @@
   :clipboard "Portapapeles"
   :grouping "Agrupamiento"
   :locking "Bloqueo"
-  :entity "Entidad"}
+  :entity "Entidad"
+  :image "Imagen"
+  :path "Trazado"}
 
  :renderer.error.core
  {:report-errors "Reportar errores automáticamente"}

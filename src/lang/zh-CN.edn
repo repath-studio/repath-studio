@@ -55,8 +55,6 @@
   :edit "编辑"
   :object "对象"
   :align "对齐"
-  :image "图像"
-  :path "路径"
   :view "视图"
   :zoom "缩放"
   :accessibility-filter "辅助功能过滤器"
@@ -668,7 +666,9 @@
   :clipboard "剪贴板"
   :grouping "分组"
   :locking "锁定"
-  :entity "实体"}
+  :entity "实体"
+  :image "图像"
+  :path "路径"}
 
  :renderer.error.core
  {:report-errors "自动报告错误"}

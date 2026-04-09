@@ -400,3 +400,18 @@
                :label [::entity "Entity"]
                :actions [:element/duplicate
                          :element/delete]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :object/path-operations
+               :label [::path "Path"]
+               :enabled [::element.subs/has-selected-tag? :path]
+               :actions [:path/simplify
+                         :path/smooth
+                         :path/flatten
+                         :path/reverse]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :object/image-operations
+               :label [::image "Image"]
+               :enabled [::element.subs/has-selected-tag? :image]
+               :actions [:image/trace]}])

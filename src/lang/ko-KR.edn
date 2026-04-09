@@ -56,8 +56,6 @@
   :edit "편집"
   :object "객체"
   :align "정렬"
-  :image "이미지"
-  :path "패스"
   :view "보기"
   :zoom "확대/축소"
   :accessibility-filter "접근성 필터"
@@ -701,7 +699,9 @@
   :clipboard "클립보드"
   :grouping "그룹화"
   :locking "잠금"
-  :entity "엔티티"}
+  :entity "엔티티"
+  :image "이미지"
+  :path "패스"}
 
  :renderer.error.core
  {:report-errors "오류 자동 보고"}

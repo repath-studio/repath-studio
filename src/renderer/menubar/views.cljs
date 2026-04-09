@@ -72,15 +72,6 @@
                  (interpose :separator)
                  (flatten))})
 
-(def path-submenu
-  [:path/simplify
-   :path/smooth
-   :path/flatten
-   :path/reverse])
-
-(def image-submenu
-  [:image/trace])
-
 (defn object-menu []
   {:id :object
    :label [::object "Object"]
@@ -112,14 +103,8 @@
              :object/raise-to-top
              :object/lower-to-bottom
              :separator
-             {:id :image
-              :label [::image "Image"]
-              :enabled [::element.subs/has-selected-tag? :image]
-              :actions image-submenu}
-             {:id :path
-              :label [::path "Path"]
-              :enabled [::element.subs/has-selected-tag? :path]
-              :actions path-submenu}]})
+             (action.views/deref-action-group :object/image-operations)
+             (action.views/deref-action-group :object/path-operations)]})
 
 (def zoom-submenu
   [:zoom/in

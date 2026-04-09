@@ -56,8 +56,6 @@
   :edit "تحرير"
   :object "كائن"
   :align "محاذاة"
-  :image "صورة"
-  :path "مسار"
   :view "عرض"
   :zoom "تكبير"
   :accessibility-filter "مرشح إمكانية الوصول"
@@ -722,7 +720,9 @@
   :clipboard "الحافظة"
   :grouping "التجميع"
   :locking "القفل"
-  :entity "كائن"}
+  :entity "كائن"
+  :image "صورة"
+  :path "مسار"}
 
  :renderer.error.core
  {:report-errors "الإبلاغ عن الأخطاء تلقائياً"}

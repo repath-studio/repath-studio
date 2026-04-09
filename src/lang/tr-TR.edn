@@ -56,8 +56,6 @@
   :edit "Düzenle"
   :object "Nesne"
   :align "Hizala"
-  :image "Resim"
-  :path "Yol"
   :view "Görünüm"
   :zoom "Yakınlaştır"
   :accessibility-filter "Erişilebilirlik filtresi"
@@ -742,7 +740,9 @@
   :clipboard "Pano"
   :grouping "Gruplama"
   :locking "Kilitleme"
-  :entity "Varlık"}
+  :entity "Varlık"
+  :image "Resim"
+  :path "Yol"}
 
  :renderer.error.core
  {:report-errors "Hataları otomatik olarak bildir"}
