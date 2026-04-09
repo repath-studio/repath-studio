@@ -16,10 +16,11 @@
 
 (defn recent-submenu []
   (let [recent-items @(rf/subscribe [::document.subs/recent-actions])]
-    (cond-> recent-items
-      (seq recent-items)
-      (concat [:separator
-               :document/clear-recent]))))
+    (->> [recent-items
+          [:document/clear-recent]]
+         (keep seq)
+         (interpose :separator)
+         (flatten))))
 
 (def export-submenu
   [:export/svg

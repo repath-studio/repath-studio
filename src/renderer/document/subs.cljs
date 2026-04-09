@@ -3,7 +3,7 @@
    [config :as config]
    [re-frame.core :as rf]
    [renderer.app.subs :as-alias app.subs]
-   [renderer.document.event :as-alias document.events]
+   [renderer.document.events :as-alias document.events]
    [renderer.document.handlers :as document.handlers]
    [renderer.timeline.subs :as-alias timeline.subs]
    [renderer.window.subs :as-alias window.subs]))
