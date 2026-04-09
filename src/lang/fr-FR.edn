@@ -62,7 +62,7 @@
   :language "Langue"
   :help "Aide"}
 
- :renderer.a11y.db
+ :renderer.a11y.core
  {:blur "Flou"
   :heavy-blur "Flou intense"
   :protanopia "Protanopie"

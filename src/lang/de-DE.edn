@@ -62,7 +62,7 @@
   :language "Sprache"
   :help "Hilfe"}
 
- :renderer.a11y.db
+ :renderer.a11y.core
  {:blur "Unschärfe"
   :heavy-blur "Starke Unschärfe"
   :protanopia "Protanopie"

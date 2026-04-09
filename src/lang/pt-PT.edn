@@ -62,7 +62,7 @@
   :language "Idioma"
   :help "Ajuda"}
 
- :renderer.a11y.db
+ :renderer.a11y.core
  {:blur "Desfoque"
   :heavy-blur "Desfoque intenso"
   :protanopia "Protanopia"

@@ -62,7 +62,7 @@
   :language "言語"
   :help "ヘルプ"}
 
- :renderer.a11y.db
+ :renderer.a11y.core
  {:blur "ブラー"
   :heavy-blur "強いブラー"
   :protanopia "第一色覚異常"

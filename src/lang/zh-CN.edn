@@ -61,7 +61,7 @@
   :language "语言"
   :help "帮助"}
 
- :renderer.a11y.db
+ :renderer.a11y.core
  {:blur "模糊"
   :heavy-blur "重度模糊"
   :protanopia "红色盲"

@@ -63,7 +63,7 @@
   :language "Язык"
   :help "Справка"}
 
- :renderer.a11y.db
+ :renderer.a11y.core
  {:blur "Размытие"
   :heavy-blur "Сильное размытие"
   :protanopia "Протанопия"

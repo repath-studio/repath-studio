@@ -62,7 +62,7 @@
   :language "Språk"
   :help "Hjälp"}
 
- :renderer.a11y.db
+ :renderer.a11y.core
  {:blur "Suddig"
   :heavy-blur "Kraftig suddig"
   :protanopia "Protanopi"

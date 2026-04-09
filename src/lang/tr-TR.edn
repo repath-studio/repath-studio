@@ -62,7 +62,7 @@
   :language "Dil"
   :help "Yardım"}
 
- :renderer.a11y.db
+ :renderer.a11y.core
  {:blur "Bulanık"
   :heavy-blur "Yoğun bulanık"
   :protanopia "Protanopi"

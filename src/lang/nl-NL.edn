@@ -62,7 +62,7 @@
   :language "Taal"
   :help "Help"}
 
- :renderer.a11y.db
+ :renderer.a11y.core
  {:blur "Vervaging"
   :heavy-blur "Sterke vervaging"
   :protanopia "Protanopie"

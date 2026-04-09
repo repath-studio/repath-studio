@@ -62,7 +62,7 @@
   :language "Γλώσσα"
   :help "Βοήθεια"}
 
- :renderer.a11y.db
+ :renderer.a11y.core
  {:blur "Θόλωση όρασης"
   :heavy-blur "Έντονη θόλωση όρασης"
   :protanopia "Πρωτανωπία"

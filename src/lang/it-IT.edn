@@ -62,7 +62,7 @@
   :language "Lingua"
   :help "Aiuto"}
 
- :renderer.a11y.db
+ :renderer.a11y.core
  {:blur "Sfocatura"
   :heavy-blur "Sfocatura intensa"
   :protanopia "Protanopia"

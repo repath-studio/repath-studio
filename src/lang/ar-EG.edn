@@ -62,7 +62,7 @@
   :language "اللغة"
   :help "مساعدة"}
 
- :renderer.a11y.db
+ :renderer.a11y.core
  {:blur "ضبابية البصر"
   :heavy-blur "ضبابية البصر الشديدة"
   :protanopia "عمى الألوان الأحمر"

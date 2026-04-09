@@ -62,7 +62,7 @@
   :language "언어"
   :help "도움말"}
 
- :renderer.a11y.db
+ :renderer.a11y.core
  {:blur "흐림"
   :heavy-blur "강한 흐림"
   :protanopia "적색맹"
