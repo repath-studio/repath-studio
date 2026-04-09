@@ -40,4 +40,5 @@
               {:id :edit/history
                :label [::history "History"]
                :actions [:history/undo
-                         :history/redo]}])
+                         :history/redo
+                         :history/clear]}])

@@ -759,7 +759,8 @@
   :locking "Verrouillage"
   :entity "Entité"
   :image "Image"
-  :path "Tracé"}
+  :path "Tracé"
+  :select "Sélectionner"}
 
  :renderer.error.core
  {:report-errors "Signaler les erreurs automatiquement"}
@@ -791,7 +792,8 @@
   :menubar-edit "Menu Édition"
   :menubar-object "Menu Objet"
   :menubar-view "Menu Affichage"
-  :menubar-help "Menu Aide"}
+  :menubar-help "Menu Aide"
+  :help "Aide"}
 
  :renderer.panel.core
  {:panel "Panneau"

@@ -747,7 +747,8 @@
   :locking "Låsning"
   :entity "Entitet"
   :image "Bild"
-  :path "Bana"}
+  :path "Bana"
+  :select "Markera"}
 
  :renderer.error.core
  {:report-errors "Rapportera fel automatiskt"}
@@ -779,7 +780,8 @@
   :menubar-edit "Redigeringsmeny"
   :menubar-object "Objektmeny"
   :menubar-view "Visningsmeny"
-  :menubar-help "Hjälpmeny"}
+  :menubar-help "Hjälpmeny"
+  :help "Hjälp"}
 
  :renderer.panel.core
  {:panel "Panel"

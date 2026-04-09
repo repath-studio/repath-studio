@@ -760,7 +760,8 @@
   :locking "Blocco"
   :entity "Entità"
   :image "Immagine"
-  :path "Tracciato"}
+  :path "Tracciato"
+  :select "Seleziona"}
 
  :renderer.error.core
  {:report-errors "Segnala errori automaticamente"}
@@ -792,7 +793,8 @@
   :menubar-edit "Menu Modifica"
   :menubar-object "Menu Oggetto"
   :menubar-view "Menu Visualizza"
-  :menubar-help "Menu Aiuto"}
+  :menubar-help "Menu Aiuto"
+  :help "Aiuto"}
 
  :renderer.panel.core
  {:panel "Pannello"

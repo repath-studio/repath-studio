@@ -769,7 +769,8 @@
   :locking "Κλείδωμα"
   :entity "Οντότητα"
   :image "Εικόνα"
-  :path "Διαδρομή"}
+  :path "Διαδρομή"
+  :select "Επιλογή"}
 
  :renderer.error.core
  {:report-errors "Αναφορά σφαλμάτων αυτόματα"}
@@ -801,7 +802,8 @@
   :menubar-edit "Μενού Επεξεργασίας"
   :menubar-object "Μενού Αντικειμένου"
   :menubar-view "Μενού Προβολής"
-  :menubar-help "Μενού Βοήθειας"}
+  :menubar-help "Μενού Βοήθειας"
+  :help "Βοήθεια"}
 
  :renderer.panel.core
  {:panel "Πάνελ"

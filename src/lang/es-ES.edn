@@ -752,7 +752,8 @@
   :locking "Bloqueo"
   :entity "Entidad"
   :image "Imagen"
-  :path "Trazado"}
+  :path "Trazado"
+  :select "Seleccionar"}
 
  :renderer.error.core
  {:report-errors "Reportar errores automáticamente"}
@@ -784,7 +785,8 @@
   :menubar-edit "Menú Editar"
   :menubar-object "Menú Objeto"
   :menubar-view "Menú Ver"
-  :menubar-help "Menú Ayuda"}
+  :menubar-help "Menú Ayuda"
+  :help "Ayuda"}
 
  :renderer.panel.core
  {:panel "Panel"

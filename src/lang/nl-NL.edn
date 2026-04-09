@@ -763,7 +763,8 @@
   :locking "Vergrendeling"
   :entity "Entiteit"
   :image "Afbeelding"
-  :path "Pad"}
+  :path "Pad"
+  :select "Selecteren"}
 
  :renderer.error.core
  {:report-errors "Fouten automatisch melden"}
@@ -795,7 +796,8 @@
   :menubar-edit "Bewerkingsmenu"
   :menubar-object "Objectmenu"
   :menubar-view "Weergavemenu"
-  :menubar-help "Helpmenu"}
+  :menubar-help "Helpmenu"
+  :help "Help"}
 
  :renderer.panel.core
  {:panel "Paneel"

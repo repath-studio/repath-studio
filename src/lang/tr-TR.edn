@@ -742,7 +742,8 @@
   :locking "Kilitleme"
   :entity "Varlık"
   :image "Resim"
-  :path "Yol"}
+  :path "Yol"
+  :select "Seç"}
 
  :renderer.error.core
  {:report-errors "Hataları otomatik olarak bildir"}
@@ -774,7 +775,8 @@
   :menubar-edit "Düzenleme Menüsü"
   :menubar-object "Nesne Menüsü"
   :menubar-view "Görünüm Menüsü"
-  :menubar-help "Yardım Menüsü"}
+  :menubar-help "Yardım Menüsü"
+  :help "Yardım"}
 
  :renderer.panel.core
  {:panel "Panel"

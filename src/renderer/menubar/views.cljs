@@ -60,15 +60,16 @@
    :label [::edit "Edit"]
    :type :root
    :enabled [::document.subs/entities?]
-   :actions (->> [[:history/undo
-                   :history/redo]
+   :actions (->> [(->> :edit/history
+                       (action.views/deref-action-group)
+                       :actions)
                   (:actions (action.views/deref-action-group :edit/clipboard))
-                  [:element/duplicate]
-                  [:element/select-all
-                   :element/deselect-all
-                   :element/invert-selection
-                   :element/select-same-tags]
-                  [:element/delete]]
+                  (->> :object/selection
+                       (action.views/deref-action-group)
+                       :actions)
+                  (->> :object/entity
+                       (action.views/deref-action-group)
+                       :actions)]
                  (interpose :separator)
                  (flatten))})
 
@@ -77,34 +78,32 @@
    :label [::object "Object"]
    :type :root
    :enabled [::document.subs/entities?]
-   :actions [:object/to-path
-             :object/stroke-to-path
-             :separator
-             :object/group
-             :object/ungroup
-             :separator
-             :object/lock
-             :object/unlock
-             :separator
-             {:id :align
-              :label [::align "Align"]
-              :enabled [::element.subs/not-every-top-level?]
-              :actions (->> [:object/horizontal-alignment
-                             :object/vertical-alignment]
-                            (map (comp :actions
-                                       action.views/deref-action-group))
-                            (interpose :separator)
-                            (flatten))}
-             (action.views/deref-action-group :object/animate)
-             (action.views/deref-action-group :object/boolean-operations)
-             :separator
-             :object/raise
-             :object/lower
-             :object/raise-to-top
-             :object/lower-to-bottom
-             :separator
-             (action.views/deref-action-group :object/image-operations)
-             (action.views/deref-action-group :object/path-operations)]})
+   :actions (->> [[:object/to-path
+                   :object/stroke-to-path]
+                  [(->> :object/grouping
+                        (action.views/deref-action-group)
+                        :actions)]
+                  [(->> :object/locking
+                        (action.views/deref-action-group)
+                        :actions)]
+                  [{:id :align
+                    :label [::align "Align"]
+                    :enabled [::element.subs/not-every-top-level?]
+                    :actions (->> [:object/horizontal-alignment
+                                   :object/vertical-alignment]
+                                  (map (comp :actions
+                                             action.views/deref-action-group))
+                                  (interpose :separator)
+                                  (flatten))}
+                   (action.views/deref-action-group :object/animate)
+                   (action.views/deref-action-group :object/boolean-operations)]
+                  [(->> :object/index-operations
+                        (action.views/deref-action-group)
+                        :actions)]
+                  [(action.views/deref-action-group :object/image-operations)
+                   (action.views/deref-action-group :object/path-operations)]]
+                 (interpose :separator)
+                 (flatten))})
 
 (def zoom-submenu
   [:zoom/in
@@ -150,18 +149,14 @@
   {:id :help
    :label [::help "Help"]
    :type :root
-   :actions [:dialog/command-panel
-             :separator
-             :help/website
-             :help/source-code
-             :help/license
-             :help/changelog
-             :help/privacy-policy
-             :separator
-             :help/submit-issue
-             :error/toggle-reporting
-             :separator
-             :dialog/about]})
+   :actions (->> [[:dialog/command-panel]
+                  (->> :app/help
+                       (action.views/deref-action-group)
+                       :actions)
+                  [:error/toggle-reporting]
+                  [:dialog/about]]
+                 (interpose :separator)
+                 (flatten))})
 
 (defmulti menu-item
   (fn [action]

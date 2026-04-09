@@ -706,7 +706,8 @@
   :locking "ロック"
   :entity "エンティティ"
   :image "画像"
-  :path "パス"}
+  :path "パス"
+  :select "選択"}
 
  :renderer.error.core
  {:report-errors "エラーを自動的に報告"}
@@ -738,7 +739,8 @@
   :menubar-edit "編集メニュー"
   :menubar-object "オブジェクトメニュー"
   :menubar-view "ビューメニュー"
-  :menubar-help "ヘルプメニュー"}
+  :menubar-help "ヘルプメニュー"
+  :help "ヘルプ"}
 
  :renderer.panel.core
  {:panel "パネル"

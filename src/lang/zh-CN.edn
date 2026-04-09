@@ -668,7 +668,8 @@
   :locking "锁定"
   :entity "实体"
   :image "图像"
-  :path "路径"}
+  :path "路径"
+  :select "选择"}
 
  :renderer.error.core
  {:report-errors "自动报告错误"}
@@ -700,7 +701,8 @@
   :menubar-edit "编辑菜单"
   :menubar-object "对象菜单"
   :menubar-view "视图菜单"
-  :menubar-help "帮助菜单"}
+  :menubar-help "帮助菜单"
+  :help "帮助"}
 
  :renderer.panel.core
  {:panel "面板"

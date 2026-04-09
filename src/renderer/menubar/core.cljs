@@ -78,7 +78,7 @@
 (rf/dispatch [::action.events/register-action
               {:id :help/privacy-policy
                :label [::privacy-policy "Privacy Policy"]
-               :icon "list"
+               :icon "lock"
                :event [::events/open-remote-url
                        "https://repath.studio/policies/privacy/"]}])
 
@@ -88,3 +88,13 @@
                :icon "warning"
                :event [::events/open-remote-url
                        "https://github.com/repath-studio/repath-studio/issues/new/choose"]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :app/help
+               :label [::help "Help"]
+               :actions [:help/website
+                         :help/source-code
+                         :help/license
+                         :help/changelog
+                         :help/privacy-policy
+                         :help/submit-issue]}])

@@ -415,3 +415,11 @@
                :label [::image "Image"]
                :enabled [::element.subs/has-selected-tag? :image]
                :actions [:image/trace]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :object/selection
+               :label [::select "Select"]
+               :actions [:element/select-all
+                         :element/deselect-all
+                         :element/invert-selection
+                         :element/select-same-tags]}])

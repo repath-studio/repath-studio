@@ -734,7 +734,8 @@
   :locking "Locking"
   :entity "Entity"
   :image "Image"
-  :path "Path"}
+  :path "Path"
+  :select "Select"}
 
  :renderer.error.core
  {:report-errors "Report errors automatically"}
@@ -766,7 +767,8 @@
   :menubar-edit "Edit menu"
   :menubar-object "Object menu"
   :menubar-view "View menu"
-  :menubar-help "Help menu"}
+  :menubar-help "Help menu"
+  :help "Help"}
 
  :renderer.panel.core
  {:panel "Panel"

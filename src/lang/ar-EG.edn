@@ -722,7 +722,8 @@
   :locking "القفل"
   :entity "كائن"
   :image "صورة"
-  :path "مسار"}
+  :path "مسار"
+  :select "تحديد"}
 
  :renderer.error.core
  {:report-errors "الإبلاغ عن الأخطاء تلقائياً"}
@@ -754,7 +755,8 @@
   :menubar-edit "قائمة التحرير"
   :menubar-object "قائمة الكائن"
   :menubar-view "قائمة العرض"
-  :menubar-help "قائمة المساعدة"}
+  :menubar-help "قائمة المساعدة"
+  :help "مساعدة"}
 
  :renderer.panel.core
  {:panel "لوحة"

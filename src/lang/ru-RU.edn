@@ -744,7 +744,8 @@
   :locking "Блокировка"
   :entity "Сущность"
   :image "Изображение"
-  :path "Контур"}
+  :path "Контур"
+  :select "Выделение"}
 
  :renderer.error.core
  {:report-errors "Сообщать об ошибках автоматически"}
@@ -776,7 +777,8 @@
   :menubar-edit "Меню Редактирование"
   :menubar-object "Меню Объект"
   :menubar-view "Меню Вид"
-  :menubar-help "Меню Справка"}
+  :menubar-help "Меню Справка"
+  :help "Справка"}
 
  :renderer.panel.core
  {:panel "Панель"
