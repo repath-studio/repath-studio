@@ -74,6 +74,7 @@ jobs:
             KEYSTOREALIAS: ${{ secrets.ANDROID_KEYSTOREALIAS }}
             KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
         run: |
+            npm install -D typescript
             echo "$KEYSTORE" | base64 --decode > android/official.jks
             npx cap sync
             npx cap build android --keystorepath official.jks \
