@@ -1,5 +1,38 @@
 # Changelog
 
+## 0.4.13 (2025-04-10)
+
+**Added**
+
+- Action registry [119](https://github.com/repath-studio/repath-studio/pull/119)
+- Action groups registry [120](https://github.com/repath-studio/repath-studio/pull/120)
+- Icon registry [117](https://github.com/repath-studio/repath-studio/pull/117)
+- Add confirmation dialog before clearing recent documents [#122](https://github.com/repath-studio/repath-studio/pull/#122),
+  thanks to [Luca Magrini](https://github.com/Luca12341234)
+- More default keyboard shortcuts
+- Auto detect overflow of tools toolbar to switch to compact view
+- Repl commands for actions and languages
+- Tree and properties panel toggle on bottom toolbar
+
+**Changed**
+
+- Enhance dialog buttons on mobile
+- Replace save with download button when filesystem is not available
+- Enhance disabled state of menubar items and buttons
+- Do not trigger select when right clicking on already selected tree elements
+- Add hover state to panel separators
+- Preserve fixed panel size on resize
+- Improved touch events
+
+**Fixed**
+
+- Repl error message margin
+- Fullscreen separator state
+- Translations on home page
+- Fix overflow issue on element name
+- Alignment of compatibility icons
+- Element tree icon size
+
 ## 0.4.12 (2025-01-09)
 
 **Added**
