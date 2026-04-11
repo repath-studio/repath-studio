@@ -11,9 +11,9 @@
    [renderer.element.db :refer [Element]]
    [renderer.event.db :refer [PointerEvent PointerId]]
    [renderer.frame.db :refer [DomRect]]
-   [renderer.i18n.db
-    :as i18n.db
-    :refer [LanguageCodeIdentifier LanguageId LanguageRegistry]]
+   [renderer.i18n.db :refer [LanguageCodeIdentifier
+                             LanguageId
+                             LanguageRegistry]]
    [renderer.icon.db :refer [Icons]]
    [renderer.icon.defaults :as icon.defaults]
    [renderer.menubar.db :refer [Menubar]]
@@ -89,7 +89,7 @@
    [:user-lang {:default "system"
                 :persist true} LanguageId]
    [:system-lang {:optional true} LanguageCodeIdentifier]
-   [:languages {:default i18n.db/registry} LanguageRegistry]
+   [:languages {:default {}} LanguageRegistry]
    [:icons {:default icon.defaults/icons} Icons]
    [:platform {:optional true} Platform]
    [:versions {:optional true} [:maybe map?]]
