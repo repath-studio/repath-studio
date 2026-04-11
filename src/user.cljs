@@ -405,4 +405,36 @@
     (circle [(+ (* x 30) 40) (+ (* (js/Math.sin x) 10) 200)]
             10
             {:fill (str "hsl(" (* x 10) " ,50% , 50%)")}))
+
+  (register-action {:id :history/undo-twice
+                    :label [:history/undo-twice "Undo twice"]
+                    :icon "undo"
+                    :event [:renderer.history.events/undo-by 2]
+                    :shortcuts [{:keyCode 90
+                                 :ctrlKey true
+                                 :altKey true}]
+                    :enabled [:renderer.history.subs/undos?]})
+
+  (register-icon {:id "dot"
+                  :path "M 12.982 8.5 A 4.482 4.482 0 0 1 8.5 12.982 A 4.482
+                         4.482 0 0 1 4.018 8.5 A 4.482 4.482 0 0 1 12.982 8.5
+                         z"})
+
+  (register-language {:id "im-LA"
+                      :dir "ltr"
+                      :locale "Imaginary language"
+                      :code "LA"
+                      :dictionary {}})
+
+  (set-translation "en-US" :renderer.menubar.views.file "New File")
+
+  (register-a11y-filter {:id :blur-x3
+                         :tag :feGaussianBlur
+                         :label [[:a11y-filter/blur-x3 "blur-x3"]]
+                         :attrs {:in "SourceGraphic"
+                                 :type "matrix"
+                                 :stdDeviation "3"}})
+
+  (add-action-to-group :object/index-operations :object/lock)
+
   #())
