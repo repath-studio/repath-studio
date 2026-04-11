@@ -23,12 +23,10 @@
          (flatten))))
 
 (def export-submenu
-  [:export/svg
-   :separator
-   :export/png
-   :export/jpg
-   :export/webp
-   :export/gif])
+  (->> [(:actions (action.views/deref-action-group :export/vector))
+        (:actions (action.views/deref-action-group :export/raster))]
+       (interpose :separator)
+       (flatten)))
 
 (defn file-menu []
   {:id :file
@@ -61,16 +59,10 @@
    :label [::edit "Edit"]
    :type :root
    :enabled [::document.subs/entities?]
-   :actions (->> [(->> :edit/history
-                       (action.views/deref-action-group)
-                       :actions)
+   :actions (->> [(:actions (action.views/deref-action-group :edit/history))
                   (:actions (action.views/deref-action-group :edit/clipboard))
-                  (->> :object/selection
-                       (action.views/deref-action-group)
-                       :actions)
-                  (->> :object/entity
-                       (action.views/deref-action-group)
-                       :actions)]
+                  (:actions (action.views/deref-action-group :object/selection))
+                  (:actions (action.views/deref-action-group :object/entity))]
                  (interpose :separator)
                  (flatten))})
 
@@ -81,12 +73,8 @@
    :enabled [::document.subs/entities?]
    :actions (->> [[:object/to-path
                    :object/stroke-to-path]
-                  [(->> :object/grouping
-                        (action.views/deref-action-group)
-                        :actions)]
-                  [(->> :object/locking
-                        (action.views/deref-action-group)
-                        :actions)]
+                  (:actions (action.views/deref-action-group :object/grouping))
+                  (:actions (action.views/deref-action-group :object/locking))
                   [{:id :align
                     :label [::align "Align"]
                     :enabled [::element.subs/not-every-top-level?]
@@ -98,9 +86,9 @@
                                   (flatten))}
                    (action.views/deref-action-group :object/animate)
                    (action.views/deref-action-group :object/boolean-operations)]
-                  [(->> :object/index-operations
-                        (action.views/deref-action-group)
-                        :actions)]
+                  (->> :object/index-operations
+                       (action.views/deref-action-group)
+                       :actions)
                   [(action.views/deref-action-group :object/image-operations)
                    (action.views/deref-action-group :object/path-operations)]]
                  (interpose :separator)

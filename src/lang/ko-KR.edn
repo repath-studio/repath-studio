@@ -649,7 +649,9 @@
   :png "PNG"
   :jpg "JPG"
   :webp "WEBP"
-  :gif "GIF"}
+  :gif "GIF"
+  :vector-formats "벡터 형식"
+  :rasterised-formats "래스터 형식"}
 
  :renderer.element.core
  {:cut "잘라내기"

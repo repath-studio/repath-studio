@@ -616,7 +616,9 @@
   :png "PNG"
   :jpg "JPG"
   :webp "WEBP"
-  :gif "GIF"}
+  :gif "GIF"
+  :vector-formats "矢量格式"
+  :rasterised-formats "光栅格式"}
 
  :renderer.element.core
  {:cut "剪切"

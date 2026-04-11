@@ -670,7 +670,9 @@
   :png "PNG"
   :jpg "JPG"
   :webp "WEBP"
-  :gif "GIF"}
+  :gif "GIF"
+  :vector-formats "تنسيقات متجهية"
+  :rasterised-formats "تنسيقات نقطية"}
 
  :renderer.element.core
  {:cut "قص"

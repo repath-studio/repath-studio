@@ -690,7 +690,9 @@
   :png "PNG"
   :jpg "JPG"
   :webp "WEBP"
-  :gif "GIF"}
+  :gif "GIF"
+  :vector-formats "Vektör biçimleri"
+  :rasterised-formats "Raster biçimleri"}
 
  :renderer.element.core
  {:cut "Kes"

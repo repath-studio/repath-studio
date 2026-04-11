@@ -139,3 +139,16 @@
                :icon "export"
                :event [::document.events/export "image/gif"]
                :enabled [::document.subs/entities?]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :export/vector
+               :label [::vector-formats "Vector formats"]
+               :actions [:export/svg]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :export/raster
+               :label [::rasterised-formats "Rasterised formats"]
+               :actions [:export/png
+                         :export/jpg
+                         :export/webp
+                         :export/gif]}])

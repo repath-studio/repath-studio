@@ -700,7 +700,9 @@
   :png "PNG"
   :jpg "JPG"
   :webp "WEBP"
-  :gif "GIF"}
+  :gif "GIF"
+  :vector-formats "Formatos vectoriales"
+  :rasterised-formats "Formatos rasterizados"}
 
  :renderer.element.core
  {:cut "Cortar"

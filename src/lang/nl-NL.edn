@@ -711,7 +711,9 @@
   :png "PNG"
   :jpg "JPG"
   :webp "WEBP"
-  :gif "GIF"}
+  :gif "GIF"
+  :vector-formats "Vectorformaten"
+  :rasterised-formats "Rasterformaten"}
 
  :renderer.element.core
  {:cut "Knippen"
