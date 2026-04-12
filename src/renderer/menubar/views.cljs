@@ -14,7 +14,8 @@
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]))
 
-(defn recent-submenu []
+(defn recent-submenu
+  []
   (let [recent-items @(rf/subscribe [::document.subs/recent-actions])]
     (->> [recent-items
           [:document/clear-recent]]
@@ -22,13 +23,15 @@
          (interpose :separator)
          (flatten))))
 
-(def export-submenu
+(defn export-submenu
+  []
   (->> [(:actions (action.views/deref-action-group :export/vector))
         (:actions (action.views/deref-action-group :export/raster))]
        (interpose :separator)
        (flatten)))
 
-(defn file-menu []
+(defn file-menu
+  []
   {:id :file
    :label [::file "File"]
    :type :root
@@ -47,14 +50,15 @@
              {:id :export
               :label [::export-as "Export as"]
               :enabled [::document.subs/entities?]
-              :actions export-submenu}
+              :actions (export-submenu)}
              :separator
              :document/print
              :separator
              :document/close
              :window/close]})
 
-(defn edit-menu []
+(defn edit-menu
+  []
   {:id :edit
    :label [::edit "Edit"]
    :type :root
@@ -66,7 +70,8 @@
                  (interpose :separator)
                  (flatten))})
 
-(defn object-menu []
+(defn object-menu
+  []
   {:id :object
    :label [::object "Object"]
    :type :root
@@ -106,7 +111,8 @@
    :zoom/fit-selected
    :zoom/fill-selected])
 
-(defn view-menu []
+(defn view-menu
+  []
   {:id :view
    :label [::view "View"]
    :type :root
@@ -134,7 +140,8 @@
               :available [::app.subs/desktop?]}
              :view/toggle-fullscreen]})
 
-(defn help-menu []
+(defn help-menu
+  []
   {:id :help
    :label [::help "Help"]
    :type :root
@@ -246,19 +253,22 @@
    [:div [action.views/label action]]
    [views/shortcuts action]])
 
-(defn submenus []
+(defn submenus
+  []
   [(file-menu)
    (edit-menu)
    (object-menu)
    (view-menu)
    (help-menu)])
 
-(defn mobile-root []
+(defn mobile-root
+  []
   [{:id :root
     :type :root
     :actions (mapv #(assoc % :type :sub-menu) (submenus))}])
 
-(defn root []
+(defn root
+  []
   (let [active-menu @(rf/subscribe [::menubar.subs/active-menu])
         xl? @(rf/subscribe [::window.subs/xl?])]
     (->> (if xl?
