@@ -35,6 +35,9 @@
     :ctrlKey true}
    {:keyCode (utils.key/codes "D")
     :ctrlKey true
+    :shiftKey true}
+   {:keyCode (utils.key/codes "T")
+    :ctrlKey true
     :shiftKey true}])
 
 (defn shortcut-modifier-count
