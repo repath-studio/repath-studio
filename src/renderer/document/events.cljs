@@ -80,7 +80,9 @@
  (fn [{:keys [db]} [_ id confirm?]]
    {:db (if (or (document.handlers/saved? db id)
                 (not confirm?))
-          (document.handlers/close db id)
+          (-> db
+              (document.handlers/add-recent (document.handlers/entity db id))
+              (document.handlers/close id))
           (dialog.handlers/create
            db
            {:title (i18n.handlers/t db [::save-changes
