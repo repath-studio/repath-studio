@@ -17,7 +17,8 @@
 (defn recent-submenu
   []
   (let [recent-items @(rf/subscribe [::document.subs/recent-actions])]
-    (->> [recent-items
+    (->> [[:document/reopen-last-closed]
+          recent-items
           [:document/clear-recent]]
          (keep seq)
          (interpose :separator)

@@ -209,3 +209,10 @@
   [document]
   (-> (apply dissoc document config/save-info-keys)
       (pr-str)))
+
+(m/=> recently-closed [:-> App [:vector RecentDocument]])
+(defn recently-closed
+  [db]
+  (->> (:recent db)
+       (filter #(not (open? db (:id %))))
+       (reverse)))

@@ -205,6 +205,13 @@
        :on-error [::recent-error id]}})))
 
 (rf/reg-event-fx
+ ::reopen-last-closed
+ (fn [{:keys [db]} [_]]
+   (let [recently-closed (document.handlers/recently-closed db)]
+     (when (seq recently-closed)
+       {:dispatch [::open-recent (first recently-closed)]}))))
+
+(rf/reg-event-fx
  ::recent-error
  [persist]
  (fn [{:keys [db]} [_ id error]]
