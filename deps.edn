@@ -13,7 +13,7 @@
         org.clj-commons/hickory {:mvn/version "0.7.7"}
         org.clojure/math.combinatorics {:mvn/version "0.3.2"}
         org.slf4j/slf4j-nop {:mvn/version "2.0.17"}
-        re-frame/re-frame {:mvn/version "1.4.4"}
+        re-frame/re-frame {:mvn/version "1.4.5"}
         re-pressed/re-pressed {:mvn/version "0.3.2"}
         reagent/reagent {:mvn/version "2.0.1"}
         replumb/replumb {:mvn/version "0.2.4"}
