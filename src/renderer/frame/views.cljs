@@ -10,9 +10,9 @@
    [renderer.app.subs :as-alias app.subs]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
-   [renderer.event.impl.wheel :as event.impl.wheel]
    [renderer.frame.events :as-alias frame.events]
    [renderer.i18n.views :as i18n.views]
+   [renderer.input.impl.wheel :as input.impl.wheel]
    [renderer.views :as views]))
 
 (defn inner-component
@@ -26,13 +26,13 @@
      {:component-did-mount
       #(.addEventListener frame-window
                           "wheel"
-                          event.impl.wheel/handler!
+                          input.impl.wheel/handler!
                           #js {:passive false})
 
       :component-will-unmount
       #(.removeEventListener frame-window
                              "wheel"
-                             event.impl.wheel/handler!)
+                             input.impl.wheel/handler!)
 
       :reagent-render #()})))
 

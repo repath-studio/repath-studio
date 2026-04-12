@@ -1,4 +1,4 @@
-(ns renderer.event.handlers
+(ns renderer.input.handlers
   (:require
    [clojure.core.matrix :as matrix]
    [malli.core :as m]
@@ -7,9 +7,9 @@
    [renderer.app.handlers :as app.handlers]
    [renderer.db :refer [Vec2]]
    [renderer.effects :as-alias effects]
-   [renderer.event.db :refer [PointerEvent KeyboardEvent WheelEvent DragEvent]]
-   [renderer.event.effects :as-alias event.effects]
    [renderer.frame.handlers :as frame.handlers]
+   [renderer.input.db :refer [PointerEvent KeyboardEvent WheelEvent DragEvent]]
+   [renderer.input.effects :as-alias input.handlers]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]))
@@ -61,7 +61,7 @@
   (-> db
       (assoc :drag-pointer pointer-id)
       (tool.hierarchy/on-drag-start e)
-      (app.handlers/add-fx [::event.effects/set-pointer-capture pointer-id])))
+      (app.handlers/add-fx [::input.handlers/set-pointer-capture pointer-id])))
 
 (m/=> on-drag-end [:-> App PointerEvent App])
 (defn on-drag-end
@@ -70,7 +70,7 @@
   (-> db
       (tool.hierarchy/on-drag-end e)
       (tool.handlers/clear-pointer-data)
-      (app.handlers/add-fx [::event.effects/release-pointer-capture
+      (app.handlers/add-fx [::input.handlers/release-pointer-capture
                             pointer-id])))
 
 (m/=> drag-pointer? [:-> App PointerEvent boolean?])
@@ -285,6 +285,6 @@
     "drop"
     (let [{:keys [data-transfer pointer-pos]} e
           position (adjusted-pointer-pos db pointer-pos)]
-      (app.handlers/add-fx db [::event.effects/drop [position data-transfer]]))
+      (app.handlers/add-fx db [::input.handlers/drop [position data-transfer]]))
 
     db))

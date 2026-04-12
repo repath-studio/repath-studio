@@ -5,14 +5,14 @@
    [reagent.core :as reagent]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
-   [renderer.event.impl.pointer :as event.impl.pointer]))
+   [renderer.input.impl.pointer :as input.impl.pointer]))
 
 (defn ghost-element
   "Renders a ghost element on top of the actual element to ensure that the user
    can interact with it."
   [el]
   (let [{:keys [attrs tag content]} el
-        pointer-handler (partial event.impl.pointer/handler! el)
+        pointer-handler (partial input.impl.pointer/handler! el)
         zoom @(rf/subscribe [::document.subs/zoom])
         stroke-width (max (:stroke-width attrs) (/ 20 zoom))]
     [tag

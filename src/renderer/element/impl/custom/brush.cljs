@@ -9,8 +9,8 @@
    [renderer.attribute.impl.range :as attribute.impl.range]
    [renderer.attribute.views :as attribute.views]
    [renderer.element.hierarchy :as element.hierarchy]
-   [renderer.event.handlers :as event.handlers]
-   [renderer.event.impl.pointer :as event.impl.pointer]
+   [renderer.input.handlers :as input.handlers]
+   [renderer.input.impl.pointer :as input.impl.pointer]
    [renderer.tool.views :as tool.views]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.element :as utils.element]
@@ -115,7 +115,7 @@
 (defmethod element.hierarchy/render :brush
   [el]
   (let [attrs (:attrs el)
-        pointer-handler (partial event.impl.pointer/handler! el)
+        pointer-handler (partial input.impl.pointer/handler! el)
         options (-> attrs
                     (select-keys option-keys)
                     (update-vals js/parseFloat))]
@@ -199,7 +199,7 @@
   (let [index (js/parseInt (name handle))
         [x y] (cond-> offset
                 lock?
-                (event.handlers/lock-direction))
+                (input.handlers/lock-direction))
         transform-point (fn [[px py pressure]]
                           (vector (utils.length/transform px + x)
                                   (utils.length/transform py + y)

@@ -67,10 +67,10 @@
                       renderer.element.hierarchy element.hierarchy
                       renderer.element.subs element.subs
                       renderer.element.views element.views
-                      renderer.event.db event.db
-                      renderer.event.effects event.effects
-                      renderer.event.events event.events
-                      renderer.event.handlers event.handlers
+                      renderer.input.db input.db
+                      renderer.input.effects input.handlers
+                      renderer.input.events input.events
+                      renderer.input.handlers input.handlers
                       renderer.i18n.db i18n.db
                       renderer.i18n.effects i18n.effects
                       renderer.i18n.events i18n.events

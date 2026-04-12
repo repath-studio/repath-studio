@@ -1,11 +1,11 @@
-(ns renderer.event.impl.pointer
+(ns renderer.input.impl.pointer
   (:require
    [malli.core :as m]
    [re-frame.core :as rf]
    [renderer.db :refer [JS_Object]]
    [renderer.element.db :refer [Element]]
-   [renderer.event.db :refer [PointerEvent PointerButton]]
-   [renderer.event.events :as-alias event.events]
+   [renderer.input.db :refer [PointerEvent PointerButton]]
+   [renderer.input.events :as-alias input.events]
    [renderer.tool.db :refer [Handle]]))
 
 (m/=> button->key [:-> [:enum -1 0 1 2 3 4] [:maybe PointerButton]])
@@ -48,4 +48,4 @@
   ;; Although the fps might drop because synced dispatch blocks rendering,
   ;; the end result appears to be more responsive because it's synced with the
   ;; pointer movement.
-  (rf/dispatch-sync [::event.events/pointer (->clj el e)]))
+  (rf/dispatch-sync [::input.events/pointer (->clj el e)]))

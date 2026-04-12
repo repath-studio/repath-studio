@@ -4,7 +4,7 @@
   (:require
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.element.hierarchy :as element.hierarchy]
-   [renderer.event.handlers :as event.handlers]
+   [renderer.input.handlers :as input.handlers]
    [renderer.tool.views :as tool.views]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]))
@@ -32,7 +32,7 @@
   [el offset handle lock?]
   (let [[x y] (cond-> offset
                 lock?
-                (event.handlers/lock-direction))
+                (input.handlers/lock-direction))
         clamp (partial max 0)]
     (case handle
       :position

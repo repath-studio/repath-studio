@@ -9,7 +9,7 @@
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
-   [renderer.event.handlers :as event.handlers]
+   [renderer.input.handlers :as input.handlers]
    [renderer.tool.views :as tool.views]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
@@ -104,7 +104,7 @@
   [el offset handle lock?]
   (let [[x y] (cond-> offset
                 lock?
-                (event.handlers/lock-direction))]
+                (input.handlers/lock-direction))]
     (case handle
       :starting-point
       (-> el

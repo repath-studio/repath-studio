@@ -6,8 +6,8 @@
    [renderer.app.subs :as-alias app.subs]
    [renderer.db :refer [BBox]]
    [renderer.document.subs :as-alias document.subs]
-   [renderer.event.impl.pointer :as event.impl.pointer]
    [renderer.i18n.views :as i18n.views]
+   [renderer.input.impl.pointer :as input.impl.pointer]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.bounds :as utils.bounds]))
 
@@ -17,7 +17,7 @@
         zoom @(rf/subscribe [::document.subs/zoom])
         clicked-element @(rf/subscribe [::app.subs/clicked-element])
         handle-size @(rf/subscribe [::document.subs/handle-size])
-        pointer-handler (partial event.impl.pointer/handler! el)
+        pointer-handler (partial input.impl.pointer/handler! el)
         r (/ handle-size 2)
         active (and (= (:id clicked-element) id)
                     (= (:element-id clicked-element) element-id))]
@@ -48,7 +48,7 @@
         zoom @(rf/subscribe [::document.subs/zoom])
         clicked-element @(rf/subscribe [::app.subs/clicked-element])
         handle-size @(rf/subscribe [::document.subs/handle-size])
-        pointer-handler (partial event.impl.pointer/handler! el)
+        pointer-handler (partial input.impl.pointer/handler! el)
         stroke-width (/ 1 zoom)
         rx (/ 1 zoom)
         x (- x (/ handle-size 2))
@@ -89,7 +89,7 @@
         ignored? (contains? ignored-ids id)
         [min-x min-y] bbox
         [w h] (utils.bounds/->dimensions bbox)
-        pointer-handler (partial event.impl.pointer/handler! {:type :handle
+        pointer-handler (partial input.impl.pointer/handler! {:type :handle
                                                               :action :translate
                                                               :id id})
         rect-attrs {:x min-x

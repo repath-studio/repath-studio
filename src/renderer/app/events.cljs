@@ -12,11 +12,11 @@
    [renderer.document.handlers :as document.handlers]
    [renderer.effects :as-alias effects]
    [renderer.error.events :as-alias error.events]
-   [renderer.event.events :as-alias event.events]
-   [renderer.event.impl.keyboard :as impl.keyboard]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.effects :as-alias i18n.effects]
    [renderer.i18n.events :as-alias i18n.events]
+   [renderer.input.events :as-alias input.events]
+   [renderer.input.impl.keyboard :as impl.keyboard]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.theme.effects :as-alias theme.effects]
    [renderer.theme.events :as-alias theme.events]
@@ -104,8 +104,8 @@
                   "accepted" [::set-install-prompt nil]}}})))
 
 (def listeners
-  (->> [[js/document "keydown" [::event.events/keyboard] impl.keyboard/->clj]
-        [js/document "keyup" [::event.events/keyboard] impl.keyboard/->clj]
+  (->> [[js/document "keydown" [::input.events/keyboard] impl.keyboard/->clj]
+        [js/document "keyup" [::input.events/keyboard] impl.keyboard/->clj]
         [js/document "fullscreenchange" [::window.events/update-fullscreen]]
         [js/window "focus" [::window.events/update-focused]]
         [js/window "blur" [::window.events/update-focused]]

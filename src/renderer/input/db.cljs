@@ -1,4 +1,4 @@
-(ns renderer.event.db
+(ns renderer.input.db
   (:require
    [renderer.db :refer [Vec2]]
    [renderer.element.db :refer [Element]]

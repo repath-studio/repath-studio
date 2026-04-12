@@ -7,7 +7,7 @@
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
-   [renderer.event.impl.pointer :as event.impl.pointer]))
+   [renderer.input.impl.pointer :as input.impl.pointer]))
 
 (element.hierarchy/derive-element :svg ::element.hierarchy/container)
 
@@ -29,7 +29,7 @@
         text-attrs (select-keys attrs [:x :y])
         active-filter @(rf/subscribe [::a11y.subs/active-filter])
         zoom @(rf/subscribe [::document.subs/zoom])
-        pointer-handler (partial event.impl.pointer/handler! el)
+        pointer-handler (partial input.impl.pointer/handler! el)
         shadow-size (/ 2 zoom)]
     [:g
      [:text

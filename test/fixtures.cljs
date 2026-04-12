@@ -9,8 +9,8 @@
    [renderer.effects :as-alias effects]
    [renderer.element.effects :as-alias element.effects]
    [renderer.error.effects :as-alias error.effects]
-   [renderer.event.events :as-alias event.events]
    [renderer.i18n.effects :as-alias i18n.effects]
+   [renderer.input.events :as-alias input.events]
    [renderer.theme.effects :as-alias theme.effects]
    [renderer.utils.element :as utils.element]
    [renderer.window.effects :as-alias window.effects]))
@@ -195,5 +195,5 @@
  (fn [_]))
 
 (rf/reg-event-db
- ::event.events/keyboard
+ ::input.events/keyboard
  (fn [_]))

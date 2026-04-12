@@ -1,12 +1,12 @@
-# Event Module
+# Input Module
 
-The event module provides a layer of abstraction for handling canvas user
+The input module provides a layer of abstraction for handling canvas user
 interactions, including pointer/keyboard/wheel events and drag-and-drop
 operations.
 
 ## Flow
 
-Browser events are captured by implementation handlers. The default event
+Browser input events are captured by implementation handlers. The default event
 behavior is prevented and propagation is stopped. Native events are converted
 to Clojure data structures, and used to dispatch synchronous re-frame events.
 Core business logic processes the events and updates the application state.

@@ -1,10 +1,10 @@
-(ns renderer.event.impl.drag
+(ns renderer.input.impl.drag
   (:require
    [malli.core :as m]
    [re-frame.core :as rf]
    [renderer.db :refer [JS_Object]]
-   [renderer.event.db :refer [DragEvent]]
-   [renderer.event.events :as-alias event.events]))
+   [renderer.input.db :refer [DragEvent]]
+   [renderer.input.events :as-alias input.events]))
 
 (m/=> ->clj [:-> JS_Object DragEvent])
 (defn ->clj
@@ -20,4 +20,4 @@
   (.stopPropagation e)
   (.preventDefault e)
 
-  (rf/dispatch-sync [::event.events/drag (->clj e)]))
+  (rf/dispatch-sync [::input.events/drag (->clj e)]))

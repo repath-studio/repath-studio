@@ -11,8 +11,8 @@
    [renderer.element.events :as-alias element.events]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
-   [renderer.event.impl.pointer :as event.impl.pointer]
    [renderer.i18n.views :as i18n.views]
+   [renderer.input.impl.pointer :as input.impl.pointer]
    [renderer.tool.views :as tool.views]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.element :as utils.element]
@@ -110,7 +110,7 @@
   [el]
   (let [{:keys [attrs children]} el
         child-elements @(rf/subscribe [::element.subs/filter-visible children])
-        pointer-handler (partial event.impl.pointer/handler! el)]
+        pointer-handler (partial input.impl.pointer/handler! el)]
     [:path (merge {:d (element.hierarchy/path el)
                    :on-pointer-up pointer-handler
                    :on-pointer-down pointer-handler

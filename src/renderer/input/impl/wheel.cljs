@@ -1,9 +1,9 @@
-(ns renderer.event.impl.wheel
+(ns renderer.input.impl.wheel
   (:require
    [malli.core :as m]
    [re-frame.core :as rf]
-   [renderer.event.db :refer [WheelEvent]]
-   [renderer.event.events :as-alias event.events]))
+   [renderer.input.db :refer [WheelEvent]]
+   [renderer.input.events :as-alias input.events]))
 
 (m/=> ->clj [:-> any? WheelEvent])
 (defn ->clj
@@ -26,4 +26,4 @@
   (.stopPropagation e)
   (.preventDefault e)
 
-  (rf/dispatch-sync [::event.events/wheel (->clj e)]))
+  (rf/dispatch-sync [::input.events/wheel (->clj e)]))

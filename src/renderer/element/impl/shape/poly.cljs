@@ -7,7 +7,7 @@
    [renderer.app.subs :as-alias app.subs]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
-   [renderer.event.handlers :as event.handlers]
+   [renderer.input.handlers :as input.handlers]
    [renderer.tool.views :as tool.views]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.element :as utils.element]
@@ -98,7 +98,7 @@
   (let [index (js/parseInt (name handle))
         [x y] (cond-> offset
                 lock?
-                (event.handlers/lock-direction))
+                (input.handlers/lock-direction))
         transform-point (fn [[px py]]
                           (list (utils.length/transform px + x)
                                 (utils.length/transform py + y)))]

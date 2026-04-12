@@ -1,10 +1,10 @@
-(ns renderer.event.impl.keyboard
+(ns renderer.input.impl.keyboard
   (:require
    [malli.core :as m]
    [re-frame.core :as rf]
    [renderer.db :refer [JS_Object]]
-   [renderer.event.db :refer [KeyboardEvent]]
-   [renderer.event.events :as-alias event.events]))
+   [renderer.input.db :refer [KeyboardEvent]]
+   [renderer.input.events :as-alias input.events]))
 
 (m/=> ->clj [:-> JS_Object KeyboardEvent])
 (defn ->clj
@@ -23,4 +23,4 @@
 (m/=> handler! [:-> JS_Object nil?])
 (defn handler!
   [^js/KeyboardEvent e]
-  (rf/dispatch-sync [::event.events/keyboard (->clj e)]))
+  (rf/dispatch-sync [::input.events/keyboard (->clj e)]))

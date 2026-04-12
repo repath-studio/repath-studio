@@ -8,10 +8,10 @@
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
-   [renderer.event.impl.drag :as event.impl.drag]
-   [renderer.event.impl.keyboard :as event.impl.keyboard]
-   [renderer.event.impl.pointer :as event.impl.pointer]
    [renderer.frame.subs :as-alias frame.subs]
+   [renderer.input.impl.drag :as input.impl.drag]
+   [renderer.input.impl.keyboard :as input.impl.keyboard]
+   [renderer.input.impl.pointer :as input.impl.pointer]
    [renderer.ruler.views :as ruler.views]
    [renderer.snap.subs :as-alias snap.subs]
    [renderer.snap.views :as snap.views]
@@ -62,18 +62,18 @@
         rotate @(rf/subscribe [::document.subs/rotate])
         grid @(rf/subscribe [::app.subs/grid])
         state @(rf/subscribe [::tool.subs/state])
-        pointer-handler (partial event.impl.pointer/handler! el)
+        pointer-handler (partial input.impl.pointer/handler! el)
         filters @(rf/subscribe [::a11y.subs/filters])
         snap? @(rf/subscribe [::snap.subs/active?])]
     [:svg#canvas {:on-pointer-up pointer-handler
                   :on-pointer-down pointer-handler
                   :on-pointer-move pointer-handler
-                  :on-key-up event.impl.keyboard/handler!
-                  :on-key-down event.impl.keyboard/handler!
+                  :on-key-up input.impl.keyboard/handler!
+                  :on-key-down input.impl.keyboard/handler!
                   :tab-index 0 ; Enable keyboard events
                   :viewBox viewbox-attr
-                  :on-drop event.impl.drag/handler!
-                  :on-drag-over event.impl.drag/handler!
+                  :on-drop input.impl.drag/handler!
+                  :on-drag-over input.impl.drag/handler!
                   :width width
                   :height height
                   :transform (str "rotate(" rotate ")")

@@ -6,7 +6,7 @@
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.impl.box :as element.impl.box]
-   [renderer.event.handlers :as event.handlers]
+   [renderer.input.handlers :as input.handlers]
    [renderer.tool.views :as tool.views]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
@@ -60,7 +60,7 @@
   (let [[x y] (cond-> offset
                 (and (contains? #{:position :size} handle)
                      lock?)
-                (event.handlers/lock-direction))
+                (input.handlers/lock-direction))
         [w h] (utils.bounds/->dimensions (:bbox el))
         clamp-radius (fn [r max-size]
                        (min (max 0 r)

@@ -9,13 +9,13 @@
    [renderer.dialog.db :refer [Dialog]]
    [renderer.document.db :refer [Document DocumentId RecentDocument]]
    [renderer.element.db :refer [Element]]
-   [renderer.event.db :refer [PointerEvent PointerId]]
    [renderer.frame.db :refer [DomRect]]
    [renderer.i18n.db :refer [LanguageCodeIdentifier
                              LanguageId
                              LanguageRegistry]]
    [renderer.icon.db :refer [Icons]]
    [renderer.icon.defaults :as icon.defaults]
+   [renderer.input.db :refer [PointerEvent PointerId]]
    [renderer.menubar.db :refer [Menubar]]
    [renderer.panel.db :as panel.db :refer [Panel PanelId]]
    [renderer.ruler.db :refer [Ruler]]
