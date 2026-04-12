@@ -61,3 +61,23 @@
                :icon "focus"
                :event [::frame.events/focus-selection :fill]
                :shortcuts [{:keyCode (utils.key/codes "THREE")}]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :zoom/in-out
+               :label [::zoom-in-out "Zoom in/out"]
+               :actions [:zoom/in
+                         :zoom/out]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :zoom/set
+               :label [::zoom-set "Set zoom"]
+               :actions [:zoom/set-50
+                         :zoom/set-100
+                         :zoom/set-200]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :zoom/auto
+               :label [::zoom-auto "Auto zoom"]
+               :actions [:zoom/focus-selected
+                         :zoom/fit-selected
+                         :zoom/fill-selected]}])

@@ -99,17 +99,13 @@
                  (interpose :separator)
                  (flatten))})
 
-(def zoom-submenu
-  [:zoom/in
-   :zoom/out
-   :separator
-   :zoom/set-50
-   :zoom/set-100
-   :zoom/set-200
-   :separator
-   :zoom/focus-selected
-   :zoom/fit-selected
-   :zoom/fill-selected])
+(defn zoom-submenu
+  []
+  (->> [(:actions (action.views/deref-action-group :zoom/in-out))
+        (:actions (action.views/deref-action-group :zoom/set))
+        (:actions (action.views/deref-action-group :zoom/auto))]
+       (interpose :separator)
+       (flatten)))
 
 (defn view-menu
   []
@@ -119,7 +115,7 @@
    :actions [{:id :zoom
               :label [::zoom "Zoom"]
               :enabled [::document.subs/entities?]
-              :actions zoom-submenu}
+              :actions (zoom-submenu)}
              (action.views/deref-action-group :theme/mode)
              {:id :a11y
               :label [::accessibility-filter "Accessibility filter"]

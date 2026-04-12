@@ -39,14 +39,10 @@
     [:button.button.flex.items-center.justify-center.px-2.font-mono
      [views/icon "chevron-up"]]]
    [:> DropdownMenu/Portal
-    (->> [:zoom/set-50
-          :zoom/set-100
-          :zoom/set-200
-          :separator
-          :zoom/focus-selected
-          :zoom/fit-selected
-          :zoom/fill-selected]
-         (map action.views/deref-action)
+    (->> [(:actions (action.views/deref-action-group :zoom/set))
+          (:actions (action.views/deref-action-group :zoom/auto))]
+         (interpose {:type :separator})
+         (flatten)
          (map #(dissoc % :icon))
          (map views/dropdown-menu-item)
          (into [:> DropdownMenu/Content
