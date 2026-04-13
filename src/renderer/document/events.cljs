@@ -81,7 +81,7 @@
    {:db (if (or (document.handlers/saved? db id)
                 (not confirm?))
           (-> db
-              (document.handlers/add-recent (document.handlers/entity db id))
+              (document.handlers/move-recent-to-front id)
               (document.handlers/close id))
           (dialog.handlers/create
            db
