@@ -177,7 +177,7 @@
 (rf/reg-cofx
  ::effects/now
  (fn [coeffects _]
-   (assoc coeffects :now (.now js/Date))))
+   (assoc coeffects :now (.now js/performance))))
 
 (rf/reg-fx
  ::effects/ipc-on

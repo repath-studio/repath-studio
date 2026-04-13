@@ -2,6 +2,7 @@
   (:require
    [re-frame.core :as rf]
    [renderer.app.effects :as-alias app.effects]
+   [renderer.effects :as-alias effects]
    [renderer.history.handlers :as history.handlers]))
 
 (rf/reg-event-db
@@ -31,10 +32,11 @@
        (history.handlers/reset-state)
        (history.handlers/clear-preview-label))))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  ::preview
- (fn [db [_ pos]]
-   (history.handlers/preview db pos)))
+ [(rf/inject-cofx ::effects/time-origin)]
+ (fn [{:keys [db time-origin]} [_ pos]]
+   {:db (history.handlers/preview db time-origin pos)}))
 
 (rf/reg-event-db
  ::go-to

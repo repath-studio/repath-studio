@@ -14,7 +14,12 @@
 (rf/reg-cofx
  ::now
  (fn [coeffects _]
-   (assoc coeffects :now (.now js/Date))))
+   (assoc coeffects :now (.now js/performance))))
+
+(rf/reg-cofx
+ ::time-origin
+ (fn [coeffects _]
+   (assoc coeffects :time-origin (.-timeOrigin js/performance))))
 
 (rf/reg-fx
  ::clipboard-write

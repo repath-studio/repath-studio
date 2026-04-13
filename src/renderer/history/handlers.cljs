@@ -98,9 +98,12 @@
 
 (m/=> preview [:-> App HistoryIndex App])
 (defn preview
-  [db pos]
+  [db time-origin pos]
   (let [preview-state (-> db history (state pos))
-        timestamp (-> preview-state :timestamp js/Date.)]
+        timestamp (-> preview-state
+                      :timestamp
+                      (+ time-origin)
+                      js/Date.)]
     (-> db
         (assoc-in (document.handlers/path db :preview-label) (str timestamp))
         (assoc-in (element.handlers/path db) (:elements preview-state)))))
