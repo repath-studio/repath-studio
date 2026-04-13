@@ -23,5 +23,5 @@
         :extra-deps {cider/cider-nrepl {:mvn/version "0.58.0"}
                      day8.re-frame/re-frame-10x {:mvn/version "1.11.0"}
                      no.cjohansen/portfolio {:mvn/version "2026.03.1"}}}
-  :format {:deps {dev.weavejester/cljfmt {:mvn/version "0.16.3"}}}
+  :format {:deps {dev.weavejester/cljfmt {:mvn/version "0.16.4"}}}
   :lint {:deps {clj-kondo/clj-kondo {:mvn/version "2026.01.19"}}}}}
