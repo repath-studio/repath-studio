@@ -30,18 +30,17 @@
          :font-weight font-weight
          :bbox bbox}))))
 
-(m/=> font-data->path-data! [:->
-                             JS_Object string? number? number? number?
-                             JS_Promise])
+(m/=> font-data->path-data! [:-> JS_Object string? map? JS_Promise])
 (defn font-data->path-data!
-  [^js/FontData font-data text x y font-size]
-  (-> (.blob font-data)
-      (.then (fn [^js/Blob blob]
-               (-> (.arrayBuffer blob)
-                   (.then (fn [buffer]
-                            (let [font (opentype/parse buffer)
-                                  path (.getPath font text x y font-size)]
-                              (.toPathData path)))))))))
+  [^js/FontData font-data text props]
+  (let [{:keys [x y font-size]} props]
+    (-> (.blob font-data)
+        (.then (fn [^js/Blob blob]
+                 (-> (.arrayBuffer blob)
+                     (.then (fn [buffer]
+                              (let [font (opentype/parse buffer)
+                                    path (.getPath font text x y font-size)]
+                                (.toPathData path))))))))))
 
 (m/=> includes-prop? [:-> string? string? boolean?])
 (defn includes-prop?

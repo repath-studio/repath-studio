@@ -136,7 +136,10 @@
         {:keys [x y font-family]} attrs
         computed-styles (utils.font/get-computed-styles! el)
         {:keys [font-size font-style font-weight]} computed-styles
-        [x y font-size] (mapv utils.length/unit->px [x y font-size])]
+        [x y font-size] (mapv utils.length/unit->px [x y font-size])
+        props {:x x
+               :y y
+               :font-size font-size}]
     (if font-family
       (some-> (.-queryLocalFonts js/window)
               (.call)
@@ -146,13 +149,10 @@
                                                       font-style
                                                       font-weight)
                                (utils.font/font-data->path-data! content
-                                                                 x y
-                                                                 font-size)))))
+                                                                 props)))))
       (-> (utils.font/default-font-path font-style font-weight)
           (js/fetch)
-          (.then #(utils.font/font-data->path-data! % content
-                                                    x y
-                                                    font-size))))))
+          (.then #(utils.font/font-data->path-data! % content props))))))
 
 (defmethod element.hierarchy/bbox :text
   [el]
