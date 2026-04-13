@@ -174,6 +174,11 @@
  (fn [coeffects _]
    (assoc coeffects :guid (random-uuid))))
 
+(rf/reg-cofx
+ ::effects/now
+ (fn [coeffects _]
+   (assoc coeffects :now (.now js/Date))))
+
 (rf/reg-fx
  ::effects/ipc-on
  (fn [_]))

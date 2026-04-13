@@ -147,17 +147,20 @@
 
 (rf/reg-event-fx
  ::new
- [(rf/inject-cofx ::effects/guid)]
- (fn [{:keys [db guid]} [_]]
+ [(rf/inject-cofx ::effects/guid)
+  (rf/inject-cofx ::effects/now)]
+ (fn [{:keys [db now guid]} [_]]
    {:db (-> (document.handlers/create db guid)
-            (history.handlers/finalize [::create-doc "Create document"]))}))
+            (history.handlers/finalize now [::create-doc "Create document"]))}))
 
 (rf/reg-event-fx
  ::new-from-template
- [(rf/inject-cofx ::effects/guid)]
- (fn [{:keys [db guid]} [_ size]]
+ [(rf/inject-cofx ::effects/guid)
+  (rf/inject-cofx ::effects/now)]
+ (fn [{:keys [db now guid]} [_ size]]
    {:db (-> (document.handlers/create db guid size)
-            (history.handlers/finalize [::create-doc-from-template
+            (history.handlers/finalize now
+                                       [::create-doc-from-template
                                         "Create document from template"]))}))
 
 (defn string->edn
@@ -286,8 +289,9 @@
 
 (rf/reg-event-fx
  ::load
- [(rf/inject-cofx ::effects/guid)]
- (fn [{:keys [db guid]} [_ document]]
+ [(rf/inject-cofx ::effects/guid)
+  (rf/inject-cofx ::effects/now)]
+ (fn [{:keys [db now guid]} [_ document]]
    (let [migrated-document (utils.compatibility/migrate-document document)
          is-migrated (not= document migrated-document)
          document (merge document.db/default {:id guid} migrated-document)
@@ -298,7 +302,7 @@
               (-> (document.handlers/create-tab (dissoc document :file-handle))
                   (document.handlers/center)
                   (document.handlers/add-recent document)
-                  (history.handlers/finalize [::load-doc "Load document"]))
+                  (history.handlers/finalize now [::load-doc "Load document"]))
 
               (not is-migrated)
               (document.handlers/update-saved-history-index id))

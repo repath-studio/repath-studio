@@ -24,21 +24,21 @@
   (tool.handlers/set-cursor db "crosshair"))
 
 (defn fill
-  [db]
+  [db timestamp]
   (let [color (document.handlers/attr db :fill)
         el-id (-> db :clicked-element :id)]
     (-> db
         (dissoc :clicked-element)
         (element.handlers/set-attr el-id :fill color)
-        (history.handlers/finalize [::fill "Fill"]))))
+        (history.handlers/finalize timestamp [::fill "Fill"]))))
 
 (defmethod tool.hierarchy/on-pointer-up :fill
-  [db _e]
-  (fill db))
+  [db e]
+  (fill db (:timestamp e)))
 
 (defmethod tool.hierarchy/on-drag-end :fill
-  [db _e]
-  (fill db))
+  [db e]
+  (fill db (:timestamp e)))
 
 (defmethod tool.hierarchy/on-pointer-move :fill
   [db e]

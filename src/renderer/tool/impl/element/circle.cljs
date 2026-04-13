@@ -42,9 +42,10 @@
     (element.handlers/update-selected db #(assoc-in % [:attrs :r] radius))))
 
 (defmethod tool.hierarchy/on-drag-end :circle
-  [db _e]
+  [db e]
   (-> db
-      (history.handlers/finalize [::create-circle "Create circle"])
+      (history.handlers/finalize (:timestamp e)
+                                 [::create-circle "Create circle"])
       (tool.handlers/activate :transform)))
 
 (defmethod tool.hierarchy/snapping-points :circle

@@ -67,13 +67,14 @@
 
 (rf/reg-event-fx
  ::set-text
- (fn [{:keys [db]} [_ id s]]
+ [(rf/inject-cofx ::effects/now)]
+ (fn [{:keys [db now]} [_ id s]]
    {:db (-> (if (empty? s)
               (-> (element.handlers/delete db id)
-                  (history.handlers/finalize [::remove-text "Remove text"]))
+                  (history.handlers/finalize now [::remove-text "Remove text"]))
               (-> (element.handlers/assoc-prop db id :content s)
                   (element.handlers/refresh-bbox id)
-                  (history.handlers/finalize [::set-text "Set text"])))
+                  (history.handlers/finalize now [::set-text "Set text"])))
             (tool.handlers/activate :transform))
     ::effects/focus-canvas nil}))
 

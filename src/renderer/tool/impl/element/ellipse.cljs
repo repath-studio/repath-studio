@@ -53,9 +53,10 @@
     (element.handlers/update-selected db #(reduce assoc-attr % attrs))))
 
 (defmethod tool.hierarchy/on-drag-end :ellipse
-  [db _e]
+  [db e]
   (-> db
-      (history.handlers/finalize [::create-ellipse "Create ellipse"])
+      (history.handlers/finalize (:timestamp e)
+                                 [::create-ellipse "Create ellipse"])
       (tool.handlers/activate :transform)))
 
 (rf/dispatch [::action.events/register-action

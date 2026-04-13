@@ -39,14 +39,14 @@
                                       str " " point)))
 
 (defmethod tool.hierarchy/on-drag-end :pencil
-  [db _e]
+  [db e]
   (let [path (-> (first (element.handlers/selected db))
                  (utils.element/->path)
                  (update-in [:attrs :d] utils.path/manipulate :smooth)
                  (update-in [:attrs :d] utils.path/manipulate :simplify))]
     (-> db
         (element.handlers/swap path)
-        (history.handlers/finalize [::draw-line "Draw line"])
+        (history.handlers/finalize (:timestamp e) [::draw-line "Draw line"])
         (tool.handlers/activate :transform))))
 
 (rf/dispatch [::action.events/register-action

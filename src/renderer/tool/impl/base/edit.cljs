@@ -53,7 +53,8 @@
           (element.handlers/clear-ignored)
           (dissoc :clicked-element)
           (element.handlers/toggle-selection (:id element) shift-key)
-          (history.handlers/finalize [::select-element "Select element"]))
+          (history.handlers/finalize (:timestamp e)
+                                     [::select-element "Select element"]))
       (dissoc db :clicked-element))))
 
 (defmethod tool.hierarchy/on-pointer-move :edit
@@ -87,11 +88,11 @@
                                   element.hierarchy/edit offset id lock?))))
 
 (defmethod tool.hierarchy/on-drag-end :edit
-  [db _e]
+  [db e]
   (-> db
       (tool.handlers/set-state :idle)
       (dissoc :clicked-element)
-      (history.handlers/finalize [::edit "Edit"])))
+      (history.handlers/finalize (:timestamp e) [::edit "Edit"])))
 
 (defmethod tool.hierarchy/snapping-points :edit
   [db]

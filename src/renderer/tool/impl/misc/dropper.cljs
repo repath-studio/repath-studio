@@ -34,15 +34,16 @@
                               [:error ["Eye Dropper is not available in this
                                         environment."]]]))))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  ::success
- (fn [db [_ ^js color]]
-   (let [srgb-color (.-sRGBHex color)]
-     (-> db
-         (document.handlers/assoc-attr :fill srgb-color)
-         (element.handlers/assoc-attr :fill srgb-color)
-         (history.handlers/finalize [::pick-color "Pick color"])
-         (tool.handlers/activate :transform)))))
+ [(rf/inject-cofx ::effects/now)]
+ (fn [{:keys [db now]} [_ ^js color]]
+   {:db (let [srgb-color (.-sRGBHex color)]
+          (-> db
+              (document.handlers/assoc-attr :fill srgb-color)
+              (element.handlers/assoc-attr :fill srgb-color)
+              (history.handlers/finalize now [::pick-color "Pick color"])
+              (tool.handlers/activate :transform)))}))
 
 (rf/reg-event-db
  ::error

@@ -50,7 +50,7 @@ with some minor additions.
 
 ```text
 module\
-├── core.cljs      -> entry point
+├── core.cljs      -> entry point (will be evaluated on load)
 ├── db.cljs        -> schema, validation
 ├── views.cljs     -> reagent views
 ├── events.cljs    -> event handlers

@@ -58,9 +58,10 @@
         (element.handlers/translate [(- min-x) (- min-y)]))))
 
 (defmethod tool.hierarchy/on-drag-end :rect
-  [db _e]
+  [db e]
   (-> db
-      (history.handlers/finalize [::create-rectangle "Create rectangle"])
+      (history.handlers/finalize (:timestamp e)
+                                 [::create-rectangle "Create rectangle"])
       (tool.handlers/activate :transform)))
 
 (rf/dispatch [::action.events/register-action

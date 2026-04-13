@@ -49,7 +49,7 @@
         (element.handlers/translate [(- min-x) (- min-y)]))))
 
 (defmethod tool.hierarchy/on-drag-end :blob
-  [db _e]
+  [db e]
   (-> db
-      (history.handlers/finalize [::create-blob "Create blob"])
+      (history.handlers/finalize (:timestamp e) [::create-blob "Create blob"])
       (tool.handlers/activate :transform)))
