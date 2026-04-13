@@ -31,7 +31,8 @@
  (fn [{:keys [db now]} [_ ids]]
    {:db (-> (partial-right element.handlers/assoc-prop :selected true)
             (reduce (element.handlers/deselect db) ids)
-            (history.handlers/finalize now [::select-elements "Select elements"]))}))
+            (history.handlers/finalize now [::select-elements
+                                            "Select elements"]))}))
 
 (rf/reg-event-fx
  ::toggle-prop
@@ -75,7 +76,9 @@
  [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ k]]
    {:db (-> (element.handlers/dissoc-attr db k)
-            (history.handlers/finalize now [::remove "Remove %1"] [(name k)]))}))
+            (history.handlers/finalize now
+                                       [::remove "Remove %1"]
+                                       [(name k)]))}))
 
 (rf/reg-event-fx
  ::update-attr
