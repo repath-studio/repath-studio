@@ -4,10 +4,10 @@
 
 **Added**
 
-- Action registry [119](https://github.com/repath-studio/repath-studio/pull/119)
-- Action groups registry [120](https://github.com/repath-studio/repath-studio/pull/120)
-- Icon registry [117](https://github.com/repath-studio/repath-studio/pull/117)
-- Reopen last closed document action [124](https://github.com/repath-studio/repath-studio/pull/124)
+- Action registry [#119](https://github.com/repath-studio/repath-studio/pull/119)
+- Action groups registry [#120](https://github.com/repath-studio/repath-studio/pull/120)
+- Icon registry [#117](https://github.com/repath-studio/repath-studio/pull/117)
+- Reopen last closed document action [#124](https://github.com/repath-studio/repath-studio/pull/124)
 - Confirmation dialog before clearing recent documents [#122](https://github.com/repath-studio/repath-studio/pull/#122),
   thanks to [Luca Magrini](https://github.com/Luca12341234)
 - More default keyboard shortcuts
@@ -38,7 +38,7 @@
 
 **Added**
 
-- Multi-touch support [116](https://github.com/repath-studio/repath-studio/pull/116)
+- Multi-touch support [#116](https://github.com/repath-studio/repath-studio/pull/116)
 - Radius handle for rect elements [#106](https://github.com/repath-studio/repath-studio/pull/106)
 - Brush point editing
 - Arrow key modifiers (ctrl, shift) to reduce or increase speed on transform
@@ -47,7 +47,7 @@
 
 **Changed**
 
-- Enhance resizable panels [114](https://github.com/repath-studio/repath-studio/pull/114)
+- Enhance resizable panels [#114](https://github.com/repath-studio/repath-studio/pull/114)
 - Enhance readability of canvas tool overlays
 - Improve keyboard accessibility of element tree
 - Set default theme mode to dark
