@@ -671,6 +671,7 @@
   :jpg "JPG"
   :webp "WEBP"
   :gif "GIF"
+  :reopen-last-closed "إعادة فتح آخر مغلق"
   :vector-formats "تنسيقات متجهية"
   :rasterised-formats "تنسيقات نقطية"}
 

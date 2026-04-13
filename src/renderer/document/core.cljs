@@ -140,6 +140,17 @@
                :event [::document.events/export "image/gif"]
                :enabled [::document.subs/entities?]}])
 
+(rf/dispatch [::action.events/register-action
+              {:id :document/reopen-last-closed
+               :label [::reopen-last-closed "Reopen last closed"]
+               :icon "folder"
+               :event [::document.events/reopen-last-closed]
+               :enabled [::document.subs/some-recently-closed?]
+               :available [::app.subs/supported-feature? :file-system]
+               :shortcuts [{:keyCode (utils.key/codes "T")
+                            :ctrlKey true
+                            :shiftKey true}]}])
+
 (rf/dispatch [::action.events/register-action-group
               {:id :export/vector
                :label [::vector-formats "Vector formats"]

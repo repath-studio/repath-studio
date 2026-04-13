@@ -683,6 +683,7 @@
   :jpg "JPG"
   :webp "WEBP"
   :gif "GIF"
+  :reopen-last-closed "Reopen last closed"
   :vector-formats "Vector formats"
   :rasterised-formats "Rasterised formats"}
 

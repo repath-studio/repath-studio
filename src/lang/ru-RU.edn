@@ -694,6 +694,7 @@
   :jpg "JPG"
   :webp "WEBP"
   :gif "GIF"
+  :reopen-last-closed "Открыть последний закрытый"
   :vector-formats "Векторные форматы"
   :rasterised-formats "Растровые форматы"}
 

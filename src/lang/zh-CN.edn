@@ -617,6 +617,7 @@
   :jpg "JPG"
   :webp "WEBP"
   :gif "GIF"
+  :reopen-last-closed "重新打开上次关闭的"
   :vector-formats "矢量格式"
   :rasterised-formats "光栅格式"}
 

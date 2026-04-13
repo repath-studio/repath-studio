@@ -80,7 +80,9 @@
  (fn [{:keys [db]} [_ id confirm?]]
    {:db (if (or (document.handlers/saved? db id)
                 (not confirm?))
-          (document.handlers/close db id)
+          (-> db
+              (document.handlers/move-recent-to-front id)
+              (document.handlers/close id))
           (dialog.handlers/create
            db
            {:title (i18n.handlers/t db [::save-changes
@@ -203,6 +205,13 @@
                       (throw (js/Error. "File handle not found"))))
        :on-success [::events/file-open]
        :on-error [::recent-error id]}})))
+
+(rf/reg-event-fx
+ ::reopen-last-closed
+ (fn [{:keys [db]} [_]]
+   (let [recently-closed (document.handlers/recently-closed db)]
+     (when (seq recently-closed)
+       {:dispatch [::open-recent (first recently-closed)]}))))
 
 (rf/reg-event-fx
  ::recent-error

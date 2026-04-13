@@ -31,6 +31,10 @@
    (-> db :recent reverse)))
 
 (rf/reg-sub
+ ::some-recently-closed?
+ (comp boolean seq document.handlers/recently-closed))
+
+(rf/reg-sub
  ::recent-actions
  :<- [::recent]
  (fn [recent _]

@@ -708,6 +708,7 @@
   :jpg "JPG"
   :webp "WEBP"
   :gif "GIF"
+  :reopen-last-closed "Rouvrir le dernier fermé"
   :vector-formats "Formats vectoriels"
   :rasterised-formats "Formats matriciels"}
 

@@ -85,6 +85,15 @@
                             (take-last max-recent)
                             (vec))))))
 
+(m/=> move-recent-to-front [:-> App DocumentId App])
+(defn move-recent-to-front
+  [db id]
+  (let [recent (get db :recent)
+        idx (.indexOf (map :id recent) id)]
+    (cond-> db
+      (>= idx 0)
+      (update :recent #(utils.vec/move % idx (dec (count recent)))))))
+
 (m/=> remove-recent [:-> App DocumentId App])
 (defn remove-recent
   [db id]
@@ -209,3 +218,10 @@
   [document]
   (-> (apply dissoc document config/save-info-keys)
       (pr-str)))
+
+(m/=> recently-closed [:-> App [:vector RecentDocument]])
+(defn recently-closed
+  [db]
+  (->> (:recent db)
+       (filter #(not (open? db (:id %))))
+       (reverse)))

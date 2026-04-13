@@ -655,6 +655,7 @@
   :jpg "JPG"
   :webp "WEBP"
   :gif "GIF"
+  :reopen-last-closed "最後に閉じたものを再度開く"
   :vector-formats "ベクター形式"
   :rasterised-formats "ラスター形式"}
 
