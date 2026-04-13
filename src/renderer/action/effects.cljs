@@ -29,7 +29,9 @@
    ;; browser shortcuts. I can't think of a case where we shouldn't do this.
    ;; In certain cases, the user might have to enter fullscreen mode to use some
    ;; shortcuts.
-   :prevent-default-keys []})
+   :prevent-default-keys (->> actions
+                              (keep :shortcuts)
+                              (apply concat))})
 
 (rf/reg-fx
  ::update-keydown-rules
