@@ -16,7 +16,6 @@
 
 (rf/reg-event-fx
  ::select
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ id additive]]
    {:db (-> (element.handlers/toggle-selection db id additive)
             (history.handlers/finalize now (if additive
@@ -27,7 +26,6 @@
 
 (rf/reg-event-fx
  ::select-ids
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ ids]]
    {:db (-> (partial-right element.handlers/assoc-prop :selected true)
             (reduce (element.handlers/deselect db) ids)
@@ -36,21 +34,18 @@
 
 (rf/reg-event-fx
  ::toggle-prop
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ id k explanation]]
    {:db (-> (element.handlers/update-prop db id k not)
             (history.handlers/finalize now explanation))}))
 
 (rf/reg-event-fx
  ::set-label
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ id v]]
    {:db (-> (element.handlers/assoc-prop db id :label v)
             (history.handlers/finalize now [::set-label "Set label"]))}))
 
 (rf/reg-event-fx
  ::lock
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]}]
    {:db (-> (element.handlers/assoc-prop db :locked true)
             (history.handlers/finalize now [::lock-selection
@@ -58,7 +53,6 @@
 
 (rf/reg-event-fx
  ::unlock
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]}]
    {:db (-> (element.handlers/assoc-prop db :locked false)
             (history.handlers/finalize now [::unlock-selection
@@ -66,14 +60,12 @@
 
 (rf/reg-event-fx
  ::set-attr
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ k v]]
    {:db (-> (element.handlers/set-attr db k v)
             (history.handlers/finalize now [::set "Set %1"] [(name k)]))}))
 
 (rf/reg-event-fx
  ::remove-attr
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ k]]
    {:db (-> (element.handlers/dissoc-attr db k)
             (history.handlers/finalize now
@@ -82,7 +74,6 @@
 
 (rf/reg-event-fx
  ::update-attr
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ k f & more]]
    {:db (-> (apply partial-right element.handlers/update-attr k f more)
             (reduce db (element.handlers/selected-ids db))
@@ -97,7 +88,6 @@
 
 (rf/reg-event-fx
  ::delete
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]}]
    {:db (-> (element.handlers/delete db)
             (history.handlers/finalize now [::delete-selection
@@ -105,21 +95,18 @@
 
 (rf/reg-event-fx
  ::deselect-all
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]}]
    {:db (-> (element.handlers/deselect db)
             (history.handlers/finalize now [::deselect-all "Deselect all"]))}))
 
 (rf/reg-event-fx
  ::select-all
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]}]
    {:db (-> (element.handlers/select-all db)
             (history.handlers/finalize now [::select-all "Select all"]))}))
 
 (rf/reg-event-fx
  ::select-same-tags
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]}]
    {:db (-> (element.handlers/select-same-tags db)
             (history.handlers/finalize now [::select-same-tags
@@ -127,7 +114,6 @@
 
 (rf/reg-event-fx
  ::invert-selection
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]}]
    {:db (-> (element.handlers/invert-selection db)
             (history.handlers/finalize now [::invert-selection
@@ -135,7 +121,6 @@
 
 (rf/reg-event-fx
  ::raise
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]}]
    {:db (-> (element.handlers/update-index db inc)
             (history.handlers/finalize now [::raise-selection
@@ -143,7 +128,6 @@
 
 (rf/reg-event-fx
  ::lower
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]}]
    {:db (-> (element.handlers/update-index db dec)
             (history.handlers/finalize now [::lower-selection
@@ -151,7 +135,6 @@
 
 (rf/reg-event-fx
  ::raise-to-top
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]}]
    {:db (-> (element.handlers/update-index db (fn [_i sibling-count]
                                                 (dec sibling-count)))
@@ -160,7 +143,6 @@
 
 (rf/reg-event-fx
  ::lower-to-bottom
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]}]
    {:db (-> (element.handlers/update-index db #(identity 0))
             (history.handlers/finalize now [::lower-selection-bottom
@@ -168,7 +150,6 @@
 
 (rf/reg-event-fx
  ::align
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ direction]]
    {:db (-> (element.handlers/align db direction)
             (history.handlers/finalize now
@@ -177,7 +158,6 @@
 
 (rf/reg-event-fx
  ::paste
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]}]
    {:db (-> (element.handlers/paste db)
             (history.handlers/finalize now [::paste-selection
@@ -185,7 +165,6 @@
 
 (rf/reg-event-fx
  ::paste-in-place
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]}]
    {:db (-> (element.handlers/paste-in-place db)
             (history.handlers/finalize now [::paste-selection-in-place
@@ -193,7 +172,6 @@
 
 (rf/reg-event-fx
  ::paste-styles
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]}]
    {:db (-> (element.handlers/paste-styles db)
             (history.handlers/finalize now [::paste-styles-to-selection
@@ -201,7 +179,6 @@
 
 (rf/reg-event-fx
  ::duplicate
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]}]
    {:db (-> (element.handlers/duplicate db)
             (history.handlers/finalize now [::duplicate-selection
@@ -209,7 +186,6 @@
 
 (rf/reg-event-fx
  ::translate
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ offset]]
    {:db (-> (element.handlers/translate db offset)
             (history.handlers/finalize now [::move-selection
@@ -217,7 +193,6 @@
 
 (rf/reg-event-fx
  ::place
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ position]]
    {:db (-> (element.handlers/place db position)
             (history.handlers/finalize now [::place-selection
@@ -225,7 +200,6 @@
 
 (rf/reg-event-fx
  ::scale
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ ratio]]
    (let [pivot-point (-> db element.handlers/bbox utils.bounds/center)]
      {:db (-> (element.handlers/scale db ratio pivot-point false)
@@ -242,7 +216,6 @@
 
 (rf/reg-event-fx
  ::finalize->path
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ elements]]
    {:db (-> (reduce element.handlers/swap db elements)
             (history.handlers/finalize now [::convert-selection-path
@@ -258,7 +231,6 @@
 
 (rf/reg-event-fx
  ::finalize-stroke->path
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ elements]]
    {:db (-> (reduce element.handlers/swap db elements)
             (element.handlers/stroke->path)
@@ -278,7 +250,6 @@
 
 (rf/reg-event-fx
  ::finalize-boolean-operation
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ operation elements]]
    {:db (-> (reduce element.handlers/swap db elements)
             (element.handlers/boolean-operation operation)
@@ -292,7 +263,6 @@
 
 (rf/reg-event-fx
  ::add
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ el]]
    {:db (-> (element.handlers/add db el)
             (history.handlers/finalize now
@@ -301,14 +271,12 @@
 
 (rf/reg-event-fx
  ::import-svg
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ data]]
    {:db (-> (element.handlers/import-svg db data)
             (history.handlers/finalize now [::import-svg "Import svg"]))}))
 
 (rf/reg-event-fx
  ::animate
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ tag attrs]]
    {:db (-> (element.handlers/animate db tag attrs)
             (history.handlers/finalize now
@@ -324,14 +292,12 @@
 
 (rf/reg-event-fx
  ::set-parent
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ id parent-id]]
    {:db (-> (element.handlers/set-parent db id parent-id)
             (history.handlers/finalize now [::set-parent "Set parent"]))}))
 
 (rf/reg-event-fx
  ::group
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]}]
    {:db (-> (element.handlers/group db)
             (history.handlers/finalize now [::group-selection
@@ -339,7 +305,6 @@
 
 (rf/reg-event-fx
  ::ungroup
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]}]
    {:db (-> (element.handlers/ungroup db)
             (history.handlers/finalize now [::ungroup-selection
@@ -347,7 +312,6 @@
 
 (rf/reg-event-fx
  ::manipulate-path
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ action]]
    {:db (-> (element.handlers/manipulate-path db action)
             (history.handlers/finalize now (case action
@@ -375,7 +339,6 @@
 
 (rf/reg-event-fx
  ::cut
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} _]
    (let [els (element.handlers/top-selected-sorted db)]
      {:db (-> (element.handlers/copy db)
@@ -395,7 +358,6 @@
 
 (rf/reg-event-fx
  ::create-traced-image
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ data]]
    {:db (-> (element.handlers/import-svg db data)
             (history.handlers/finalize now [::trace-image "Trace image"]))}))

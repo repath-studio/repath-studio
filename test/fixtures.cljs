@@ -174,11 +174,6 @@
  (fn [coeffects _]
    (assoc coeffects :guid (random-uuid))))
 
-(rf/reg-cofx
- ::effects/now
- (fn [coeffects _]
-   (assoc coeffects :now (.now js/Date))))
-
 (rf/reg-fx
  ::effects/ipc-on
  (fn [_]))
@@ -202,3 +197,9 @@
 (rf/reg-event-db
  ::input.events/keyboard
  (fn [_]))
+
+(rf/reg-global-interceptor
+ (rf/->interceptor
+  :id ::now
+  :before (fn [context]
+            (rf/assoc-coeffect context :now (.now js/Date)))))

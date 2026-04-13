@@ -67,7 +67,6 @@
 
 (rf/reg-event-fx
  ::set-text
- [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ id s]]
    {:db (-> (if (empty? s)
               (-> (element.handlers/delete db id)
