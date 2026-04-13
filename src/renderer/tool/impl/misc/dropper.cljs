@@ -36,6 +36,7 @@
 
 (rf/reg-event-fx
  ::success
+ [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ ^js color]]
    {:db (let [srgb-color (.-sRGBHex color)]
           (-> db

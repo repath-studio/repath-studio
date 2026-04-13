@@ -11,6 +11,11 @@
  (fn [coeffects _]
    (assoc coeffects :guid (random-uuid))))
 
+(rf/reg-cofx
+ ::now
+ (fn [coeffects _]
+   (assoc coeffects :now (.now js/Date))))
+
 (rf/reg-fx
  ::clipboard-write
  (fn [{:keys [data on-success on-error]}]
@@ -220,9 +225,3 @@
  (fn [[channel listener]]
    (some-> js/window.api
            (.on channel #(rf/dispatch listener)))))
-
-(rf/reg-global-interceptor
- (rf/->interceptor
-  :id ::now
-  :before (fn [context]
-            (rf/assoc-coeffect context :now (.now js/Date)))))

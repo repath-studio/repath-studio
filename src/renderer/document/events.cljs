@@ -147,14 +147,16 @@
 
 (rf/reg-event-fx
  ::new
- [(rf/inject-cofx ::effects/guid)]
+ [(rf/inject-cofx ::effects/guid)
+  (rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now guid]} [_]]
    {:db (-> (document.handlers/create db guid)
             (history.handlers/finalize now [::create-doc "Create document"]))}))
 
 (rf/reg-event-fx
  ::new-from-template
- [(rf/inject-cofx ::effects/guid)]
+ [(rf/inject-cofx ::effects/guid)
+  (rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now guid]} [_ size]]
    {:db (-> (document.handlers/create db guid size)
             (history.handlers/finalize now
@@ -287,7 +289,8 @@
 
 (rf/reg-event-fx
  ::load
- [(rf/inject-cofx ::effects/guid)]
+ [(rf/inject-cofx ::effects/guid)
+  (rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now guid]} [_ document]]
    (let [migrated-document (utils.compatibility/migrate-document document)
          is-migrated (not= document migrated-document)

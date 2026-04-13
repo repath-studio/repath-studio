@@ -115,7 +115,8 @@
 
 (rf/reg-event-fx
  ::db-loaded
- [(rf/inject-cofx ::effects/guid)]
+ [(rf/inject-cofx ::effects/guid)
+  (rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now guid]} _]
    {:db (if (:active-document db)
           (snap.handlers/rebuild-tree db)
