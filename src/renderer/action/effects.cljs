@@ -31,7 +31,7 @@
    ;; shortcuts.
    :prevent-default-keys (->> actions
                               (keep :shortcuts)
-                              (apply concat))})
+                              (reduce concat []))})
 
 (rf/reg-fx
  ::update-keydown-rules
