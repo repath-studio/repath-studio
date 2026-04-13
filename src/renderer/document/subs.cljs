@@ -85,13 +85,13 @@
  ::zoom-in-available?
  :<- [::zoom]
  (fn [zoom [_]]
-   (< zoom 100)))
+   (and zoom (< zoom 100))))
 
 (rf/reg-sub
  ::zoom-out-available?
  :<- [::zoom]
  (fn [zoom [_]]
-   (> zoom 0.01)))
+   (and zoom (> zoom 0.01))))
 
 (rf/reg-sub
  ::rotate

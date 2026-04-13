@@ -9,6 +9,11 @@
  history.handlers/history)
 
 (rf/reg-sub
+ ::multiple-states?
+ :<- [::history]
+ (comp boolean second :states))
+
+(rf/reg-sub
  ::undos?
  :<- [::history]
  history.handlers/undos?)

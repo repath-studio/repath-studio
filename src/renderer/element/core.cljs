@@ -2,6 +2,7 @@
   (:require
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
+   [renderer.document.subs :as document.subs]
    [renderer.element.effects]
    [renderer.element.events :as element.events]
    [renderer.element.impl.core]
@@ -31,6 +32,7 @@
                :label [::paste "Paste"]
                :icon "paste"
                :event [::element.events/paste]
+               :enabled [::document.subs/entities?]
                :shortcuts [{:keyCode (utils.key/codes "V")
                             :ctrlKey true}]}])
 
@@ -39,6 +41,7 @@
                :label [::paste-in-place "Paste in place"]
                :icon "paste"
                :event [::element.events/paste-in-place]
+               :enabled [::document.subs/entities?]
                :shortcuts [{:keyCode (utils.key/codes "V")
                             :ctrlKey true
                             :altKey true}]}])
@@ -48,6 +51,7 @@
                :label [::paste-styles "Paste styles"]
                :icon "paste"
                :event [::element.events/paste-styles]
+               :enabled [::element.subs/some-selected?]
                :shortcuts [{:keyCode (utils.key/codes "V")
                             :ctrlKey true
                             :shiftKey true}]}])
@@ -75,6 +79,7 @@
                :label [::select-all "Select all"]
                :icon "select-all"
                :event [::element.events/select-all]
+               :enabled [::document.subs/entities?]
                :shortcuts [{:keyCode (utils.key/codes "A")
                             :ctrlKey true}]}])
 
@@ -89,6 +94,7 @@
               {:id :element/invert-selection
                :label [::invert-selection "Invert selection"]
                :icon "invert-selection"
+               :enabled [::document.subs/entities?]
                :event [::element.events/invert-selection]}])
 
 (rf/dispatch [::action.events/register-action

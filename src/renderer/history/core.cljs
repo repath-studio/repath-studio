@@ -32,6 +32,7 @@
               {:id :history/clear
                :label [::clear-history "Clear history"]
                :icon "delete"
+               :enabled [::history.subs/multiple-states?]
                :event [::dialog.events/confirm-irreversible-action
                        {:confirm-event [::history.events/clear]
                         :confirm-label [::clear-history "Clear history"]}]}])
