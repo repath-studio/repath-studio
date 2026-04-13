@@ -691,6 +691,7 @@
   :jpg "JPG"
   :webp "WEBP"
   :gif "GIF"
+  :reopen-last-closed "Son kapatılanı yeniden aç"
   :vector-formats "Vektör biçimleri"
   :rasterised-formats "Raster biçimleri"}
 

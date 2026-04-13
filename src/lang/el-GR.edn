@@ -718,6 +718,7 @@
   :jpg "JPG"
   :webp "WEBP"
   :gif "GIF"
+  :reopen-last-closed "Επαναφορά τελευταίου κλεισμένου"
   :vector-formats "Μορφές διανυσμάτων"
   :rasterised-formats "Ραστεροποιημένες μορφές"}
 

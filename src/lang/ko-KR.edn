@@ -650,6 +650,7 @@
   :jpg "JPG"
   :webp "WEBP"
   :gif "GIF"
+  :reopen-last-closed "마지막으로 닫은 항목 다시 열기"
   :vector-formats "벡터 형식"
   :rasterised-formats "래스터 형식"}
 

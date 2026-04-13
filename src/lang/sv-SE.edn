@@ -696,6 +696,7 @@
   :jpg "JPG"
   :webp "WEBP"
   :gif "GIF"
+  :reopen-last-closed "Öppna senast stängda igen"
   :vector-formats "Vektorformat"
   :rasterised-formats "Rasterformat"}
 

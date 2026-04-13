@@ -714,6 +714,7 @@
   :jpg "JPG"
   :webp "WEBP"
   :gif "GIF"
+  :reopen-last-closed "Zuletzt geschlossenes erneut öffnen"
   :vector-formats "Vektorformate"
   :rasterised-formats "Rasterformate"}
 
