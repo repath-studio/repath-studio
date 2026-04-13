@@ -166,7 +166,8 @@
       (element.handlers/clear-ignored)
 
       (utils.key/arrow? k)
-      (history.handlers/finalize [::move-selection "Move selection"]))))
+      (history.handlers/finalize (:timestamp e)
+                                 [::move-selection "Move selection"]))))
 
 (defmethod tool.hierarchy/on-pointer-down :transform
   [db e]
@@ -183,12 +184,13 @@
 
 (defmethod tool.hierarchy/on-pointer-up :transform
   [db e]
-  (let [{:keys [element]} e]
+  (let [{:keys [element timestamp]} e]
     (-> db
         (dissoc :clicked-element)
         (element.handlers/unignore :bbox)
         (element.handlers/toggle-selection (:id element) (:shift-key e))
-        (history.handlers/finalize (if (:selected element)
+        (history.handlers/finalize timestamp
+                                   (if (:selected element)
                                      [::deselect-element "Deselect element"]
                                      [::select-element "Select element"])))))
 
@@ -451,6 +453,7 @@
 
       (not= state :idle)
       (history.handlers/finalize
+       (:timestamp e)
        (case state
          :select [::modify-selection "Modify selection"]
          :translate [::move-selection "Move selection"]

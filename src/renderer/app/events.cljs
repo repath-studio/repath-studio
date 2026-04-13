@@ -115,13 +115,14 @@
 
 (rf/reg-event-fx
  ::db-loaded
- [(rf/inject-cofx ::effects/guid)]
- (fn [{:keys [db guid]} _]
+ [(rf/inject-cofx ::effects/guid)
+  (rf/inject-cofx ::effects/now)]
+ (fn [{:keys [db now guid]} _]
    {:db (if (:active-document db)
           (snap.handlers/rebuild-tree db)
           (-> db
               (document.handlers/create guid)
-              (history.handlers/finalize [::create-doc "Create document"])))
+              (history.handlers/finalize now [::create-doc "Create document"])))
     ;; The order of the following events is important.
     ;; Changes require thorough testing on all platforms.
     :fx (into [[:dispatch [::error.events/init-reporting]]

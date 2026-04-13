@@ -13,10 +13,11 @@
 (tool.hierarchy/derive-tool :polyline ::tool.hierarchy/poly)
 
 (defmethod tool.hierarchy/on-double-click :polyline
-  [db _e]
+  [db e]
   (-> db
       (poly/drop-last-point)
-      (history.handlers/finalize [::create-polyline "Create polyline"])
+      (history.handlers/finalize (:timestamp e)
+                                 [::create-polyline "Create polyline"])
       (tool.handlers/activate :transform)))
 
 (rf/dispatch [::action.events/register-action

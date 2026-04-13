@@ -43,9 +43,9 @@
                                               (assoc-in [:attrs :y2] y)))))
 
 (defmethod tool.hierarchy/on-drag-end :line
-  [db _e]
+  [db e]
   (-> db
-      (history.handlers/finalize [::create-line "Create line"])
+      (history.handlers/finalize (:timestamp e) [::create-line "Create line"])
       (tool.handlers/activate :transform)))
 
 (rf/dispatch [::action.events/register-action

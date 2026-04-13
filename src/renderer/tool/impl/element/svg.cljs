@@ -50,9 +50,9 @@
     (element.handlers/update-selected db #(reduce assoc-attr % attrs))))
 
 (defmethod tool.hierarchy/on-drag-end :svg
-  [db _e]
+  [db e]
   (-> db
-      (history.handlers/finalize [::create-svg "Create SVG"])
+      (history.handlers/finalize (:timestamp e) [::create-svg "Create SVG"])
       (tool.handlers/activate :transform)))
 
 (rf/dispatch [::action.events/register-action

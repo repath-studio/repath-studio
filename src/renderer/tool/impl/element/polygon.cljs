@@ -13,10 +13,11 @@
 (tool.hierarchy/derive-tool :polygon ::tool.hierarchy/poly)
 
 (defmethod tool.hierarchy/on-double-click :polygon
-  [db _e]
+  [db e]
   (-> db
       (poly/drop-last-point)
-      (history.handlers/finalize [::create-polygon "Create polygon"])
+      (history.handlers/finalize (:timestamp e)
+                                 [::create-polygon "Create polygon"])
       (tool.handlers/activate :transform)))
 
 (rf/dispatch [::action.events/register-action

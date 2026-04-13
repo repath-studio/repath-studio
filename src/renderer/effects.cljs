@@ -11,6 +11,11 @@
  (fn [coeffects _]
    (assoc coeffects :guid (random-uuid))))
 
+(rf/reg-cofx
+ ::now
+ (fn [coeffects _]
+   (assoc coeffects :now (.now js/Date))))
+
 (rf/reg-fx
  ::clipboard-write
  (fn [{:keys [data on-success on-error]}]

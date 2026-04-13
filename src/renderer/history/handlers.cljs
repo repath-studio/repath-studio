@@ -184,10 +184,10 @@
 
 (m/=> create-state [:-> App HistoryIndex Translation HistoryState])
 (defn create-state
-  [db index explanation]
+  [db index timestamp explanation]
   (let [new-state {:explanation explanation
                    :elements (get-in db (element.handlers/path db))
-                   :timestamp (.now js/Date) ; REVIEW: Sideffect
+                   :timestamp timestamp
                    :index index
                    :children []}]
     (cond-> new-state
@@ -247,7 +247,7 @@
 (m/=> finalize [:-> App Translation App])
 (defn finalize
   "Pushes changes to history."
-  [db & explanation]
+  [db timestamp & explanation]
   (if (= (get-in db (element.handlers/path db))
          (-> db history state :elements))
     db
@@ -256,7 +256,7 @@
       (-> db
           (assoc-in (path db :position) index)
           (assoc-in (path db :states index)
-                    (create-state db index explanation))
+                    (create-state db index timestamp explanation))
           (cond->
            current-position
             (-> (update-in (path db :states current-position :children)
