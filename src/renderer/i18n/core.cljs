@@ -1,10 +1,23 @@
 (ns renderer.i18n.core
   (:require
    [re-frame.core :as rf]
+   [renderer.action.events :as-alias action.events]
    [renderer.i18n.effects]
    [renderer.i18n.events :as i18n.events]
-   [renderer.i18n.subs]
+   [renderer.i18n.subs :as i18n.subs]
    [taoensso.tempura :refer-macros [load-resource-at-compile-time]]))
+
+(rf/dispatch [::action.events/register-action
+              {:id :lang/system
+               :label [::system "System"]
+               :icon "language"
+               :event [::i18n.events/set-user-lang "system"]
+               :active [::i18n.subs/selected-lang? "system"]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :i18n/language
+               :label [::language "Language"]
+               :actions [:lang/system]}])
 
 (rf/dispatch [::i18n.events/register-language
               {:id "en-US"

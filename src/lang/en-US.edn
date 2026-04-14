@@ -58,12 +58,14 @@
   :align "Align"
   :view "View"
   :zoom "Zoom"
-  :accessibility-filter "Accessibility filter"
-  :language "Language"
   :help "Help"}
 
+ :renderer.i18n.core
+ {:language "Language"}
+
  :renderer.a11y.core
- {:blur "Blur"
+ {:accessibility-filter "Accessibility filter"
+  :blur "Blur"
   :heavy-blur "Heavy Blur"
   :protanopia "Protanopia"
   :protanomaly "Protanomaly"

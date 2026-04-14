@@ -57,12 +57,14 @@
   :align "对齐"
   :view "视图"
   :zoom "缩放"
-  :accessibility-filter "辅助功能过滤器"
-  :language "语言"
   :help "帮助"}
 
+ :renderer.i18n.core
+ {:language "语言"}
+
  :renderer.a11y.core
- {:blur "模糊"
+ {:accessibility-filter "辅助功能过滤器"
+  :blur "模糊"
   :heavy-blur "重度模糊"
   :protanopia "红色盲"
   :protanomaly "红色弱"

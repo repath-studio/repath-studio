@@ -59,12 +59,14 @@
   :animate "Анимировать"
   :view "Вид"
   :zoom "Масштаб"
-  :accessibility-filter "Фильтр доступности"
-  :language "Язык"
   :help "Справка"}
 
+ :renderer.i18n.core
+ {:language "Язык"}
+
  :renderer.a11y.core
- {:blur "Размытие"
+ {:accessibility-filter "Фильтр доступности"
+  :blur "Размытие"
   :heavy-blur "Сильное размытие"
   :protanopia "Протанопия"
   :protanomaly "Протаномалия"

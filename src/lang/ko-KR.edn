@@ -58,12 +58,14 @@
   :align "정렬"
   :view "보기"
   :zoom "확대/축소"
-  :accessibility-filter "접근성 필터"
-  :language "언어"
   :help "도움말"}
 
+ :renderer.i18n.core
+ {:language "언어"}
+
  :renderer.a11y.core
- {:blur "흐림"
+ {:accessibility-filter "접근성 필터"
+  :blur "흐림"
   :heavy-blur "강한 흐림"
   :protanopia "적색맹"
   :protanomaly "적색약"
