@@ -58,12 +58,14 @@
   :align "Justera"
   :view "Visa"
   :zoom "Zoom"
-  :accessibility-filter "Tillgänglighetsfilter"
-  :language "Språk"
   :help "Hjälp"}
 
+ :renderer.i18n.core
+ {:language "Språk"}
+
  :renderer.a11y.core
- {:blur "Suddig"
+ {:accessibility-filter "Tillgänglighetsfilter"
+  :blur "Suddig"
   :heavy-blur "Kraftig suddig"
   :protanopia "Protanopi"
   :protanomaly "Protanomali"

@@ -2,7 +2,6 @@
   (:require
    ["@radix-ui/react-menubar" :as Menubar]
    [re-frame.core :as rf]
-   [renderer.a11y.subs :as-alias a11y.subs]
    [renderer.action.views :as action.views]
    [renderer.app.subs :as-alias app.subs]
    [renderer.document.subs :as-alias document.subs]
@@ -118,13 +117,8 @@
               :enabled [::document.subs/some-entities?]
               :actions (zoom-submenu)}
              (action.views/deref-action-group :theme/mode)
-             {:id :a11y
-              :label [::accessibility-filter "Accessibility filter"]
-              :enabled [::document.subs/some-entities?]
-              :actions @(rf/subscribe [::a11y.subs/filter-actions])}
-             {:id :lang
-              :label [::language "Language"]
-              :actions @(rf/subscribe [::i18n.subs/language-actions])}
+             (action.views/deref-action-group :a11y/filter)
+             (action.views/deref-action-group :i18n/language)
              :separator
              :view/toggle-grid
              :view/toggle-rulers

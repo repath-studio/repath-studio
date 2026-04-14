@@ -58,12 +58,14 @@
   :align "Hizala"
   :view "Görünüm"
   :zoom "Yakınlaştır"
-  :accessibility-filter "Erişilebilirlik filtresi"
-  :language "Dil"
   :help "Yardım"}
 
+ :renderer.i18n.core
+ {:language "Dil"}
+
  :renderer.a11y.core
- {:blur "Bulanık"
+ {:accessibility-filter "Erişilebilirlik filtresi"
+  :blur "Bulanık"
   :heavy-blur "Yoğun bulanık"
   :protanopia "Protanopi"
   :protanomaly "Protanomali"
