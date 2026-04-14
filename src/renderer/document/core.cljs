@@ -51,7 +51,7 @@
                :shortcuts [{:keyCode (utils.key/codes "S")
                             :ctrlKey true
                             :shiftKey true}]
-               :enabled [::document.subs/entities?]
+               :enabled [::document.subs/some-entities?]
                :available [::app.subs/supported-feature? :file-system]}])
 
 (rf/dispatch [::action.events/register-action
@@ -59,7 +59,7 @@
                :label [::download "Download"]
                :icon "download"
                :event [::document.events/download]
-               :enabled [::document.subs/entities?]
+               :enabled [::document.subs/some-entities?]
                :available [::app.subs/unsupported-feature? :file-system]}])
 
 (rf/dispatch [::action.events/register-action
@@ -69,7 +69,7 @@
                :event [::document.events/close-active]
                :shortcuts [{:keyCode (utils.key/codes "W")
                             :ctrlKey true}]
-               :enabled [::document.subs/entities?]}])
+               :enabled [::document.subs/some-entities?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :document/close-all
@@ -103,42 +103,42 @@
                :label [::print "Print"]
                :icon "printer"
                :event [::document.events/print]
-               :enabled [::document.subs/entities?]}])
+               :enabled [::document.subs/some-entities?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :export/svg
                :label [::svg "SVG"]
                :icon "export"
                :event [::document.events/export "image/svg+xml"]
-               :enabled [::document.subs/entities?]}])
+               :enabled [::document.subs/some-entities?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :export/png
                :label [::png "PNG"]
                :icon "export"
                :event [::document.events/export "image/png"]
-               :enabled [::document.subs/entities?]}])
+               :enabled [::document.subs/some-entities?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :export/jpg
                :label [::jpg "JPG"]
                :icon "export"
                :event [::document.events/export "image/jpeg"]
-               :enabled [::document.subs/entities?]}])
+               :enabled [::document.subs/some-entities?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :export/webp
                :label [::webp "WEBP"]
                :icon "export"
                :event [::document.events/export "image/webp"]
-               :enabled [::document.subs/entities?]}])
+               :enabled [::document.subs/some-entities?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :export/gif
                :label [::gif "GIF"]
                :icon "export"
                :event [::document.events/export "image/gif"]
-               :enabled [::document.subs/entities?]}])
+               :enabled [::document.subs/some-entities?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :document/reopen-last-closed

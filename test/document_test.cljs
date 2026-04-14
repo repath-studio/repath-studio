@@ -13,7 +13,7 @@
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
 
-   (let [document-entities? (rf/subscribe [::document.subs/entities?])
+   (let [document-entities? (rf/subscribe [::document.subs/some-entities?])
          active-document (rf/subscribe [::document.subs/active])
          title-bar (rf/subscribe [::document.subs/title-bar])]
      (testing "defaults"

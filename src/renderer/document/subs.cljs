@@ -47,7 +47,7 @@
                  :event [::document.events/open-recent recent]})))))
 
 (rf/reg-sub
- ::entities?
+ ::some-entities?
  :<- [::entities]
  (comp boolean seq))
 
@@ -200,10 +200,10 @@
 
 (rf/reg-sub
  ::saveable?
- :<- [::entities?]
+ :<- [::some-entities?]
  :<- [::active-saved?]
- (fn [[entities? active-saved?] [_]]
-   (and entities?
+ (fn [[some-entities? active-saved?] [_]]
+   (and some-entities?
         (not active-saved?))))
 
 (rf/reg-sub

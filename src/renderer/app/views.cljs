@@ -444,7 +444,7 @@
        [bottom-bar])]))
 
 (defn root []
-  (let [documents? @(rf/subscribe [::document.subs/entities?])
+  (let [documents? @(rf/subscribe [::document.subs/some-entities?])
         recent-documents @(rf/subscribe [::document.subs/recent])
         lang-dir @(rf/subscribe [::i18n.subs/lang-dir])
         desktop? @(rf/subscribe [::app.subs/desktop?])

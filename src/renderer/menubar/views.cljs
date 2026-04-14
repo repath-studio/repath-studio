@@ -50,7 +50,7 @@
              :document/download
              {:id :export
               :label [::export-as "Export as"]
-              :enabled [::document.subs/entities?]
+              :enabled [::document.subs/some-entities?]
               :actions (export-submenu)}
              :separator
              :document/print
@@ -63,7 +63,7 @@
   {:id :edit
    :label [::edit "Edit"]
    :type :root
-   :enabled [::document.subs/entities?]
+   :enabled [::document.subs/some-entities?]
    :actions (->> [(:actions (action.views/deref-action-group :edit/history))
                   (:actions (action.views/deref-action-group :edit/clipboard))
                   (:actions (action.views/deref-action-group :object/selection))
@@ -76,7 +76,7 @@
   {:id :object
    :label [::object "Object"]
    :type :root
-   :enabled [::document.subs/entities?]
+   :enabled [::document.subs/some-entities?]
    :actions (->> [[:object/to-path
                    :object/stroke-to-path]
                   (:actions (action.views/deref-action-group :object/grouping))
@@ -115,12 +115,12 @@
    :type :root
    :actions [{:id :zoom
               :label [::zoom "Zoom"]
-              :enabled [::document.subs/entities?]
+              :enabled [::document.subs/some-entities?]
               :actions (zoom-submenu)}
              (action.views/deref-action-group :theme/mode)
              {:id :a11y
               :label [::accessibility-filter "Accessibility filter"]
-              :enabled [::document.subs/entities?]
+              :enabled [::document.subs/some-entities?]
               :actions @(rf/subscribe [::a11y.subs/filter-actions])}
              {:id :lang
               :label [::language "Language"]
