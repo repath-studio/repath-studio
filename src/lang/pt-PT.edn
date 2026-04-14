@@ -812,7 +812,7 @@
 
  :renderer.window.core
  {:exit "Sair"
-  :fullscreen "Ecrã completo"}
+  :toggle-fullscreen "Alternar ecrã completo"}
 
  :renderer.tool.core
  {:cancel "Cancelar"}

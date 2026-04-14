@@ -827,7 +827,7 @@
 
  :renderer.window.core
  {:exit "Quitter"
-  :fullscreen "Plein écran"}
+  :toggle-fullscreen "Basculer en plein écran"}
 
  :renderer.tool.core
  {:cancel "Annuler"}

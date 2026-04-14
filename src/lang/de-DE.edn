@@ -833,7 +833,7 @@
 
  :renderer.window.core
  {:exit "Beenden"
-  :fullscreen "Vollbild"}
+  :toggle-fullscreen "Vollbild umschalten"}
 
  :renderer.tool.core
  {:cancel "Abbrechen"}

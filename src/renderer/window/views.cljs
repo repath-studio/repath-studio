@@ -75,7 +75,8 @@
       :title (i18n.views/t [::close "Close"])
       :icon "window-close"}]))
 
-(defn app-icon []
+(defn app-icon
+  []
   [:div.drag.shrink-0.px-1
    [:img.h-4.w-4
     {:src "img/icon-no-bg.svg"
@@ -86,18 +87,19 @@
   [button {:event [::window.events/toggle-fullscreen]
            :title (if enabled
                     (i18n.views/t [::exit-fullscreen "Exit fullscreen"])
-                    (i18n.views/t [::enter-fullscreen
-                                   "Enter fullscreen"]))
+                    (i18n.views/t [::enter-fullscreen "Enter fullscreen"]))
            :icon (if enabled "arrow-minimize" "arrow-maximize")
            :class "bg-primary"}])
 
-(defn install-button []
+(defn install-button
+  []
   [views/icon-button "download"
    {:title (i18n.views/t [::install "Install"])
     :class "rounded-none outline-inset bg-transparent!"
     :on-click #(rf/dispatch [::app.events/install])}])
 
-(defn titlebar [s]
+(defn titlebar
+  [s]
   [:div.drag.grow.items-center
    {:dir "ltr"
     :class "pointer-events-none truncate lg:absolute lg:justify-center px-1
@@ -127,12 +129,14 @@
      (->> actions
           (mapv views/dropdown-menu-item))]))
 
-(defn window-controls []
+(defn window-controls
+  []
   (->> (window-control-buttons)
        (map button)
        (into [:div.flex])))
 
-(defn right-controls []
+(defn right-controls
+  []
   (let [fullscreen? @(rf/subscribe [::window.subs/fullscreen?])
         theme-mode @(rf/subscribe [::theme.subs/computed-mode])
         mac? @(rf/subscribe [::app.subs/mac?])
@@ -151,7 +155,8 @@
      (when fullscreen-toggle? [fullscreen-toggle fullscreen?])
      (when window-controls? [window-controls])]))
 
-(defn app-header []
+(defn app-header
+  []
   (let [title-bar @(rf/subscribe [::document.subs/title-bar])
         fullscreen? @(rf/subscribe [::window.subs/fullscreen?])
         mac? @(rf/subscribe [::app.subs/mac?])

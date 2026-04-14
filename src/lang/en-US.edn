@@ -802,7 +802,7 @@
 
  :renderer.window.core
  {:exit "Exit"
-  :fullscreen "Fullscreen"}
+  :toggle-fullscreen "Toggle fullscreen"}
 
  :renderer.tool.core
  {:cancel "Cancel"}

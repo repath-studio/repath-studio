@@ -829,7 +829,7 @@
 
  :renderer.window.core
  {:exit "Esci"
-  :fullscreen "Schermo intero"}
+  :toggle-fullscreen "Attiva/disattiva schermo intero"}
 
  :renderer.tool.core
  {:cancel "Annulla"}

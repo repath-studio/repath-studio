@@ -831,7 +831,7 @@
 
  :renderer.window.core
  {:exit "Afsluiten"
-  :fullscreen "Volledig scherm"}
+  :toggle-fullscreen "Volledig scherm in-/uitschakelen"}
 
  :renderer.tool.core
  {:cancel "Annuleren"}

@@ -812,7 +812,7 @@
 
  :renderer.window.core
  {:exit "Выход"
-  :fullscreen "Полный экран"}
+  :toggle-fullscreen "Переключить полноэкранный режим"}
 
  :renderer.tool.core
  {:cancel "Отмена"}
