@@ -736,7 +736,7 @@
 
  :renderer.window.core
  {:exit "退出"
-  :fullscreen "全屏"}
+  :toggle-fullscreen "切换全屏"}
 
  :renderer.tool.core
  {:cancel "取消"}

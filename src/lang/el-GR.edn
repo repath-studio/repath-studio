@@ -837,7 +837,7 @@
 
  :renderer.window.core
  {:exit "Έξοδος"
-  :fullscreen "Πλήρης οθόνη"}
+  :toggle-fullscreen "Εναλλαγή πλήρους οθόνης"}
 
  :renderer.tool.core
  {:cancel "Ακύρωση"}

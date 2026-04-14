@@ -769,7 +769,7 @@
 
  :renderer.window.core
  {:exit "종료"
-  :fullscreen "전체화면"}
+  :toggle-fullscreen "전체 화면 전환"}
 
  :renderer.tool.core
  {:cancel "취소"}

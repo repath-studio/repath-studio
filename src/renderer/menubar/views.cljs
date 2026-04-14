@@ -128,7 +128,7 @@
               :available [::window.subs/md?]}
              (action.views/deref-action-group :view/panel)
              {:type :separator
-              :available [::app.subs/desktop?]}
+              :available [::app.subs/not-mobile?]}
              :view/toggle-fullscreen]})
 
 (defn help-menu

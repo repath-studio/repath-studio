@@ -78,6 +78,11 @@
  utils.platform/desktop?)
 
 (rf/reg-sub
+ ::not-mobile?
+ :<- [::platform]
+ (comp not utils.platform/mobile?))
+
+(rf/reg-sub
  ::mac?
  :<- [::platform]
  utils.platform/mac?)

@@ -10,11 +10,11 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :view/toggle-fullscreen
-               :label [::fullscreen "Fullscreen"]
+               :label [::toggle-fullscreen "Toggle fullscreen"]
                :icon "arrow-minimize"
                :event [::window.events/toggle-fullscreen]
                :shortcuts [{:keyCode (utils.key/codes "F11")}]
-               :available [::app.subs/desktop?]
+               :available [::app.subs/not-mobile?]
                :active [::window.subs/fullscreen?]}])
 
 (rf/dispatch [::action.events/register-action

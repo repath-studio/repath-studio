@@ -774,7 +774,7 @@
 
  :renderer.window.core
  {:exit "終了"
-  :fullscreen "フルスクリーン"}
+  :toggle-fullscreen "フルスクリーン切り替え"}
 
  :renderer.tool.core
  {:cancel "キャンセル"}

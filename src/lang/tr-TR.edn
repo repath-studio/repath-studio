@@ -810,7 +810,7 @@
 
  :renderer.window.core
  {:exit "Çıkış"
-  :fullscreen "Tam ekran"}
+  :toggle-fullscreen "Tam ekranı aç/kapat"}
 
  :renderer.tool.core
  {:cancel "İptal"}

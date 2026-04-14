@@ -790,7 +790,7 @@
 
  :renderer.window.core
  {:exit "خروج"
-  :fullscreen "ملء الشاشة"}
+  :toggle-fullscreen "تبديل ملء الشاشة"}
 
  :renderer.tool.core
  {:cancel "إلغاء"}

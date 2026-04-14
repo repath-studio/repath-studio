@@ -815,7 +815,7 @@
 
  :renderer.window.core
  {:exit "Avsluta"
-  :fullscreen "Helskärm"}
+  :toggle-fullscreen "Växla helskärm"}
 
  :renderer.tool.core
  {:cancel "Avbryt"}
