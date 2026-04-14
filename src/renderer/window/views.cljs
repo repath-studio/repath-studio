@@ -1,6 +1,7 @@
 (ns renderer.window.views
   (:require
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
+   [clojure.string :as string]
    [re-frame.core :as rf]
    [renderer.action.views :as action.views]
    [renderer.app.events :as-alias app.events]
@@ -15,7 +16,7 @@
    [renderer.window.subs :as-alias window.subs]))
 
 (defn language-item
-  [system-abbr {:keys [id abbr]
+  [system-abbr {:keys [id]
                 :as action}]
   [:> DropdownMenu/CheckboxItem
    {:class "menu-checkbox-item inset"
@@ -25,9 +26,12 @@
     {:class "menu-item-indicator"}
     [views/icon "checkmark"]]
    [:div [action.views/label action]]
-   (if (= id "system")
+   (if (= id :lang/system)
      [:span.font-mono.text-foreground-disabled (or system-abbr "EN")]
-     [:span.font-mono.text-foreground-muted abbr])])
+     [:span.font-mono.text-foreground-muted (->> (name id)
+                                                 (take 2)
+                                                 (apply str)
+                                                 (string/upper-case))])])
 
 (defn dropdown
   [trigger-content dropdown-items]
@@ -102,14 +106,15 @@
 
 (defn language-select
   [system-code code]
-  [dropdown
-   [:button.button
-    {:title (i18n.views/t [::menubar.views/language "Language"])
-     :class "flex gap-1 items-center px-3 uppercase bg-primary font-mono
-             outline-inset"}
-    code]
-   (->> @(rf/subscribe [::i18n.subs/language-actions])
-        (mapv (partial language-item system-code)))])
+  (let [action-group (action.views/deref-action-group :i18n/language)]
+    [dropdown
+     [:button.button
+      {:title (i18n.views/t (:label action-group))
+       :class "flex gap-1 items-center px-3 uppercase bg-primary font-mono
+               outline-inset"}
+      code]
+     (->> (:actions action-group)
+          (mapv (partial language-item system-code)))]))
 
 (defn theme-mode-select
   [mode]

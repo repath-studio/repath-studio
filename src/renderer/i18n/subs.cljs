@@ -1,7 +1,6 @@
 (ns renderer.i18n.subs
   (:require
    [re-frame.core :as rf]
-   [renderer.i18n.events :as-alias i18n.events]
    [renderer.i18n.handlers :as i18n.handlers]))
 
 (rf/reg-sub
@@ -63,21 +62,3 @@
  ::system-lang-code
  :<- [::system-language]
  :-> :code)
-
-(rf/reg-sub
- ::language-actions
- :<- [::languages]
- (fn [languages _]
-   (->> languages
-        (map (fn [[k v]]
-               {:id k
-                :abbr (:code v)
-                :label [k (:locale v)]
-                :icon "language"
-                :event [::i18n.events/set-user-lang k]
-                :active [::selected-lang? k]}))
-        (into [{:id "system"
-                :label [::system "System"]
-                :icon "language"
-                :event [::i18n.events/set-user-lang "system"]
-                :active [::selected-lang? "system"]}]))))

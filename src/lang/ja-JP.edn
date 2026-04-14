@@ -58,12 +58,14 @@
   :align "整列"
   :view "表示"
   :zoom "ズーム"
-  :accessibility-filter "アクセシビリティフィルタ"
-  :language "言語"
   :help "ヘルプ"}
 
+ :renderer.i18n.core
+ {:language "言語"}
+
  :renderer.a11y.core
- {:blur "ブラー"
+ {:accessibility-filter "アクセシビリティフィルタ"
+  :blur "ブラー"
   :heavy-blur "強いブラー"
   :protanopia "第一色覚異常"
   :protanomaly "第一色弱"

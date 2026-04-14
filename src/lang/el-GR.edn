@@ -58,12 +58,14 @@
   :align "Στοίχιση"
   :view "Προβολή"
   :zoom "Μεγέθυνση"
-  :accessibility-filter "Φίλτρο προσβασιμότητας"
-  :language "Γλώσσα"
   :help "Βοήθεια"}
 
+ :renderer.i18n.core
+ {:language "Γλώσσα"}
+
  :renderer.a11y.core
- {:blur "Θόλωση όρασης"
+ {:accessibility-filter "Φίλτρο προσβασιμότητας"
+  :blur "Θόλωση όρασης"
   :heavy-blur "Έντονη θόλωση όρασης"
   :protanopia "Πρωτανωπία"
   :protanomaly "Πρωτανωμαλία"

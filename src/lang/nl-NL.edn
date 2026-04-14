@@ -58,12 +58,14 @@
   :align "Uitlijnen"
   :view "Weergave"
   :zoom "Zoom"
-  :accessibility-filter "Toegankelijkheidsfilter"
-  :language "Taal"
   :help "Help"}
 
+ :renderer.i18n.core
+ {:language "Taal"}
+
  :renderer.a11y.core
- {:blur "Vervaging"
+ {:accessibility-filter "Toegankelijkheidsfilter"
+  :blur "Vervaging"
   :heavy-blur "Sterke vervaging"
   :protanopia "Protanopie"
   :protanomaly "Protanomalie"

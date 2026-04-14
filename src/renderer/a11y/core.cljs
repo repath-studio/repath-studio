@@ -2,7 +2,13 @@
   (:require
    [re-frame.core :as rf]
    [renderer.a11y.events :as a11y.events]
-   [renderer.a11y.subs]))
+   [renderer.a11y.subs]
+   [renderer.action.events :as-alias action.events]))
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :a11y/filter
+               :label [::accessibility-filter "Accessibility filter"]
+               :actions []}])
 
 (rf/dispatch [::a11y.events/register-filter
               {:id :blur

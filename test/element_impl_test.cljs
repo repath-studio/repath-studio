@@ -2,7 +2,8 @@
   (:require
    [cljs.test :refer-macros [deftest is]]
    [clojure.string :as string]
-   [renderer.element.hierarchy :as element.hierarchy]))
+   [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.element.impl.core]))
 
 (deftest circle
   (let [circle-el {:type :element

@@ -5,11 +5,17 @@
    [re-frame.core :as rf]
    [renderer.a11y.events :as-alias a11y.events]
    [renderer.a11y.subs :as-alias a11y.subs]
+   [renderer.action.events :as-alias action.events]
    [renderer.app.events :as-alias app.events]))
 
 (deftest filters
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
+
+   (rf/dispatch [::action.events/register-action-group
+                 {:id :a11y/filter
+                  :label [::accessibility-filter "Accessibility filter"]
+                  :actions []}])
 
    (let [a11y-filters (rf/subscribe [::a11y.subs/filters])]
 

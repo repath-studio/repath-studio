@@ -58,12 +58,14 @@
   :align "محاذاة"
   :view "عرض"
   :zoom "تكبير"
-  :accessibility-filter "مرشح إمكانية الوصول"
-  :language "اللغة"
   :help "مساعدة"}
 
+ :renderer.i18n.core
+ {:language "اللغة"}
+
  :renderer.a11y.core
- {:blur "ضبابية البصر"
+ {:accessibility-filter "مرشح إمكانية الوصول"
+  :blur "ضبابية البصر"
   :heavy-blur "ضبابية البصر الشديدة"
   :protanopia "عمى الألوان الأحمر"
   :protanomaly "ضعف الألوان الأحمر"
