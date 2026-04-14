@@ -30,3 +30,9 @@
  :<- [::frame.subs/viewbox]
  (fn [[step viewbox] [_ orientation]]
    (ruler.handlers/steps-coll step viewbox orientation)))
+
+(rf/reg-sub
+ ::subgrid?
+ :<- [::document.subs/zoom]
+ (fn [zoom _]
+   (<= zoom 66)))

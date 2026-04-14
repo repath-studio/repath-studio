@@ -1,6 +1,5 @@
 (ns renderer.ruler.views
   (:require
-   [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [re-frame.core :as rf]
    [renderer.app.subs :as-alias app.subs]
@@ -131,31 +130,37 @@
      [base-lines orientation]
      (when md? [pointer orientation])]))
 
-(defn grid-lines
+(defn grid-line
+  [i step stroke-width orientation]
+  (let [[x y w h] @(rf/subscribe [::frame.subs/viewbox-bounds])
+        vertical (= orientation :vertical)
+        step-x (+ step x)
+        step-y (+ step y)
+        main? (zero? (rem i 10))]
+    [:line {:x1 (if vertical x step-x)
+            :y1 (if vertical step-y y)
+            :x2 (if vertical w step-x)
+            :y2 (if vertical step-y h)
+            :stroke-width stroke-width
+            :opacity (when-not main? ".5")
+            :stroke "var(--border)"
+            :pointer-events "none"}]))
+
+(defn grid-plane
   [orientation]
-  (let [zoom @(rf/subscribe [::document.subs/zoom])
-        [x y w h] @(rf/subscribe [::frame.subs/viewbox])
-        [w h] (matrix/add [w h] [x y])
-        steps-coll @(rf/subscribe [::ruler.subs/steps-coll orientation])
-        vertical (= orientation :vertical)]
-    (into [:g]
-          (map-indexed
-           (fn [i step]
-             (let [step-x (+ step x)
-                   step-y (+ step y)
-                   main? (zero? (rem i 10))]
-               (when (or main? (< zoom 50))
-                 [:line {:x1 (if vertical x step-x)
-                         :y1 (if vertical step-y y)
-                         :x2 (if vertical w step-x)
-                         :y2 (if vertical step-y h)
-                         :stroke-width (/ 1 zoom)
-                         :opacity (when-not main? ".5")
-                         :stroke "var(--border)"
-                         :pointer-events "none"}]))) steps-coll))))
+  (let [coll @(rf/subscribe [::ruler.subs/steps-coll orientation])
+        zoom @(rf/subscribe [::document.subs/zoom])
+        subgrid? @(rf/subscribe [::ruler.subs/subgrid?])
+        stroke-width (/ 1 zoom)
+        render-line (fn [i step]
+                      (when (or (zero? (rem i 10)) subgrid?)
+                        (grid-line i step stroke-width orientation)))]
+    (->> coll
+         (map-indexed render-line)
+         (into [:g]))))
 
 (defn grid
   []
   [:<>
-   [grid-lines :vertical]
-   [grid-lines :horizontal]])
+   [grid-plane :vertical]
+   [grid-plane :horizontal]])
