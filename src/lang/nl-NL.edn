@@ -818,10 +818,12 @@
 
  :renderer.snap.core
  {:snap "Uitlijnen"
-  :centers "middelpunten"
-  :midpoints "middenpunten"
-  :corners "hoeken"
-  :nodes "knooppunten"}
+  :centers "Middelpunten"
+  :midpoints "Middenpunten"
+  :corners "Hoeken"
+  :nodes "Knooppunten"
+  :grid "Raster"
+  :guides "Hulplijnen"}
 
  :renderer.theme.core
  {:theme-mode "Thema-modus"

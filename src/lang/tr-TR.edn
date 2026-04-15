@@ -797,10 +797,12 @@
 
  :renderer.snap.core
  {:snap "Yapış"
-  :centers "merkezler"
-  :midpoints "orta noktalar"
-  :corners "köşeler"
-  :nodes "düğümler"}
+  :centers "Merkezler"
+  :midpoints "Orta noktalar"
+  :corners "Köşeler"
+  :nodes "Düğümler"
+  :grid "Izgara"
+  :guides "Kılavuzlar"}
 
  :renderer.theme.core
  {:theme-mode "Tema modu"

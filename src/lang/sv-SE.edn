@@ -802,10 +802,12 @@
 
  :renderer.snap.core
  {:snap "Fäst"
-  :centers "centrum"
-  :midpoints "mittpunkter"
-  :corners "hörn"
-  :nodes "noder"}
+  :centers "Centrum"
+  :midpoints "Mittpunkter"
+  :corners "Hörn"
+  :nodes "Noder"
+  :grid "Rutnät"
+  :guides "Stödlinjer"}
 
  :renderer.theme.core
  {:theme-mode "Tema-läge"

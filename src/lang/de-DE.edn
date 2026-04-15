@@ -823,7 +823,9 @@
   :centers "Zentren"
   :midpoints "Mittelpunkte"
   :corners "Ecken"
-  :nodes "Knoten"}
+  :nodes "Knoten"
+  :grid "Raster"
+  :guides "Hilfslinien"}
 
  :renderer.theme.core
  {:theme-mode "Thema-Modus"

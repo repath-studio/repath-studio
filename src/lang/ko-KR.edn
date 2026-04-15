@@ -759,7 +759,9 @@
   :centers "중심"
   :midpoints "중점"
   :corners "모서리"
-  :nodes "노드"}
+  :nodes "노드"
+  :grid "그리드"
+  :guides "가이드"}
 
  :renderer.theme.core
  {:theme-mode "테마 모드"

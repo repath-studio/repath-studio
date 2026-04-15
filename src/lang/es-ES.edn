@@ -807,10 +807,12 @@
 
  :renderer.snap.core
  {:snap "Ajustar"
-  :centers "centros"
-  :midpoints "puntos medios"
-  :corners "esquinas"
-  :nodes "nodos"}
+  :centers "Centros"
+  :midpoints "Puntos medios"
+  :corners "Esquinas"
+  :nodes "Nodos"
+  :grid "Cuadrícula"
+  :guides "Guías"}
 
  :renderer.theme.core
  {:theme-mode "Modo de tema"

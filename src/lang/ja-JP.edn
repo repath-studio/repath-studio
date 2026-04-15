@@ -764,7 +764,9 @@
   :centers "中心"
   :midpoints "中点"
   :corners "角"
-  :nodes "ノード"}
+  :nodes "ノード"
+  :grid "グリッド"
+  :guides "ガイド"}
 
  :renderer.theme.core
  {:theme-mode "テーマモード"

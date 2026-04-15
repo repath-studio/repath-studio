@@ -726,7 +726,9 @@
   :centers "中心"
   :midpoints "中点"
   :corners "角点"
-  :nodes "节点"}
+  :nodes "节点"
+  :grid "网格"
+  :guides "参考线"}
 
  :renderer.theme.core
  {:theme-mode "主题模式"

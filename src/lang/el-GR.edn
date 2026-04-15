@@ -824,10 +824,12 @@
 
  :renderer.snap.core
  {:snap "Προσκόλληση"
-  :centers "κέντρο"
-  :midpoints "μέση απόσταση"
-  :corners "γωνία"
-  :nodes "κόμβος"}
+  :centers "Κέντρο"
+  :midpoints "Μέση απόσταση"
+  :corners "Γωνία"
+  :nodes "Κόμβος"
+  :grid "Πλέγμα"
+  :guides "Οδηγοί"}
 
  :renderer.theme.core
  {:theme-mode "Λειτουργία θέματος"

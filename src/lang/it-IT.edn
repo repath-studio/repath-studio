@@ -816,10 +816,12 @@
 
  :renderer.snap.core
  {:snap "Aggancia"
-  :centers "centri"
-  :midpoints "punti medi"
-  :corners "angoli"
-  :nodes "nodi"}
+  :centers "Centri"
+  :midpoints "Punti medi"
+  :corners "Angoli"
+  :nodes "Nodi"
+  :grid "Griglia"
+  :guides "Guide"}
 
  :renderer.theme.core
  {:theme-mode "Modalità tema"

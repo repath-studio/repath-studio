@@ -814,10 +814,12 @@
 
  :renderer.snap.core
  {:snap "Magnétisme"
-  :centers "centres"
-  :midpoints "points médians"
-  :corners "coins"
-  :nodes "nœuds"}
+  :centers "Centres"
+  :midpoints "Points médians"
+  :corners "Coins"
+  :nodes "Nœuds"
+  :grid "Grille"
+  :guides "Guides"}
 
  :renderer.theme.core
  {:theme-mode "Mode de thème"

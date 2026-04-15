@@ -780,7 +780,9 @@
   :centers "المراكز"
   :midpoints "نقاط المنتصف"
   :corners "الزوايا"
-  :nodes "العقد"}
+  :nodes "العقد"
+  :grid "الشبكة"
+  :guides "الأدلة"}
 
  :renderer.theme.core
  {:theme-mode "وضع السمة"

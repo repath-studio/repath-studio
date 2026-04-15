@@ -789,10 +789,12 @@
 
  :renderer.snap.core
  {:snap "Snap"
-  :centers "centers"
-  :midpoints "midpoints"
-  :corners "corners"
-  :nodes "nodes"}
+  :centers "Centers"
+  :midpoints "Midpoints"
+  :corners "Corners"
+  :nodes "Nodes"
+  :grid "Grid"
+  :guides "Guides"}
 
  :renderer.theme.core
  {:theme-mode "Theme mode"

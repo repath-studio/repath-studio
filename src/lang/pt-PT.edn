@@ -799,10 +799,12 @@
 
  :renderer.snap.core
  {:snap "Ajustar"
-  :centers "centros"
-  :midpoints "pontos médios"
-  :corners "cantos"
-  :nodes "nós"}
+  :centers "Centros"
+  :midpoints "Pontos médios"
+  :corners "Cantos"
+  :nodes "Nós"
+  :grid "Grelha"
+  :guides "Guias"}
 
  :renderer.theme.core
  {:theme-mode "Modo de tema"

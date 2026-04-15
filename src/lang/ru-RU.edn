@@ -799,10 +799,12 @@
 
  :renderer.snap.core
  {:snap "Привязка"
-  :centers "центры"
-  :midpoints "средние точки"
-  :corners "углы"
-  :nodes "узлы"}
+  :centers "Центры"
+  :midpoints "Средние точки"
+  :corners "Углы"
+  :nodes "Узлы"
+  :grid "Сетка"
+  :guides "Направляющие"}
 
  :renderer.theme.core
  {:theme-mode "Режим темы"
