@@ -1,5 +1,6 @@
 (ns renderer.reepl.views
   (:require
+   [clojure.string :as string]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
    [renderer.app.events :as-alias app.events]
@@ -117,6 +118,14 @@
                             "bg-primary!"))}
    text])
 
+(defn function-docs
+  [s]
+  (let [[fn-name signature doc] (filter seq (string/split-lines s))]
+    [:div.bg-primary.drop-shadow.p-4.absolute.bottom-full.flex.flex-col.gap-4
+     [:div.font-semibold fn-name]
+     [codemirror/colored-text signature]
+     [:div doc]]))
+
 (defn completion-list
   [docs {:keys [pos words active show-all]} set-active]
   (let [items (map-indexed
@@ -126,7 +135,9 @@
                         active
                         (partial set-active %1)) words)]
     [:div.absolute.bottom-full.left-0.w-full.text-xs.mb-px
-     (when docs [:div.bg-primary.drop-shadow.p-4.absolute.bottom-full docs])
+     (when docs
+
+       [function-docs docs])
      (into
       [:div.overflow-hidden.flex
        {:class (when show-all "flex-wrap")}]
