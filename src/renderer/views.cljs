@@ -19,6 +19,7 @@
    ["react" :as react]
    ["sonner" :refer [Toaster]]
    ["tailwind-merge" :refer [twMerge]]
+   ["vaul" :refer [Drawer]]
    [reagent.core :as reagent]
    [renderer.action.views :as action.views]
    [renderer.i18n.views :as i18n.views]
@@ -342,3 +343,53 @@
      [:div.text-xs.gap-1.flex.flex-wrap.py-2.px-4.justify-center.truncate
       {:aria-live "polite"}
       message]]]])
+
+(defn drawer
+  [{:keys [label direction disabled snap-points content-class]
+    :as attrs} & children]
+  (reagent/with-let [snap (reagent/atom nil)]
+    [:> Drawer.Root
+     (cond-> {:direction direction}
+       snap-points
+       (assoc :snapPoints (clj->js snap-points)
+              :activeSnapPoint @snap
+              :setActiveSnapPoint (fn [v] (reset! snap v))))
+     [:> Drawer.Trigger
+      {:class "button p-1 rounded h-auto flex flex-col flex-1 text-2xs gap-1
+               overflow-hidden items-center"
+       :disabled disabled}
+      [icon (:icon attrs)]
+      [:span.truncate.w-full (i18n.views/t label)]]
+     [:> Drawer.Portal
+      [:> Drawer.Overlay
+       {:class "backdrop"}]
+      [:> Drawer.Content
+       {:class ["inset-0 fixed z-0 outline-none bg-primary flex shadow-lg"
+                (case direction
+                  "left"
+                  "right-auto max-w-[80dvw] min-w-[60dvw] py-safe pl-safe"
+
+                  "right"
+                  "left-auto max-w-[80dvw] min-w-[60dvw] py-safe pr-safe"
+
+                  "bottom"
+                  "top-auto max-h-[60dvh] min-h-[30dvh] px-safe pb-safe"
+
+                  "top"
+                  "bottom-auto max-h-[60dvh] min-h-[30dvh] px-safe pt-safe")
+                content-class]
+        :style {:margin (cond
+                          (or (= direction "left")
+                              (= direction "right"))
+                          "- env(safe-area-inset-top) 0
+                           - env(safe-area-inset-bottom) 0"
+
+                          :else
+                          "0 - env(safe-area-inset-right)
+                           0 - env(safe-area-inset-left)")}}
+       [:> Drawer.Title {:class "sr-only"} (i18n.views/t label)]
+       [:> Drawer.Description
+        {:as-child true}
+        (into [:div.flex.flex-1.overflow-hidden
+               {:class (when (= direction "bottom") "w-full")}]
+              children)]]]]))
