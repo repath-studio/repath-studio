@@ -3,10 +3,8 @@
    ["@radix-ui/react-direction" :as Direction]
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
    ["@radix-ui/react-tooltip" :as Tooltip]
-   ["vaul" :refer [Drawer]]
    [clojure.string :as string]
    [re-frame.core :as rf]
-   [reagent.core :as reagent]
    [renderer.action.views :as action.views]
    [renderer.app.events :as-alias app.events]
    [renderer.app.subs :as-alias app.subs]
@@ -89,7 +87,8 @@
      ["Ignored elements" ignored-ids]
      ["Snap" (map->str nearest-neighbor)]]))
 
-(defn debug-info []
+(defn debug-info
+  []
   [:div
    {:dir "ltr"}
    (into [:div.absolute.top-2.left-2.pointer-events-none.text-gray-500]
@@ -98,7 +97,8 @@
             [:strong.mr-1 s]
             [:div v]]))])
 
-(defn read-only-overlay []
+(defn read-only-overlay
+  []
   [:div.absolute.inset-0.border-4.border-accent.pointer-events-none
    (when-let [preview-label @(rf/subscribe [::document.subs/preview-label])]
      [:div.absolute.bg-accent.top-2.left-2.px-1.rounded.text-accent-foreground
@@ -111,7 +111,8 @@
     (tool.hierarchy/right-panel active-tool)]
    [:div.bg-primary.grow.flex]])
 
-(defn ruler-locked-toggle []
+(defn ruler-locked-toggle
+  []
   (let [ruler-locked? @(rf/subscribe [::ruler.subs/locked?])]
     [:div.bg-primary
      {:style {:width ruler.views/ruler-size
@@ -124,7 +125,8 @@
                               [::lock "Lock"]))
        :on-click #(rf/dispatch [::ruler.events/toggle-locked])}]]))
 
-(defn frame []
+(defn frame
+  []
   (let [backdrop @(rf/subscribe [::app.subs/backdrop])
         read-only? @(rf/subscribe [::document.subs/read-only?])
         help-message @(rf/subscribe [::tool.subs/help])
@@ -148,7 +150,8 @@
        [:div.absolute.inset-0
         {:on-click #(rf/dispatch [::app.events/set-backdrop false])}])]))
 
-(defn context-dropdown-button []
+(defn context-dropdown-button
+  []
   [:> DropdownMenu/Root
    [:> DropdownMenu/Trigger
     {:as-child true}
@@ -169,7 +172,8 @@
                  :on-escape-key-down #(.stopPropagation %)}
                 [views/dropdownmenu-arrow]]))]])
 
-(defn frame-panel []
+(defn frame-panel
+  []
   (let [ruler-visible? @(rf/subscribe [::ruler.subs/visible?])
         md? @(rf/subscribe [::window.subs/md?])]
     [:div.flex.flex-col.flex-1.h-full.gap-px.overflow-hidden
@@ -203,7 +207,8 @@
            [:span.h-divider]
            [context-dropdown-button]]])]]]))
 
-(defn xml-panel []
+(defn xml-panel
+  []
   (let [xml @(rf/subscribe [::element.subs/xml])
         codemirror-theme @(rf/subscribe [::theme.subs/codemirror])]
     [views/scroll-area
@@ -214,7 +219,8 @@
                   :screenReaderLabel "XML"
                   :theme codemirror-theme}}]]]))
 
-(defn center-top-group []
+(defn center-top-group
+  []
   (let [md? @(rf/subscribe [::window.subs/md?])
         history-visible? @(rf/subscribe [::panel.subs/visible? :history])
         xml-visible? @(rf/subscribe [::panel.subs/visible? :xml])]
@@ -252,7 +258,8 @@
            [history.views/root]]
           [panel.views/close-button :history]]])]]))
 
-(defn editor []
+(defn editor
+  []
   (let [timeline-visible @(rf/subscribe [::panel.subs/visible? :timeline])
         md? @(rf/subscribe [::window.subs/md?])]
     [panel.views/group
@@ -278,103 +285,59 @@
      [toolbar.status/root]
      (when md? [repl.views/root])]))
 
-(defn drawer
-  [{:keys [label direction content disabled snap-points]
-    :as attrs}]
-  (reagent/with-let [snap (reagent/atom nil)]
-    [:> Drawer.Root
-     (cond-> {:direction direction}
-       snap-points
-       (assoc :snapPoints (clj->js snap-points)
-              :activeSnapPoint @snap
-              :setActiveSnapPoint (fn [v] (reset! snap v))))
-     [:> Drawer.Trigger
-      {:class "button p-1 rounded h-auto flex flex-col flex-1 text-2xs gap-1
-               overflow-hidden items-center"
-       :disabled disabled}
-      [views/icon (:icon attrs)]
-      [:span.truncate.w-full (i18n.views/t label)]]
-     [:> Drawer.Portal
-      [:> Drawer.Overlay
-       {:class "backdrop"}]
-      [:> Drawer.Content
-       {:class ["inset-0 fixed z-0 outline-none bg-primary flex shadow-lg"
-                (case direction
-                  "left"
-                  (cond->
-                   "right-auto max-w-[80dvw] min-w-[60dvw] py-safe pl-safe"
-                    @(rf/subscribe [::app.subs/mac?]) (str " pt-8"))
-
-                  "right"
-                  "left-auto max-w-[80dvw] min-w-[60dvw] py-safe pr-safe"
-
-                  "bottom"
-                  "top-auto max-h-[60dvh] min-h-[30dvh] px-safe pb-safe"
-
-                  "top"
-                  "bottom-auto max-h-[60dvh] min-h-[30dvh] px-safe pt-safe")]
-        :style {:margin (cond
-                          (or (= direction "left")
-                              (= direction "right"))
-                          "- env(safe-area-inset-top) 0
-                           - env(safe-area-inset-bottom) 0"
-
-                          :else
-                          "0 - env(safe-area-inset-right)
-                           0 - env(safe-area-inset-left)")}}
-       [:> Drawer.Title {:class "sr-only"} (i18n.views/t label)]
-       [:> Drawer.Description
-        {:as-child true}
-        [:div.flex.flex-1.overflow-hidden
-         {:class (when (= direction "bottom") "w-full")}
-         content]]]]]))
-
-(defn bottom-bar []
+(defn bottom-bar
+  []
   (let [some-selected? @(rf/subscribe [::element.subs/some-selected?])
-        active-tool @(rf/subscribe [::tool.subs/active])]
+        active-tool @(rf/subscribe [::tool.subs/active])
+        mac? @(rf/subscribe [::app.subs/mac?])]
     [:div.flex.justify-evenly.p-2.gap-1.rtl:flex-row-reverse
 
-     [drawer
+     [views/drawer
       {:icon "tree"
        :label [::tree "Tree"]
        :direction "left"
-       :content [tree.views/root]}]
+       :content-class (when mac? "pt-8")}
+      [tree.views/root]]
 
-     [drawer
+     [views/drawer
       {:icon "code"
        :label [::xml "XML"]
        :direction "left"
-       :content [xml-panel]}]
+       :content-class (when mac? "pt-8")}
+      [xml-panel]]
+
      [:span.v-divider]
 
-     [drawer
+     [views/drawer
       {:icon "animation"
        :label [::timeline "Timeline"]
-       :direction "bottom"
-       :content [timeline.views/root]}]
+       :direction "bottom"}
+      [timeline.views/root]]
 
-     [drawer
+     [views/drawer
       {:icon "shell"
        :label [::shell "Shell"]
-       :direction "bottom"
-       :content [:div.flex.flex-col.flex-1 [repl.views/root]]}]
+       :direction "bottom"}
+      [:div.flex.flex-col.flex-1
+       [repl.views/root]]]
 
      [:span.v-divider]
 
-     [drawer
+     [views/drawer
       {:icon "history"
        :label [::history "History"]
-       :direction "right"
-       :content [history.views/root]}]
+       :direction "right"}
+      [history.views/root]]
 
-     [drawer
+     [views/drawer
       {:icon "properties"
        :label [::attributes "Attributes"]
        :direction "right"
-       :disabled (not some-selected?)
-       :content [right-panel active-tool]}]]))
+       :disabled (not some-selected?)}
+      [right-panel active-tool]]]))
 
-(defn center-panel []
+(defn center-panel
+  []
   (let [properties? @(rf/subscribe [::panel.subs/visible? :properties])
         active-tool @(rf/subscribe [::tool.subs/active])
         md? @(rf/subscribe [::window.subs/md?])
@@ -416,7 +379,8 @@
                      :object/vertical-alignment
                      :object/boolean-operations]}]])]]))
 
-(defn main-panel-group []
+(defn main-panel-group
+  []
   (let [tree? @(rf/subscribe [::panel.subs/visible? :tree])
         md? @(rf/subscribe [::window.subs/md?])]
     [:div.flex.flex-col.h-full.overflow-hidden
@@ -443,7 +407,8 @@
      (when-not md?
        [bottom-bar])]))
 
-(defn root []
+(defn root
+  []
   (let [documents? @(rf/subscribe [::document.subs/some-entities?])
         recent-documents @(rf/subscribe [::document.subs/recent])
         lang-dir @(rf/subscribe [::i18n.subs/lang-dir])
