@@ -22,8 +22,6 @@
    [renderer.panel.subs :as-alias panel.subs]
    [renderer.panel.views :as panel.views]
    [renderer.reepl.views :as repl.views]
-   [renderer.ruler.events :as-alias ruler.events]
-   [renderer.ruler.subs :as-alias ruler.subs]
    [renderer.ruler.views :as ruler.views]
    [renderer.snap.subs :as-alias snap.subs]
    [renderer.theme.subs :as-alias theme.subs]
@@ -111,19 +109,19 @@
     (tool.hierarchy/right-panel active-tool)]
    [:div.bg-primary.grow.flex]])
 
-(defn ruler-locked-toggle
+(defn guides-locked-toggle
   []
-  (let [ruler-locked? @(rf/subscribe [::ruler.subs/locked?])]
+  (let [locked? @(rf/subscribe [::app.subs/guides-locked?])]
     [:div.bg-primary
      {:style {:width ruler.views/ruler-size
               :height ruler.views/ruler-size}}
      [views/icon-button
-      (if ruler-locked? "lock" "unlock")
-      {:class "button-size-small rounded-xs m-0 bg-transparent! hidden"
-       :title (i18n.views/t (if ruler-locked?
+      (if locked? "lock" "unlock")
+      {:class "button-size-small rounded-xs m-0 bg-transparent!"
+       :title (i18n.views/t (if locked?
                               [::unlock "Unlock"]
                               [::lock "Lock"]))
-       :on-click #(rf/dispatch [::ruler.events/toggle-locked])}]]))
+       :on-click #(rf/dispatch [::app.events/toggle-guides-locked])}]]))
 
 (defn frame
   []
@@ -174,23 +172,23 @@
 
 (defn frame-panel
   []
-  (let [ruler-visible? @(rf/subscribe [::ruler.subs/visible?])
+  (let [rulers? @(rf/subscribe [::app.subs/rulers?])
         md? @(rf/subscribe [::window.subs/md?])]
     [:div.flex.flex-col.flex-1.h-full.gap-px.overflow-hidden
      [:div
       [toolbar.tools/root]
-      (when ruler-visible?
+      (when rulers?
         [:div.flex.gap-px
          [:div.bg-primary
           {:style {:width ruler.views/ruler-size
                    :height ruler.views/ruler-size}}
-          [ruler-locked-toggle]]
+          [guides-locked-toggle]]
          [:div.bg-primary.flex-1
           {:dir "ltr"
            :class "rtl:pl-[50px] rtl:md:pl-0"}
           [ruler.views/ruler :horizontal]]])]
      [:div.flex.flex-1.relative.gap-px
-      (when ruler-visible?
+      (when rulers?
         [:div.bg-primary
          {:dir "ltr"
           :class "rtl:scale-x-[-1]"}

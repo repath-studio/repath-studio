@@ -55,7 +55,7 @@
                :y2 ruler-size
                :stroke color})]]))
 
-(defn line
+(defn ruler-line
   [{:keys [orientation adjusted-step size starting-point]}]
   [:line (if (= orientation :vertical)
            {:x1 starting-point
@@ -101,23 +101,23 @@
                (cond
                  (zero? (rem index 10))
                  [:<>
-                  [line {:orientation orientation
-                         :adjusted-step adjusted-step
-                         :size ruler-size
-                         :starting-point 0}]
+                  [ruler-line {:orientation orientation
+                               :adjusted-step adjusted-step
+                               :size ruler-size
+                               :starting-point 0}]
                   [label orientation adjusted-step font-size text]]
 
                  (and (odd? index) (zero? (rem index 5)))
-                 [line {:orientation orientation
-                        :adjusted-step adjusted-step
-                        :size ruler-size
-                        :starting-point (/ ruler-size 1.6)}]
+                 [ruler-line {:orientation orientation
+                              :adjusted-step adjusted-step
+                              :size ruler-size
+                              :starting-point (/ ruler-size 1.6)}]
 
                  :else
-                 [line {:orientation orientation
-                        :adjusted-step adjusted-step
-                        :size ruler-size
-                        :starting-point (/ ruler-size 1.3)}])))
+                 [ruler-line {:orientation orientation
+                              :adjusted-step adjusted-step
+                              :size ruler-size
+                              :starting-point (/ ruler-size 1.3)}])))
            steps-coll))))
 
 (defn ruler
@@ -131,30 +131,30 @@
      (when md? [pointer orientation])]))
 
 (defn grid-line
-  [i step stroke-width orientation]
-  (let [[x y w h] @(rf/subscribe [::frame.subs/viewbox-bounds])
+  [step orientation & {:as attrs}]
+  (let [zoom @(rf/subscribe [::document.subs/zoom])
+        [x y w h] @(rf/subscribe [::frame.subs/viewbox-bounds])
         vertical (= orientation :vertical)
         step-x (+ step x)
-        step-y (+ step y)
-        main? (zero? (rem i 10))]
-    [:line {:x1 (if vertical x step-x)
-            :y1 (if vertical step-y y)
-            :x2 (if vertical w step-x)
-            :y2 (if vertical step-y h)
-            :stroke-width stroke-width
-            :opacity (when-not main? ".5")
-            :stroke "var(--border)"
-            :pointer-events "none"}]))
+        step-y (+ step y)]
+    [:line (merge {:x1 (if vertical x step-x)
+                   :y1 (if vertical step-y y)
+                   :x2 (if vertical w step-x)
+                   :y2 (if vertical step-y h)
+                   :stroke-width (/ 1 zoom)
+                   :stroke "var(--border)"
+                   :pointer-events "none"}
+                  attrs)]))
 
 (defn grid-plane
   [orientation]
   (let [coll @(rf/subscribe [::ruler.subs/steps-coll orientation])
-        zoom @(rf/subscribe [::document.subs/zoom])
         subgrid? @(rf/subscribe [::ruler.subs/subgrid?])
-        stroke-width (/ 1 zoom)
         render-line (fn [i step]
-                      (when (or (zero? (rem i 10)) subgrid?)
-                        (grid-line i step stroke-width orientation)))]
+                      (let [main? (zero? (rem i 10))
+                            opacity (when-not main? ".5")]
+                        (when (or main? subgrid?)
+                          (grid-line step orientation :opacity opacity))))]
     (->> coll
          (map-indexed render-line)
          (into [:g]))))

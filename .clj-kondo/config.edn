@@ -89,8 +89,6 @@
                       renderer.history.views history.views
                       renderer.menubar.events menubar.events
                       renderer.menubar.views menubar.views
-                      renderer.ruler.db ruler.db
-                      renderer.ruler.events ruler.events
                       renderer.ruler.handlers ruler.handlers
                       renderer.ruler.subs ruler.subs
                       renderer.ruler.views ruler.views

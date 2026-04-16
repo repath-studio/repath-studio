@@ -60,7 +60,7 @@
         active-tool @(rf/subscribe [::tool.subs/active])
         cached-tool @(rf/subscribe [::tool.subs/cached])
         rotate @(rf/subscribe [::document.subs/rotate])
-        grid @(rf/subscribe [::app.subs/grid])
+        grid? @(rf/subscribe [::app.subs/grid?])
         state @(rf/subscribe [::tool.subs/state])
         pointer-handler (partial input.impl.pointer/handler! el)
         filters @(rf/subscribe [::a11y.subs/filters])
@@ -88,7 +88,7 @@
           (map a11y-filter)
           (into [:defs]))
 
-     (when grid
+     (when grid?
        [ruler.views/grid])
 
      (when (and snap? (not= state :select))

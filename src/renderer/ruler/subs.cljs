@@ -6,20 +6,6 @@
    [renderer.ruler.handlers :as ruler.handlers]))
 
 (rf/reg-sub
- ::ruler
- :-> :ruler)
-
-(rf/reg-sub
- ::locked?
- :<- [::ruler]
- :-> :locked)
-
-(rf/reg-sub
- ::visible?
- :<- [::ruler]
- :-> :visible)
-
-(rf/reg-sub
  ::step
  :<- [::document.subs/zoom]
  ruler.handlers/step)

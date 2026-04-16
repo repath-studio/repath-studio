@@ -108,8 +108,20 @@
  :-> :user-agent)
 
 (rf/reg-sub
- ::grid
+ ::grid?
  :-> :grid)
+
+(rf/reg-sub
+ ::rulers?
+ :-> :rulers)
+
+(rf/reg-sub
+ ::guides?
+ :-> :guides)
+
+(rf/reg-sub
+ ::guides-locked?
+ :-> :guides-locked)
 
 (rf/reg-sub
  ::loading?

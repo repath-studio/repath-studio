@@ -177,6 +177,24 @@
  (fn [db [_]]
    (update db :grid not)))
 
+(rf/reg-event-db
+ ::toggle-rulers
+ [persist]
+ (fn [db [_]]
+   (update db :rulers not)))
+
+(rf/reg-event-db
+ ::toggle-guides
+ [persist]
+ (fn [db [_]]
+   (update db :guides not)))
+
+(rf/reg-event-db
+ ::toggle-guides-locked
+ [persist]
+ (fn [db [_]]
+   (update db :guides-locked not)))
+
 (rf/reg-event-fx
  ::load-system-fonts
  (fn [_ _]

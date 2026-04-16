@@ -121,6 +121,7 @@
              (action.views/deref-action-group :i18n/language)
              :separator
              :view/toggle-grid
+             :view/toggle-guides
              :view/toggle-rulers
              :view/toggle-help-bar
              :view/toggle-debug-info
