@@ -56,7 +56,7 @@ jobs:
         uses: DeLaGuardo/setup-clojure@13.6.0
         with:
           cli: 1.12.4.1629
-          clj-kondo: 2026.01.19
+          clj-kondo: 2026.04.15
 
       - name: Cache npm dependencies
         uses: actions/cache@v5
