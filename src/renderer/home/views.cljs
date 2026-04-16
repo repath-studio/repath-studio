@@ -10,7 +10,8 @@
    [renderer.i18n.views :as i18n.views]
    [renderer.views :as views]))
 
-(defn document-size-select []
+(defn document-size-select
+  []
   [:> Select/Root
    {:onValueChange #(let [size (get db/a-series-paper-sizes %)]
                       (rf/dispatch [::document.events/new-from-template size]))}

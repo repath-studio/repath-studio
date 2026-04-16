@@ -306,7 +306,8 @@
         [:div {:ref ref
                :style style}])})))
 
-(defn colored-text [text style]
+(defn colored-text
+  [_text _theme]
   (let [ref (react/createRef)]
     (reagent/create-class
      {:component-did-mount
@@ -318,9 +319,8 @@
           (-> dom-el .-classList (.remove "cm-s-default"))))
 
       :reagent-render
-      (fn [_]
-        [:pre.cm-s-tomorrow-night-eighties
-         {:style (merge {:padding 0
-                         :margin 0} style)
+      (fn [text theme]
+        [:pre.p-0.m-0
+         {:class (str "cm-s-" theme)
           :ref ref}
          text])})))
