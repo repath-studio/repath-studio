@@ -210,7 +210,8 @@
   (-> db
       (element.handlers/clear-ignored)
       (element.handlers/clear-hovered)
-      (dissoc :pivot-point)))
+      (dissoc :pivot-point)
+      (app.handlers/add-fx [::set-select-box nil])))
 
 (defn select-rect
   [db intersecting?]
@@ -439,7 +440,9 @@
           (scale (matrix/add delta (snap.handlers/nearest-delta db))
                  {:ratio-locked (ratio-locked? db e)
                   :in-place shift-key
-                  :recursive alt-key})))))
+                  :recursive alt-key}))
+
+      db)))
 
 (defmethod tool.hierarchy/on-drag-end :transform
   [db e]
