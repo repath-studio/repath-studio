@@ -37,8 +37,8 @@
       :reagent-render #()})))
 
 (defn initial-markup
-  "https://github.com/ryanseddon/react-frame-component#initialcontent
-   The iframe is isolated, so we cannot access the css vars of the parent."
+  "The iframe is isolated, so we cannot access the css vars of the parent.
+   https://github.com/ryanseddon/react-frame-component#initialcontent"
   []
   [:html {:data-theme "light"}
    [:head [:link {:rel "stylesheet"

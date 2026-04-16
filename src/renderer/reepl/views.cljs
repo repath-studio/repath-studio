@@ -71,11 +71,11 @@
 (defmulti item (fn [i _opts] (:type i)))
 
 (defmethod item :input
-  [{:keys [_num text]} opts]
+  [{:keys [_num text theme]} opts]
   [:div.text-foreground-disabled.font-bold "=>"]
   [:div.flex-1.cursor-pointer.break-words
    {:on-click #((:set-text opts) text)}
-   [codemirror/colored-text text]])
+   [codemirror/colored-text text theme]])
 
 (defmethod item :log
   [{:keys [value]} opts]
@@ -95,7 +95,8 @@
   [{:keys [value]} opts]
   [:div.flex-1.break-words [show-value value nil opts]])
 
-(defn repl-items [items opts]
+(defn repl-items
+  [items opts]
   [:div.flex-1.border-b.border-border.h-full.overflow-hidden.flex
    [views/scroll-area
     {:ref (fn [this]
@@ -104,7 +105,7 @@
     (into
      [:div.p-1 {:dir "ltr"}]
      (map (fn [i]
-            [:div.font-mono.p-1.flex.text-xs.min-h-4 (item i opts)]) items))]])
+            [:div.font-mono.p-1.flex.text-xs.min-h-4 [item i opts]]) items))]])
 
 (defn completion-item
   [text selected active set-active]
@@ -120,10 +121,11 @@
 
 (defn function-docs
   [s]
-  (let [[fn-name signature doc] (filter seq (string/split-lines s))]
+  (let [codemirror-theme @(rf/subscribe [::theme.subs/codemirror])
+        [fn-name signature doc] (filter seq (string/split-lines s))]
     [:div.bg-primary.drop-shadow.p-4.absolute.bottom-full.flex.flex-col.gap-4
      [:div.font-semibold fn-name]
-     [codemirror/colored-text signature]
+     [codemirror/colored-text signature codemirror-theme]
      [:div doc]]))
 
 (defn completion-list
@@ -209,11 +211,15 @@
           :class "relative"
           :minSize 100
           :defaultSize 300}
-         [repl-items @items (assoc show-value-opts :set-text set-text)]
+         [repl-items @items (assoc show-value-opts
+                                   :set-text set-text
+                                   :theme (:theme js-cm-opts))]
          [panel.views/close-button :repl-history]]])
 
      (when-not @(rf/subscribe [::window.subs/md?])
-       [repl-items @items (assoc show-value-opts :set-text set-text)])
+       [repl-items @items (assoc show-value-opts
+                                 :set-text set-text
+                                 :theme (:theme js-cm-opts))])
 
      [:div.relative.whitespace-pre-wrap.font-mono.w-full
       {:dir "ltr"}
