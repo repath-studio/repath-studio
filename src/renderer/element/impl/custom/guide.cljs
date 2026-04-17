@@ -1,0 +1,95 @@
+(ns renderer.element.impl.custom.guide
+  (:require
+   [re-frame.core :as rf]
+   [renderer.attribute.hierarchy :as attribute.hierarchy]
+   [renderer.attribute.views :as attribute.views]
+   [renderer.document.subs :as-alias document.subs]
+   [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.frame.subs :as-alias frame.subs]
+   [renderer.input.impl.pointer :as input.impl.pointer]
+   [renderer.tool.views :as tool.views]
+   [renderer.utils.length :as utils.length]))
+
+(element.hierarchy/derive-element :guide ::element.hierarchy/renderable)
+
+(defmethod element.hierarchy/properties :guide
+  []
+  {:icon "ruler-straight"
+   :label [::label "Guide"]
+   :description [::element-description
+                 "The <guide> element is used to create guides for aligning
+                  other elements."]
+   :attrs [:x
+           :y
+           :orientation]})
+
+(defmethod element.hierarchy/translate :guide
+  [el [x y]]
+  (if (= (-> el :attrs :orientation) "vertical")
+    (attribute.hierarchy/update-attr el :x + x)
+    (attribute.hierarchy/update-attr el :y + y)))
+
+(defmethod element.hierarchy/render :guide
+  [el]
+  (let [attrs (:attrs el)
+        {:keys [x y orientation]} attrs]
+    (when (and x y)
+      (let [[x y] (mapv utils.length/unit->px [x y])
+            zoom @(rf/subscribe [::document.subs/zoom])
+            pointer-handler (partial input.impl.pointer/handler! el)
+            [b-x b-y b-w b-h] @(rf/subscribe [::frame.subs/viewbox-bounds])
+            vertical (= orientation "vertical")
+            attrs {:x1 (if vertical x b-x)
+                   :y1 (if vertical b-y y)
+                   :x2 (if vertical x b-w)
+                   :y2 (if vertical b-h y)
+                   :stroke-width (/ 1 zoom)
+                   :stroke "var(--accent)"
+                   :pointer-events "none"}]
+        [:g
+         [:line attrs]
+         [:line (merge attrs
+                       {:on-pointer-up pointer-handler
+                        :on-pointer-down pointer-handler
+                        :on-pointer-move pointer-handler
+                        :pointer-events "all"
+                        :shape-rendering "optimizeSpeed"
+                        :stroke "transparent"
+                        :stroke-width (/ 10 zoom)})]]))))
+
+(defmethod element.hierarchy/edit :guide
+  [el [x y] handle _lock?]
+  (case handle
+    :position (-> el
+                  (attribute.hierarchy/update-attr :x + x)
+                  (attribute.hierarchy/update-attr :y + y))
+    el))
+
+(defmethod element.hierarchy/render-edit :guide
+  [el]
+  (let [{:keys [attrs]} el
+        {:keys [x y]} attrs]
+
+    [tool.views/square-handle {:x x
+                               :y y
+                               :id :position
+                               :label [::position "Position"]
+                               :type :handle
+                               :action :edit
+                               :element-id (:id el)}]))
+
+(defmethod attribute.hierarchy/description [:guide :orientation]
+  []
+  [::orientation-description "The orientation of the guide."])
+
+(defmethod attribute.hierarchy/form-element [:guide :orientation]
+  [_ k v attrs]
+  [attribute.views/select-input k v
+   (merge attrs
+          {:default-value "vertical"
+           :items [{:id :vertical
+                    :label [::normal "Vertical"]
+                    :value "vertical"}
+                   {:id :horizontal
+                    :label [::italic "Horizontal"]
+                    :value "horizontal"}]})])

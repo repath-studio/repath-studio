@@ -30,7 +30,7 @@
 
 (m/=> activate [:-> App Tool App])
 (defn activate
-  [db tool]
+  [db tool & {:as props}]
   (cond-> db
     :always
     (tool.hierarchy/on-deactivate)
@@ -45,7 +45,7 @@
         (set-cursor "default")
         (dissoc :drag :pointer-offset :clicked-element)
         (snap.handlers/rebuild-tree)
-        (tool.hierarchy/on-activate))))
+        (tool.hierarchy/on-activate props))))
 
 (m/=> pointer-delta [:-> App Vec2])
 (defn pointer-delta

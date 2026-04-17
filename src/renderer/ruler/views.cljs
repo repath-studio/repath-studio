@@ -6,6 +6,7 @@
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.subs :as-alias element.subs]
    [renderer.frame.subs :as-alias frame.subs]
+   [renderer.ruler.events :as-alias ruler.events]
    [renderer.ruler.subs :as-alias ruler.subs]
    [renderer.window.subs :as-alias window.subs]))
 
@@ -125,7 +126,11 @@
   (let [vertical (= orientation :vertical)
         md? @(rf/subscribe [::window.subs/md?])]
     [:svg {:width (if vertical ruler-size "100%")
-           :height (if vertical "100%" ruler-size)}
+           :height (if vertical "100%" ruler-size)
+           :on-pointer-down (fn [e]
+                              (rf/dispatch [::ruler.events/activate-guide-tool
+                                            orientation
+                                            e]))}
      (when md? [bbox-rect orientation])
      [base-lines orientation]
      (when md? [pointer orientation])]))

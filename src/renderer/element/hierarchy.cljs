@@ -6,7 +6,6 @@
   [tag parent]
   (swap! hierarchy derive tag parent))
 
-;; REVIEW: Is this type of complexity really needed?
 (derive-element ::graphics ::renderable)
 (derive-element ::gradient ::renderable)
 (derive-element ::descriptive ::renderable)
