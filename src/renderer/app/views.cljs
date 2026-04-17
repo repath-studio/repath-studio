@@ -241,7 +241,7 @@
 
       [panel.views/panel
        {:defaultSize "100%"
-        :minSize 100}
+        :minSize 320}
        [frame-panel]]
 
       (when (and md? history-visible?)
@@ -355,7 +355,7 @@
         :class "w-full"}
        [panel.views/panel
         {:defaultSize "100%"
-         :minSize 100}
+         :minSize 320}
         [:div.flex.h-full.flex-col.flex-1.overflow-hidden.gap-px.w-full
          [editor]]]
        (when (and md? properties?)
@@ -400,7 +400,7 @@
           [panel.views/separator]])
        [panel.views/panel
         {:defaultSize "100%"
-         :minSize 100}
+         :minSize 665}
         [center-panel]]]]
      (when-not md?
        [bottom-bar])]))
