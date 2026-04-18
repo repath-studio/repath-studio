@@ -5,6 +5,7 @@
    [renderer.attribute.views :as attribute.views]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.element.subs :as-alias element.subs]
    [renderer.frame.subs :as-alias frame.subs]
    [renderer.input.impl.pointer :as input.impl.pointer]
    [renderer.tool.views :as tool.views]
@@ -31,31 +32,33 @@
 
 (defmethod element.hierarchy/render :guide
   [el]
-  (let [attrs (:attrs el)
-        {:keys [x y orientation]} attrs]
-    (when (and x y)
-      (let [[x y] (mapv utils.length/unit->px [x y])
-            zoom @(rf/subscribe [::document.subs/zoom])
-            pointer-handler (partial input.impl.pointer/handler! el)
-            [b-x b-y b-w b-h] @(rf/subscribe [::frame.subs/viewbox-bounds])
-            vertical (= orientation "vertical")
-            attrs {:x1 (if vertical x b-x)
-                   :y1 (if vertical b-y y)
-                   :x2 (if vertical x b-w)
-                   :y2 (if vertical b-h y)
-                   :stroke-width (/ 1 zoom)
-                   :stroke "var(--accent)"
-                   :pointer-events "none"}]
-        [:g
-         [:line attrs]
-         [:line (merge attrs
-                       {:on-pointer-up pointer-handler
-                        :on-pointer-down pointer-handler
-                        :on-pointer-move pointer-handler
-                        :pointer-events "all"
-                        :shape-rendering "optimizeSpeed"
-                        :stroke "transparent"
-                        :stroke-width (/ 10 zoom)})]]))))
+  (let [{:keys [x y orientation]} (:attrs el)
+        [x y] (mapv utils.length/unit->px [x y])
+        zoom @(rf/subscribe [::document.subs/zoom])
+        hovered? @(rf/subscribe [::element.subs/hovered? (:id el)])
+        pointer-handler (partial input.impl.pointer/handler! el)
+        [b-x b-y b-w b-h] @(rf/subscribe [::frame.subs/viewbox-bounds])
+        vertical (= orientation "vertical")
+        attrs {:x1 (if vertical x b-x)
+               :y1 (if vertical b-y y)
+               :x2 (if vertical x b-w)
+               :y2 (if vertical b-h y)
+               :stroke-width (/ 1 zoom)
+               :pointer-events "none"
+               :stroke (if (:selected el)
+                         "var(--accent)"
+                         "DodgerBlue")}]
+    [:g
+     [:line (merge attrs
+                   {:on-pointer-up pointer-handler
+                    :on-pointer-down pointer-handler
+                    :on-pointer-move pointer-handler
+                    :pointer-events "all"
+                    :shape-rendering "optimizeSpeed"
+                    :stroke "transparent"
+                    :stroke-width (/ 5 zoom)})]
+     (when hovered? [:line (merge attrs {:stroke "white"})])
+     [:line (merge attrs {:stroke-dasharray (when hovered? (/ 5 zoom))})]]))
 
 (defmethod element.hierarchy/edit :guide
   [el [x y] handle _lock?]
@@ -93,3 +96,5 @@
                    {:id :horizontal
                     :label [::italic "Horizontal"]
                     :value "horizontal"}]})])
+
+(defmethod attribute.hierarchy/initial [:guide :orientation] [] "vertical")

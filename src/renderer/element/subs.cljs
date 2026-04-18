@@ -60,6 +60,12 @@
    (vals (select-keys elements hovered-ids))))
 
 (rf/reg-sub
+ ::hovered?
+ :<- [::document.subs/hovered-ids]
+ (fn [hovered-ids [_ id]]
+   (contains? hovered-ids id)))
+
+(rf/reg-sub
  ::selected-tags
  :<- [::selected]
  (fn [selected-elements _]
