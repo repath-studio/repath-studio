@@ -214,7 +214,11 @@
 
  :renderer.element.impl.container.canvas
  {:label "Canvas"
-  :description "Het canvas is de hoofd-SVG container die alle elementen bevat."}
+  :description "Het canvas is de hoofd-SVG container die alle elementen bevat."
+  :fill-description "Het vulattribuut definieert de achtergrondkleur van het
+                     hoofdcanvas. De standaardwaarde hangt af van het huidige
+                     thema, wat betekent dat deze wordt bepaald door het huidige
+                     thema van de applicatie."}
 
  :renderer.element.impl.container.group
  {:label "Groep"

@@ -217,7 +217,11 @@
  :renderer.element.impl.container.canvas
  {:label "Leinwand"
   :description "Die Leinwand ist der Haupt-SVG-Container, der alle Elemente
-                beherbergt."}
+                beherbergt."
+  :fill-description "Das Füllattribut definiert die Hintergrundfarbe der
+                     Hauptleinwand. Der Standardwert hängt vom aktuellen Theme
+                     ab, was bedeutet, dass er durch das aktuelle Theme der
+                     Anwendung bestimmt wird."}
 
  :renderer.element.impl.container.group
  {:label "Gruppe"

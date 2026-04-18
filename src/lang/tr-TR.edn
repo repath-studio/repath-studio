@@ -213,7 +213,10 @@
 
  :renderer.element.impl.container.canvas
  {:label "Tuval"
-  :description "Tuval, tüm öğeleri barındıran ana SVG kapsayıcısıdır."}
+  :description "Tuval, tüm öğeleri barındıran ana SVG kapsayıcısıdır."
+  :fill-description "Dolgu özniteliği, ana tuvalin arka plan rengini tanımlar.
+                     Varsayılan değer mevcut temaya bağlıdır; bu, uygulamanın
+                     mevcut teması tarafından belirleneceği anlamına gelir."}
 
  :renderer.element.impl.container.group
  {:label "Grup"

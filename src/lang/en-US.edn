@@ -209,7 +209,11 @@
 
  :renderer.element.impl.container.canvas
  {:label "Canvas"
-  :description "The canvas is the main SVG container that hosts all elements."}
+  :description "The canvas is the main SVG container that hosts all elements."
+  :fill-description "The fill attribute defines the background color of the main
+                     canvas. The default value depends on the current theme,
+                     which means that it will be determined by the current theme
+                     of the application."}
 
  :renderer.element.impl.container.group
  {:label "Group"

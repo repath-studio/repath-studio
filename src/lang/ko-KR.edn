@@ -207,7 +207,10 @@
 
  :renderer.element.impl.container.canvas
  {:label "캔버스"
-  :description "캔버스는 모든 요소를 포함하는 주요 SVG 컨테이너입니다."}
+  :description "캔버스는 모든 요소를 포함하는 주요 SVG 컨테이너입니다."
+  :fill-description "채우기 속성은 메인 캔버스의 배경색을 정의합니다. 기본값은
+                     현재 테마에 따라 달라지며, 이는 애플리케이션의 현재 테마에
+                     의해 결정됩니다."}
 
  :renderer.element.impl.container.group
  {:label "그룹"

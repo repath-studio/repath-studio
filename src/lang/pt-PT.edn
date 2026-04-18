@@ -214,7 +214,11 @@
  :renderer.element.impl.container.canvas
  {:label "Tela"
   :description "A tela é o contentor SVG principal que aloja todos os
-                elementos."}
+                elementos."
+  :fill-description "O atributo de preenchimento define a cor de fundo da tela
+                     principal. O valor predefinido depende do tema atual, o que
+                     significa que será determinado pelo tema atual da
+                     aplicação."}
 
  :renderer.element.impl.container.group
  {:label "Grupo"
