@@ -198,7 +198,9 @@
 
  :renderer.element.impl.container.canvas
  {:label "画布"
-  :description "画布是承载所有元素的主要 SVG 容器。"}
+  :description "画布是承载所有元素的主要 SVG 容器。"
+  :fill-description "填充属性定义主画布的背景颜色。默认值取决于当前主题，这意味着
+                     它将由应用程序的当前主题决定。"}
 
  :renderer.element.impl.container.group
  {:label "组"

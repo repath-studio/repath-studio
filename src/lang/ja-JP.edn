@@ -205,7 +205,10 @@
 
  :renderer.element.impl.container.canvas
  {:label "キャンバス"
-  :description "キャンバスは、すべての要素をホストするメインのSVGコンテナです。"}
+  :description "キャンバスは、すべての要素をホストするメインのSVGコンテナです。"
+  :fill-description "塗りつぶし属性は、メインキャンバスの背景色を定義します。
+                     デフォルト値は現在のテーマに依存し、アプリケーションの現在の
+                     テーマによって決定されます。"}
 
  :renderer.element.impl.container.group
  {:label "グループ"

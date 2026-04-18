@@ -216,7 +216,11 @@
  :renderer.element.impl.container.canvas
  {:label "Canevas"
   :description "Le canevas est le conteneur SVG principal qui héberge tous les
-                éléments."}
+                éléments."
+  :fill-description "L'attribut de remplissage définit la couleur d'arrière-plan
+                     du canevas principal. La valeur par défaut dépend du thème
+                     actuel, ce qui signifie qu'elle sera déterminée par le
+                     thème actuel de l'application."}
 
  :renderer.element.impl.container.group
  {:label "Groupe"

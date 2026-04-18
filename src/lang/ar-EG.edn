@@ -209,7 +209,10 @@
  :renderer.element.impl.container.canvas
  {:label "لوحة الرسم"
   :description "لوحة الرسم هي حاوية SVG الرئيسية التي تستضيف جميع
-                العناصر."}
+                العناصر."
+  :fill-description "تحدد خاصية التعبئة لون خلفية لوحة الرسم الرئيسية. تعتمد
+                     القيمة الافتراضية على السمة الحالية، مما يعني أنها ستُحدد
+                     بواسطة السمة الحالية للتطبيق."}
 
  :renderer.element.impl.container.group
  {:label "مجموعة"

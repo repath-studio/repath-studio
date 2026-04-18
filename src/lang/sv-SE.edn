@@ -212,7 +212,11 @@
 
  :renderer.element.impl.container.canvas
  {:label "Duk"
-  :description "Duken är huvud-SVG behållaren som innehåller alla element."}
+  :description "Duken är huvud-SVG behållaren som innehåller alla element."
+  :fill-description "Fyllnadsattributet definierar bakgrundsfärgen för
+                     huvudduken. Standardvärdet beror på det aktuella temat,
+                     vilket innebär att det bestäms av programmets aktuella
+                     tema."}
 
  :renderer.element.impl.container.group
  {:label "Grupp"

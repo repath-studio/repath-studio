@@ -215,7 +215,11 @@
  :renderer.element.impl.container.canvas
  {:label "Tela"
   :description "La tela è il contenitore SVG principale che ospita tutti gli
-                elementi."}
+                elementi."
+  :fill-description "L'attributo di riempimento definisce il colore di sfondo
+                     della tela principale. Il valore predefinito dipende dal
+                     tema corrente, il che significa che sarà determinato dal
+                     tema corrente dell'applicazione."}
 
  :renderer.element.impl.container.group
  {:label "Gruppo"
