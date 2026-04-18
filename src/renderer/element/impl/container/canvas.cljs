@@ -30,7 +30,14 @@
                                 all elements."]
    :attrs [:fill]})
 
-(defmethod attribute.hierarchy/initial [:canvas :fill] [] "")
+(defmethod attribute.hierarchy/description [:canvas :fill]
+  []
+  [::fill-description
+   "The fill attribute defines the background color of the main canvas.
+    The default value depends on the current theme, which means that it will be
+    determined by the current theme of the application."])
+
+(defmethod attribute.hierarchy/initial [:canvas :fill] [] "dependsOnTheme")
 
 (defn a11y-filter
   [{:keys [id tag attrs]}]
