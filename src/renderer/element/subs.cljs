@@ -22,7 +22,7 @@
  (fn [[elements root] _]
    (->> (:children root)
         (mapv elements)
-        (filterv #(not= :guide (:tag %))))))
+        (filterv (complement :virtual)))))
 
 (rf/reg-sub
  ::entity

@@ -53,6 +53,7 @@
         (tool.handlers/set-cursor (cursor @orient))
         (tool.handlers/set-state :create)
         (element.handlers/add {:type :element
+                               :virtual true
                                :tag :guide
                                :attrs {:x x
                                        :y y
