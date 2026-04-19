@@ -1,6 +1,7 @@
 (ns renderer.element.impl.custom.guide
   (:require
    [re-frame.core :as rf]
+   [renderer.app.subs :as-alias app.subs]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.views :as attribute.views]
    [renderer.document.subs :as-alias document.subs]
@@ -45,29 +46,33 @@
         hovered? @(rf/subscribe [::element.subs/hovered? (:id el)])
         pointer-handler (partial input.impl.pointer/handler! el)
         viewbox-bounds @(rf/subscribe [::frame.subs/viewbox-bounds])
+        guides? @(rf/subscribe [::app.subs/guides?])
+        guides-locked? @(rf/subscribe [::app.subs/guides-locked?])
         attrs (default-attrs (:attrs el) viewbox-bounds)]
-    [:g
-     [:line (merge attrs
-                   {:on-pointer-up pointer-handler
-                    :on-pointer-down pointer-handler
-                    :on-pointer-move pointer-handler
-                    :pointer-events "all"
-                    :shape-rendering "optimizeSpeed"
-                    :stroke "transparent"
-                    :stroke-width (/ 5 zoom)})]
+    (when guides?
+      [:g
+       (when-not guides-locked?
+         [:line (merge attrs
+                       {:on-pointer-up pointer-handler
+                        :on-pointer-down pointer-handler
+                        :on-pointer-move pointer-handler
+                        :pointer-events "all"
+                        :shape-rendering "optimizeSpeed"
+                        :stroke "transparent"
+                        :stroke-width (/ 5 zoom)})])
 
-     (when hovered?
-       [:line (merge attrs {:pointer-events "none"
-                            :stroke "white"
-                            :stroke-width (/ 1 zoom)})])
+       (when hovered?
+         [:line (merge attrs {:pointer-events "none"
+                              :stroke "white"
+                              :stroke-width (/ 1 zoom)})])
 
-     [:line (merge attrs
-                   {:pointer-events "none"
-                    :stroke-width (/ 1 zoom)
-                    :stroke-dasharray (when hovered? (/ 5 zoom))
-                    :stroke (if (:selected el)
-                              "var(--accent)"
-                              "DodgerBlue")})]]))
+       [:line (merge attrs
+                     {:pointer-events "none"
+                      :stroke-width (/ 1 zoom)
+                      :stroke-dasharray (when hovered? (/ 5 zoom))
+                      :stroke (if (:selected el)
+                                "var(--accent)"
+                                "DodgerBlue")})]])))
 
 (defmethod element.hierarchy/render-to-string :guide [_el] nil)
 

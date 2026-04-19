@@ -953,9 +953,3 @@
   [db els]
   (let [options (-> db :snap :options)]
     (into [] (mapcat #(utils.element/acc-snapping-points % options)) els)))
-
-(m/=> set-guides-prop [:-> App :keyword? :any App])
-(defn set-guides-prop
-  [db prop value]
-  (->> (filter-by-tag db :guide)
-       (reduce (fn [db el] (assoc-prop db (:id el) prop value)) db)))
