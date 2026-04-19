@@ -184,12 +184,6 @@
  (fn [db [_]]
    (update db :rulers not)))
 
-(defn set-guides-prop
-  [db prop value]
-  (->> (element.handlers/filter-by-tag db :guide)
-       (reduce (fn [db el] (element.handlers/assoc-prop db (:id el) prop value))
-               db)))
-
 (rf/reg-event-fx
  ::toggle-guides
  [persist
@@ -197,7 +191,7 @@
  (fn [{:keys [db now]} [_]]
    {:db (-> db
             (update :guides not)
-            (set-guides-prop :visible (not (:guides db)))
+            (element.handlers/set-guides-prop :visible (not (:guides db)))
             (history.handlers/finalize now (if (:guides db)
                                              [::Hide-guides "Hide guides"]
                                              [::Show-guides "Show guides"])))}))
@@ -209,7 +203,7 @@
  (fn [{:keys [db now]} [_]]
    {:db (-> db
             (update :guides-locked not)
-            (set-guides-prop :locked (not (:guides-locked db)))
+            (element.handlers/set-guides-prop :locked (not (:guides-locked db)))
             (history.handlers/finalize now (if (:guides-locked db)
                                              [::unlock-guides "Unlock guides"]
                                              [::lock-guides "Lock guides"])))}))

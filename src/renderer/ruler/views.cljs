@@ -58,31 +58,35 @@
                :stroke color})]]))
 
 (defn ruler-line
-  [{:keys [orientation adjusted-step size starting-point]}]
-  [:line (if (= orientation :vertical)
-           {:x1 starting-point
-            :y1 adjusted-step
-            :x2 size
-            :y2 adjusted-step
-            :stroke "var(--foreground-muted)"}
-           {:x1 adjusted-step
-            :y1 starting-point
-            :x2 adjusted-step
-            :y2 size
-            :stroke "var(--foreground-muted)"})])
+  [{:keys [active orientation adjusted-step size starting-point]}]
+  (let [stroke (if active "var(--accent-foreground)" "var(--foreground-muted)")]
+    [:line (if (= orientation :vertical)
+             {:x1 starting-point
+              :y1 adjusted-step
+              :x2 size
+              :y2 adjusted-step
+              :stroke stroke}
+             {:x1 adjusted-step
+              :y1 starting-point
+              :x2 adjusted-step
+              :y2 size
+              :stroke stroke})]))
 
 (defn label
-  [orientation step font-size text]
-  (let [x-step (+ step 4)
+  [active? orientation step text]
+  (let [font-size 9
+        x-step (+ step 4)
         y-step (- step 8)
         vertical (= orientation :vertical)]
     [:text {:x (if vertical 19 x-step)
             :y (if vertical y-step (inc font-size))
             :writing-mode (when vertical "vertical-rl")
-            :fill "var(--foreground-default)"
             :font-size font-size
             :rotate (when vertical 180)
-            :font-family "var(--font-mono)"}
+            :font-family "var(--font-mono)"
+            :fill (if active?
+                    "var(--accent-foreground)"
+                    "var(--foreground-default)")}
      (if vertical (reverse text) text)]))
 
 (defn base-lines
@@ -90,12 +94,12 @@
   (let [[x y] @(rf/subscribe [::frame.subs/viewbox])
         zoom @(rf/subscribe [::document.subs/zoom])
         steps-coll @(rf/subscribe [::ruler.subs/steps-coll orientation])
+        active? @(rf/subscribe [::tool.subs/active? :guide])
         vertical (= orientation :vertical)]
     (into [:g]
           (map-indexed
            (fn [index step]
              (let [adjusted-step (* zoom step)
-                   font-size 9
                    text (-> step
                             (+ (if vertical y x))
                             (Math/round)
@@ -106,20 +110,23 @@
                   [ruler-line {:orientation orientation
                                :adjusted-step adjusted-step
                                :size ruler-size
-                               :starting-point 0}]
-                  [label orientation adjusted-step font-size text]]
+                               :starting-point 0
+                               :active active?}]
+                  [label active? orientation adjusted-step text]]
 
                  (and (odd? index) (zero? (rem index 5)))
                  [ruler-line {:orientation orientation
                               :adjusted-step adjusted-step
                               :size ruler-size
-                              :starting-point (/ ruler-size 1.6)}]
+                              :starting-point (/ ruler-size 1.6)
+                              :active active?}]
 
                  :else
                  [ruler-line {:orientation orientation
                               :adjusted-step adjusted-step
                               :size ruler-size
-                              :starting-point (/ ruler-size 1.3)}])))
+                              :starting-point (/ ruler-size 1.3)
+                              :active active?}])))
            steps-coll))))
 
 (defn ruler

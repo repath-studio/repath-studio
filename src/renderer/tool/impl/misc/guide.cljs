@@ -36,7 +36,10 @@
   [db & {:as props}]
   (let [{:keys [orientation]} props]
     (if orientation
-      (app.handlers/add-fx db [::set-orientation orientation])
+      (-> db
+          (assoc :guides true)
+          (element.handlers/set-guides-prop :visible true)
+          (app.handlers/add-fx [::set-orientation orientation]))
       (tool.handlers/activate db :transform))))
 
 (defmethod tool.hierarchy/on-deactivate :guide
