@@ -118,6 +118,7 @@
      [views/icon-button
       (if locked? "lock" "unlock")
       {:class "button-size-small rounded-xs m-0 bg-transparent!"
+       :disabled @(rf/subscribe [::tool.subs/active? :guide])
        :title (i18n.views/t (if locked?
                               [::unlock "Unlock"]
                               [::lock "Lock"]))

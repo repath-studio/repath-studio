@@ -5,6 +5,7 @@
    [renderer.app.effects]
    [renderer.app.events :as app.events]
    [renderer.app.subs :as app.subs]
+   [renderer.tool.subs :as tool.subs]
    [renderer.utils.key :as utils.key]))
 
 (rf/dispatch [::action.events/register-action
@@ -39,6 +40,7 @@
                :label [::lock-guides "Lock guides"]
                :icon "ruler-straight"
                :event [::app.events/toggle-guides-locked]
+               :enabled [::tool.subs/not-active? :guide]
                :active [::app.subs/guides-locked?]}])
 
 (rf/dispatch [::action.events/register-action
