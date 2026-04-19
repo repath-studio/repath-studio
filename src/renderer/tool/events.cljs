@@ -6,10 +6,10 @@
 
 (rf/reg-event-db
  ::activate
- (fn [db [_ tool & [opts]]]
+ (fn [db [_ tool]]
    (cond-> db
      (:active-document db)
-     (tool.handlers/activate tool opts))))
+     (tool.handlers/activate tool))))
 
 (rf/reg-event-db
  ::set-state
