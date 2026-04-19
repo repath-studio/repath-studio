@@ -38,6 +38,7 @@
     (if orientation
       (-> db
           (assoc :guides true)
+          (assoc :guides-locked false)
           (app.handlers/add-fx [::set-orientation orientation]))
       (tool.handlers/activate db :transform))))
 

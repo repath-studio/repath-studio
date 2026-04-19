@@ -92,7 +92,7 @@
     [tool.views/square-handle {:x x
                                :y y
                                :id :position
-                               :label [::position "Position"]
+                               :label [::position "position"]
                                :type :handle
                                :action :edit
                                :element-id (:id el)}]))
