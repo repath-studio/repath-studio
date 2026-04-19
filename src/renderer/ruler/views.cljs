@@ -6,8 +6,9 @@
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.subs :as-alias element.subs]
    [renderer.frame.subs :as-alias frame.subs]
-   [renderer.ruler.events :as-alias ruler.events]
+   [renderer.input.impl.pointer :as input.impl.pointer]
    [renderer.ruler.subs :as-alias ruler.subs]
+   [renderer.tool.subs :as-alias tool.subs]
    [renderer.window.subs :as-alias window.subs]))
 
 (def ruler-size 24)
@@ -124,13 +125,16 @@
 (defn ruler
   [orientation]
   (let [vertical (= orientation :vertical)
-        md? @(rf/subscribe [::window.subs/md?])]
-    [:svg {:width (if vertical ruler-size "100%")
-           :height (if vertical "100%" ruler-size)
-           :on-pointer-down (fn [e]
-                              (rf/dispatch [::ruler.events/activate-guide-tool
-                                            orientation
-                                            e]))}
+        md? @(rf/subscribe [::window.subs/md?])
+        active? @(rf/subscribe [::tool.subs/active? :guide])
+        pointer-handler (partial input.impl.pointer/handler!
+                                 {:type :guide
+                                  :orientation orientation})]
+    [:svg
+     {:width (if vertical ruler-size "100%")
+      :height (if vertical "100%" ruler-size)
+      :class (when active? "bg-accent")
+      :on-pointer-down pointer-handler}
      (when md? [bbox-rect orientation])
      [base-lines orientation]
      (when md? [pointer orientation])]))

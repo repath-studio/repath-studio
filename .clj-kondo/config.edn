@@ -90,7 +90,6 @@
                       renderer.menubar.events menubar.events
                       renderer.menubar.views menubar.views
                       renderer.ruler.handlers ruler.handlers
-                      renderer.ruler.events ruler.events
                       renderer.ruler.subs ruler.subs
                       renderer.ruler.views ruler.views
                       renderer.snap.db snap.db

@@ -8,8 +8,7 @@
    [renderer.element.subs :as-alias element.subs]
    [renderer.frame.subs :as-alias frame.subs]
    [renderer.input.impl.pointer :as input.impl.pointer]
-   [renderer.tool.views :as tool.views]
-   [renderer.utils.length :as utils.length]))
+   [renderer.tool.views :as tool.views]))
 
 (element.hierarchy/derive-element :guide ::element.hierarchy/renderable)
 
@@ -30,24 +29,23 @@
     (attribute.hierarchy/update-attr el :x + x)
     (attribute.hierarchy/update-attr el :y + y)))
 
+(defn default-attrs
+  [attrs viewbox-bounds]
+  (let [{:keys [x y orientation]} attrs
+        [b-x b-y b-w b-h] viewbox-bounds
+        vertical (= orientation "vertical")]
+    {:x1 (if vertical x b-x)
+     :y1 (if vertical b-y y)
+     :x2 (if vertical x b-w)
+     :y2 (if vertical b-h y)}))
+
 (defmethod element.hierarchy/render :guide
   [el]
-  (let [{:keys [x y orientation]} (:attrs el)
-        [x y] (mapv utils.length/unit->px [x y])
-        zoom @(rf/subscribe [::document.subs/zoom])
+  (let [zoom @(rf/subscribe [::document.subs/zoom])
         hovered? @(rf/subscribe [::element.subs/hovered? (:id el)])
         pointer-handler (partial input.impl.pointer/handler! el)
-        [b-x b-y b-w b-h] @(rf/subscribe [::frame.subs/viewbox-bounds])
-        vertical (= orientation "vertical")
-        attrs {:x1 (if vertical x b-x)
-               :y1 (if vertical b-y y)
-               :x2 (if vertical x b-w)
-               :y2 (if vertical b-h y)
-               :stroke-width (/ 1 zoom)
-               :pointer-events "none"
-               :stroke (if (:selected el)
-                         "var(--accent)"
-                         "DodgerBlue")}]
+        viewbox-bounds @(rf/subscribe [::frame.subs/viewbox-bounds])
+        attrs (default-attrs (:attrs el) viewbox-bounds)]
     [:g
      [:line (merge attrs
                    {:on-pointer-up pointer-handler
@@ -57,8 +55,19 @@
                     :shape-rendering "optimizeSpeed"
                     :stroke "transparent"
                     :stroke-width (/ 5 zoom)})]
-     (when hovered? [:line (merge attrs {:stroke "white"})])
-     [:line (merge attrs {:stroke-dasharray (when hovered? (/ 5 zoom))})]]))
+
+     (when hovered?
+       [:line (merge attrs {:pointer-events "none"
+                            :stroke "white"
+                            :stroke-width (/ 1 zoom)})])
+
+     [:line (merge attrs
+                   {:pointer-events "none"
+                    :stroke-width (/ 1 zoom)
+                    :stroke-dasharray (when hovered? (/ 5 zoom))
+                    :stroke (if (:selected el)
+                              "var(--accent)"
+                              "DodgerBlue")})]]))
 
 (defmethod element.hierarchy/edit :guide
   [el [x y] handle _lock?]

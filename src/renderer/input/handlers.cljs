@@ -86,6 +86,7 @@
         {:keys [pointer-pos]} e]
     (cond-> db
       (and (not= tool :pan)
+           (not= tool :guide)
            (drag-pointer? db e))
       (tool.handlers/pan-out-of-canvas dom-rect pointer-pos pointer-offset)
 
@@ -123,16 +124,17 @@
 (m/=> on-pointer-down [:-> App PointerEvent App])
 (defn on-pointer-down
   [db e]
-  (let [{:keys [tool state nearest-neighbor active-pointers]} db
-        {:keys [button pointer-pos pointer-id]} e]
+  (let [{:keys [nearest-neighbor active-pointers]} db
+        {:keys [button pointer-pos pointer-id element]} e]
     (cond-> db
       (not= button :right)
       (assoc-in [:active-pointers pointer-id] e)
 
       (= button :middle)
-      (-> (assoc :cached-tool tool
-                 :cached-state state)
-          (tool.handlers/activate :pan))
+      (tool.handlers/set-cached :pan)
+
+      (= (:type element) :guide)
+      (tool.handlers/activate :guide :orientation (:orientation element))
 
       (and (not= button :right)
            (empty? active-pointers))
@@ -155,8 +157,7 @@
 (m/=> on-pointer-up [:-> App PointerEvent App])
 (defn on-pointer-up
   [db e]
-  (let [{:keys [cached-tool cached-state active-pointers pinch-distance
-                drag-pointer]} db
+  (let [{:keys [cached-tool active-pointers pinch-distance drag-pointer]} db
         {:keys [button timestamp pointer-id]} e
         db (snap.handlers/update-nearest-neighbors db)]
     (if pinch-distance
@@ -176,10 +177,9 @@
                       (tool.hierarchy/on-double-click e))
                   (-> (assoc db :event-timestamp timestamp)
                       (tool.hierarchy/on-pointer-up e))))
+
         (and cached-tool (= button :middle))
-        (-> (tool.handlers/activate cached-tool)
-            (tool.handlers/set-state cached-state)
-            (dissoc :cached-tool :cached-state))
+        (tool.handlers/reset-cached)
 
         (not (tool.handlers/multi-touch? db))
         (tool.handlers/clear-pointer-data)
@@ -213,10 +213,8 @@
   [db e]
   (cond-> db
     (and (= (:code e) "Space")
-         (not= (:tool db) :pan)
-         (= (:state db) :idle))
-    (-> (assoc :cached-tool (:tool db))
-        (tool.handlers/activate :pan))
+         (not= (:tool db) :pan))
+    (tool.handlers/set-cached :pan)
 
     (= (:key e) "Shift")
     (-> (assoc-in [:snap :transient-active] true)
@@ -238,8 +236,7 @@
   (cond-> db
     (and (= (:code e) "Space")
          (:cached-tool db))
-    (-> (tool.handlers/activate (:cached-tool db))
-        (dissoc :cached-tool))
+    (tool.handlers/reset-cached)
 
     (= (:key e) "Shift")
     (-> (assoc-in [:snap :transient-active] false)

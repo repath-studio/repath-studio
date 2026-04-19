@@ -107,6 +107,21 @@
           ; REVIEW: Can we improve performance?
           (snap.handlers/update-viewport-tree)))))
 
+(defn set-cached
+  [db tool]
+  (-> db
+      (assoc :cached-tool (:tool db)
+             :cached-state (:state db))
+      (activate tool)))
+
+(defn reset-cached
+  [db]
+  (let [{:keys [cached-tool cached-state]} db]
+    (-> db
+        (activate cached-tool)
+        (set-state cached-state)
+        (dissoc :cached-tool :cached-state))))
+
 (m/=> cancel [:-> App App])
 (defn cancel
   [db]
@@ -116,8 +131,10 @@
         (history.handlers/reset-state))
 
     (= (:state db) :idle)
-    (-> (dissoc :cached-tool :cached-state)
-        (activate :transform))
+    (activate :transform)
+
+    (:cached-tool db)
+    (reset-cached)
 
     :always
     (-> (clear-pointer-data)
