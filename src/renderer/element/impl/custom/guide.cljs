@@ -69,6 +69,8 @@
                               "var(--accent)"
                               "DodgerBlue")})]]))
 
+(defmethod element.hierarchy/render-to-string :guide [_el] nil)
+
 (defmethod element.hierarchy/edit :guide
   [el [x y] handle _lock?]
   (case handle

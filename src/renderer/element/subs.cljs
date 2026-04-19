@@ -20,7 +20,9 @@
  :<- [::document.subs/elements]
  :<- [::root]
  (fn [[elements root] _]
-   (mapv elements (:children root))))
+   (->> (:children root)
+        (mapv elements)
+        (filterv #(not= :guide (:tag %))))))
 
 (rf/reg-sub
  ::entity

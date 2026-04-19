@@ -11,6 +11,7 @@
    [renderer.document.events :as-alias document.events]
    [renderer.document.handlers :as document.handlers]
    [renderer.effects :as-alias effects]
+   [renderer.element.handlers :as element.handlers]
    [renderer.error.events :as-alias error.events]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.effects :as-alias i18n.effects]
@@ -183,17 +184,35 @@
  (fn [db [_]]
    (update db :rulers not)))
 
-(rf/reg-event-db
- ::toggle-guides
- [persist]
- (fn [db [_]]
-   (update db :guides not)))
+(defn set-guides-prop
+  [db prop value]
+  (->> (element.handlers/filter-by-tag db :guide)
+       (reduce (fn [db el] (element.handlers/assoc-prop db (:id el) prop value))
+               db)))
 
-(rf/reg-event-db
+(rf/reg-event-fx
+ ::toggle-guides
+ [persist
+  (rf/inject-cofx ::effects/now)]
+ (fn [{:keys [db now]} [_]]
+   {:db (-> db
+            (update :guides not)
+            (set-guides-prop :visible (not (:guides db)))
+            (history.handlers/finalize now (if (:guides db)
+                                             [::Hide-guides "Hide guides"]
+                                             [::Show-guides "Show guides"])))}))
+
+(rf/reg-event-fx
  ::toggle-guides-locked
- [persist]
- (fn [db [_]]
-   (update db :guides-locked not)))
+ [persist
+  (rf/inject-cofx ::effects/now)]
+ (fn [{:keys [db now]} [_]]
+   {:db (-> db
+            (update :guides-locked not)
+            (set-guides-prop :locked (not (:guides-locked db)))
+            (history.handlers/finalize now (if (:guides-locked db)
+                                             [::unlock-guides "Unlock guides"]
+                                             [::lock-guides "Lock guides"])))}))
 
 (rf/reg-event-fx
  ::load-system-fonts

@@ -51,6 +51,7 @@
         (tool.handlers/set-state :create)
         (element.handlers/add {:type :element
                                :tag :guide
+                               :visible (:guides db)
                                :attrs {:x x
                                        :y y
                                        :orientation (name @orient)}}))))
@@ -64,9 +65,14 @@
 
 (defmethod tool.hierarchy/on-drag-end :guide
   [db e]
-  (-> db
-      (history.handlers/finalize (:timestamp e) [::create-guide "Create guide"])
-      (tool.handlers/activate :transform)))
+  (let [{:keys [timestamp]} e]
+    (cond-> db
+      (:guides-locked db)
+      (element.handlers/assoc-prop :locked true)
+
+      :always
+      (-> (history.handlers/finalize timestamp [::create-guide "Create guide"])
+          (tool.handlers/activate :transform)))))
 
 (defmethod tool.hierarchy/snapping-points :guide
   [db]

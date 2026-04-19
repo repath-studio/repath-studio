@@ -452,20 +452,26 @@
 (m/=> filter-by-tag [:-> App ElementTag [:sequential Element]])
 (defn filter-by-tag
   ([tag]
-   (comp (selected)
-         (filter #(= tag (:tag %)))))
+   (filter #(= tag (:tag %))))
   ([db tag]
    (into [] (filter-by-tag tag) (entities db))))
 
+(m/=> filter-selected-by-tag [:-> App ElementTag [:sequential Element]])
+(defn filter-selected-by-tag
+  ([tag]
+   (comp (selected) (filter-by-tag tag)))
+  ([db tag]
+   (into [] (filter-selected-by-tag tag) (entities db))))
+
 (m/=> select-same-tags [:-> App App])
 (defn select-same-tags
-  [db]
-  (let [tags (selected-tags db)]
-    (transduce (comp (filter #(contains? tags (:tag %)))
-                     (map :id))
-               (completing select)
-               db
-               (entities db))))
+  ([db]
+   (let [tags (selected-tags db)]
+     (transduce (comp (filter #(contains? tags (:tag %)))
+                      (map :id))
+                (completing select)
+                db
+                (entities db)))))
 
 (m/=> sort-by-index-path [:-> App [:sequential Element] [:sequential Element]])
 (defn sort-by-index-path

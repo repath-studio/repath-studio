@@ -389,7 +389,7 @@
 (rf/reg-event-fx
  ::trace
  (fn [{:keys [db]} [_]]
-   (let [images (element.handlers/filter-by-tag db :image)]
+   (let [images (element.handlers/filter-selected-by-tag db :image)]
      {::element.effects/trace {:data images
                                :on-success [::create-traced-image]}})))
 
