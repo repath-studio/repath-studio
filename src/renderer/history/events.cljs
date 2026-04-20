@@ -95,7 +95,8 @@
    :id ::finalize
    :before (fn [context]
              (let [db (rf/get-coeffect context :db)]
-               (if (= (:state db) :idle)
+               (if (or (= (:state db) :idle)
+                       (not (:active-document db)))
                  (-> context
                      (rf/assoc-coeffect :now (.now js/performance))
                      (rf/assoc-coeffect :db
