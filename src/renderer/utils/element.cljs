@@ -29,7 +29,7 @@
 (defn top-level?
   [el]
   (or (svg? el)
-      (:virtual el)))
+      (true? (:virtual el))))
 
 (m/=> container? [:-> Element boolean?])
 (defn container?

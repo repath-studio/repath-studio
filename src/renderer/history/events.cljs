@@ -97,10 +97,13 @@
              (let [db (rf/get-coeffect context :db)]
                (if (or (= (:state db) :idle)
                        (not (:active-document db)))
-                 (-> context
-                     (rf/assoc-coeffect :now (.now js/performance))
-                     (rf/assoc-coeffect :db
-                                        (tool.handlers/activate db :transform)))
+                 (cond-> context
+                   :always
+                   (rf/assoc-coeffect :now (.now js/performance))
+
+                   (:active-document db)
+                   (rf/assoc-coeffect :db
+                                      (tool.handlers/activate db :transform)))
                  (assoc context :queue []))))
    :after (fn [context]
             (if-let [db (rf/get-effect context :db)]

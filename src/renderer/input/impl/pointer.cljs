@@ -6,6 +6,7 @@
    [renderer.element.db :refer [Element]]
    [renderer.input.db :refer [PointerEvent PointerButton]]
    [renderer.input.events :as-alias input.events]
+   [renderer.ruler.db :refer [Guide]]
    [renderer.tool.db :refer [Handle]]))
 
 (m/=> button->key [:-> [:enum -1 0 1 2 3 4] [:maybe PointerButton]])
@@ -18,7 +19,7 @@
         3 :back
         4 :forward} button))
 
-(m/=> ->clj [:-> [:or Element Handle] JS_Object PointerEvent])
+(m/=> ->clj [:-> [:or Element Handle Guide] JS_Object PointerEvent])
 (defn ->clj
   "https://developer.mozilla.org/en-US/docs/Web/API/PointerEvent"
   [el ^js/PointerEvent e]
