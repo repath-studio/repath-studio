@@ -95,6 +95,12 @@
   ([db]
    (into #{} (selected-ids) (entities db))))
 
+(defn selected-non-virtual-ids
+  [db]
+  (into #{} (comp (selected)
+                  (filter (complement :virtual))
+                  (map :id)) (entities db)))
+
 (m/=> children-ids [:-> App ElementId [:vector ElementId]])
 (defn children-ids
   [db id]
@@ -328,7 +334,7 @@
                   [:-> App ElementId keyword? any? App]])
 (defn assoc-prop
   ([db k v]
-   (reduce (partial-right assoc-prop k v) db (selected-ids db)))
+   (reduce (partial-right assoc-prop k v) db (selected-non-virtual-ids db)))
   ([db id k v]
    (if (string/blank? v)
      (update-in db (path db id) dissoc k)
