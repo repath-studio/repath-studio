@@ -309,13 +309,14 @@
  ::cut
  [(finalize [::cut-selection "Cut selection"])]
  (fn [{:keys [db]} _]
-   (let [els (element.handlers/top-selected-sorted db)]
-     {:db (-> (element.handlers/copy db)
-              (element.handlers/delete))
-      :fx [(when (seq els)
-             [::effects/clipboard-write
-              {:data (utils.element/->svg els)
-               :on-error [::app.events/toast-error]}])]})))
+   (when (= (:state db) :idle)
+     (let [els (element.handlers/top-selected-sorted db)]
+       {:db (-> (element.handlers/copy db)
+                (element.handlers/delete))
+        :fx [(when (seq els)
+               [::effects/clipboard-write
+                {:data (utils.element/->svg els)
+                 :on-error [::app.events/toast-error]}])]}))))
 
 (rf/reg-event-fx
  ::trace

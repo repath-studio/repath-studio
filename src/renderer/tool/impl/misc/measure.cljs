@@ -3,6 +3,7 @@
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.element.handlers :as element.handlers]
+   [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
@@ -25,6 +26,7 @@
   (let [[offset-x offset-y] (tool.handlers/snapped-offset db)
         [x y] (tool.handlers/snapped-position db)]
     (-> db
+        (history.handlers/reset-state)
         (tool.handlers/set-state :create)
         (element.handlers/add {:type :element
                                :virtual true

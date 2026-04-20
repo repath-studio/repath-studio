@@ -340,26 +340,27 @@
          document (document.handlers/persisted-format db id)
          on-success [::saved close]
          on-error [::app.events/toast-error]]
-     (cond
-       (app.handlers/desktop? db)
-       {::effects/ipc-invoke
-        {:channel "save-document"
-         :data (pr-str document)
-         :on-success [::saved close]
-         :on-error on-error
-         :formatter string->edn}}
+     (when (and id (= (:state db) :idle))
+       (cond
+         (app.handlers/desktop? db)
+         {::effects/ipc-invoke
+          {:channel "save-document"
+           :data (pr-str document)
+           :on-success [::saved close]
+           :on-error on-error
+           :formatter string->edn}}
 
-       (app.handlers/supported-feature? db :file-system)
-       {::app.effects/get-local-store
-        {:store-key (str id)
-         :formatter #(-> document
-                         (file-save-options on-success on-error)
-                         (assoc :file-handle %))
-         :on-success [::events/file-save]
-         :on-error on-error}}
+         (app.handlers/supported-feature? db :file-system)
+         {::app.effects/get-local-store
+          {:store-key (str id)
+           :formatter #(-> document
+                           (file-save-options on-success on-error)
+                           (assoc :file-handle %))
+           :on-success [::events/file-save]
+           :on-error on-error}}
 
-       :else
-       {:dispatch [::download]}))))
+         :else
+         {:dispatch [::download]})))))
 
 (rf/reg-event-fx
  ::save-as
