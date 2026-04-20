@@ -133,14 +133,12 @@
   [orientation]
   (let [vertical (= orientation :vertical)
         md? @(rf/subscribe [::window.subs/md?])
-        active? @(rf/subscribe [::tool.subs/active? :guide])
         pointer-handler (partial input.impl.pointer/handler!
                                  {:type :guide
                                   :orientation orientation})]
     [:svg
      {:width (if vertical ruler-size "100%")
       :height (if vertical "100%" ruler-size)
-      :class (when active? "bg-accent")
       :on-pointer-down pointer-handler}
      (when md? [bbox-rect orientation])
      [base-lines orientation]

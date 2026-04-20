@@ -110,10 +110,11 @@
    [:div.bg-primary.grow.flex]])
 
 (defn guides-locked-toggle
-  []
+  [class]
   (let [locked? @(rf/subscribe [::app.subs/guides-locked?])]
-    [:div.bg-primary
-     {:style {:width ruler.views/ruler-size
+    [:div
+     {:class class
+      :style {:width ruler.views/ruler-size
               :height ruler.views/ruler-size}}
      [views/icon-button
       (if locked? "lock" "unlock")
@@ -174,25 +175,27 @@
 (defn frame-panel
   []
   (let [rulers? @(rf/subscribe [::app.subs/rulers?])
-        md? @(rf/subscribe [::window.subs/md?])]
+        md? @(rf/subscribe [::window.subs/md?])
+        active? @(rf/subscribe [::tool.subs/active? :guide])
+        bg-class (if active? "bg-accent" "bg-primary")]
     [:div.flex.flex-col.flex-1.h-full.gap-px.overflow-hidden
      [:div
       [toolbar.tools/root]
       (when rulers?
         [:div.flex.gap-px
-         [:div.bg-primary
+         [:div
           {:style {:width ruler.views/ruler-size
                    :height ruler.views/ruler-size}}
-          [guides-locked-toggle]]
-         [:div.bg-primary.flex-1
+          [guides-locked-toggle bg-class]]
+         [:div.flex-1
           {:dir "ltr"
-           :class "rtl:pl-[50px] rtl:md:pl-0"}
+           :class ["rtl:pl-[50px] rtl:md:pl-0" bg-class]}
           [ruler.views/ruler :horizontal]]])]
      [:div.flex.flex-1.relative.gap-px
       (when rulers?
-        [:div.bg-primary
+        [:div
          {:dir "ltr"
-          :class "rtl:scale-x-[-1]"}
+          :class ["rtl:scale-x-[-1]" bg-class]}
          [ruler.views/ruler :vertical]])
       [:div.relative.grow.flex
        [frame]
