@@ -439,9 +439,10 @@
 (m/=> select-all [:-> App App])
 (defn select-all
   [db]
-  (reduce select db (if (siblings-selected? db)
-                      (children-ids db (:id (parent db (:id (parent db)))))
-                      (siblings db))))
+  (let [ids (if (siblings-selected? db)
+              (children-ids db (:id (parent db (:id (parent db)))))
+              (siblings db))]
+    (reduce select db (remove #(:virtual (entity db %)) ids))))
 
 (m/=> selected-tags [:-> App [:set ElementTag]])
 (defn selected-tags
