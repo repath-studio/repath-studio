@@ -78,9 +78,7 @@
 (rf/reg-event-db
  ::preview-attr
  (fn [db [_ k v]]
-   (cond-> db
-     (= (:state db) :idle)
-     (element.handlers/set-attr db k v))))
+   (element.handlers/set-attr db k v)))
 
 (rf/reg-event-db
  ::delete
@@ -126,8 +124,7 @@
 
 (rf/reg-event-db
  ::raise-to-top
- [(finalize [::raise-selection-top
-             "Raise selection to top"])]
+ [(finalize [::raise-selection-top "Raise selection to top"])]
  (fn [db _]
    (element.handlers/update-index db (fn [_i sibling-count]
                                        (dec sibling-count)))))
@@ -152,8 +149,7 @@
 
 (rf/reg-event-db
  ::paste-in-place
- [(finalize [::paste-selection-in-place
-             "Paste selection in place"])]
+ [(finalize [::paste-selection-in-place "Paste selection in place"])]
  (fn [db _]
    (element.handlers/paste-in-place db)))
 
@@ -165,8 +161,7 @@
 
 (rf/reg-event-db
  ::duplicate
- [(finalize [::duplicate-selection
-             "Duplicate selection"])]
+ [(finalize [::duplicate-selection "Duplicate selection"])]
  (fn [db _]
    (element.handlers/duplicate db)))
 
