@@ -110,15 +110,17 @@
    [:div.bg-primary.grow.flex]])
 
 (defn guides-locked-toggle
-  [class]
-  (let [locked? @(rf/subscribe [::app.subs/guides-locked?])]
+  []
+  (let [locked? @(rf/subscribe [::app.subs/guides-locked?])
+        guide-active? @(rf/subscribe [::tool.subs/active? :guide])]
     [:div
-     {:class class
+     {:class (if guide-active? "bg-accent" "bg-primary")
       :style {:width ruler.views/ruler-size
               :height ruler.views/ruler-size}}
      [views/icon-button
       (if locked? "lock" "unlock")
-      {:class "button-size-small rounded-xs m-0 bg-transparent!"
+      {:class ["button-size-small rounded-xs m-0 bg-transparent!"
+               (when guide-active? "text-accent-foreground!")]
        :disabled @(rf/subscribe [::tool.subs/active? :guide])
        :title (i18n.views/t (if locked?
                               [::unlock "Unlock"]
@@ -178,11 +180,11 @@
         md? @(rf/subscribe [::window.subs/md?])
         active? @(rf/subscribe [::tool.subs/active? :guide])
         bg-class (if active? "bg-accent" "bg-primary")]
-    [:div.flex.flex-col.flex-1.h-full.gap-px.overflow-hidden
+    [:div.flex.flex-col.flex-1.h-full.overflow-hidden
      [:div
       [toolbar.tools/root]
       (when rulers?
-        [:div.flex.gap-px
+        [:div.flex
          [:div
           {:style {:width ruler.views/ruler-size
                    :height ruler.views/ruler-size}}
@@ -191,7 +193,7 @@
           {:dir "ltr"
            :class ["rtl:pl-[50px] rtl:md:pl-0" bg-class]}
           [ruler.views/ruler :horizontal]]])]
-     [:div.flex.flex-1.relative.gap-px
+     [:div.flex.flex-1.relative
       (when rulers?
         [:div
          {:dir "ltr"
