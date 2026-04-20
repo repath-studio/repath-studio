@@ -309,9 +309,10 @@
 (m/=> top-selected-ancestors [:-> App [:sequential Element]])
 (defn top-selected-ancestors
   [db]
-  (entities db (-> (top-ancestor-ids db)
-                   (disj (:id (root db)))
-                   (vec))))
+  (->> (entities db (-> (top-ancestor-ids db)
+                        (disj (:id (root db)))
+                        (vec)))
+       (filter (complement :virtual))))
 
 (m/=> update-prop [:-> App ElementId ifn? [:* any?] App])
 (defn update-prop
@@ -701,7 +702,7 @@
   [db el]
   (cond-> el
     (not (or (utils.element/root? el) (:parent el)))
-    (assoc :parent (:id (if (utils.element/svg? el)
+    (assoc :parent (:id (if (utils.element/top-level? el)
                           (root db)
                           (if-let [el-bbox (element.hierarchy/bbox el)]
                             (overlapping-svg db el-bbox)
@@ -816,15 +817,19 @@
          offset (matrix/sub el-center center)
          el (dissoc el :bbox)
          [s-x1 s-y1] (:bbox parent-el)
-         pointer-pos (:adjusted-pointer-pos db)]
+         pointer-pos (:adjusted-pointer-pos db)
+         el (cond-> el
+              (not (utils.element/top-level? el))
+              (assoc :parent (:id parent-el)))]
      (reduce select
              (cond-> db
                :always
                (-> (deselect)
-                   (add (assoc el :parent (:id parent-el)))
+                   (add el)
                    (place (matrix/add pointer-pos offset)))
 
-               (not= (:id (root db)) (:id parent-el))
+               (and (not= (:id (root db)) (:id parent-el))
+                    (not (utils.element/top-level? el)))
                (translate [(- s-x1) (- s-y1)]))
              (selected-ids db)))))
 

@@ -25,6 +25,12 @@
   [el]
   (= :svg (:tag el)))
 
+(m/=> top-level? [:-> Element boolean?])
+(defn top-level?
+  [el]
+  (or (svg? el)
+      (:virtual el)))
+
 (m/=> container? [:-> Element boolean?])
 (defn container?
   [el]

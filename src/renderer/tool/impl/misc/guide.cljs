@@ -44,7 +44,7 @@
 
 (defmethod tool.hierarchy/on-deactivate :guide
   [db]
-  (app.handlers/add-fx db [::set-orientation nil]))
+  (tool.handlers/clear-pointer-data db))
 
 (defmethod tool.hierarchy/on-drag-start :guide
   [db _e]
