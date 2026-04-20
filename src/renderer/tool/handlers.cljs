@@ -128,7 +128,8 @@
   (cond-> db
     :always
     (-> (activate (:tool db))
-        (history.handlers/reset-state))
+        (history.handlers/reset-state)
+        (tool.hierarchy/on-cancel))
 
     (= (:state db) :idle)
     (activate :transform)

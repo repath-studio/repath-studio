@@ -6,8 +6,8 @@
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.subs :as-alias element.subs]
    [renderer.frame.subs :as-alias frame.subs]
-   [renderer.input.impl.pointer :as input.impl.pointer]
    [renderer.ruler.subs :as-alias ruler.subs]
+   [renderer.tool.events :as tool.events]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.window.subs :as-alias window.subs]))
 
@@ -132,14 +132,13 @@
 (defn ruler
   [orientation]
   (let [vertical (= orientation :vertical)
-        md? @(rf/subscribe [::window.subs/md?])
-        pointer-handler (partial input.impl.pointer/handler!
-                                 {:type :guide
-                                  :orientation orientation})]
+        md? @(rf/subscribe [::window.subs/md?])]
     [:svg
      {:width (if vertical ruler-size "100%")
       :height (if vertical "100%" ruler-size)
-      :on-pointer-down pointer-handler}
+      :on-pointer-down #(rf/dispatch [::tool.events/activate
+                                      :guide
+                                      :orientation orientation])}
      (when md? [bbox-rect orientation])
      [base-lines orientation]
      (when md? [pointer orientation])]))

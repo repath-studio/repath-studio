@@ -86,7 +86,6 @@
         {:keys [pointer-pos]} e]
     (cond-> db
       (and (not= tool :pan)
-           (not= tool :guide)
            (drag-pointer? db e))
       (tool.handlers/pan-out-of-canvas dom-rect pointer-pos pointer-offset)
 
@@ -125,16 +124,13 @@
 (defn on-pointer-down
   [db e]
   (let [{:keys [nearest-neighbor active-pointers]} db
-        {:keys [button pointer-pos pointer-id element]} e]
+        {:keys [button pointer-pos pointer-id]} e]
     (cond-> db
       (not= button :right)
       (assoc-in [:active-pointers pointer-id] e)
 
       (= button :middle)
       (tool.handlers/set-cached :pan)
-
-      (= (:type element) :guide)
-      (tool.handlers/activate :guide :orientation (:orientation element))
 
       (and (not= button :right)
            (empty? active-pointers))
