@@ -28,7 +28,7 @@
         dispatch-state (if is-dispatchable state :idle)]
     (tool.hierarchy/help tool dispatch-state)))
 
-(m/=> activate [:-> App Tool App])
+(m/=> activate [:-> App Tool [:* any?] App])
 (defn activate
   [db tool & {:as props}]
   (cond-> db

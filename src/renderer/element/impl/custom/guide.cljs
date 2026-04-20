@@ -8,6 +8,7 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
    [renderer.frame.subs :as-alias frame.subs]
+   [renderer.input.handlers :as input.handlers]
    [renderer.input.impl.pointer :as input.impl.pointer]
    [renderer.tool.views :as tool.views]))
 
@@ -78,18 +79,20 @@
 (defmethod element.hierarchy/render-to-string :guide [_el] nil)
 
 (defmethod element.hierarchy/edit :guide
-  [el [x y] handle _lock?]
-  (case handle
-    :position (-> el
-                  (attribute.hierarchy/update-attr :x + x)
-                  (attribute.hierarchy/update-attr :y + y))
-    el))
+  [el offset handle lock?]
+  (let [[x y] (cond-> offset
+                lock?
+                (input.handlers/lock-direction))]
+    (case handle
+      :position (-> el
+                    (attribute.hierarchy/update-attr :x + x)
+                    (attribute.hierarchy/update-attr :y + y))
+      el)))
 
 (defmethod element.hierarchy/render-edit :guide
   [el]
   (let [{:keys [attrs]} el
         {:keys [x y]} attrs]
-
     [tool.views/square-handle {:x x
                                :y y
                                :id :position
