@@ -180,11 +180,11 @@
         md? @(rf/subscribe [::window.subs/md?])
         active? @(rf/subscribe [::tool.subs/active? :guide])
         bg-class (if active? "bg-accent" "bg-primary")]
-    [:div.flex.flex-col.flex-1.h-full.overflow-hidden
+    [:div.flex.flex-col.flex-1.h-full.gap-px.overflow-hidden
      [:div
       [toolbar.tools/root]
       (when rulers?
-        [:div.flex
+        [:div.flex.gap-px
          [:div
           {:style {:width ruler.views/ruler-size
                    :height ruler.views/ruler-size}}
@@ -193,7 +193,7 @@
           {:dir "ltr"
            :class ["rtl:pl-[50px] rtl:md:pl-0" bg-class]}
           [ruler.views/ruler :horizontal]]])]
-     [:div.flex.flex-1.relative
+     [:div.flex.flex-1.relative.gap-px
       (when rulers?
         [:div
          {:dir "ltr"
