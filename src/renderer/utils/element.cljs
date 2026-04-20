@@ -25,12 +25,6 @@
   [el]
   (= :svg (:tag el)))
 
-(m/=> top-level? [:-> Element boolean?])
-(defn top-level?
-  [el]
-  (or (svg? el)
-      (true? (:virtual el))))
-
 (m/=> container? [:-> Element boolean?])
 (defn container?
   [el]
@@ -47,6 +41,11 @@
 (defn ratio-locked?
   [el]
   (-> el properties :ratio-locked boolean))
+
+(m/=> top-level? [:-> Element boolean?])
+(defn top-level?
+  [el]
+  (-> el properties :top-level boolean))
 
 (m/=> united-bbox [:-> [:sequential Element] [:maybe BBox]])
 (defn united-bbox

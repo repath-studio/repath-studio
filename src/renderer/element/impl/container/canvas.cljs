@@ -17,6 +17,7 @@
    [renderer.snap.views :as snap.views]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
+   [renderer.utils.element :as utils.element]
    [renderer.utils.svg :as utils.svg]))
 
 (element.hierarchy/derive-element
@@ -60,7 +61,7 @@
   [el]
   (let [{:keys [attrs children]} el
         child-elements @(rf/subscribe [::element.subs/filter-visible children])
-        child-elements (sort-by :virtual child-elements)
+        child-elements (sort-by utils.element/top-level? child-elements)
         viewbox-attr @(rf/subscribe [::frame.subs/viewbox-attr])
         {:keys [width height]} @(rf/subscribe [::app.subs/dom-rect])
         read-only? @(rf/subscribe [::document.subs/read-only?])

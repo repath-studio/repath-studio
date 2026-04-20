@@ -339,7 +339,7 @@
         selected-els (element.handlers/selected db)
         auto-parent? (and (contains? #{:translate :clone} (:state db))
                           (seq selected-els)
-                          (not (:virtual (first selected-els)))
+                          (not (utils.element/top-level? (first selected-els)))
                           (empty? (rest selected-els)))
         offset (case axis
                  :vertical [offset-x 0]
