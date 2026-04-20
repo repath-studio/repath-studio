@@ -59,7 +59,7 @@
                         :pointer-events "all"
                         :shape-rendering "optimizeSpeed"
                         :stroke "transparent"
-                        :stroke-width (/ 5 zoom)})])
+                        :stroke-width (/ 15 zoom)})])
 
        (when hovered?
          [:line (merge attrs {:pointer-events "none"
