@@ -82,7 +82,8 @@
    [:system-fonts {:optional true} SystemFonts]
    [:debug-info {:default false
                  :persist true} boolean?]
-   [:help-bar {:default true} boolean?]
+   [:help-bar {:default true
+               :persist true} boolean?]
    [:loading {:default true} boolean?]
    [:pen-mode {:default false} boolean?]
    [:backdrop {:default false} boolean?]
@@ -98,7 +99,8 @@
    [:menubar {:default {}} Menubar]
    [:install-prompt {:optional true} JS_Object]
    [:user-agent {:optional true} string?]
-   [:repl-mode {:default :cljs} keyword?]
+   [:repl-mode {:default :cljs
+                :persist true} keyword?]
    [:error-reporting {:optional true
                       :persist true} boolean?]
    [:worker {:default {:tasks {}}} [:map [:tasks map?]]]

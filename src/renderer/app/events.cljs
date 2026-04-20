@@ -153,16 +153,19 @@
 
 (rf/reg-event-db
  ::set-repl-mode
+ [persist]
  (fn [db [_ mode]]
    (assoc db :repl-mode mode)))
 
 (rf/reg-event-db
  ::toggle-debug-info
+ [persist]
  (fn [db [_]]
    (update db :debug-info not)))
 
 (rf/reg-event-db
  ::toggle-help-bar
+ [persist]
  (fn [db [_]]
    (update db :help-bar not)))
 
