@@ -130,49 +130,45 @@
 (m/=> bounding-corners [:-> BBox any?])
 (defn bounding-corners
   [bbox]
-  (let [state @(rf/subscribe [::tool.subs/state])
+  (let [idle? @(rf/subscribe [::tool.subs/idle?])
         clicked-element @(rf/subscribe [::app.subs/clicked-element])
-        bbox (cond-> bbox (= state :idle) min-bbox)
+        bbox (cond-> bbox idle? min-bbox)
         [min-x min-y max-x max-y] bbox
         [w h] (utils.bounds/->dimensions bbox)
-        show? (fn [id]
-                (or (= state :idle)
-                    (and (= state :scale)
-                         (= id (:id clicked-element)))))]
-    [:g {:key :bounding-corners}
-     (->> [{:x min-x
-            :y min-y
-            :id :top-left
-            :cursor "nwse-resize"}
-           {:x max-x
-            :y min-y
-            :id :top-right
-            :cursor "nesw-resize"}
-           {:x min-x
-            :y max-y
-            :id :bottom-left
-            :cursor "nesw-resize"}
-           {:x max-x
-            :y max-y
-            :id :bottom-right
-            :cursor "nwse-resize"}
-           {:x (+ min-x (/ w 2))
-            :y min-y
-            :id :top-middle
-            :cursor "ns-resize"}
-           {:x max-x
-            :y (+ min-y (/ h 2))
-            :id :middle-right
-            :cursor "ew-resize"}
-           {:x min-x
-            :y (+ min-y (/ h 2))
-            :id :middle-left
-            :cursor "ew-resize"}
-           {:x (+ min-x (/ w 2))
-            :y max-y
-            :id :bottom-middle
-            :cursor "ns-resize"}]
-          (map #(when (show? (:id %))
-                  ^{:key (:id %)}
-                  [square-handle (merge % {:type :handle
-                                           :action :scale})])))]))
+        show? (fn [id] (or idle? (= id (:id clicked-element))))]
+    (->> [{:x min-x
+           :y min-y
+           :id :top-left
+           :cursor "nwse-resize"}
+          {:x max-x
+           :y min-y
+           :id :top-right
+           :cursor "nesw-resize"}
+          {:x min-x
+           :y max-y
+           :id :bottom-left
+           :cursor "nesw-resize"}
+          {:x max-x
+           :y max-y
+           :id :bottom-right
+           :cursor "nwse-resize"}
+          {:x (+ min-x (/ w 2))
+           :y min-y
+           :id :top-middle
+           :cursor "ns-resize"}
+          {:x max-x
+           :y (+ min-y (/ h 2))
+           :id :middle-right
+           :cursor "ew-resize"}
+          {:x min-x
+           :y (+ min-y (/ h 2))
+           :id :middle-left
+           :cursor "ew-resize"}
+          {:x (+ min-x (/ w 2))
+           :y max-y
+           :id :bottom-middle
+           :cursor "ns-resize"}]
+         (filter (comp show? :id))
+         (map #(vector square-handle (merge % {:type :handle
+                                               :action :scale})))
+         (into [:g {:key :bounding-corners}]))))

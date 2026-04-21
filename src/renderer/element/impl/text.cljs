@@ -81,10 +81,10 @@
 (defmethod element.hierarchy/render :text
   [el]
   (let [child-els @(rf/subscribe [::element.subs/filter-visible (:children el)])
-        state @(rf/subscribe [::tool.subs/state])
+        idle? @(rf/subscribe [::tool.subs/idle?])
         tool @(rf/subscribe [::tool.subs/active])]
     (when-not (and (= tool :edit) (:selected el))
-      [element.views/render-to-dom el child-els (= state :idle)])))
+      [element.views/render-to-dom el child-els idle?])))
 
 (defmethod element.hierarchy/render-edit :text
   [el]

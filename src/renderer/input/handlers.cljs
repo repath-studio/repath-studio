@@ -206,6 +206,9 @@
              (not= button :right))
         (on-pointer-up e))
 
+      "contextmenu"
+      (tool.hierarchy/on-context-menu db e)
+
       db)))
 
 (m/=> on-key-down [:-> App KeyboardEvent App])

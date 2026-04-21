@@ -39,6 +39,12 @@
  :-> :state)
 
 (rf/reg-sub
+ ::idle?
+ :<- [::state]
+ (fn [state _]
+   (= state :idle)))
+
+(rf/reg-sub
  ::cached-state
  :-> :cached-state)
 
