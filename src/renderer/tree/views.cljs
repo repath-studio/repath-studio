@@ -274,10 +274,10 @@
        [item el 1 elements])]]])
 
 (defn inner-sidebar []
-  (let [state @(rf/subscribe [::tool.subs/state])
+  (let [idle? @(rf/subscribe [::tool.subs/idle?])
         root-children @(rf/subscribe [::element.subs/root-children])
         elements @(rf/subscribe [::document.subs/elements])]
-    (if (= state :idle)
+    (if idle?
       [inner-sidebar-render root-children elements]
       (reagent/with-let [root-children root-children
                          elements elements]

@@ -13,6 +13,7 @@
    [renderer.frame.events :as-alias frame.events]
    [renderer.i18n.views :as i18n.views]
    [renderer.input.impl.wheel :as input.impl.wheel]
+   [renderer.tool.subs :as-alias tool.subs]
    [renderer.views :as views]))
 
 (defn inner-component
@@ -86,6 +87,7 @@
       :reagent-render
       (fn []
         (let [root-el @(rf/subscribe [::element.subs/root])
+              idle? @(rf/subscribe [::tool.subs/idle?])
               {:keys [x y]} @(rf/subscribe [::app.subs/dom-rect])
               ;; This is a different browsing context inside an iframe.
               ;; We need to simulate the events to the parent window.
@@ -107,6 +109,7 @@
            [:f> inner-component]
            [:> ContextMenu/Root
             [:> ContextMenu/Trigger
+             {:disabled (not idle?)}
              [element.hierarchy/render root-el]]
             [:> ContextMenu/Portal
              (->> context-menu-action-groups
