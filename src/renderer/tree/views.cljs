@@ -277,7 +277,7 @@
   (let [idle? @(rf/subscribe [::tool.subs/idle?])
         root-children @(rf/subscribe [::element.subs/root-children])
         elements @(rf/subscribe [::document.subs/elements])]
-    (if (= idle? :idle)
+    (if idle?
       [inner-sidebar-render root-children elements]
       (reagent/with-let [root-children root-children
                          elements elements]
