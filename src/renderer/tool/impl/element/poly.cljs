@@ -64,6 +64,10 @@
   [db e]
   (tool.hierarchy/on-pointer-up db e))
 
+(defmethod tool.hierarchy/on-context-menu ::tool.hierarchy/poly
+  [db e]
+  (tool.hierarchy/on-double-click db e))
+
 (defmethod tool.hierarchy/on-pointer-move ::tool.hierarchy/poly
   [db _e]
   (let [point (tool.handlers/snapped-position db)

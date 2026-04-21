@@ -71,12 +71,14 @@
         rotate @(rf/subscribe [::document.subs/rotate])
         grid? @(rf/subscribe [::app.subs/grid?])
         state @(rf/subscribe [::tool.subs/state])
+        idle? @(rf/subscribe [::tool.subs/idle?])
         pointer-handler (partial input.impl.pointer/handler! el)
         filters @(rf/subscribe [::a11y.subs/filters])
         snap? @(rf/subscribe [::snap.subs/active?])]
     [:svg#canvas {:on-pointer-up pointer-handler
                   :on-pointer-down pointer-handler
                   :on-pointer-move pointer-handler
+                  :on-context-menu (when-not idle? pointer-handler)
                   :on-key-up input.impl.keyboard/handler!
                   :on-key-down input.impl.keyboard/handler!
                   :tab-index 0 ; Enable keyboard events

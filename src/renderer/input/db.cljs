@@ -46,7 +46,8 @@
            "pointerout"
            "pointerleave"
            "gotpointercapture"
-           "lostpointercapture"]]])
+           "lostpointercapture"
+           "contextmenu"]]])
 
 (def WheelEvent
   [:map {:closed true}

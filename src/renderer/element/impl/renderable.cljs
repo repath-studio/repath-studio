@@ -14,5 +14,5 @@
 (defmethod element.hierarchy/render ::element.hierarchy/renderable
   [el]
   (let [child-els @(rf/subscribe [::element.subs/filter-visible (:children el)])
-        state @(rf/subscribe [::tool.subs/state])]
-    [element.views/render-to-dom el child-els (= state :idle)]))
+        idle? @(rf/subscribe [::tool.subs/idle?])]
+    [element.views/render-to-dom el child-els idle?]))
