@@ -136,9 +136,13 @@
     [:svg
      {:width (if vertical ruler-size "100%")
       :height (if vertical "100%" ruler-size)
-      :on-pointer-down #(rf/dispatch [::tool.events/activate
-                                      :guide
-                                      :orientation orientation])}
+      :on-pointer-down (fn [e]
+                         ;; Prevent action when if the event was propagated
+                         ;; through a panel separator.
+                         (when-not (.-defaultPrevented e)
+                           (rf/dispatch [::tool.events/activate
+                                         :guide
+                                         :orientation orientation])))}
      (when md? [bbox-rect orientation])
      [base-lines orientation]
      (when md? [pointer orientation])]))
