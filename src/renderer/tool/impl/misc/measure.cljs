@@ -42,6 +42,10 @@
   [db _e]
   (tool.handlers/set-state db :create))
 
+(defmethod tool.hierarchy/on-drag-end :measure
+  [db _e]
+  (tool.handlers/set-state db :idle))
+
 (defmethod tool.hierarchy/on-drag :measure
   [db _e]
   (let [[offset-x offset-y] (tool.handlers/snapped-offset db)
