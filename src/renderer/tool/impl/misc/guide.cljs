@@ -75,21 +75,20 @@
   (tool.hierarchy/on-pointer-down db e))
 
 (defmethod tool.hierarchy/on-pointer-up :guide
-  [db _e]
+  [db e]
   (-> db
-      (history.handlers/finalize (:timestamp db) [::add-guide "Add guide"])
+      (history.handlers/finalize (:timestamp e) [::add-guide "Add guide"])
       (tool.handlers/activate :transform)))
 
 (defmethod tool.hierarchy/on-drag-end :guide
-  [db _e]
+  [db e]
   (-> db
-      (history.handlers/finalize (:timestamp db) [::add-guide "Add guide"])
+      (history.handlers/finalize (:timestamp e) [::add-guide "Add guide"])
       (tool.handlers/activate :transform)))
 
 (defmethod tool.hierarchy/on-drag :guide
   [db _e]
   (let [[x y] (tool.handlers/snapped-position db)]
-    (print "a")
     (-> db
         (element.handlers/update-selected #(assoc-in % [:attrs :x] x))
         (element.handlers/update-selected #(assoc-in % [:attrs :y] y)))))
@@ -108,5 +107,5 @@
               {:id :tool/guide
                :label [::label "Guide"]
                :icon "ruler-straight"
-               :event [::tool.events/activate :fill]
-               :active [::tool.subs/active? :fill]}])
+               :event [::tool.events/activate :guide]
+               :active [::tool.subs/active? :guide]}])
