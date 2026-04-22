@@ -111,16 +111,13 @@
 
 (defn guides-locked-toggle
   []
-  (let [locked? @(rf/subscribe [::app.subs/guides-locked?])
-        guide-active? @(rf/subscribe [::tool.subs/active? :guide])]
-    [:div
-     {:class (if guide-active? "bg-accent" "bg-primary")
-      :style {:width ruler.views/ruler-size
+  (let [locked? @(rf/subscribe [::app.subs/guides-locked?])]
+    [:div.bg-primary
+     {:style {:width ruler.views/ruler-size
               :height ruler.views/ruler-size}}
      [views/icon-button
       (if locked? "lock" "unlock")
-      {:class ["button-size-small rounded-xs m-0 bg-transparent!"
-               (when guide-active? "text-accent-foreground!")]
+      {:class "button-size-small rounded-xs m-0 bg-transparent!"
        :disabled @(rf/subscribe [::tool.subs/active? :guide])
        :title (i18n.views/t (if locked?
                               [::unlock "Unlock"]
