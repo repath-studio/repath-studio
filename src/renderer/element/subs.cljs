@@ -22,7 +22,7 @@
  (fn [[elements root] _]
    (->> (:children root)
         (mapv elements)
-        (filterv (complement :virtual)))))
+        (filterv (complement utils.element/virtual?)))))
 
 (rf/reg-sub
  ::entity

@@ -64,7 +64,6 @@
     (-> db
         (tool.handlers/set-state :create)
         (element.handlers/add {:type :element
-                               :virtual true
                                :tag :guide
                                :attrs {:x x
                                        :y y

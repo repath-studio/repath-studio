@@ -19,6 +19,7 @@
   {:icon "ruler-straight"
    :label [::label "Guide"]
    :top-level true
+   :virtual true
    :description [::element-description
                  "The <guide> element is used to create guides for aligning
                   other elements."]

@@ -41,7 +41,6 @@
    [:parent {:optional true} ElementId]
    [:type {:optional true} [:= :element]]
    [:visible {:optional true} boolean?]
-   [:virtual {:optional true} boolean?]
    [:locked {:optional true} boolean?]
    [:selected {:optional true} boolean?]
    [:children {:optional true} [:vector ElementId]]

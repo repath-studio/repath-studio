@@ -47,6 +47,11 @@
   [el]
   (-> el properties :top-level boolean))
 
+(m/=> virtual? [:-> Element boolean?])
+(defn virtual?
+  [el]
+  (-> el properties :virtual boolean))
+
 (m/=> united-bbox [:-> [:sequential Element] [:maybe BBox]])
 (defn united-bbox
   [elements]

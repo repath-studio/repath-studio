@@ -63,6 +63,11 @@
   [db id]
   (-> db (entity id) :locked boolean))
 
+(m/=> virtual? [:-> App ElementId boolean?])
+(defn virtual?
+  [db id]
+  (-> db (entity id) utils.element/virtual?))
+
 (m/=> selected [:function
                 [:-> fn?]
                 [:-> App [:sequential Element]]])
@@ -98,7 +103,7 @@
 (defn selected-non-virtual-ids
   [db]
   (into #{} (comp (selected)
-                  (filter (complement :virtual))
+                  (filter (complement utils.element/virtual?))
                   (map :id)) (entities db)))
 
 (m/=> children-ids [:-> App ElementId [:vector ElementId]])
@@ -312,13 +317,13 @@
                   (visible))
             (entities db)))
 
-(m/=> top-selected-ancestors [:-> App [:sequential Element]])
+(m/=> top-selected-ancestors [:-> App [:vector Element]])
 (defn top-selected-ancestors
   [db]
   (->> (entities db (-> (top-ancestor-ids db)
                         (disj (:id (root db)))
                         (vec)))
-       (filter (complement :virtual))))
+       (filterv (complement utils.element/virtual?))))
 
 (m/=> update-prop [:-> App ElementId ifn? [:* any?] App])
 (defn update-prop
@@ -449,7 +454,7 @@
   (let [ids (if (siblings-selected? db)
               (children-ids db (:id (parent db (:id (parent db)))))
               (siblings db))]
-    (reduce select db (remove #(:virtual (entity db %)) ids))))
+    (reduce select db (remove (partial virtual? db) ids))))
 
 (m/=> selected-tags [:-> App [:set ElementTag]])
 (defn selected-tags
@@ -588,13 +593,19 @@
   ([db f]
    (reduce (partial-right update-index f) db (selected-sorted-ids db)))
   ([db id f]
-   (let [sibling-count (count (siblings db id))
-         i (children-index db id)
+   (let [all-siblings (siblings db id)
+         non-virtual-siblings (filterv #(not (virtual? db %)) all-siblings)
+         sibling-count (count non-virtual-siblings)
+         i (.indexOf non-virtual-siblings id)
          new-index (f i sibling-count)]
      (cond-> db
        (<= 0 new-index (dec sibling-count))
        (update-prop (:id (parent db id)) :children
-                    utils.vec/move i new-index)))))
+                    (fn [children]
+                      (let [actual-i (.indexOf children id)
+                            target-id (nth non-virtual-siblings new-index)
+                            actual-new-i (.indexOf children target-id)]
+                        (utils.vec/move children actual-i actual-new-i))))))))
 
 (m/=> set-parent [:function
                   [:-> App ElementId App]
