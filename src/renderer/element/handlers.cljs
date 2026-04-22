@@ -46,7 +46,7 @@
   ([db]
    (vals (get-in db (path db))))
   ([db ids]
-   (vals (select-keys (get-in db (path db)) ids))))
+   (keep #(get-in db (path db %)) ids)))
 
 (m/=> entity [:-> App [:maybe ElementId] [:maybe Element]])
 (defn entity
