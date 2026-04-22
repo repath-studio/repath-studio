@@ -67,7 +67,6 @@
         read-only? @(rf/subscribe [::document.subs/read-only?])
         cursor @(rf/subscribe [::tool.subs/cursor])
         active-tool @(rf/subscribe [::tool.subs/active])
-        cached-tool @(rf/subscribe [::tool.subs/cached])
         rotate @(rf/subscribe [::document.subs/rotate])
         grid? @(rf/subscribe [::app.subs/grid?])
         state @(rf/subscribe [::tool.subs/state])
@@ -106,7 +105,7 @@
        [snap-info])
 
      (when-not read-only?
-       [tool.hierarchy/render (or cached-tool active-tool)])]))
+       [tool.hierarchy/render active-tool])]))
 
 (defmethod element.hierarchy/render-to-string :canvas
   [el]
