@@ -379,6 +379,11 @@
  {:label "텍스트"
   :help "클릭하여 입력을 시작합니다."}
 
+ :renderer.tool.impl.misc.guide
+ {:label "안내선"
+  :idle "안내선을 만들려면 눈금자를 캔버스로 드래그하세요."
+  :create "안내선을 완성하려면 놓으세요."}
+
  :renderer.attribute.impl.stroke-linecap
  {:description "stroke-linecap 속성은 획이 있을 때 열린 하위 패스의
                 끝에서 사용할 모양을 정의하는 프레젠테이션 속성입니다."

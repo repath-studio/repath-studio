@@ -427,6 +427,11 @@
  {:label "Tekst"
   :help "Klik om te beginnen met typen."}
 
+ :renderer.tool.impl.misc.guide
+ {:label "Gids"
+  :idle "Sleep de liniaal naar het canvas om een gids te maken."
+  :create "Laat los om de gids te voltooien."}
+
  :renderer.attribute.impl.stroke-linecap
  {:description "Het stroke-linecap attribuut is een presentatie attribuut dat
                 de vorm definieert die gebruikt wordt aan het einde van open

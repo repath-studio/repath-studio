@@ -2,13 +2,16 @@
   (:require
    [re-frame.core :as rf]
    [reagent.core :as reagent]
+   [renderer.action.events :as-alias action.events]
    [renderer.app.handlers :as app.handlers]
    [renderer.element.handlers :as element.handlers]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
    [renderer.input.handlers :as input.handlers]
+   [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
-   [renderer.tool.hierarchy :as tool.hierarchy]))
+   [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.tool.subs :as-alias tool.subs]))
 
 (tool.hierarchy/derive-tool :guide ::tool.hierarchy/tool)
 
@@ -27,11 +30,11 @@
 
 (defmethod tool.hierarchy/help [:guide :idle]
   []
-  (i18n.views/t [::help "Drag the ruler to the canvas to create a guide."]))
+  (i18n.views/t [::idle "Drag the ruler to the canvas to create a guide."]))
 
 (defmethod tool.hierarchy/help [:guide :create]
   []
-  (i18n.views/t [::help "Drop to finalize the guide."]))
+  (i18n.views/t [::create "Drop to finalize the guide."]))
 
 (defmethod tool.hierarchy/on-activate :guide
   [db & {:as props}]
@@ -100,3 +103,10 @@
 (defmethod tool.hierarchy/snapping-elements :guide
   [db]
   (element.handlers/visible db))
+
+(rf/dispatch [::action.events/register-action
+              {:id :tool/guide
+               :label [::label "Guide"]
+               :icon "ruler-straight"
+               :event [::tool.events/activate :fill]
+               :active [::tool.subs/active? :fill]}])

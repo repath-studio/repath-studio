@@ -398,6 +398,11 @@
  {:label "Текст"
   :help "Щёлкните для начала ввода."}
 
+ :renderer.tool.impl.misc.guide
+ {:label "Направляющая"
+  :idle "Перетащите линейку на холст, чтобы создать направляющую."
+  :create "Отпустите, чтобы завершить создание направляющей."}
+
  :renderer.tool.impl.element.polyline
  {:label "Ломаная"
   :create-polyline "Создать ломаную"}

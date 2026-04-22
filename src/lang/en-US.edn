@@ -409,6 +409,11 @@
  {:label "Text"
   :help "Click to start typing."}
 
+ :renderer.tool.impl.misc.guide
+ {:label "Guide"
+  :idle "Drag the ruler to the canvas to create a guide."
+  :create "Drop to finalize the guide."}
+
  :renderer.attribute.impl.stroke-linecap
  {:description "The stroke-linecap attribute is a presentation attribute
                 defining the shape to be used at the end of open subpaths when

@@ -372,6 +372,11 @@
  {:label "テキスト"
   :help "クリックして入力を開始。"}
 
+ :renderer.tool.impl.misc.guide
+ {:label "ガイド"
+  :idle "定規をキャンバスにドラッグしてガイドを作成します。"
+  :create "ガイドを確定するにはドロップしてください。"}
+
  :renderer.tool.impl.element.polyline
  {:label "複線"
   :create-polyline "複線を作成"}

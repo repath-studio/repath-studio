@@ -342,6 +342,11 @@
  {:label "文本"
   :help "点击开始输入."}
 
+ :renderer.tool.impl.misc.guide
+ {:label "参考线"
+  :idle "将标尺拖到画布上以创建参考线。"
+  :create "放下以完成参考线。"}
+
  :renderer.tool.impl.element.polyline
  {:label "折线"
   :create-polyline "创建折线"}

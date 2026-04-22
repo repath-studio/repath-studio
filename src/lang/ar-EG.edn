@@ -387,6 +387,11 @@
  {:label "نص"
   :help "انقر لبدء الكتابة."}
 
+ :renderer.tool.impl.misc.guide
+ {:label "دليل"
+  :idle "اسحب المسطرة إلى اللوحة لإنشاء دليل."
+  :create "أسقط لإتمام الدليل."}
+
  :renderer.tool.impl.element.polyline
  {:label "خط متعدد"
   :create-polyline "إنشاء خط متعدد"}

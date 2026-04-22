@@ -416,6 +416,11 @@
  {:label "Text"
   :help "Klicka för att börja skriva."}
 
+ :renderer.tool.impl.misc.guide
+ {:label "Guide"
+  :idle "Dra linjalen till duken för att skapa en guide."
+  :create "Släpp för att slutföra guiden."}
+
  :renderer.attribute.impl.stroke-linecap
  {:description "Attributet stroke-linecap är ett presentationsattribut som
                 definierar formen som ska användas i slutet av öppna delbanor

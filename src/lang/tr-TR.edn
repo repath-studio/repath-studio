@@ -409,6 +409,11 @@
  {:label "Metin"
   :help "Yazmaya başlamak için tıklayın."}
 
+ :renderer.tool.impl.misc.guide
+ {:label "Kılavuz"
+  :idle "Kılavuz oluşturmak için cetveli tuval üzerine sürükleyin."
+  :create "Kılavuzu tamamlamak için bırakın."}
+
  :renderer.attribute.impl.stroke-linecap
  {:description "stroke-linecap özniteliği, açık alt yolların ucunda
                 çizgi çekildiğinde kullanılacak şekli tanımlayan
