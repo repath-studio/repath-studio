@@ -130,15 +130,16 @@
       (assoc-in [:active-pointers pointer-id] e)
 
       (= button :middle)
-      (tool.handlers/set-cached :pan)
+      (-> (tool.handlers/set-cached :pan))
 
-      (and (not= button :right)
-           (empty? active-pointers))
+      (or (= button :middle)
+          (and (= button :left) (empty? active-pointers)))
       (assoc :pointer-offset pointer-pos
              :adjusted-pointer-offset (adjusted-pointer-pos db pointer-pos)
              :nearest-neighbor-offset (:point nearest-neighbor))
 
-      (empty? active-pointers)
+      (or (= button :middle)
+          (empty? active-pointers))
       (-> (tool.hierarchy/on-pointer-down e)
           (app.handlers/add-fx [::effects/focus-canvas nil])))))
 

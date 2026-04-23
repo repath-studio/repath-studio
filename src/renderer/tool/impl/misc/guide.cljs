@@ -38,7 +38,8 @@
 
 (defmethod tool.hierarchy/on-activate :guide
   [db & {:as props}]
-  (let [{:keys [orientation]} props]
+  (let [{:keys [orientation]} props
+        orientation (or orientation @orient)]
     (cond-> db
       orientation
       (-> (assoc :guides true)
