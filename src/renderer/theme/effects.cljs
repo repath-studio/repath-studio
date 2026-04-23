@@ -24,7 +24,7 @@
    (.addListener native-query! #(rf/dispatch e))))
 
 (rf/reg-fx
- ::set-status-bar-style
+ ::set-mobile-status-bar-style
  (fn [theme-mode]
    (.setStyle StatusBar (clj->js {:style (if (= theme-mode :dark)
                                            Style.Dark

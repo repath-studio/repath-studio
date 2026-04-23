@@ -13,7 +13,7 @@
  (fn [{:keys [db native-mode]} _]
    {:db (theme.handlers/set-native-mode db native-mode)
     :dispatch-n [[::update-data-theme]
-                 [::update-status-bar]
+                 [::update-mobile-status-bar]
                  [::update-meta-color]]}))
 
 (rf/reg-event-fx
@@ -23,11 +23,11 @@
      {::effects/set-document-attr ["data-theme" (name mode)]})))
 
 (rf/reg-event-fx
- ::update-status-bar
+ ::update-mobile-status-bar
  (fn [{:keys [db]} _]
    (cond-> {}
      (app.handlers/mobile? db)
-     (assoc ::theme.effects/set-status-bar-style
+     (assoc ::theme.effects/set-mobile-status-bar-style
             (theme.handlers/computed-mode db)))))
 
 (rf/reg-event-fx
@@ -42,5 +42,5 @@
  (fn [{:keys [db]} [_ mode]]
    {:db (theme.handlers/set-mode db mode)
     :dispatch-n [[::update-data-theme]
-                 [::update-status-bar]
+                 [::update-mobile-status-bar]
                  [::update-meta-color]]}))

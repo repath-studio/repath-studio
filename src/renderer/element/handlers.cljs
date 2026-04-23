@@ -403,7 +403,7 @@
                 [:-> App ElementId App]])
 (defn deselect
   ([db]
-   (transduce (selected-ids) (completing deselect) db (entities db)))
+   (reduce deselect db (selected-ids db)))
   ([db id]
    (assoc-prop db id :selected false)))
 

@@ -141,7 +141,7 @@
                [::theme.effects/add-listener [::theme.events/set-native-mode]]
                [::app.effects/setup-paper]
                ;; The status bar needs to be updated later for some reason.
-               [:dispatch [::theme.events/update-status-bar]]
+               [:dispatch [::theme.events/update-mobile-status-bar]]
                [::action.effects/update-keydown-rules
                 (action.handlers/entities db)]]
               listeners)}))

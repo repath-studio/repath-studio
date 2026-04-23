@@ -109,7 +109,7 @@
  (fn [_]))
 
 (rf/reg-fx
- ::theme.effects/set-status-bar-style
+ ::theme.effects/set-mobile-status-bar-style
  (fn [_]))
 
 (rf/reg-fx
