@@ -14,6 +14,12 @@
    (= active tool-id)))
 
 (rf/reg-sub
+ ::not-active?
+ :<- [::active]
+ (fn [active [_ tool-id]]
+   (not= active tool-id)))
+
+(rf/reg-sub
  ::cached
  :-> :cached-tool)
 

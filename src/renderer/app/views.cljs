@@ -22,8 +22,6 @@
    [renderer.panel.subs :as-alias panel.subs]
    [renderer.panel.views :as panel.views]
    [renderer.reepl.views :as repl.views]
-   [renderer.ruler.events :as-alias ruler.events]
-   [renderer.ruler.subs :as-alias ruler.subs]
    [renderer.ruler.views :as ruler.views]
    [renderer.snap.subs :as-alias snap.subs]
    [renderer.theme.subs :as-alias theme.subs]
@@ -111,19 +109,20 @@
     (tool.hierarchy/right-panel active-tool)]
    [:div.bg-primary.grow.flex]])
 
-(defn ruler-locked-toggle
+(defn guides-locked-toggle
   []
-  (let [ruler-locked? @(rf/subscribe [::ruler.subs/locked?])]
+  (let [locked? @(rf/subscribe [::app.subs/guides-locked?])]
     [:div.bg-primary
      {:style {:width ruler.views/ruler-size
               :height ruler.views/ruler-size}}
      [views/icon-button
-      (if ruler-locked? "lock" "unlock")
-      {:class "button-size-small rounded-xs m-0 bg-transparent! hidden"
-       :title (i18n.views/t (if ruler-locked?
+      (if locked? "lock" "unlock")
+      {:class "button-size-small rounded-xs m-0 bg-transparent!"
+       :disabled @(rf/subscribe [::tool.subs/active? :guide])
+       :title (i18n.views/t (if locked?
                               [::unlock "Unlock"]
                               [::lock "Lock"]))
-       :on-click #(rf/dispatch [::ruler.events/toggle-locked])}]]))
+       :on-click #(rf/dispatch [::app.events/toggle-guides-locked])}]]))
 
 (defn frame
   []
@@ -174,26 +173,28 @@
 
 (defn frame-panel
   []
-  (let [ruler-visible? @(rf/subscribe [::ruler.subs/visible?])
-        md? @(rf/subscribe [::window.subs/md?])]
+  (let [rulers? @(rf/subscribe [::app.subs/rulers?])
+        md? @(rf/subscribe [::window.subs/md?])
+        active? @(rf/subscribe [::tool.subs/active? :guide])
+        bg-class (if active? "bg-accent" "bg-primary")]
     [:div.flex.flex-col.flex-1.h-full.gap-px.overflow-hidden
      [:div
       [toolbar.tools/root]
-      (when ruler-visible?
+      (when rulers?
         [:div.flex.gap-px
-         [:div.bg-primary
+         [:div
           {:style {:width ruler.views/ruler-size
                    :height ruler.views/ruler-size}}
-          [ruler-locked-toggle]]
-         [:div.bg-primary.flex-1
+          [guides-locked-toggle bg-class]]
+         [:div.flex-1
           {:dir "ltr"
-           :class "rtl:pl-[50px] rtl:md:pl-0"}
+           :class ["rtl:pl-[50px] rtl:md:pl-0" bg-class]}
           [ruler.views/ruler :horizontal]]])]
      [:div.flex.flex-1.relative.gap-px
-      (when ruler-visible?
-        [:div.bg-primary
+      (when rulers?
+        [:div
          {:dir "ltr"
-          :class "rtl:scale-x-[-1]"}
+          :class ["rtl:scale-x-[-1]" bg-class]}
          [ruler.views/ruler :vertical]])
       [:div.relative.grow.flex
        [frame]
@@ -243,7 +244,7 @@
 
       [panel.views/panel
        {:defaultSize "100%"
-        :minSize 100}
+        :minSize 320}
        [frame-panel]]
 
       (when (and md? history-visible?)
@@ -357,7 +358,7 @@
         :class "w-full"}
        [panel.views/panel
         {:defaultSize "100%"
-         :minSize 100}
+         :minSize 320}
         [:div.flex.h-full.flex-col.flex-1.overflow-hidden.gap-px.w-full
          [editor]]]
        (when (and md? properties?)
@@ -402,7 +403,7 @@
           [panel.views/separator]])
        [panel.views/panel
         {:defaultSize "100%"
-         :minSize 100}
+         :minSize 665}
         [center-panel]]]]
      (when-not md?
        [bottom-bar])]))

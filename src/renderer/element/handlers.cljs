@@ -63,6 +63,11 @@
   [db id]
   (-> db (entity id) :locked boolean))
 
+(m/=> virtual? [:-> App ElementId boolean?])
+(defn virtual?
+  [db id]
+  (-> db (entity id) utils.element/virtual?))
+
 (m/=> selected [:function
                 [:-> fn?]
                 [:-> App [:sequential Element]]])
@@ -94,6 +99,12 @@
    (comp (selected) (map :id)))
   ([db]
    (into #{} (selected-ids) (entities db))))
+
+(defn selected-non-virtual-ids
+  [db]
+  (into #{} (comp (selected)
+                  (filter (complement utils.element/virtual?))
+                  (map :id)) (entities db)))
 
 (m/=> children-ids [:-> App ElementId [:vector ElementId]])
 (defn children-ids
@@ -306,12 +317,13 @@
                   (visible))
             (entities db)))
 
-(m/=> top-selected-ancestors [:-> App [:sequential Element]])
+(m/=> top-selected-ancestors [:-> App [:vector Element]])
 (defn top-selected-ancestors
   [db]
-  (entities db (-> (top-ancestor-ids db)
-                   (disj (:id (root db)))
-                   (vec))))
+  (->> (entities db (-> (top-ancestor-ids db)
+                        (disj (:id (root db)))
+                        (vec)))
+       (filterv (complement utils.element/virtual?))))
 
 (m/=> update-prop [:-> App ElementId ifn? [:* any?] App])
 (defn update-prop
@@ -327,7 +339,7 @@
                   [:-> App ElementId keyword? any? App]])
 (defn assoc-prop
   ([db k v]
-   (reduce (partial-right assoc-prop k v) db (selected-ids db)))
+   (reduce (partial-right assoc-prop k v) db (selected-non-virtual-ids db)))
   ([db id k v]
    (if (string/blank? v)
      (update-in db (path db id) dissoc k)
@@ -439,9 +451,10 @@
 (m/=> select-all [:-> App App])
 (defn select-all
   [db]
-  (reduce select db (if (siblings-selected? db)
-                      (children-ids db (:id (parent db (:id (parent db)))))
-                      (siblings db))))
+  (let [ids (if (siblings-selected? db)
+              (children-ids db (:id (parent db (:id (parent db)))))
+              (siblings db))]
+    (reduce select db (remove (partial virtual? db) ids))))
 
 (m/=> selected-tags [:-> App [:set ElementTag]])
 (defn selected-tags
@@ -452,20 +465,26 @@
 (m/=> filter-by-tag [:-> App ElementTag [:sequential Element]])
 (defn filter-by-tag
   ([tag]
-   (comp (selected)
-         (filter #(= tag (:tag %)))))
+   (filter #(= tag (:tag %))))
   ([db tag]
    (into [] (filter-by-tag tag) (entities db))))
 
+(m/=> filter-selected-by-tag [:-> App ElementTag [:sequential Element]])
+(defn filter-selected-by-tag
+  ([tag]
+   (comp (selected) (filter-by-tag tag)))
+  ([db tag]
+   (into [] (filter-selected-by-tag tag) (entities db))))
+
 (m/=> select-same-tags [:-> App App])
 (defn select-same-tags
-  [db]
-  (let [tags (selected-tags db)]
-    (transduce (comp (filter #(contains? tags (:tag %)))
-                     (map :id))
-               (completing select)
-               db
-               (entities db))))
+  ([db]
+   (let [tags (selected-tags db)]
+     (transduce (comp (filter #(contains? tags (:tag %)))
+                      (map :id))
+                (completing select)
+                db
+                (entities db)))))
 
 (m/=> sort-by-index-path [:-> App [:sequential Element] [:sequential Element]])
 (defn sort-by-index-path
@@ -574,13 +593,19 @@
   ([db f]
    (reduce (partial-right update-index f) db (selected-sorted-ids db)))
   ([db id f]
-   (let [sibling-count (count (siblings db id))
-         i (children-index db id)
+   (let [all-siblings (siblings db id)
+         non-virtual-siblings (filterv #(not (virtual? db %)) all-siblings)
+         sibling-count (count non-virtual-siblings)
+         i (.indexOf non-virtual-siblings id)
          new-index (f i sibling-count)]
      (cond-> db
        (<= 0 new-index (dec sibling-count))
        (update-prop (:id (parent db id)) :children
-                    utils.vec/move i new-index)))))
+                    (fn [children]
+                      (let [actual-i (.indexOf children id)
+                            target-id (nth non-virtual-siblings new-index)
+                            actual-new-i (.indexOf children target-id)]
+                        (utils.vec/move children actual-i actual-new-i))))))))
 
 (m/=> set-parent [:function
                   [:-> App ElementId App]
@@ -694,7 +719,7 @@
   [db el]
   (cond-> el
     (not (or (utils.element/root? el) (:parent el)))
-    (assoc :parent (:id (if (utils.element/svg? el)
+    (assoc :parent (:id (if (utils.element/top-level? el)
                           (root db)
                           (if-let [el-bbox (element.hierarchy/bbox el)]
                             (overlapping-svg db el-bbox)
@@ -809,15 +834,19 @@
          offset (matrix/sub el-center center)
          el (dissoc el :bbox)
          [s-x1 s-y1] (:bbox parent-el)
-         pointer-pos (:adjusted-pointer-pos db)]
+         pointer-pos (:adjusted-pointer-pos db)
+         el (cond-> el
+              (not (utils.element/top-level? el))
+              (assoc :parent (:id parent-el)))]
      (reduce select
              (cond-> db
                :always
                (-> (deselect)
-                   (add (assoc el :parent (:id parent-el)))
+                   (add el)
                    (place (matrix/add pointer-pos offset)))
 
-               (not= (:id (root db)) (:id parent-el))
+               (and (not= (:id (root db)) (:id parent-el))
+                    (not (utils.element/top-level? el)))
                (translate [(- s-x1) (- s-y1)]))
              (selected-ids db)))))
 

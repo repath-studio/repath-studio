@@ -18,7 +18,6 @@
    [renderer.input.db :refer [PointerEvent PointerId]]
    [renderer.menubar.db :refer [Menubar]]
    [renderer.panel.db :as panel.db :refer [Panel PanelId]]
-   [renderer.ruler.db :refer [Ruler]]
    [renderer.snap.db :refer [Snap NearestNeighbor]]
    [renderer.theme.db :refer [Theme]]
    [renderer.timeline.db :refer [Timeline]]
@@ -62,8 +61,12 @@
    [:cached-state {:optional true} State]
    [:grid {:default false
            :persist true} boolean?]
-   [:ruler {:default {}
-            :persist true} Ruler]
+   [:rulers {:default true
+             :persist true} boolean?]
+   [:guides {:default true
+             :persist true} boolean?]
+   [:guides-locked {:default false
+                    :persist true} boolean?]
    [:snap {:default {}
            :persist true} Snap]
    [:active-document {:optional true

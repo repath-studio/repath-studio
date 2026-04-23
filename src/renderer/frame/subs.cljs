@@ -19,3 +19,8 @@
  :<- [::viewbox]
  (fn [viewbox _]
    (string/join " " viewbox)))
+
+(rf/reg-sub
+ ::viewbox-bounds
+ :<- [::viewbox]
+ frame.handlers/viewbox->bounds)

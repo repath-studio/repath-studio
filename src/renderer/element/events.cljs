@@ -9,396 +9,329 @@
    [renderer.element.db :as element.db]
    [renderer.element.effects :as-alias element.effects]
    [renderer.element.handlers :as element.handlers]
-   [renderer.history.handlers :as history.handlers]
+   [renderer.history.events :refer [finalize]]
+   [renderer.tool.handlers :as tool.handlers]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.extra :refer [partial-right]]))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::select
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]} [_ id additive]]
-   {:db (-> (element.handlers/toggle-selection db id additive)
-            (history.handlers/finalize now (if additive
-                                             [::modify-selection
-                                              "Modify selection"]
-                                             [::select-element
-                                              "Select element"])))}))
+ [(finalize (fn [[_ _id additive]]
+              (if additive
+                [[::modify-selection "Modify selection"]]
+                [[::select-element "Select element"]])))]
+ (fn [db [_ id additive]]
+   (element.handlers/toggle-selection db id additive)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::select-ids
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]} [_ ids]]
-   {:db (-> (partial-right element.handlers/assoc-prop :selected true)
-            (reduce (element.handlers/deselect db) ids)
-            (history.handlers/finalize now [::select-elements
-                                            "Select elements"]))}))
+ [(finalize [::select-elements "Select elements"])]
+ (fn [db [_ ids]]
+   (-> (partial-right element.handlers/assoc-prop :selected true)
+       (reduce (element.handlers/deselect db) ids))))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::toggle-prop
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]} [_ id k explanation]]
-   {:db (-> (element.handlers/update-prop db id k not)
-            (history.handlers/finalize now explanation))}))
+ [(finalize (fn [[_ _id _k explanation]] [explanation]))]
+ (fn [db [_ id k _explanation]]
+   (element.handlers/update-prop db id k not)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::set-label
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]} [_ id v]]
-   {:db (-> (element.handlers/assoc-prop db id :label v)
-            (history.handlers/finalize now [::set-label "Set label"]))}))
+ [(finalize [::set-label "Set label"])]
+ (fn [db [_ id v]]
+   (element.handlers/assoc-prop db id :label v)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::lock
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]}]
-   {:db (-> (element.handlers/assoc-prop db :locked true)
-            (history.handlers/finalize now [::lock-selection
-                                            "Lock selection"]))}))
+ [(finalize [::lock-selection "Lock selection"])]
+ (fn [db _]
+   (element.handlers/assoc-prop db :locked true)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::unlock
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]}]
-   {:db (-> (element.handlers/assoc-prop db :locked false)
-            (history.handlers/finalize now [::unlock-selection
-                                            "Unlock selection"]))}))
+ [(finalize [::unlock-selection "Unlock selection"])]
+ (fn [db _]
+   (element.handlers/assoc-prop db :locked false)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::set-attr
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]} [_ k v]]
-   {:db (-> (element.handlers/set-attr db k v)
-            (history.handlers/finalize now [::set "Set %1"] [(name k)]))}))
+ [(finalize (fn [[_ k]] [[::set "Set %1"] [(name k)]]))]
+ (fn [db [_ k v]]
+   (element.handlers/set-attr db k v)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::remove-attr
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]} [_ k]]
-   {:db (-> (element.handlers/dissoc-attr db k)
-            (history.handlers/finalize now
-                                       [::remove "Remove %1"]
-                                       [(name k)]))}))
+ [(finalize
+   (fn [[_ k]] [[::remove "Remove %1"] [(name k)]]))]
+ (fn [db [_ k]]
+   (element.handlers/dissoc-attr db k)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::update-attr
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]} [_ k f & more]]
-   {:db (-> (apply partial-right element.handlers/update-attr k f more)
-            (reduce db (element.handlers/selected-ids db))
-            (history.handlers/finalize now
-                                       [::update "Update %1"]
-                                       [(name k)]))}))
+ [(finalize (fn [[_ k]] [[::update "Update %1"] [(name k)]]))]
+ (fn [db [_ k f & more]]
+   (-> (apply partial-right element.handlers/update-attr k f more)
+       (reduce db (element.handlers/selected-ids db)))))
 
 (rf/reg-event-db
  ::preview-attr
  (fn [db [_ k v]]
    (element.handlers/set-attr db k v)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::delete
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]}]
-   {:db (-> (element.handlers/delete db)
-            (history.handlers/finalize now [::delete-selection
-                                            "Delete selection"]))}))
+ [(finalize [::delete-selection "Delete selection"])]
+ (fn [db _]
+   (element.handlers/delete db)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::deselect-all
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]}]
-   {:db (-> (element.handlers/deselect db)
-            (history.handlers/finalize now [::deselect-all "Deselect all"]))}))
+ [(finalize [::deselect-all "Deselect all"])]
+ (fn [db _]
+   (element.handlers/deselect db)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::select-all
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]}]
-   {:db (-> (element.handlers/select-all db)
-            (history.handlers/finalize now [::select-all "Select all"]))}))
+ [(finalize [::select-all "Select all"])]
+ (fn [db _]
+   (element.handlers/select-all db)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::select-same-tags
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]}]
-   {:db (-> (element.handlers/select-same-tags db)
-            (history.handlers/finalize now [::select-same-tags
-                                            "Select same tags"]))}))
+ [(finalize [::select-same-tags "Select same tags"])]
+ (fn [db _]
+   (element.handlers/select-same-tags db)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::invert-selection
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]}]
-   {:db (-> (element.handlers/invert-selection db)
-            (history.handlers/finalize now [::invert-selection
-                                            "Invert selection"]))}))
+ [(finalize [::invert-selection "Invert selection"])]
+ (fn [db _]
+   (element.handlers/invert-selection db)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::raise
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]}]
-   {:db (-> (element.handlers/update-index db inc)
-            (history.handlers/finalize now [::raise-selection
-                                            "Raise selection"]))}))
+ [(finalize [::raise-selection "Raise selection"])]
+ (fn [db _]
+   (element.handlers/update-index db inc)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::lower
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]}]
-   {:db (-> (element.handlers/update-index db dec)
-            (history.handlers/finalize now [::lower-selection
-                                            "Lower selection"]))}))
+ [(finalize [::lower-selection "Lower selection"])]
+ (fn [db _]
+   (element.handlers/update-index db dec)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::raise-to-top
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]}]
-   {:db (-> (element.handlers/update-index db (fn [_i sibling-count]
-                                                (dec sibling-count)))
-            (history.handlers/finalize now [::raise-selection-top
-                                            "Raise selection to top"]))}))
+ [(finalize [::raise-selection-top "Raise selection to top"])]
+ (fn [db _]
+   (element.handlers/update-index db (fn [_i sibling-count]
+                                       (dec sibling-count)))))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::lower-to-bottom
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]}]
-   {:db (-> (element.handlers/update-index db #(identity 0))
-            (history.handlers/finalize now [::lower-selection-bottom
-                                            "Lower selection to bottom"]))}))
+ [(finalize [::lower-selection-bottom "Lower selection to bottom"])]
+ (fn [db _]
+   (element.handlers/update-index db #(identity 0))))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::align
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]} [_ direction]]
-   {:db (-> (element.handlers/align db direction)
-            (history.handlers/finalize now
-                                       [::update "Update %1"]
-                                       [direction]))}))
+ [(finalize (fn [[_ direction]] [[::update "Update %1"] [direction]]))]
+ (fn [db [_ direction]]
+   (element.handlers/align db direction)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::paste
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]}]
-   {:db (-> (element.handlers/paste db)
-            (history.handlers/finalize now [::paste-selection
-                                            "Paste selection"]))}))
+ [(finalize [::paste-selection "Paste selection"])]
+ (fn [db _]
+   (element.handlers/paste db)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::paste-in-place
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]}]
-   {:db (-> (element.handlers/paste-in-place db)
-            (history.handlers/finalize now [::paste-selection-in-place
-                                            "Paste selection in place"]))}))
+ [(finalize [::paste-selection-in-place "Paste selection in place"])]
+ (fn [db _]
+   (element.handlers/paste-in-place db)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::paste-styles
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]}]
-   {:db (-> (element.handlers/paste-styles db)
-            (history.handlers/finalize now [::paste-styles-to-selection
-                                            "Paste styles to selection"]))}))
+ [(finalize [::paste-styles-to-selection "Paste styles to selection"])]
+ (fn [db _]
+   (element.handlers/paste-styles db)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::duplicate
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]}]
-   {:db (-> (element.handlers/duplicate db)
-            (history.handlers/finalize now [::duplicate-selection
-                                            "Duplicate selection"]))}))
+ [(finalize [::duplicate-selection "Duplicate selection"])]
+ (fn [db _]
+   (element.handlers/duplicate db)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::translate
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]} [_ offset]]
-   {:db (-> (element.handlers/translate db offset)
-            (history.handlers/finalize now [::move-selection
-                                            "Move selection"]))}))
+ [(finalize [::move-selection "Move selection"])]
+ (fn [db [_ offset]]
+   (element.handlers/translate db offset)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::place
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]} [_ position]]
-   {:db (-> (element.handlers/place db position)
-            (history.handlers/finalize now [::place-selection
-                                            "Place selection"]))}))
+ [(finalize [::place-selection "Place selection"])]
+ (fn [db [_ position]]
+   (element.handlers/place db position)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::scale
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]} [_ ratio]]
+ [(finalize [::scale-selection "Scale selection"])]
+ (fn [db [_ ratio]]
    (let [pivot-point (-> db element.handlers/bbox utils.bounds/center)]
-     {:db (-> (element.handlers/scale db ratio pivot-point false)
-              (history.handlers/finalize now [::scale-selection
-                                              "Scale selection"]))})))
+     (element.handlers/scale db ratio pivot-point false))))
 
 (rf/reg-event-fx
  ::->path
  (fn [{:keys [db]}]
-   {::element.effects/->path
-    {:data (element.handlers/selected db)
-     :on-success [::finalize->path]
-     :on-error [::app.events/toast-error]}}))
+   (when (= (:state db) :idle)
+     {:db (tool.handlers/activate db :transform)
+      ::element.effects/->path
+      {:data (element.handlers/selected db)
+       :on-success [::finalize->path]
+       :on-error [::app.events/toast-error]}})))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::finalize->path
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]} [_ elements]]
-   {:db (-> (reduce element.handlers/swap db elements)
-            (history.handlers/finalize now [::convert-selection-path
-                                            "Convert selection to path"]))}))
+ [(finalize [::convert-selection-path "Convert selection to path"])]
+ (fn [db [_ elements]]
+   (reduce element.handlers/swap db elements)))
 
 (rf/reg-event-fx
  ::stroke->path
  (fn [{:keys [db]}]
-   {::element.effects/->path
-    {:data (element.handlers/selected db)
-     :on-success [::finalize-stroke->path]
-     :on-error [::app.events/toast-error]}}))
+   (when (= (:state db) :idle)
+     {:db (tool.handlers/activate db :transform)
+      ::element.effects/->path
+      {:data (element.handlers/selected db)
+       :on-success [::finalize-stroke->path]
+       :on-error [::app.events/toast-error]}})))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::finalize-stroke->path
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]} [_ elements]]
-   {:db (-> (reduce element.handlers/swap db elements)
-            (element.handlers/stroke->path)
-            (history.handlers/finalize
-             now
-             [::convert-selection-stroke-path
-              "Convert selection's stroke to path"]))}))
+ [(finalize [::convert-selection-stroke-path
+             "Convert selection's stroke to path"])]
+ (fn [db [_ elements]]
+   (-> (reduce element.handlers/swap db elements)
+       (element.handlers/stroke->path))))
 
 (rf/reg-event-fx
  ::boolean-operation
  (fn [{:keys [db]} [_ operation]]
-   (when (seq (rest (element.handlers/selected db)))
-     {::element.effects/->path
+   (when (and (= (:state db) :idle)
+              (seq (rest (element.handlers/selected db))))
+     {:db (tool.handlers/activate db :transform)
+      ::element.effects/->path
       {:data (element.handlers/selected db)
        :on-success [::finalize-boolean-operation operation]
        :on-error [::app.events/toast-error]}})))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::finalize-boolean-operation
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]} [_ operation elements]]
-   {:db (-> (reduce element.handlers/swap db elements)
-            (element.handlers/boolean-operation operation)
-            (history.handlers/finalize now
-                                       (case operation
-                                         :unite [::element.core/unite]
-                                         :intersect [::element.core/intersect]
-                                         :subtract [::element.core/subtract]
-                                         :exclude [::element.core/exclude]
-                                         :divide [::element.core/divide])))}))
+ [(finalize (fn [[_ operation]]
+              [(case operation
+                 :unite [::element.core/unite]
+                 :intersect [::element.core/intersect]
+                 :subtract [::element.core/subtract]
+                 :exclude [::element.core/exclude]
+                 :divide [::element.core/divide])]))]
+ (fn [db [_ operation elements]]
+   (-> (reduce element.handlers/swap db elements)
+       (element.handlers/boolean-operation operation))))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::add
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]} [_ el]]
-   {:db (-> (element.handlers/add db el)
-            (history.handlers/finalize now
-                                       [::create "Create %1"]
-                                       [(name (:tag el))]))}))
+ [(finalize (fn [[_ el]] [[::create "Create %1"] [(name (:tag el))]]))]
+ (fn [db [_ el]]
+   (element.handlers/add db el)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::import-svg
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]} [_ data]]
-   {:db (-> (element.handlers/import-svg db data)
-            (history.handlers/finalize now [::import-svg "Import svg"]))}))
+ [(finalize [::import-svg "Import svg"])]
+ (fn [db [_ data]]
+   (element.handlers/import-svg db data)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::animate
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]} [_ tag attrs]]
-   {:db (-> (element.handlers/animate db tag attrs)
-            (history.handlers/finalize now
-                                       (case tag
-                                         :animate
-                                         [::element.core/animate]
+ [(finalize (fn [[_ tag]]
+              [(case tag
+                 :animate [::element.core/animate]
+                 :animateTransform [::element.core/animate-transform]
+                 :animateMotion [::element.core/animate-motion])]))]
+ (fn [db [_ tag attrs]]
+   (element.handlers/animate db tag attrs)))
 
-                                         :animateTransform
-                                         [::element.core/animate-transform]
-
-                                         :animateMotion
-                                         [::element.core/animate-motion])))}))
-
-(rf/reg-event-fx
+(rf/reg-event-db
  ::set-parent
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]} [_ id parent-id]]
-   {:db (-> (element.handlers/set-parent db id parent-id)
-            (history.handlers/finalize now [::set-parent "Set parent"]))}))
+ [(finalize [::set-parent "Set parent"])]
+ (fn [db [_ id parent-id]]
+   (element.handlers/set-parent db id parent-id)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::group
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]}]
-   {:db (-> (element.handlers/group db)
-            (history.handlers/finalize now [::group-selection
-                                            "Group selection"]))}))
+ [(finalize [::group-selection "Group selection"])]
+ (fn [db _]
+   (element.handlers/group db)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::ungroup
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]}]
-   {:db (-> (element.handlers/ungroup db)
-            (history.handlers/finalize now [::ungroup-selection
-                                            "Ungroup selection"]))}))
+ [(finalize [::ungroup-selection "Ungroup selection"])]
+ (fn [db _]
+   (element.handlers/ungroup db)))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::manipulate-path
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]} [_ action]]
-   {:db (-> (element.handlers/manipulate-path db action)
-            (history.handlers/finalize now (case action
-                                             :simplify
-                                             [::element.core/path-simplify]
-
-                                             :smooth
-                                             [::element.core/path-smooth]
-
-                                             :flatten
-                                             [::element.core/path-flatten]
-
-                                             :reverse
-                                             [::element.core/path-reverse])))}))
+ [(finalize (fn [[_ action]]
+              [(case action
+                 :simplify [::element.core/path-simplify]
+                 :smooth [::element.core/path-smooth]
+                 :flatten [::element.core/path-flatten]
+                 :reverse [::element.core/path-reverse])]))]
+ (fn [db [_ action]]
+   (element.handlers/manipulate-path db action)))
 
 (rf/reg-event-fx
  ::copy
  (fn [{:keys [db]} _]
    (let [els (element.handlers/top-selected-sorted db)]
-     {:db (element.handlers/copy db)
-      :fx [(when (seq els)
-             [::effects/clipboard-write
-              {:data (utils.element/->svg els)
-               :on-error [::app.events/toast-error]}])]})))
+     (when (= (:state db) :idle)
+       {:db (-> (tool.handlers/activate db :transform)
+                (element.handlers/copy))
+        :fx [(when (seq els)
+               [::effects/clipboard-write
+                {:data (utils.element/->svg els)
+                 :on-error [::app.events/toast-error]}])]}))))
 
 (rf/reg-event-fx
  ::cut
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]} _]
-   (let [els (element.handlers/top-selected-sorted db)]
-     {:db (-> (element.handlers/copy db)
-              (element.handlers/delete)
-              (history.handlers/finalize now [::cut-selection "Cut selection"]))
-      :fx [(when (seq els)
-             [::effects/clipboard-write
-              {:data (utils.element/->svg els)
-               :on-error [::app.events/toast-error]}])]})))
+ [(finalize [::cut-selection "Cut selection"])]
+ (fn [{:keys [db]} _]
+   (when (= (:state db) :idle)
+     (let [els (element.handlers/top-selected-sorted db)]
+       {:db (-> (element.handlers/copy db)
+                (element.handlers/delete))
+        :fx [(when (seq els)
+               [::effects/clipboard-write
+                {:data (utils.element/->svg els)
+                 :on-error [::app.events/toast-error]}])]}))))
 
 (rf/reg-event-fx
  ::trace
  (fn [{:keys [db]} [_]]
-   (let [images (element.handlers/filter-by-tag db :image)]
-     {::element.effects/trace {:data images
-                               :on-success [::create-traced-image]}})))
+   (let [images (element.handlers/filter-selected-by-tag db :image)]
+     (when (= (:state db) :idle)
+       {:db (tool.handlers/activate db :transform)
+        ::element.effects/trace {:data images
+                                 :on-success [::create-traced-image]}}))))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::create-traced-image
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]} [_ data]]
-   {:db (-> (element.handlers/import-svg db data)
-            (history.handlers/finalize now [::trace-image "Trace image"]))}))
+ [(finalize [::trace-image "Trace image"])]
+ (fn [db [_ data]]
+   (element.handlers/import-svg db data)))
 
 (rf/reg-event-fx
  ::import-file

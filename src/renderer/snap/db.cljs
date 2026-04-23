@@ -1,11 +1,8 @@
 (ns renderer.snap.db
   (:require [renderer.db :refer [Vec2]]))
 
-(def snap-options
-  #{:centers :midpoints :corners :nodes #_:grid})
-
 (def SnapOption
-  (into [:enum] snap-options))
+  [:enum :centers :midpoints :corners :nodes :grid :guides])
 
 (def SnapOptions
   [:set SnapOption])
@@ -21,4 +18,4 @@
    [:active {:default false} boolean?]
    [:transient-active {:default false} boolean?]
    [:threshold {:default 15} number?]
-   [:options {:default snap-options} SnapOptions]])
+   [:options {:default #{:centers :midpoints :corners :nodes}} SnapOptions]])

@@ -410,6 +410,11 @@
  {:label "Texte"
   :help "Cliquez pour commencer à taper."}
 
+ :renderer.tool.impl.misc.guide
+ {:label "Guide"
+  :idle "Faites glisser la règle sur le canevas pour créer un guide."
+  :create "Déposez pour finaliser le guide."}
+
  :renderer.tool.impl.element.polyline
  {:label "Polyligne"
   :create-polyline "Créer polyligne"}
@@ -818,10 +823,12 @@
 
  :renderer.snap.core
  {:snap "Magnétisme"
-  :centers "centres"
-  :midpoints "points médians"
-  :corners "coins"
-  :nodes "nœuds"}
+  :centers "Centres"
+  :midpoints "Points médians"
+  :corners "Coins"
+  :nodes "Nœuds"
+  :grid "Grille"
+  :guides "Guides"}
 
  :renderer.theme.core
  {:theme-mode "Mode de thème"

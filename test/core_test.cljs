@@ -27,7 +27,6 @@
    [renderer.icon.subs]
    [renderer.panel.events]
    [renderer.panel.subs]
-   [renderer.ruler.events]
    [renderer.snap.events]
    [renderer.theme.events]
    [renderer.theme.subs]

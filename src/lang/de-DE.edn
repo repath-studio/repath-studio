@@ -416,6 +416,12 @@
  {:label "Text"
   :help "Klicken, um mit der Eingabe zu beginnen."}
 
+ :renderer.tool.impl.misc.guide
+ {:label "Führungslinie"
+  :idle "Ziehen Sie das Lineal auf die Leinwand, um eine Führungslinie zu
+         erstellen."
+  :create "Loslassen, um die Führungslinie zu finalisieren."}
+
  :renderer.tool.impl.element.polyline
  {:label "Polylinie"
   :create-polyline "Polylinie erstellen"}
@@ -827,7 +833,9 @@
   :centers "Zentren"
   :midpoints "Mittelpunkte"
   :corners "Ecken"
-  :nodes "Knoten"}
+  :nodes "Knoten"
+  :grid "Raster"
+  :guides "Hilfslinien"}
 
  :renderer.theme.core
  {:theme-mode "Thema-Modus"

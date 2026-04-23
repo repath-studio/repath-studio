@@ -405,6 +405,11 @@
  {:label "Texto"
   :help "Haga clic para comenzar a escribir."}
 
+ :renderer.tool.impl.misc.guide
+ {:label "Guía"
+  :idle "Arrastra la regla al lienzo para crear una guía."
+  :create "Suelta para finalizar la guía."}
+
  :renderer.tool.impl.element.polyline
  {:label "Polilínea"
   :create-polyline "Crear polilínea"}
@@ -811,10 +816,12 @@
 
  :renderer.snap.core
  {:snap "Ajustar"
-  :centers "centros"
-  :midpoints "puntos medios"
-  :corners "esquinas"
-  :nodes "nodos"}
+  :centers "Centros"
+  :midpoints "Puntos medios"
+  :corners "Esquinas"
+  :nodes "Nodos"
+  :grid "Cuadrícula"
+  :guides "Guías"}
 
  :renderer.theme.core
  {:theme-mode "Modo de tema"

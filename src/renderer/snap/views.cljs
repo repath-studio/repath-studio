@@ -13,13 +13,8 @@
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]))
 
-(def snap-options
-  [:snap/toggle-centers
-   :snap/toggle-midpoints
-   :snap/toggle-corners
-   :snap/toggle-nodes])
-
-(defn root []
+(defn root
+  []
   (let [active? (rf/subscribe [::snap.subs/active?])
         md? @(rf/subscribe [::window.subs/md?])
         toggle-snap-action (action.views/deref-action :snap/toggle)]
@@ -43,8 +38,8 @@
              :title (i18n.views/t [::snap-options "Snap options"])}
             [views/icon "chevron-up"]]]
           [:> DropdownMenu/Portal
-           (->> snap-options
-                (map (comp views/dropdown-menu-item action.views/deref-action))
+           (->> (:actions (action.views/deref-action-group :snap/options))
+                (map views/dropdown-menu-item)
                 (into [:> DropdownMenu/Content
                        {:side "top"
                         :align "end"

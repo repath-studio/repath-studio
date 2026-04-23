@@ -342,6 +342,11 @@
  {:label "文本"
   :help "点击开始输入."}
 
+ :renderer.tool.impl.misc.guide
+ {:label "参考线"
+  :idle "将标尺拖到画布上以创建参考线。"
+  :create "放下以完成参考线。"}
+
  :renderer.tool.impl.element.polyline
  {:label "折线"
   :create-polyline "创建折线"}
@@ -728,7 +733,9 @@
   :centers "中心"
   :midpoints "中点"
   :corners "角点"
-  :nodes "节点"}
+  :nodes "节点"
+  :grid "网格"
+  :guides "参考线"}
 
  :renderer.theme.core
  {:theme-mode "主题模式"

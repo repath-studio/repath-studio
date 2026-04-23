@@ -425,6 +425,11 @@
  {:label "Testo"
   :help "Clicca per iniziare a digitare."}
 
+ :renderer.tool.impl.misc.guide
+ {:label "Guida"
+  :idle "Trascina il righello sulla tela per creare una guida."
+  :create "Rilascia per finalizzare la guida."}
+
  :renderer.attribute.impl.stroke-linecap
  {:description "L'attributo stroke-linecap è un attributo di presentazione
                 che definisce la forma da utilizzare alla fine dei
@@ -820,10 +825,12 @@
 
  :renderer.snap.core
  {:snap "Aggancia"
-  :centers "centri"
-  :midpoints "punti medi"
-  :corners "angoli"
-  :nodes "nodi"}
+  :centers "Centri"
+  :midpoints "Punti medi"
+  :corners "Angoli"
+  :nodes "Nodi"
+  :grid "Griglia"
+  :guides "Guide"}
 
  :renderer.theme.core
  {:theme-mode "Modalità tema"

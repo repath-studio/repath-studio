@@ -28,9 +28,9 @@
         dispatch-state (if is-dispatchable state :idle)]
     (tool.hierarchy/help tool dispatch-state)))
 
-(m/=> activate [:-> App Tool App])
+(m/=> activate [:-> App Tool [:* any?] App])
 (defn activate
-  [db tool]
+  [db tool & {:as props}]
   (cond-> db
     :always
     (tool.hierarchy/on-deactivate)
@@ -45,7 +45,7 @@
         (set-cursor "default")
         (dissoc :drag :pointer-offset :clicked-element)
         (snap.handlers/rebuild-tree)
-        (tool.hierarchy/on-activate))))
+        (tool.hierarchy/on-activate props))))
 
 (m/=> pointer-delta [:-> App Vec2])
 (defn pointer-delta
@@ -107,17 +107,35 @@
           ; REVIEW: Can we improve performance?
           (snap.handlers/update-viewport-tree)))))
 
+(defn set-cached
+  [db tool]
+  (-> db
+      (assoc :cached-tool (:tool db)
+             :cached-state (:state db))
+      (activate tool)))
+
+(defn reset-cached
+  [db]
+  (let [{:keys [cached-tool cached-state]} db]
+    (-> db
+        (activate cached-tool)
+        (set-state cached-state)
+        (dissoc :cached-tool :cached-state))))
+
 (m/=> cancel [:-> App App])
 (defn cancel
   [db]
   (cond-> db
     :always
     (-> (activate (:tool db))
-        (history.handlers/reset-state))
+        (history.handlers/reset-state)
+        (tool.hierarchy/on-cancel))
 
     (= (:state db) :idle)
-    (-> (dissoc :cached-tool :cached-state)
-        (activate :transform))
+    (activate :transform)
+
+    (:cached-tool db)
+    (reset-cached)
 
     :always
     (-> (clear-pointer-data)

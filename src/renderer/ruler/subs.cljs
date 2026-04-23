@@ -6,20 +6,6 @@
    [renderer.ruler.handlers :as ruler.handlers]))
 
 (rf/reg-sub
- ::ruler
- :-> :ruler)
-
-(rf/reg-sub
- ::locked?
- :<- [::ruler]
- :-> :locked)
-
-(rf/reg-sub
- ::visible?
- :<- [::ruler]
- :-> :visible)
-
-(rf/reg-sub
  ::step
  :<- [::document.subs/zoom]
  ruler.handlers/step)
@@ -30,3 +16,9 @@
  :<- [::frame.subs/viewbox]
  (fn [[step viewbox] [_ orientation]]
    (ruler.handlers/steps-coll step viewbox orientation)))
+
+(rf/reg-sub
+ ::subgrid?
+ :<- [::document.subs/zoom]
+ (fn [zoom _]
+   (<= zoom 66)))

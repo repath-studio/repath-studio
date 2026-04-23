@@ -4,12 +4,12 @@
    [renderer.element.events :as-alias element.events]
    [renderer.tool.handlers :as tool.handlers]))
 
-(rf/reg-event-fx
+(rf/reg-event-db
  ::activate
- (fn [{:keys [db]} [_ tool]]
-   {:db (cond-> db
-          (:active-document db)
-          (tool.handlers/activate tool))}))
+ (fn [db [_ tool & {:as opts}]]
+   (cond-> db
+     (:active-document db)
+     (tool.handlers/activate tool opts))))
 
 (rf/reg-event-db
  ::set-state

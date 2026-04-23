@@ -30,7 +30,9 @@
 
 (defmethod tool.hierarchy/on-pointer-down :pan
   [db _e]
-  (tool.handlers/set-cursor db "grabbing"))
+  (-> db
+      (tool.handlers/set-state :pan)
+      (tool.handlers/set-cursor "grabbing")))
 
 (defmethod tool.hierarchy/on-drag :pan
   [db e]
@@ -40,6 +42,7 @@
 (defmethod tool.hierarchy/on-drag-end :pan
   [db _e]
   (-> db
+      (tool.handlers/set-state :idle)
       (tool.handlers/set-cursor "grab")
       (snap.handlers/update-viewport-tree)
       (app.handlers/add-fx [::app.effects/persist])))

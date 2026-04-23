@@ -7,13 +7,18 @@
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
+   [renderer.i18n.views :as i18n.views]
    [renderer.input.impl.pointer :as input.impl.pointer]))
 
 (element.hierarchy/derive-element :svg ::element.hierarchy/container)
 
+(def label [::label "SVG"])
+
 (defmethod element.hierarchy/properties :svg
   []
   {:icon "svg"
+   :top-level true
+   :label label
    :description [::description
                  "The svg element is a container that defines a new
                   coordinate system and viewport. It is used as the outermost
@@ -39,7 +44,9 @@
         :on-pointer-down pointer-handler
         :on-pointer-move pointer-handler
         :fill "var(--foreground-muted)"
-        :font-size (/ 12 zoom)}) (or (:label el) (name (:tag el)))]
+        :font-size (/ 12 zoom)})
+      (or (:label el)
+          (i18n.views/t label))]
 
      [:rect
       (merge

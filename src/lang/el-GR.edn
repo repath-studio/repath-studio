@@ -436,6 +436,11 @@
  {:label "Κείμενο"
   :help "Κάντε κλικ για να ξεκινήσετε τη πληκτρολόγηση."}
 
+ :renderer.tool.impl.misc.guide
+ {:label "Οδηγός"
+  :idle "Σύρετε τον χάρακα στον καμβά για να δημιουργήσετε έναν οδηγό."
+  :create "Αφήστε για να οριστικοποιήσετε τον οδηγό."}
+
  :renderer.tool.impl.element.polyline
  {:label "Πολύγραμμο"
   :create-polyline "Δημιουργία πολύγραμμου"}
@@ -828,10 +833,12 @@
 
  :renderer.snap.core
  {:snap "Προσκόλληση"
-  :centers "κέντρο"
-  :midpoints "μέση απόσταση"
-  :corners "γωνία"
-  :nodes "κόμβος"}
+  :centers "Κέντρο"
+  :midpoints "Μέση απόσταση"
+  :corners "Γωνία"
+  :nodes "Κόμβος"
+  :grid "Πλέγμα"
+  :guides "Οδηγοί"}
 
  :renderer.theme.core
  {:theme-mode "Λειτουργία θέματος"

@@ -25,6 +25,12 @@
      (->> (matrix/div [width height] zoom)
           (into pan)))))
 
+(m/=> viewbox->bounds [:-> Viewbox BBox])
+(defn viewbox->bounds
+  [[x y w h]]
+  (let [[w h] (matrix/add [w h] [x y])]
+    [x y w h]))
+
 (m/=> pan-by [:function
               [:-> App Vec2 App]
               [:-> App Vec2 uuid? App]])

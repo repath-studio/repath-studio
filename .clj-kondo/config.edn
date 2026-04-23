@@ -68,7 +68,7 @@
                       renderer.element.subs element.subs
                       renderer.element.views element.views
                       renderer.input.db input.db
-                      renderer.input.effects input.handlers
+                      renderer.input.effects input.effects
                       renderer.input.events input.events
                       renderer.input.handlers input.handlers
                       renderer.i18n.db i18n.db
@@ -89,8 +89,6 @@
                       renderer.history.views history.views
                       renderer.menubar.events menubar.events
                       renderer.menubar.views menubar.views
-                      renderer.ruler.db ruler.db
-                      renderer.ruler.events ruler.events
                       renderer.ruler.handlers ruler.handlers
                       renderer.ruler.subs ruler.subs
                       renderer.ruler.views ruler.views

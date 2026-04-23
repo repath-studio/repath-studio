@@ -1,6 +1,5 @@
 (ns renderer.ruler.views
   (:require
-   [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [re-frame.core :as rf]
    [renderer.app.subs :as-alias app.subs]
@@ -8,6 +7,8 @@
    [renderer.element.subs :as-alias element.subs]
    [renderer.frame.subs :as-alias frame.subs]
    [renderer.ruler.subs :as-alias ruler.subs]
+   [renderer.tool.events :as tool.events]
+   [renderer.tool.subs :as-alias tool.subs]
    [renderer.window.subs :as-alias window.subs]))
 
 (def ruler-size 24)
@@ -56,32 +57,36 @@
                :y2 ruler-size
                :stroke color})]]))
 
-(defn line
-  [{:keys [orientation adjusted-step size starting-point]}]
-  [:line (if (= orientation :vertical)
-           {:x1 starting-point
-            :y1 adjusted-step
-            :x2 size
-            :y2 adjusted-step
-            :stroke "var(--foreground-muted)"}
-           {:x1 adjusted-step
-            :y1 starting-point
-            :x2 adjusted-step
-            :y2 size
-            :stroke "var(--foreground-muted)"})])
+(defn ruler-line
+  [{:keys [active orientation adjusted-step size starting-point]}]
+  (let [stroke (if active "var(--accent-foreground)" "var(--foreground-muted)")]
+    [:line (if (= orientation :vertical)
+             {:x1 starting-point
+              :y1 adjusted-step
+              :x2 size
+              :y2 adjusted-step
+              :stroke stroke}
+             {:x1 adjusted-step
+              :y1 starting-point
+              :x2 adjusted-step
+              :y2 size
+              :stroke stroke})]))
 
 (defn label
-  [orientation step font-size text]
-  (let [x-step (+ step 4)
+  [active? orientation step text]
+  (let [font-size 9
+        x-step (+ step 4)
         y-step (- step 8)
         vertical (= orientation :vertical)]
     [:text {:x (if vertical 19 x-step)
             :y (if vertical y-step (inc font-size))
             :writing-mode (when vertical "vertical-rl")
-            :fill "var(--foreground-default)"
             :font-size font-size
             :rotate (when vertical 180)
-            :font-family "var(--font-mono)"}
+            :font-family "var(--font-mono)"
+            :fill (if active?
+                    "var(--accent-foreground)"
+                    "var(--foreground-default)")}
      (if vertical (reverse text) text)]))
 
 (defn base-lines
@@ -89,12 +94,12 @@
   (let [[x y] @(rf/subscribe [::frame.subs/viewbox])
         zoom @(rf/subscribe [::document.subs/zoom])
         steps-coll @(rf/subscribe [::ruler.subs/steps-coll orientation])
+        active? @(rf/subscribe [::tool.subs/active? :guide])
         vertical (= orientation :vertical)]
     (into [:g]
           (map-indexed
            (fn [index step]
              (let [adjusted-step (* zoom step)
-                   font-size 9
                    text (-> step
                             (+ (if vertical y x))
                             (Math/round)
@@ -102,60 +107,77 @@
                (cond
                  (zero? (rem index 10))
                  [:<>
-                  [line {:orientation orientation
-                         :adjusted-step adjusted-step
-                         :size ruler-size
-                         :starting-point 0}]
-                  [label orientation adjusted-step font-size text]]
+                  [ruler-line {:orientation orientation
+                               :adjusted-step adjusted-step
+                               :size ruler-size
+                               :starting-point 0
+                               :active active?}]
+                  [label active? orientation adjusted-step text]]
 
                  (and (odd? index) (zero? (rem index 5)))
-                 [line {:orientation orientation
-                        :adjusted-step adjusted-step
-                        :size ruler-size
-                        :starting-point (/ ruler-size 1.6)}]
+                 [ruler-line {:orientation orientation
+                              :adjusted-step adjusted-step
+                              :size ruler-size
+                              :starting-point (/ ruler-size 1.6)
+                              :active active?}]
 
                  :else
-                 [line {:orientation orientation
-                        :adjusted-step adjusted-step
-                        :size ruler-size
-                        :starting-point (/ ruler-size 1.3)}])))
+                 [ruler-line {:orientation orientation
+                              :adjusted-step adjusted-step
+                              :size ruler-size
+                              :starting-point (/ ruler-size 1.3)
+                              :active active?}])))
            steps-coll))))
 
 (defn ruler
   [orientation]
   (let [vertical (= orientation :vertical)
         md? @(rf/subscribe [::window.subs/md?])]
-    [:svg {:width (if vertical ruler-size "100%")
-           :height (if vertical "100%" ruler-size)}
+    [:svg
+     {:width (if vertical ruler-size "100%")
+      :height (if vertical "100%" ruler-size)
+      :on-pointer-down (fn [e]
+                         ;; Prevent action when if the event was propagated
+                         ;; through a panel separator.
+                         (when-not (.-defaultPrevented e)
+                           (rf/dispatch [::tool.events/activate
+                                         :guide
+                                         :orientation orientation])))}
      (when md? [bbox-rect orientation])
      [base-lines orientation]
      (when md? [pointer orientation])]))
 
-(defn grid-lines
-  [orientation]
+(defn grid-line
+  [step orientation & {:as attrs}]
   (let [zoom @(rf/subscribe [::document.subs/zoom])
-        [x y w h] @(rf/subscribe [::frame.subs/viewbox])
-        [w h] (matrix/add [w h] [x y])
-        steps-coll @(rf/subscribe [::ruler.subs/steps-coll orientation])
-        vertical (= orientation :vertical)]
-    (into [:g]
-          (map-indexed
-           (fn [i step]
-             (let [step-x (+ step x)
-                   step-y (+ step y)
-                   main? (zero? (rem i 10))]
-               (when (or main? (< zoom 50))
-                 [:line {:x1 (if vertical x step-x)
-                         :y1 (if vertical step-y y)
-                         :x2 (if vertical w step-x)
-                         :y2 (if vertical step-y h)
-                         :stroke-width (/ 1 zoom)
-                         :opacity (when-not main? ".5")
-                         :stroke "var(--border)"
-                         :pointer-events "none"}]))) steps-coll))))
+        [x y w h] @(rf/subscribe [::frame.subs/viewbox-bounds])
+        vertical (= orientation :vertical)
+        step-x (+ step x)
+        step-y (+ step y)]
+    [:line (merge {:x1 (if vertical x step-x)
+                   :y1 (if vertical step-y y)
+                   :x2 (if vertical w step-x)
+                   :y2 (if vertical step-y h)
+                   :stroke-width (/ 1 zoom)
+                   :stroke "var(--border)"
+                   :pointer-events "none"}
+                  attrs)]))
+
+(defn grid-plane
+  [orientation]
+  (let [coll @(rf/subscribe [::ruler.subs/steps-coll orientation])
+        subgrid? @(rf/subscribe [::ruler.subs/subgrid?])
+        render-line (fn [i step]
+                      (let [main? (zero? (rem i 10))
+                            opacity (when-not main? ".5")]
+                        (when (or main? subgrid?)
+                          (grid-line step orientation :opacity opacity))))]
+    (->> coll
+         (map-indexed render-line)
+         (into [:g]))))
 
 (defn grid
   []
   [:<>
-   [grid-lines :vertical]
-   [grid-lines :horizontal]])
+   [grid-plane :vertical]
+   [grid-plane :horizontal]])

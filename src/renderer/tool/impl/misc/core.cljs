@@ -4,6 +4,7 @@
    [renderer.action.events :as-alias action.events]
    [renderer.tool.impl.misc.dropper]
    [renderer.tool.impl.misc.fill]
+   [renderer.tool.impl.misc.guide]
    [renderer.tool.impl.misc.measure]))
 
 (rf/dispatch [::action.events/register-action-group

@@ -17,6 +17,7 @@
    [renderer.element.effects :as-alias element.effects]
    [renderer.element.handlers :as element.handlers]
    [renderer.events :as-alias events]
+   [renderer.history.events :refer [finalize]]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.handlers :as i18n.handlers]
    [renderer.utils.bounds :as utils.bounds]
@@ -148,20 +149,16 @@
 (rf/reg-event-fx
  ::new
  [(rf/inject-cofx ::effects/guid)
-  (rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now guid]} [_]]
-   {:db (-> (document.handlers/create db guid)
-            (history.handlers/finalize now [::create-doc "Create document"]))}))
+  (finalize [::create-doc "Create document"])]
+ (fn [{:keys [db guid]} [_]]
+   {:db (document.handlers/create db guid)}))
 
 (rf/reg-event-fx
  ::new-from-template
  [(rf/inject-cofx ::effects/guid)
-  (rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now guid]} [_ size]]
-   {:db (-> (document.handlers/create db guid size)
-            (history.handlers/finalize now
-                                       [::create-doc-from-template
-                                        "Create document from template"]))}))
+  (finalize [::create-doc-from-template "Create document from template"])]
+ (fn [{:keys [db guid]} [_ size]]
+   {:db (document.handlers/create db guid size)}))
 
 (defn string->edn
   [s]
@@ -343,26 +340,27 @@
          document (document.handlers/persisted-format db id)
          on-success [::saved close]
          on-error [::app.events/toast-error]]
-     (cond
-       (app.handlers/desktop? db)
-       {::effects/ipc-invoke
-        {:channel "save-document"
-         :data (pr-str document)
-         :on-success [::saved close]
-         :on-error on-error
-         :formatter string->edn}}
+     (when (and id (= (:state db) :idle))
+       (cond
+         (app.handlers/desktop? db)
+         {::effects/ipc-invoke
+          {:channel "save-document"
+           :data (pr-str document)
+           :on-success [::saved close]
+           :on-error on-error
+           :formatter string->edn}}
 
-       (app.handlers/supported-feature? db :file-system)
-       {::app.effects/get-local-store
-        {:store-key (str id)
-         :formatter #(-> document
-                         (file-save-options on-success on-error)
-                         (assoc :file-handle %))
-         :on-success [::events/file-save]
-         :on-error on-error}}
+         (app.handlers/supported-feature? db :file-system)
+         {::app.effects/get-local-store
+          {:store-key (str id)
+           :formatter #(-> document
+                           (file-save-options on-success on-error)
+                           (assoc :file-handle %))
+           :on-success [::events/file-save]
+           :on-error on-error}}
 
-       :else
-       {:dispatch [::download]}))))
+         :else
+         {:dispatch [::download]})))))
 
 (rf/reg-event-fx
  ::save-as

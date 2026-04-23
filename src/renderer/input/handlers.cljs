@@ -9,7 +9,7 @@
    [renderer.effects :as-alias effects]
    [renderer.frame.handlers :as frame.handlers]
    [renderer.input.db :refer [PointerEvent KeyboardEvent WheelEvent DragEvent]]
-   [renderer.input.effects :as-alias input.handlers]
+   [renderer.input.effects :as-alias input.effects]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]))
@@ -61,7 +61,7 @@
   (-> db
       (assoc :drag-pointer pointer-id)
       (tool.hierarchy/on-drag-start e)
-      (app.handlers/add-fx [::input.handlers/set-pointer-capture pointer-id])))
+      (app.handlers/add-fx [::input.effects/set-pointer-capture pointer-id])))
 
 (m/=> on-drag-end [:-> App PointerEvent App])
 (defn on-drag-end
@@ -70,7 +70,7 @@
   (-> db
       (tool.hierarchy/on-drag-end e)
       (tool.handlers/clear-pointer-data)
-      (app.handlers/add-fx [::input.handlers/release-pointer-capture
+      (app.handlers/add-fx [::input.effects/release-pointer-capture
                             pointer-id])))
 
 (m/=> drag-pointer? [:-> App PointerEvent boolean?])
@@ -123,24 +123,23 @@
 (m/=> on-pointer-down [:-> App PointerEvent App])
 (defn on-pointer-down
   [db e]
-  (let [{:keys [tool state nearest-neighbor active-pointers]} db
+  (let [{:keys [nearest-neighbor active-pointers]} db
         {:keys [button pointer-pos pointer-id]} e]
     (cond-> db
       (not= button :right)
       (assoc-in [:active-pointers pointer-id] e)
 
       (= button :middle)
-      (-> (assoc :cached-tool tool
-                 :cached-state state)
-          (tool.handlers/activate :pan))
+      (-> (tool.handlers/set-cached :pan))
 
-      (and (not= button :right)
-           (empty? active-pointers))
+      (or (= button :middle)
+          (and (= button :left) (empty? active-pointers)))
       (assoc :pointer-offset pointer-pos
              :adjusted-pointer-offset (adjusted-pointer-pos db pointer-pos)
              :nearest-neighbor-offset (:point nearest-neighbor))
 
-      (empty? active-pointers)
+      (or (= button :middle)
+          (empty? active-pointers))
       (-> (tool.hierarchy/on-pointer-down e)
           (app.handlers/add-fx [::effects/focus-canvas nil])))))
 
@@ -155,8 +154,7 @@
 (m/=> on-pointer-up [:-> App PointerEvent App])
 (defn on-pointer-up
   [db e]
-  (let [{:keys [cached-tool cached-state active-pointers pinch-distance
-                drag-pointer]} db
+  (let [{:keys [cached-tool active-pointers pinch-distance drag-pointer]} db
         {:keys [button timestamp pointer-id]} e
         db (snap.handlers/update-nearest-neighbors db)]
     (if pinch-distance
@@ -176,10 +174,9 @@
                       (tool.hierarchy/on-double-click e))
                   (-> (assoc db :event-timestamp timestamp)
                       (tool.hierarchy/on-pointer-up e))))
+
         (and cached-tool (= button :middle))
-        (-> (tool.handlers/activate cached-tool)
-            (tool.handlers/set-state cached-state)
-            (dissoc :cached-tool :cached-state))
+        (tool.handlers/reset-cached)
 
         (not (tool.handlers/multi-touch? db))
         (tool.handlers/clear-pointer-data)
@@ -216,10 +213,8 @@
   [db e]
   (cond-> db
     (and (= (:code e) "Space")
-         (not= (:tool db) :pan)
-         (= (:state db) :idle))
-    (-> (assoc :cached-tool (:tool db))
-        (tool.handlers/activate :pan))
+         (not= (:tool db) :pan))
+    (tool.handlers/set-cached :pan)
 
     (= (:key e) "Shift")
     (-> (assoc-in [:snap :transient-active] true)
@@ -241,8 +236,7 @@
   (cond-> db
     (and (= (:code e) "Space")
          (:cached-tool db))
-    (-> (tool.handlers/activate (:cached-tool db))
-        (dissoc :cached-tool))
+    (tool.handlers/reset-cached)
 
     (= (:key e) "Shift")
     (-> (assoc-in [:snap :transient-active] false)
@@ -288,6 +282,6 @@
     "drop"
     (let [{:keys [data-transfer pointer-pos]} e
           position (adjusted-pointer-pos db pointer-pos)]
-      (app.handlers/add-fx db [::input.handlers/drop [position data-transfer]]))
+      (app.handlers/add-fx db [::input.effects/drop [position data-transfer]]))
 
     db))

@@ -20,7 +20,9 @@
  :<- [::document.subs/elements]
  :<- [::root]
  (fn [[elements root] _]
-   (mapv elements (:children root))))
+   (->> (:children root)
+        (mapv elements)
+        (filterv (complement utils.element/virtual?)))))
 
 (rf/reg-sub
  ::entity
@@ -58,6 +60,12 @@
  :<- [::document.subs/hovered-ids]
  (fn [[elements hovered-ids] _]
    (vals (select-keys elements hovered-ids))))
+
+(rf/reg-sub
+ ::hovered?
+ :<- [::document.subs/hovered-ids]
+ (fn [hovered-ids [_ id]]
+   (contains? hovered-ids id)))
 
 (rf/reg-sub
  ::selected-tags
