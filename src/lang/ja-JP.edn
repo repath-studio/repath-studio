@@ -499,22 +499,32 @@
   :handle "ハンドル"
   :tool-edit "編集"}
 
- :renderer.tool.impl.base.transform
+ :renderer.tool.impl.base.transform.core
  {:label "変形"
-  :idle-click [:div "クリックして要素を選択するか、ドラッグして範囲選択。 "]
-  :idle-hold [:div "%1を押しながら選択に要素を追加または削除。"]
-  :select [:div "%1を押しながら交差する要素を選択。"]
   :select-element "要素を選択"
   :deselect-element "要素の選択を解除"
-  :translate [:div "%1を押しながら方向を制限、%2を押しながら複製。"]
-  :clone [:div "%1を押しながら方向を制限。または%2を離して移動"]
-  :scale [:div "%1を押しながら比率をロック、%2を押しながらその場で拡大縮小、
-                  %3を押しながら子要素も拡大縮小。"]
   :modify-selection "選択を変更"
   :move-selection "選択を移動"
   :scale-selection "選択を拡大縮小"
-  :clone-selection "選択を複製"
+  :clone-selection "選択を複製"}
+
+ :renderer.tool.impl.base.transform.clone
+ {:clone [:div "%1を押しながら方向を制限。または%2を離して移動"]}
+
+ :renderer.tool.impl.base.transform.scale
+ {:scale [:div "%1を押しながら比率をロック、%2を押しながらその場で拡大縮小、
+                %3を押しながら子要素も拡大縮小。"]
   :scale-handle "拡大縮小ハンドル"}
+
+ :renderer.tool.impl.base.transform.select
+ {:select [:div "%1を押しながら交差する要素を選択。"]}
+
+ :renderer.tool.impl.base.transform.idle
+ {:idle-click [:div "クリックして要素を選択するか、ドラッグして範囲選択。 "]
+  :idle-hold [:div "%1を押しながら選択に要素を追加または削除。"]}
+
+ :renderer.tool.impl.base.transform.translate
+ {:translate [:div "%1を押しながら方向を制限、%2を押しながら複製。"]}
 
  :renderer.tool.impl.base.pan
  {:label "パン"

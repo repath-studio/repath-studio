@@ -4,7 +4,7 @@
    [renderer.action.events :as-alias action.events]
    [renderer.tool.impl.base.edit]
    [renderer.tool.impl.base.pan]
-   [renderer.tool.impl.base.transform]
+   [renderer.tool.impl.base.transform.core]
    [renderer.tool.impl.base.zoom]))
 
 (rf/dispatch [::action.events/register-action-group

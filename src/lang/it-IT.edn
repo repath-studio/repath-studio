@@ -549,26 +549,37 @@
   :handle "maniglia"
   :tool-edit "Modifica"}
 
- :renderer.tool.impl.base.transform
+ :renderer.tool.impl.base.transform.core
  {:label "Trasforma"
-  :idle-click [:div "Clicca per selezionare un elemento o trascina per
-                     selezionare per area. "]
-  :idle-hold [:div "Tieni premuto %1 per aggiungere o rimuovere elementi alla
-                    selezione."]
-  :select [:div "Tieni premuto %1 per selezionare elementi che si intersecano."]
   :select-element "Seleziona elemento"
   :deselect-element "Deseleziona elemento"
-  :translate [:div "Tieni premuto %1 per limitare la direzione, e %2 per
-                    clonare."]
-  :clone [:div "Tieni premuto %1 per limitare la direzione. o rilascia %2 per
-                spostare"]
-  :scale [:div "Tieni premuto %1 per bloccare le proporzioni, %2 per scalare
-                in posizione, %3 per scalare anche i figli."]
   :modify-selection "Modifica selezione"
   :move-selection "Sposta selezione"
   :scale-selection "Ridimensiona selezione"
-  :clone-selection "Clona selezione"
+  :clone-selection "Clona selezione"}
+
+ :renderer.tool.impl.base.transform.clone
+ {:clone [:div "Tieni premuto %1 per limitare la direzione. o rilascia %2 per
+                spostare"]}
+
+ :renderer.tool.impl.base.transform.scale
+ {:scale [:div "Tieni premuto %1 per bloccare le proporzioni, %2 per scalare
+                in posizione, %3 per scalare anche i figli."]
   :scale-handle "maniglia di ridimensionamento"}
+
+ :renderer.tool.impl.base.transform.select
+ {:select [:div "Tieni premuto %1 per selezionare elementi che si
+                 intersecano."]}
+
+ :renderer.tool.impl.base.transform.idle
+ {:idle-click [:div "Clicca per selezionare un elemento o trascina per
+                     selezionare per area. "]
+  :idle-hold [:div "Tieni premuto %1 per aggiungere o rimuovere elementi alla
+                    selezione."]}
+
+ :renderer.tool.impl.base.transform.translate
+ {:translate [:div "Tieni premuto %1 per limitare la direzione, e %2 per
+                    clonare."]}
 
  :renderer.tool.impl.base.pan
  {:label "Panoramica"
