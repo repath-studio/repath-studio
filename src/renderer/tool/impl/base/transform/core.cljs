@@ -15,6 +15,7 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.transform.clone :as transform.clone]
+   [renderer.tool.impl.base.transform.edit :as transform.edit]
    [renderer.tool.impl.base.transform.idle]
    [renderer.tool.impl.base.transform.scale :as transform.scale]
    [renderer.tool.impl.base.transform.select :as transform.select]
@@ -93,7 +94,8 @@
       element
       (assoc :clicked-element element)
 
-      (and (= button :right) (not= (:id element) :bbox))
+      (and (= button :right)
+           (not= (:id element) :bbox))
       (element.handlers/toggle-selection (:id element) (:shift-key e))
 
       :always
@@ -127,7 +129,7 @@
   (-> db
       (element.handlers/clear-ignored)
       (element.handlers/clear-hovered)
-      (dissoc :pivot-point)
+      (assoc :pivot-point [0 0])
       (transform.select/clear-select-box)))
 
 (defn drag-start->state
@@ -141,9 +143,7 @@
         :translate)
 
       :handle
-      (if (= action :scale)
-        :scale
-        :translate)
+      action
 
       :idle)))
 
@@ -193,6 +193,9 @@
       :scale
       (transform.scale/on-drag db delta e)
 
+      :edit
+      (transform.edit/on-drag db delta axis)
+
       db)))
 
 (defmethod tool.hierarchy/on-drag-end :transform
@@ -202,7 +205,7 @@
       (= state :select)
       (transform.select/on-drag-end e)
 
-      (not= state :idle)
+      (not (contains? #{:idle :edit} state))
       (history.handlers/finalize
        (:timestamp e)
        (case state
@@ -210,6 +213,9 @@
          :translate [::move-selection "Move selection"]
          :scale [::scale-selection "Scale selection"]
          :clone [::clone-selection "Clone selection"]))
+
+      (= state :edit)
+      (assoc :anchor-point (:anchor-offset db))
 
       :always
       (-> (tool.handlers/set-state :idle)
@@ -238,8 +244,28 @@
   [db]
   (element.handlers/non-selected-visible db))
 
-(m/=> render-bounding-box [:-> Element boolean? any?])
-(defn render-bounding-box
+(defn pivot-handle
+  []
+  (let [pivot-point @(rf/subscribe [::tool.subs/pivot-point])
+        anchor-point @(rf/subscribe [::element.subs/center])
+        anchor-offset @(rf/subscribe [::tool.subs/anchor-offset])
+        state @(rf/subscribe [::tool.subs/state])
+        [x y] (cond->> anchor-offset
+                anchor-point
+                (matrix/add anchor-point))]
+    [:g
+     (when pivot-point
+       [utils.svg/times pivot-point])
+     (when (and anchor-point (contains? #{:edit :idle} state))
+       [tool.views/circle-handle {:id :pivot-handle
+                                  :x x
+                                  :y y
+                                  :type :handle
+                                  :label [::pivot-point "pivot point"]
+                                  :action :edit}])]))
+
+(m/=> bounding-box [:-> Element boolean? any?])
+(defn bounding-box
   [el dashed?]
   (some-> (:bbox el)
           (utils.svg/bounding-box dashed?)))
@@ -249,16 +275,15 @@
   (let [state @(rf/subscribe [::tool.subs/state])
         selected-elements @(rf/subscribe [::element.subs/selected])
         bbox @(rf/subscribe [::element.subs/bbox])
-        pivot-point @(rf/subscribe [::tool.subs/pivot-point])
         hovered-elements @(rf/subscribe [::element.subs/hovered])
         touch? @(rf/subscribe [::app.subs/supported-feature? :touch])]
     [:<>
      (into [:<>]
-           (map #(render-bounding-box % false) selected-elements))
+           (map #(bounding-box % false) selected-elements))
 
      (when (or (not touch?) (= state :select))
        (into [:<>]
-             (map #(render-bounding-box % true) hovered-elements)))
+             (map #(bounding-box % true) hovered-elements)))
 
      (when (seq bbox)
        [:<>
@@ -270,8 +295,7 @@
         [transform.scale/area-label bbox]
         [transform.scale/size-label bbox]])
 
-     (when pivot-point
-       [utils.svg/times pivot-point])
+     [pivot-handle]
 
      [transform.select/render-select-box]]))
 
@@ -282,3 +306,21 @@
                :event [::tool.events/activate :transform]
                :active [::tool.subs/active? :transform]
                :shortcuts [{:keyCode (utils.key/codes "S")}]}])
+
+(rf/reg-global-interceptor
+ (rf/->interceptor
+  :id ::clear-anchor
+  :after (fn [context]
+           (let [db (rf/get-effect context :db)]
+             (if (:active-document db)
+               (let [selected-ids (element.handlers/selected-ids db)
+                     prev-selected-ids
+                     (let [db (rf/get-coeffect context :db)]
+                       (when (:active-document db)
+                         (element.handlers/selected-ids db)))]
+                 (cond-> context
+                   (not= selected-ids prev-selected-ids)
+                   (rf/assoc-effect :db (assoc db
+                                               :anchor-point [0 0]
+                                               :anchor-offset [0 0]))))
+               context)))))
