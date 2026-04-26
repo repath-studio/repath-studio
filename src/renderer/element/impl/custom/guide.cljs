@@ -85,9 +85,11 @@
                 lock?
                 (input.handlers/lock-direction))]
     (case handle
-      :position (-> el
-                    (attribute.hierarchy/update-attr :x + x)
-                    (attribute.hierarchy/update-attr :y + y))
+      :position
+      (-> el
+          (attribute.hierarchy/update-attr :x + x)
+          (attribute.hierarchy/update-attr :y + y))
+
       el)))
 
 (defmethod element.hierarchy/render-edit :guide

@@ -10,7 +10,7 @@
    [renderer.app.subs :as-alias app.subs]
    [renderer.db :refer [BBox Orientation Vec2]]
    [renderer.document.subs :as-alias document.subs]
-   [renderer.element.db :refer [Element]]
+   [renderer.element.db :refer [Element ElementId]]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
@@ -303,7 +303,7 @@
   [el]
   (into [] (take 2) (:bbox el)))
 
-(m/=> swap-parent [:-> App uuid? Element Element App])
+(m/=> swap-parent [:-> App ElementId Element Element App])
 (defn swap-parent
   [db id hovered-svg container-el]
   (cond-> db
@@ -316,7 +316,7 @@
     (:bbox hovered-svg)
     (element.handlers/translate id (matrix/mul (start-point hovered-svg) -1))))
 
-(m/=> translate-el [:-> App uuid? map? App])
+(m/=> translate-el [:-> App ElementId map? App])
 (defn translate-el
   [db id {:keys [offset hovered-svg auto-parent]}]
   (let [el (element.handlers/entity db id)
