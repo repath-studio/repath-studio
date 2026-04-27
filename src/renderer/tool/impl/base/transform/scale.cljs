@@ -82,6 +82,30 @@
       :bottom-right [[x y] [min-x min-y]]
       :bottom-left [[(- x) y] [max-x min-y]])))
 
+(defn pivot-offset
+  [offset handle bbox pivot-point]
+  (let [dimensions (utils.bounds/->dimensions bbox)
+        [px py] pivot-point
+        [min-x min-y max-x max-y] bbox
+        [w h] dimensions
+        x-factor (condp contains? handle
+                   #{:middle-right :top-right :bottom-right}
+                   (/ w (- max-x px))
+
+                   #{:middle-left :top-left :bottom-left}
+                   (/ w (- px min-x))
+
+                   1)
+        y-factor (condp contains? handle
+                   #{:top-middle :top-right :top-left}
+                   (/ h (- py min-y))
+
+                   #{:bottom-middle :bottom-right :bottom-left}
+                   (/ h (- max-y py))
+
+                   1)]
+    (matrix/mul offset [x-factor y-factor])))
+
 (m/=> scale [:-> App Vec2 ScaleOptions App])
 (defn scale
   [db offset options]
@@ -89,10 +113,14 @@
         handle (-> db :clicked-element :id)
         bbox (element.handlers/bbox db)
         [offset pivot-point] (delta->offset-with-pivot handle offset bbox)
-        pivot-point (if in-place (matrix/add (utils.bounds/center bbox)
-                                             (:anchor-offset db)) pivot-point)
-        offset (cond-> offset in-place (matrix/mul 2))
+        center (utils.bounds/center bbox)
+        pivot-point (if in-place
+                      (matrix/add center (:anchor-offset db))
+                      pivot-point)
         dimensions (utils.bounds/->dimensions bbox)
+        offset (cond-> offset
+                 in-place
+                 (pivot-offset handle bbox pivot-point))
         ratio (matrix/div (matrix/add dimensions offset) dimensions)
         ratio (cond-> ratio ratio-locked (lock-ratio handle))
         ;; TODO: Handle negative ratio, and position on recursive scale.
