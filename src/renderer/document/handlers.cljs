@@ -136,8 +136,8 @@
         (update :document-tabs #(utils.vec/add % (inc active-index) id)))))
 
 (m/=> create [:function
-              [:-> App uuid? App]
-              [:-> App uuid? [:maybe Vec2] App]])
+              [:-> App DocumentId App]
+              [:-> App DocumentId [:maybe Vec2] App]])
 (defn create
   ([db guid]
    (create db guid [595 842]))

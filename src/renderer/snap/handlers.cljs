@@ -5,6 +5,7 @@
    [malli.core :as m]
    [renderer.app.db :refer [App]]
    [renderer.db :refer [Vec2]]
+   [renderer.element.db :refer [ElementId]]
    [renderer.element.handlers :as element.handlers]
    [renderer.frame.handlers :as frame.handlers]
    [renderer.ruler.handlers :as ruler.handlers]
@@ -80,14 +81,14 @@
           (update-viewport-tree)))
     (rebuild-tree db)))
 
-(m/=> insert-to-tree [:-> App [:maybe [:set uuid?]] App])
+(m/=> insert-to-tree [:-> App [:maybe [:set ElementId]] App])
 (defn insert-to-tree
   [db element-ids]
   (let [elements (element.handlers/entities db (vec element-ids))
         points (element.handlers/snapping-points db elements)]
     (update-tree db kdtree/insert points)))
 
-(m/=> delete-from-tree [:-> App [:maybe [:set uuid?]] App])
+(m/=> delete-from-tree [:-> App [:maybe [:set ElementId]] App])
 (defn delete-from-tree
   [db element-ids]
   (let [elements (element.handlers/entities db (vec element-ids))

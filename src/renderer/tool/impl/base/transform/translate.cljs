@@ -3,7 +3,7 @@
             [malli.core :as m]
             [renderer.app.db :refer [App]]
             [renderer.db :refer [Orientation Vec2]]
-            [renderer.element.db :refer [Element]]
+            [renderer.element.db :refer [Element ElementId]]
             [renderer.element.handlers :as element.handlers]
             [renderer.history.handlers :as history.handlers]
             [renderer.i18n.views :as i18n.views]
@@ -28,7 +28,7 @@
   [el]
   (into [] (take 2) (:bbox el)))
 
-(m/=> swap-parent [:-> App uuid? Element Element App])
+(m/=> swap-parent [:-> App ElementId Element Element App])
 (defn swap-parent
   [db id hovered-svg container-el]
   (cond-> db
@@ -41,7 +41,7 @@
     (:bbox hovered-svg)
     (element.handlers/translate id (matrix/mul (start-point hovered-svg) -1))))
 
-(m/=> translate-el [:-> App uuid? map? App])
+(m/=> translate-el [:-> App ElementId map? App])
 (defn translate-el
   [db id {:keys [offset hovered-svg auto-parent]}]
   (let [el (element.handlers/entity db id)

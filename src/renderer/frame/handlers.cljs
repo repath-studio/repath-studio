@@ -4,7 +4,7 @@
    [malli.core :as m]
    [renderer.app.db :refer [App]]
    [renderer.db :refer [BBox Vec2]]
-   [renderer.document.db :as document.db :refer [ZoomFactor]]
+   [renderer.document.db :as document.db :refer [DocumentId ZoomFactor]]
    [renderer.element.handlers :as element.handlers]
    [renderer.frame.db :refer [DomRect Viewbox FocusType]]
    [renderer.utils.bounds :as utils.bounds]
@@ -33,7 +33,7 @@
 
 (m/=> pan-by [:function
               [:-> App Vec2 App]
-              [:-> App Vec2 uuid? App]])
+              [:-> App Vec2 DocumentId App]])
 (defn pan-by
   ([db offset]
    (pan-by db offset (:active-document db)))
