@@ -13,4 +13,4 @@ jobs:
           with:
             REMOTE: 'ssh://git@codeberg.org/repath-studio/repath-studio.git'
             GIT_SSH_PRIVATE_KEY: ${{ secrets.CODEBERG_SSH_PRIVATE_KEY }}
-            GIT_SSH_KNOWN_HOSTS: ${{ secrets.CODEBERG_SSH_KNOWN_HOSTS }}
+            GIT_SSH_NO_VERIFY_HOST: "true"
