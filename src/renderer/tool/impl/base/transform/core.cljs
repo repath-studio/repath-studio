@@ -156,7 +156,8 @@
     (cond-> db
       :always
       (-> (tool.handlers/set-state state)
-          (element.handlers/clear-hovered))
+          (element.handlers/clear-hovered)
+          (snap.handlers/rebuild-tree))
 
       (transform.select/selectable? clicked-element)
       (-> (element.handlers/toggle-selection id shift-key)
@@ -234,6 +235,13 @@
                        (tool.handlers/pointer-delta db))
            {:label [::scale-handle "scale handle"]})])
 
+      (= (:state db) :edit)
+      (when-let [el (:clicked-element db)]
+        [(with-meta
+           (matrix/add [(:x el) (:y el)]
+                       (tool.handlers/pointer-delta db))
+           {:label [::pivot-handle "pivot handle"]})])
+
       (not= (:state db) :idle)
       (cond-> (element.handlers/snapping-points db (filter :visible selected))
         (seq (rest selected))
@@ -242,7 +250,12 @@
 
 (defmethod tool.hierarchy/snapping-elements :transform
   [db]
-  (element.handlers/non-selected-visible db))
+  (cond
+    (= (:state db) :edit)
+    (element.handlers/selected db)
+
+    :else
+    (element.handlers/non-selected-visible db)))
 
 (defn pivot-handle
   []
@@ -254,7 +267,7 @@
                 anchor-point
                 (matrix/add anchor-point))]
     [:g
-     (when pivot-point
+     (when (and pivot-point (= state :scale))
        [utils.svg/times pivot-point])
      (when (and anchor-point (contains? #{:edit :idle} state))
        [tool.views/circle-handle {:id :pivot-handle
