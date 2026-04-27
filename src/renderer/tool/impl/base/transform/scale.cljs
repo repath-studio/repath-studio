@@ -113,11 +113,13 @@
         handle (-> db :clicked-element :id)
         bbox (element.handlers/bbox db)
         [offset pivot-point] (delta->offset-with-pivot handle offset bbox)
-        center (utils.bounds/center bbox)
-        pivot-point (if in-place
-                      (matrix/add center (:anchor-offset db))
-                      pivot-point)
         dimensions (utils.bounds/->dimensions bbox)
+        pivot-point (if in-place
+                      (let [[min-x min-y] bbox
+                            [w h] dimensions
+                            [fx fy] (:anchor-offset db)]
+                        [(+ min-x (* fx w)) (+ min-y (* fy h))])
+                      pivot-point)
         offset (cond-> offset
                  in-place
                  (pivot-offset handle bbox pivot-point))

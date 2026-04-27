@@ -263,17 +263,19 @@
 (defn pivot-handle
   []
   (let [pivot-point @(rf/subscribe [::tool.subs/pivot-point])
-        anchor-point @(rf/subscribe [::element.subs/center])
+        bbox @(rf/subscribe [::element.subs/bbox])
         anchor-offset @(rf/subscribe [::tool.subs/anchor-offset])
         state @(rf/subscribe [::tool.subs/state])
         handle-size @(rf/subscribe [::document.subs/handle-size])
-        [x y] (cond->> anchor-offset
-                anchor-point
-                (matrix/add anchor-point))]
+        [x y] (when bbox
+                (let [[min-x min-y] bbox
+                      [w h] (utils.bounds/->dimensions bbox)
+                      [fx fy] anchor-offset]
+                  [(+ min-x (* fx w)) (+ min-y (* fy h))]))]
     [:g
      (when (and pivot-point (= state :scale))
        [utils.svg/times pivot-point])
-     (when (and anchor-point (contains? #{:edit :idle} state))
+     (when (and bbox (contains? #{:edit :idle} state))
        [:g
         [utils.svg/cross [x y] (* handle-size 1.5)]
         [tool.views/circle-handle {:id :pivot-handle
@@ -340,6 +342,6 @@
                  (cond-> context
                    (not= selected-ids prev-selected-ids)
                    (rf/assoc-effect :db (assoc db
-                                               :anchor-point [0 0]
-                                               :anchor-offset [0 0]))))
+                                               :anchor-point [0.5 0.5]
+                                               :anchor-offset [0.5 0.5]))))
                context)))))

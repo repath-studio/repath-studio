@@ -117,8 +117,8 @@
               :persist true} string?]
    [:fx {:default []} vector?]
    [:pivot-point {:optional true} Vec2]
-   [:anchor-point {:default [0 0]} Vec2]
-   [:anchor-offset {:default [0 0]} Vec2]
+   [:anchor-point {:default [0.5 0.5]} Vec2]
+   [:anchor-offset {:default [0.5 0.5]} Vec2]
    [:clicked-element {:optional true} [:or Element Handle]]
    [:clipboard {:default {}} [:map {:closed true}
                               [:bbox {:optional true} BBox]
