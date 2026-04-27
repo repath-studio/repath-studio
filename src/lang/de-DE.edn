@@ -552,26 +552,36 @@
   :handle "Griff"
   :tool-edit "Bearbeiten"}
 
- :renderer.tool.impl.base.transform
+ :renderer.tool.impl.base.transform.core
  {:label "Transformieren"
-  :idle-click [:div "Klicken, um ein Element auszuwählen oder ziehen, um nach
-                     Bereich auszuwählen. "]
-  :idle-hold [:div "Halten Sie %1, um Elemente zur Auswahl hinzuzufügen oder zu
-                   entfernen."]
-  :select [:div "Halten Sie %1, um sich schneidende Elemente auszuwählen."]
   :select-element "Element auswählen"
   :deselect-element "Element abwählen"
-  :translate [:div "Halten Sie %1, um die Richtung zu beschränken, und %2 zum
-                    Klonen."]
-  :clone [:div "Halten Sie %1, um die Richtung zu beschränken. oder lassen Sie
-                %2 los, um zu verschieben"]
-  :scale [:div "Halten Sie %1, um die Proportionen zu sperren, %2 zum Skalieren
-                an Ort und Stelle, %3 um auch Kinder zu skalieren."]
   :modify-selection "Auswahl ändern"
   :move-selection "Auswahl verschieben"
   :scale-selection "Auswahl skalieren"
-  :scale-handle "Skalierungsgriff"
   :clone-selection "Auswahl klonen"}
+
+ :renderer.tool.impl.base.transform.clone
+ {:clone [:div "Halten Sie %1, um die Richtung zu beschränken. oder lassen Sie
+                %2 los, um zu verschieben"]}
+
+ :renderer.tool.impl.base.transform.scale
+ {:scale [:div "Halten Sie %1, um die Proportionen zu sperren, %2 zum Skalieren
+                an Ort und Stelle, %3 um auch Kinder zu skalieren."]
+  :scale-handle "Skalierungsgriff"}
+
+ :renderer.tool.impl.base.transform.select
+ {:select [:div "Halten Sie %1, um sich schneidende Elemente auszuwählen."]}
+
+ :renderer.tool.impl.base.transform.idle
+ {:idle-click [:div "Klicken, um ein Element auszuwählen oder ziehen, um nach
+                     Bereich auszuwählen. "]
+  :idle-hold [:div "Halten Sie %1, um Elemente zur Auswahl hinzuzufügen oder zu
+                    entfernen."]}
+
+ :renderer.tool.impl.base.transform.translate
+ {:translate [:div "Halten Sie %1, um die Richtung zu beschränken, und %2 zum
+                    Klonen."]}
 
  :renderer.tool.impl.base.pan
  {:label "Schwenken"

@@ -61,7 +61,8 @@
 (defmethod tool.hierarchy/render :measure
   []
   (when @measure-attrs
-    (let [{:keys [x1 x2 y1 y2 hypotenuse]} @measure-attrs
+    (let [handle-size @(rf/subscribe [::document.subs/handle-size])
+          {:keys [x1 x2 y1 y2 hypotenuse]} @measure-attrs
           [x1 y1 x2 y2] (map utils.length/unit->px [x1 y1 x2 y2])
           angle (utils.math/angle [x1 y1] [x2 y2])
           zoom @(rf/subscribe [::document.subs/zoom])
@@ -79,8 +80,8 @@
        [utils.svg/line [x1 y1] [x2 y2]]
        [utils.svg/line [x1 y1] [(+ x1 (/ 30 zoom)) y1]]
 
-       [utils.svg/cross [x1 y1]]
-       [utils.svg/cross [x2 y2]]
+       [utils.svg/cross [x1 y1] handle-size]
+       [utils.svg/cross [x2 y2] handle-size]
 
        [utils.svg/label
         (str (utils.length/->fixed straight-angle 2 false) "°")

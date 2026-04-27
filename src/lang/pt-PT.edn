@@ -534,24 +534,34 @@
   :handle "alça"
   :tool-edit "Editar"}
 
- :renderer.tool.impl.base.transform
+ :renderer.tool.impl.base.transform.core
  {:label "Transformar"
-  :idle-click [:div "Clique para selecionar um elemento ou arraste para
-                     selecionar por área. "]
-  :idle-hold [:div "Mantenha %1 para adicionar ou remover elementos da
-                    seleção."]
-  :select [:div "Mantenha %1 para selecionar elementos que se intersetam."]
   :select-element "Selecionar elemento"
   :deselect-element "Desselecionar elemento"
-  :translate [:div "Mantenha %1 para restringir direção, e %2 para clonar."]
-  :clone [:div "Mantenha %1 para restringir direção. ou solte %2 para mover"]
-  :scale [:div "Mantenha %1 para bloquear proporções, %2 para escalar no local,
-                %3 para também escalar filhos."]
   :modify-selection "Modificar seleção"
   :move-selection "Mover seleção"
   :scale-selection "Escalar seleção"
-  :scale-handle "controlo de escala"
   :clone-selection "Clonar seleção"}
+
+ :renderer.tool.impl.base.transform.clone
+ {:clone [:div "Mantenha %1 para restringir direção. ou solte %2 para mover"]}
+
+ :renderer.tool.impl.base.transform.scale
+ {:scale [:div "Mantenha %1 para bloquear proporções, %2 para escalar no local,
+                %3 para também escalar filhos."]
+  :scale-handle "controlo de escala"}
+
+ :renderer.tool.impl.base.transform.select
+ {:select [:div "Mantenha %1 para selecionar elementos que se intersetam."]}
+
+ :renderer.tool.impl.base.transform.idle
+ {:idle-click [:div "Clique para selecionar um elemento ou arraste para
+                     selecionar por área. "]
+  :idle-hold [:div "Mantenha %1 para adicionar ou remover elementos da
+                    seleção."]}
+
+ :renderer.tool.impl.base.transform.translate
+ {:translate [:div "Mantenha %1 para restringir direção, e %2 para clonar."]}
 
  :renderer.tool.impl.base.pan
  {:label "Panorâmica"

@@ -544,27 +544,37 @@
   :handle "poignée"
   :tool-edit "Éditer"}
 
- :renderer.tool.impl.base.transform
+ :renderer.tool.impl.base.transform.core
  {:label "Transformer"
-  :idle-click [:div "Cliquez pour sélectionner un élément ou faites glisser pour
-                     sélectionner par zone. "]
-  :idle-hold [:div "Maintenez %1 pour ajouter ou supprimer des éléments de la
-                    sélection."]
-  :select [:div "Maintenez %1 pour sélectionner les éléments intersectants."]
   :select-element "Sélectionner l'élément"
   :deselect-element "Désélectionner l'élément"
-  :translate [:div "Maintenez %1 pour restreindre la direction, et %2 pour
-                    cloner."]
-  :clone [:div "Maintenez %1 pour restreindre la direction. ou relâchez %2 pour
-                déplacer"]
-  :scale [:div "Maintenez %1 pour verrouiller les proportions, %2 pour
-                redimensionner en place, %3 pour aussi redimensionner les
-                enfants."]
   :modify-selection "Modifier la sélection"
   :move-selection "Déplacer la sélection"
   :scale-selection "Redimensionner la sélection"
-  :scale-handle "poignée de redimensionnement"
   :clone-selection "Cloner la sélection"}
+
+ :renderer.tool.impl.base.transform.clone
+ {:clone [:div "Maintenez %1 pour restreindre la direction. ou relâchez %2 pour
+                déplacer"]}
+
+ :renderer.tool.impl.base.transform.scale
+ {:scale [:div "Maintenez %1 pour verrouiller les proportions, %2 pour
+                redimensionner en place, %3 pour aussi redimensionner les
+                enfants."]
+  :scale-handle "poignée de redimensionnement"}
+
+ :renderer.tool.impl.base.transform.select
+ {:select [:div "Maintenez %1 pour sélectionner les éléments intersectants."]}
+
+ :renderer.tool.impl.base.transform.idle
+ {:idle-click [:div "Cliquez pour sélectionner un élément ou faites glisser pour
+                     sélectionner par zone. "]
+  :idle-hold [:div "Maintenez %1 pour ajouter ou supprimer des éléments de la
+                    sélection."]}
+
+ :renderer.tool.impl.base.transform.translate
+ {:translate [:div "Maintenez %1 pour restreindre la direction, et %2 pour
+                    cloner."]}
 
  :renderer.tool.impl.base.pan
  {:label "Panoramique"

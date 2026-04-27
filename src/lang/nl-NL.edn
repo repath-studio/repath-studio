@@ -551,26 +551,36 @@
   :handle "handvat"
   :tool-edit "Bewerken"}
 
- :renderer.tool.impl.base.transform
+ :renderer.tool.impl.base.transform.core
  {:label "Transformeren"
-  :idle-click [:div "Klik om een element te selecteren of sleep om te
-                     selecteren per gebied. "]
-  :idle-hold [:div "Houd %1 ingedrukt om elementen toe te voegen aan of te
-                    verwijderen uit selectie."]
-  :select [:div "Houd %1 ingedrukt om overlappende elementen te selecteren."]
   :select-element "Element selecteren"
   :deselect-element "Element deselecteren"
-  :translate [:div "Houd %1 ingedrukt om richting te beperken, en %2 om te
-                    klonen."]
-  :clone [:div "Houd %1 ingedrukt om richting te beperken. of laat %2 los om
-                te verplaatsen"]
-  :scale [:div "Houd %1 ingedrukt om verhoudingen te vergrendelen, %2 om op
-                plaats te schalen, %3 om ook kinderen te schalen."]
   :modify-selection "Selectie wijzigen"
   :move-selection "Selectie verplaatsen"
   :scale-selection "Selectie schalen"
-  :clone-selection "Selectie klonen"
+  :clone-selection "Selectie klonen"}
+
+ :renderer.tool.impl.base.transform.clone
+ {:clone [:div "Houd %1 ingedrukt om richting te beperken. of laat %2 los om
+                te verplaatsen"]}
+
+ :renderer.tool.impl.base.transform.scale
+ {:scale [:div "Houd %1 ingedrukt om verhoudingen te vergrendelen, %2 om op
+                plaats te schalen, %3 om ook kinderen te schalen."]
   :scale-handle "schaalhandvat"}
+
+ :renderer.tool.impl.base.transform.select
+ {:select [:div "Houd %1 ingedrukt om overlappende elementen te selecteren."]}
+
+ :renderer.tool.impl.base.transform.idle
+ {:idle-click [:div "Klik om een element te selecteren of sleep om te
+                     selecteren per gebied. "]
+  :idle-hold [:div "Houd %1 ingedrukt om elementen toe te voegen aan of te
+                    verwijderen uit selectie."]}
+
+ :renderer.tool.impl.base.transform.translate
+ {:translate [:div "Houd %1 ingedrukt om richting te beperken, en %2 om te
+                    klonen."]}
 
  :renderer.tool.impl.base.pan
  {:label "Pannen"

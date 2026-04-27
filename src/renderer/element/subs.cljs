@@ -8,6 +8,7 @@
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.utils.attribute :as utils.attribute]
+   [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.map :as utils.map]))
 
@@ -120,6 +121,13 @@
  :<- [::selected]
  (fn [selected-elements _]
    (utils.element/united-bbox selected-elements)))
+
+(rf/reg-sub
+ ::center
+ :<- [::bbox]
+ (fn [bbox _]
+   (when bbox
+     (utils.bounds/center bbox))))
 
 (rf/reg-sub
  ::area

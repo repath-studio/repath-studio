@@ -495,22 +495,32 @@
   :handle "핸들"
   :tool-edit "편집"}
 
- :renderer.tool.impl.base.transform
+ :renderer.tool.impl.base.transform.core
  {:label "변환"
-  :idle-click [:div "클릭하여 요소를 선택하거나 드래그하여 영역으로 선택합니다. "]
-  :idle-hold [:div "%1을 누르면 선택에 요소를 추가하거나 제거합니다."]
-  :select [:div "%1을 누르면 교차하는 요소를 선택합니다."]
   :select-element "요소 선택"
   :deselect-element "요소 선택 해제"
-  :translate [:div "%1을 누르면 방향을 제한하고, %2를 누르면 복제합니다."]
-  :clone [:div "%1을 누르면 방향을 제한하거나 %2를 놓으면 이동합니다"]
-  :scale [:div "%1을 누르면 비율을 고정하고, %2를 누르면 제자리에서 크기를 조정하며,
-                  %3을 누르면 하위 요소도 크기를 조정합니다."]
   :modify-selection "선택 수정"
   :move-selection "선택 이동"
   :scale-selection "선택 크기 조정"
-  :clone-selection "선택 복제"
+  :clone-selection "선택 복제"}
+
+ :renderer.tool.impl.base.transform.clone
+ {:clone [:div "%1을 누르면 방향을 제한하거나 %2를 놓으면 이동합니다"]}
+
+ :renderer.tool.impl.base.transform.scale
+ {:scale [:div "%1을 누르면 비율을 고정하고, %2를 누르면 제자리에서 크기를 조정하며,
+                %3을 누르면 하위 요소도 크기를 조정합니다."]
   :scale-handle "크기 조정 핸들"}
+
+ :renderer.tool.impl.base.transform.select
+ {:select [:div "%1을 누르면 교차하는 요소를 선택합니다."]}
+
+ :renderer.tool.impl.base.transform.idle
+ {:idle-click [:div "클릭하여 요소를 선택하거나 드래그하여 영역으로 선택합니다. "]
+  :idle-hold [:div "%1을 누르면 선택에 요소를 추가하거나 제거합니다."]}
+
+ :renderer.tool.impl.base.transform.translate
+ {:translate [:div "%1을 누르면 방향을 제한하고, %2를 누르면 복제합니다."]}
 
  :renderer.tool.impl.base.pan
  {:label "팬"

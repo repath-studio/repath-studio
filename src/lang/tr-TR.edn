@@ -529,26 +529,36 @@
   :handle "tutamak"
   :tool-edit "Düzenle"}
 
- :renderer.tool.impl.base.transform
+ :renderer.tool.impl.base.transform.core
  {:label "Dönüştür"
-  :idle-click [:div "Bir öğe seçmek için tıklayın veya alanla seçmek için
-                     sürükleyin."]
-  :idle-hold [:div "Seçime öğe eklemek veya çıkarmak için %1 tuşunu basılı
-                    tutun."]
-  :select [:div "Kesişen öğeleri seçmek için %1 tuşunu basılı tutun."]
   :select-element "Öğe seç"
   :deselect-element "Öğe seçimini kaldır"
-  :translate [:div "Yönü kısıtlamak için %1, klonlamak için %2 tuşunu basılı
-                    tutun."]
-  :clone [:div "Yönü kısıtlamak için %1 tuşunu basılı tutun. veya taşımak için
-                %2 tuşunu bırakın"]
-  :scale [:div "Oranları kilitlemek için %1, yerinde ölçeklendirmek için %2,
-                  alt öğeleri de ölçeklendirmek için %3 tuşunu basılı tutun."]
   :modify-selection "Seçimi değiştir"
   :move-selection "Seçimi taşı"
   :scale-selection "Seçimi ölçeklendir"
-  :clone-selection "Seçimi klonla"
+  :clone-selection "Seçimi klonla"}
+
+ :renderer.tool.impl.base.transform.clone
+ {:clone [:div "Yönü kısıtlamak için %1 tuşunu basılı tutun. veya taşımak için
+                %2 tuşunu bırakın"]}
+
+ :renderer.tool.impl.base.transform.scale
+ {:scale [:div "Oranları kilitlemek için %1, yerinde ölçeklendirmek için %2,
+                alt öğeleri de ölçeklendirmek için %3 tuşunu basılı tutun."]
   :scale-handle "ölçeklendirme tutamacı"}
+
+ :renderer.tool.impl.base.transform.select
+ {:select [:div "Kesişen öğeleri seçmek için %1 tuşunu basılı tutun."]}
+
+ :renderer.tool.impl.base.transform.idle
+ {:idle-click [:div "Bir öğe seçmek için tıklayın veya alanla seçmek için
+                     sürükleyin."]
+  :idle-hold [:div "Seçime öğe eklemek veya çıkarmak için %1 tuşunu basılı
+                    tutun."]}
+
+ :renderer.tool.impl.base.transform.translate
+ {:translate [:div "Yönü kısıtlamak için %1, klonlamak için %2 tuşunu basılı
+                    tutun."]}
 
  :renderer.tool.impl.base.pan
  {:label "Kaydır"

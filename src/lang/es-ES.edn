@@ -538,26 +538,36 @@
   :handle "asa"
   :tool-edit "Editar"}
 
- :renderer.tool.impl.base.transform
+ :renderer.tool.impl.base.transform.core
  {:label "Transformar"
-  :idle-click [:div "Haga clic para seleccionar un elemento o arrastre para
-                     seleccionar por área. "]
-  :idle-hold [:div "Mantenga %1 para agregar o quitar elementos de la
-                    selección."]
-  :select [:div "Mantenga %1 para seleccionar elementos que se intersecan."]
   :select-element "Seleccionar elemento"
   :deselect-element "Deseleccionar elemento"
-  :translate [:div "Mantenga %1 para restringir la dirección, y %2 para
-                    clonar."]
-  :clone [:div "Mantenga %1 para restringir la dirección. o suelte %2 para
-                mover"]
-  :scale [:div "Mantenga %1 para bloquear proporciones, %2 para escalar en el
-                lugar, %3 para también escalar hijos."]
   :modify-selection "Modificar selección"
   :move-selection "Mover selección"
   :scale-selection "Escalar selección"
-  :scale-handle "control de escalado"
   :clone-selection "Clonar selección"}
+
+ :renderer.tool.impl.base.transform.clone
+ {:clone [:div "Mantenga %1 para restringir la dirección. o suelte %2 para
+                mover"]}
+
+ :renderer.tool.impl.base.transform.scale
+ {:scale [:div "Mantenga %1 para bloquear proporciones, %2 para escalar en el
+                lugar, %3 para también escalar hijos."]
+  :scale-handle "control de escalado"}
+
+ :renderer.tool.impl.base.transform.select
+ {:select [:div "Mantenga %1 para seleccionar elementos que se intersecan."]}
+
+ :renderer.tool.impl.base.transform.idle
+ {:idle-click [:div "Haga clic para seleccionar un elemento o arrastre para
+                     seleccionar por área. "]
+  :idle-hold [:div "Mantenga %1 para agregar o quitar elementos de la
+                    selección."]}
+
+ :renderer.tool.impl.base.transform.translate
+ {:translate [:div "Mantenga %1 para restringir la dirección, y %2 para
+                    clonar."]}
 
  :renderer.tool.impl.base.pan
  {:label "Panorámica"
