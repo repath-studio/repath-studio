@@ -6,10 +6,11 @@ jobs:
   to_codeberg:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-      - uses: pixta-dev/repository-mirroring-action@v1
-        with:
-          target_repo_url: ssh://git@codeberg.org/repath-studio/repath-studio.git
-          ssh_private_key: ${{ secrets.CODEBERG_SSH_PRIVATE_KEY }}
+        - uses: actions/checkout@v6
+          with:
+            fetch-depth: 0
+        - uses: yesolutions/mirror-action@master
+          with:
+            REMOTE: 'ssh://git@codeberg.org/repath-studio/repath-studio.git'
+            GIT_SSH_PRIVATE_KEY: ${{ secrets.CODEBERG_SSH_PRIVATE_KEY }}
+            GIT_SSH_KNOWN_HOSTS: ${{ secrets.CODEBERG_SSH_KNOWN_HOSTS }}
