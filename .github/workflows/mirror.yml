@@ -1,0 +1,16 @@
+name: Mirroring
+
+on: [push, delete]
+
+jobs:
+  to_gitlab:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: pixta-dev/repository-mirroring-action@v1
+        with:
+          target_repo_url: git@codeberg.org/repath-studio/repath-studio.git
+          ssh_private_key: ${{ secrets.CODEBERG_SSH_PRIVATE_KEY }}
