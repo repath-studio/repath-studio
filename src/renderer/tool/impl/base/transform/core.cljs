@@ -6,6 +6,7 @@
    [renderer.action.events :as-alias action.events]
    [renderer.app.subs :as-alias app.subs]
    [renderer.db :refer [Orientation Vec2]]
+   [renderer.document.subs :as-alias document.subs]
    [renderer.element.db :refer [Element]]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.subs :as-alias element.subs]
@@ -263,6 +264,7 @@
         anchor-point @(rf/subscribe [::element.subs/center])
         anchor-offset @(rf/subscribe [::tool.subs/anchor-offset])
         state @(rf/subscribe [::tool.subs/state])
+        handle-size @(rf/subscribe [::document.subs/handle-size])
         [x y] (cond->> anchor-offset
                 anchor-point
                 (matrix/add anchor-point))]
@@ -270,12 +272,14 @@
      (when (and pivot-point (= state :scale))
        [utils.svg/times pivot-point])
      (when (and anchor-point (contains? #{:edit :idle} state))
-       [tool.views/circle-handle {:id :pivot-handle
-                                  :x x
-                                  :y y
-                                  :type :handle
-                                  :label [::pivot-point "pivot point"]
-                                  :action :edit}])]))
+       [:g
+        [utils.svg/cross [x y] (* handle-size 1.5)]
+        [tool.views/circle-handle {:id :pivot-handle
+                                   :x x
+                                   :y y
+                                   :type :handle
+                                   :label [::pivot-point "pivot point"]
+                                   :action :edit}]])]))
 
 (m/=> bounding-box [:-> Element boolean? any?])
 (defn bounding-box
