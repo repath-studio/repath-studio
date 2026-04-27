@@ -150,15 +150,17 @@
 
 (defmethod tool.hierarchy/on-drag-start :transform
   [db e]
-  (let [{:keys [clicked-element]} db
+  (let [{:keys [clicked-element state]} db
         {:keys [shift-key]} e
         {:keys [id]} clicked-element
-        state (drag-start->state clicked-element)]
+        new-state (drag-start->state clicked-element)]
     (cond-> db
       :always
-      (-> (tool.handlers/set-state state)
-          (element.handlers/clear-hovered)
-          (snap.handlers/rebuild-tree))
+      (-> (tool.handlers/set-state new-state)
+          (element.handlers/clear-hovered))
+
+      (not= state new-state)
+      (snap.handlers/rebuild-tree)
 
       (transform.select/selectable? clicked-element)
       (-> (element.handlers/toggle-selection id shift-key)
