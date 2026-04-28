@@ -8,8 +8,8 @@
    [renderer.element.db :refer [Element]]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
-   [renderer.input.db :refer [PointerEvent]]
    [renderer.tool.db :refer [Handle]]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
@@ -85,8 +85,7 @@
     (not intersecting?)
     (assoc-in [:attrs :fill] "transparent")))
 
-(m/=> on-drag [:-> App PointerEvent App])
-(defn on-drag
+(defmethod tool.hierarchy/on-drag [:transform :select]
   [db e]
   (let [{:keys [alt-key]} e]
     (-> db
@@ -94,8 +93,7 @@
         (app.handlers/add-fx [::set-select-box (select-rect db alt-key)])
         (reduce-by-area e element.handlers/hover))))
 
-(m/=> on-drag-end [:-> App PointerEvent App])
-(defn on-drag-end
+(defmethod tool.hierarchy/on-drag-end [:transform :select]
   [db e]
   (cond-> db
     (not (:shift-key e))
@@ -103,4 +101,23 @@
 
     :always
     (-> (reduce-by-area e element.handlers/select)
-        (clear-select-box))))
+        (clear-select-box)
+        (dissoc :clicked-element :pivot-point)
+        (tool.handlers/set-state :idle)
+        (history.handlers/finalize (:timestamp e)
+                                   [::modify-selection "Modify selection"]))))
+
+(defmethod tool.hierarchy/snapping-points [:transform :select]
+  [db]
+  (let [selected (element.handlers/selected db)
+        options (-> db :snap :options)]
+    (cond
+      (not= (:state db) :idle)
+      (cond-> (element.handlers/snapping-points db (filter :visible selected))
+        (seq (rest selected))
+        (into (utils.bounds/->snapping-points (element.handlers/bbox db)
+                                              options))))))
+
+(defmethod tool.hierarchy/snapping-elements [:transform :select]
+  [db]
+  (element.handlers/non-selected-visible db))

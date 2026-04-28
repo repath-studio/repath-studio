@@ -532,36 +532,39 @@
   :tool-edit "Редактирование"}
 
  :renderer.tool.impl.base.transform.core
- {:label "Трансформация"
-  :select-element "Выделить элемент"
-  :deselect-element "Снять выделение элемента"
-  :modify-selection "Изменить выделение"
-  :move-selection "Переместить выделение"
-  :scale-selection "Масштабировать выделение"
-  :clone-selection "Клонировать выделение"}
+ {:label "Трансформация"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Удерживайте %1 для ограничения направления. или отпустите %2
-                для перемещения"]}
+                для перемещения"]
+  :clone-selection "Клонировать выделение"}
 
  :renderer.tool.impl.base.transform.scale
  {:scale [:div "Удерживайте %1 для блокировки пропорций, %2 для
                 масштабирования на месте, %3 для также масштабирования
                 потомков."]
-  :scale-handle "ручка масштабирования"}
+  :scale-handle "ручка масштабирования"
+  :scale-selection "Масштабировать выделение"}
 
  :renderer.tool.impl.base.transform.select
- {:select [:div "Удерживайте %1 для выделения пересекающихся элементов."]}
+ {:select [:div "Удерживайте %1 для выделения пересекающихся элементов."]
+  :modify-selection "Изменить выделение"}
 
  :renderer.tool.impl.base.transform.idle
  {:idle-click [:div "Щёлкните для выделения элемента или перетащите для
                      выделения по области. "]
   :idle-hold [:div "Удерживайте %1 для добавления или удаления элементов из
-                    выделения."]}
+                    выделения."]
+  :select-element "Выделить элемент"
+  :deselect-element "Снять выделение элемента"}
 
  :renderer.tool.impl.base.transform.translate
  {:translate [:div "Удерживайте %1 для ограничения направления, и %2 для
-                    клонирования."]}
+                    клонирования."]
+  :move-selection "Переместить выделение"}
+
+ :renderer.tool.impl.base.transform.edit
+ {:pivot-handle "ручка поворота"}
 
  :renderer.tool.impl.base.pan
  {:label "Панорамирование"

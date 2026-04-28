@@ -20,26 +20,28 @@
   [db]
   (tool.handlers/set-cursor db "grab"))
 
-(defmethod tool.hierarchy/help [:pan :idle]
+(defmethod tool.hierarchy/help [:pan :default]
   []
   (i18n.views/t [::idle-help "Click and drag to pan."]))
 
-(defmethod tool.hierarchy/on-pointer-up :pan
+(defmethod tool.hierarchy/on-pointer-up [:pan :idle]
   [db _e]
   (tool.handlers/set-cursor db "grab"))
 
-(defmethod tool.hierarchy/on-pointer-down :pan
+(defmethod tool.hierarchy/on-pointer-down [:pan :idle]
   [db _e]
-  (-> db
-      (tool.handlers/set-state :pan)
-      (tool.handlers/set-cursor "grabbing")))
+  (tool.handlers/set-cursor db "grabbing"))
 
-(defmethod tool.hierarchy/on-drag :pan
+(defmethod tool.hierarchy/on-drag-start [:pan :idle]
+  [db _e]
+  (tool.handlers/set-state db :pan))
+
+(defmethod tool.hierarchy/on-drag [:pan :pan]
   [db e]
   (frame.handlers/pan-by db (matrix/sub (:pointer-pos db)
                                         (:pointer-pos e))))
 
-(defmethod tool.hierarchy/on-drag-end :pan
+(defmethod tool.hierarchy/on-drag-end [:pan :pan]
   [db _e]
   (-> db
       (tool.handlers/set-state :idle)

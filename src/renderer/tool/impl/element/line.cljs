@@ -16,7 +16,7 @@
 
 (tool.hierarchy/derive-tool :line ::tool.hierarchy/element)
 
-(defmethod tool.hierarchy/on-drag-start :line
+(defmethod tool.hierarchy/on-drag-start [:line :idle]
   [db _e]
   (let [[offset-x offset-y] (tool.handlers/snapped-offset db)
         [x y] (tool.handlers/snapped-position db)
@@ -31,7 +31,7 @@
                                        :y2 y
                                        :stroke stroke}}))))
 
-(defmethod tool.hierarchy/on-drag :line
+(defmethod tool.hierarchy/on-drag [:line :create]
   [db _e]
   (let [position (tool.handlers/snapped-position db)
         [min-x min-y] (element.handlers/parent-offset db)
@@ -42,7 +42,7 @@
                                               (assoc-in [:attrs :x2] x)
                                               (assoc-in [:attrs :y2] y)))))
 
-(defmethod tool.hierarchy/on-drag-end :line
+(defmethod tool.hierarchy/on-drag-end [:line :create]
   [db e]
   (-> db
       (history.handlers/finalize (:timestamp e) [::create-line "Create line"])

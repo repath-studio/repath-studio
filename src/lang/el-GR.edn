@@ -558,35 +558,38 @@
   :tool-edit "Επεξεργασία"}
 
  :renderer.tool.impl.base.transform.core
- {:label "Μετασχηματισμός"
-  :select-element "Επιλογή στοιχείου"
-  :deselect-element "Αποεπιλογή στοιχείου"
-  :modify-selection "Τροποποίηση επιλογής"
-  :move-selection "Μετακίνηση επιλογής"
-  :scale-selection "Κλιμάκωση επιλογής"
-  :clone-selection "Κλωνοποίηση επιλογής"}
+ {:label "Μετασχηματισμός"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Πιέστε %1 για περιορισμό κατεύθυνσης. ή αφήστε %2 για
-                μετακίνηση."]}
+                μετακίνηση."]
+  :clone-selection "Κλωνοποίηση επιλογής"}
 
  :renderer.tool.impl.base.transform.scale
  {:scale [:div "Πιέστε %1 για κλείδωμα αναλογιών, %2 για αλλαγή κλίμακας χωρίς
                 μετατόπιση, %3 για αλλαγή κλίμακας και των παιδιών."]
-  :scale-handle "λαβή κλίμακας"}
+  :scale-handle "λαβή κλίμακας"
+  :scale-selection "Κλιμάκωση επιλογής"}
 
  :renderer.tool.impl.base.transform.select
- {:select [:div "Πιέστε %1 για να επιλέξετε τεμνόμενα στοιχεία."]}
+ {:select [:div "Πιέστε %1 για να επιλέξετε τεμνόμενα στοιχεία."]
+  :modify-selection "Τροποποίηση επιλογής"}
 
  :renderer.tool.impl.base.transform.idle
  {:idle-click [:div "Κάντε κλικ για να επιλέξετε ένα στοιχείο ή σύρετε για να
                      επιλέξετε από περιοχή. "]
   :idle-hold [:div "Πιέστε %1 για να προσθέσετε ή να αφαιρέσετε στοιχεία από
-                    επιλογή."]}
+                    επιλογή."]
+  :select-element "Επιλογή στοιχείου"
+  :deselect-element "Αποεπιλογή στοιχείου"}
 
  :renderer.tool.impl.base.transform.translate
  {:translate [:div "Πιέστε %1 για περιορισμό κατεύθυνσης, και %2 για
-                    κλωνοποίηση."]}
+                    κλωνοποίηση."]
+  :move-selection "Μετακίνηση επιλογής"}
+
+ :renderer.tool.impl.base.transform.edit
+ {:pivot-handle "λαβή περιστροφής"}
 
  :renderer.tool.impl.base.pan
  {:label "Μετατόπιση"

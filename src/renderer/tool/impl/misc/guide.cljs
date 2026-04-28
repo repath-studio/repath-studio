@@ -51,7 +51,7 @@
   [db]
   (tool.handlers/activate db :transform))
 
-(defmethod tool.hierarchy/on-pointer-move :guide
+(defmethod tool.hierarchy/on-pointer-move [:guide :idle]
   [db {:keys [pointer-id]
        :as e}]
   (-> db
@@ -59,7 +59,7 @@
       (assoc-in [:active-pointers pointer-id] e)
       (input.handlers/on-drag-start e)))
 
-(defmethod tool.hierarchy/on-pointer-down :guide
+(defmethod tool.hierarchy/on-pointer-down [:guide :create]
   [db _e]
   (let [[x y] (tool.handlers/snapped-position db)]
     (-> db
@@ -70,23 +70,25 @@
                                        :y y
                                        :orientation (name @orient)}}))))
 
-(defmethod tool.hierarchy/on-drag-start :guide
+(defmethod tool.hierarchy/on-drag-start [:guide :idle]
   [db e]
-  (tool.hierarchy/on-pointer-down db e))
+  (-> db
 
-(defmethod tool.hierarchy/on-pointer-up :guide
+      (tool.hierarchy/on-pointer-down e)))
+
+(defmethod tool.hierarchy/on-pointer-up [:guide :idle]
   [db e]
   (-> db
       (history.handlers/finalize (:timestamp e) [::add-guide "Add guide"])
       (tool.handlers/activate :transform)))
 
-(defmethod tool.hierarchy/on-drag-end :guide
+(defmethod tool.hierarchy/on-drag-end [:guide :create]
   [db e]
   (-> db
       (history.handlers/finalize (:timestamp e) [::add-guide "Add guide"])
       (tool.handlers/activate :transform)))
 
-(defmethod tool.hierarchy/on-drag :guide
+(defmethod tool.hierarchy/on-drag [:guide :create]
   [db _e]
   (let [[x y] (tool.handlers/snapped-position db)]
     (-> db

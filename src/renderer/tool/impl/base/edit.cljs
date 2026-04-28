@@ -37,14 +37,14 @@
   []
   (i18n.views/t [::help-type "Enter your text."]))
 
-(defmethod tool.hierarchy/on-pointer-down :edit
+(defmethod tool.hierarchy/on-pointer-down [:edit :idle]
   [db e]
   (let [{:keys [element]} e]
     (cond-> db
       element
       (assoc :clicked-element element))))
 
-(defmethod tool.hierarchy/on-pointer-up :edit
+(defmethod tool.hierarchy/on-pointer-up [:edit :idle]
   [db e]
   (let [{:keys [shift-key button element]} e]
     (if-not (and (= button :right)
@@ -57,7 +57,7 @@
                                      [::select-element "Select element"]))
       (dissoc db :clicked-element))))
 
-(defmethod tool.hierarchy/on-pointer-move :edit
+(defmethod tool.hierarchy/on-pointer-move [:edit :idle]
   [db e]
   (let [el-id (-> e :element :id)]
     (cond-> db
@@ -67,13 +67,13 @@
       el-id
       (element.handlers/hover el-id))))
 
-(defmethod tool.hierarchy/on-drag-start :edit
+(defmethod tool.hierarchy/on-drag-start [:edit :idle]
   [db e]
   (tool.handlers/set-state db (if (= (-> e :element :type) :handle)
                                 :edit
                                 :select)))
 
-(defmethod tool.hierarchy/on-drag :edit
+(defmethod tool.hierarchy/on-drag [:edit :edit]
   [db e]
   (let [{:keys [element-id id]} (:clicked-element db)
         lock? (or (:ctrl-key e) (tool.handlers/multi-touch? db))
@@ -87,14 +87,14 @@
       (element.handlers/update-el element-id
                                   element.hierarchy/edit offset id lock?))))
 
-(defmethod tool.hierarchy/on-drag-end :edit
+(defmethod tool.hierarchy/on-drag-end [:edit :edit]
   [db e]
   (-> db
       (tool.handlers/set-state :idle)
       (dissoc :clicked-element)
       (history.handlers/finalize (:timestamp e) [::edit "Edit"])))
 
-(defmethod tool.hierarchy/snapping-points :edit
+(defmethod tool.hierarchy/snapping-points [:edit :edit]
   [db]
   (when-let [el (:clicked-element db)]
     [(with-meta
@@ -104,7 +104,7 @@
                  (or (:label el)
                      [::handle "handle"]))})]))
 
-(defmethod tool.hierarchy/snapping-elements :edit
+(defmethod tool.hierarchy/snapping-elements [:edit :idle]
   [db]
   (element.handlers/non-selected-visible db))
 

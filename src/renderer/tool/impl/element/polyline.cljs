@@ -12,7 +12,7 @@
 
 (tool.hierarchy/derive-tool :polyline ::tool.hierarchy/poly)
 
-(defmethod tool.hierarchy/on-double-click :polyline
+(defmethod tool.hierarchy/on-double-click [:polyline :create]
   [db e]
   (-> db
       (poly/drop-last-point)

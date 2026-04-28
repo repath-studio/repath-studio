@@ -24,7 +24,7 @@
      :y (utils.length/->fixed (- offset-y radius))
      :size (utils.length/->fixed (* radius 2))}))
 
-(defmethod tool.hierarchy/on-drag-start :blob
+(defmethod tool.hierarchy/on-drag-start [:blob :idle]
   [db _e]
   (let [fill (document.handlers/attr db :fill)
         stroke (document.handlers/attr db :stroke)
@@ -39,7 +39,7 @@
                                               :fill fill
                                               :stroke stroke})}))))
 
-(defmethod tool.hierarchy/on-drag :blob
+(defmethod tool.hierarchy/on-drag [:blob :create]
   [db _e]
   (let [attrs (attributes db)
         assoc-attr (fn [el [k v]] (assoc-in el [:attrs k] (str v)))
@@ -48,7 +48,7 @@
         (element.handlers/update-selected #(reduce assoc-attr % attrs))
         (element.handlers/translate [(- min-x) (- min-y)]))))
 
-(defmethod tool.hierarchy/on-drag-end :blob
+(defmethod tool.hierarchy/on-drag-end [:blob :create]
   [db e]
   (-> db
       (history.handlers/finalize (:timestamp e) [::create-blob "Create blob"])

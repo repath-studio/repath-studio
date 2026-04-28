@@ -30,7 +30,7 @@
     {:rx (utils.length/->fixed (cond-> rx lock-ratio (min ry)))
      :ry (utils.length/->fixed (cond-> ry lock-ratio (min rx)))}))
 
-(defmethod tool.hierarchy/on-drag-start :ellipse
+(defmethod tool.hierarchy/on-drag-start [:ellipse :idle]
   [db e]
   (let [[x y] (tool.handlers/snapped-position db)
         fill (document.handlers/attr db :fill)
@@ -45,14 +45,14 @@
                                               :fill fill
                                               :stroke stroke})}))))
 
-(defmethod tool.hierarchy/on-drag :ellipse
+(defmethod tool.hierarchy/on-drag [:ellipse :create]
   [db e]
   (let [lock-ratio (or (:ctrl-key e) (tool.handlers/multi-touch? db))
         attrs (attributes db lock-ratio)
         assoc-attr (fn [el [k v]] (assoc-in el [:attrs k] (str v)))]
     (element.handlers/update-selected db #(reduce assoc-attr % attrs))))
 
-(defmethod tool.hierarchy/on-drag-end :ellipse
+(defmethod tool.hierarchy/on-drag-end [:ellipse :create]
   [db e]
   (-> db
       (history.handlers/finalize (:timestamp e)

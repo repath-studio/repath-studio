@@ -462,30 +462,33 @@
   :tool-edit "编辑"}
 
  :renderer.tool.impl.base.transform.core
- {:label "变换"
-  :select-element "选择元素"
-  :deselect-element "取消选择元素"
-  :modify-selection "修改选择"
-  :move-selection "移动选择"
-  :scale-selection "缩放选择"
-  :clone-selection "克隆选择"}
+ {:label "变换"}
 
  :renderer.tool.impl.base.transform.clone
- {:clone [:div "按住 %1 限制方向。或释放 %2 进行移动"]}
+ {:clone [:div "按住 %1 限制方向。或释放 %2 进行移动"]
+  :clone-selection "克隆选择"}
 
  :renderer.tool.impl.base.transform.scale
  {:scale [:div "按住 %1 锁定比例，%2 就地缩放，%3 同时缩放子级。"]
-  :scale-handle "缩放控制点"}
+  :scale-handle "缩放控制点"
+  :scale-selection "缩放选择"}
 
  :renderer.tool.impl.base.transform.select
- {:select [:div "按住 %1 选择相交元素。"]}
+ {:select [:div "按住 %1 选择相交元素。"]
+  :modify-selection "修改选择"}
 
  :renderer.tool.impl.base.transform.idle
  {:idle-click [:div "点击选择元素或拖动按区域选择。"]
-  :idle-hold [:div "按住 %1 向选择中添加或移除元素。"]}
+  :idle-hold [:div "按住 %1 向选择中添加或移除元素。"]
+  :select-element "选择元素"
+  :deselect-element "取消选择元素"}
 
  :renderer.tool.impl.base.transform.translate
- {:translate [:div "按住 %1 限制方向，%2 进行克隆。"]}
+ {:translate [:div "按住 %1 限制方向，%2 进行克隆。"]
+  :move-selection "移动选择"}
+
+ :renderer.tool.impl.base.transform.edit
+ {:pivot-handle "旋转中心控制点"}
 
  :renderer.tool.impl.base.pan
  {:label "平移"

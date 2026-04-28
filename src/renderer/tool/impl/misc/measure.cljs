@@ -38,15 +38,15 @@
   [db]
   (app.handlers/add-fx db [::set-measure-attrs nil]))
 
-(defmethod tool.hierarchy/on-drag-start :measure
+(defmethod tool.hierarchy/on-drag-start [:measure :idle]
   [db _e]
   (tool.handlers/set-state db :create))
 
-(defmethod tool.hierarchy/on-drag-end :measure
+(defmethod tool.hierarchy/on-drag-end [:measure :create]
   [db _e]
   (tool.handlers/set-state db :idle))
 
-(defmethod tool.hierarchy/on-drag :measure
+(defmethod tool.hierarchy/on-drag [:measure :create]
   [db _e]
   (let [[offset-x offset-y] (tool.handlers/snapped-offset db)
         [x y] (tool.handlers/snapped-position db)
@@ -94,7 +94,7 @@
         {:x (/ (+ x1 x2) 2)
          :y (/ (+ y1 y2) 2)}]])))
 
-(defmethod tool.hierarchy/snapping-points :measure
+(defn handle-snap-point
   [db]
   [(with-meta
      (:adjusted-pointer-pos db)
@@ -102,7 +102,19 @@
                [::measure-end "measure end"]
                [::measure-start "measure start"])})])
 
-(defmethod tool.hierarchy/snapping-elements :measure
+(defmethod tool.hierarchy/snapping-points [:measure :idle]
+  [db]
+  (handle-snap-point db))
+
+(defmethod tool.hierarchy/snapping-points [:measure :create]
+  [db]
+  (handle-snap-point db))
+
+(defmethod tool.hierarchy/snapping-elements [:measure :idle]
+  [db]
+  (element.handlers/visible db))
+
+(defmethod tool.hierarchy/snapping-elements [:measure :create]
   [db]
   (element.handlers/visible db))
 

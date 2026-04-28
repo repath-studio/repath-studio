@@ -34,7 +34,7 @@
      :width (utils.length/->fixed width)
      :height (utils.length/->fixed height)}))
 
-(defmethod tool.hierarchy/on-drag-start :svg
+(defmethod tool.hierarchy/on-drag-start [:svg :idle]
   [db e]
   (-> db
       (tool.handlers/set-state :create)
@@ -42,14 +42,14 @@
                              :type :element
                              :attrs (attributes db (:ctrl-key e))})))
 
-(defmethod tool.hierarchy/on-drag :svg
+(defmethod tool.hierarchy/on-drag [:svg :create]
   [db e]
   (let [lock-ratio (or (:ctrl-key e) (tool.handlers/multi-touch? db))
         attrs (attributes db lock-ratio)
         assoc-attr (fn [el [k v]] (assoc-in el [:attrs k] (str v)))]
     (element.handlers/update-selected db #(reduce assoc-attr % attrs))))
 
-(defmethod tool.hierarchy/on-drag-end :svg
+(defmethod tool.hierarchy/on-drag-end [:svg :create]
   [db e]
   (-> db
       (history.handlers/finalize (:timestamp e) [::create-svg "Create SVG"])

@@ -553,35 +553,38 @@
   :tool-edit "Bearbeiten"}
 
  :renderer.tool.impl.base.transform.core
- {:label "Transformieren"
-  :select-element "Element auswählen"
-  :deselect-element "Element abwählen"
-  :modify-selection "Auswahl ändern"
-  :move-selection "Auswahl verschieben"
-  :scale-selection "Auswahl skalieren"
-  :clone-selection "Auswahl klonen"}
+ {:label "Transformieren"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Halten Sie %1, um die Richtung zu beschränken. oder lassen Sie
-                %2 los, um zu verschieben"]}
+                %2 los, um zu verschieben"]
+  :clone-selection "Auswahl klonen"}
 
  :renderer.tool.impl.base.transform.scale
  {:scale [:div "Halten Sie %1, um die Proportionen zu sperren, %2 zum Skalieren
                 an Ort und Stelle, %3 um auch Kinder zu skalieren."]
-  :scale-handle "Skalierungsgriff"}
+  :scale-handle "Skalierungsgriff"
+  :scale-selection "Auswahl skalieren"}
 
  :renderer.tool.impl.base.transform.select
- {:select [:div "Halten Sie %1, um sich schneidende Elemente auszuwählen."]}
+ {:select [:div "Halten Sie %1, um sich schneidende Elemente auszuwählen."]
+  :modify-selection "Auswahl ändern"}
 
  :renderer.tool.impl.base.transform.idle
  {:idle-click [:div "Klicken, um ein Element auszuwählen oder ziehen, um nach
                      Bereich auszuwählen. "]
   :idle-hold [:div "Halten Sie %1, um Elemente zur Auswahl hinzuzufügen oder zu
-                    entfernen."]}
+                    entfernen."]
+  :select-element "Element auswählen"
+  :deselect-element "Element abwählen"}
 
  :renderer.tool.impl.base.transform.translate
  {:translate [:div "Halten Sie %1, um die Richtung zu beschränken, und %2 zum
-                    Klonen."]}
+                    Klonen."]
+  :move-selection "Auswahl verschieben"}
+
+ :renderer.tool.impl.base.transform.edit
+ {:pivot-handle "Drehpunktgriff"}
 
  :renderer.tool.impl.base.pan
  {:label "Schwenken"

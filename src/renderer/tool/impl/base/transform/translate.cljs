@@ -7,11 +7,11 @@
             [renderer.element.handlers :as element.handlers]
             [renderer.history.handlers :as history.handlers]
             [renderer.i18n.views :as i18n.views]
-            [renderer.input.db :refer [PointerEvent]]
             [renderer.snap.handlers :as snap.handlers]
             [renderer.tool.handlers :as tool.handlers]
             [renderer.tool.hierarchy :as tool.hierarchy]
             [renderer.tool.impl.base.transform.select :as transform.select]
+            [renderer.utils.bounds :as utils.bounds]
             [renderer.utils.element :as utils.element]
             [renderer.utils.extra :refer [partial-right]]
             [renderer.views :as views]))
@@ -56,10 +56,19 @@
            (not (utils.element/svg? el)))
       (swap-parent id hovered-svg container-el))))
 
+(m/=> direction [:-> Vec2 Orientation])
+(defn direction
+  [delta]
+  (let [[delta-x delta-y] delta]
+    (if (> (abs delta-x) (abs delta-y))
+      :vertical
+      :horizontal)))
+
 (m/=> translate [:-> App Vec2 [:maybe Orientation] App])
 (defn translate
-  [db offset axis]
+  [db offset lock-direction?]
   (let [[offset-x offset-y] offset
+        axis (when lock-direction? (direction offset))
         hovered-svg (element.handlers/hovered-svg db)
         selected-els (element.handlers/selected db)
         auto-parent? (and (contains? #{:translate :clone} (:state db))
@@ -75,15 +84,40 @@
                                               :hovered-svg hovered-svg
                                               :auto-parent auto-parent?}) db))))
 
-(m/=> on-drag [:-> App Vec2 Orientation PointerEvent App])
-(defn on-drag
-  [db delta axis e]
-  (let [{:keys [shift-key]} e
+(defmethod tool.hierarchy/on-drag [:transform :translate]
+  [db e]
+  (let [{:keys [shift-key ctrl-key alt-key]} e
+        delta (tool.handlers/pointer-delta db)
         selected-elements (element.handlers/selected db)
         locked? (every? :locked selected-elements)]
-    (-> db
-        (history.handlers/reset-state)
-        (transform.select/select-element shift-key)
-        (translate delta axis)
-        (snap.handlers/snap-with translate axis)
-        (tool.handlers/set-cursor (if locked? "not-allowed" "move")))))
+    (if alt-key
+      (tool.handlers/set-state db :clone)
+      (-> db
+          (history.handlers/reset-state)
+          (transform.select/select-element shift-key)
+          (translate delta ctrl-key)
+          (snap.handlers/snap-with translate ctrl-key)
+          (tool.handlers/set-cursor (if locked? "not-allowed" "move"))))))
+
+(defmethod tool.hierarchy/on-drag-end [:transform :translate]
+  [db e]
+  (-> db
+      (tool.handlers/set-state :idle)
+      (dissoc :clicked-element :pivot-point)
+      (history.handlers/finalize (:timestamp e)
+                                 [::move-selection "Move selection"])))
+
+(defmethod tool.hierarchy/snapping-points [:transform :translate]
+  [db]
+  (let [selected (element.handlers/selected db)
+        options (-> db :snap :options)]
+    (cond
+      (not= (:state db) :idle)
+      (cond-> (element.handlers/snapping-points db (filter :visible selected))
+        (seq (rest selected))
+        (into (utils.bounds/->snapping-points (element.handlers/bbox db)
+                                              options))))))
+
+(defmethod tool.hierarchy/snapping-elements [:transform :translate]
+  [db]
+  (element.handlers/non-selected-visible db))

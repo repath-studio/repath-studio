@@ -16,7 +16,7 @@
 
 (tool.hierarchy/derive-tool :circle ::tool.hierarchy/element)
 
-(defmethod tool.hierarchy/on-drag-start :circle
+(defmethod tool.hierarchy/on-drag-start [:circle :idle]
   [db _e]
   (let [offset (tool.handlers/snapped-offset db)
         position (tool.handlers/snapped-position db)
@@ -34,21 +34,21 @@
                                        :stroke stroke
                                        :r radius}}))))
 
-(defmethod tool.hierarchy/on-drag :circle
+(defmethod tool.hierarchy/on-drag [:circle :create]
   [db _e]
   (let [offset (tool.handlers/snapped-offset db)
         position (tool.handlers/snapped-position db)
         radius (utils.length/->fixed (matrix/distance position offset))]
     (element.handlers/update-selected db #(assoc-in % [:attrs :r] radius))))
 
-(defmethod tool.hierarchy/on-drag-end :circle
+(defmethod tool.hierarchy/on-drag-end [:circle :create]
   [db e]
   (-> db
       (history.handlers/finalize (:timestamp e)
                                  [::create-circle "Create circle"])
       (tool.handlers/activate :transform)))
 
-(defmethod tool.hierarchy/snapping-points :circle
+(defmethod tool.hierarchy/snapping-points [:circle :create]
   [db]
   [(with-meta
      (:adjusted-pointer-pos db)

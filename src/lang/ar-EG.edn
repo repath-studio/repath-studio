@@ -515,31 +515,34 @@
   :tool-edit "تحرير"}
 
  :renderer.tool.impl.base.transform.core
- {:label "تحويل"
-  :select-element "تحديد عنصر"
-  :deselect-element "إلغاء تحديد عنصر"
-  :modify-selection "تعديل التحديد"
-  :move-selection "تحريك التحديد"
-  :scale-selection "تحجيم التحديد"
-  :clone-selection "استنساخ التحديد"}
+ {:label "تحويل"}
 
  :renderer.tool.impl.base.transform.clone
- {:clone [:div "اضغط %1 لتقييد الاتجاه. أو حرر %2 للتحريك"]}
+ {:clone [:div "اضغط %1 لتقييد الاتجاه. أو حرر %2 للتحريك"]
+  :clone-selection "استنساخ التحديد"}
 
  :renderer.tool.impl.base.transform.scale
  {:scale [:div "اضغط %1 لقفل النسب، %2 للتحجيم في المكان، %3
                 لتحجيم العناصر الفرعية أيضاً."]
-  :scale-handle "مقبض التحجيم"}
+  :scale-handle "مقبض التحجيم"
+  :scale-selection "تحجيم التحديد"}
 
  :renderer.tool.impl.base.transform.select
- {:select [:div "اضغط %1 لتحديد العناصر المتقاطعة."]}
+ {:select [:div "اضغط %1 لتحديد العناصر المتقاطعة."]
+  :modify-selection "تعديل التحديد"}
 
  :renderer.tool.impl.base.transform.idle
  {:idle-click [:div "انقر لتحديد عنصر أو اسحب للتحديد بالمنطقة. "]
-  :idle-hold [:div "اضغط %1 لإضافة أو إزالة عناصر إلى التحديد."]}
+  :idle-hold [:div "اضغط %1 لإضافة أو إزالة عناصر إلى التحديد."]
+  :select-element "تحديد عنصر"
+  :deselect-element "إلغاء تحديد عنصر"}
 
  :renderer.tool.impl.base.transform.translate
- {:translate [:div "اضغط %1 لتقييد الاتجاه، و %2 للاستنساخ."]}
+ {:translate [:div "اضغط %1 لتقييد الاتجاه، و %2 للاستنساخ."]
+  :move-selection "تحريك التحديد"}
+
+ :renderer.tool.impl.base.transform.edit
+ {:pivot-handle "مقبض المحور"}
 
  :renderer.tool.impl.base.pan
  {:label "تحريك"

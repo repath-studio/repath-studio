@@ -1,7 +1,34 @@
 (ns renderer.tool.impl.base.transform.idle
-  (:require [renderer.i18n.views :as i18n.views]
+  (:require [malli.core :as m]
+            [renderer.element.db :refer [Element]]
+            [renderer.element.handlers :as element.handlers]
+            [renderer.history.handlers :as history.handlers]
+            [renderer.i18n.views :as i18n.views]
+            [renderer.snap.handlers :as snap.handlers]
+            [renderer.tool.db :refer [Handle State]]
+            [renderer.tool.handlers :as tool.handlers]
             [renderer.tool.hierarchy :as tool.hierarchy]
+            [renderer.tool.impl.base.transform.select :as transform.select]
+            [renderer.utils.element :as utils.element]
+            [renderer.utils.key :as utils.key]
             [renderer.views :as views]))
+
+(defmethod tool.hierarchy/on-pointer-move [:transform :idle]
+  [db e]
+  (let [{:keys [element]} e
+        movable? (or (= (:type element) :handle)
+                     (and element (not (utils.element/root? element))))
+        cursor (if movable? "move" "default")]
+    (cond-> db
+      (not (:shift-key e))
+      (element.handlers/clear-ignored)
+
+      :always
+      (-> (element.handlers/clear-hovered)
+          (tool.handlers/set-cursor cursor))
+
+      (:id element)
+      (element.handlers/hover (:id element)))))
 
 (defmethod tool.hierarchy/help [:transform :idle]
   []
@@ -12,3 +39,116 @@
    (i18n.views/t [::idle-hold
                   [:div "Hold %1 to add or remove elements to selection."]]
                  [[views/kbd "⇧"]])])
+
+(defmethod tool.hierarchy/on-pointer-down [:transform :idle]
+  [db e]
+  (let [{:keys [button element]} e]
+    (cond-> db
+      element
+      (assoc :clicked-element element)
+
+      (and (= button :right)
+           (not= (:id element) :bbox))
+      (element.handlers/toggle-selection (:id element) (:shift-key e))
+
+      :always
+      (element.handlers/ignore :bbox))))
+
+(defmethod tool.hierarchy/on-pointer-up [:transform :idle]
+  [db e]
+  (let [{:keys [element timestamp]} e]
+    (-> db
+        (dissoc :clicked-element)
+        (element.handlers/unignore :bbox)
+        (element.handlers/toggle-selection (:id element) (:shift-key e))
+        (history.handlers/finalize timestamp
+                                   (if (:selected element)
+                                     [::deselect-element "Deselect element"]
+                                     [::select-element "Select element"])))))
+
+(defmethod tool.hierarchy/on-double-click [:transform :idle]
+  [db e]
+  (let [{{:keys [tag id]} :element} e]
+    (if (= tag :g)
+      (-> db
+          (element.handlers/ignore id)
+          (element.handlers/deselect id))
+      (cond-> db
+        (not= :canvas tag)
+        (tool.handlers/activate :edit)))))
+
+(m/=> drag-start->state [:-> [:or Element Handle] State])
+(defn drag-start->state
+  [el]
+  (let [{el-type :type
+         :keys [tag action]} el]
+    (case el-type
+      :element
+      (if (= tag :canvas)
+        :select
+        :translate)
+
+      :handle
+      action
+
+      :idle)))
+
+(defmethod tool.hierarchy/on-drag-start [:transform :idle]
+  [db e]
+  (let [{:keys [clicked-element state]} db
+        {:keys [shift-key]} e
+        {:keys [id]} clicked-element
+        new-state (drag-start->state clicked-element)]
+    (cond-> db
+      :always
+      (-> (tool.handlers/set-state new-state)
+          (element.handlers/clear-hovered))
+
+      (not= state new-state)
+      (snap.handlers/rebuild-tree)
+
+      (transform.select/selectable? clicked-element)
+      (-> (element.handlers/toggle-selection id shift-key)
+          (snap.handlers/delete-from-tree #{id})))))
+
+(defn event->arrow-key-step
+  [e]
+  (let [{:keys [shift-key ctrl-key]} e
+        step 10]
+    (cond-> 1
+      shift-key (* step)
+      ctrl-key (/ step))))
+
+(defn event->offset
+  [e]
+  (let [arrow-key-step (event->arrow-key-step e)]
+    (case (:key e)
+      "ArrowUp" [0 (- arrow-key-step)]
+      "ArrowDown" [0 arrow-key-step]
+      "ArrowLeft" [(- arrow-key-step) 0]
+      "ArrowRight" [arrow-key-step 0]
+      [0 0])))
+
+(defmethod tool.hierarchy/on-key-down [:transform :idle]
+  [db e]
+  (let [k (:key e)]
+    (cond-> db
+      (= k "Shift")
+      (element.handlers/ignore :bbox)
+
+      (utils.key/arrow? k)
+      (element.handlers/translate (event->offset e))
+
+      (= k "Escape")
+      (history.handlers/reset-state))))
+
+(defmethod tool.hierarchy/on-key-up [:transform :idle]
+  [db e]
+  (let [k (:key e)]
+    (cond-> db
+      (= k "Shift")
+      (element.handlers/clear-ignored)
+
+      (utils.key/arrow? k)
+      (history.handlers/finalize (:timestamp e)
+                                 [::move-selection "Move selection"]))))

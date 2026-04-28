@@ -26,7 +26,7 @@
  (fn [value]
    (reset! brush value)))
 
-(defmethod tool.hierarchy/on-pointer-move :brush
+(defmethod tool.hierarchy/on-pointer-move [:brush :idle]
   [db e]
   (let [[x y] (:adjusted-pointer-pos db)
         pressure (:pressure e)
@@ -40,7 +40,7 @@
                                                   :r r
                                                   :fill stroke}}])))
 
-(defmethod tool.hierarchy/on-drag-start :brush
+(defmethod tool.hierarchy/on-drag-start [:brush :idle]
   [db e]
   (let [point (string/join " " (conj (:adjusted-pointer-pos db) (:pressure e)))
         stroke (document.handlers/attr db :stroke)]
@@ -55,7 +55,7 @@
                                        :smoothing 0.5
                                        :streamline 0.5}}))))
 
-(defmethod tool.hierarchy/on-drag :brush
+(defmethod tool.hierarchy/on-drag [:brush :create]
   [db e]
   (let [[min-x min-y] (element.handlers/parent-offset db)
         point (matrix/sub (:adjusted-pointer-pos db) [min-x min-y])
@@ -64,7 +64,7 @@
                                       update-in [:attrs :points]
                                       str " " point)))
 
-(defmethod tool.hierarchy/on-drag-end :brush
+(defmethod tool.hierarchy/on-drag-end [:brush :create]
   [db e]
   (-> db
       (history.handlers/finalize (:timestamp e) [::draw-brush "Draw brush"])

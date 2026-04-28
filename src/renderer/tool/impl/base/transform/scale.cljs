@@ -1,21 +1,15 @@
 (ns renderer.tool.impl.base.transform.scale
   (:require [clojure.core.matrix :as matrix]
             [malli.core :as m]
-            [re-frame.core :as rf]
             [renderer.app.db :refer [App]]
             [renderer.db :refer [BBox Vec2]]
-            [renderer.document.subs :as-alias document.subs]
             [renderer.element.handlers :as element.handlers]
-            [renderer.element.subs :as-alias element.subs]
             [renderer.history.handlers :as history.handlers]
             [renderer.i18n.views :as i18n.views]
-            [renderer.input.db :refer [PointerEvent]]
             [renderer.snap.handlers :as snap.handlers]
             [renderer.tool.handlers :as tool.handlers]
             [renderer.tool.hierarchy :as tool.hierarchy]
             [renderer.utils.bounds :as utils.bounds]
-            [renderer.utils.length :as utils.length]
-            [renderer.utils.svg :as utils.svg]
             [renderer.views :as views]))
 
 (defmethod tool.hierarchy/help [:transform :scale]
@@ -138,37 +132,10 @@
       (tool.handlers/multi-touch? db)
       (element.handlers/ratio-locked? db)))
 
-(defn area-label
-  [bbox]
-  (let [area @(rf/subscribe [::element.subs/area])
-        zoom @(rf/subscribe [::document.subs/zoom])
-        handle-size @(rf/subscribe [::document.subs/handle-size])]
-    (when (pos? area)
-      (let [[min-x min-y max-x] bbox
-            x (+ min-x (/ (- max-x min-x) 2))
-            y (- min-y (/ handle-size 2) (/ 15 zoom))
-            text (str (utils.length/->fixed area 2 false) " px²")]
-        [utils.svg/label text {:x x
-                               :y y}]))))
-
-(defn size-label
-  [bbox]
-  (let [zoom @(rf/subscribe [::document.subs/zoom])
-        handle-size @(rf/subscribe [::document.subs/handle-size])
-        [min-x _min-y max-x y2] bbox
-        x (+ min-x (/ (- max-x min-x) 2))
-        y (+ y2 (/ handle-size 2) (/ 15 zoom))
-        [w h] (utils.bounds/->dimensions bbox)
-        text (str (utils.length/->fixed w 2 false)
-                  " x "
-                  (utils.length/->fixed h 2 false))]
-    [utils.svg/label text {:x x
-                           :y y}]))
-
-(m/=> on-drag [:-> App Vec2 PointerEvent App])
-(defn on-drag
-  [db delta e]
+(defmethod tool.hierarchy/on-drag [:transform :scale]
+  [db e]
   (let [{:keys [shift-key alt-key]} e
+        delta (tool.handlers/pointer-delta db)
         selected-elements (element.handlers/selected db)
         locked? (every? :locked selected-elements)]
     (-> db
@@ -178,3 +145,23 @@
                {:ratio-locked (ratio-locked? db e)
                 :in-place shift-key
                 :recursive alt-key}))))
+
+(defmethod tool.hierarchy/on-drag-end [:transform :scale]
+  [db e]
+  (-> db
+      (tool.handlers/set-state :idle)
+      (dissoc :clicked-element :pivot-point)
+      (history.handlers/finalize (:timestamp e)
+                                 [::scale-selection "Scale selection"])))
+
+(defmethod tool.hierarchy/snapping-points [:transform :scale]
+  [db]
+  (when-let [el (:clicked-element db)]
+    [(with-meta
+       (matrix/add [(:x el) (:y el)]
+                   (tool.handlers/pointer-delta db))
+       {:label [::scale-handle "scale handle"]})]))
+
+(defmethod tool.hierarchy/snapping-elements [:transform :scale]
+  [db]
+  (element.handlers/non-selected-visible db))

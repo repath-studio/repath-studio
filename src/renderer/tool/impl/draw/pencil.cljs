@@ -16,7 +16,7 @@
 
 (tool.hierarchy/derive-tool :pencil ::tool.hierarchy/draw)
 
-(defmethod tool.hierarchy/on-drag-start :pencil
+(defmethod tool.hierarchy/on-drag-start [:pencil :idle]
   [db _e]
   (let [stroke (document.handlers/attr db :stroke)
         point-1 (string/join " " (:adjusted-pointer-offset db))
@@ -29,7 +29,7 @@
                                        :stroke stroke
                                        :fill "transparent"}}))))
 
-(defmethod tool.hierarchy/on-drag :pencil
+(defmethod tool.hierarchy/on-drag [:pencil :create]
   [db _e]
   (let [[min-x min-y] (element.handlers/parent-offset db)
         point (matrix/sub (:adjusted-pointer-pos db) [min-x min-y])
@@ -38,7 +38,7 @@
                                       update-in [:attrs :points]
                                       str " " point)))
 
-(defmethod tool.hierarchy/on-drag-end :pencil
+(defmethod tool.hierarchy/on-drag-end [:pencil :create]
   [db e]
   (let [path (-> (first (element.handlers/selected db))
                  (utils.element/->path)

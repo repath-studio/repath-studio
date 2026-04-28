@@ -27,13 +27,25 @@
   [db]
   (tool.handlers/set-cursor db "crosshair"))
 
-(defmethod tool.hierarchy/snapping-points ::tool.hierarchy/element
+(defn handle-snap-point
   [db]
   [(with-meta
      (:adjusted-pointer-pos db)
      {:label [::edge "edge"]})])
 
-(defmethod tool.hierarchy/snapping-elements ::tool.hierarchy/element
+(defmethod tool.hierarchy/snapping-points [::tool.hierarchy/element :idle]
+  [db]
+  (handle-snap-point db))
+
+(defmethod tool.hierarchy/snapping-points [::tool.hierarchy/element :create]
+  [db]
+  (handle-snap-point db))
+
+(defmethod tool.hierarchy/snapping-elements [::tool.hierarchy/element :idle]
+  [db]
+  (element.handlers/visible db))
+
+(defmethod tool.hierarchy/snapping-elements [::tool.hierarchy/element :create]
   [db]
   (element.handlers/visible db))
 
