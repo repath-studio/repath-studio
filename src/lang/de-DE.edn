@@ -585,7 +585,8 @@
   :move-selection "Auswahl verschieben"}
 
  :renderer.tool.impl.base.transform.edit
- {:pivot-handle "Drehpunktgriff"}
+ {:pivot-handle "Drehpunktgriff"
+  :help-edit [:div "Halten Sie %1, um die Richtung zu beschränken."]}
 
  :renderer.tool.impl.base.pan
  {:label "Schwenken"

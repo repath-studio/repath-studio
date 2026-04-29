@@ -578,7 +578,8 @@
   :move-selection "Déplacer la sélection"}
 
  :renderer.tool.impl.base.transform.edit
- {:pivot-handle "poignée de pivot"}
+ {:pivot-handle "poignée de pivot"
+  :help-edit [:div "Maintenez %1 pour restreindre la direction."]}
 
  :renderer.tool.impl.base.pan
  {:label "Panoramique"

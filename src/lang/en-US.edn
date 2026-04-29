@@ -556,7 +556,8 @@
   :move-selection "Move selection"}
 
  :renderer.tool.impl.base.transform.edit
- {:pivot-handle "pivot handle"}
+ {:pivot-handle "pivot handle"
+  :help-edit [:div "Hold %1 to restrict direction."]}
 
  :renderer.tool.impl.base.pan
  {:label "Pan"

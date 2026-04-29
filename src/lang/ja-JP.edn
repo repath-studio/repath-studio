@@ -528,7 +528,8 @@
   :move-selection "選択を移動"}
 
  :renderer.tool.impl.base.transform.edit
- {:pivot-handle "ピボットハンドル"}
+ {:pivot-handle "ピボットハンドル"
+  :help-edit [:div "%1を押しながら方向を制限。"]}
 
  :renderer.tool.impl.base.pan
  {:label "パン"

@@ -543,7 +543,8 @@
   :move-selection "تحريك التحديد"}
 
  :renderer.tool.impl.base.transform.edit
- {:pivot-handle "مقبض المحور"}
+ {:pivot-handle "مقبض المحور"
+  :help-edit [:div "اضغط %1 لتقييد الاتجاه."]}
 
  :renderer.tool.impl.base.pan
  {:label "تحريك"

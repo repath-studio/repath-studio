@@ -590,7 +590,8 @@
   :move-selection "Μετακίνηση επιλογής"}
 
  :renderer.tool.impl.base.transform.edit
- {:pivot-handle "λαβή περιστροφής"}
+ {:pivot-handle "λαβή περιστροφής"
+  :help-edit [:div "Κρατήστε %1 για να περιορίσετε την κατεύθυνση."]}
 
  :renderer.tool.impl.base.pan
  {:label "Μετατόπιση"

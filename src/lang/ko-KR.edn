@@ -524,7 +524,8 @@
   :move-selection "선택 이동"}
 
  :renderer.tool.impl.base.transform.edit
- {:pivot-handle "피벗 핸들"}
+ {:pivot-handle "피벗 핸들"
+  :help-edit [:div "%1을 누르면 방향을 제한합니다."]}
 
  :renderer.tool.impl.base.pan
  {:label "팬"

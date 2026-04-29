@@ -565,7 +565,8 @@
   :move-selection "Переместить выделение"}
 
  :renderer.tool.impl.base.transform.edit
- {:pivot-handle "ручка поворота"}
+ {:pivot-handle "ручка поворота"
+  :help-edit [:div "Удерживайте %1 для ограничения направления."]}
 
  :renderer.tool.impl.base.pan
  {:label "Панорамирование"

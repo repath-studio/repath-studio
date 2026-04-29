@@ -583,7 +583,8 @@
   :move-selection "Sposta selezione"}
 
  :renderer.tool.impl.base.transform.edit
- {:pivot-handle "maniglia del perno"}
+ {:pivot-handle "maniglia del perno"
+  :help-edit [:div "Tieni premuto %1 per limitare la direzione."]}
 
  :renderer.tool.impl.base.pan
  {:label "Panoramica"

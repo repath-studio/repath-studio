@@ -571,7 +571,8 @@
   :move-selection "Mover selección"}
 
  :renderer.tool.impl.base.transform.edit
- {:pivot-handle "control de pivote"}
+ {:pivot-handle "control de pivote"
+  :help-edit [:div "Mantenga %1 para restringir la dirección."]}
 
  :renderer.tool.impl.base.pan
  {:label "Panorámica"

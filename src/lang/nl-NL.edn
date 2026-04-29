@@ -584,7 +584,8 @@
   :move-selection "Selectie verplaatsen"}
 
  :renderer.tool.impl.base.transform.edit
- {:pivot-handle "draaipunthandvat"}
+ {:pivot-handle "draaipunthandvat"
+  :help-edit [:div "Houd %1 ingedrukt om richting te beperken."]}
 
  :renderer.tool.impl.base.pan
  {:label "Pannen"

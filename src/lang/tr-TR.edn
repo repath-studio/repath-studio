@@ -562,7 +562,8 @@
   :move-selection "Seçimi taşı"}
 
  :renderer.tool.impl.base.transform.edit
- {:pivot-handle "pivot tutamacı"}
+ {:pivot-handle "pivot tutamacı"
+  :help-edit [:div "Yönü kısıtlamak için %1 tuşunu basılı tutun."]}
 
  :renderer.tool.impl.base.pan
  {:label "Kaydır"

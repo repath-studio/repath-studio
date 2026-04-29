@@ -489,7 +489,8 @@
   :move-selection "移动选择"}
 
  :renderer.tool.impl.base.transform.edit
- {:pivot-handle "旋转中心控制点"}
+ {:pivot-handle "旋转中心控制点"
+  :help-edit [:div "按住 %1 限制方向。"]}
 
  :renderer.tool.impl.base.pan
  {:label "平移"

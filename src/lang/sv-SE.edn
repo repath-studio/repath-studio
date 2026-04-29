@@ -569,7 +569,8 @@
   :move-selection "Flytta markering"}
 
  :renderer.tool.impl.base.transform.edit
- {:pivot-handle "pivothandtag"}
+ {:pivot-handle "pivothandtag"
+  :help-edit [:div "Håll %1 för att begränsa riktning."]}
 
  :renderer.tool.impl.base.pan
  {:label "Panorera"
