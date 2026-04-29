@@ -63,8 +63,8 @@
   [db _e]
   (let [[x y] (tool.handlers/snapped-position db)]
     (-> db
-        (element.handlers/update-selected #(assoc-in % [:attrs :x] x))
-        (element.handlers/update-selected #(assoc-in % [:attrs :y] y)))))
+        (element.handlers/update-selected #(assoc-in % [:attrs :x] (str x)))
+        (element.handlers/update-selected #(assoc-in % [:attrs :y] (str y))))))
 
 (defmethod tool.hierarchy/on-pointer-down [:guide :create]
   [db _e]
