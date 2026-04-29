@@ -761,8 +761,8 @@
         child-els
         (add-child-elements id child-els)))))
 
-(m/=> add-child-elements [:-> App ElementId [:sequential Element] App])
-(defn add-child-elements
+(m/=> add-child-elements [:-> App ElementId any? App])
+(defn- add-child-elements
   [db parent-id child-els]
   (reduce #(cond-> %1
              (element.db/tag? (:tag %2))
