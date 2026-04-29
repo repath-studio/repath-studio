@@ -42,6 +42,7 @@
 (defmethod tool.hierarchy/on-drag-end [:transform :edit]
   [db _e]
   (-> db
+      (assoc :anchor-point (:anchor-offset db))
       (tool.handlers/set-state :idle)
       (dissoc :clicked-element :pivot-point)))
 
