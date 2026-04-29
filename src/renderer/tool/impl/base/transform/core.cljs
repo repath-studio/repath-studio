@@ -31,6 +31,7 @@
       (element.handlers/clear-ignored)
       (element.handlers/clear-hovered)
       (assoc :pivot-point [0 0])
+      (assoc :anchor-offset (:anchor-point db))
       (transform.select/clear-select-box)))
 
 (defn pivot-handle
