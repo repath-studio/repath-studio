@@ -53,9 +53,10 @@
   [db _e]
   (->> (tool.handlers/snapped-position db)
        (adjusted-point db)
+       (string/join " ")
        (element.handlers/update-selected db
                                          update-in [:attrs :points]
-                                         str " " (string/join " "))))
+                                         str " ")))
 
 (defmethod tool.hierarchy/on-drag-end [::tool.hierarchy/poly :idle]
   [db e]
