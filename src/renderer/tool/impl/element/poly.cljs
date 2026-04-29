@@ -31,14 +31,6 @@
                                        :stroke stroke
                                        :fill fill}}))))
 
-(defn add-point
-  [db point]
-  (if (= (:state db) :create)
-    (element.handlers/update-selected db
-                                      update-in [:attrs :points]
-                                      str " " (string/join " " point))
-    (create-el db point)))
-
 (defn drop-last-point
   [db]
   (element.handlers/update-selected db
@@ -52,23 +44,33 @@
   [db point]
   (matrix/sub point (element.handlers/parent-offset db)))
 
-(defmethod tool.hierarchy/on-pointer-up ::tool.hierarchy/poly
+(defmethod tool.hierarchy/on-pointer-up [::tool.hierarchy/poly :idle]
   [db _e]
-  (let [point (tool.handlers/snapped-position db)
-        point (cond->> point
-                (= (:state db) :create)
-                (adjusted-point db))]
-    (add-point db point)))
+  (->> (tool.handlers/snapped-position db)
+       (create-el db)))
 
-(defmethod tool.hierarchy/on-drag-end ::tool.hierarchy/poly
+(defmethod tool.hierarchy/on-pointer-up [::tool.hierarchy/poly :create]
+  [db _e]
+  (->> (tool.handlers/snapped-position db)
+       (adjusted-point db)
+       (string/join " ")
+       (element.handlers/update-selected db
+                                         update-in [:attrs :points]
+                                         str " ")))
+
+(defmethod tool.hierarchy/on-drag-end [::tool.hierarchy/poly :idle]
   [db e]
   (tool.hierarchy/on-pointer-up db e))
 
-(defmethod tool.hierarchy/on-context-menu ::tool.hierarchy/poly
+(defmethod tool.hierarchy/on-drag-end [::tool.hierarchy/poly :create]
+  [db e]
+  (tool.hierarchy/on-pointer-up db e))
+
+(defmethod tool.hierarchy/on-context-menu [::tool.hierarchy/poly :create]
   [db e]
   (tool.hierarchy/on-double-click db e))
 
-(defmethod tool.hierarchy/on-pointer-move ::tool.hierarchy/poly
+(defmethod tool.hierarchy/on-pointer-move [::tool.hierarchy/poly :create]
   [db _e]
   (let [point (tool.handlers/snapped-position db)
         point (adjusted-point db point)]

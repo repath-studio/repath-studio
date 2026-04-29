@@ -20,7 +20,7 @@
   [db]
   (tool.handlers/set-cursor db "text"))
 
-(defmethod tool.hierarchy/on-pointer-up :text
+(defmethod tool.hierarchy/on-pointer-up [:text :idle]
   [db _e]
   (let [[offset-x offset-y] (tool.handlers/snapped-offset db)
         el {:type :element
@@ -33,7 +33,7 @@
         (tool.handlers/set-state :type)
         (tool.handlers/activate :edit))))
 
-(defmethod tool.hierarchy/on-drag-end :text
+(defmethod tool.hierarchy/on-drag-end [:text :idle]
   [db e]
   (tool.hierarchy/on-pointer-up db e))
 

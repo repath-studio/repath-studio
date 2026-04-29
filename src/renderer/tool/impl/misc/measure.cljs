@@ -38,15 +38,15 @@
   [db]
   (app.handlers/add-fx db [::set-measure-attrs nil]))
 
-(defmethod tool.hierarchy/on-drag-start :measure
+(defmethod tool.hierarchy/on-drag-start [:measure :idle]
   [db _e]
   (tool.handlers/set-state db :create))
 
-(defmethod tool.hierarchy/on-drag-end :measure
+(defmethod tool.hierarchy/on-drag-end [:measure :create]
   [db _e]
   (tool.handlers/set-state db :idle))
 
-(defmethod tool.hierarchy/on-drag :measure
+(defmethod tool.hierarchy/on-drag [:measure :create]
   [db _e]
   (let [[offset-x offset-y] (tool.handlers/snapped-offset db)
         [x y] (tool.handlers/snapped-position db)
@@ -61,7 +61,8 @@
 (defmethod tool.hierarchy/render :measure
   []
   (when @measure-attrs
-    (let [{:keys [x1 x2 y1 y2 hypotenuse]} @measure-attrs
+    (let [handle-size @(rf/subscribe [::document.subs/handle-size])
+          {:keys [x1 x2 y1 y2 hypotenuse]} @measure-attrs
           [x1 y1 x2 y2] (map utils.length/unit->px [x1 y1 x2 y2])
           angle (utils.math/angle [x1 y1] [x2 y2])
           zoom @(rf/subscribe [::document.subs/zoom])
@@ -79,8 +80,8 @@
        [utils.svg/line [x1 y1] [x2 y2]]
        [utils.svg/line [x1 y1] [(+ x1 (/ 30 zoom)) y1]]
 
-       [utils.svg/cross [x1 y1]]
-       [utils.svg/cross [x2 y2]]
+       [utils.svg/cross [x1 y1] handle-size]
+       [utils.svg/cross [x2 y2] handle-size]
 
        [utils.svg/label
         (str (utils.length/->fixed straight-angle 2 false) "°")
@@ -93,7 +94,7 @@
         {:x (/ (+ x1 x2) 2)
          :y (/ (+ y1 y2) 2)}]])))
 
-(defmethod tool.hierarchy/snapping-points :measure
+(defn snap-point
   [db]
   [(with-meta
      (:adjusted-pointer-pos db)
@@ -101,7 +102,19 @@
                [::measure-end "measure end"]
                [::measure-start "measure start"])})])
 
-(defmethod tool.hierarchy/snapping-elements :measure
+(defmethod tool.hierarchy/snapping-points [:measure :idle]
+  [db]
+  (snap-point db))
+
+(defmethod tool.hierarchy/snapping-points [:measure :create]
+  [db]
+  (snap-point db))
+
+(defmethod tool.hierarchy/snapping-elements [:measure :idle]
+  [db]
+  (element.handlers/visible db))
+
+(defmethod tool.hierarchy/snapping-elements [:measure :create]
   [db]
   (element.handlers/visible db))
 

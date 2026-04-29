@@ -216,7 +216,8 @@
          (not= (:tool db) :pan))
     (tool.handlers/set-cached :pan)
 
-    (= (:key e) "Shift")
+    (and (= (:code e) "KeyX")
+         (not (-> db :snap :transient-active)))
     (-> (assoc-in [:snap :transient-active] true)
         (cond->
          (not (-> db :snap :active))
@@ -238,7 +239,7 @@
          (:cached-tool db))
     (tool.handlers/reset-cached)
 
-    (= (:key e) "Shift")
+    (= (:code e) "KeyX")
     (-> (assoc-in [:snap :transient-active] false)
         (cond->
          (not (-> db :snap :active))

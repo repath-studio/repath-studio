@@ -28,6 +28,10 @@
  :-> :pivot-point)
 
 (rf/reg-sub
+ ::anchor-offset
+ :-> :anchor-offset)
+
+(rf/reg-sub
  ::drag-pointer
  :-> :drag-pointer)
 

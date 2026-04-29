@@ -12,7 +12,7 @@
 
 (tool.hierarchy/derive-tool :polygon ::tool.hierarchy/poly)
 
-(defmethod tool.hierarchy/on-double-click :polygon
+(defmethod tool.hierarchy/on-double-click [:polygon :create]
   [db e]
   (-> db
       (poly/drop-last-point)

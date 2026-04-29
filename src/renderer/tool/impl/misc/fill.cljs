@@ -32,15 +32,15 @@
         (element.handlers/set-attr el-id :fill color)
         (history.handlers/finalize timestamp [::fill "Fill"]))))
 
-(defmethod tool.hierarchy/on-pointer-up :fill
+(defmethod tool.hierarchy/on-pointer-up [:fill :idle]
   [db e]
   (fill db (:timestamp e)))
 
-(defmethod tool.hierarchy/on-drag-end :fill
+(defmethod tool.hierarchy/on-drag-end [:fill :idle]
   [db e]
   (fill db (:timestamp e)))
 
-(defmethod tool.hierarchy/on-pointer-move :fill
+(defmethod tool.hierarchy/on-pointer-move [:fill :idle]
   [db e]
   (let [color (document.handlers/attr db :fill)
         el (-> e :element)]
@@ -48,7 +48,7 @@
       (not (utils.element/root? el))
       (element.handlers/set-attr (:id el) :fill color))))
 
-(defmethod tool.hierarchy/on-pointer-down :fill
+(defmethod tool.hierarchy/on-pointer-down [:fill :idle]
   [db e]
   (-> db
       (assoc :clicked-element (-> e :element))

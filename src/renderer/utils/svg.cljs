@@ -44,9 +44,8 @@
 
 (m/=> cross [:-> Vec2 any?])
 (defn cross
-  [[x y]]
-  (let [handle-size @(rf/subscribe [::document.subs/handle-size])
-        mid (/ handle-size 2)
+  [[x y] size]
+  (let [mid (/ size 2)
         start-a [(- x mid) y]
         end-a [(+ x mid) y]
         start-b [x (- y mid)]

@@ -120,8 +120,7 @@
  (fn [{:keys [db now guid]} _]
    {:db (if (:active-document db)
           (snap.handlers/rebuild-tree db)
-          (-> db
-              (document.handlers/create guid)
+          (-> (document.handlers/create db guid)
               (history.handlers/finalize now [::create-doc "Create document"])))
     ;; The order of the following events is important.
     ;; Changes require thorough testing on all platforms.
@@ -216,10 +215,8 @@
                   event (rf/get-coeffect context :event)]
               (cond-> context
                 db
-                (rf/assoc-effect :fx
-                                 (conj (or fx [])
-                                       [::app.effects/validate
-                                        [db event]])))))))
+                (rf/assoc-effect :fx (conj (or fx []) [::app.effects/validate
+                                                       [db event]])))))))
 
 (rf/reg-event-fx
  ::toast

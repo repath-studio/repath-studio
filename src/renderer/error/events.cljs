@@ -17,8 +17,8 @@
               [::reporting-description
                [:div
                 [:p "Would you like to help us improve by sending anonymous
-                         error reports? You can change your preference at any
-                         time from our \"%1\" menu."]
+                     error reports? You can change your preference at any time
+                     from our \"%1\" menu."]
                 [:p "For more information, please read our %2."]]]
               [[:strong (i18n.handlers/t db [::menubar.views/help "Help"])]
                [:a.button-link.underline

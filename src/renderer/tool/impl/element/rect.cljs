@@ -35,7 +35,7 @@
      :width (utils.length/->fixed width)
      :height (utils.length/->fixed height)}))
 
-(defmethod tool.hierarchy/on-drag-start :rect
+(defmethod tool.hierarchy/on-drag-start [:rect :idle]
   [db e]
   (let [fill (document.handlers/attr db :fill)
         stroke (document.handlers/attr db :stroke)]
@@ -47,7 +47,7 @@
                                              {:fill fill
                                               :stroke stroke})}))))
 
-(defmethod tool.hierarchy/on-drag :rect
+(defmethod tool.hierarchy/on-drag [:rect :create]
   [db e]
   (let [lock-ratio (or (:ctrl-key e) (tool.handlers/multi-touch? db))
         attrs (attributes db lock-ratio)
@@ -57,7 +57,7 @@
         (element.handlers/update-selected #(reduce assoc-attr % attrs))
         (element.handlers/translate [(- min-x) (- min-y)]))))
 
-(defmethod tool.hierarchy/on-drag-end :rect
+(defmethod tool.hierarchy/on-drag-end [:rect :create]
   [db e]
   (-> db
       (history.handlers/finalize (:timestamp e)
