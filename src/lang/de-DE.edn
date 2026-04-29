@@ -218,6 +218,7 @@
  {:label "Leinwand"
   :description "Die Leinwand ist der Haupt-SVG-Container, der alle Elemente
                 beherbergt."
+  :pivot-point "Drehpunkt"
   :fill-description "Das Füllattribut definiert die Hintergrundfarbe der
                      Hauptleinwand. Der Standardwert hängt vom aktuellen Theme
                      ab, was bedeutet, dass er durch das aktuelle Theme der

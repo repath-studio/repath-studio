@@ -528,7 +528,8 @@
   :tool-edit "Edit"}
 
  :renderer.tool.impl.base.transform.core
- {:label "Transform"}
+ {:label "Transform"
+  :pivot-point "pivot point"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Hold %1 to restrict direction. or release %2 to move"]

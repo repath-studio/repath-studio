@@ -213,6 +213,7 @@
  :renderer.element.impl.container.canvas
  {:label "Duk"
   :description "Duken är huvud-SVG behållaren som innehåller alla element."
+  :pivot-point "rotationspunkt"
   :fill-description "Fyllnadsattributet definierar bakgrundsfärgen för
                      huvudduken. Standardvärdet beror på det aktuella temat,
                      vilket innebär att det bestäms av programmets aktuella

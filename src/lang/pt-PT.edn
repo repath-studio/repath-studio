@@ -215,6 +215,7 @@
  {:label "Tela"
   :description "A tela é o contentor SVG principal que aloja todos os
                 elementos."
+  :pivot-point "ponto de pivô"
   :fill-description "O atributo de preenchimento define a cor de fundo da tela
                      principal. O valor predefinido depende do tema atual, o que
                      significa que será determinado pelo tema atual da

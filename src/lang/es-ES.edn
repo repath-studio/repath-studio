@@ -215,6 +215,7 @@
  {:label "Lienzo"
   :description "El lienzo es el contenedor SVG principal que aloja todos los
                 elementos."
+  :pivot-point "punto de pivote"
   :fill-description "El atributo de relleno define el color de fondo del lienzo
                      principal. El valor predeterminado depende del tema actual,
                      lo que significa que será determinado por el tema actual de
