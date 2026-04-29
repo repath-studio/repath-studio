@@ -59,49 +59,49 @@
       (assoc-in [:active-pointers pointer-id] e)
       (input.handlers/on-drag-start e)))
 
-(defmethod tool.hierarchy/on-pointer-down [:guide :create]
-  [db _e]
-  (let [[x y] (tool.handlers/snapped-position db)]
-    (-> db
-        (tool.handlers/set-state :create)
-        (element.handlers/add {:type :element
-                               :tag :guide
-                               :attrs {:x x
-                                       :y y
-                                       :orientation (name @orient)}}))))
-
-(defmethod tool.hierarchy/on-drag-start [:guide :idle]
-  [db e]
-  (-> db
-
-      (tool.hierarchy/on-pointer-down e)))
-
-(defmethod tool.hierarchy/on-pointer-up [:guide :idle]
-  [db e]
-  (-> db
-      (history.handlers/finalize (:timestamp e) [::add-guide "Add guide"])
-      (tool.handlers/activate :transform)))
-
-(defmethod tool.hierarchy/on-drag-end [:guide :create]
-  [db e]
-  (-> db
-      (history.handlers/finalize (:timestamp e) [::add-guide "Add guide"])
-      (tool.handlers/activate :transform)))
-
-(defmethod tool.hierarchy/on-drag [:guide :create]
+(defmethod tool.hierarchy/on-pointer-move [:guide :create]
   [db _e]
   (let [[x y] (tool.handlers/snapped-position db)]
     (-> db
         (element.handlers/update-selected #(assoc-in % [:attrs :x] x))
         (element.handlers/update-selected #(assoc-in % [:attrs :y] y)))))
 
-(defmethod tool.hierarchy/snapping-points :guide
+(defmethod tool.hierarchy/on-pointer-down [:guide :create]
+  [db _e]
+  (let [[x y] (tool.handlers/snapped-position db)]
+    (element.handlers/add db {:type :element
+                              :tag :guide
+                              :attrs {:x x
+                                      :y y
+                                      :orientation (name @orient)}})))
+
+(defmethod tool.hierarchy/on-drag-start [:guide :idle]
+  [db e]
+  (-> db
+      (tool.handlers/set-state :create)
+      (tool.hierarchy/on-pointer-down e)))
+
+(defn finalize
+  [db e]
+  (-> db
+      (history.handlers/finalize (:timestamp e) [::add-guide "Add guide"])
+      (tool.handlers/activate :transform)))
+
+(defmethod tool.hierarchy/on-pointer-up [:guide :create]
+  [db e]
+  (finalize db e))
+
+(defmethod tool.hierarchy/on-drag-end [:guide :create]
+  [db e]
+  (finalize db e))
+
+(defmethod tool.hierarchy/snapping-points [:guide :create]
   [db]
   [(with-meta
      (:adjusted-pointer-pos db)
      {:label [::guide-position "guide position"]})])
 
-(defmethod tool.hierarchy/snapping-elements :guide
+(defmethod tool.hierarchy/snapping-elements [:guide :create]
   [db]
   (element.handlers/visible db))
 
