@@ -57,6 +57,10 @@
                                          update-in [:attrs :points]
                                          str " " (string/join " "))))
 
+(defmethod tool.hierarchy/on-drag-end [::tool.hierarchy/poly :idle]
+  [db e]
+  (tool.hierarchy/on-pointer-up db e))
+
 (defmethod tool.hierarchy/on-drag-end [::tool.hierarchy/poly :create]
   [db e]
   (tool.hierarchy/on-pointer-up db e))
