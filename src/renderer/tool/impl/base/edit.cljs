@@ -108,6 +108,10 @@
   [db]
   (element.handlers/non-selected-visible db))
 
+(defmethod tool.hierarchy/snapping-elements [:edit :edit]
+  [db]
+  (element.handlers/non-selected-visible db))
+
 (defmethod tool.hierarchy/render :edit
   []
   (let [selected-elements @(rf/subscribe [::element.subs/selected])]
