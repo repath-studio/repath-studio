@@ -206,7 +206,6 @@
  :renderer.element.impl.container.canvas
  {:label "キャンバス"
   :description "キャンバスは、すべての要素をホストするメインのSVGコンテナです。"
-  :pivot-point "ピボットポイント"
   :fill-description "塗りつぶし属性は、メインキャンバスの背景色を定義します。
                      デフォルト値は現在のテーマに依存し、アプリケーションの現在の
                      テーマによって決定されます。"}
@@ -501,7 +500,8 @@
   :tool-edit "編集"}
 
  :renderer.tool.impl.base.transform.core
- {:label "変形"}
+ {:label "変形"
+  :pivot-point "ピボットポイント"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "%1を押しながら方向を制限。または%2を離して移動"]

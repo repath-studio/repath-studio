@@ -210,7 +210,6 @@
  {:label "لوحة الرسم"
   :description "لوحة الرسم هي حاوية SVG الرئيسية التي تستضيف جميع
                 العناصر."
-  :pivot-point "نقطة الارتكاز"
   :fill-description "تحدد خاصية التعبئة لون خلفية لوحة الرسم الرئيسية. تعتمد
                      القيمة الافتراضية على السمة الحالية، مما يعني أنها ستُحدد
                      بواسطة السمة الحالية للتطبيق."}
@@ -516,7 +515,8 @@
   :tool-edit "تحرير"}
 
  :renderer.tool.impl.base.transform.core
- {:label "تحويل"}
+ {:label "تحويل"
+  :pivot-point "نقطة الارتكاز"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "اضغط %1 لتقييد الاتجاه. أو حرر %2 للتحريك"]

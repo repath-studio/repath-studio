@@ -217,7 +217,6 @@
  {:label "Canevas"
   :description "Le canevas est le conteneur SVG principal qui héberge tous les
                 éléments."
-  :pivot-point "point de pivot"
   :fill-description "L'attribut de remplissage définit la couleur d'arrière-plan
                      du canevas principal. La valeur par défaut dépend du thème
                      actuel, ce qui signifie qu'elle sera déterminée par le
@@ -546,7 +545,8 @@
   :tool-edit "Éditer"}
 
  :renderer.tool.impl.base.transform.core
- {:label "Transformer"}
+ {:label "Transformer"
+  :pivot-point "point de pivot"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Maintenez %1 pour restreindre la direction. ou relâchez %2 pour

@@ -214,7 +214,6 @@
  :renderer.element.impl.container.canvas
  {:label "Tuval"
   :description "Tuval, tüm öğeleri barındıran ana SVG kapsayıcısıdır."
-  :pivot-point "pivot noktası"
   :fill-description "Dolgu özniteliği, ana tuvalin arka plan rengini tanımlar.
                      Varsayılan değer mevcut temaya bağlıdır; bu, uygulamanın
                      mevcut teması tarafından belirleneceği anlamına gelir."}
@@ -531,7 +530,8 @@
   :tool-edit "Düzenle"}
 
  :renderer.tool.impl.base.transform.core
- {:label "Dönüştür"}
+ {:label "Dönüştür"
+  :pivot-point "pivot noktası"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Yönü kısıtlamak için %1 tuşunu basılı tutun. veya taşımak için

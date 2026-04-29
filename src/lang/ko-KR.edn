@@ -208,7 +208,6 @@
  :renderer.element.impl.container.canvas
  {:label "캔버스"
   :description "캔버스는 모든 요소를 포함하는 주요 SVG 컨테이너입니다."
-  :pivot-point "피벗 포인트"
   :fill-description "채우기 속성은 메인 캔버스의 배경색을 정의합니다. 기본값은
                      현재 테마에 따라 달라지며, 이는 애플리케이션의 현재 테마에
                      의해 결정됩니다."}
@@ -497,7 +496,8 @@
   :tool-edit "편집"}
 
  :renderer.tool.impl.base.transform.core
- {:label "변환"}
+ {:label "변환"
+  :pivot-point "피벗 포인트"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "%1을 누르면 방향을 제한하거나 %2를 놓으면 이동합니다"]

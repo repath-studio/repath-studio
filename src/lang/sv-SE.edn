@@ -213,7 +213,6 @@
  :renderer.element.impl.container.canvas
  {:label "Duk"
   :description "Duken är huvud-SVG behållaren som innehåller alla element."
-  :pivot-point "rotationspunkt"
   :fill-description "Fyllnadsattributet definierar bakgrundsfärgen för
                      huvudduken. Standardvärdet beror på det aktuella temat,
                      vilket innebär att det bestäms av programmets aktuella
@@ -539,7 +538,8 @@
   :tool-edit "Redigera"}
 
  :renderer.tool.impl.base.transform.core
- {:label "Transformera"}
+ {:label "Transformera"
+  :pivot-point "rotationspunkt"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Håll %1 för att begränsa riktning. eller släpp %2 för att

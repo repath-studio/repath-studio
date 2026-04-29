@@ -216,7 +216,6 @@
  {:label "Tela"
   :description "La tela è il contenitore SVG principale che ospita tutti gli
                 elementi."
-  :pivot-point "punto di pivot"
   :fill-description "L'attributo di riempimento definisce il colore di sfondo
                      della tela principale. Il valore predefinito dipende dal
                      tema corrente, il che significa che sarà determinato dal
@@ -551,7 +550,8 @@
   :tool-edit "Modifica"}
 
  :renderer.tool.impl.base.transform.core
- {:label "Trasforma"}
+ {:label "Trasforma"
+  :pivot-point "punto di pivot"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Tieni premuto %1 per limitare la direzione. o rilascia %2 per
