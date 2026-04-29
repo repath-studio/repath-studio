@@ -725,6 +725,8 @@
                             (overlapping-svg db el-bbox)
                             (root db)))))))
 
+(declare add-child-elements)
+
 (m/=> create [:-> App map? App])
 (defn create
   [db el]
@@ -735,34 +737,37 @@
                       (concat (:content el)))
         parent-el (entity db (:parent new-el))
         [min-x min-y] (some-> parent-el element.hierarchy/bbox)
-        add-children (fn [db child-els]
-                       (reduce #(cond-> %1
-                                  (element.db/tag? (:tag %2))
-                                  (create (assoc %2 :parent id)))
-                               db child-els))]
+        is-translated (or (utils.element/svg? new-el)
+                          (utils.element/root? new-el)
+                          (:parent el))]
     (if-not (element.db/valid? new-el)
       (throw (ex-info (str "Invalid element: "
                            (m.error/humanize (element.db/explain el)))
                       {:element new-el}))
-      (let [is-translated (or (utils.element/svg? new-el)
-                              (utils.element/root? new-el)
-                              (:parent el))]
-        (cond-> db
-          :always
-          (assoc-in (path db id) new-el)
+      (cond-> db
+        :always
+        (assoc-in (path db id) new-el)
 
-          (:parent new-el)
-          (-> (update-prop (:parent new-el) :children #(vec (conj % id)))
-              (expand (:parent new-el)))
+        (:parent new-el)
+        (-> (update-prop (:parent new-el) :children #(vec (conj % id)))
+            (expand (:parent new-el)))
 
-          (and (not is-translated) parent-el)
-          (translate [(- min-x) (- min-y)])
+        (and (not is-translated) parent-el)
+        (translate [(- min-x) (- min-y)])
 
-          is-translated
-          (refresh-bbox id)
+        is-translated
+        (refresh-bbox id)
 
-          child-els
-          (add-children child-els))))))
+        child-els
+        (add-child-elements id child-els)))))
+
+(m/=> add-child-elements [:-> App ElementId [:sequential Element] App])
+(defn add-child-elements
+  [db parent-id child-els]
+  (reduce #(cond-> %1
+             (element.db/tag? (:tag %2))
+             (create (assoc %2 :parent parent-id)))
+          db child-els))
 
 (m/=> create-default-canvas [:-> App [:maybe Vec2] App])
 (defn create-default-canvas
