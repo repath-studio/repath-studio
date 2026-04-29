@@ -27,7 +27,7 @@
   [db]
   (tool.handlers/set-cursor db "crosshair"))
 
-(defn handle-snap-point
+(defn snap-point
   [db]
   [(with-meta
      (:adjusted-pointer-pos db)
@@ -35,11 +35,11 @@
 
 (defmethod tool.hierarchy/snapping-points [::tool.hierarchy/element :idle]
   [db]
-  (handle-snap-point db))
+  (snap-point db))
 
 (defmethod tool.hierarchy/snapping-points [::tool.hierarchy/element :create]
   [db]
-  (handle-snap-point db))
+  (snap-point db))
 
 (defmethod tool.hierarchy/snapping-elements [::tool.hierarchy/element :idle]
   [db]

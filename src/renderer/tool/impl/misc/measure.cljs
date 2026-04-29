@@ -94,7 +94,7 @@
         {:x (/ (+ x1 x2) 2)
          :y (/ (+ y1 y2) 2)}]])))
 
-(defn handle-snap-point
+(defn snap-point
   [db]
   [(with-meta
      (:adjusted-pointer-pos db)
@@ -104,11 +104,11 @@
 
 (defmethod tool.hierarchy/snapping-points [:measure :idle]
   [db]
-  (handle-snap-point db))
+  (snap-point db))
 
 (defmethod tool.hierarchy/snapping-points [:measure :create]
   [db]
-  (handle-snap-point db))
+  (snap-point db))
 
 (defmethod tool.hierarchy/snapping-elements [:measure :idle]
   [db]
