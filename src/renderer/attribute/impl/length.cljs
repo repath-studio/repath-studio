@@ -51,7 +51,8 @@
 
 (defmethod attribute.hierarchy/initial ::length [_tag _attr] 0)
 
-(defmethod attribute.hierarchy/update-attr ::length
+(defmethod attribute.hierarchy/update-attr [::element.hierarchy/element
+                                            ::length]
   ([el k f]
    (update-in el [:attrs k] #(utils.length/transform % f)))
   ([el k f arg]
@@ -59,7 +60,8 @@
   ([el k f arg & more]
    (update-in el [:attrs k] #(apply utils.length/transform % f arg more))))
 
-(defmethod attribute.hierarchy/update-attr ::positive-length
+(defmethod attribute.hierarchy/update-attr [::element.hierarchy/element
+                                            ::positive-length]
   ([el k f]
    (update-in el [:attrs k] utils.length/transform (fn [v] (max 0 (f v)))))
   ([el k f arg]

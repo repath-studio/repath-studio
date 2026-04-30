@@ -7,7 +7,7 @@
   :hierarchy hierarchy/hierarchy)
 
 (defmulti update-attr
-  (fn [_ k & _more] k)
+  (fn [el k & _more] [(:tag el) k])
   :hierarchy hierarchy/hierarchy)
 
 (defmulti description

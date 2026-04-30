@@ -15,7 +15,8 @@
     baseline when multiple lines of text are set solid in a multiline layout
     environment."])
 
-(defmethod attribute.hierarchy/update-attr :font-size
+(defmethod attribute.hierarchy/update-attr [::element.hierarchy/element
+                                            :font-size]
   [el attribute f & more]
   (let [font-size (:font-size (utils.font/get-computed-styles! el))
         font-size (utils.length/unit->px font-size)]
