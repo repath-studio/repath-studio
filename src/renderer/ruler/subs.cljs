@@ -20,5 +20,4 @@
 (rf/reg-sub
  ::subgrid?
  :<- [::document.subs/zoom]
- (fn [zoom _]
-   (<= zoom 66)))
+ :-> (partial > 66))

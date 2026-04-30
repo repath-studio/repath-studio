@@ -14,5 +14,4 @@
 (rf/reg-sub
  ::some-active?
  :<- [::tasks]
- (fn [tasks _]
-   (boolean (seq tasks))))
+ :-> (comp boolean seq))

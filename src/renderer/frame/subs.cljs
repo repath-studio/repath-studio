@@ -17,10 +17,9 @@
 (rf/reg-sub
  ::viewbox-attr
  :<- [::viewbox]
- (fn [viewbox _]
-   (string/join " " viewbox)))
+ :-> (partial string/join " "))
 
 (rf/reg-sub
  ::viewbox-bounds
  :<- [::viewbox]
- frame.handlers/viewbox->bounds)
+ :-> frame.handlers/viewbox->bounds)

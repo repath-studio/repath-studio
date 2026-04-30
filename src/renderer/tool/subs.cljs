@@ -51,8 +51,7 @@
 (rf/reg-sub
  ::idle?
  :<- [::state]
- (fn [state _]
-   (= state :idle)))
+ :-> (partial = :idle))
 
 (rf/reg-sub
  ::cached-state
@@ -62,5 +61,4 @@
  ::help
  :<- [::active]
  :<- [::state]
- (fn [[tool state] _]
-   (tool.handlers/help tool state)))
+ :-> (partial apply tool.handlers/help))

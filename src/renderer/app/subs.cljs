@@ -70,22 +70,22 @@
 (rf/reg-sub
  ::web?
  :<- [::platform]
- utils.platform/web?)
+ :-> utils.platform/web?)
 
 (rf/reg-sub
  ::desktop?
  :<- [::platform]
- utils.platform/desktop?)
+ :-> utils.platform/desktop?)
 
 (rf/reg-sub
  ::not-mobile?
  :<- [::platform]
- (comp not utils.platform/mobile?))
+ :-> (comp not utils.platform/mobile?))
 
 (rf/reg-sub
  ::mac?
  :<- [::platform]
- utils.platform/mac?)
+ :-> utils.platform/mac?)
 
 (rf/reg-sub
  ::standalone?

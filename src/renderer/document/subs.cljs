@@ -27,8 +27,7 @@
 
 (rf/reg-sub
  ::recent
- (fn [db _]
-   (-> db :recent reverse)))
+ :-> (comp reverse :recent))
 
 (rf/reg-sub
  ::some-recently-closed?

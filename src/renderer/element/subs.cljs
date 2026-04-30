@@ -39,7 +39,8 @@
  ::xml
  :<- [::root-children]
  (fn [root-children _]
-   (-> (utils.element/->string root-children)
+   (-> root-children
+       (utils.element/->string)
        (js-beautify/html #js {:indent_size 2}))))
 
 (rf/reg-sub
@@ -51,8 +52,7 @@
 (rf/reg-sub
  ::selected
  :<- [::entities]
- (fn [entities _]
-   (filter :selected entities)))
+ :-> (partial filter :selected))
 
 (rf/reg-sub
  ::hovered
@@ -70,8 +70,7 @@
 (rf/reg-sub
  ::selected-tags
  :<- [::selected]
- (fn [selected-elements _]
-   (->> selected-elements (map :tag) set)))
+ :-> (comp set (partial map :tag)))
 
 (rf/reg-sub
  ::has-selected-tag?
@@ -87,14 +86,12 @@
 (rf/reg-sub
  ::selected-locked?
  :<- [::selected]
- (fn [selected-elements _]
-   (every? :locked selected-elements)))
+ :-> (partial every? :locked))
 
 (rf/reg-sub
  ::multiple-selected?
  :<- [::selected]
- (fn [selected-elements _]
-   (boolean (seq (rest selected-elements)))))
+ :-> (comp boolean seq rest))
 
 (rf/reg-sub
  ::selected-attrs

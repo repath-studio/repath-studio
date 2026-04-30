@@ -9,4 +9,4 @@
 (rf/reg-sub
  ::active
  :<- [::entities]
- last)
+ :-> last)

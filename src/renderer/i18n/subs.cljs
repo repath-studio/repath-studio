@@ -26,20 +26,18 @@
  :<- [::languages]
  :<- [::user-lang]
  :<- [::system-lang]
- (fn [[languages user-lang system-lang] _]
-   (i18n.handlers/computed-lang languages user-lang system-lang)))
+ :-> (partial apply i18n.handlers/computed-lang))
 
 (rf/reg-sub
  ::options
  :<- [::languages]
- i18n.handlers/tempura-options)
+ :-> i18n.handlers/tempura-options)
 
 (rf/reg-sub
  ::language
  :<- [::languages]
  :<- [::lang]
- (fn [[languages lang] _]
-   (get languages lang)))
+ :-> (partial apply get))
 
 (rf/reg-sub
  ::lang-dir
@@ -55,8 +53,7 @@
  ::system-language
  :<- [::languages]
  :<- [::system-lang]
- (fn [[languages system-lang] _]
-   (get languages system-lang)))
+ :-> (partial apply get))
 
 (rf/reg-sub
  ::system-lang-code

@@ -5,8 +5,7 @@
 
 (rf/reg-sub
  ::theme
- (fn [db _]
-   (:theme db)))
+ :-> :theme)
 
 (rf/reg-sub
  ::mode
@@ -28,8 +27,7 @@
  ::computed-mode
  :<- [::mode]
  :<- [::native-mode]
- (fn [[mode native-mode] _]
-   (theme.handlers/compute-mode mode native-mode)))
+ :-> (partial apply theme.handlers/compute-mode))
 
 (rf/reg-sub
  ::codemirror
