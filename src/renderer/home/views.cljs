@@ -5,15 +5,27 @@
    [config :as config]
    [re-frame.core :as rf]
    [renderer.action.views :as action.views]
-   [renderer.db :as db]
    [renderer.document.events :as-alias document.events]
    [renderer.i18n.views :as i18n.views]
    [renderer.views :as views]))
 
+(def a-series-paper-sizes
+  {0 [2384 3370]
+   1 [1684 2384]
+   2 [1191 1684]
+   3 [842 1191]
+   4 [595 842]
+   5 [420 595]
+   6 [298 420]
+   7 [210 298]
+   8 [147 210]
+   9 [105 147]
+   10 [74 105]})
+
 (defn document-size-select
   []
   [:> Select/Root
-   {:onValueChange #(let [size (get db/a-series-paper-sizes %)]
+   {:onValueChange #(let [size (get a-series-paper-sizes %)]
                       (rf/dispatch [::document.events/new-from-template size]))}
    [:> Select/Trigger
     {:class "button px-2 bg-overlay rounded-sm"
@@ -36,7 +48,7 @@
          :class "menu-item px-2!"}
         [:> Select/ItemText
          (i18n.views/t [::empty-canvas "Empty canvas"])]]
-       (for [[k _v] (sort db/a-series-paper-sizes)]
+       (for [[k _v] (sort a-series-paper-sizes)]
          ^{:key k}
          [:> Select/Item
           {:value k
