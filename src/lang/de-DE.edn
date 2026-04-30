@@ -382,7 +382,8 @@
  :renderer.tool.impl.element.poly
  {:click-to-start "Klicken, um mit dem Zeichnen zu beginnen."
   :add-points "Klicken, um weitere Punkte hinzuzufügen."
-  :finalize-shape "Rechtsklicken oder doppelklicken, um die Form zu finalisieren."}
+  :finalize-shape "Rechtsklicken oder doppelklicken, um die Form zu
+                   finalisieren."}
 
  :renderer.tool.impl.element.rect
  {:label "Rechteck"

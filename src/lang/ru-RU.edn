@@ -364,7 +364,8 @@
  :renderer.tool.impl.element.poly
  {:click-to-start "Щёлкните для начала рисования."
   :add-points "Щёлкните для добавления дополнительных точек."
-  :finalize-shape "Щёлкните правой кнопкой мыши или дважды для завершения формы."}
+  :finalize-shape "Щёлкните правой кнопкой мыши или дважды для завершения
+                   формы."}
 
  :renderer.tool.impl.element.rect
  {:label "Прямоугольник"
