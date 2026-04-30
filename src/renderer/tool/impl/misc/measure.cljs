@@ -28,7 +28,11 @@
 
 (defmethod tool.hierarchy/help [:measure :idle]
   []
-  (i18n.views/t [::help "Click and drag to measure a distance."]))
+  (i18n.views/t [::click-and-drag "Click and drag to measure a distance."]))
+
+(defmethod tool.hierarchy/help [:measure :create]
+  []
+  (i18n.views/t [::release-to-finalize "Release to finalize the measurement."]))
 
 (defmethod tool.hierarchy/on-activate :measure
   [db]

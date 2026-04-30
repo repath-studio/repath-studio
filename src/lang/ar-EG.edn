@@ -344,14 +344,16 @@
                           ارتفاع مختلفة."}
 
  :renderer.tool.impl.element.core
- {:help "انقر واسحب لإنشاء عنصر."
+ {:click-and-drag "انقر واسحب لإنشاء عنصر."
+  :release-to-finalize "أفلت لإنهاء العنصر."
   :edge "حافة"
   :elements "عناصر"
   :containers "حاويات"}
 
  :renderer.tool.impl.element.poly
- {:add-points "انقر لإضافة المزيد من النقاط."
-  :finalize-shape "انقر مرتين لإنهاء الشكل."}
+ {:click-to-start "انقر لبدء الرسم."
+  :add-points "انقر لإضافة المزيد من النقاط."
+  :finalize-shape "انقر بالزر الأيمن أو انقر مرتين لإنهاء الشكل."}
 
  :renderer.tool.impl.element.rect
  {:label "مستطيل"
@@ -379,7 +381,8 @@
 
  :renderer.tool.impl.misc.measure
  {:label "قياس"
-  :help "انقر واسحب لقياس مسافة."
+  :click-and-drag "انقر واسحب لقياس مسافة."
+  :release-to-finalize "أفلت لإنهاء القياس."
   :measure-end "نهاية القياس"
   :measure-start "بداية القياس"}
 
@@ -548,14 +551,15 @@
 
  :renderer.tool.impl.base.pan
  {:label "تحريك"
-  :idle-help "انقر واسحب للتحريك."
-  :pan-help "اسحب للتحريك."
+  :click-and-drag "انقر واسحب للتحريك."
+  :release-to-stop "أفلت للتوقف عن التحريك."
   :tool-pan "تحريك"}
 
  :renderer.tool.impl.base.zoom
  {:label "تكبير"
   :zoom-in [:div "انقر أو حدد منطقة للتكبير."]
   :zoom-out [:div "اضغط %1 للتصغير."]
+  :release-to-focus "أفلت للتركيز على المنطقة."
   :tool-zoom "تكبير"}
 
  :renderer.tool.impl.draw.brush
@@ -567,7 +571,8 @@
   :draw-line "رسم خط"}
 
  :renderer.tool.impl.draw.core
- {:help "انقر واسحب للرسم."
+ {:click-and-drag "انقر واسحب للرسم."
+  :release-to-finalize "أفلت لإنهاء الرسم."
   :draw "رسم"}
 
  :renderer.tool.impl.element.circle

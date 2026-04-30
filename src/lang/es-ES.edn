@@ -362,14 +362,16 @@
                           viewport con una proporción de aspecto diferente."}
 
  :renderer.tool.impl.element.core
- {:help "Haga clic y arrastre para crear un elemento."
+ {:click-and-drag "Haga clic y arrastre para crear un elemento."
+  :release-to-finalize "Suelte para finalizar el elemento."
   :edge "borde"
   :elements "Elementos"
   :containers "Contenedores"}
 
  :renderer.tool.impl.element.poly
- {:add-points "Haga clic para agregar más puntos."
-  :finalize-shape "Doble clic para finalizar la forma."}
+ {:click-to-start "Haga clic para empezar a dibujar."
+  :add-points "Haga clic para agregar más puntos."
+  :finalize-shape "Clic derecho o doble clic para finalizar la forma."}
 
  :renderer.tool.impl.element.rect
  {:label "Rectángulo"
@@ -397,7 +399,8 @@
 
  :renderer.tool.impl.misc.measure
  {:label "Medir"
-  :help "Haga clic y arrastre para medir una distancia."
+  :click-and-drag "Haga clic y arrastre para medir una distancia."
+  :release-to-finalize "Suelte para finalizar la medición."
   :measure-end "fin de medición"
   :measure-start "inicio de medición"}
 
@@ -576,14 +579,15 @@
 
  :renderer.tool.impl.base.pan
  {:label "Panorámica"
-  :idle-help "Haga clic y arrastre para hacer panorámica."
-  :pan-help "Arrastre para hacer panorámica."
+  :click-and-drag "Haga clic y arrastre para hacer panorámica."
+  :release-to-stop "Suelte para detener la panorámica."
   :tool-pan "Desplazar"}
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
   :zoom-in [:div "Haga clic o seleccione un área para acercar."]
   :zoom-out [:div "Mantenga %1 para alejar."]
+  :release-to-focus "Suelte para centrarse en el área."
   :tool-zoom "Zoom"}
 
  :renderer.tool.impl.draw.brush
@@ -595,7 +599,8 @@
   :draw-line "Dibujar línea"}
 
  :renderer.tool.impl.draw.core
- {:help "Haga clic y arrastre para dibujar."
+ {:click-and-drag "Haga clic y arrastre para dibujar."
+  :release-to-finalize "Suelte para finalizar el dibujo."
   :draw "Dibujar"}
 
  :renderer.tool.impl.element.circle

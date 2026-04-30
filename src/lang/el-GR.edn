@@ -377,14 +377,16 @@
                           σε ένα viewport με διαφορετικές διαστάσεις."}
 
  :renderer.tool.impl.element.core
- {:help "Κάντε κλίκ και σύρετε για να δημιουργήσετε ένα στοιχείο"
+ {:click-and-drag "Κάντε κλίκ και σύρετε για να δημιουργήσετε ένα στοιχείο"
+  :release-to-finalize "Αφήστε για να οριστικοποιήσετε το στοιχείο."
   :edge "άκρη"
   :elements "Στοιχεία"
   :containers "Κοντέινερ"}
 
  :renderer.tool.impl.element.poly
- {:add-points "Κάντε κλικ για να προσθέτε σημεία."
-  :finalize-shape "Διπλό κλικ για να οριστικοποιήσετε το σχήμα."}
+ {:click-to-start "Κάντε κλικ για να ξεκινήσετε τη σχεδίαση."
+  :add-points "Κάντε κλικ για να προσθέτε σημεία."
+  :finalize-shape "Δεξί κλικ ή διπλό κλικ για να οριστικοποιήσετε το σχήμα."}
 
  :renderer.tool.impl.element.rect
  {:label "Ορθογώνιο"
@@ -412,7 +414,8 @@
 
  :renderer.tool.impl.misc.measure
  {:label "Μέτρο"
-  :help "Κάντε κλικ και σύρετε για να μετρήσετε μια απόσταση."
+  :click-and-drag "Κάντε κλικ και σύρετε για να μετρήσετε μια απόσταση."
+  :release-to-finalize "Αφήστε για να οριστικοποιήσετε τη μέτρηση."
   :measure-end "τέλος μέτρησης"
   :measure-start "αρχή μέτρησης"}
 
@@ -595,14 +598,15 @@
 
  :renderer.tool.impl.base.pan
  {:label "Μετατόπιση"
-  :idle-help "Κάντε κλικ και σύρετε για μετατόπιση."
-  :pan-help "Σύρετε για μετατόπιση."
+  :click-and-drag "Κάντε κλικ και σύρετε για μετατόπιση."
+  :release-to-stop "Αφήστε για να σταματήσετε τη μετατόπιση."
   :tool-pan "Κύλιση"}
 
  :renderer.tool.impl.base.zoom
  {:label "Μεγέθυνση"
   :zoom-in [:div "Κάντε κλικ ή επιλέξτε μια περιοχή για μεγέθυνση."]
   :zoom-out [:div "Κρατήστε %1 για σμίκρυνση."]
+  :release-to-focus "Αφήστε για να εστιάσετε στην περιοχή."
   :tool-zoom "Ζουμ"}
 
  :renderer.tool.impl.draw.brush
@@ -614,7 +618,8 @@
   :draw-line "Σχεδίαση γραμμής"}
 
  :renderer.tool.impl.draw.core
- {:help "Κάντε κλικ και σύρετε για να σχεδιάσετε."
+ {:click-and-drag "Κάντε κλικ και σύρετε για να σχεδιάσετε."
+  :release-to-finalize "Αφήστε για να οριστικοποιήσετε τη σχεδίαση."
   :draw "Σχεδίαση"}
 
  :renderer.tool.impl.element.circle

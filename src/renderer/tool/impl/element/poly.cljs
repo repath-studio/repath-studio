@@ -14,10 +14,15 @@
 
 (defmethod tool.hierarchy/help [::tool.hierarchy/poly :idle]
   []
+  (i18n.views/t [::click-to-start "Click to start drawing."]))
+
+(defmethod tool.hierarchy/help [::tool.hierarchy/poly :create]
+  []
   [:<>
    [:div (i18n.views/t [::add-points "Click to add more points."])]
    [:div (i18n.views/t [::finalize-shape
-                        "Double click to finalize the shape."])]])
+                        "Right click or double click to finalize the
+                         shape."])]])
 
 (defn create-el
   [db initial-point]

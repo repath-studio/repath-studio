@@ -12,7 +12,11 @@
 
 (defmethod tool.hierarchy/help [::tool.hierarchy/draw :idle]
   []
-  (i18n.views/t [::help "Click and drag to draw."]))
+  (i18n.views/t [::click-and-drag "Click and drag to draw."]))
+
+(defmethod tool.hierarchy/help [::tool.hierarchy/draw :create]
+  []
+  (i18n.views/t [::release-to-finalize "Release to finalize the drawing."]))
 
 (defmethod tool.hierarchy/on-activate ::tool.hierarchy/draw
   [db]

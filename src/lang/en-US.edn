@@ -366,14 +366,16 @@
  {:label "Image"}
 
  :renderer.tool.impl.element.core
- {:help "Click and drag to create an element."
+ {:click-and-drag "Click and drag to create an element."
+  :release-to-finalize "Release to finalize the element."
   :edge "edge"
   :elements "Elements"
   :containers "Containers"}
 
  :renderer.tool.impl.element.poly
- {:add-points "Click to add more points."
-  :finalize-shape "Double click to finalize the shape."}
+ {:click-to-start "Click to start drawing."
+  :add-points "Click to add more points."
+  :finalize-shape "Right click or double click to finalize the shape."}
 
  :renderer.tool.impl.element.rect
  {:label "Rectangle"
@@ -401,7 +403,8 @@
 
  :renderer.tool.impl.misc.measure
  {:label "Measure"
-  :help "Click and drag to measure a distance."
+  :click-and-drag "Click and drag to measure a distance."
+  :release-to-finalize "Release to finalize the measurement."
   :measure-end "measure end"
   :measure-start "measure start"}
 
@@ -561,14 +564,15 @@
 
  :renderer.tool.impl.base.pan
  {:label "Pan"
-  :idle-help "Click and drag to pan."
-  :pan-help "Drag to pan."
+  :click-and-drag "Click and drag to pan."
+  :release-to-stop "Release to stop panning."
   :tool-pan "Pan"}
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
   :zoom-in [:div "Click or select an area to zoom in."]
   :zoom-out [:div "Hold %1 to zoom out."]
+  :release-to-focus "Release to focus on the area."
   :tool-zoom "Zoom"}
 
  :renderer.tool.impl.draw.brush
@@ -580,7 +584,8 @@
   :draw-line "Draw line"}
 
  :renderer.tool.impl.draw.core
- {:help "Click and drag to draw."
+ {:click-and-drag "Click and drag to draw."
+  :release-to-finalize "Release to finalize the drawing."
   :draw "Draw"}
 
  :renderer.tool.impl.element.circle

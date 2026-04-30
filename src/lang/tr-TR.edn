@@ -366,14 +366,16 @@
  {:label "Resim"}
 
  :renderer.tool.impl.element.core
- {:help "Bir öğe oluşturmak için tıklayın ve sürükleyin."
+ {:click-and-drag "Bir öğe oluşturmak için tıklayın ve sürükleyin."
+  :release-to-finalize "Öğeyi tamamlamak için bırakın."
   :edge "kenar"
   :elements "Öğeler"
   :containers "Kapsayıcılar"}
 
  :renderer.tool.impl.element.poly
- {:add-points "Daha fazla nokta eklemek için tıklayın."
-  :finalize-shape "Şekli sonlandırmak için çift tıklayın."}
+ {:click-to-start "Çizmeye başlamak için tıklayın."
+  :add-points "Daha fazla nokta eklemek için tıklayın."
+  :finalize-shape "Şekli sonlandırmak için sağ tıklayın veya çift tıklayın."}
 
  :renderer.tool.impl.element.rect
  {:label "Dikdörtgen"
@@ -401,7 +403,8 @@
 
  :renderer.tool.impl.misc.measure
  {:label "Ölç"
-  :help "Bir mesafeyi ölçmek için tıklayın ve sürükleyin."
+  :click-and-drag "Bir mesafeyi ölçmek için tıklayın ve sürükleyin."
+  :release-to-finalize "Ölçümü tamamlamak için bırakın."
   :measure-end "ölçüm sonu"
   :measure-start "ölçüm başı"}
 
@@ -567,14 +570,15 @@
 
  :renderer.tool.impl.base.pan
  {:label "Kaydır"
-  :idle-help "Kaydırmak için tıklayın ve sürükleyin."
-  :pan-help "Kaydırmak için sürükleyin."
+  :click-and-drag "Kaydırmak için tıklayın ve sürükleyin."
+  :release-to-stop "Kaydırmayı durdurmak için bırakın."
   :tool-pan "Kaydır"}
 
  :renderer.tool.impl.base.zoom
  {:label "Yakınlaştır"
   :zoom-in [:div "Yakınlaştırmak için tıklayın veya bir alan seçin."]
   :zoom-out [:div "Uzaklaştırmak için %1 tuşunu basılı tutun."]
+  :release-to-focus "Alana odaklanmak için bırakın."
   :tool-zoom "Yakınlaştır"}
 
  :renderer.tool.impl.draw.brush
@@ -586,7 +590,8 @@
   :draw-line "Çizgi çiz"}
 
  :renderer.tool.impl.draw.core
- {:help "Çizmek için tıklayın ve sürükleyin."
+ {:click-and-drag "Çizmek için tıklayın ve sürükleyin."
+  :release-to-finalize "Çizimi tamamlamak için bırakın."
   :draw "Çiz"}
 
  :renderer.tool.impl.element.circle

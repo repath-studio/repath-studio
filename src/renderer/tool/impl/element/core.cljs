@@ -21,7 +21,11 @@
 
 (defmethod tool.hierarchy/help [::tool.hierarchy/element :idle]
   []
-  (i18n.views/t [::help "Click and drag to create an element."]))
+  (i18n.views/t [::click-and-drag "Click and drag to create an element."]))
+
+(defmethod tool.hierarchy/help [::tool.hierarchy/element :create]
+  []
+  (i18n.views/t [::release-to-finalize "Release to finalize the element."]))
 
 (defmethod tool.hierarchy/on-activate ::tool.hierarchy/element
   [db]

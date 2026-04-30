@@ -329,14 +329,16 @@
                           示します。"}
 
  :renderer.tool.impl.element.core
- {:help "クリックしてドラッグして要素を作成します。"
+ {:click-and-drag "クリックしてドラッグして要素を作成します。"
+  :release-to-finalize "要素を確定するには離す。"
   :edge "エッジ"
   :elements "要素"
   :containers "コンテナ"}
 
  :renderer.tool.impl.element.poly
- {:add-points "クリックしてポイントを追加。"
-  :finalize-shape "ダブルクリックして形状を確定。"}
+ {:click-to-start "クリックして描画を開始。"
+  :add-points "クリックしてポイントを追加。"
+  :finalize-shape "右クリックまたはダブルクリックして形状を確定。"}
 
  :renderer.tool.impl.element.rect
  {:label "矩形"
@@ -364,7 +366,8 @@
 
  :renderer.tool.impl.misc.measure
  {:label "測定"
-  :help "クリックしてドラッグして距離を測定。"
+  :click-and-drag "クリックしてドラッグして距離を測定。"
+  :release-to-finalize "測定を確定するには離す。"
   :measure-end "測定終了"
   :measure-start "測定開始"}
 
@@ -533,14 +536,15 @@
 
  :renderer.tool.impl.base.pan
  {:label "パン"
-  :idle-help "クリックしてドラッグしてパン。"
-  :pan-help "ドラッグしてパン。"
+  :click-and-drag "クリックしてドラッグしてパン。"
+  :release-to-stop "パンを停止するには離す。"
   :tool-pan "パン"}
 
  :renderer.tool.impl.base.zoom
  {:label "ズーム"
   :zoom-in [:div "クリックするか範囲を選択してズームイン。"]
   :zoom-out [:div "%1を押しながらズームアウト。"]
+  :release-to-focus "エリアにフォーカスするには離す。"
   :tool-zoom "ズーム"}
 
  :renderer.tool.impl.draw.brush
@@ -552,7 +556,8 @@
   :draw-line "線を描画"}
 
  :renderer.tool.impl.draw.core
- {:help "クリックしてドラッグして描画。"
+ {:click-and-drag "クリックしてドラッグして描画。"
+  :release-to-finalize "描画を確定するには離す。"
   :draw "描画"}
 
  :renderer.tool.impl.element.circle

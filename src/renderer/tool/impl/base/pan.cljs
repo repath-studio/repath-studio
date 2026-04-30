@@ -20,9 +20,13 @@
   [db]
   (tool.handlers/set-cursor db "grab"))
 
-(defmethod tool.hierarchy/help [:pan :default]
+(defmethod tool.hierarchy/help [:pan :idle]
   []
-  (i18n.views/t [::idle-help "Click and drag to pan."]))
+  (i18n.views/t [::click-and-drag "Click and drag to pan."]))
+
+(defmethod tool.hierarchy/help [:pan :pan]
+  []
+  (i18n.views/t [::release-to-stop "Release to stop panning."]))
 
 (defmethod tool.hierarchy/on-pointer-up [:pan :idle]
   [db _e]
@@ -30,11 +34,9 @@
 
 (defmethod tool.hierarchy/on-pointer-down [:pan :idle]
   [db _e]
-  (tool.handlers/set-cursor db "grabbing"))
-
-(defmethod tool.hierarchy/on-drag-start [:pan :idle]
-  [db _e]
-  (tool.handlers/set-state db :pan))
+  (-> db
+      (tool.handlers/set-state :pan)
+      (tool.handlers/set-cursor "grabbing")))
 
 (defmethod tool.hierarchy/on-drag [:pan :pan]
   [db e]

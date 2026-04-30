@@ -336,14 +336,16 @@
  {:label "이미지"}
 
  :renderer.tool.impl.element.core
- {:help "클릭하고 드래그하여 요소를 생성합니다."
+ {:click-and-drag "클릭하고 드래그하여 요소를 생성합니다."
+  :release-to-finalize "요소를 완료하려면 놓으세요."
   :edge "가장자리"
   :elements "요소"
   :containers "컨테이너"}
 
  :renderer.tool.impl.element.poly
- {:add-points "클릭하여 더 많은 점을 추가합니다."
-  :finalize-shape "더블 클릭하여 모양을 완료합니다."}
+ {:click-to-start "클릭하여 그리기를 시작합니다."
+  :add-points "클릭하여 더 많은 점을 추가합니다."
+  :finalize-shape "오른쪽 클릭 또는 더블 클릭하여 모양을 완료합니다."}
 
  :renderer.tool.impl.element.rect
  {:label "사각형"
@@ -371,7 +373,8 @@
 
  :renderer.tool.impl.misc.measure
  {:label "측정"
-  :help "클릭하고 드래그하여 거리를 측정합니다."
+  :click-and-drag "클릭하고 드래그하여 거리를 측정합니다."
+  :release-to-finalize "측정을 완료하려면 놓으세요."
   :measure-end "측정 끝"
   :measure-start "측정 시작"}
 
@@ -529,14 +532,15 @@
 
  :renderer.tool.impl.base.pan
  {:label "팬"
-  :idle-help "클릭하고 드래그하여 팬합니다."
-  :pan-help "드래그하여 팬합니다."
+  :click-and-drag "클릭하고 드래그하여 팬합니다."
+  :release-to-stop "팬을 멈주려면 놓으세요."
   :tool-pan "이동"}
 
  :renderer.tool.impl.base.zoom
  {:label "확대/축소"
   :zoom-in [:div "클릭하거나 영역을 선택하여 확대합니다."]
   :zoom-out [:div "%1을 누르면 축소합니다."]
+  :release-to-focus "영역에 집중하려면 놓으세요."
   :tool-zoom "줌"}
 
  :renderer.tool.impl.draw.brush
@@ -548,7 +552,8 @@
   :draw-line "선 그리기"}
 
  :renderer.tool.impl.draw.core
- {:help "클릭하고 드래그하여 그립니다."
+ {:click-and-drag "클릭하고 드래그하여 그립니다."
+  :release-to-finalize "그리기를 완료하려면 놓으세요."
   :draw "그리기"}
 
  :renderer.tool.impl.element.circle

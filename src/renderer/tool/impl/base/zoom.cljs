@@ -32,6 +32,10 @@
    (i18n.views/t [::zoom-in "Click or select an area to zoom in."])
    (i18n.views/t [::zoom-out "Hold %1 to zoom out."] [[views/kbd "⇧"]])])
 
+(defmethod tool.hierarchy/help [:zoom :select]
+  []
+  (i18n.views/t [::release-to-focus "Release to focus on the area."]))
+
 (defmethod tool.hierarchy/on-activate :zoom
   [db]
   (tool.handlers/set-cursor db "zoom-in"))

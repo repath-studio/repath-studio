@@ -373,14 +373,16 @@
                           einem anderen Seitenverhältnis passen muss."}
 
  :renderer.tool.impl.element.core
- {:help "Klicken und ziehen, um ein Element zu erstellen."
+ {:click-and-drag "Klicken und ziehen, um ein Element zu erstellen."
+  :release-to-finalize "Loslassen, um das Element abzuschließen."
   :edge "Kante"
   :elements "Elemente"
   :containers "Container"}
 
  :renderer.tool.impl.element.poly
- {:add-points "Klicken, um weitere Punkte hinzuzufügen."
-  :finalize-shape "Doppelklicken, um die Form zu finalisieren."}
+ {:click-to-start "Klicken, um mit dem Zeichnen zu beginnen."
+  :add-points "Klicken, um weitere Punkte hinzuzufügen."
+  :finalize-shape "Rechtsklicken oder doppelklicken, um die Form zu finalisieren."}
 
  :renderer.tool.impl.element.rect
  {:label "Rechteck"
@@ -408,7 +410,8 @@
 
  :renderer.tool.impl.misc.measure
  {:label "Messen"
-  :help "Klicken und ziehen, um eine Entfernung zu messen."
+  :click-and-drag "Klicken und ziehen, um eine Entfernung zu messen."
+  :release-to-finalize "Loslassen, um die Messung abzuschließen."
   :measure-end "Messende"
   :measure-start "Messanfang"}
 
@@ -590,14 +593,15 @@
 
  :renderer.tool.impl.base.pan
  {:label "Schwenken"
-  :idle-help "Klicken und ziehen zum Schwenken."
-  :pan-help "Ziehen zum Schwenken."
+  :click-and-drag "Klicken und ziehen zum Schwenken."
+  :release-to-stop "Loslassen, um das Schwenken zu beenden."
   :tool-pan "Verschieben"}
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
   :zoom-in [:div "Klicken oder einen Bereich auswählen, um zu vergrößern."]
   :zoom-out [:div "Halten Sie %1, um zu verkleinern."]
+  :release-to-focus "Loslassen, um auf den Bereich zu fokussieren."
   :tool-zoom "Zoomen"}
 
  :renderer.tool.impl.draw.brush
@@ -609,7 +613,8 @@
   :draw-line "Linie zeichnen"}
 
  :renderer.tool.impl.draw.core
- {:help "Klicken und ziehen zum Zeichnen."
+ {:click-and-drag "Klicken und ziehen zum Zeichnen."
+  :release-to-finalize "Loslassen, um die Zeichnung abzuschließen."
   :draw "Zeichnen"}
 
  :renderer.tool.impl.element.circle
