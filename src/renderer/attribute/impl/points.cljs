@@ -7,13 +7,14 @@
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.views :as attribute.views]
    [renderer.element.events :as-alias element.events]
+   [renderer.element.hierarchy :as-alias element.hierarchy]
    [renderer.i18n.views :as i18n.views]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.vec :as utils.vec]
    [renderer.views :as views]))
 
-(defmethod attribute.hierarchy/description [:default :points]
+(defmethod attribute.hierarchy/description [::element.hierarchy/element :points]
   []
   [::description
    ["The points attribute defines a list of points. Each point is defined by a
@@ -71,7 +72,8 @@
                        [point-row index point points]) points)]]]
      [views/popover-arrow]]]])
 
-(defmethod attribute.hierarchy/form-element [:default :points]
+(defmethod attribute.hierarchy/form-element [::element.hierarchy/element
+                                             :points]
   [_ k v {:keys [disabled]}]
   (let [state-idle (= @(rf/subscribe [::tool.subs/state]) :idle)]
     [:div.flex.gap-px.w-full

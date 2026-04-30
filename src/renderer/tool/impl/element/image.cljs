@@ -15,7 +15,7 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.key :as utils.key]))
 
-(tool.hierarchy/derive-tool :image ::tool.hierarchy/element)
+(tool.hierarchy/derive! :image ::tool.hierarchy/element)
 
 (defmethod tool.hierarchy/on-drag-end [:image :idle]
   [db e]

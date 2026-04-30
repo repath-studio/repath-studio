@@ -6,11 +6,12 @@
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
+   [renderer.hierarchy :as hierarchy]
    [renderer.input.impl.pointer :as input.impl.pointer]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]))
 
-(element.hierarchy/derive-element :g ::element.hierarchy/container)
+(hierarchy/derive! :g ::element.hierarchy/container)
 
 (defmethod element.hierarchy/properties :g
   []

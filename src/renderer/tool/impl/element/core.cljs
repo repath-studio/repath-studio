@@ -17,7 +17,7 @@
    [renderer.tool.impl.element.svg]
    [renderer.tool.impl.element.text]))
 
-(tool.hierarchy/derive-tool ::tool.hierarchy/element ::tool.hierarchy/tool)
+(tool.hierarchy/derive! ::tool.hierarchy/element ::tool.hierarchy/tool)
 
 (defmethod tool.hierarchy/help [::tool.hierarchy/element :idle]
   []

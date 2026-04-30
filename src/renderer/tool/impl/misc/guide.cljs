@@ -13,7 +13,7 @@
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]))
 
-(tool.hierarchy/derive-tool :guide ::tool.hierarchy/tool)
+(tool.hierarchy/derive! :guide ::tool.hierarchy/tool)
 
 (defonce orient (reagent/atom nil))
 

@@ -8,11 +8,12 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
    [renderer.frame.subs :as-alias frame.subs]
+   [renderer.hierarchy :as hierarchy]
    [renderer.input.handlers :as input.handlers]
    [renderer.input.impl.pointer :as input.impl.pointer]
    [renderer.tool.views :as tool.views]))
 
-(element.hierarchy/derive-element :guide ::element.hierarchy/renderable)
+(hierarchy/derive! :guide ::element.hierarchy/renderable)
 
 (defmethod element.hierarchy/properties :guide
   []

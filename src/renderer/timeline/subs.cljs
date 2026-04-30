@@ -3,14 +3,15 @@
    [clojure.string :as string]
    [re-frame.core :as rf]
    [renderer.element.hierarchy :as element.hierarchy]
-   [renderer.element.subs :as-alias element.subs]))
+   [renderer.element.subs :as-alias element.subs]
+   [renderer.hierarchy :as hierarchy]))
 
 (rf/reg-sub
  ::animations
  :<- [::element.subs/entities]
  (fn [elements]
    (->> elements
-        (filter #(contains? (descendants @element.hierarchy/hierarchy
+        (filter #(contains? (descendants @hierarchy/hierarchy
                                          ::element.hierarchy/animation)
                             (:tag %))))))
 

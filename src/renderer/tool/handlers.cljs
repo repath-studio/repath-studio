@@ -24,9 +24,7 @@
 (m/=> help [:-> Tool State any?])
 (defn help
   [tool state]
-  (let [is-dispatchable (contains? (methods tool.hierarchy/help) [tool state])
-        dispatch-state (if is-dispatchable state :idle)]
-    (tool.hierarchy/help tool dispatch-state)))
+  (tool.hierarchy/help tool state))
 
 (m/=> activate [:-> App Tool [:* any?] App])
 (defn activate

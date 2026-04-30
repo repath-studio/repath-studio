@@ -5,29 +5,32 @@
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.views :as attribute.views]
    [renderer.element.events :as-alias element.events]
+   [renderer.element.hierarchy :as-alias element.hierarchy]
+   [renderer.hierarchy :as hierarchy]
    [renderer.i18n.views :as i18n.views]
    [renderer.utils.length :as utils.length]
    [renderer.views :as views]))
 
-(attribute.hierarchy/derive-attribute :x ::length)
-(attribute.hierarchy/derive-attribute :y ::length)
-(attribute.hierarchy/derive-attribute :x1 ::length)
-(attribute.hierarchy/derive-attribute :y1 ::length)
-(attribute.hierarchy/derive-attribute :x2 ::length)
-(attribute.hierarchy/derive-attribute :y2 ::length)
-(attribute.hierarchy/derive-attribute :cx ::length)
-(attribute.hierarchy/derive-attribute :cy ::length)
-(attribute.hierarchy/derive-attribute :dx ::length)
-(attribute.hierarchy/derive-attribute :dy ::length)
-(attribute.hierarchy/derive-attribute ::positive-length ::length)
-(attribute.hierarchy/derive-attribute :width ::positive-length)
-(attribute.hierarchy/derive-attribute :height ::positive-length)
-(attribute.hierarchy/derive-attribute :stroke-width ::positive-length)
-(attribute.hierarchy/derive-attribute :r ::positive-length)
-(attribute.hierarchy/derive-attribute :rx ::positive-length)
-(attribute.hierarchy/derive-attribute :ry ::positive-length)
+(hierarchy/derive! :x ::length)
+(hierarchy/derive! :y ::length)
+(hierarchy/derive! :x1 ::length)
+(hierarchy/derive! :y1 ::length)
+(hierarchy/derive! :x2 ::length)
+(hierarchy/derive! :y2 ::length)
+(hierarchy/derive! :cx ::length)
+(hierarchy/derive! :cy ::length)
+(hierarchy/derive! :dx ::length)
+(hierarchy/derive! :dy ::length)
+(hierarchy/derive! ::positive-length ::length)
+(hierarchy/derive! :width ::positive-length)
+(hierarchy/derive! :height ::positive-length)
+(hierarchy/derive! :stroke-width ::positive-length)
+(hierarchy/derive! :r ::positive-length)
+(hierarchy/derive! :rx ::positive-length)
+(hierarchy/derive! :ry ::positive-length)
 
-(defmethod attribute.hierarchy/form-element [:default ::length]
+(defmethod attribute.hierarchy/form-element [::element.hierarchy/element
+                                             ::length]
   [_ k v {:keys [disabled placeholder]}]
   [:div.flex.w-full.gap-px
    [attribute.views/form-input k v

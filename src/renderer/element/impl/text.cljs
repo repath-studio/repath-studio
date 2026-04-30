@@ -11,6 +11,7 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
    [renderer.element.views :as element.views]
+   [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
@@ -21,7 +22,7 @@
    [renderer.utils.key :as utils.key]
    [renderer.utils.length :as utils.length]))
 
-(element.hierarchy/derive-element :text ::element.hierarchy/shape)
+(hierarchy/derive! :text ::element.hierarchy/shape)
 
 (defmethod element.hierarchy/properties :text
   []

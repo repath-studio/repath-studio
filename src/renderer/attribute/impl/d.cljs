@@ -8,12 +8,13 @@
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.views :as attribute.views]
    [renderer.element.events :as-alias element.events]
+   [renderer.element.hierarchy :as-alias element.hierarchy]
    [renderer.events :as-alias events]
    [renderer.i18n.views :as i18n.views]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.views :as views]))
 
-(defmethod attribute.hierarchy/description [:default :d]
+(defmethod attribute.hierarchy/description [::element.hierarchy/element :d]
   []
   [[::description "The d attribute defines a path to be drawn."]])
 
@@ -146,7 +147,7 @@
                       ^{:key (str "segment-" index)}
                       [segment-row index segment path]) segments)]]]))
 
-(defmethod attribute.hierarchy/form-element [:default :d]
+(defmethod attribute.hierarchy/form-element [::element.hierarchy/element :d]
   [_ k v {:keys [disabled]}]
   (let [idle (= @(rf/subscribe [::tool.subs/state]) :idle)]
     [:div.flex.gap-px.w-full

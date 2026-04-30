@@ -9,6 +9,7 @@
    [renderer.attribute.impl.range :as attribute.impl.range]
    [renderer.attribute.views :as attribute.views]
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.hierarchy :as hierarchy]
    [renderer.input.handlers :as input.handlers]
    [renderer.input.impl.pointer :as input.impl.pointer]
    [renderer.tool.views :as tool.views]
@@ -16,7 +17,7 @@
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]))
 
-(element.hierarchy/derive-element :brush ::element.hierarchy/renderable)
+(hierarchy/derive! :brush ::element.hierarchy/renderable)
 
 (defmethod element.hierarchy/properties :brush
   []
@@ -38,9 +39,9 @@
 (def option-keys
   [:size :thinning :smoothing :streamline])
 
-(attribute.hierarchy/derive-attribute :thinning ::attribute.impl.range/range)
-(attribute.hierarchy/derive-attribute :smoothing ::attribute.impl.range/range)
-(attribute.hierarchy/derive-attribute :streamline ::attribute.impl.range/range)
+(hierarchy/derive! :thinning ::attribute.impl.range/range)
+(hierarchy/derive! :smoothing ::attribute.impl.range/range)
+(hierarchy/derive! :streamline ::attribute.impl.range/range)
 
 (defmethod attribute.hierarchy/form-element [:brush :size]
   [_ k v attrs]

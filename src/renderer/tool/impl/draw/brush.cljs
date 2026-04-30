@@ -17,7 +17,7 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.key :as utils.key]))
 
-(tool.hierarchy/derive-tool :brush ::tool.hierarchy/draw)
+(tool.hierarchy/derive! :brush ::tool.hierarchy/draw)
 
 (defonce brush (reagent/atom nil))
 

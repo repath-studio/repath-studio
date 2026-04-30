@@ -9,10 +9,12 @@
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.views :as attribute.views]
    [renderer.element.events :as-alias element.events]
+   [renderer.element.hierarchy :as-alias element.hierarchy]
    [renderer.i18n.views :as i18n.views]
    [renderer.views :as views]))
 
-(defmethod attribute.hierarchy/description [:default :font-family]
+(defmethod attribute.hierarchy/description [::element.hierarchy/element
+                                            :font-family]
   []
   [::description
    "The font-family attribute indicates which font family will be used to
@@ -52,7 +54,8 @@
          ^{:key font}
          [font-item font])]]]]])
 
-(defmethod attribute.hierarchy/form-element [:default :font-family]
+(defmethod attribute.hierarchy/form-element [::element.hierarchy/element
+                                             :font-family]
   [_ k v attrs]
   (let [font-list @(rf/subscribe [::app.subs/font-list])
         fonts? @(rf/subscribe [::app.subs/supported-feature? :local-fonts])]

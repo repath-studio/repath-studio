@@ -17,7 +17,7 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.key :as utils.key]))
 
-(tool.hierarchy/derive-tool :eye-dropper ::tool.hierarchy/tool)
+(tool.hierarchy/derive! :eye-dropper ::tool.hierarchy/tool)
 
 (defmethod tool.hierarchy/help [:eye-dropper :idle]
   []

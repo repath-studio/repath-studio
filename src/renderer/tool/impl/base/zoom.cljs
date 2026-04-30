@@ -17,7 +17,7 @@
    [renderer.utils.svg :as utils.svg]
    [renderer.views :as views]))
 
-(tool.hierarchy/derive-tool :zoom ::tool.hierarchy/tool)
+(tool.hierarchy/derive! :zoom ::tool.hierarchy/tool)
 
 (defonce select-box (reagent/atom nil))
 

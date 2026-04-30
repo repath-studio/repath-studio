@@ -14,7 +14,7 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.key :as utils.key]))
 
-(tool.hierarchy/derive-tool :pan ::tool.hierarchy/tool)
+(tool.hierarchy/derive! :pan ::tool.hierarchy/tool)
 
 (defmethod tool.hierarchy/on-activate :pan
   [db]

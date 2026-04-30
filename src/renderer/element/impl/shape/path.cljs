@@ -7,11 +7,12 @@
    [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.hierarchy :as hierarchy]
    [renderer.tool.views :as tool.views]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]))
 
-(element.hierarchy/derive-element :path ::element.hierarchy/shape)
+(hierarchy/derive! :path ::element.hierarchy/shape)
 
 (defmethod element.hierarchy/properties :path
   []

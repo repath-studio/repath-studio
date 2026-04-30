@@ -4,10 +4,12 @@
    ["@radix-ui/react-popover" :as Popover]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.views :as attribute.views]
+   [renderer.element.hierarchy :as-alias element.hierarchy]
    [renderer.i18n.views :as i18n.views]
    [renderer.views :as views]))
 
-(defmethod attribute.hierarchy/form-element [:default ::angle]
+(defmethod attribute.hierarchy/form-element [::element.hierarchy/element
+                                             ::angle]
   [_ k v attrs]
   [:div.flex.gap-px.w-full
    [attribute.views/form-input k v attrs]

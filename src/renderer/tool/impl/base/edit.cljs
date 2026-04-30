@@ -19,7 +19,7 @@
    [renderer.utils.svg :as utils.svg]
    [renderer.views :as views]))
 
-(tool.hierarchy/derive-tool :edit ::tool.hierarchy/tool)
+(tool.hierarchy/derive! :edit ::tool.hierarchy/tool)
 
 (defmethod tool.hierarchy/help [:edit :idle]
   []

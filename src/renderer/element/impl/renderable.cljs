@@ -5,11 +5,10 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
    [renderer.element.views :as element.views]
+   [renderer.hierarchy :as hierarchy]
    [renderer.tool.subs :as-alias tool.subs]))
 
-(element.hierarchy/derive-element
- ::element.hierarchy/renderable
- ::element.hierarchy/element)
+(hierarchy/derive! ::element.hierarchy/renderable ::element.hierarchy/element)
 
 (defmethod element.hierarchy/render ::element.hierarchy/renderable
   [el]

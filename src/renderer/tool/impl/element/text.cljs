@@ -10,7 +10,7 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.key :as utils.key]))
 
-(tool.hierarchy/derive-tool :text ::tool.hierarchy/element)
+(tool.hierarchy/derive! :text ::tool.hierarchy/element)
 
 (defmethod tool.hierarchy/help [:text :idle]
   []

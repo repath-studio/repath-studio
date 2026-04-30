@@ -4,10 +4,11 @@
    [re-frame.core :as rf]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.element.events :as-alias element.events]
+   [renderer.element.hierarchy :as-alias element.hierarchy]
    [renderer.theme.subs :as-alias theme.subs]
    [renderer.views :as views]))
 
-(defmethod attribute.hierarchy/form-element [:default :style]
+(defmethod attribute.hierarchy/form-element [::element.hierarchy/element :style]
   [_ k v {:keys [disabled]}]
   (let [codemirror-theme @(rf/subscribe [::theme.subs/codemirror])]
     [:div.w-full.bg-primary.px-2.py-1

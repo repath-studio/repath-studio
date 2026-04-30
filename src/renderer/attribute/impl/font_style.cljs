@@ -3,10 +3,12 @@
   (:require
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.views :as attribute.views]
+   [renderer.element.hierarchy :as-alias element.hierarchy]
    [renderer.utils.font :as utils.font]
    [renderer.utils.length :as utils.length]))
 
-(defmethod attribute.hierarchy/description [:default :font-style]
+(defmethod attribute.hierarchy/description [::element.hierarchy/element
+                                            :font-style]
   []
   [::description
    "The font-size attribute refers to the size of the font from baseline to
@@ -19,7 +21,8 @@
         font-size (utils.length/unit->px font-size)]
     (assoc-in el [:attrs attribute] (str (apply f font-size more)))))
 
-(defmethod attribute.hierarchy/form-element [:default :font-style]
+(defmethod attribute.hierarchy/form-element [::element.hierarchy/element
+                                             :font-style]
   [_ k v attrs]
   [attribute.views/select-input k v
    (merge attrs

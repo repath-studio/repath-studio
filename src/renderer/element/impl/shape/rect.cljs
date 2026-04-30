@@ -6,14 +6,15 @@
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.impl.box :as element.impl.box]
+   [renderer.hierarchy :as hierarchy]
    [renderer.input.handlers :as input.handlers]
    [renderer.tool.views :as tool.views]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]))
 
-(element.hierarchy/derive-element :rect ::element.hierarchy/box)
-(element.hierarchy/derive-element :rect ::element.hierarchy/shape)
+(hierarchy/derive! :rect ::element.hierarchy/box)
+(hierarchy/derive! :rect ::element.hierarchy/shape)
 
 (defmethod element.hierarchy/properties :rect
   []

@@ -8,7 +8,7 @@
    [renderer.tool.impl.draw.brush]
    [renderer.tool.impl.draw.pencil]))
 
-(tool.hierarchy/derive-tool ::tool.hierarchy/draw ::tool.hierarchy/tool)
+(tool.hierarchy/derive! ::tool.hierarchy/draw ::tool.hierarchy/tool)
 
 (defmethod tool.hierarchy/help [::tool.hierarchy/draw :idle]
   []

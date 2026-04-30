@@ -7,10 +7,11 @@
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
+   [renderer.hierarchy :as hierarchy]
    [renderer.i18n.views :as i18n.views]
    [renderer.input.impl.pointer :as input.impl.pointer]))
 
-(element.hierarchy/derive-element :svg ::element.hierarchy/container)
+(hierarchy/derive! :svg ::element.hierarchy/container)
 
 (def label [::label "SVG"])
 

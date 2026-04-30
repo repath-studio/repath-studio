@@ -9,7 +9,7 @@
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.utils.length :as utils.length]))
 
-(tool.hierarchy/derive-tool :blob ::tool.hierarchy/element)
+(tool.hierarchy/derive! :blob ::tool.hierarchy/element)
 
 (defn pointer-delta
   [db]

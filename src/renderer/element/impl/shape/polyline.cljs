@@ -1,9 +1,11 @@
 (ns renderer.element.impl.shape.polyline
   "https://www.w3.org/TR/SVG/shapes.html#PolylineElement
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/polyline"
-  (:require [renderer.element.hierarchy :as element.hierarchy]))
+  (:require
+   [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.hierarchy :as hierarchy]))
 
-(element.hierarchy/derive-element :polyline ::element.hierarchy/poly)
+(hierarchy/derive! :polyline ::element.hierarchy/poly)
 
 (defmethod element.hierarchy/properties :polyline
   []

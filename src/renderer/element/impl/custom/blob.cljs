@@ -11,6 +11,7 @@
    [renderer.element.events :as-alias element.events]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
+   [renderer.hierarchy :as hierarchy]
    [renderer.i18n.views :as i18n.views]
    [renderer.input.impl.pointer :as input.impl.pointer]
    [renderer.tool.views :as tool.views]
@@ -20,9 +21,9 @@
    [renderer.utils.svg :as utils.svg]
    [renderer.views :as views]))
 
-(element.hierarchy/derive-element :blob ::element.hierarchy/renderable)
+(hierarchy/derive! :blob ::element.hierarchy/renderable)
 
-(attribute.hierarchy/derive-attribute :size ::attribute.impl.length/length)
+(hierarchy/derive! :size ::attribute.impl.length/length)
 
 (defmethod attribute.hierarchy/form-element [:blob :extraPoints]
   [_ k v attrs]

@@ -1,9 +1,11 @@
 (ns renderer.element.impl.shape.polygon
   "https://www.w3.org/TR/SVG/shapes.html#PolygonElement
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/polygon"
-  (:require [renderer.element.hierarchy :as element.hierarchy]))
+  (:require
+   [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.hierarchy :as hierarchy]))
 
-(element.hierarchy/derive-element :polygon ::element.hierarchy/poly)
+(hierarchy/derive! :polygon ::element.hierarchy/poly)
 
 (defmethod element.hierarchy/properties :polygon
   []

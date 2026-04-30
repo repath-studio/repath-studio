@@ -2,7 +2,7 @@
 
 (defonce hierarchy (atom (make-hierarchy)))
 
-(defn derive-tool
+(defn derive!
   [tool parent]
   (swap! hierarchy derive tool parent))
 
