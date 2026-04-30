@@ -69,9 +69,9 @@
 
 (defmethod tool.hierarchy/on-drag-start [:edit :idle]
   [db e]
-  (tool.handlers/set-state db (if (= (-> e :element :type) :handle)
-                                :edit
-                                :select)))
+  (cond-> db
+    (= (-> e :element :type) :handle)
+    (tool.handlers/set-state :edit)))
 
 (defmethod tool.hierarchy/on-drag [:edit :edit]
   [db e]
