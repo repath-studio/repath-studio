@@ -1,6 +1,7 @@
 (ns portfolio
-  (:require [pages.components]
-            [portfolio.ui :as ui]))
+  (:require
+   [pages.components]
+   [portfolio.ui :as ui]))
 
 (ui/start!
  {:config

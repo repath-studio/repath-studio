@@ -1,17 +1,18 @@
 (ns renderer.tool.impl.base.transform.idle
-  (:require [malli.core :as m]
-            [renderer.element.db :refer [Element]]
-            [renderer.element.handlers :as element.handlers]
-            [renderer.history.handlers :as history.handlers]
-            [renderer.i18n.views :as i18n.views]
-            [renderer.snap.handlers :as snap.handlers]
-            [renderer.tool.db :refer [Handle State]]
-            [renderer.tool.handlers :as tool.handlers]
-            [renderer.tool.hierarchy :as tool.hierarchy]
-            [renderer.tool.impl.base.transform.select :as transform.select]
-            [renderer.utils.element :as utils.element]
-            [renderer.utils.key :as utils.key]
-            [renderer.views :as views]))
+  (:require
+   [malli.core :as m]
+   [renderer.element.db :refer [Element]]
+   [renderer.element.handlers :as element.handlers]
+   [renderer.history.handlers :as history.handlers]
+   [renderer.i18n.views :as i18n.views]
+   [renderer.snap.handlers :as snap.handlers]
+   [renderer.tool.db :refer [Handle State]]
+   [renderer.tool.handlers :as tool.handlers]
+   [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.tool.impl.base.transform.select :as transform.select]
+   [renderer.utils.element :as utils.element]
+   [renderer.utils.key :as utils.key]
+   [renderer.views :as views]))
 
 (defmethod tool.hierarchy/on-pointer-move [:transform :idle]
   [db e]
