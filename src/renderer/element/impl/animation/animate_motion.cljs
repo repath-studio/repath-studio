@@ -2,11 +2,10 @@
   "https://svgwg.org/specs/animations/#AnimateMotionElement
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/animateMotion"
   (:require
-   [renderer.element.hierarchy :as element.hierarchy]))
+   [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.hierarchy :as hierarchy]))
 
-(element.hierarchy/derive-element
- :animateMotion
- ::element.hierarchy/animation)
+(hierarchy/derive! :animateMotion ::element.hierarchy/animation)
 
 (defmethod element.hierarchy/properties :animateMotion
   []

@@ -6,13 +6,14 @@
    [clojure.string :as string]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.hierarchy :as hierarchy]
    [renderer.tool.views :as tool.views]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
    [renderer.utils.svg :as utils.svg]))
 
-(element.hierarchy/derive-element :ellipse ::element.hierarchy/shape)
+(hierarchy/derive! :ellipse ::element.hierarchy/shape)
 
 (defmethod element.hierarchy/properties :ellipse
   []

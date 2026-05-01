@@ -2,11 +2,10 @@
   "https://svgwg.org/specs/animations/#AnimateTransformElement
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/animateTransform"
   (:require
-   [renderer.element.hierarchy :as element.hierarchy]))
+   [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.hierarchy :as hierarchy]))
 
-(element.hierarchy/derive-element
- :animateTransform
- ::element.hierarchy/animation)
+(hierarchy/derive! :animateTransform ::element.hierarchy/animation)
 
 (defmethod element.hierarchy/properties :animateTransform
   []

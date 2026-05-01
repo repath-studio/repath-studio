@@ -9,6 +9,7 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
    [renderer.frame.subs :as-alias frame.subs]
+   [renderer.hierarchy :as hierarchy]
    [renderer.input.impl.drag :as input.impl.drag]
    [renderer.input.impl.keyboard :as input.impl.keyboard]
    [renderer.input.impl.pointer :as input.impl.pointer]
@@ -20,9 +21,7 @@
    [renderer.utils.element :as utils.element]
    [renderer.utils.svg :as utils.svg]))
 
-(element.hierarchy/derive-element
- :canvas
- ::element.hierarchy/element)
+(hierarchy/derive! :canvas ::element.hierarchy/element)
 
 (defmethod element.hierarchy/properties :canvas
   []

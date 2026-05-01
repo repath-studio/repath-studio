@@ -14,7 +14,7 @@
    [renderer.utils.element :as utils.element]
    [renderer.utils.path :as utils.path]))
 
-(tool.hierarchy/derive-tool :pencil ::tool.hierarchy/draw)
+(tool.hierarchy/derive! :pencil ::tool.hierarchy/draw)
 
 (defmethod tool.hierarchy/on-drag-start [:pencil :idle]
   [db _e]

@@ -9,13 +9,14 @@
    [renderer.element.db :as element.db]
    [renderer.element.effects :as-alias element.effects]
    [renderer.element.events :as-alias element.events]
+   [renderer.element.hierarchy :as-alias element.hierarchy]
    [renderer.events :as-alias events]
    [renderer.i18n.views :as i18n.views]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.views :as views]))
 
-(defmethod attribute.hierarchy/description [:default :href]
+(defmethod attribute.hierarchy/description [::element.hierarchy/element :href]
   []
   [::description
    "The href attribute defines a link to a resource as a reference URL.

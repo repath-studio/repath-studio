@@ -6,9 +6,10 @@
    [renderer.element.impl.animation.animate]
    [renderer.element.impl.animation.animate-motion]
    [renderer.element.impl.animation.animate-transform]
-   [renderer.element.subs :as-alias element.subs]))
+   [renderer.element.subs :as-alias element.subs]
+   [renderer.hierarchy :as hierarchy]))
 
-(element.hierarchy/derive-element
+(hierarchy/derive!
  ::element.hierarchy/animation
  ::element.hierarchy/descriptive)
 

@@ -3,11 +3,12 @@
    [malli.core :as m]
    [malli.transform :as m.transform]
    [renderer.db :refer [BBox]]
-   [renderer.element.hierarchy :as element.hierarchy]))
+   [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.hierarchy :as hierarchy]))
 
 (defn tag?
   [k]
-  (contains? (descendants @element.hierarchy/hierarchy
+  (contains? (descendants @hierarchy/hierarchy
                           ::element.hierarchy/element) k))
 
 (def ElementTag

@@ -17,7 +17,7 @@
    [renderer.utils.svg :as utils.svg]
    [renderer.views :as views]))
 
-(tool.hierarchy/derive-tool :zoom ::tool.hierarchy/tool)
+(tool.hierarchy/derive! :zoom ::tool.hierarchy/tool)
 
 (defonce select-box (reagent/atom nil))
 
@@ -31,6 +31,10 @@
   [:<>
    (i18n.views/t [::zoom-in "Click or select an area to zoom in."])
    (i18n.views/t [::zoom-out "Hold %1 to zoom out."] [[views/kbd "⇧"]])])
+
+(defmethod tool.hierarchy/help [:zoom :select]
+  []
+  (i18n.views/t [::release-to-focus "Release to focus on the area."]))
 
 (defmethod tool.hierarchy/on-activate :zoom
   [db]

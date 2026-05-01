@@ -23,7 +23,7 @@
    [renderer.utils.length :as utils.length]
    [renderer.utils.svg :as utils.svg]))
 
-(tool.hierarchy/derive-tool :transform ::tool.hierarchy/tool)
+(tool.hierarchy/derive! :transform ::tool.hierarchy/tool)
 
 (defmethod tool.hierarchy/on-deactivate :transform
   [db]

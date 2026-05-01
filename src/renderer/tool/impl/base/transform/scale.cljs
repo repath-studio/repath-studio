@@ -1,16 +1,17 @@
 (ns renderer.tool.impl.base.transform.scale
-  (:require [clojure.core.matrix :as matrix]
-            [malli.core :as m]
-            [renderer.app.db :refer [App]]
-            [renderer.db :refer [BBox Vec2]]
-            [renderer.element.handlers :as element.handlers]
-            [renderer.history.handlers :as history.handlers]
-            [renderer.i18n.views :as i18n.views]
-            [renderer.snap.handlers :as snap.handlers]
-            [renderer.tool.handlers :as tool.handlers]
-            [renderer.tool.hierarchy :as tool.hierarchy]
-            [renderer.utils.bounds :as utils.bounds]
-            [renderer.views :as views]))
+  (:require
+   [clojure.core.matrix :as matrix]
+   [malli.core :as m]
+   [renderer.app.db :refer [App]]
+   [renderer.db :refer [BBox Vec2]]
+   [renderer.element.handlers :as element.handlers]
+   [renderer.history.handlers :as history.handlers]
+   [renderer.i18n.views :as i18n.views]
+   [renderer.snap.handlers :as snap.handlers]
+   [renderer.tool.handlers :as tool.handlers]
+   [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.utils.bounds :as utils.bounds]
+   [renderer.views :as views]))
 
 (defmethod tool.hierarchy/help [:transform :scale]
   []

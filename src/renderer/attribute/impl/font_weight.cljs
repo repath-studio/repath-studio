@@ -4,10 +4,12 @@
    [re-frame.core :as rf]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.views :as attribute.views]
+   [renderer.element.hierarchy :as-alias element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
    [renderer.utils.attribute :as utils.attribute]))
 
-(defmethod attribute.hierarchy/description [:default :font-weight]
+(defmethod attribute.hierarchy/description [::element.hierarchy/element
+                                            :font-weight]
   []
   [::description
    "The font-weight attribute refers to the boldness or lightness of the
@@ -19,7 +21,8 @@
   (let [weight-name (first (get utils.attribute/weight-name-mapping weight))]
     (str weight " - " weight-name)))
 
-(defmethod attribute.hierarchy/form-element [:default :font-weight]
+(defmethod attribute.hierarchy/form-element [::element.hierarchy/element
+                                             :font-weight]
   [_ k v attrs]
   (let [available-weights @(rf/subscribe [::element.subs/font-weights])
         weights (sort (if (seq available-weights)

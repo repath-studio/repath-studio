@@ -2,7 +2,7 @@
 
 (defonce hierarchy (atom (make-hierarchy)))
 
-(defn derive-tool
+(defn derive!
   [tool parent]
   (swap! hierarchy derive tool parent))
 
@@ -54,29 +54,18 @@
   (fn [db _e] [(:tool db) (:state db)])
   :hierarchy hierarchy)
 
-(defmulti on-activate
-  (fn [db & {:as _props}] (:tool db))
-  :hierarchy hierarchy)
-
-(defmulti on-deactivate
-  :tool
-  :hierarchy hierarchy)
-
-(defmulti on-cancel
-  :tool
-  :hierarchy hierarchy)
-
-(defmulti render
-  identity
-  :hierarchy hierarchy)
-
 (defmulti help
   (fn [tool state] [tool state])
   :hierarchy hierarchy)
 
-(defmulti right-panel
-  identity
+(defmulti on-activate
+  (fn [db & {:as _props}] (:tool db))
   :hierarchy hierarchy)
+
+(defmulti on-deactivate :tool :hierarchy hierarchy)
+(defmulti on-cancel :tool :hierarchy hierarchy)
+(defmulti render identity :hierarchy hierarchy)
+(defmulti right-panel identity :hierarchy hierarchy)
 
 (defmethod on-pointer-down :default [db _e] db)
 (defmethod on-pointer-up :default [db _e] db)

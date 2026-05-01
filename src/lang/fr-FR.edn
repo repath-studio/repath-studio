@@ -367,14 +367,16 @@
                           d'affichage avec un rapport d'aspect différent."}
 
  :renderer.tool.impl.element.core
- {:help "Cliquez et faites glisser pour créer un élément."
+ {:click-and-drag "Cliquez et faites glisser pour créer un élément."
+  :release-to-finalize "Relâchez pour finaliser l'élément."
   :edge "bord"
   :elements "Éléments"
   :containers "Conteneurs"}
 
  :renderer.tool.impl.element.poly
- {:add-points "Cliquez pour ajouter plus de points."
-  :finalize-shape "Double-cliquez pour finaliser la forme."}
+ {:click-to-start "Cliquez pour commencer à dessiner."
+  :add-points "Cliquez pour ajouter plus de points."
+  :finalize-shape "Clic droit ou double-cliquez pour finaliser la forme."}
 
  :renderer.tool.impl.element.rect
  {:label "Rectangle"
@@ -402,7 +404,8 @@
 
  :renderer.tool.impl.misc.measure
  {:label "Mesurer"
-  :help "Cliquez et faites glisser pour mesurer une distance."
+  :click-and-drag "Cliquez et faites glisser pour mesurer une distance."
+  :release-to-finalize "Relâchez pour finaliser la mesure."
   :measure-end "fin de mesure"
   :measure-start "début de mesure"}
 
@@ -583,14 +586,15 @@
 
  :renderer.tool.impl.base.pan
  {:label "Panoramique"
-  :idle-help "Cliquez et faites glisser pour faire un panoramique."
-  :pan-help "Faites glisser pour faire un panoramique."
+  :click-and-drag "Cliquez et faites glisser pour faire un panoramique."
+  :release-to-stop "Relâchez pour arrêter le panoramique."
   :tool-pan "Déplacer"}
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
   :zoom-in [:div "Cliquez ou sélectionnez une zone pour agrandir."]
   :zoom-out [:div "Maintenez %1 pour réduire."]
+  :release-to-focus "Relâchez pour vous concentrer sur la zone."
   :tool-zoom "Zoom"}
 
  :renderer.tool.impl.draw.brush
@@ -602,7 +606,8 @@
   :draw-line "Dessiner une ligne"}
 
  :renderer.tool.impl.draw.core
- {:help "Cliquez et faites glisser pour dessiner."
+ {:click-and-drag "Cliquez et faites glisser pour dessiner."
+  :release-to-finalize "Relâchez pour finaliser le dessin."
   :draw "Dessiner"}
 
  :renderer.tool.impl.element.circle

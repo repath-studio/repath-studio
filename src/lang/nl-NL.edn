@@ -384,14 +384,16 @@
  {:label "Afbeelding"}
 
  :renderer.tool.impl.element.core
- {:help "Klik en sleep om een element te maken."
+ {:click-and-drag "Klik en sleep om een element te maken."
+  :release-to-finalize "Loslaten om het element te voltooien."
   :edge "rand"
   :elements "Elementen"
   :containers "Containers"}
 
  :renderer.tool.impl.element.poly
- {:add-points "Klik om meer punten toe te voegen."
-  :finalize-shape "Dubbelklik om de vorm te voltooien."}
+ {:click-to-start "Klik om te beginnen met tekenen."
+  :add-points "Klik om meer punten toe te voegen."
+  :finalize-shape "Rechtsklikken of dubbelklikken om de vorm te voltooien."}
 
  :renderer.tool.impl.element.rect
  {:label "Rechthoek"
@@ -419,7 +421,8 @@
 
  :renderer.tool.impl.misc.measure
  {:label "Meten"
-  :help "Klik en sleep om een afstand te meten."
+  :click-and-drag "Klik en sleep om een afstand te meten."
+  :release-to-finalize "Loslaten om de meting te voltooien."
   :measure-end "meeteinde"
   :measure-start "meetbegin"}
 
@@ -589,14 +592,15 @@
 
  :renderer.tool.impl.base.pan
  {:label "Pannen"
-  :idle-help "Klik en sleep om te pannen."
-  :pan-help "Sleep om te pannen."
+  :click-and-drag "Klik en sleep om te pannen."
+  :release-to-stop "Loslaten om te stoppen met pannen."
   :tool-pan "Pannen"}
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
   :zoom-in [:div "Klik of selecteer een gebied om in te zoomen."]
   :zoom-out [:div "Houd %1 ingedrukt om uit te zoomen."]
+  :release-to-focus "Loslaten om op het gebied te focussen."
   :tool-zoom "Zoomen"}
 
  :renderer.tool.impl.draw.brush
@@ -608,7 +612,8 @@
   :draw-line "Lijn tekenen"}
 
  :renderer.tool.impl.draw.core
- {:help "Klik en sleep om te tekenen."
+ {:click-and-drag "Klik en sleep om te tekenen."
+  :release-to-finalize "Loslaten om het tekenen te voltooien."
   :draw "Tekenen"}
 
  :renderer.tool.impl.element.circle

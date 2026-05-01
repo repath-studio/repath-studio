@@ -1,35 +1,41 @@
-(ns renderer.element.hierarchy)
+(ns renderer.element.hierarchy
+  (:require
+   [renderer.hierarchy :as hierarchy]))
 
-(defonce hierarchy (atom (make-hierarchy)))
+(hierarchy/derive! ::graphics ::renderable)
+(hierarchy/derive! ::gradient ::renderable)
+(hierarchy/derive! ::descriptive ::renderable)
+(hierarchy/derive! :foreignObject ::graphics)
+(hierarchy/derive! :textPath ::graphics)
+(hierarchy/derive! :tspan ::graphics)
+(hierarchy/derive! :linearGradient ::gradient)
+(hierarchy/derive! :radialGradient ::gradient)
+(hierarchy/derive! :desc ::descriptive)
+(hierarchy/derive! :metadata ::descriptive)
+(hierarchy/derive! :title ::descriptive)
 
-(defn derive-element
-  [tag parent]
-  (swap! hierarchy derive tag parent))
+(defmulti render :tag :hierarchy hierarchy/hierarchy)
+(defmulti render-to-string :tag :hierarchy hierarchy/hierarchy)
+(defmulti render-edit :tag :hierarchy hierarchy/hierarchy)
+(defmulti path :tag :hierarchy hierarchy/hierarchy)
+(defmulti area :tag :hierarchy hierarchy/hierarchy)
+(defmulti centroid :tag :hierarchy hierarchy/hierarchy)
+(defmulti snapping-points :tag :hierarchy hierarchy/hierarchy)
+(defmulti bbox :tag :hierarchy hierarchy/hierarchy)
 
-(derive-element ::graphics ::renderable)
-(derive-element ::gradient ::renderable)
-(derive-element ::descriptive ::renderable)
-(derive-element :foreignObject ::graphics)
-(derive-element :textPath ::graphics)
-(derive-element :tspan ::graphics)
-(derive-element :linearGradient ::gradient)
-(derive-element :radialGradient ::gradient)
-(derive-element :desc ::descriptive)
-(derive-element :metadata ::descriptive)
-(derive-element :title ::descriptive)
+(defmulti translate
+  (fn [el _offset] (:tag el))
+  :hierarchy hierarchy/hierarchy)
 
-(defmulti render :tag :hierarchy hierarchy)
-(defmulti render-to-string :tag :hierarchy hierarchy)
-(defmulti render-edit :tag :hierarchy hierarchy)
-(defmulti path :tag :hierarchy hierarchy)
-(defmulti area :tag :hierarchy hierarchy)
-(defmulti centroid :tag :hierarchy hierarchy)
-(defmulti snapping-points :tag :hierarchy hierarchy)
-(defmulti bbox :tag :hierarchy hierarchy)
-(defmulti translate (fn [el _offset] (:tag el)) :hierarchy hierarchy)
-(defmulti scale (fn [el _ratio _pivot-point] (:tag el)) :hierarchy hierarchy)
-(defmulti edit (fn [el _offset _handle _lock?] (:tag el)) :hierarchy hierarchy)
-(defmulti properties identity :hierarchy hierarchy)
+(defmulti scale
+  (fn [el _ratio _pivot-point] (:tag el))
+  :hierarchy hierarchy/hierarchy)
+
+(defmulti edit
+  (fn [el _offset _handle _lock?] (:tag el))
+  :hierarchy hierarchy/hierarchy)
+
+(defmulti properties identity :hierarchy hierarchy/hierarchy)
 
 (defmethod render :default [])
 (defmethod render-to-string :default [el] [render el])

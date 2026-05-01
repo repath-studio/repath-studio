@@ -7,12 +7,14 @@
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.views :as attribute.views]
    [renderer.element.events :as-alias element.events]
+   [renderer.element.hierarchy :as-alias element.hierarchy]
+   [renderer.hierarchy :as hierarchy]
    [renderer.i18n.views :as i18n.views]
    [renderer.views :as views]))
 
-(attribute.hierarchy/derive-attribute :stroke ::color)
-(attribute.hierarchy/derive-attribute :fill ::color)
-(attribute.hierarchy/derive-attribute :color ::color)
+(hierarchy/derive! :stroke ::color)
+(hierarchy/derive! :fill ::color)
+(hierarchy/derive! :color ::color)
 
 (defn picker
   [k v]
@@ -21,7 +23,8 @@
     :on-change-complete #(rf/dispatch [::element.events/set-attr k (.-hex %)])
     :on-change #(rf/dispatch [::element.events/preview-attr k (.-hex %)])}])
 
-(defmethod attribute.hierarchy/form-element [:default ::color]
+(defmethod attribute.hierarchy/form-element [::element.hierarchy/element
+                                             ::color]
   [_ k v attrs]
   [:div.flex.gap-px.w-full
    [attribute.views/form-input k v attrs]

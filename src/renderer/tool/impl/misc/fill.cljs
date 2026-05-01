@@ -13,7 +13,7 @@
    [renderer.utils.element :as utils.element]
    [renderer.utils.key :as utils.key]))
 
-(tool.hierarchy/derive-tool :fill ::tool.hierarchy/tool)
+(tool.hierarchy/derive! :fill ::tool.hierarchy/tool)
 
 (defmethod tool.hierarchy/help [:fill :idle]
   []

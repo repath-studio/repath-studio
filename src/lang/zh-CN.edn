@@ -299,14 +299,16 @@
                           viewBox 的元素如何适合具有不同纵横比的视口。"}
 
  :renderer.tool.impl.element.core
- {:help "点击并拖动以创建元素。"
+ {:click-and-drag "点击并拖动以创建元素。"
+  :release-to-finalize "松开以完成元素。"
   :edge "边缘"
   :elements "元素"
   :containers "容器"}
 
  :renderer.tool.impl.element.poly
- {:add-points "点击添加更多点。"
-  :finalize-shape "双击完成形状。"}
+ {:click-to-start "点击开始绘制。"
+  :add-points "点击添加更多点。"
+  :finalize-shape "右键单击或双击以完成形状。"}
 
  :renderer.tool.impl.element.rect
  {:label "矩形"
@@ -334,7 +336,8 @@
 
  :renderer.tool.impl.misc.measure
  {:label "测量"
-  :help "点击并拖动测量距离。"
+  :click-and-drag "点击并拖动测量距离。"
+  :release-to-finalize "松开以完成测量。"
   :measure-end "测量终点"
   :measure-start "测量起点"}
 
@@ -494,14 +497,15 @@
 
  :renderer.tool.impl.base.pan
  {:label "平移"
-  :idle-help "点击并拖动进行平移。"
-  :pan-help "拖动进行平移。"
+  :click-and-drag "点击并拖动进行平移。"
+  :release-to-stop "松开以停止平移。"
   :tool-pan "平移"}
 
  :renderer.tool.impl.base.zoom
  {:label "缩放"
   :zoom-in [:div "点击或选择区域进行放大。"]
   :zoom-out [:div "按住 %1 进行缩小。"]
+  :release-to-focus "松开以聚焦该区域。"
   :tool-zoom "缩放"}
 
  :renderer.tool.impl.draw.brush
@@ -513,7 +517,8 @@
   :draw-line "绘制线条"}
 
  :renderer.tool.impl.draw.core
- {:help "点击并拖动进行绘制。"
+ {:click-and-drag "点击并拖动进行绘制。"
+  :release-to-finalize "松开以完成绘制。"
   :draw "绘制"}
 
  :renderer.tool.impl.element.circle

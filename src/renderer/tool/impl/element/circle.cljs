@@ -14,7 +14,7 @@
    [renderer.utils.key :as utils.key]
    [renderer.utils.length :as utils.length]))
 
-(tool.hierarchy/derive-tool :circle ::tool.hierarchy/element)
+(tool.hierarchy/derive! :circle ::tool.hierarchy/element)
 
 (defmethod tool.hierarchy/on-drag-start [:circle :idle]
   [db _e]

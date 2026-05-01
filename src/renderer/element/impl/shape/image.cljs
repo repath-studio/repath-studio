@@ -2,10 +2,11 @@
   "https://www.w3.org/TR/SVG/embedded.html#ImageElement
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/image"
   (:require
-   [renderer.element.hierarchy :as element.hierarchy]))
+   [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.hierarchy :as hierarchy]))
 
-(element.hierarchy/derive-element :image ::element.hierarchy/graphics)
-(element.hierarchy/derive-element :image ::element.hierarchy/box)
+(hierarchy/derive! :image ::element.hierarchy/graphics)
+(hierarchy/derive! :image ::element.hierarchy/box)
 
 (defmethod element.hierarchy/properties :image
   []

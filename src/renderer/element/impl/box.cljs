@@ -4,14 +4,13 @@
   (:require
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.hierarchy :as hierarchy]
    [renderer.input.handlers :as input.handlers]
    [renderer.tool.views :as tool.views]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]))
 
-(element.hierarchy/derive-element
- ::element.hierarchy/box
- ::element.hierarchy/renderable)
+(hierarchy/derive! ::element.hierarchy/box ::element.hierarchy/renderable)
 
 (defmethod element.hierarchy/translate ::element.hierarchy/box
   [el [x y]]

@@ -204,9 +204,7 @@
   [tag k]
   (let [clicked-element @(rf/subscribe [::app.subs/clicked-element])
         property (utils.attribute/property-data-memo k)
-        is-dispatchable (contains? (methods attribute.hierarchy/description)
-                                   [tag k])
-        dispatch-tag (if is-dispatchable tag :default)
+        description (attribute.hierarchy/description tag k)
         active (and (= (:type clicked-element) :handle)
                     (= (:key clicked-element) key))]
     [:> HoverCard/Root
@@ -226,9 +224,8 @@
         :on-escape-key-down #(.stopPropagation %)}
        [:div.p-5
         [:h2.mb-4.text-lg.font-mono.text-foreground-hovered k]
-        (when (get-method attribute.hierarchy/description [dispatch-tag k])
-          [:p
-           (i18n.views/t (attribute.hierarchy/description dispatch-tag k))])
+        (when description
+          [:p (i18n.views/t description)])
         (when (utils.attribute/compatibility tag k)
           [:<>
            (when property
@@ -241,14 +238,11 @@
 
 (defn row
   [k v locked? tag]
-  (let [initial (utils.attribute/initial-memo tag k)
-        dispatchable? (contains? (methods attribute.hierarchy/form-element)
-                                 [tag k])
-        dispatch-tag (if dispatchable? tag :default)]
+  (let [initial (utils.attribute/initial-memo tag k)]
     [:<>
      [title tag k]
      [:div.flex.flex-1
-      [attribute.hierarchy/form-element dispatch-tag k v
+      [attribute.hierarchy/form-element tag k v
        {:disabled locked?
         :default-value initial
         :placeholder initial}]]]))

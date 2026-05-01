@@ -10,7 +10,7 @@
    [renderer.tool.impl.element.poly :as poly]
    [renderer.tool.subs :as-alias tool.subs]))
 
-(tool.hierarchy/derive-tool :polygon ::tool.hierarchy/poly)
+(tool.hierarchy/derive! :polygon ::tool.hierarchy/poly)
 
 (defmethod tool.hierarchy/on-double-click [:polygon :create]
   [db e]

@@ -14,7 +14,7 @@
    [renderer.utils.length :as utils.length]
    [renderer.views :as views]))
 
-(tool.hierarchy/derive-tool :svg ::tool.hierarchy/element)
+(tool.hierarchy/derive! :svg ::tool.hierarchy/element)
 
 (defmethod tool.hierarchy/help [:svg :create]
   []

@@ -2,16 +2,19 @@
   "https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/overflow"
   (:require
    [renderer.attribute.hierarchy :as attribute.hierarchy]
-   [renderer.attribute.views :as attribute.views]))
+   [renderer.attribute.views :as attribute.views]
+   [renderer.element.hierarchy :as-alias element.hierarchy]))
 
-(defmethod attribute.hierarchy/description [:default :overflow]
+(defmethod attribute.hierarchy/description [::element.hierarchy/element
+                                            :overflow]
   []
   [::description
    "The overflow attribute sets what to do when an element's content is too
     big to fit in its block formatting context. This feature is not widely
     implemented yet."])
 
-(defmethod attribute.hierarchy/form-element [:default :overflow]
+(defmethod attribute.hierarchy/form-element [::element.hierarchy/element
+                                             :overflow]
   [_ k v {:keys [disabled]}]
   [attribute.views/select-input k v
    {:disabled disabled

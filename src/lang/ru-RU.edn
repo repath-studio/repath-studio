@@ -355,14 +355,17 @@
                           соотношением сторон."}
 
  :renderer.tool.impl.element.core
- {:help "Щёлкните и перетащите для создания элемента."
+ {:click-and-drag "Щёлкните и перетащите для создания элемента."
+  :release-to-finalize "Отпустите для завершения элемента."
   :edge "край"
   :elements "Элементы"
   :containers "Контейнеры"}
 
  :renderer.tool.impl.element.poly
- {:add-points "Щёлкните для добавления дополнительных точек."
-  :finalize-shape "Двойной щелчок для завершения формы."}
+ {:click-to-start "Щёлкните для начала рисования."
+  :add-points "Щёлкните для добавления дополнительных точек."
+  :finalize-shape "Щёлкните правой кнопкой мыши или дважды для завершения
+                   формы."}
 
  :renderer.tool.impl.element.rect
  {:label "Прямоугольник"
@@ -390,7 +393,8 @@
 
  :renderer.tool.impl.misc.measure
  {:label "Измерение"
-  :help "Щёлкните и перетащите для измерения расстояния."
+  :click-and-drag "Щёлкните и перетащите для измерения расстояния."
+  :release-to-finalize "Отпустите для завершения измерения."
   :measure-end "конец измерения"
   :measure-start "начало измерения"}
 
@@ -570,14 +574,15 @@
 
  :renderer.tool.impl.base.pan
  {:label "Панорамирование"
-  :idle-help "Щёлкните и перетащите для панорамирования."
-  :pan-help "Перетащите для панорамирования."
+  :click-and-drag "Щёлкните и перетащите для панорамирования."
+  :release-to-stop "Отпустите для остановки панорамирования."
   :tool-pan "Панорамирование"}
 
  :renderer.tool.impl.base.zoom
  {:label "Масштабирование"
   :zoom-in [:div "Щёлкните или выделите область для увеличения."]
   :zoom-out [:div "Удерживайте %1 для уменьшения."]
+  :release-to-focus "Отпустите для фокусировки на области."
   :tool-zoom "Масштабирование"}
 
  :renderer.tool.impl.draw.brush
@@ -589,7 +594,8 @@
   :draw-line "Рисовать линию"}
 
  :renderer.tool.impl.draw.core
- {:help "Щёлкните и перетащите для рисования."
+ {:click-and-drag "Щёлкните и перетащите для рисования."
+  :release-to-finalize "Отпустите для завершения рисунка."
   :draw "Рисование"}
 
  :renderer.tool.impl.element.circle

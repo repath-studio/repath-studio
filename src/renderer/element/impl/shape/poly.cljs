@@ -7,6 +7,7 @@
    [renderer.app.subs :as-alias app.subs]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.hierarchy :as hierarchy]
    [renderer.input.handlers :as input.handlers]
    [renderer.tool.views :as tool.views]
    [renderer.utils.attribute :as utils.attribute]
@@ -14,9 +15,7 @@
    [renderer.utils.length :as utils.length]
    [renderer.utils.svg :as utils.svg]))
 
-(element.hierarchy/derive-element
- ::element.hierarchy/poly
- ::element.hierarchy/shape)
+(hierarchy/derive! ::element.hierarchy/poly ::element.hierarchy/shape)
 
 (def partition-to-px
   (comp (map utils.length/unit->px)

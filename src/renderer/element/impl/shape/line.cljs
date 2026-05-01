@@ -9,6 +9,7 @@
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.hierarchy :as hierarchy]
    [renderer.input.handlers :as input.handlers]
    [renderer.tool.views :as tool.views]
    [renderer.utils.bounds :as utils.bounds]
@@ -16,7 +17,7 @@
    [renderer.utils.length :as utils.length]
    [renderer.utils.svg :as utils.svg]))
 
-(element.hierarchy/derive-element :line ::element.hierarchy/shape)
+(hierarchy/derive! :line ::element.hierarchy/shape)
 
 (defmethod element.hierarchy/properties :line
   []

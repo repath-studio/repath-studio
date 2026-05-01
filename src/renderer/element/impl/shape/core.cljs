@@ -13,11 +13,10 @@
    [renderer.element.impl.shape.polyline]
    [renderer.element.impl.shape.rect]
    [renderer.element.subs :as-alias element.subs]
+   [renderer.hierarchy :as hierarchy]
    [renderer.utils.element :as utils.element]))
 
-(element.hierarchy/derive-element
- ::element.hierarchy/shape
- ::element.hierarchy/graphics)
+(hierarchy/derive! ::element.hierarchy/shape ::element.hierarchy/graphics)
 
 (defmethod element.hierarchy/render-to-string ::element.hierarchy/shape
   [el]

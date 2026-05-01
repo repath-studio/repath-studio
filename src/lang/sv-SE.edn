@@ -373,14 +373,16 @@
  {:label "Bild"}
 
  :renderer.tool.impl.element.core
- {:help "Klicka och dra för att skapa ett element."
+ {:click-and-drag "Klicka och dra för att skapa ett element."
+  :release-to-finalize "Släpp för att slutföra elementet."
   :edge "kant"
   :elements "Element"
   :containers "Behållare"}
 
  :renderer.tool.impl.element.poly
- {:add-points "Klicka för att lägga till fler punkter."
-  :finalize-shape "Dubbelklicka för att slutföra formen."}
+ {:click-to-start "Klicka för att börja rita."
+  :add-points "Klicka för att lägga till fler punkter."
+  :finalize-shape "Högerklicka eller dubbelklicka för att slutföra formen."}
 
  :renderer.tool.impl.element.rect
  {:label "Rektangel"
@@ -408,7 +410,8 @@
 
  :renderer.tool.impl.misc.measure
  {:label "Mäta"
-  :help "Klicka och dra för att mäta ett avstånd."
+  :click-and-drag "Klicka och dra för att mäta ett avstånd."
+  :release-to-finalize "Släpp för att slutföra mätningen."
   :measure-end "mätslut"
   :measure-start "mätstart"}
 
@@ -574,14 +577,15 @@
 
  :renderer.tool.impl.base.pan
  {:label "Panorera"
-  :idle-help "Klicka och dra för att panorera."
-  :pan-help "Dra för att panorera."
+  :click-and-drag "Klicka och dra för att panorera."
+  :release-to-stop "Släpp för att sluta panorera."
   :tool-pan "Panorera"}
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
   :zoom-in [:div "Klicka eller markera ett område för att zooma in."]
   :zoom-out [:div "Håll %1 för att zooma ut."]
+  :release-to-focus "Släpp för att fokusera på området."
   :tool-zoom "Zooma"}
 
  :renderer.tool.impl.draw.brush
@@ -593,7 +597,8 @@
   :draw-line "Rita linje"}
 
  :renderer.tool.impl.draw.core
- {:help "Klicka och dra för att rita."
+ {:click-and-drag "Klicka och dra för att rita."
+  :release-to-finalize "Släpp för att slutföra ritningen."
   :draw "Rita"}
 
  :renderer.tool.impl.element.circle

@@ -7,7 +7,8 @@
    [malli.core :as m]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.element.db :as element.db :refer [ElementAttrs ElementTag]]
-   [renderer.element.hierarchy :as element.hierarchy]))
+   [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.hierarchy :as hierarchy]))
 
 (def mdn-data
   "https://github.com/mdn/data/blob/main/docs/updating_css_json.md"
@@ -317,10 +318,10 @@
   [tag]
   (merge (when (element.db/tag? tag)
            (merge (->attrs-memo (or (tag (:elements svg-data)) {}))
-                  (when (or (isa? @element.hierarchy/hierarchy
+                  (when (or (isa? @hierarchy/hierarchy
                                   tag
                                   ::element.hierarchy/shape)
-                            (isa? @element.hierarchy/hierarchy
+                            (isa? @hierarchy/hierarchy
                                   tag
                                   ::element.hierarchy/container))
                     (zipmap core (repeat "")))))
@@ -333,11 +334,9 @@
 (m/=> initial [:-> ElementTag keyword? string?])
 (defn initial
   [tag k]
-  (let [dispatchable? (contains? (methods attribute.hierarchy/initial) [tag k])
-        dispatch-tag (if dispatchable? tag :default)]
-    (or (attribute.hierarchy/initial dispatch-tag k)
-        (let [initial-value (:initial (property-data-memo k))]
-          (when (string? initial-value) initial-value)))))
+  (or (attribute.hierarchy/initial tag k)
+      (let [initial-value (:initial (property-data-memo k))]
+        (when (string? initial-value) initial-value))))
 
 (def initial-memo (memoize initial))
 
