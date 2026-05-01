@@ -190,12 +190,16 @@
        (some #(when (= document-path (:path %))
                 (:id %)))))
 
-(m/=> saved? [:-> App DocumentId boolean?])
+(m/=> saved? [:function
+              [:-> App boolean?]
+              [:-> App DocumentId boolean?]])
 (defn saved?
-  [db id]
-  (let [document (get-in db [:documents id])
-        history-position (get-in document [:history :position])]
-    (= (:saved-history-index document) history-position)))
+  ([db]
+   (some->> (:active-document db) (saved? db)))
+  ([db id]
+   (let [document (get-in db [:documents id])
+         history-position (get-in document [:history :position])]
+     (= (:saved-history-index document) history-position))))
 
 (m/=> open? [:-> App DocumentId boolean?])
 (defn open?

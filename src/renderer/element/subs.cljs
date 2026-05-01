@@ -13,7 +13,7 @@
 
 (rf/reg-sub
  ::root
- element.handlers/root)
+ :-> element.handlers/root)
 
 (rf/reg-sub
  ::root-children
@@ -27,13 +27,12 @@
 (rf/reg-sub
  ::entity
  :<- [::document.subs/elements]
- (fn [elements [_ id]]
-   (get elements id)))
+ :=> get)
 
 (rf/reg-sub
  ::entities
  :<- [::document.subs/elements]
- vals)
+ :-> vals)
 
 (rf/reg-sub
  ::xml
@@ -64,8 +63,7 @@
 (rf/reg-sub
  ::hovered?
  :<- [::document.subs/hovered-ids]
- (fn [hovered-ids [_ id]]
-   (contains? hovered-ids id)))
+ :=> contains?)
 
 (rf/reg-sub
  ::selected-tags
@@ -81,7 +79,7 @@
 (rf/reg-sub
  ::some-selected?
  :<- [::selected]
- (comp boolean seq))
+ :-> (comp boolean seq))
 
 (rf/reg-sub
  ::selected-locked?
@@ -115,8 +113,7 @@
 (rf/reg-sub
  ::bbox
  :<- [::selected]
- (fn [selected-elements _]
-   (utils.element/united-bbox selected-elements)))
+ :-> utils.element/united-bbox)
 
 (rf/reg-sub
  ::area
@@ -126,8 +123,7 @@
 
 (rf/reg-sub
  ::ancestor-ids
- (fn [db _]
-   (element.handlers/ancestor-ids db)))
+ :-> element.handlers/ancestor-ids)
 
 (rf/reg-sub
  ::font-styles
@@ -163,4 +159,4 @@
 (rf/reg-sub
  ::not-every-top-level?
  :<- [::every-top-level?]
- not)
+ :-> not)

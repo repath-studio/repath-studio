@@ -1,5 +1,6 @@
 (ns hooks
-  (:require [clj-kondo.hooks-api :as api]))
+  (:require
+   [clj-kondo.hooks-api :as api]))
 
 (defn ^:export => [{:keys [node]}]
   (let [[macro-sym name-node & schema-nodes] (:children node)

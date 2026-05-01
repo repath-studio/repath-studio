@@ -6,7 +6,7 @@
 
 (rf/reg-sub
  ::history
- history.handlers/history)
+ :-> history.handlers/history)
 
 (rf/reg-sub
  ::multiple-states?

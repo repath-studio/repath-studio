@@ -19,5 +19,4 @@
 (rf/reg-sub
  ::filter-active?
  :<- [::active-filter]
- (fn [active-filter [_ k]]
-   (= active-filter k)))
+ :=> =)

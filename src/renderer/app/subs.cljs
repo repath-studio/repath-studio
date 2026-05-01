@@ -134,11 +134,9 @@
 (rf/reg-sub
  ::supported-feature?
  :<- [::features]
- (fn [features [_ k]]
-   (contains? features k)))
+ :=> contains?)
 
 (rf/reg-sub
  ::unsupported-feature?
  :<- [::features]
- (fn [features [_ k]]
-   (not (contains? features k))))
+ :=> (comp not contains?))

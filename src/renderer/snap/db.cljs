@@ -1,5 +1,6 @@
 (ns renderer.snap.db
-  (:require [renderer.db :refer [Vec2]]))
+  (:require
+   [renderer.db :refer [Vec2]]))
 
 (def SnapOption
   [:enum :centers :midpoints :corners :nodes :grid :guides])

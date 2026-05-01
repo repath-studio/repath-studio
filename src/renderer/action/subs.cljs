@@ -21,5 +21,4 @@
 (rf/reg-sub
  ::action-group
  :<- [::action-groups]
- (fn [groups [_ id]]
-   (get groups id)))
+ :=> get)

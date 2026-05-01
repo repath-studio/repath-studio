@@ -63,8 +63,7 @@
 
 (rf/reg-event-db
  ::remove-attr
- [(finalize
-   (fn [[_ k]] [[::remove "Remove %1"] [(name k)]]))]
+ [(finalize (fn [[_ k]] [[::remove "Remove %1"] [(name k)]]))]
  (fn [db [_ k]]
    (element.handlers/dissoc-attr db k)))
 

@@ -19,7 +19,7 @@
 (rf/reg-sub
  ::entities
  :<- [::documents]
- vals)
+ :-> vals)
 
 (rf/reg-sub
  ::tabs
@@ -31,7 +31,7 @@
 
 (rf/reg-sub
  ::some-recently-closed?
- (comp boolean seq document.handlers/recently-closed))
+ :-> (comp boolean seq document.handlers/recently-closed))
 
 (rf/reg-sub
  ::recent-actions
@@ -48,32 +48,28 @@
 (rf/reg-sub
  ::some-entities?
  :<- [::entities]
- (comp boolean seq))
+ :-> (comp boolean seq))
 
 (rf/reg-sub
  ::some-recent?
  :<- [::recent]
- (comp boolean seq))
+ :-> (comp boolean seq))
 
 (rf/reg-sub
  ::active
  :<- [::documents]
  :<- [::active-id]
- (fn [[documents active-document] _]
-   (some->> active-document
-            (get documents))))
+ :-> (partial apply get))
 
 (rf/reg-sub
  ::active?
  :<- [::active-id]
- (fn [active-id [_ id]]
-   (= active-id id)))
+ :=> =)
 
 (rf/reg-sub
  ::entity
  :<- [::documents]
- (fn [documents [_ k]]
-   (get documents k)))
+ :=> get)
 
 (rf/reg-sub
  ::zoom
@@ -179,15 +175,11 @@
 
 (rf/reg-sub
  ::saved?
- (fn [db [_ id]]
-   (document.handlers/saved? db id)))
+ :=> document.handlers/saved?)
 
 (rf/reg-sub
  ::active-saved?
- (fn [{:keys [active-document]
-       :as db} [_]]
-   (some->> active-document
-            (document.handlers/saved? db))))
+ :-> document.handlers/saved?)
 
 (rf/reg-sub
  ::some-saved?

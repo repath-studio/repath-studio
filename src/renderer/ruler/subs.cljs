@@ -8,7 +8,7 @@
 (rf/reg-sub
  ::step
  :<- [::document.subs/zoom]
- ruler.handlers/step)
+ :-> ruler.handlers/step)
 
 (rf/reg-sub
  ::steps-coll

@@ -11,8 +11,7 @@
  :<- [::document.subs/zoom]
  :<- [::document.subs/pan]
  :<- [::app.subs/dom-rect]
- (fn [[zoom pan dom-rect] _]
-   (frame.handlers/viewbox zoom pan dom-rect)))
+ :-> (partial apply frame.handlers/viewbox))
 
 (rf/reg-sub
  ::viewbox-attr
