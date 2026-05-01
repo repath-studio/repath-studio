@@ -61,7 +61,8 @@
           [:> Tooltip/Trigger
            {:as-child true}
            [:button.button.flex.items-center.justify-center.px-2.font-mono
-            {:class ["rounded-sm gap-1 border border-border"
+            {:aria-label (i18n.views/t label)
+             :class ["rounded-sm gap-1 border border-border"
                      (when cached-action "outline outline-inset outline-accent")
                      (when active-action
                        "bg-accent text-accent-foreground! hover:bg-accent-light
