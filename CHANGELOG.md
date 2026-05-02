@@ -1,5 +1,33 @@
 # Changelog
 
+All notable user facing changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+
+## 0.4.14 (2025-05-02)
+
+**Added**
+
+- Guide tool [#129](https://github.com/repath-studio/repath-studio/pull/129)
+- Adjustable anchor points [#132](https://github.com/repath-studio/repath-studio/pull/132)
+- Right click enhancements [#131](https://github.com/repath-studio/repath-studio/pull/131)
+- Syntax highlighting to interactive shell popover docs
+- Canvas fill initial value and description
+
+**Changed**
+
+- Enhanced action disabled state
+- Persist help bar visibility state and repl mode selection
+
+**Fixed**
+
+- Fullscreen action availability and label
+- Leftover select box on escape
+- Image position on canvas click to add
+- Drag start of edit tool on elements
+- Minor accessibility issues
+- Order of entities preservation
+
 ## 0.4.13 (2025-04-13)
 
 **Added**
