@@ -48,7 +48,7 @@ jobs:
       - name: Install clojure tools
         uses: DeLaGuardo/setup-clojure@13.6.0
         with:
-          cli: 1.12.4.1629
+          cli: 1.12.4.1618
 
       - name: Cache npm dependencies
         uses: actions/cache@v5
