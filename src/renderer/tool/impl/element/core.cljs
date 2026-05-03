@@ -3,6 +3,7 @@
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.element.handlers :as element.handlers]
+   [renderer.hierarchy :as hierarchy]
    [renderer.i18n.views :as i18n.views]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
@@ -17,7 +18,7 @@
    [renderer.tool.impl.element.svg]
    [renderer.tool.impl.element.text]))
 
-(tool.hierarchy/derive! ::tool.hierarchy/element ::tool.hierarchy/tool)
+(hierarchy/derive! ::tool.hierarchy/element ::tool.hierarchy/tool)
 
 (defmethod tool.hierarchy/help [::tool.hierarchy/element :idle]
   []

@@ -1,12 +1,13 @@
 (ns renderer.tool.db
   (:require
    [renderer.element.db :refer [ElementId]]
+   [renderer.hierarchy :as hierarchy]
    [renderer.i18n.db :refer [Translation]]
    [renderer.tool.hierarchy :as tool.hierarchy]))
 
 (defn tool?
   [tool]
-  (isa? @tool.hierarchy/hierarchy tool ::tool.hierarchy/tool))
+  (isa? @hierarchy/hierarchy tool ::tool.hierarchy/tool))
 
 (def Tool
   [:fn {:error/fn (fn [{:keys [value]} _]

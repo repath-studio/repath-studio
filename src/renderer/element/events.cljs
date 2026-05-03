@@ -187,7 +187,7 @@
  ::->path
  (fn [{:keys [db]}]
    (when (= (:state db) :idle)
-     {:db (tool.handlers/activate db :transform)
+     {:db (tool.handlers/deactivate db)
       ::element.effects/->path
       {:data (element.handlers/selected db)
        :on-success [::finalize->path]
@@ -203,7 +203,7 @@
  ::stroke->path
  (fn [{:keys [db]}]
    (when (= (:state db) :idle)
-     {:db (tool.handlers/activate db :transform)
+     {:db (tool.handlers/deactivate db)
       ::element.effects/->path
       {:data (element.handlers/selected db)
        :on-success [::finalize-stroke->path]
@@ -222,7 +222,7 @@
  (fn [{:keys [db]} [_ operation]]
    (when (and (= (:state db) :idle)
               (seq (rest (element.handlers/selected db))))
-     {:db (tool.handlers/activate db :transform)
+     {:db (tool.handlers/deactivate db)
       ::element.effects/->path
       {:data (element.handlers/selected db)
        :on-success [::finalize-boolean-operation operation]
@@ -297,7 +297,7 @@
  (fn [{:keys [db]} _]
    (let [els (element.handlers/top-selected-sorted db)]
      (when (= (:state db) :idle)
-       {:db (-> (tool.handlers/activate db :transform)
+       {:db (-> (tool.handlers/deactivate db)
                 (element.handlers/copy))
         :fx [(when (seq els)
                [::effects/clipboard-write
@@ -322,7 +322,7 @@
  (fn [{:keys [db]} [_]]
    (let [images (element.handlers/filter-selected-by-tag db :image)]
      (when (= (:state db) :idle)
-       {:db (tool.handlers/activate db :transform)
+       {:db (tool.handlers/deactivate db)
         ::element.effects/trace {:data images
                                  :on-success [::create-traced-image]}}))))
 

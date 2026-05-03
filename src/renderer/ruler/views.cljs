@@ -8,6 +8,7 @@
    [renderer.frame.subs :as-alias frame.subs]
    [renderer.ruler.subs :as-alias ruler.subs]
    [renderer.tool.events :as tool.events]
+   [renderer.tool.impl.misc.guide :as-alias tool.impl.misc.guide]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.window.subs :as-alias window.subs]))
 
@@ -94,7 +95,8 @@
   (let [[x y] @(rf/subscribe [::frame.subs/viewbox])
         zoom @(rf/subscribe [::document.subs/zoom])
         steps-coll @(rf/subscribe [::ruler.subs/steps-coll orientation])
-        active? @(rf/subscribe [::tool.subs/active? :guide])
+        active? @(rf/subscribe [::tool.subs/active?
+                                ::tool.impl.misc.guide/guide])
         vertical (= orientation :vertical)]
     (into [:g]
           (map-indexed
@@ -141,7 +143,7 @@
                          ;; through a panel separator.
                          (when-not (.-defaultPrevented e)
                            (rf/dispatch [::tool.events/activate
-                                         :guide
+                                         ::tool.impl.misc.guide/guide
                                          :orientation orientation])))}
      (when md? [bbox-rect orientation])
      [base-lines orientation]

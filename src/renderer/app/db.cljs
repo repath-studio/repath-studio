@@ -22,6 +22,7 @@
    [renderer.theme.db :refer [Theme]]
    [renderer.timeline.db :refer [Timeline]]
    [renderer.tool.db :refer [Handle Tool State Cursor]]
+   [renderer.tool.impl.base.transform.core :as-alias tool.transform]
    [renderer.window.db :refer [Window]]))
 
 (def Platform
@@ -40,7 +41,7 @@
 
 (def App
   [:map {:closed true}
-   [:tool {:default :transform} Tool]
+   [:tool {:default ::tool.transform/transform} Tool]
    [:cached-tool {:optional true} Tool]
    [:active-pointers {:default {}} [:map-of PointerId PointerEvent]]
    [:pointer-pos {:default [0 0]} Vec2]

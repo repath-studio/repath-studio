@@ -2,13 +2,16 @@
   (:require
    [re-frame.core :as rf]
    [renderer.element.events :as-alias element.events]
-   [renderer.tool.handlers :as tool.handlers]))
+   [renderer.tool.db :as tool.db]
+   [renderer.tool.handlers :as tool.handlers]
+   [renderer.tool.impl.base.transform.core :as-alias tool.impl.base.transform]))
 
 (rf/reg-event-db
  ::activate
  (fn [db [_ tool & {:as opts}]]
    (cond-> db
-     (:active-document db)
+     (and (tool.db/tool? tool)
+          (:active-document db))
      (tool.handlers/activate tool opts))))
 
 (rf/reg-event-db
@@ -19,7 +22,7 @@
 (rf/reg-event-fx
  ::cancel
  (fn [{:keys [db]} _]
-   (if (and (= (:tool db) :transform)
+   (if (and (= (:tool db) ::tool.impl.base.transform/transform)
             (= (:state db) :idle))
      {:dispatch [::element.events/deselect-all]}
      {:db (tool.handlers/cancel db)})))

@@ -7,6 +7,7 @@
    [renderer.app.handlers :as app.handlers]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.handlers :as element.handlers]
+   [renderer.hierarchy :as hierarchy]
    [renderer.i18n.views :as i18n.views]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
@@ -17,7 +18,7 @@
    [renderer.utils.math :as utils.math]
    [renderer.utils.svg :as utils.svg]))
 
-(tool.hierarchy/derive! :measure ::tool.hierarchy/tool)
+(hierarchy/derive! ::measure ::tool.hierarchy/tool)
 
 (defonce measure-attrs (reagent/atom nil))
 
@@ -26,31 +27,31 @@
  (fn [value]
    (reset! measure-attrs value)))
 
-(defmethod tool.hierarchy/help [:measure :idle]
+(defmethod tool.hierarchy/help [::measure :idle]
   []
   (i18n.views/t [::click-and-drag "Click and drag to measure a distance."]))
 
-(defmethod tool.hierarchy/help [:measure :create]
+(defmethod tool.hierarchy/help [::measure :create]
   []
   (i18n.views/t [::release-to-finalize "Release to finalize the measurement."]))
 
-(defmethod tool.hierarchy/on-activate :measure
+(defmethod tool.hierarchy/on-activate ::measure
   [db]
   (tool.handlers/set-cursor db "crosshair"))
 
-(defmethod tool.hierarchy/on-deactivate :measure
+(defmethod tool.hierarchy/on-deactivate ::measure
   [db]
   (app.handlers/add-fx db [::set-measure-attrs nil]))
 
-(defmethod tool.hierarchy/on-drag-start [:measure :idle]
+(defmethod tool.hierarchy/on-drag-start [::measure :idle]
   [db _e]
   (tool.handlers/set-state db :create))
 
-(defmethod tool.hierarchy/on-drag-end [:measure :create]
+(defmethod tool.hierarchy/on-drag-end [::measure :create]
   [db _e]
   (tool.handlers/set-state db :idle))
 
-(defmethod tool.hierarchy/on-drag [:measure :create]
+(defmethod tool.hierarchy/on-drag [::measure :create]
   [db _e]
   (let [[offset-x offset-y] (tool.handlers/snapped-offset db)
         [x y] (tool.handlers/snapped-position db)
@@ -62,7 +63,7 @@
                                                   :y2 y
                                                   :hypotenuse hypotenuse}])))
 
-(defmethod tool.hierarchy/render :measure
+(defmethod tool.hierarchy/render ::measure
   []
   (when @measure-attrs
     (let [handle-size @(rf/subscribe [::document.subs/handle-size])
@@ -106,19 +107,19 @@
                [::measure-end "measure end"]
                [::measure-start "measure start"])})])
 
-(defmethod tool.hierarchy/snapping-points [:measure :idle]
+(defmethod tool.hierarchy/snapping-points [::measure :idle]
   [db]
   (snap-point db))
 
-(defmethod tool.hierarchy/snapping-points [:measure :create]
+(defmethod tool.hierarchy/snapping-points [::measure :create]
   [db]
   (snap-point db))
 
-(defmethod tool.hierarchy/snapping-elements [:measure :idle]
+(defmethod tool.hierarchy/snapping-elements [::measure :idle]
   [db]
   (element.handlers/visible db))
 
-(defmethod tool.hierarchy/snapping-elements [:measure :create]
+(defmethod tool.hierarchy/snapping-elements [::measure :create]
   [db]
   (element.handlers/visible db))
 
@@ -126,6 +127,6 @@
               {:id :tool/measure
                :label [::label "Measure"]
                :icon "ruler-triangle"
-               :event [::tool.events/activate :measure]
-               :active [::tool.subs/active? :measure]
+               :event [::tool.events/activate ::measure]
+               :active [::tool.subs/active? ::measure]
                :shortcuts [{:keyCode (utils.key/codes "M")}]}])

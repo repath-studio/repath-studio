@@ -4,6 +4,7 @@
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.element.handlers :as element.handlers]
+   [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
    [renderer.tool.events :as-alias tool.events]
@@ -14,9 +15,9 @@
    [renderer.utils.length :as utils.length]
    [renderer.views :as views]))
 
-(tool.hierarchy/derive! :svg ::tool.hierarchy/element)
+(hierarchy/derive! ::svg ::tool.hierarchy/element)
 
-(defmethod tool.hierarchy/help [:svg :create]
+(defmethod tool.hierarchy/help [::svg :create]
   []
   (i18n.views/t [::help [:div "Hold %1 to lock proportions."]]
                 [[views/kbd "Ctrl"]]))
@@ -34,7 +35,7 @@
      :width (utils.length/->fixed width)
      :height (utils.length/->fixed height)}))
 
-(defmethod tool.hierarchy/on-drag-start [:svg :idle]
+(defmethod tool.hierarchy/on-drag-start [::svg :idle]
   [db e]
   (-> db
       (tool.handlers/set-state :create)
@@ -42,23 +43,23 @@
                              :type :element
                              :attrs (attributes db (:ctrl-key e))})))
 
-(defmethod tool.hierarchy/on-drag [:svg :create]
+(defmethod tool.hierarchy/on-drag [::svg :create]
   [db e]
   (let [lock-ratio (or (:ctrl-key e) (tool.handlers/multi-touch? db))
         attrs (attributes db lock-ratio)
         assoc-attr (fn [el [k v]] (assoc-in el [:attrs k] (str v)))]
     (element.handlers/update-selected db #(reduce assoc-attr % attrs))))
 
-(defmethod tool.hierarchy/on-drag-end [:svg :create]
+(defmethod tool.hierarchy/on-drag-end [::svg :create]
   [db e]
   (-> db
       (history.handlers/finalize (:timestamp e) [::create-svg "Create SVG"])
-      (tool.handlers/activate :transform)))
+      (tool.handlers/deactivate)))
 
 (rf/dispatch [::action.events/register-action
               {:id :tool/svg
                :label [::label "Svg"]
                :icon "svg"
-               :event [::tool.events/activate :svg]
-               :active [::tool.subs/active? :svg]
+               :event [::tool.events/activate ::svg]
+               :active [::tool.subs/active? ::svg]
                :shortcuts [{:keyCode (utils.key/codes "S")}]}])

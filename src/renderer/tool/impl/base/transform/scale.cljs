@@ -10,10 +10,11 @@
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.tool.impl.base.transform.core :as-alias transform]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.views :as views]))
 
-(defmethod tool.hierarchy/help [:transform :scale]
+(defmethod tool.hierarchy/help [::transform/transform :scale]
   []
   (i18n.views/t [::scale
                  [:div "Hold %1 to lock proportions, %2 to scale in place,
@@ -133,7 +134,7 @@
       (tool.handlers/multi-touch? db)
       (element.handlers/ratio-locked? db)))
 
-(defmethod tool.hierarchy/on-drag [:transform :scale]
+(defmethod tool.hierarchy/on-drag [::transform/transform :scale]
   [db e]
   (let [{:keys [shift-key alt-key]} e
         delta (tool.handlers/pointer-delta db)
@@ -147,7 +148,7 @@
                 :in-place shift-key
                 :recursive alt-key}))))
 
-(defmethod tool.hierarchy/on-drag-end [:transform :scale]
+(defmethod tool.hierarchy/on-drag-end [::transform/transform :scale]
   [db e]
   (-> db
       (tool.handlers/set-state :idle)
@@ -155,7 +156,7 @@
       (history.handlers/finalize (:timestamp e)
                                  [::scale-selection "Scale selection"])))
 
-(defmethod tool.hierarchy/snapping-points [:transform :scale]
+(defmethod tool.hierarchy/snapping-points [::transform/transform :scale]
   [db]
   (when-let [el (:clicked-element db)]
     [(with-meta
@@ -163,6 +164,6 @@
                    (tool.handlers/pointer-delta db))
        {:label [::scale-handle "scale handle"]})]))
 
-(defmethod tool.hierarchy/snapping-elements [:transform :scale]
+(defmethod tool.hierarchy/snapping-elements [::transform/transform :scale]
   [db]
   (element.handlers/non-selected-visible db))

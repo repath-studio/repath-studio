@@ -6,6 +6,7 @@
    [renderer.app.effects :as-alias app.effects]
    [renderer.app.handlers :as app.handlers]
    [renderer.frame.handlers :as frame.handlers]
+   [renderer.hierarchy :as hierarchy]
    [renderer.i18n.views :as i18n.views]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.events :as-alias tool.events]
@@ -14,36 +15,36 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.key :as utils.key]))
 
-(tool.hierarchy/derive! :pan ::tool.hierarchy/tool)
+(hierarchy/derive! ::pan ::tool.hierarchy/tool)
 
-(defmethod tool.hierarchy/on-activate :pan
+(defmethod tool.hierarchy/on-activate ::pan
   [db]
   (tool.handlers/set-cursor db "grab"))
 
-(defmethod tool.hierarchy/help [:pan :idle]
+(defmethod tool.hierarchy/help [::pan :idle]
   []
   (i18n.views/t [::click-and-drag "Click and drag to pan."]))
 
-(defmethod tool.hierarchy/help [:pan :pan]
+(defmethod tool.hierarchy/help [::pan :pan]
   []
   (i18n.views/t [::release-to-stop "Release to stop panning."]))
 
-(defmethod tool.hierarchy/on-pointer-up [:pan :idle]
+(defmethod tool.hierarchy/on-pointer-up [::pan :idle]
   [db _e]
   (tool.handlers/set-cursor db "grab"))
 
-(defmethod tool.hierarchy/on-pointer-down [:pan :idle]
+(defmethod tool.hierarchy/on-pointer-down [::pan :idle]
   [db _e]
   (-> db
       (tool.handlers/set-state :pan)
       (tool.handlers/set-cursor "grabbing")))
 
-(defmethod tool.hierarchy/on-drag [:pan :pan]
+(defmethod tool.hierarchy/on-drag [::pan :pan]
   [db e]
   (frame.handlers/pan-by db (matrix/sub (:pointer-pos db)
                                         (:pointer-pos e))))
 
-(defmethod tool.hierarchy/on-drag-end [:pan :pan]
+(defmethod tool.hierarchy/on-drag-end [::pan :pan]
   [db _e]
   (-> db
       (tool.handlers/set-state :idle)
@@ -55,6 +56,6 @@
               {:id :tool/pan
                :label [::tool-pan "Pan"]
                :icon "hand"
-               :event [::tool.events/activate :pan]
-               :active [::tool.subs/active? :pan]
+               :event [::tool.events/activate ::pan]
+               :active [::tool.subs/active? ::pan]
                :shortcuts [{:keyCode (utils.key/codes "P")}]}])

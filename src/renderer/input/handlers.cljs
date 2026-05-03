@@ -12,7 +12,8 @@
    [renderer.input.effects :as-alias input.effects]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.handlers :as tool.handlers]
-   [renderer.tool.hierarchy :as tool.hierarchy]))
+   [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.tool.impl.base.pan :as-alias tool.impl.base.pan]))
 
 (m/=> adjusted-pointer-pos [:-> App Vec2 Vec2])
 (defn adjusted-pointer-pos
@@ -85,7 +86,7 @@
   (let [{:keys [pointer-offset tool dom-rect drag-pointer]} db
         {:keys [pointer-pos]} e]
     (cond-> db
-      (and (not= tool :pan)
+      (and (not= tool ::tool.impl.base.pan/pan)
            (drag-pointer? db e))
       (tool.handlers/pan-out-of-canvas dom-rect pointer-pos pointer-offset)
 
@@ -130,7 +131,7 @@
       (assoc-in [:active-pointers pointer-id] e)
 
       (= button :middle)
-      (-> (tool.handlers/set-cached :pan))
+      (-> (tool.handlers/set-cached ::tool.impl.base.pan/pan))
 
       (or (= button :middle)
           (and (= button :left) (empty? active-pointers)))
@@ -213,8 +214,8 @@
   [db e]
   (cond-> db
     (and (= (:code e) "Space")
-         (not= (:tool db) :pan))
-    (tool.handlers/set-cached :pan)
+         (not= (:tool db) ::tool.impl.base.pan/pan))
+    (tool.handlers/set-cached ::tool.impl.base.pan/pan)
 
     (and (= (:code e) "KeyX")
          (not (-> db :snap :transient-active)))

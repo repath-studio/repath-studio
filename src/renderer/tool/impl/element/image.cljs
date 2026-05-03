@@ -9,19 +9,20 @@
    [renderer.element.db :as element.db]
    [renderer.element.effects :as-alias element.effects]
    [renderer.element.events :as-alias element.events]
+   [renderer.hierarchy :as hierarchy]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.key :as utils.key]))
 
-(tool.hierarchy/derive! :image ::tool.hierarchy/element)
+(hierarchy/derive! ::image ::tool.hierarchy/element)
 
-(defmethod tool.hierarchy/on-drag-end [:image :idle]
+(defmethod tool.hierarchy/on-drag-end [::image :idle]
   [db e]
   (tool.hierarchy/on-pointer-up db e))
 
-(defmethod tool.hierarchy/on-pointer-up [:image :idle]
+(defmethod tool.hierarchy/on-pointer-up [::image :idle]
   [db _e]
   (app.handlers/add-fx
    db
@@ -35,7 +36,7 @@
 (rf/reg-event-fx
  ::success
  (fn [{:keys [db]} [_ _file-handle file]]
-   {:db (tool.handlers/activate db :transform)
+   {:db (tool.handlers/deactivate db)
     ::element.effects/import-image
     {:file file
      :on-success [::element.events/add]
@@ -47,6 +48,6 @@
               {:id :tool/image
                :label [::label "Image"]
                :icon "image"
-               :event [::tool.events/activate :image]
-               :active [::tool.subs/active? :image]
+               :event [::tool.events/activate ::image]
+               :active [::tool.subs/active? ::image]
                :shortcuts [{:keyCode (utils.key/codes "I")}]}])

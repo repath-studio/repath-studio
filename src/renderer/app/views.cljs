@@ -27,6 +27,7 @@
    [renderer.theme.subs :as-alias theme.subs]
    [renderer.timeline.views :as timeline.views]
    [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.tool.impl.misc.guide :as-alias tool.impl.misc.guide]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.toolbar.status :as toolbar.status]
    [renderer.toolbar.tools :as toolbar.tools]
@@ -118,7 +119,8 @@
      [views/icon-button
       (if locked? "lock" "unlock")
       {:class "button-size-small rounded-xs m-0 bg-transparent!"
-       :disabled @(rf/subscribe [::tool.subs/active? :guide])
+       :disabled @(rf/subscribe [::tool.subs/active?
+                                 ::tool.impl.misc.guide/guide])
        :title (i18n.views/t (if locked?
                               [::unlock "Unlock"]
                               [::lock "Lock"]))
@@ -175,7 +177,8 @@
   []
   (let [rulers? @(rf/subscribe [::app.subs/rulers?])
         md? @(rf/subscribe [::window.subs/md?])
-        active? @(rf/subscribe [::tool.subs/active? :guide])
+        active? @(rf/subscribe [::tool.subs/active?
+                                ::tool.impl.misc.guide/guide])
         bg-class (if active? "bg-accent" "bg-primary")]
     [:div.flex.flex-col.flex-1.h-full.gap-px.overflow-hidden
      [:div
