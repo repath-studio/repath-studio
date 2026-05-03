@@ -741,9 +741,8 @@
                           (utils.element/root? new-el)
                           (:parent el))]
     (if-not (element.db/valid? new-el)
-      (throw (ex-info (str "Invalid element: "
-                           (m.error/humanize (element.db/explain el)))
-                      {:element new-el}))
+      (let [error (-> el element.db/explain m.error/humanize)]
+        (throw (ex-info (str "Invalid element: " error) {:element new-el})))
       (cond-> db
         :always
         (assoc-in (path db id) new-el)

@@ -13,10 +13,8 @@
 (defn register-language
   [db language]
   (if-not (i18n.db/valid-language? language)
-    (throw (ex-info (str "Invalid language: "
-                         (-> (i18n.db/explain-language language)
-                             (m.error/humanize)))
-                    {:language language}))
+    (let [error (-> language i18n.db/explain-language m.error/humanize)]
+      (throw (ex-info (str "Invalid language: " error) {:language language})))
     (assoc-in db [:languages (:id language)] language)))
 
 (m/=> deregister-language [:-> App LanguageCodeIdentifier App])

@@ -18,10 +18,9 @@
 (defn register-filter
   [db a11y-filter]
   (if-not (a11y.db/valid-filter? a11y-filter)
-    (throw (ex-info (str "Invalid a11y filter: "
-                         (-> (a11y.db/explain-filter a11y-filter)
-                             (m.error/humanize)))
-                    {:a11y-filter a11y-filter}))
+    (let [error (-> a11y-filter a11y.db/explain-filter m.error/humanize)]
+      (throw (ex-info (str "Invalid a11y filter: " error)
+                      {:a11y-filter a11y-filter})))
     (-> db
         (deregister-filter (:id a11y-filter))
         (update-in [:a11y :filters] conj a11y-filter))))

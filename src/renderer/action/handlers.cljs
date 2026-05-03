@@ -16,10 +16,8 @@
 (defn register-action
   [db action]
   (when-not (action.db/valid-action? action)
-    (throw (ex-info (str "Invalid action: "
-                         (-> (action.db/explain-action action)
-                             (m.error/humanize)))
-                    {:action action})))
+    (let [error (-> action action.db/explain-action m.error/humanize)]
+      (throw (ex-info (str "Invalid action: " error) {:action action}))))
   (assoc-in db [:actions (:id action)] action))
 
 (m/=> deregister-action [:-> App ActionId App])
@@ -33,10 +31,8 @@
 (defn register-action-group
   [db group]
   (when-not (action.db/valid-action-group? group)
-    (throw (ex-info (str "Invalid action group: "
-                         (-> (action.db/explain-action-group group)
-                             (m.error/humanize)))
-                    {:group group})))
+    (let [error (-> group action.db/explain-action-group m.error/humanize)]
+      (throw (ex-info (str "Invalid action group: " error) {:group group}))))
   (assoc-in db [:action-groups (:id group)] group))
 
 (m/=> deregister-action-group [:-> App ActionGroupId App])
