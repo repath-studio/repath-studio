@@ -6,6 +6,7 @@
    [renderer.action.events :as-alias action.events]
    [renderer.document.handlers :as document.handlers]
    [renderer.element.handlers :as element.handlers]
+   [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
@@ -14,9 +15,9 @@
    [renderer.utils.element :as utils.element]
    [renderer.utils.path :as utils.path]))
 
-(tool.hierarchy/derive! :pencil ::tool.hierarchy/draw)
+(hierarchy/derive! ::pencil ::tool.hierarchy/draw)
 
-(defmethod tool.hierarchy/on-drag-start [:pencil :idle]
+(defmethod tool.hierarchy/on-drag-start [::pencil :idle]
   [db _e]
   (let [stroke (document.handlers/attr db :stroke)
         point-1 (string/join " " (:adjusted-pointer-offset db))
@@ -29,7 +30,7 @@
                                        :stroke stroke
                                        :fill "transparent"}}))))
 
-(defmethod tool.hierarchy/on-drag [:pencil :create]
+(defmethod tool.hierarchy/on-drag [::pencil :create]
   [db _e]
   (let [[min-x min-y] (element.handlers/parent-offset db)
         point (matrix/sub (:adjusted-pointer-pos db) [min-x min-y])
@@ -38,7 +39,7 @@
                                       update-in [:attrs :points]
                                       str " " point)))
 
-(defmethod tool.hierarchy/on-drag-end [:pencil :create]
+(defmethod tool.hierarchy/on-drag-end [::pencil :create]
   [db e]
   (let [path (-> (first (element.handlers/selected db))
                  (utils.element/->path)
@@ -47,11 +48,11 @@
     (-> db
         (element.handlers/swap path)
         (history.handlers/finalize (:timestamp e) [::draw-line "Draw line"])
-        (tool.handlers/activate :transform))))
+        (tool.handlers/deactivate))))
 
 (rf/dispatch [::action.events/register-action
               {:id :tool/pencil
                :label [::label "Pen"]
                :icon "pencil"
-               :event [::tool.events/activate :pencil]
-               :active [::tool.subs/active? :pencil]}])
+               :event [::tool.events/activate ::pencil]
+               :active [::tool.subs/active? ::pencil]}])

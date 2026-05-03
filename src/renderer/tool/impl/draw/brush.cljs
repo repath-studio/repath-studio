@@ -10,6 +10,7 @@
    [renderer.document.handlers :as document.handlers]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
@@ -17,7 +18,7 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.key :as utils.key]))
 
-(tool.hierarchy/derive! :brush ::tool.hierarchy/draw)
+(hierarchy/derive! ::brush ::tool.hierarchy/draw)
 
 (defonce brush (reagent/atom nil))
 
@@ -26,7 +27,7 @@
  (fn [value]
    (reset! brush value)))
 
-(defmethod tool.hierarchy/on-pointer-move [:brush :idle]
+(defmethod tool.hierarchy/on-pointer-move [::brush :idle]
   [db e]
   (let [[x y] (:adjusted-pointer-pos db)
         pressure (:pressure e)
@@ -40,7 +41,7 @@
                                                   :r r
                                                   :fill stroke}}])))
 
-(defmethod tool.hierarchy/on-drag-start [:brush :idle]
+(defmethod tool.hierarchy/on-drag-start [::brush :idle]
   [db e]
   (let [point (string/join " " (conj (:adjusted-pointer-pos db) (:pressure e)))
         stroke (document.handlers/attr db :stroke)]
@@ -55,7 +56,7 @@
                                        :smoothing 0.5
                                        :streamline 0.5}}))))
 
-(defmethod tool.hierarchy/on-drag [:brush :create]
+(defmethod tool.hierarchy/on-drag [::brush :create]
   [db e]
   (let [[min-x min-y] (element.handlers/parent-offset db)
         point (matrix/sub (:adjusted-pointer-pos db) [min-x min-y])
@@ -64,13 +65,13 @@
                                       update-in [:attrs :points]
                                       str " " point)))
 
-(defmethod tool.hierarchy/on-drag-end [:brush :create]
+(defmethod tool.hierarchy/on-drag-end [::brush :create]
   [db e]
   (-> db
       (history.handlers/finalize (:timestamp e) [::draw-brush "Draw brush"])
-      (tool.handlers/activate :transform)))
+      (tool.handlers/deactivate)))
 
-(defmethod tool.hierarchy/render :brush
+(defmethod tool.hierarchy/render ::brush
   []
   (when-not (= :create @(rf/subscribe [::tool.subs/state]))
     [element.hierarchy/render @brush]))
@@ -79,6 +80,6 @@
               {:id :tool/brush
                :label [::label "Brush"]
                :icon "brush"
-               :event [::tool.events/activate :brush]
-               :active [::tool.subs/active? :brush]
+               :event [::tool.events/activate ::brush]
+               :active [::tool.subs/active? ::brush]
                :shortcuts [{:keyCode (utils.key/codes "B")}]}])

@@ -4,12 +4,13 @@
    [clojure.core.matrix :as matrix]
    [renderer.document.handlers :as document.handlers]
    [renderer.element.handlers :as element.handlers]
+   [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.utils.length :as utils.length]))
 
-(tool.hierarchy/derive! :blob ::tool.hierarchy/element)
+(hierarchy/derive! ::blob ::tool.hierarchy/element)
 
 (defn pointer-delta
   [db]
@@ -24,7 +25,7 @@
      :y (utils.length/->fixed (- offset-y radius))
      :size (utils.length/->fixed (* radius 2))}))
 
-(defmethod tool.hierarchy/on-drag-start [:blob :idle]
+(defmethod tool.hierarchy/on-drag-start [::blob :idle]
   [db _e]
   (let [fill (document.handlers/attr db :fill)
         stroke (document.handlers/attr db :stroke)
@@ -39,7 +40,7 @@
                                               :fill fill
                                               :stroke stroke})}))))
 
-(defmethod tool.hierarchy/on-drag [:blob :create]
+(defmethod tool.hierarchy/on-drag [::blob :create]
   [db _e]
   (let [attrs (attributes db)
         assoc-attr (fn [el [k v]] (assoc-in el [:attrs k] (str v)))
@@ -48,8 +49,8 @@
         (element.handlers/update-selected #(reduce assoc-attr % attrs))
         (element.handlers/translate [(- min-x) (- min-y)]))))
 
-(defmethod tool.hierarchy/on-drag-end [:blob :create]
+(defmethod tool.hierarchy/on-drag-end [::blob :create]
   [db e]
   (-> db
       (history.handlers/finalize (:timestamp e) [::create-blob "Create blob"])
-      (tool.handlers/activate :transform)))
+      (tool.handlers/deactivate)))

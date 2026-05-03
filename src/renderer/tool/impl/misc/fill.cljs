@@ -4,6 +4,7 @@
    [renderer.action.events :as-alias action.events]
    [renderer.document.handlers :as document.handlers]
    [renderer.element.handlers :as element.handlers]
+   [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
    [renderer.tool.events :as-alias tool.events]
@@ -13,13 +14,13 @@
    [renderer.utils.element :as utils.element]
    [renderer.utils.key :as utils.key]))
 
-(tool.hierarchy/derive! :fill ::tool.hierarchy/tool)
+(hierarchy/derive! ::fill ::tool.hierarchy/tool)
 
-(defmethod tool.hierarchy/help [:fill :idle]
+(defmethod tool.hierarchy/help [::fill :idle]
   []
   (i18n.views/t [::help "Click on an element to fill."]))
 
-(defmethod tool.hierarchy/on-activate :fill
+(defmethod tool.hierarchy/on-activate ::fill
   [db]
   (tool.handlers/set-cursor db "crosshair"))
 
@@ -32,15 +33,15 @@
         (element.handlers/set-attr el-id :fill color)
         (history.handlers/finalize timestamp [::fill "Fill"]))))
 
-(defmethod tool.hierarchy/on-pointer-up [:fill :idle]
+(defmethod tool.hierarchy/on-pointer-up [::fill :idle]
   [db e]
   (fill db (:timestamp e)))
 
-(defmethod tool.hierarchy/on-drag-end [:fill :idle]
+(defmethod tool.hierarchy/on-drag-end [::fill :idle]
   [db e]
   (fill db (:timestamp e)))
 
-(defmethod tool.hierarchy/on-pointer-move [:fill :idle]
+(defmethod tool.hierarchy/on-pointer-move [::fill :idle]
   [db e]
   (let [color (document.handlers/attr db :fill)
         el (-> e :element)]
@@ -48,7 +49,7 @@
       (not (utils.element/root? el))
       (element.handlers/set-attr (:id el) :fill color))))
 
-(defmethod tool.hierarchy/on-pointer-down [:fill :idle]
+(defmethod tool.hierarchy/on-pointer-down [::fill :idle]
   [db e]
   (-> db
       (assoc :clicked-element (-> e :element))
@@ -58,6 +59,6 @@
               {:id :tool/fill
                :label [::label "Fill"]
                :icon "fill"
-               :event [::tool.events/activate :fill]
-               :active [::tool.subs/active? :fill]
+               :event [::tool.events/activate ::fill]
+               :active [::tool.subs/active? ::fill]
                :shortcuts [{:keyCode (utils.key/codes "F")}]}])

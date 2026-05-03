@@ -1,71 +1,66 @@
-(ns renderer.tool.hierarchy)
-
-(defonce hierarchy (atom (make-hierarchy)))
-
-(defn derive!
-  [tool parent]
-  (swap! hierarchy derive tool parent))
+(ns renderer.tool.hierarchy
+  (:require
+   [renderer.hierarchy :as hierarchy]))
 
 (defmulti on-pointer-down
   (fn [db _e] [(:tool db) (:state db)])
-  :hierarchy hierarchy)
+  :hierarchy hierarchy/hierarchy)
 
 (defmulti on-pointer-up
   (fn [db _e] [(:tool db) (:state db)])
-  :hierarchy hierarchy)
+  :hierarchy hierarchy/hierarchy)
 
 (defmulti on-pointer-move
   (fn [db _e] [(:tool db) (:state db)])
-  :hierarchy hierarchy)
+  :hierarchy hierarchy/hierarchy)
 
 (defmulti on-double-click
   (fn [db _e] [(:tool db) (:state db)])
-  :hierarchy hierarchy)
+  :hierarchy hierarchy/hierarchy)
 
 (defmulti on-drag-start
   (fn [db _e] [(:tool db) (:state db)])
-  :hierarchy hierarchy)
+  :hierarchy hierarchy/hierarchy)
 
 (defmulti on-drag
   (fn [db _e] [(:tool db) (:state db)])
-  :hierarchy hierarchy)
+  :hierarchy hierarchy/hierarchy)
 
 (defmulti on-drag-end
   (fn [db _e] [(:tool db) (:state db)])
-  :hierarchy hierarchy)
+  :hierarchy hierarchy/hierarchy)
 
 (defmulti on-context-menu
   (fn [db _e] [(:tool db) (:state db)])
-  :hierarchy hierarchy)
+  :hierarchy hierarchy/hierarchy)
 
 (defmulti on-key-up
   (fn [db _e] [(:tool db) (:state db)])
-  :hierarchy hierarchy)
+  :hierarchy hierarchy/hierarchy)
 
 (defmulti on-key-down
   (fn [db _e] [(:tool db) (:state db)])
-  :hierarchy hierarchy)
+  :hierarchy hierarchy/hierarchy)
 
 (defmulti snapping-points
   (fn [db _e] [(:tool db) (:state db)])
-  :hierarchy hierarchy)
+  :hierarchy hierarchy/hierarchy)
 
 (defmulti snapping-elements
   (fn [db _e] [(:tool db) (:state db)])
-  :hierarchy hierarchy)
+  :hierarchy hierarchy/hierarchy)
 
 (defmulti help
   (fn [tool state] [tool state])
-  :hierarchy hierarchy)
+  :hierarchy hierarchy/hierarchy)
 
 (defmulti on-activate
   (fn [db & {:as _props}] (:tool db))
-  :hierarchy hierarchy)
+  :hierarchy hierarchy/hierarchy)
 
-(defmulti on-deactivate :tool :hierarchy hierarchy)
-(defmulti on-cancel :tool :hierarchy hierarchy)
-(defmulti render identity :hierarchy hierarchy)
-(defmulti right-panel identity :hierarchy hierarchy)
+(defmulti on-deactivate :tool :hierarchy hierarchy/hierarchy)
+(defmulti render identity :hierarchy hierarchy/hierarchy)
+(defmulti right-panel identity :hierarchy hierarchy/hierarchy)
 
 (defmethod on-pointer-down :default [db _e] db)
 (defmethod on-pointer-up :default [db _e] db)
@@ -79,7 +74,6 @@
 (defmethod on-key-down :default [db _e] db)
 (defmethod on-activate :default [db & {:as _props}] db)
 (defmethod on-deactivate :default [db] db)
-(defmethod on-cancel :default [db] db)
 (defmethod render :default [])
 (defmethod snapping-points :default [])
 (defmethod snapping-elements :default [])

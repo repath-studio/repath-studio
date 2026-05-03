@@ -3,14 +3,14 @@
   (:require
    [clojure.core.matrix :as matrix]
    [clojure.string :as string]
-   [renderer.document.handlers :as document.handlers]
    [renderer.element.handlers :as element.handlers]
+   [renderer.hierarchy :as hierarchy]
    [renderer.i18n.views :as i18n.views]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.utils.attribute :as utils.attribute]))
 
-(tool.hierarchy/derive! ::tool.hierarchy/poly ::tool.hierarchy/element)
+(hierarchy/derive! ::tool.hierarchy/poly ::tool.hierarchy/element)
 
 (defmethod tool.hierarchy/help [::tool.hierarchy/poly :idle]
   []
@@ -24,18 +24,6 @@
                         "Right click or double click to finalize the
                          shape."])]])
 
-(defn create-el
-  [db initial-point]
-  (let [stroke (document.handlers/attr db :stroke)
-        fill (document.handlers/attr db :fill)]
-    (-> db
-        (tool.handlers/set-state :create)
-        (element.handlers/add {:type :element
-                               :tag (:tool db)
-                               :attrs {:points (string/join " " initial-point)
-                                       :stroke stroke
-                                       :fill fill}}))))
-
 (defn drop-last-point
   [db]
   (element.handlers/update-selected db
@@ -48,11 +36,6 @@
 (defn adjusted-point
   [db point]
   (matrix/sub point (element.handlers/parent-offset db)))
-
-(defmethod tool.hierarchy/on-pointer-up [::tool.hierarchy/poly :idle]
-  [db _e]
-  (->> (tool.handlers/snapped-position db)
-       (create-el db)))
 
 (defmethod tool.hierarchy/on-pointer-up [::tool.hierarchy/poly :create]
   [db _e]

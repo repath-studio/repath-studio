@@ -8,6 +8,7 @@
    [renderer.element.db :refer [Element]]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.subs :as-alias element.subs]
+   [renderer.hierarchy :as hierarchy]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.transform.clone]
@@ -23,9 +24,9 @@
    [renderer.utils.length :as utils.length]
    [renderer.utils.svg :as utils.svg]))
 
-(tool.hierarchy/derive! :transform ::tool.hierarchy/tool)
+(hierarchy/derive! ::transform ::tool.hierarchy/tool)
 
-(defmethod tool.hierarchy/on-deactivate :transform
+(defmethod tool.hierarchy/on-deactivate ::transform
   [db]
   (-> db
       (element.handlers/clear-ignored)
@@ -92,7 +93,7 @@
     [utils.svg/label text {:x x
                            :y y}]))
 
-(defmethod tool.hierarchy/render :transform
+(defmethod tool.hierarchy/render ::transform
   []
   (let [state @(rf/subscribe [::tool.subs/state])
         selected-elements @(rf/subscribe [::element.subs/selected])
@@ -125,8 +126,8 @@
               {:id :tool/transform
                :label [::label "Transform"]
                :icon "pointer"
-               :event [::tool.events/activate :transform]
-               :active [::tool.subs/active? :transform]
+               :event [::tool.events/activate ::transform]
+               :active [::tool.subs/active? ::transform]
                :shortcuts [{:keyCode (utils.key/codes "S")}]}])
 
 (rf/reg-global-interceptor

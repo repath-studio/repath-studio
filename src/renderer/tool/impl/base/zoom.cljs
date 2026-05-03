@@ -7,6 +7,7 @@
    [renderer.app.handlers :as app.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.frame.handlers :as frame.handlers]
+   [renderer.hierarchy :as hierarchy]
    [renderer.i18n.views :as i18n.views]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.events :as-alias tool.events]
@@ -17,7 +18,7 @@
    [renderer.utils.svg :as utils.svg]
    [renderer.views :as views]))
 
-(tool.hierarchy/derive! :zoom ::tool.hierarchy/tool)
+(hierarchy/derive! ::zoom ::tool.hierarchy/tool)
 
 (defonce select-box (reagent/atom nil))
 
@@ -26,45 +27,45 @@
  (fn [value]
    (reset! select-box value)))
 
-(defmethod tool.hierarchy/help [:zoom :idle]
+(defmethod tool.hierarchy/help [::zoom :idle]
   []
   [:<>
    (i18n.views/t [::zoom-in "Click or select an area to zoom in."])
    (i18n.views/t [::zoom-out "Hold %1 to zoom out."] [[views/kbd "⇧"]])])
 
-(defmethod tool.hierarchy/help [:zoom :select]
+(defmethod tool.hierarchy/help [::zoom :select]
   []
   (i18n.views/t [::release-to-focus "Release to focus on the area."]))
 
-(defmethod tool.hierarchy/on-activate :zoom
+(defmethod tool.hierarchy/on-activate ::zoom
   [db]
   (tool.handlers/set-cursor db "zoom-in"))
 
-(defmethod tool.hierarchy/on-deactivate :zoom
+(defmethod tool.hierarchy/on-deactivate ::zoom
   [db]
   (app.handlers/add-fx db [::set-select-box nil]))
 
-(defmethod tool.hierarchy/on-key-down [:zoom :idle]
+(defmethod tool.hierarchy/on-key-down [::zoom :idle]
   [db e]
   (cond-> db
     (:shift-key e)
     (tool.handlers/set-cursor "zoom-out")))
 
-(defmethod tool.hierarchy/on-key-up [:zoom :idle]
+(defmethod tool.hierarchy/on-key-up [::zoom :idle]
   [db e]
   (cond-> db
     (not (:shift-key e))
     (tool.handlers/set-cursor "zoom-in")))
 
-(defmethod tool.hierarchy/on-drag-start [:zoom :idle]
+(defmethod tool.hierarchy/on-drag-start [::zoom :idle]
   [db _e]
   (tool.handlers/set-state db :select))
 
-(defmethod tool.hierarchy/on-drag [:zoom :select]
+(defmethod tool.hierarchy/on-drag [::zoom :select]
   [db _e]
   (app.handlers/add-fx db [::set-select-box (utils.svg/select-box db)]))
 
-(defmethod tool.hierarchy/on-drag-end [:zoom :select]
+(defmethod tool.hierarchy/on-drag-end [::zoom :select]
   [db e]
   (let [{:keys [dom-rect zoom-sensitivity active-document]} db
         [offset-x offset-y] (:adjusted-pointer-offset db)
@@ -86,7 +87,7 @@
         (snap.handlers/update-viewport-tree)
         (app.handlers/add-fx [::app.effects/persist]))))
 
-(defmethod tool.hierarchy/on-pointer-up [:zoom :idle]
+(defmethod tool.hierarchy/on-pointer-up [::zoom :idle]
   [db e]
   (let [factor (cond->> (:zoom-sensitivity db)
                  (not (:shift-key e))
@@ -96,7 +97,7 @@
         (snap.handlers/update-viewport-tree)
         (app.handlers/add-fx [::app.effects/persist]))))
 
-(defmethod tool.hierarchy/render :zoom
+(defmethod tool.hierarchy/render ::zoom
   []
   [element.hierarchy/render @select-box])
 
@@ -104,6 +105,6 @@
               {:id :tool/zoom
                :label [::tool-zoom "Zoom"]
                :icon "magnifier"
-               :event [::tool.events/activate :zoom]
-               :active [::tool.subs/active? :zoom]
+               :event [::tool.events/activate ::zoom]
+               :active [::tool.subs/active? ::zoom]
                :shortcuts [{:keyCode (utils.key/codes "Z")}]}])

@@ -79,7 +79,7 @@
   "Returns an interceptor that:
    1. Checks if (:state db) is :idle, short-circuiting if not.
    2. Injects a performance timestamp into coeffects as :now.
-   3. Activates the :transform tool on the db in coeffects.
+   3. Deactivates the current tool.
    4. After the handler runs, calls history.handlers/finalize on the
       resulting db.
 
@@ -102,8 +102,7 @@
                    (rf/assoc-coeffect :now (.now js/performance))
 
                    (:active-document db)
-                   (rf/assoc-coeffect :db
-                                      (tool.handlers/activate db :transform)))
+                   (rf/assoc-coeffect :db (tool.handlers/deactivate db)))
                  (assoc context :queue []))))
    :after (fn [context]
             (if-let [db (rf/get-effect context :db)]
@@ -112,7 +111,6 @@
                     expl (if (fn? (first explanation))
                            ((first explanation) event)
                            explanation)]
-                (rf/assoc-effect context :db
-                                 (apply history.handlers/finalize
-                                        db now expl)))
+                (rf/assoc-effect context :db (apply history.handlers/finalize
+                                                    db now expl)))
               context))))

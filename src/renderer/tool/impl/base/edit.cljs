@@ -7,6 +7,7 @@
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
+   [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
    [renderer.snap.handlers :as snap.handlers]
@@ -19,32 +20,32 @@
    [renderer.utils.svg :as utils.svg]
    [renderer.views :as views]))
 
-(tool.hierarchy/derive! :edit ::tool.hierarchy/tool)
+(hierarchy/derive! ::edit ::tool.hierarchy/tool)
 
-(defmethod tool.hierarchy/help [:edit :idle]
+(defmethod tool.hierarchy/help [::edit :idle]
   []
   [:<>
    (i18n.views/t [::help-idle-drag "Drag a handle to modify your shape."])
    (i18n.views/t [::help-idle-click
                   "Click on an element to change selection"])])
 
-(defmethod tool.hierarchy/help [:edit :edit]
+(defmethod tool.hierarchy/help [::edit :edit]
   []
   (i18n.views/t [::help-edit "Hold %1 to restrict direction."]
                 [[views/kbd "Ctrl"]]))
 
-(defmethod tool.hierarchy/help [:edit :type]
+(defmethod tool.hierarchy/help [::edit :type]
   []
   (i18n.views/t [::help-type "Enter your text."]))
 
-(defmethod tool.hierarchy/on-pointer-down [:edit :idle]
+(defmethod tool.hierarchy/on-pointer-down [::edit :idle]
   [db e]
   (let [{:keys [element]} e]
     (cond-> db
       element
       (assoc :clicked-element element))))
 
-(defmethod tool.hierarchy/on-pointer-up [:edit :idle]
+(defmethod tool.hierarchy/on-pointer-up [::edit :idle]
   [db e]
   (let [{:keys [shift-key button element]} e]
     (if-not (and (= button :right)
@@ -57,7 +58,7 @@
                                      [::select-element "Select element"]))
       (dissoc db :clicked-element))))
 
-(defmethod tool.hierarchy/on-pointer-move [:edit :idle]
+(defmethod tool.hierarchy/on-pointer-move [::edit :idle]
   [db e]
   (let [el-id (-> e :element :id)]
     (cond-> db
@@ -67,13 +68,13 @@
       el-id
       (element.handlers/hover el-id))))
 
-(defmethod tool.hierarchy/on-drag-start [:edit :idle]
+(defmethod tool.hierarchy/on-drag-start [::edit :idle]
   [db e]
   (cond-> db
     (= (-> e :element :type) :handle)
     (tool.handlers/set-state :edit)))
 
-(defmethod tool.hierarchy/on-drag [:edit :edit]
+(defmethod tool.hierarchy/on-drag [::edit :edit]
   [db e]
   (let [{:keys [element-id id]} (:clicked-element db)
         lock? (or (:ctrl-key e) (tool.handlers/multi-touch? db))
@@ -87,14 +88,14 @@
       (element.handlers/update-el element-id
                                   element.hierarchy/edit offset id lock?))))
 
-(defmethod tool.hierarchy/on-drag-end [:edit :edit]
+(defmethod tool.hierarchy/on-drag-end [::edit :edit]
   [db e]
   (-> db
       (tool.handlers/set-state :idle)
       (dissoc :clicked-element)
       (history.handlers/finalize (:timestamp e) [::edit "Edit"])))
 
-(defmethod tool.hierarchy/snapping-points [:edit :edit]
+(defmethod tool.hierarchy/snapping-points [::edit :edit]
   [db]
   (when-let [el (:clicked-element db)]
     [(with-meta
@@ -104,15 +105,15 @@
                  (or (:label el)
                      [::handle "handle"]))})]))
 
-(defmethod tool.hierarchy/snapping-elements [:edit :idle]
+(defmethod tool.hierarchy/snapping-elements [::edit :idle]
   [db]
   (element.handlers/non-selected-visible db))
 
-(defmethod tool.hierarchy/snapping-elements [:edit :edit]
+(defmethod tool.hierarchy/snapping-elements [::edit :edit]
   [db]
   (element.handlers/non-selected-visible db))
 
-(defmethod tool.hierarchy/render :edit
+(defmethod tool.hierarchy/render ::edit
   []
   (let [selected-elements @(rf/subscribe [::element.subs/selected])]
     (->> selected-elements
@@ -130,6 +131,6 @@
               {:id :tool/edit
                :label [::tool-edit "Edit"]
                :icon "edit"
-               :event [::tool.events/activate :edit]
-               :active [::tool.subs/active? :edit]
+               :event [::tool.events/activate ::edit]
+               :active [::tool.subs/active? ::edit]
                :shortcuts [{:keyCode (utils.key/codes "E")}]}])
