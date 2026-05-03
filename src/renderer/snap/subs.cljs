@@ -21,8 +21,7 @@
 (rf/reg-sub
  ::option-enabled?
  :<- [::options]
- (fn [options [_ id]]
-   (contains? options id)))
+ :=> contains?)
 
 (rf/reg-sub
  ::nearest-neighbor
