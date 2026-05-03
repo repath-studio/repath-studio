@@ -76,7 +76,7 @@
               (-> (element.handlers/assoc-prop db id :content s)
                   (element.handlers/refresh-bbox id)
                   (history.handlers/finalize now [::set-text "Set text"])))
-            (tool.handlers/activate :transform))
+            (tool.handlers/deactivate))
     ::effects/focus-canvas nil}))
 
 (defmethod element.hierarchy/render :text

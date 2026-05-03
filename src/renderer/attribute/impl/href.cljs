@@ -57,5 +57,5 @@
  ::update-attrs
  (fn [{:keys [db]} [_ el]]
    (let [attrs (select-keys (:attrs el) [:href :width :height])]
-     {:db (tool.handlers/activate db :transform)
+     {:db (tool.handlers/deactivate db)
       :dispatch-n (mapv (fn [[k v]] [::element.events/set-attr k v]) attrs)})))

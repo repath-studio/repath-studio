@@ -9,7 +9,9 @@
    [renderer.history.handlers :as history.handlers]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.db :refer [Tool State Cursor]]
-   [renderer.tool.hierarchy :as tool.hierarchy]))
+   [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.tool.impl.base.edit :as-alias tool.impl.base.edit]
+   [renderer.tool.impl.base.transform.core :as-alias tool.impl.base.transform]))
 
 (m/=> set-state [:-> App State App])
 (defn set-state
@@ -44,6 +46,16 @@
         (dissoc :drag :pointer-offset :clicked-element)
         (snap.handlers/rebuild-tree)
         (tool.hierarchy/on-activate props))))
+
+(m/=> deactivate [:-> App App])
+(defn deactivate
+  [db]
+  (activate db ::tool.impl.base.transform/transform))
+
+(m/=> edit [:-> App App])
+(defn edit
+  [db]
+  (activate db ::tool.impl.base.edit/edit))
 
 (m/=> pointer-delta [:-> App Vec2])
 (defn pointer-delta
@@ -126,11 +138,10 @@
   (cond-> db
     :always
     (-> (activate (:tool db))
-        (history.handlers/reset-state)
-        (tool.hierarchy/on-cancel))
+        (history.handlers/reset-state))
 
     (= (:state db) :idle)
-    (activate :transform)
+    (deactivate)
 
     (:cached-tool db)
     (reset-cached)

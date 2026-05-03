@@ -13,11 +13,12 @@
    [renderer.tool.db :refer [Handle]]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.tool.impl.base.transform.core :as-alias transform]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.svg :as utils.svg]
    [renderer.views :as views]))
 
-(defmethod tool.hierarchy/help [:transform :select]
+(defmethod tool.hierarchy/help [::transform/transform :select]
   []
   (i18n.views/t [::select [:div "Hold %1 to select intersecting elements."]]
                 [[views/kbd "Alt"]]))
@@ -85,7 +86,7 @@
     (not intersecting?)
     (assoc-in [:attrs :fill] "transparent")))
 
-(defmethod tool.hierarchy/on-drag [:transform :select]
+(defmethod tool.hierarchy/on-drag [::transform/transform :select]
   [db e]
   (let [{:keys [alt-key]} e]
     (-> db
@@ -93,7 +94,7 @@
         (app.handlers/add-fx [::set-select-box (select-rect db alt-key)])
         (reduce-by-area e element.handlers/hover))))
 
-(defmethod tool.hierarchy/on-drag-end [:transform :select]
+(defmethod tool.hierarchy/on-drag-end [::transform/transform :select]
   [db e]
   (cond-> db
     (not (:shift-key e))
@@ -107,7 +108,7 @@
         (history.handlers/finalize (:timestamp e)
                                    [::modify-selection "Modify selection"]))))
 
-(defmethod tool.hierarchy/snapping-points [:transform :select]
+(defmethod tool.hierarchy/snapping-points [::transform/transform :select]
   [db]
   (let [selected (element.handlers/selected db)
         options (-> db :snap :options)]
@@ -118,6 +119,6 @@
         (into (utils.bounds/->snapping-points (element.handlers/bbox db)
                                               options))))))
 
-(defmethod tool.hierarchy/snapping-elements [:transform :select]
+(defmethod tool.hierarchy/snapping-elements [::transform/transform :select]
   [db]
   (element.handlers/non-selected-visible db))

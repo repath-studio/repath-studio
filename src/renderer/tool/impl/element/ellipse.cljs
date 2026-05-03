@@ -5,6 +5,7 @@
    [renderer.action.events :as-alias action.events]
    [renderer.document.handlers :as document.handlers]
    [renderer.element.handlers :as element.handlers]
+   [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
    [renderer.tool.events :as-alias tool.events]
@@ -14,9 +15,9 @@
    [renderer.utils.length :as utils.length]
    [renderer.views :as views]))
 
-(tool.hierarchy/derive! :ellipse ::tool.hierarchy/element)
+(hierarchy/derive! ::ellipse ::tool.hierarchy/element)
 
-(defmethod tool.hierarchy/help [:ellipse :create]
+(defmethod tool.hierarchy/help [::ellipse :create]
   []
   (i18n.views/t [::help [:div "Hold %1 to lock proportions."]]
                 [[views/kbd "Ctrl"]]))
@@ -30,7 +31,7 @@
     {:rx (utils.length/->fixed (cond-> rx lock-ratio (min ry)))
      :ry (utils.length/->fixed (cond-> ry lock-ratio (min rx)))}))
 
-(defmethod tool.hierarchy/on-drag-start [:ellipse :idle]
+(defmethod tool.hierarchy/on-drag-start [::ellipse :idle]
   [db e]
   (let [[x y] (tool.handlers/snapped-position db)
         fill (document.handlers/attr db :fill)
@@ -45,23 +46,23 @@
                                               :fill fill
                                               :stroke stroke})}))))
 
-(defmethod tool.hierarchy/on-drag [:ellipse :create]
+(defmethod tool.hierarchy/on-drag [::ellipse :create]
   [db e]
   (let [lock-ratio (or (:ctrl-key e) (tool.handlers/multi-touch? db))
         attrs (attributes db lock-ratio)
         assoc-attr (fn [el [k v]] (assoc-in el [:attrs k] (str v)))]
     (element.handlers/update-selected db #(reduce assoc-attr % attrs))))
 
-(defmethod tool.hierarchy/on-drag-end [:ellipse :create]
+(defmethod tool.hierarchy/on-drag-end [::ellipse :create]
   [db e]
   (-> db
       (history.handlers/finalize (:timestamp e)
                                  [::create-ellipse "Create ellipse"])
-      (tool.handlers/activate :transform)))
+      (tool.handlers/deactivate)))
 
 (rf/dispatch [::action.events/register-action
               {:id :tool/ellipse
                :label [::label "Ellipse"]
                :icon "ellipse-tool"
-               :event [::tool.events/activate :ellipse]
-               :active [::tool.subs/active? :ellipse]}])
+               :event [::tool.events/activate ::ellipse]
+               :active [::tool.subs/active? ::ellipse]}])

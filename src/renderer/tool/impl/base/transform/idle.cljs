@@ -9,12 +9,13 @@
    [renderer.tool.db :refer [Handle State]]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.tool.impl.base.transform.core :as-alias transform]
    [renderer.tool.impl.base.transform.select :as transform.select]
    [renderer.utils.element :as utils.element]
    [renderer.utils.key :as utils.key]
    [renderer.views :as views]))
 
-(defmethod tool.hierarchy/on-pointer-move [:transform :idle]
+(defmethod tool.hierarchy/on-pointer-move [::transform/transform :idle]
   [db e]
   (let [{:keys [element]} e
         movable? (or (= (:type element) :handle)
@@ -31,7 +32,7 @@
       (:id element)
       (element.handlers/hover (:id element)))))
 
-(defmethod tool.hierarchy/help [:transform :idle]
+(defmethod tool.hierarchy/help [::transform/transform :idle]
   []
   [:<>
    (i18n.views/t [::idle-click
@@ -41,7 +42,7 @@
                   [:div "Hold %1 to add or remove elements to selection."]]
                  [[views/kbd "⇧"]])])
 
-(defmethod tool.hierarchy/on-pointer-down [:transform :idle]
+(defmethod tool.hierarchy/on-pointer-down [::transform/transform :idle]
   [db e]
   (let [{:keys [button element]} e]
     (cond-> db
@@ -55,7 +56,7 @@
       :always
       (element.handlers/ignore :bbox))))
 
-(defmethod tool.hierarchy/on-pointer-up [:transform :idle]
+(defmethod tool.hierarchy/on-pointer-up [::transform/transform :idle]
   [db e]
   (let [{:keys [element timestamp]} e]
     (-> db
@@ -67,7 +68,7 @@
                                      [::deselect-element "Deselect element"]
                                      [::select-element "Select element"])))))
 
-(defmethod tool.hierarchy/on-double-click [:transform :idle]
+(defmethod tool.hierarchy/on-double-click [::transform/transform :idle]
   [db e]
   (let [{{:keys [tag id]} :element} e]
     (if (= tag :g)
@@ -76,7 +77,7 @@
           (element.handlers/deselect id))
       (cond-> db
         (not= :canvas tag)
-        (tool.handlers/activate :edit)))))
+        (tool.handlers/edit)))))
 
 (m/=> drag-start->state [:-> [:or Element Handle] State])
 (defn drag-start->state
@@ -94,7 +95,7 @@
 
       :idle)))
 
-(defmethod tool.hierarchy/on-drag-start [:transform :idle]
+(defmethod tool.hierarchy/on-drag-start [::transform/transform :idle]
   [db e]
   (let [{:keys [clicked-element state]} db
         {:keys [shift-key]} e
@@ -130,7 +131,7 @@
       "ArrowRight" [arrow-key-step 0]
       [0 0])))
 
-(defmethod tool.hierarchy/on-key-down [:transform :idle]
+(defmethod tool.hierarchy/on-key-down [::transform/transform :idle]
   [db e]
   (let [k (:key e)]
     (cond-> db
@@ -143,7 +144,7 @@
       (= k "Escape")
       (history.handlers/reset-state))))
 
-(defmethod tool.hierarchy/on-key-up [:transform :idle]
+(defmethod tool.hierarchy/on-key-up [::transform/transform :idle]
   [db e]
   (let [k (:key e)]
     (cond-> db

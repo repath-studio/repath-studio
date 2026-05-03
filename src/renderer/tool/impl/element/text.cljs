@@ -3,6 +3,7 @@
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.element.handlers :as element.handlers]
+   [renderer.hierarchy :as hierarchy]
    [renderer.i18n.views :as i18n.views]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
@@ -10,17 +11,17 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.key :as utils.key]))
 
-(tool.hierarchy/derive! :text ::tool.hierarchy/element)
+(hierarchy/derive! ::text ::tool.hierarchy/element)
 
-(defmethod tool.hierarchy/help [:text :idle]
+(defmethod tool.hierarchy/help [::text :idle]
   []
   (i18n.views/t [::help "Click to start typing."]))
 
-(defmethod tool.hierarchy/on-activate :text
+(defmethod tool.hierarchy/on-activate ::text
   [db]
   (tool.handlers/set-cursor db "text"))
 
-(defmethod tool.hierarchy/on-pointer-up [:text :idle]
+(defmethod tool.hierarchy/on-pointer-up [::text :idle]
   [db _e]
   (let [[offset-x offset-y] (tool.handlers/snapped-offset db)
         el {:type :element
@@ -31,9 +32,9 @@
         (element.handlers/deselect)
         (element.handlers/add el)
         (tool.handlers/set-state :type)
-        (tool.handlers/activate :edit))))
+        (tool.handlers/edit))))
 
-(defmethod tool.hierarchy/on-drag-end [:text :idle]
+(defmethod tool.hierarchy/on-drag-end [::text :idle]
   [db e]
   (tool.hierarchy/on-pointer-up db e))
 
@@ -41,6 +42,6 @@
               {:id :tool/text
                :label [::label "Text"]
                :icon "text"
-               :event [::tool.events/activate :text]
-               :active [::tool.subs/active? :text]
+               :event [::tool.events/activate ::text]
+               :active [::tool.subs/active? ::text]
                :shortcuts [{:keyCode (utils.key/codes "T")}]}])

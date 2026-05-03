@@ -6,6 +6,7 @@
    [renderer.action.events :as-alias action.events]
    [renderer.document.handlers :as document.handlers]
    [renderer.element.handlers :as element.handlers]
+   [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
@@ -14,9 +15,9 @@
    [renderer.utils.key :as utils.key]
    [renderer.utils.length :as utils.length]))
 
-(tool.hierarchy/derive! :circle ::tool.hierarchy/element)
+(hierarchy/derive! ::circle ::tool.hierarchy/element)
 
-(defmethod tool.hierarchy/on-drag-start [:circle :idle]
+(defmethod tool.hierarchy/on-drag-start [::circle :idle]
   [db _e]
   (let [offset (tool.handlers/snapped-offset db)
         position (tool.handlers/snapped-position db)
@@ -34,21 +35,21 @@
                                        :stroke stroke
                                        :r radius}}))))
 
-(defmethod tool.hierarchy/on-drag [:circle :create]
+(defmethod tool.hierarchy/on-drag [::circle :create]
   [db _e]
   (let [offset (tool.handlers/snapped-offset db)
         position (tool.handlers/snapped-position db)
         radius (utils.length/->fixed (matrix/distance position offset))]
     (element.handlers/update-selected db #(assoc-in % [:attrs :r] radius))))
 
-(defmethod tool.hierarchy/on-drag-end [:circle :create]
+(defmethod tool.hierarchy/on-drag-end [::circle :create]
   [db e]
   (-> db
       (history.handlers/finalize (:timestamp e)
                                  [::create-circle "Create circle"])
-      (tool.handlers/activate :transform)))
+      (tool.handlers/deactivate)))
 
-(defmethod tool.hierarchy/snapping-points [:circle :create]
+(defmethod tool.hierarchy/snapping-points [::circle :create]
   [db]
   [(with-meta
      (:adjusted-pointer-pos db)
@@ -60,6 +61,6 @@
               {:id :tool/circle
                :label [::label "Circle"]
                :icon "circle-tool"
-               :event [::tool.events/activate :circle]
-               :active [::tool.subs/active? :circle]
+               :event [::tool.events/activate ::circle]
+               :active [::tool.subs/active? ::circle]
                :shortcuts [{:keyCode (utils.key/codes "C")}]}])

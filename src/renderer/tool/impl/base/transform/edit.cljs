@@ -9,11 +9,12 @@
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.tool.impl.base.transform.core :as-alias transform]
    [renderer.tool.impl.base.transform.translate :as transform.translate]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.views :as views]))
 
-(defmethod tool.hierarchy/help [:transform :edit]
+(defmethod tool.hierarchy/help [::transform/transform :edit]
   []
   (i18n.views/t [::help-edit "Hold %1 to restrict direction."]
                 [[views/kbd "Ctrl"]]))
@@ -29,7 +30,7 @@
                        [(/ delta-x w) (/ delta-y h)])]
     (update db :anchor-offset matrix/add factor-delta)))
 
-(defmethod tool.hierarchy/on-drag [:transform :edit]
+(defmethod tool.hierarchy/on-drag [::transform/transform :edit]
   [db e]
   (let [bbox (element.handlers/bbox db)
         delta (tool.handlers/pointer-delta db)
@@ -39,14 +40,14 @@
         (translate-offset delta axis bbox)
         (snap.handlers/snap-with translate-offset axis bbox))))
 
-(defmethod tool.hierarchy/on-drag-end [:transform :edit]
+(defmethod tool.hierarchy/on-drag-end [::transform/transform :edit]
   [db _e]
   (-> db
       (assoc :anchor-point (:anchor-offset db))
       (tool.handlers/set-state :idle)
       (dissoc :clicked-element :pivot-point)))
 
-(defmethod tool.hierarchy/snapping-points [:transform :edit]
+(defmethod tool.hierarchy/snapping-points [::transform/transform :edit]
   [db]
   (when-let [el (:clicked-element db)]
     [(with-meta
@@ -54,6 +55,6 @@
                    (tool.handlers/pointer-delta db))
        {:label [::pivot-handle "pivot handle"]})]))
 
-(defmethod tool.hierarchy/snapping-elements [:transform :edit]
+(defmethod tool.hierarchy/snapping-elements [::transform/transform :edit]
   [db]
   (element.handlers/selected db))

@@ -5,6 +5,7 @@
    [renderer.action.events :as-alias action.events]
    [renderer.document.handlers :as document.handlers]
    [renderer.element.handlers :as element.handlers]
+   [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
    [renderer.tool.events :as-alias tool.events]
@@ -15,9 +16,9 @@
    [renderer.utils.length :as utils.length]
    [renderer.views :as views]))
 
-(tool.hierarchy/derive! :rect ::tool.hierarchy/element)
+(hierarchy/derive! ::rect ::tool.hierarchy/element)
 
-(defmethod tool.hierarchy/help [:rect :create]
+(defmethod tool.hierarchy/help [::rect :create]
   []
   (i18n.views/t [::help [:div "Hold %1 to lock proportions."]]
                 [[views/kbd "Ctrl"]]))
@@ -35,7 +36,7 @@
      :width (utils.length/->fixed width)
      :height (utils.length/->fixed height)}))
 
-(defmethod tool.hierarchy/on-drag-start [:rect :idle]
+(defmethod tool.hierarchy/on-drag-start [::rect :idle]
   [db e]
   (let [fill (document.handlers/attr db :fill)
         stroke (document.handlers/attr db :stroke)]
@@ -47,7 +48,7 @@
                                              {:fill fill
                                               :stroke stroke})}))))
 
-(defmethod tool.hierarchy/on-drag [:rect :create]
+(defmethod tool.hierarchy/on-drag [::rect :create]
   [db e]
   (let [lock-ratio (or (:ctrl-key e) (tool.handlers/multi-touch? db))
         attrs (attributes db lock-ratio)
@@ -57,17 +58,17 @@
         (element.handlers/update-selected #(reduce assoc-attr % attrs))
         (element.handlers/translate [(- min-x) (- min-y)]))))
 
-(defmethod tool.hierarchy/on-drag-end [:rect :create]
+(defmethod tool.hierarchy/on-drag-end [::rect :create]
   [db e]
   (-> db
       (history.handlers/finalize (:timestamp e)
                                  [::create-rectangle "Create rectangle"])
-      (tool.handlers/activate :transform)))
+      (tool.handlers/deactivate)))
 
 (rf/dispatch [::action.events/register-action
               {:id :tool/rect
                :label [::label "Rectangle"]
                :icon "rectangle-tool"
-               :event [::tool.events/activate :rect]
-               :active [::tool.subs/active? :rect]
+               :event [::tool.events/activate ::rect]
+               :active [::tool.subs/active? ::rect]
                :shortcuts [{:keyCode (utils.key/codes "R")}]}])

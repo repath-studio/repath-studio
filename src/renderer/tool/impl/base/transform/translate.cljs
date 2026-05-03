@@ -11,13 +11,14 @@
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.tool.impl.base.transform.core :as-alias transform]
    [renderer.tool.impl.base.transform.select :as transform.select]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.extra :refer [partial-right]]
    [renderer.views :as views]))
 
-(defmethod tool.hierarchy/help [:transform :translate]
+(defmethod tool.hierarchy/help [::transform/transform :translate]
   []
   (i18n.views/t [::translate
                  [:div "Hold %1 to restrict direction, and %2 to clone."]]
@@ -85,7 +86,7 @@
                                               :hovered-svg hovered-svg
                                               :auto-parent auto-parent?}) db))))
 
-(defmethod tool.hierarchy/on-drag [:transform :translate]
+(defmethod tool.hierarchy/on-drag [::transform/transform :translate]
   [db e]
   (let [{:keys [shift-key ctrl-key alt-key]} e
         delta (tool.handlers/pointer-delta db)
@@ -100,7 +101,7 @@
           (snap.handlers/snap-with translate ctrl-key)
           (tool.handlers/set-cursor (if locked? "not-allowed" "move"))))))
 
-(defmethod tool.hierarchy/on-drag-end [:transform :translate]
+(defmethod tool.hierarchy/on-drag-end [::transform/transform :translate]
   [db e]
   (-> db
       (tool.handlers/set-state :idle)
@@ -108,7 +109,7 @@
       (history.handlers/finalize (:timestamp e)
                                  [::move-selection "Move selection"])))
 
-(defmethod tool.hierarchy/snapping-points [:transform :translate]
+(defmethod tool.hierarchy/snapping-points [::transform/transform :translate]
   [db]
   (let [selected (element.handlers/selected db)
         options (-> db :snap :options)]
@@ -119,6 +120,6 @@
         (into (utils.bounds/->snapping-points (element.handlers/bbox db)
                                               options))))))
 
-(defmethod tool.hierarchy/snapping-elements [:transform :translate]
+(defmethod tool.hierarchy/snapping-elements [::transform/transform :translate]
   [db]
   (element.handlers/non-selected-visible db))

@@ -2,13 +2,14 @@
   (:require
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
+   [renderer.hierarchy :as hierarchy]
    [renderer.i18n.views :as i18n.views]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.draw.brush]
    [renderer.tool.impl.draw.pencil]))
 
-(tool.hierarchy/derive! ::tool.hierarchy/draw ::tool.hierarchy/tool)
+(hierarchy/derive! ::tool.hierarchy/draw ::tool.hierarchy/tool)
 
 (defmethod tool.hierarchy/help [::tool.hierarchy/draw :idle]
   []

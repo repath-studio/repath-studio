@@ -6,6 +6,7 @@
    [renderer.action.events :as-alias action.events]
    [renderer.document.handlers :as document.handlers]
    [renderer.element.handlers :as element.handlers]
+   [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
@@ -14,9 +15,9 @@
    [renderer.utils.key :as utils.key]
    [renderer.utils.length :as utils.length]))
 
-(tool.hierarchy/derive! :line ::tool.hierarchy/element)
+(hierarchy/derive! ::line ::tool.hierarchy/element)
 
-(defmethod tool.hierarchy/on-drag-start [:line :idle]
+(defmethod tool.hierarchy/on-drag-start [::line :idle]
   [db _e]
   (let [[offset-x offset-y] (tool.handlers/snapped-offset db)
         [x y] (tool.handlers/snapped-position db)
@@ -31,7 +32,7 @@
                                        :y2 y
                                        :stroke stroke}}))))
 
-(defmethod tool.hierarchy/on-drag [:line :create]
+(defmethod tool.hierarchy/on-drag [::line :create]
   [db _e]
   (let [position (tool.handlers/snapped-position db)
         [min-x min-y] (element.handlers/parent-offset db)
@@ -42,16 +43,16 @@
                                               (assoc-in [:attrs :x2] x)
                                               (assoc-in [:attrs :y2] y)))))
 
-(defmethod tool.hierarchy/on-drag-end [:line :create]
+(defmethod tool.hierarchy/on-drag-end [::line :create]
   [db e]
   (-> db
       (history.handlers/finalize (:timestamp e) [::create-line "Create line"])
-      (tool.handlers/activate :transform)))
+      (tool.handlers/deactivate)))
 
 (rf/dispatch [::action.events/register-action
               {:id :tool/line
                :label [::label "Line"]
                :icon "line-tool"
-               :event [::tool.events/activate :line]
-               :active [::tool.subs/active? :line]
+               :event [::tool.events/activate ::line]
+               :active [::tool.subs/active? ::line]
                :shortcuts [{:keyCode (utils.key/codes "L")}]}])

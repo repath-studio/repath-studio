@@ -9,6 +9,7 @@
    [renderer.document.handlers :as document.handlers]
    [renderer.effects :as-alias effects]
    [renderer.element.handlers :as element.handlers]
+   [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
    [renderer.tool.events :as-alias tool.events]
@@ -17,19 +18,19 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.key :as utils.key]))
 
-(tool.hierarchy/derive! :eye-dropper ::tool.hierarchy/tool)
+(hierarchy/derive! ::eye-dropper ::tool.hierarchy/tool)
 
-(defmethod tool.hierarchy/help [:eye-dropper :idle]
+(defmethod tool.hierarchy/help [::eye-dropper :idle]
   []
   (i18n.views/t [::help "Click anywhere to pick a color."]))
 
-(defmethod tool.hierarchy/on-activate :eye-dropper
+(defmethod tool.hierarchy/on-activate ::eye-dropper
   [db]
   (if (contains? (:features db) :eye-dropper)
     (app.handlers/add-fx db [::effects/eye-dropper {:on-success [::success]
                                                     :on-error [::error]}])
     (-> db
-        (tool.handlers/activate :transform)
+        (tool.handlers/deactivate)
         (app.handlers/add-fx [::app.effects/toast
                               [:error ["Eye Dropper is not available in this
                                         environment."]]]))))
@@ -43,20 +44,20 @@
               (document.handlers/assoc-attr :fill srgb-color)
               (element.handlers/assoc-attr :fill srgb-color)
               (history.handlers/finalize now [::pick-color "Pick color"])
-              (tool.handlers/activate :transform)))}))
+              (tool.handlers/deactivate)))}))
 
 (rf/reg-event-db
  ::error
  (fn [db [_ error]]
    (-> db
-       (tool.handlers/activate :transform)
+       (tool.handlers/deactivate)
        (app.handlers/add-fx [:dispatch [::app.events/toast-error error]]))))
 
 (rf/dispatch [::action.events/register-action
               {:id :tool/eye-dropper
                :label [::label "Eyedropper"]
                :icon "eye-dropper"
-               :event [::tool.events/activate :eye-dropper]
-               :active [::tool.subs/active? :eye-dropper]
+               :event [::tool.events/activate ::eye-dropper]
+               :active [::tool.subs/active? ::eye-dropper]
                :available [::app.subs/supported-feature? :eye-dropper]
                :shortcuts [{:keyCode (utils.key/codes "D")}]}])
