@@ -11,11 +11,17 @@
    [renderer.utils.dom :as utils.dom]
    [renderer.views :as views]))
 
+(defn tool-action
+  ([action]
+   (second (:event action)))
+  ([actions tool-id]
+   (some #(when (= tool-id (tool-action %)) %) actions)))
+
 (defn button
   [action bordered]
   (let [active (action.views/checked? action)
         cached-tool @(rf/subscribe [::tool.subs/cached])
-        primary (= cached-tool (keyword (name (:id action))))]
+        primary (= cached-tool (tool-action action))]
     [:> Tooltip/Root
      [:> Tooltip/Trigger
       {:as-child true}
@@ -40,10 +46,6 @@
   (some->> (:actions action-group)
            (map (fn [action] [button action false]))
            (into [:div {:class "flex justify-center md:gap-1 gap-0.5"}])))
-
-(defn tool-action
-  [actions tool-id]
-  (some #(when (= tool-id (keyword (name (:id %)))) %) actions))
 
 (defn dropdown-button
   [{:keys [label actions]}]
