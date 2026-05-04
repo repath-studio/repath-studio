@@ -32,7 +32,7 @@
 
 (m/=> font-data->path-data! [:-> JS_Object string? map? JS_Promise])
 (defn font-data->path-data!
-  [^js/FontData font-data text props]
+  [font-data text props]
   (let [{:keys [x y font-size]} props]
     (-> (.blob font-data)
         (.then (fn [^js/Blob blob]
