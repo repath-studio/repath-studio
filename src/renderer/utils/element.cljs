@@ -21,7 +21,7 @@
   [el]
   (= :canvas (:tag el)))
 
-(m/=> svg? [:-> Element boolean?])
+(m/=> svg? [:-> map? boolean?])
 (defn svg?
   [el]
   (= :svg (:tag el)))
