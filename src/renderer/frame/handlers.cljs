@@ -28,8 +28,8 @@
 (m/=> viewbox->bounds [:-> Viewbox BBox])
 (defn viewbox->bounds
   [[x y w h]]
-  (let [[w h] (matrix/add [w h] [x y])]
-    [x y w h]))
+  (let [[x2 y2] (matrix/add [w h] [x y])]
+    [x y x2 y2]))
 
 (m/=> pan-by [:function
               [:-> App Vec2 App]

@@ -84,18 +84,18 @@
   [[x y]]
   (let [handle-size @(rf/subscribe [::document.subs/handle-size])
         mid (/ handle-size Math/PI)
-        x-1 (- x mid)
-        x-2 (+ x mid)
-        y-1 (- y mid)
-        y-2 (+ y mid)
+        x1 (- x mid)
+        x2 (+ x mid)
+        y1 (- y mid)
+        y2 (+ y mid)
         bg-attrs {:stroke "var(--accent-foreground)"
                   :stroke-opacity ".5"
                   :stroke-width 3}]
     [:g {:style {:pointer-events "none"}}
-     [line [x-1 y-1] [x-2 y-2] bg-attrs]
-     [line [x-2 y-1] [x-1 y-2] bg-attrs]
-     [line [x-1 y-1] [x-2 y-2]]
-     [line [x-2 y-1] [x-1 y-2]]]))
+     [line [x1 y1] [x2 y2] bg-attrs]
+     [line [x2 y1] [x1 y2] bg-attrs]
+     [line [x1 y1] [x2 y2]]
+     [line [x2 y1] [x1 y2]]]))
 
 (m/=> label [:-> string? map? any?])
 (defn label
