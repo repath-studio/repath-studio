@@ -1,7 +1,8 @@
 (ns renderer.tool.subs
   (:require
    [re-frame.core :as rf]
-   [renderer.tool.handlers :as tool.handlers]))
+   [renderer.tool.handlers :as tool.handlers]
+   [renderer.tool.impl.base.edit :as-alias tool.impl.base.edit]))
 
 (rf/reg-sub
  ::active
@@ -12,6 +13,12 @@
  :<- [::active]
  (fn [active [_ tool-id]]
    (= active tool-id)))
+
+(rf/reg-sub
+ ::editing?
+ :<- [::active]
+ (fn [active _]
+   (= active ::tool.impl.base.edit/edit)))
 
 (rf/reg-sub
  ::not-active?
