@@ -170,7 +170,7 @@
 
 (m/=> set-zoom [:-> App number? App])
 (defn set-zoom
-  [db, zoom]
+  [db zoom]
   (assoc-in db (path db :zoom) zoom))
 
 (m/=> set-translate [:-> App Vec2 App])
