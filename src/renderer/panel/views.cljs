@@ -24,6 +24,7 @@
             data-[separator=active]:after:bg-accent!
             data-[separator=hover]:after:bg-accent!
             data-[separator=hover]:after:delay-300
+            data-[separator=focus]:hover:after:bg-accent
             focus-visible:outline-hidden
             focus-visible:after:bg-border focus-visible:after:delay-0"}])
 

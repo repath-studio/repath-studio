@@ -153,7 +153,7 @@
     "react-d3-tree": "3.6.6",
     "react-dom": "19.2.5",
     "react-frame-component": "5.3.2",
-    "react-resizable-panels": "4.10.0",
+    "react-resizable-panels": "4.11.0",
     "shadow-cljs": "3.4.6",
     "shx": "0.4.0",
     "snabbdom": "3.6.3",
