@@ -618,12 +618,15 @@
    (let [sibling-els (:children (entity db parent-id))
          last-index (count sibling-els)]
      (set-parent db id parent-id last-index)))
-  ([db id parent-id i]
+  ([db id parent-id index]
    (let [el (entity db id)]
      (cond-> db
-       (and el (not= id parent-id) (not (locked? db id)))
+       (and el
+            (not= id parent-id)
+            (not (locked? db id))
+            (not (contains? (descendant-ids db id) parent-id)))
        (-> (update-prop (:parent el) :children #(vec (remove #{id} %)))
-           (update-prop parent-id :children utils.vec/add i id)
+           (update-prop parent-id :children utils.vec/add index id)
            (assoc-prop id :parent parent-id)
            (refresh-bbox id))))))
 
