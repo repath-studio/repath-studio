@@ -5,6 +5,7 @@
    ["style-to-object" :default parse]
    [clojure.core.matrix :as matrix]
    [clojure.string :as string]
+   [clojure.zip :as zip]
    [malli.core :as m]
    [reagent.dom.server :as dom.server]
    [renderer.db :refer [BBox Vec2 JS_Element]]
@@ -214,3 +215,16 @@
         (normalize-attrs)
         (dissoc :locked)
         (merge element.db/default))))
+
+(defn find-svg
+  [zipper]
+  (loop [loc zipper]
+    (cond
+      (zip/end? loc)
+      (zip/root loc)
+
+      (svg? (zip/node loc))
+      (zip/node loc)
+
+      :else
+      (recur (zip/next loc)))))
