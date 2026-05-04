@@ -39,8 +39,7 @@
 
 (defmethod tool.hierarchy/on-activate ::guide
   [db & {:as props}]
-  (let [{:keys [orientation]} props
-        orientation (or orientation @orient)]
+  (let [{:keys [orientation]} props]
     (if
      orientation
       (-> db
