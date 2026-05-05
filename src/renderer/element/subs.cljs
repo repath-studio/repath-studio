@@ -73,8 +73,7 @@
 (rf/reg-sub
  ::has-selected-tag?
  :<- [::selected-tags]
- (fn [selected-tags [_ tag]]
-   (contains? selected-tags tag)))
+ :=> contains?)
 
 (rf/reg-sub
  ::some-selected?
@@ -118,8 +117,7 @@
 (rf/reg-sub
  ::area
  :<- [::selected]
- (fn [selected-elements _]
-   (reduce #(+ %1 (element.hierarchy/area %2)) 0 selected-elements)))
+ :-> utils.element/area)
 
 (rf/reg-sub
  ::ancestor-ids

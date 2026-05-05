@@ -309,12 +309,13 @@
   (set/difference (->> (path db) (get-in db) keys (into #{}))
                   (selected-with-descendant-ids db)))
 
-(m/=> non-selected-visible [:-> App [:sequential Element]])
+(m/=> non-selected-visible [:-> App [:vector Element]])
 (defn non-selected-visible
   [db]
-  (sequence (comp (filter (complement :selected))
-                  (visible))
-            (entities db)))
+  (into []
+        (comp (filter (complement :selected))
+              (visible))
+        (entities db)))
 
 (m/=> top-selected-ancestors [:-> App [:vector Element]])
 (defn top-selected-ancestors

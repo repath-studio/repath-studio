@@ -55,10 +55,15 @@
 
 (m/=> united-bbox [:-> [:sequential Element] [:maybe BBox]])
 (defn united-bbox
-  [elements]
-  (let [el-bbox (keep :bbox elements)]
+  [els]
+  (let [el-bbox (keep :bbox els)]
     (when (seq el-bbox)
       (apply utils.bounds/union el-bbox))))
+
+(m/=> area [:-> [:sequential Element] number?])
+(defn area
+  [els]
+  (reduce #(+ %1 (element.hierarchy/area %2)) 0 els))
 
 (m/=> offset [:-> Element Vec2])
 (defn offset

@@ -11,20 +11,17 @@
 (rf/reg-sub
  ::active?
  :<- [::active]
- (fn [active [_ tool-id]]
-   (= active tool-id)))
+ :=> =)
 
 (rf/reg-sub
  ::editing?
  :<- [::active]
- (fn [active _]
-   (= active ::tool.impl.base.edit/edit)))
+ :-> (partial = ::tool.impl.base.edit/edit))
 
 (rf/reg-sub
  ::not-active?
  :<- [::active]
- (fn [active [_ tool-id]]
-   (not= active tool-id)))
+ :=> not=)
 
 (rf/reg-sub
  ::cached
