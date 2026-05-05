@@ -6,7 +6,6 @@
    [renderer.app.subs :as-alias app.subs]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.handlers :as element.handlers]
-   [renderer.element.hierarchy :as element.hierarchy]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.element :as utils.element]
    [renderer.utils.map :as utils.map]))
