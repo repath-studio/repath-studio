@@ -99,10 +99,11 @@
   ([db]
    (into #{} (selected-ids) (entities db))))
 
+(m/=> selected-non-virtual-ids [:-> App [:set ElementId]])
 (defn selected-non-virtual-ids
   [db]
   (into #{} (comp (selected)
-                  (filter (complement utils.element/virtual?))
+                  (remove utils.element/virtual?)
                   (map :id)) (entities db)))
 
 (m/=> children-ids [:-> App ElementId [:vector ElementId]])

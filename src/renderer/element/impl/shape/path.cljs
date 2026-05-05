@@ -49,7 +49,7 @@
 
 (defmethod element.hierarchy/bbox :path
   [el]
-  (-> el :attrs :d svgPathBbox js->clj))
+  (-> el :attrs :d svgPathBbox vec))
 
 (defmethod element.hierarchy/render-edit :path
   [el]
