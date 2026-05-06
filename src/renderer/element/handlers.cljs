@@ -153,6 +153,12 @@
                (into []))
       [0 0]))
 
+(m/=> adjusted-point [:-> App Vec2 Vec2])
+(defn adjusted-point
+  [db point]
+  (->> (parent-offset db)
+       (matrix/sub point)))
+
 (m/=> adjusted-bbox [:-> App ElementId [:maybe BBox]])
 (defn adjusted-bbox
   [db id]
