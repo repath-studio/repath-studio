@@ -11,6 +11,7 @@
    [renderer.tool.impl.element.ellipse]
    [renderer.tool.impl.element.image]
    [renderer.tool.impl.element.line]
+   [renderer.tool.impl.element.path]
    [renderer.tool.impl.element.poly]
    [renderer.tool.impl.element.polygon]
    [renderer.tool.impl.element.polyline]
@@ -57,7 +58,8 @@
 (rf/dispatch [::action.events/register-action-group
               {:id :tools/elements
                :label [::elements "Elements"]
-               :actions [:tool/circle
+               :actions [:tool/path
+                         :tool/circle
                          :tool/ellipse
                          :tool/rect
                          :tool/line
