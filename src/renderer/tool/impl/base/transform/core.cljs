@@ -53,12 +53,13 @@
      (when (and bbox (contains? #{:edit :idle} state))
        [:g
         [utils.svg/cross [x y] (* handle-size 1.5)]
-        [tool.views/circle-handle {:id :pivot-handle
-                                   :x x
-                                   :y y
-                                   :type :handle
-                                   :label [::pivot-point "pivot point"]
-                                   :action :edit}]])]))
+        [tool.views/handle {:id :pivot-handle
+                            :x x
+                            :y y
+                            :rounded true
+                            :type :handle
+                            :label [::pivot-point "pivot point"]
+                            :action :edit}]])]))
 
 (m/=> bounding-box [:-> Element boolean? any?])
 (defn bounding-box

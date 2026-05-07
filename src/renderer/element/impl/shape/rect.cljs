@@ -114,9 +114,10 @@
            :y (+ min-y ry)
            :id :ry
            :label [::ry-handle "y radius handle"]}]
-         (mapv (comp tool.views/circle-handle
+         (mapv (comp tool.views/handle
                      (partial merge {:type :handle
                                      :action :edit
+                                     :rounded true
                                      :element-id (:id el)})))
          (into [:g [element.impl.box/render-edit-handles el-bbox (:id el)]]))))
 
@@ -137,7 +138,7 @@
       curved? (conj "A" rx ry 0 0 1 (- (+ x width) rx) (+ y height))
       :always (conj "H" (+ x rx))
       curved? (conj "A" rx ry 0 0 1 x (- (+ y height) ry))
-      :always (conj "V" (+ y ry))
+      curved? (conj "V" (+ y ry))
       curved? (conj "A" rx ry 0 0 1 (+ x rx) y)
       :always (conj "z")
       :always (->> (string/join " ")))))

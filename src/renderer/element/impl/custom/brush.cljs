@@ -185,14 +185,13 @@
                      (let [[x y] (mapv utils.length/unit->px [x y])
                            [x y] (matrix/add (utils.element/offset el) [x y])]
                        ^{:key index}
-                       [tool.views/square-handle {:id (keyword (str index))
-                                                  :x x
-                                                  :y y
-                                                  :type :handle
-                                                  :label [::brush-point
-                                                          "brush point"]
-                                                  :action :edit
-                                                  :element-id (:id el)}]))
+                       [tool.views/handle {:id (keyword (str index))
+                                           :x x
+                                           :y y
+                                           :type :handle
+                                           :label [::brush-point "brush point"]
+                                           :action :edit
+                                           :element-id (:id el)}]))
                    (-> el :attrs :points points->vec))])
 
 (defmethod element.hierarchy/edit :brush

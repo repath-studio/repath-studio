@@ -104,17 +104,19 @@
 
      [utils.svg/label (utils.length/->fixed ry 2 false) {:x cx
                                                          :y (- cy (/ ry 2))}]
-     (map (fn [handle]
-            ^{:key (:id handle)}
-            [tool.views/square-handle
-             (merge handle {:type :handle
-                            :action :edit
-                            :element-id (:id el)})])
-          [{:x (+ cx rx)
+
+     (->> [{:x (+ cx rx)
             :y cy
             :id :rx
+            :cursor "ew-resize"
             :label [::rx-handle "x radius handle"]}
            {:x cx
             :y (- cy ry)
             :id :ry
-            :label [::ry-handle "y radius handle"]}])]))
+            :cursor "ns-resize"
+            :label [::ry-handle "y radius handle"]}]
+          (mapv (comp tool.views/handle
+                      (partial merge {:type :handle
+                                      :action :edit
+                                      :element-id (:id el)})))
+          (into [:g]))]))

@@ -75,13 +75,13 @@
                                          (mapv utils.length/unit->px)
                                          (matrix/add offset))]
                           [:g
-                           [tool.views/square-handle {:id (keyword (str index))
-                                                      :x x
-                                                      :y y
-                                                      :label [::point "point"]
-                                                      :type :handle
-                                                      :action :edit
-                                                      :element-id (:id el)}]
+                           [tool.views/handle {:id (keyword (str index))
+                                               :x x
+                                               :y y
+                                               :label [::point "point"]
+                                               :type :handle
+                                               :action :edit
+                                               :element-id (:id el)}]
                            (when is-active
                              [utils.svg/label
                               (->> [x y]
@@ -95,9 +95,7 @@
 (defmethod element.hierarchy/edit ::element.hierarchy/poly
   [el offset handle lock?]
   (let [index (js/parseInt (name handle))
-        [x y] (cond-> offset
-                lock?
-                (input.handlers/lock-direction))
+        [x y] (cond-> offset lock? input.handlers/lock-direction)
         transform-point (fn [[px py]]
                           (list (utils.length/transform px + x)
                                 (utils.length/transform py + y)))]

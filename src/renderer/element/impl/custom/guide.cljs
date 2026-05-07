@@ -97,13 +97,13 @@
   [el]
   (let [{:keys [attrs]} el
         {:keys [x y]} attrs]
-    [tool.views/square-handle {:x x
-                               :y y
-                               :id :position
-                               :label [::position "position"]
-                               :type :handle
-                               :action :edit
-                               :element-id (:id el)}]))
+    [tool.views/handle {:x x
+                        :y y
+                        :id :position
+                        :label [::position "position"]
+                        :type :handle
+                        :action :edit
+                        :element-id (:id el)}]))
 
 (defmethod attribute.hierarchy/description [:guide :orientation]
   []
