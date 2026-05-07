@@ -48,8 +48,8 @@
              [min-x min-y] bbox
              [w h] (utils.bounds/->dimensions bbox)
              pointer-handler (partial input.impl.pointer/handler! el)
-             zoom @(rf/subscribe [::document.subs/zoom])
-             stroke-width (max (:stroke-width attrs) (/ 20 zoom))]
+             handle-size @(rf/subscribe [::document.subs/handle-size])
+             stroke-width (max (:stroke-width attrs) handle-size)]
          [:rect {:x min-x
                  :y min-y
                  :width w
