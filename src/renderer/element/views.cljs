@@ -13,8 +13,8 @@
   [el]
   (let [{:keys [attrs tag content]} el
         pointer-handler (partial input.impl.pointer/handler! el)
-        zoom @(rf/subscribe [::document.subs/zoom])
-        stroke-width (max (:stroke-width attrs) (/ 20 zoom))]
+        handle-size @(rf/subscribe [::document.subs/handle-size])
+        stroke-width (max (:stroke-width attrs) handle-size)]
     [tag
      (merge (dissoc attrs :style)
             {:on-pointer-up pointer-handler

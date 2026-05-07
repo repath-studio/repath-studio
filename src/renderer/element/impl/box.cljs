@@ -49,20 +49,19 @@
 
 (defn render-edit-handles
   [[min-x min-y max-x max-y] element-id]
-  [:g
-   (for [handle [{:x min-x
-                  :y min-y
-                  :id :position
-                  :label [::position-handle "position handle"]}
-                 {:x max-x
-                  :y max-y
-                  :id :size
-                  :label [::size-handle "size handle"]}]]
-     (let [handle (merge handle {:type :handle
-                                 :action :edit
-                                 :element-id element-id})]
-       ^{:key (:id handle)}
-       [tool.views/square-handle handle]))])
+  (->> [{:x min-x
+         :y min-y
+         :id :position
+         :label [::position-handle "position handle"]}
+        {:x max-x
+         :y max-y
+         :id :size
+         :label [::size-handle "size handle"]}]
+       (mapv (comp tool.views/square-handle
+                   (partial merge {:type :handle
+                                   :action :edit
+                                   :element-id element-id})))
+       (into [:g])))
 
 (defmethod element.hierarchy/render-edit ::element.hierarchy/box
   [el]

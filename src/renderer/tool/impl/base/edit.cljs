@@ -69,9 +69,9 @@
       (element.handlers/hover el-id))))
 
 (defmethod tool.hierarchy/on-drag-start [::edit :idle]
-  [db e]
+  [db _e]
   (cond-> db
-    (= (-> e :element :type) :handle)
+    (= (-> db :clicked-element :type) :handle)
     (tool.handlers/set-state :edit)))
 
 (defmethod tool.hierarchy/on-drag [::edit :edit]
