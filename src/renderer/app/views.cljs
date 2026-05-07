@@ -420,8 +420,7 @@
         md? @(rf/subscribe [::window.subs/md?])
         loading? @(rf/subscribe [::app.subs/loading?])
         theme @(rf/subscribe [::theme.subs/theme])]
-    (if loading?
-      (when-not desktop? [:div.loader])
+    (when-not loading?
       [:> Direction/Provider {:dir lang-dir}
        [:> Tooltip/Provider
         [:div.flex.flex-col.h-full.overflow-hidden.justify-between
