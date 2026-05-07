@@ -169,6 +169,7 @@
            :id :bottom-middle
            :cursor "ns-resize"}]
          (filter (comp show? :id))
-         (map #(vector square-handle (merge % {:type :handle
-                                               :action :scale})))
-         (into [:g {:key :bounding-corners}]))))
+         (mapv (comp square-handle
+                     (partial merge {:type :handle
+                                     :action :scale})))
+         (into [:g]))))

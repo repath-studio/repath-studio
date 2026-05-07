@@ -106,21 +106,19 @@
         [_min-x min-y max-x _max-y] el-bbox
         {{:keys [rx ry]} :attrs} el
         [rx ry] (mapv utils.length/unit->px [rx ry])]
-    [:g
-     (element.impl.box/render-edit-handles el-bbox (:id el))
-     (for [handle [{:x (- max-x rx)
-                    :y min-y
-                    :id :rx
-                    :label [::rx-handle "x radius handle"]}
-                   {:x max-x
-                    :y (+ min-y ry)
-                    :id :ry
-                    :label [::ry-handle "y radius handle"]}]]
-       (let [handle (merge handle {:type :handle
-                                   :action :edit
-                                   :element-id (:id el)})]
-         ^{:key (:id handle)}
-         [tool.views/circle-handle handle]))]))
+    (->> [{:x (- max-x rx)
+           :y min-y
+           :id :rx
+           :label [::rx-handle "x radius handle"]}
+          {:x max-x
+           :y (+ min-y ry)
+           :id :ry
+           :label [::ry-handle "y radius handle"]}]
+         (mapv (comp tool.views/circle-handle
+                     (partial merge {:type :handle
+                                     :action :edit
+                                     :element-id (:id el)})))
+         (into [:g [element.impl.box/render-edit-handles el-bbox (:id el)]]))))
 
 (defmethod element.hierarchy/path :rect
   [el]
