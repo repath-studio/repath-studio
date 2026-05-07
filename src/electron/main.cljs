@@ -127,7 +127,6 @@
                   :icon (resource-path "/public/img/icon.png")
                   :frame false
                   :show false
-                  :transparent true
                   :webPreferences
                   #js {:sandbox false
                        :preload (.join path js/__dirname "preload.js")}}))
@@ -144,10 +143,9 @@
 
     (.on ^js @main-window "ready-to-show" #(on-ready-to-show! @main-window))
 
-    (.loadURL ^js @main-window
-              (if config/debug?
-                "http://localhost:8080"
-                (resource-path "/public/index.html")))
+    (.loadURL ^js @main-window (if config/debug?
+                                 "http://localhost:8080"
+                                 (resource-path "/public/index.html")))
 
     (set-window-open-handler!)
     (register-web-contents-events!)
