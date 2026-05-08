@@ -160,8 +160,7 @@
 (m/=> redos [:-> History [:vector HistoryState]])
 (defn redos
   [active-history]
-  (accumulate active-history (fn [current-state]
-                               (-> current-state :children last))))
+  (accumulate active-history (comp last :children)))
 
 (m/=> state-count [:-> App int?])
 (defn state-count
