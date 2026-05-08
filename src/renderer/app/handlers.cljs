@@ -23,8 +23,3 @@
 (defn mobile?
   [db]
   (-> db :platform utils.platform/mobile?))
-
-(m/=> web? [:-> App boolean?])
-(defn web?
-  [db]
-  (-> db :platform utils.platform/web?))
