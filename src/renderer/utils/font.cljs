@@ -40,7 +40,7 @@
                      (.then (fn [buffer]
                               (let [font (opentype/parse buffer)
                                     path (.getPath font text x y font-size)]
-                                (.toPathData path))))))))))
+                                (.toPathData path #js {:flipY false}))))))))))
 
 (m/=> includes-prop? [:-> string? string? boolean?])
 (defn includes-prop?
