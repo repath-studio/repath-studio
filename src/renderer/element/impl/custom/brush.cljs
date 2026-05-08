@@ -181,18 +181,19 @@
 
 (defmethod element.hierarchy/render-edit :brush
   [el]
-  [:g (map-indexed (fn [index [x y]]
-                     (let [[x y] (mapv utils.length/unit->px [x y])
-                           [x y] (matrix/add (utils.element/offset el) [x y])]
-                       ^{:key index}
-                       [tool.views/handle {:id (keyword (str index))
-                                           :x x
-                                           :y y
-                                           :type :handle
-                                           :label [::brush-point "brush point"]
-                                           :action :edit
-                                           :element-id (:id el)}]))
-                   (-> el :attrs :points points->vec))])
+  (->> (-> el :attrs :points)
+       (points->vec)
+       (map-indexed (fn [index [x y]]
+                      (let [[x y] (mapv utils.length/unit->px [x y])
+                            [x y] (matrix/add (utils.element/offset el) [x y])]
+                        [tool.views/handle {:id (keyword (str index))
+                                            :x x
+                                            :y y
+                                            :type :handle
+                                            :label [::brush-point "brush point"]
+                                            :action :edit
+                                            :element-id (:id el)}])))
+       (into [:g])))
 
 (defmethod element.hierarchy/edit :brush
   [el offset handle lock?]
