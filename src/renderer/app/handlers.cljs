@@ -14,22 +14,17 @@
   [db k]
   (contains? (:features db) k))
 
-(m/=> platform [:-> App Platform])
-(defn platform
-  [db]
-  (:platform db))
-
 (m/=> desktop? [:-> App boolean?])
 (defn desktop?
   [db]
-  (utils.platform/desktop? (platform db)))
+  (-> db :platform utils.platform/desktop?))
 
 (m/=> mobile? [:-> App boolean?])
 (defn mobile?
   [db]
-  (utils.platform/mobile? (platform db)))
+  (-> db :platform utils.platform/mobile?))
 
 (m/=> web? [:-> App boolean?])
 (defn web?
   [db]
-  (utils.platform/web? (platform db)))
+  (-> db :platform utils.platform/web?))
