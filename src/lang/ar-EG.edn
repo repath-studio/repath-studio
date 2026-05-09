@@ -399,7 +399,8 @@
  {:click-to-start "انقر لإضافة النقطة الأولى."
   :click-to-add "انقر لإضافة مقطع، أو انقر واسحب لإضافة منحنى."
   :double-click-to-end "انقر مرتين أو انقر بالزر الأيمن لإنهاء المسار."
-  :create-path "إنشاء مسار"}
+  :create-path "إنشاء مسار"
+  :label "مسار"}
 
  :renderer.tool.impl.element.polyline
  {:label "خط متعدد"

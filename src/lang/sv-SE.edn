@@ -366,7 +366,8 @@
   :click-to-add "Klicka för att lägga till ett segment, eller klicka och dra
                  för att lägga till en kurva."
   :double-click-to-end "Dubbelklicka eller högerklicka för att slutföra banan."
-  :create-path "Skapa bana"}
+  :create-path "Skapa bana"
+  :label "Bana"}
 
  :renderer.tool.impl.element.polyline
  {:label "Polylinje"

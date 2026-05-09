@@ -358,7 +358,8 @@
  {:click-to-start "Click to add the first point."
   :click-to-add "Click to add a segment, or click and drag to add a curve."
   :double-click-to-end "Double or right click to finalize the path."
-  :create-path "Create path"}
+  :create-path "Create path"
+  :label "Path"}
 
  :renderer.tool.impl.element.polyline
  {:label "Polyline"

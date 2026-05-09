@@ -416,7 +416,8 @@
                  adicionar uma curva."
   :double-click-to-end "Duplo clique ou clique direito para finalizar o
                         caminho."
-  :create-path "Criar caminho"}
+  :create-path "Criar caminho"
+  :label "Caminho"}
 
  :renderer.tool.impl.element.polyline
  {:label "Polilinha"

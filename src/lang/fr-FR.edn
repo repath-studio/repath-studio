@@ -423,7 +423,8 @@
   :click-to-add "Cliquez pour ajouter un segment, ou cliquez et faites glisser
                  pour ajouter une courbe."
   :double-click-to-end "Double-cliquez ou clic droit pour finaliser le chemin."
-  :create-path "Créer un chemin"}
+  :create-path "Créer un chemin"
+  :label "Tracé"}
 
  :renderer.tool.impl.element.polyline
  {:label "Polyligne"

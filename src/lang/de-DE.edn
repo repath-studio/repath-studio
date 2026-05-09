@@ -432,7 +432,8 @@
                  um eine Kurve hinzuzufügen."
   :double-click-to-end "Doppelklicken oder rechtsklicken, um den Pfad zu
                         finalisieren."
-  :create-path "Pfad erstellen"}
+  :create-path "Pfad erstellen"
+  :label "Pfad"}
 
  :renderer.tool.impl.element.polyline
  {:label "Polylinie"

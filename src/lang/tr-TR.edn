@@ -359,7 +359,8 @@
   :click-to-add "Bir bölüm eklemek için tıklayın veya bir eğri eklemek için
                  tıklayıp sürükleyin."
   :double-click-to-end "Yolu sonlandırmak için çift tıklayın veya sağ tıklayın."
-  :create-path "Yol oluştur"}
+  :create-path "Yol oluştur"
+  :label "Yol"}
 
  :renderer.tool.impl.element.polyline
  {:label "Çoklu çizgi"

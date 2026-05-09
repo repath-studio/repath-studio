@@ -384,7 +384,8 @@
  {:click-to-start "最初のポイントを追加するにはクリック。"
   :click-to-add "セグメントを追加するにはクリック、曲線を追加するにはクリックしてドラッグ。"
   :double-click-to-end "パスを確定するにはダブルクリックまたは右クリック。"
-  :create-path "パスを作成"}
+  :create-path "パスを作成"
+  :label "パス"}
 
  :renderer.tool.impl.element.polyline
  {:label "複線"

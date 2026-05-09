@@ -418,7 +418,8 @@
   :click-to-add "Haga clic para añadir un segmento, o haga clic y arrastre
                  para añadir una curva."
   :double-click-to-end "Doble clic o clic derecho para finalizar el trazado."
-  :create-path "Crear trazado"}
+  :create-path "Crear trazado"
+  :label "Trazado"}
 
  :renderer.tool.impl.element.polyline
  {:label "Polilínea"

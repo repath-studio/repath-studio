@@ -413,7 +413,8 @@
                  для добавления кривой."
   :double-click-to-end "Дважды щёлкните или щёлкните правой кнопкой мыши для
                         завершения пути."
-  :create-path "Создать путь"}
+  :create-path "Создать путь"
+  :label "Контур"}
 
  :renderer.tool.impl.element.polyline
  {:label "Ломаная"
