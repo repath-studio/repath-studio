@@ -4,7 +4,6 @@
    [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [re-frame.core :as rf]
-   [renderer.app.subs :as-alias app.subs]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
@@ -70,7 +69,7 @@
                    (mapv utils.length/unit->px)
                    (matrix/add offset))]
     [:g
-     [tool.views/handle {:id (keyword (str index))
+     [tool.views/handle {:id id
                          :x x
                          :y y
                          :label [::point "point"]
