@@ -103,7 +103,7 @@
                       :offset offset}]
     (case cmd
       ("M" "L" "T" "A")
-      (point-handle (merge handle-props {:type :end-point
+      (point-handle (merge handle-props {:point-type :end-point
                                          :pos (->px-point seg :end-point)}))
 
       "C"
@@ -141,7 +141,7 @@
       "V"
       (when-let [[prev-x _] prev-ep]
         (let [pos (mapv utils.length/unit->px [prev-x (aget seg 1)])]
-          (point-handle (merge handle-props {:type :end-point
+          (point-handle (merge handle-props {:point-type :end-point
                                              :pos pos}))))
 
       nil)))
