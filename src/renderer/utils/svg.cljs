@@ -59,6 +59,18 @@
      [line start-a end-a]
      [line start-b end-b]]))
 
+(defn arm
+  [start end]
+  [:g
+   [line start end
+    :stroke "var(--bg-primary"
+    :stroke-width 3
+    :stroke-opacity ".5"]
+   [line start end
+    :stroke "var(--foreground-muted)"
+    :stroke-opacity 0.7
+    :stroke-dasharray 4]])
+
 (m/=> arc [:-> Vec2 number? number? number? any?])
 (defn arc
   [[x y] radius start-degrees size-degrees]

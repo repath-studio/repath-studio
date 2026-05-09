@@ -5,12 +5,14 @@
    ["svg-path-bbox" :refer [svgPathBbox]]
    ["svgpath" :as svgpath]
    [clojure.core.matrix :as matrix]
-   [clojure.string :as string]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
+   [renderer.input.handlers :as input.handlers]
    [renderer.tool.views :as tool.views]
    [renderer.utils.element :as utils.element]
-   [renderer.utils.length :as utils.length]))
+   [renderer.utils.length :as utils.length]
+   [renderer.utils.path :as utils.path]
+   [renderer.utils.svg :as utils.svg]))
 
 (hierarchy/derive! :path ::element.hierarchy/shape)
 
@@ -51,49 +53,164 @@
   [el]
   (-> el :attrs :d svgPathBbox vec))
 
+(defn ->px-point
+  [seg point-type]
+  (when-let [[xi yi] (utils.path/point-indices (aget seg 0) point-type)]
+    (->> [(aget seg xi) (aget seg yi)]
+         (mapv utils.length/unit->px))))
+
+(defn render-arms
+  [endpoints offset index seg]
+  (let [prev-ep (get endpoints (dec index))
+        cp0 (->px-point seg :start-control-point)
+        ep (->px-point seg :end-point)]
+    (case (utils.path/segment->cmd seg)
+      "C"
+      (let [cp1 (->px-point seg :end-control-point)]
+        [:<>
+         (when prev-ep
+           [utils.svg/arm prev-ep cp0 offset])
+         [utils.svg/arm cp1 ep offset]])
+
+      "S"
+      [utils.svg/arm cp0 ep offset]
+
+      "Q"
+      [:<>
+       (when prev-ep
+         [utils.svg/arm prev-ep cp0 offset])
+       [utils.svg/arm cp0 ep offset]]
+
+      nil)))
+
+(defn point-handle
+  [{:keys [element-id seg-index point-type pos offset rounded]}]
+  (let [[ax ay] (matrix/add offset pos)]
+    [tool.views/handle {:id (keyword seg-index point-type)
+                        :x ax
+                        :y ay
+                        :type :handle
+                        :action :edit
+                        :rounded rounded
+                        :element-id element-id}]))
+
+(defn render-handles
+  [{:keys [element-id endpoints offset]} index seg]
+  (let [cmd (utils.path/segment->cmd seg)
+        prev-ep (get endpoints (dec index))
+        handle-props {:element-id element-id
+                      :seg-index index
+                      :offset offset}]
+    (case cmd
+      ("M" "L" "T" "A")
+      (point-handle (merge handle-props {:type :end-point
+                                         :pos (->px-point seg :end-point)}))
+
+      "C"
+      [:<>
+       (when prev-ep
+         (point-handle (merge handle-props
+                              {:point-type :start-control-point
+                               :pos (->px-point seg :start-control-point)
+                               :rounded true})))
+       (point-handle (merge handle-props
+                            {:point-type :end-control-point
+                             :pos (->px-point seg :end-control-point)
+                             :rounded true}))
+
+       (point-handle (merge handle-props
+                            {:point-type :end-point
+                             :pos (->px-point seg :end-point)}))]
+
+      ("S" "Q")
+      [:<>
+       (point-handle (merge handle-props
+                            {:point-type :start-control-point
+                             :pos (->px-point seg :start-control-point)
+                             :rounded true}))
+       (point-handle (merge handle-props
+                            {:point-type :end-point
+                             :pos (->px-point seg :end-point)}))]
+
+      "H"
+      (when-let [[_ prev-y] prev-ep]
+        (let [pos (mapv utils.length/unit->px [(aget seg 1) prev-y])]
+          (point-handle (merge handle-props {:point-type :end-point
+                                             :pos pos}))))
+
+      "V"
+      (when-let [[prev-x _] prev-ep]
+        (let [pos (mapv utils.length/unit->px [prev-x (aget seg 1)])]
+          (point-handle (merge handle-props {:type :end-point
+                                             :pos pos}))))
+
+      nil)))
+
+(defn acc-endpoints
+  [segments]
+  (->> (range (.-length segments))
+       (reduce
+        (fn [acc i]
+          (conj acc (utils.path/abs-endpoint (aget segments i) (peek acc))))
+        [])))
+
 (defmethod element.hierarchy/render-edit :path
   [el]
   (let [offset (utils.element/offset el)
-        segments (-> el :attrs :d svgpath .-segments)
-        square-handle (fn [index [x y]]
-                        ^{:key index}
-                        [tool.views/square-handle {:id (keyword (str index))
-                                                   :x x
-                                                   :y y
-                                                   :type :handle
-                                                   :action :edit
-                                                   :element-id (:id el)}])]
-    [:g {:key ::edit-handles}
-     (map-indexed (fn [i segment]
-                    (case (-> segment first string/lower-case)
-                      "m"
-                      (let [point (mapv utils.length/unit->px (rest segment))
-                            [x y] (matrix/add offset point)]
-                        (square-handle i [x y]))
+        segments (-> el :attrs :d svgpath .abs .-segments)
+        endpoints (acc-endpoints segments)]
+    [:g
+     (->> segments
+          (map-indexed (partial render-arms endpoints offset))
+          (into [:g]))
+     (->> segments
+          (map-indexed (partial render-handles {:element-id (:id el)
+                                                :endpoints endpoints
+                                                :offset offset}))
+          (into [:g]))]))
 
-                      "l"
-                      (let [point (mapv utils.length/unit->px (rest segment))
-                            [x y] (matrix/add offset point)]
-                        (square-handle i [x y]))
+(defn translate-seg-point!
+  [segments index point-type [dx dy]]
+  (when-let [seg (aget segments index)]
+    (let [cmd (utils.path/segment->cmd seg)]
+      (case cmd
+        "H"
+        (when (= point-type :end-point)
+          (let [new-seg (.slice seg)]
+            (aset new-seg 1 (utils.length/transform (aget seg 1) + dx))
+            (aset segments index new-seg)))
 
-                      nil))
-                  segments)]))
+        "V"
+        (when (= point-type :end-point)
+          (let [new-seg (.slice seg)]
+            (aset new-seg 1 (utils.length/transform (aget seg 1) + dy))
+            (aset segments index new-seg)))
 
-(defn translate-segment
-  [path index [x y]]
-  (let [segment (aget (.-segments path) index)
-        segment (array (aget segment 0)
-                       (utils.length/transform (aget segment 1) + x)
-                       (utils.length/transform (aget segment 2) + y))]
-    (aset (.-segments path) index segment)
-    path))
+        (when-let [[xi yi] (utils.path/point-indices cmd point-type)]
+          (let [new-seg (.slice seg)]
+            (aset new-seg xi (utils.length/transform (aget seg xi) + dx))
+            (aset new-seg yi (utils.length/transform (aget seg yi) + dy))
+            (aset segments index new-seg)))))))
+
+(defn translate-point
+  [svgpath-obj index point-type delta]
+  (let [segments (.-segments svgpath-obj)]
+    (translate-seg-point! segments index point-type delta)
+    (when (= point-type :end-point)
+      (translate-seg-point! segments index :end-control-point delta)
+      (translate-seg-point! segments (inc index) :start-control-point delta)))
+  svgpath-obj)
 
 (defmethod element.hierarchy/edit :path
-  [el offset handle _lock?]
-  (let [index (js/parseInt (name handle))]
-    (update-in el [:attrs :d] #(-> (svgpath %)
-                                   (translate-segment index offset)
-                                   (.toString)))))
+  [el offset handle lock?]
+  (let [offset (cond-> offset lock? input.handlers/lock-direction)
+        index (js/parseInt (namespace handle))
+        point-type (keyword (name handle))]
+    (update-in el [:attrs :d]
+               #(-> (svgpath %)
+                    (.abs)
+                    (translate-point index point-type offset)
+                    (.toString)))))
 
 (defmethod element.hierarchy/path :path
   [el]

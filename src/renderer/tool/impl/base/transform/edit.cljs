@@ -19,7 +19,7 @@
   (i18n.views/t [::help-edit "Hold %1 to restrict direction."]
                 [[views/kbd "Ctrl"]]))
 
-(m/=> translate-offset [:-> App Vec2 Orientation BBox App])
+(m/=> translate-offset [:-> App Vec2 [:maybe Orientation] BBox App])
 (defn translate-offset
   [db delta axis bbox]
   (let [[delta-x delta-y] delta
