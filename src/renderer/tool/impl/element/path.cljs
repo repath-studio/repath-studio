@@ -82,6 +82,7 @@
        (into [d cmd])
        (string/join " ")))
 
+(m/=> create-el [:-> App App])
 (defn create-el
   [db]
   (let [[x y] (->> (tool.handlers/snapped-offset db)

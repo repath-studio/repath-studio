@@ -61,25 +61,23 @@
 
 (defn render-arms
   [endpoints offset index seg]
-  (let [prev-ep (get endpoints (dec index))
-        cp0 (->px-point seg :start-control-point)
-        ep (->px-point seg :end-point)]
+  (let [prev-ep (some-> (get endpoints (dec index)) (matrix/add offset))
+        cp0 (some-> seg (->px-point :start-control-point) (matrix/add offset))
+        ep (some-> seg (->px-point :end-point) (matrix/add offset))]
     (case (utils.path/segment->cmd seg)
       "C"
-      (let [cp1 (->px-point seg :end-control-point)]
+      (let [cp1 (matrix/add (->px-point seg :end-control-point) offset)]
         [:<>
-         (when prev-ep
-           [utils.svg/arm prev-ep cp0 offset])
-         [utils.svg/arm cp1 ep offset]])
+         (when prev-ep [utils.svg/arm prev-ep cp0])
+         [utils.svg/arm cp1 ep]])
 
       "S"
-      [utils.svg/arm cp0 ep offset]
+      [utils.svg/arm cp0 ep]
 
-      "Q"
+      `"Q"
       [:<>
-       (when prev-ep
-         [utils.svg/arm prev-ep cp0 offset])
-       [utils.svg/arm cp0 ep offset]]
+       (when prev-ep [utils.svg/arm prev-ep cp0])
+       [utils.svg/arm cp0 ep]]
 
       nil)))
 
