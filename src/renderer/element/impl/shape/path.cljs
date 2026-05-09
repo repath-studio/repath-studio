@@ -81,68 +81,60 @@
 
       nil)))
 
-(defn point-handle
-  [{:keys [element-id seg-index point-type pos offset rounded]}]
-  (let [[ax ay] (matrix/add offset pos)]
-    [tool.views/handle {:id (keyword seg-index point-type)
-                        :x ax
-                        :y ay
-                        :type :handle
-                        :action :edit
-                        :rounded rounded
-                        :element-id element-id}]))
+(defn handles
+  [endpoints index seg]
+  (let [cmd (utils.path/segment->cmd seg)
+        prev-ep (get endpoints (dec index))]
+    (case cmd
+      ("M" "L" "T" "A")
+      [{:point-type :end-point
+        :pos (->px-point seg :end-point)}]
+
+      "C"
+      [(when prev-ep
+         {:point-type :start-control-point
+          :pos (->px-point seg :start-control-point)
+          :rounded true})
+       {:point-type :end-control-point
+        :pos (->px-point seg :end-control-point)
+        :rounded true}
+       {:point-type :end-point
+        :pos (->px-point seg :end-point)}]
+
+      ("S" "Q")
+      [{:point-type :start-control-point
+        :pos (->px-point seg :start-control-point)
+        :rounded true}
+       {:point-type :end-point
+        :pos (->px-point seg :end-point)}]
+
+      "H"
+      [(when-let [[_ prev-y] prev-ep]
+         {:point-type :end-point
+          :pos (->> [(aget seg 1) prev-y]
+                    (mapv utils.length/unit->px))})]
+
+      "V"
+      [(when-let [[prev-x _] prev-ep]
+         {:point-type :end-point
+          :pos (->> [prev-x (aget seg 1)]
+                    (mapv utils.length/unit->px))})]
+
+      nil)))
 
 (defn render-handles
   [{:keys [element-id endpoints offset]} index seg]
-  (let [cmd (utils.path/segment->cmd seg)
-        prev-ep (get endpoints (dec index))
-        handle-props {:element-id element-id
-                      :seg-index index
-                      :offset offset}]
-    (case cmd
-      ("M" "L" "T" "A")
-      (point-handle (merge handle-props {:point-type :end-point
-                                         :pos (->px-point seg :end-point)}))
-
-      "C"
-      [:<>
-       (when prev-ep
-         (point-handle (merge handle-props
-                              {:point-type :start-control-point
-                               :pos (->px-point seg :start-control-point)
-                               :rounded true})))
-       (point-handle (merge handle-props
-                            {:point-type :end-control-point
-                             :pos (->px-point seg :end-control-point)
-                             :rounded true}))
-
-       (point-handle (merge handle-props
-                            {:point-type :end-point
-                             :pos (->px-point seg :end-point)}))]
-
-      ("S" "Q")
-      [:<>
-       (point-handle (merge handle-props
-                            {:point-type :start-control-point
-                             :pos (->px-point seg :start-control-point)
-                             :rounded true}))
-       (point-handle (merge handle-props
-                            {:point-type :end-point
-                             :pos (->px-point seg :end-point)}))]
-
-      "H"
-      (when-let [[_ prev-y] prev-ep]
-        (let [pos (mapv utils.length/unit->px [(aget seg 1) prev-y])]
-          (point-handle (merge handle-props {:point-type :end-point
-                                             :pos pos}))))
-
-      "V"
-      (when-let [[prev-x _] prev-ep]
-        (let [pos (mapv utils.length/unit->px [prev-x (aget seg 1)])]
-          (point-handle (merge handle-props {:point-type :end-point
-                                             :pos pos}))))
-
-      nil)))
+  (->> (handles endpoints index seg)
+       (map (fn [{:keys [point-type pos rounded]}]
+              (let [[ax ay] (matrix/add offset pos)]
+                [tool.views/handle {:id (keyword index point-type)
+                                    :x ax
+                                    :y ay
+                                    :type :handle
+                                    :action :edit
+                                    :rounded rounded
+                                    :element-id element-id}])))
+       (into [:g])))
 
 (defn acc-endpoints
   [segments]
