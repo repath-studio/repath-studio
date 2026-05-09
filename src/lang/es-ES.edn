@@ -413,6 +413,13 @@
   :idle "Arrastra la regla al lienzo para crear una guía."
   :create "Suelta para finalizar la guía."}
 
+ :renderer.tool.impl.element.path
+ {:click-to-start "Haga clic para añadir el primer punto."
+  :click-to-add "Haga clic para añadir un segmento, o haga clic y arrastre
+                 para añadir una curva."
+  :double-click-to-end "Doble clic o clic derecho para finalizar el trazado."
+  :create-path "Crear trazado"}
+
  :renderer.tool.impl.element.polyline
  {:label "Polilínea"
   :create-polyline "Crear polilínea"}

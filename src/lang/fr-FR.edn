@@ -418,6 +418,13 @@
   :idle "Faites glisser la règle sur le canevas pour créer un guide."
   :create "Déposez pour finaliser le guide."}
 
+ :renderer.tool.impl.element.path
+ {:click-to-start "Cliquez pour ajouter le premier point."
+  :click-to-add "Cliquez pour ajouter un segment, ou cliquez et faites glisser
+                 pour ajouter une courbe."
+  :double-click-to-end "Double-cliquez ou clic droit pour finaliser le chemin."
+  :create-path "Créer un chemin"}
+
  :renderer.tool.impl.element.polyline
  {:label "Polyligne"
   :create-polyline "Créer polyligne"}

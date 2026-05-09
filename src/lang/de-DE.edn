@@ -426,6 +426,14 @@
          erstellen."
   :create "Loslassen, um die Führungslinie zu finalisieren."}
 
+ :renderer.tool.impl.element.path
+ {:click-to-start "Klicken, um den ersten Punkt hinzuzufügen."
+  :click-to-add "Klicken, um ein Segment hinzuzufügen, oder klicken und ziehen,
+                 um eine Kurve hinzuzufügen."
+  :double-click-to-end "Doppelklicken oder rechtsklicken, um den Pfad zu
+                        finalisieren."
+  :create-path "Pfad erstellen"}
+
  :renderer.tool.impl.element.polyline
  {:label "Polylinie"
   :create-polyline "Polylinie erstellen"}
