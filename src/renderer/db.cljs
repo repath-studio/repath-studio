@@ -13,12 +13,6 @@
 (def Orientation
   [:enum :vertical :horizontal])
 
-(def BooleanOperation
-  [:enum :unite :intersect :subtract :exclude :divide])
-
-(def PathManipulation
-  [:enum :simplify :smooth :flatten :reverse])
-
 (def JS_Element
   [:fn (fn [x] (instance? js/Element x))])
 
@@ -30,3 +24,34 @@
 
 (def JS_Promise
   [:fn (fn [x] (instance? js/Promise x))])
+
+(def BooleanOperation
+  [:enum :unite :intersect :subtract :exclude :divide])
+
+(def PathManipulation
+  [:enum :simplify :smooth :flatten :reverse])
+
+(def PathPointType
+  [:enum
+   :start-control-point
+   :end-control-point
+   :end-point])
+
+(def PathCommand
+  [:enum
+   "M" "m"
+   "L" "l"
+   "H" "h"
+   "V" "v"
+   "C" "c"
+   "S" "s"
+   "Q" "q"
+   "T" "t"
+   "A" "a"
+   "Z" "z"])
+
+(def PathSegment
+  [:tuple PathCommand [:* any?]])
+
+(def PathSegments
+  [:vector PathSegment])

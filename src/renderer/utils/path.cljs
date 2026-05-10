@@ -4,7 +4,13 @@
    ["svgpath" :as svgpath]
    [clojure.string :as string]
    [malli.core :as m]
-   [renderer.db :refer [BooleanOperation PathManipulation Vec2]]))
+   [renderer.db :refer [BooleanOperation
+                        PathSegment
+                        PathSegments
+                        PathCommand
+                        PathManipulation
+                        PathPointType
+                        Vec2]]))
 
 (m/=> get-d [:-> any? string?])
 (defn get-d
@@ -24,13 +30,7 @@
       :reverse (.reverse path))
     (get-d path)))
 
-(def PointType
-  [:enum
-   :start-control-point
-   :end-control-point
-   :end-point])
-
-(m/=> point-indices [:-> string? PointType [:maybe Vec2]])
+(m/=> point-indices [:-> string? PathPointType [:maybe Vec2]])
 (defn point-indices
   "Returns the vector indices if the point-type is defined for the command.
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/d#path_commands"
@@ -57,12 +57,12 @@
 
     nil))
 
-(m/=> segment->command [:-> [:maybe [:vector any?]] [:maybe string?]])
+(m/=> segment->command [:-> [:maybe PathSegment] [:maybe PathCommand]])
 (defn segment->command
   [segment]
   (some-> segment first string/upper-case))
 
-(m/=> segment-point [:-> [:maybe [:vector any?]] PointType [:maybe Vec2]])
+(m/=> segment-point [:-> [:maybe PathSegment] PathPointType [:maybe Vec2]])
 (defn segment-point
   [segment point-type]
   (when-let [[xi yi] (some-> segment
@@ -70,7 +70,7 @@
                              (point-indices point-type))]
     [(get segment xi) (get segment yi)]))
 
-(m/=> abs-endpoint [:-> [:vector any?] [:maybe Vec2] [:maybe Vec2]])
+(m/=> abs-endpoint [:-> PathSegment [:maybe Vec2] [:maybe Vec2]])
 (defn abs-endpoint
   "Returns the endpoint for an absolute segment.
    For horizontal and vertical line commands the segment only stores one
@@ -85,7 +85,7 @@
 
     (segment-point segment :end-point)))
 
-(m/=> outgoing-cp [:-> [:maybe [:vector any?]] [:maybe Vec2]])
+(m/=> outgoing-cp [:-> [:maybe PathSegment] [:maybe Vec2]])
 (defn outgoing-cp
   "Returns the outgoing control point.
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/d#cubic_b%C3%A9zier_curve"
@@ -98,16 +98,19 @@
         [(- (* 2 ex) cp2x)
          (- (* 2 ey) cp2y)]))))
 
-(m/=> string->segments [:-> string? [:vector any?]])
+(m/=> string->segments [:-> string? PathSegments])
 (defn string->segments
   [d]
   (-> d svgpath .abs .-segments js->clj))
 
-(def segments->string
-  (comp (partial string/join " ")
-        flatten))
+(m/=> segments->string [:-> PathSegments string?])
+(defn segments->string
+  [segments]
+  (->> segments
+       (flatten)
+       (string/join " ")))
 
-(m/=> drop-last-segment [:-> [:vector any?] [:vector any?]])
+(m/=> drop-last-segment [:-> PathSegments PathSegments])
 (defn drop-last-segment
   [segments]
   (cond-> segments

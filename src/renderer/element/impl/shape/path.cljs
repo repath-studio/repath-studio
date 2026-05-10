@@ -5,6 +5,8 @@
    ["svg-path-bbox" :refer [svgPathBbox]]
    ["svgpath" :as svgpath]
    [clojure.core.matrix :as matrix]
+   [malli.core :as m]
+   [renderer.db :refer [PathSegment PathSegments PathPointType Vec2]]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
    [renderer.input.handlers :as input.handlers]
@@ -53,12 +55,11 @@
   [el]
   (-> el :attrs :d svgPathBbox vec))
 
+(m/=> ->px-point [:-> PathSegment PathPointType [:maybe Vec2]])
 (defn ->px-point
-  [seg point-type]
-  (when-let [[xi yi] (-> (utils.path/segment->command seg)
-                         (utils.path/point-indices point-type))]
-    (->> [(get seg xi) (get seg yi)]
-         (mapv utils.length/unit->px))))
+  [segment point-type]
+  (some->> (utils.path/segment-point segment point-type)
+           (mapv utils.length/unit->px)))
 
 (defn render-arms
   [endpoints offset index segment]
@@ -86,6 +87,8 @@
 
       nil)))
 
+(m/=> handles [:-> [:vector Vec2] int? PathSegment [:maybe PathPointType]
+               [:maybe [:vector map?]]])
 (defn handles
   [endpoints index segment]
   (let [command (utils.path/segment->command segment)
@@ -141,6 +144,7 @@
                                     :element-id element-id}])))
        (into [:g])))
 
+(m/=> acc-endpoints [:-> PathSegments [:vector Vec2]])
 (defn acc-endpoints
   [segments]
   (reduce (fn [acc segment]
@@ -163,36 +167,37 @@
                                                 :offset offset}))
           (into [:g]))]))
 
+(m/=> translate-seg-point [:-> PathSegments number? PathPointType Vec2
+                           PathSegment])
 (defn translate-seg-point
   [segments index point-type delta]
-  (if-let [segment (get segments index)]
-    (let [[dx dy] delta
-          cmd (utils.path/segment->command segment)]
-      (case cmd
-        "H"
+  (let [segment (get segments index)
+        [dx dy] delta
+        cmd (utils.path/segment->command segment)]
+    (case cmd
+      "H"
+      (cond-> segments
+        (= point-type :end-point)
+        (assoc index (assoc segment 1 (-> (second segment)
+                                          (utils.length/transform + dx)))))
+
+      "V"
+      (cond-> segments
+        (= point-type :end-point)
+        (assoc index (assoc segment 1 (-> (second segment)
+                                          (utils.length/transform + dy)))))
+
+      (let [[xi yi] (utils.path/point-indices cmd point-type)]
         (cond-> segments
-          (= point-type :end-point)
-          (assoc index (assoc segment 1 (-> (second segment)
-                                            (utils.length/transform + dx)))))
+          (and xi yi)
+          (assoc index
+                 (assoc segment
+                        xi (-> (get segment xi)
+                               (utils.length/transform + dx))
+                        yi (-> (get segment yi)
+                               (utils.length/transform + dy)))))))))
 
-        "V"
-        (cond-> segments
-          (= point-type :end-point)
-          (assoc index (assoc segment 1 (-> (second segment)
-                                            (utils.length/transform + dy)))))
-
-        (let [[xi yi] (utils.path/point-indices cmd point-type)]
-          (cond-> segments
-            (and xi yi)
-            (assoc index
-                   (assoc segment
-                          xi (-> (get segment xi)
-                                 (utils.length/transform + dx))
-                          yi (-> (get segment yi)
-                                 (utils.length/transform + dy))))))))
-
-    segments))
-
+(m/=> translate-point [:-> int? PathPointType Vec2 PathSegments PathSegments])
 (defn translate-point
   [index point-type delta segments]
   (let [segments (translate-seg-point segments index point-type delta)]
