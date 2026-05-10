@@ -2,7 +2,6 @@
   "Pen/bezier path drawing tool.
    Click to place anchor points; click and drag to pull out bezier handles."
   (:require
-   ["svgpath" :as svgpath]
    [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [malli.core :as m]
@@ -40,23 +39,12 @@
    [:div (i18n.views/t [::double-click-to-end
                         "Double or right click to finalize the path."])]])
 
-(m/=> drop-last-segment [:-> string? string?])
-(defn drop-last-segment
-  [d]
-  (let [path (-> (svgpath d) .abs)
-        segs (.-segments path)]
-    (if (> (.-length segs) 1)
-      (do (.pop segs)
-          (.toString path))
-      d)))
-
-(m/=> next-control-point [:-> string? [:tuple string? string?]])
+(m/=> next-control-point [:-> [:vector any?] [:tuple string? string?]])
 (defn next-control-point
-  [d]
-  (let [base-d (drop-last-segment d)
-        seg (utils.path/last-seg base-d)]
-    (or (utils.path/outgoing-cp seg)
-        (utils.path/segment-point seg :end-point))))
+  [segments]
+  (let [segment (-> segments utils.path/drop-last-segment last)]
+    (or (utils.path/outgoing-cp segment)
+        (utils.path/segment-point segment :end-point))))
 
 (m/=> adjusted-pointer-position [:-> App Vec2])
 (defn adjusted-pointer-position
@@ -77,9 +65,9 @@
 
 (m/=> add-to-path [:-> string? string?])
 (defn add-to-path
-  [d cmd & coords]
+  [d command & coords]
   (->> (mapv utils.length/->fixed coords)
-       (into [d cmd])
+       (into [d command])
        (string/join " ")))
 
 (m/=> create-el [:-> App App])
@@ -110,13 +98,15 @@
   (let [[x y] (adjusted-pointer-position db)]
     (update-path
      db
-     #(let [base (drop-last-segment %)
-            last-seg (utils.path/last-seg base)
-            out-cp (utils.path/outgoing-cp last-seg)]
-        (apply add-to-path base
-               (if out-cp
-                 ["C" (first out-cp) (second out-cp) x y x y]
-                 ["L" x y]))))))
+     #(let [segments (-> (utils.path/string->segments %)
+                         (utils.path/drop-last-segment))
+            last-segment (last segments)
+            out-cp (utils.path/outgoing-cp last-segment)]
+        (->> (if out-cp
+               ["C" (first out-cp) (second out-cp) x y x y]
+               ["L" x y])
+             (into segments)
+             (utils.path/segments->string))))))
 
 (defmethod tool.hierarchy/on-pointer-up [::path :create]
   [db _e]
@@ -129,12 +119,13 @@
         drag-pos (adjusted-pointer-position db)
         [cp2-x cp2-y] (-> (matrix/mul anchor 2)
                           (matrix/sub drag-pos))]
-    (update-path db #(let [base (drop-last-segment %)
-                           segs (-> % svgpath .abs .-segments)]
-                       (if (> (.-length segs) 1)
+    (update-path db #(let [segments (utils.path/string->segments %)]
+                       (if (> (count segments) 1)
                          (let [[ax ay] anchor
-                               [cp1-x cp1-y] (next-control-point %)]
-                           (add-to-path base "C" cp1-x cp1-y cp2-x cp2-y ax ay))
+                               [cp1-x cp1-y] (next-control-point segments)]
+                           (->> ["C" cp1-x cp1-y cp2-x cp2-y ax ay]
+                                (into (utils.path/drop-last-segment segments))
+                                (utils.path/segments->string)))
                          %)))))
 
 (defmethod tool.hierarchy/on-drag-end [::path :create]
@@ -145,7 +136,9 @@
 
 (defmethod tool.hierarchy/on-double-click [::path :create]
   [db e]
-  (-> (update-path db drop-last-segment)
+  (-> (update-path db (comp utils.path/segments->string
+                            utils.path/drop-last-segment
+                            utils.path/string->segments))
       (history.handlers/finalize (:timestamp e) [::create-path "Create path"])
       (tool.handlers/deactivate)))
 
