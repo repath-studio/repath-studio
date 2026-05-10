@@ -5,7 +5,6 @@
    ["svg-path-bbox" :refer [svgPathBbox]]
    ["svgpath" :as svgpath]
    [clojure.core.matrix :as matrix]
-   [clojure.string :as string]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
    [renderer.input.handlers :as input.handlers]
