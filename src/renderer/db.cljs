@@ -51,7 +51,7 @@
    "Z" "z"])
 
 (def PathSegment
-  [:tuple PathCommand [:* any?]])
+  [:cat PathCommand [:* number?]])
 
 (def PathSegments
   [:vector PathSegment])

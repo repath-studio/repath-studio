@@ -35,9 +35,10 @@
 
 (defmethod element.hierarchy/translate :path
   [el [x y]]
-  (update-in el [:attrs :d] #(-> (svgpath %)
-                                 (.translate x y)
-                                 (.toString))))
+  (update-in el [:attrs :d] #(some-> %
+                                     (svgpath)
+                                     (.translate x y)
+                                     (.toString))))
 
 (defmethod element.hierarchy/scale :path
   [el ratio pivot-point]
@@ -46,14 +47,15 @@
         [x y] (element.hierarchy/bbox el)
         [x y] (-> (matrix/add [x y] offset)
                   (matrix/sub (matrix/mul ratio [x y])))]
-    (update-in el [:attrs :d] #(-> (svgpath %)
-                                   (.scale scale-x scale-y)
-                                   (.translate x y)
-                                   (.toString)))))
+    (update-in el [:attrs :d] #(some-> %
+                                       (svgpath)
+                                       (.scale scale-x scale-y)
+                                       (.translate x y)
+                                       (.toString)))))
 
 (defmethod element.hierarchy/bbox :path
   [el]
-  (-> el :attrs :d svgPathBbox vec))
+  (some-> el :attrs :d svgPathBbox vec))
 
 (m/=> ->px-point [:-> PathSegment PathPointType [:maybe Vec2]])
 (defn ->px-point

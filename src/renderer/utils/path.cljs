@@ -98,10 +98,10 @@
         [(- (* 2 ex) cp2x)
          (- (* 2 ey) cp2y)]))))
 
-(m/=> string->segments [:-> string? PathSegments])
+(m/=> string->segments [:-> [:maybe string?] [:maybe PathSegments]])
 (defn string->segments
   [d]
-  (-> d svgpath .abs .-segments js->clj))
+  (some-> d svgpath .abs .-segments js->clj))
 
 (m/=> segments->string [:-> PathSegments string?])
 (defn segments->string
