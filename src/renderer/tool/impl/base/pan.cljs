@@ -57,5 +57,4 @@
                :label [::tool-pan "Pan"]
                :icon "hand"
                :event [::tool.events/activate ::pan]
-               :active [::tool.subs/active? ::pan]
-               :shortcuts [{:keyCode (utils.key/codes "P")}]}])
+               :active [::tool.subs/active? ::pan]}])
