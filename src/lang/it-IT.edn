@@ -370,6 +370,14 @@
                           d'aspetto deve adattarsi in un viewport con un
                           rapporto d'aspetto diverso."}
 
+ :renderer.tool.impl.element.path
+ {:click-to-start "Clicca per aggiungere il primo punto."
+  :click-to-add "Clicca per aggiungere un segmento, o clicca e trascina per
+                 aggiungere una curva."
+  :double-click-to-end "Doppio clic o clic destro per finalizzare il percorso."
+  :create-path "Crea percorso"
+  :label "Tracciato"}
+
  :renderer.tool.impl.element.polyline
  {:label "Polilinea"
   :create-polyline "Crea polilinea"}

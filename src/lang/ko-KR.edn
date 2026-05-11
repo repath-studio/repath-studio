@@ -324,6 +324,13 @@
                           viewBox가 있는 요소가 다른 종횡비를 가진 뷰포트에
                           어떻게 맞춰져야 하는지를 나타냅니다."}
 
+ :renderer.tool.impl.element.path
+ {:click-to-start "첫 번째 점을 추가하려면 클릭합니다."
+  :click-to-add "세그먼트를 추가하려면 클릭하고, 곡선을 추가하려면 클릭하고 드래그합니다."
+  :double-click-to-end "더블 클릭 또는 오른쪽 클릭으로 패스를 완료합니다."
+  :create-path "패스 생성"
+  :label "패스"}
+
  :renderer.tool.impl.element.polyline
  {:label "다중선"
   :create-polyline "다중선 생성"}

@@ -350,6 +350,13 @@
   :idle "将标尺拖到画布上以创建参考线。"
   :create "放下以完成参考线。"}
 
+ :renderer.tool.impl.element.path
+ {:click-to-start "点击添加第一个点。"
+  :click-to-add "点击添加线段，或点击并拖动以添加曲线。"
+  :double-click-to-end "双击或右键单击以完成路径。"
+  :create-path "创建路径"
+  :label "路径"}
+
  :renderer.tool.impl.element.polyline
  {:label "折线"
   :create-polyline "创建折线"}

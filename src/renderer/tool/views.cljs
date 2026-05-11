@@ -8,51 +8,24 @@
    [renderer.document.subs :as-alias document.subs]
    [renderer.i18n.views :as i18n.views]
    [renderer.input.impl.pointer :as input.impl.pointer]
+   [renderer.tool.db :refer [Handle]]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.bounds :as utils.bounds]))
 
-(defn circle-handle
+(m/=> handle [:-> Handle any?])
+(defn handle
   [el]
-  (let [{:keys [x y id element-id label]} el
-        zoom @(rf/subscribe [::document.subs/zoom])
-        clicked-element @(rf/subscribe [::app.subs/clicked-element])
-        handle-size @(rf/subscribe [::document.subs/handle-size])
-        pointer-handler (partial input.impl.pointer/handler! el)
-        r (/ handle-size 2)
-        active (and (= (:id clicked-element) id)
-                    (= (:element-id clicked-element) element-id))]
-    [:g
-     [:circle {:cx x
-               :cy y
-               :stroke "var(--accent-foreground)"
-               :stroke-opacity ".5"
-               :stroke-width (/ 3 zoom)
-               :r r
-               :cursor "default"
-               :on-pointer-up pointer-handler
-               :on-pointer-down pointer-handler
-               :on-pointer-move pointer-handler}
-      (when label
-        [:title (i18n.views/t label)])]
-     [:circle {:cx x
-               :cy y
-               :stroke (if active "var(--accent)" "var(--foreground-muted)")
-               :stroke-width (/ 1 zoom)
-               :fill (if active "var(--accent)" "var(--primary)")
-               :r r
-               :pointer-events "none"}]]))
-
-(defn square-handle
-  [el]
-  (let [{:keys [x y id cursor element-id label]} el
+  (let [{:keys [x y id cursor element-id label orientation rounded]} el
         zoom @(rf/subscribe [::document.subs/zoom])
         clicked-element @(rf/subscribe [::app.subs/clicked-element])
         handle-size @(rf/subscribe [::document.subs/handle-size])
         pointer-handler (partial input.impl.pointer/handler! el)
         stroke-width (/ 1 zoom)
-        rx (/ 1 zoom)
-        x (- x (/ handle-size 2))
-        y (- y (/ handle-size 2))
+        vertical-size (cond-> handle-size (= orientation :vertical) (* 0.7))
+        horizontal-size (cond-> handle-size (= orientation :horizontal) (* 0.7))
+        rx (when rounded (/ handle-size 2))
+        x (- x (/ horizontal-size 2))
+        y (- y (/ vertical-size 2))
         active (and (= (:id clicked-element) id)
                     (= (:element-id clicked-element) element-id))]
     [:g
@@ -62,8 +35,8 @@
              :x x
              :y y
              :rx rx
-             :width handle-size
-             :height handle-size
+             :width horizontal-size
+             :height vertical-size
              :cursor (or cursor "move")
              :on-pointer-up pointer-handler
              :on-pointer-down pointer-handler
@@ -76,8 +49,8 @@
              :x x
              :y y
              :rx rx
-             :width handle-size
-             :height handle-size
+             :width horizontal-size
+             :height vertical-size
              :pointer-events "none"}]]))
 
 (m/=> wrapping-bbox [:-> BBox any?])
@@ -169,7 +142,7 @@
            :id :bottom-middle
            :cursor "ns-resize"}]
          (filter (comp show? :id))
-         (mapv (comp square-handle
+         (mapv (comp handle
                      (partial merge {:type :handle
                                      :action :scale})))
          (into [:g]))))

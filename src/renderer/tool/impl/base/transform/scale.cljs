@@ -42,9 +42,9 @@
 (m/=> lock-ratio [:-> Vec2 ScaleHandle Vec2])
 (defn lock-ratio
   [[x y] handle]
-  (let [[x y] (condp contains? handle
-                #{:middle-right :middle-left} [x x]
-                #{:top-middle :bottom-middle} [y y]
+  (let [[x y] (case handle
+                (:middle-right :middle-left) [x x]
+                (:top-middle :bottom-middle) [y y]
                 [x y])
         ratio (if (< (abs x) (abs y)) x y)]
     [ratio ratio]))
@@ -84,19 +84,19 @@
         [px py] pivot-point
         [min-x min-y max-x max-y] bbox
         [w h] dimensions
-        x-factor (condp contains? handle
-                   #{:middle-right :top-right :bottom-right}
+        x-factor (case handle
+                   (:middle-right :top-right :bottom-right)
                    (/ w (- max-x px))
 
-                   #{:middle-left :top-left :bottom-left}
+                   (:middle-left :top-left :bottom-left)
                    (/ w (- px min-x))
 
                    1)
-        y-factor (condp contains? handle
-                   #{:top-middle :top-right :top-left}
+        y-factor (case handle
+                   (:top-middle :top-right :top-left)
                    (/ h (- py min-y))
 
-                   #{:bottom-middle :bottom-right :bottom-left}
+                   (:bottom-middle :bottom-right :bottom-left)
                    (/ h (- max-y py))
 
                    1)]

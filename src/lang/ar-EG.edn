@@ -395,6 +395,13 @@
   :idle "اسحب المسطرة إلى اللوحة لإنشاء دليل."
   :create "أسقط لإتمام الدليل."}
 
+ :renderer.tool.impl.element.path
+ {:click-to-start "انقر لإضافة النقطة الأولى."
+  :click-to-add "انقر لإضافة مقطع، أو انقر واسحب لإضافة منحنى."
+  :double-click-to-end "انقر مرتين أو انقر بالزر الأيمن لإنهاء المسار."
+  :create-path "إنشاء مسار"
+  :label "مسار"}
+
  :renderer.tool.impl.element.polyline
  {:label "خط متعدد"
   :create-polyline "إنشاء خط متعدد"}

@@ -57,7 +57,7 @@
          :y max-y
          :id :size
          :label [::size-handle "size handle"]}]
-       (mapv (comp tool.views/square-handle
+       (mapv (comp tool.views/handle
                    (partial merge {:type :handle
                                    :action :edit
                                    :element-id element-id})))

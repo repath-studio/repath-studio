@@ -4,7 +4,6 @@
    [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [re-frame.core :as rf]
-   [renderer.app.subs :as-alias app.subs]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
@@ -59,45 +58,44 @@
                      (string/join " ")
                      (string/trim)))))
 
+(defn render-handle
+  [el margin index point]
+  (let [id (keyword (str index))
+        is-active (and (= (:id (:clicked-element el)) id)
+                       (= (:element-id (:clicked-element el))
+                          (:id el)))
+        offset (utils.element/offset el)
+        [x y] (->> point
+                   (mapv utils.length/unit->px)
+                   (matrix/add offset))]
+    [:g
+     [tool.views/handle {:id id
+                         :x x
+                         :y y
+                         :label [::point "point"]
+                         :type :handle
+                         :action :edit
+                         :element-id (:id el)}]
+     (when is-active
+       (let [label (->> [x y]
+                        (mapv #(utils.length/->fixed % 2 false))
+                        (string/join " "))]
+         [utils.svg/label label {:x (- x margin)
+                                 :y (+ y margin)
+                                 :text-anchor "end"}]))]))
+
 (defmethod element.hierarchy/render-edit ::element.hierarchy/poly
   [el]
-  (let [clicked-element @(rf/subscribe [::app.subs/clicked-element])
-        zoom @(rf/subscribe [::document.subs/zoom])
+  (let [zoom @(rf/subscribe [::document.subs/zoom])
         margin (/ 15 zoom)]
     (->> (utils.attribute/points->vec (-> el :attrs :points))
-         (map-indexed (fn [index point]
-                        (let [id (keyword (str index))
-                              is-active (and (= (:id clicked-element) id)
-                                             (= (:element-id clicked-element)
-                                                (:id el)))
-                              offset (utils.element/offset el)
-                              [x y] (->> point
-                                         (mapv utils.length/unit->px)
-                                         (matrix/add offset))]
-                          [:g
-                           [tool.views/square-handle {:id (keyword (str index))
-                                                      :x x
-                                                      :y y
-                                                      :label [::point "point"]
-                                                      :type :handle
-                                                      :action :edit
-                                                      :element-id (:id el)}]
-                           (when is-active
-                             [utils.svg/label
-                              (->> [x y]
-                                   (mapv #(utils.length/->fixed % 2 false))
-                                   (string/join " "))
-                              {:x (- x margin)
-                               :y (+ y margin)
-                               :text-anchor "end"}])])))
+         (map-indexed (partial render-handle el margin))
          (into [:g]))))
 
 (defmethod element.hierarchy/edit ::element.hierarchy/poly
   [el offset handle lock?]
   (let [index (js/parseInt (name handle))
-        [x y] (cond-> offset
-                lock?
-                (input.handlers/lock-direction))
+        [x y] (cond-> offset lock? input.handlers/lock-direction)
         transform-point (fn [[px py]]
                           (list (utils.length/transform px + x)
                                 (utils.length/transform py + y)))]

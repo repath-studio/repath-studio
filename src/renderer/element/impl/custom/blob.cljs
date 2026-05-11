@@ -174,7 +174,7 @@
         [x2 y2] (matrix/add [x1 y1] size)]
     [:<>
      [utils.svg/line [x1 y1] [x2 y2]]
-     [tool.views/square-handle
+     [tool.views/handle
       {:type :handle
        :action :edit
        :label [::size-handle "size handle"]

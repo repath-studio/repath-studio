@@ -372,6 +372,14 @@
                           beeldverhouding biedt moet passen in een viewport met
                           een andere beeldverhouding."}
 
+ :renderer.tool.impl.element.path
+ {:click-to-start "Klik om het eerste punt toe te voegen."
+  :click-to-add "Klik om een segment toe te voegen, of klik en sleep om een
+                 curve toe te voegen."
+  :double-click-to-end "Dubbelklikken of rechtsklikken om het pad te voltooien."
+  :create-path "Pad maken"
+  :label "Pad"}
+
  :renderer.tool.impl.element.polyline
  {:label "Polylijn"
   :create-polyline "Polylijn maken"}

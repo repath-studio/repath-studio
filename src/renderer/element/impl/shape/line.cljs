@@ -78,7 +78,7 @@
                                  (= (:element-id clicked-element) (:id el)))]
               ^{:key id}
               [:g
-               [tool.views/square-handle handle]
+               [tool.views/handle handle]
                (when is-active
                  [utils.svg/label
                   (string/join " " [(utils.length/->fixed x 2 false)

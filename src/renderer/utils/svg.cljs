@@ -20,7 +20,7 @@
                     :fill "var(--accent)"
                     :r (/ 3 zoom)}] children)))
 
-(m/=> line [:-> Vec2 Vec2 any?])
+(m/=> line [:-> Vec2 Vec2 [:* any?] any?])
 (defn line
   [[x1 y1] [x2 y2] & {:keys [stroke
                              stroke-width
@@ -42,7 +42,7 @@
             :stroke-linecap stroke-linecap
             :stroke-dasharray (/ stroke-dasharray zoom)}]))
 
-(m/=> cross [:-> Vec2 any?])
+(m/=> cross [:-> Vec2 number? any?])
 (defn cross
   [[x y] size]
   (let [mid (/ size 2)
@@ -58,6 +58,18 @@
      [line start-b end-b line-bg-attrs]
      [line start-a end-a]
      [line start-b end-b]]))
+
+(defn arm
+  [start end]
+  [:g
+   [line start end
+    :stroke "var(--bg-primary"
+    :stroke-width 3
+    :stroke-opacity ".5"]
+   [line start end
+    :stroke "var(--foreground-muted)"
+    :stroke-opacity 0.7
+    :stroke-dasharray 4]])
 
 (m/=> arc [:-> Vec2 number? number? number? any?])
 (defn arc

@@ -18,32 +18,31 @@
   []
   [[::description "The d attribute defines a path to be drawn."]])
 
-(defn path-commands
-  []
-  {:m {:label [::move-to "Move To"]
-       :url "https://svgwg.org/svg2-draft/paths.html#PathDataMovetoCommands"}
-   :l {:label [::line-to "Line To"]
-       :url "https://svgwg.org/svg2-draft/paths.html#PathDataLinetoCommands"}
-   :v {:label [::vertical-line "Vertical Line"]
-       :url "https://svgwg.org/svg2-draft/paths.html#PathDataLinetoCommands"}
-   :h {:label [::horizontal-line "Horizontal Line"]
-       :url "https://svgwg.org/svg2-draft/paths.html#PathDataLinetoCommands"}
-   :c {:label [::cubic-bezier "Cubic Bézier Curve"]
-       :url "https://svgwg.org/svg2-draft/paths.html#PathDataCubicBezierCommands"}
-   :s {:label [::shortcut-cubic-bezier "Shortcut Cubic Bézier Curve"]
-       :url "https://svgwg.org/svg2-draft/paths.html#PathDataCubicBezierCommands"}
-   :q {:label [::quadratic-bezier-curve "Quadratic Bézier Curve"]
-       :url "https://svgwg.org/svg2-draft/paths.html#PathDataQuadraticBezierCommands"}
-   :t {:label [::shortcut-quadratic "Shortcut Quadratic Bézier Curve"]
-       :url "https://svgwg.org/svg2-draft/paths.html#PathDataQuadraticBezierCommands"}
-   :a {:label [::elliptical-arc-curve "Elliptical Arc Curve"]
-       :url "https://svgwg.org/svg2-draft/paths.html#PathDataEllipticalArcCommands"}
-   :z {:label [::close-path "Close Path"]
-       :url "https://svgwg.org/svg2-draft/paths.html#PathDataClosePathCommand"}})
+(def path-commands
+  {"m" {:label [::move-to "Move To"]
+        :url "https://svgwg.org/svg2-draft/paths.html#PathDataMovetoCommands"}
+   "l" {:label [::line-to "Line To"]
+        :url "https://svgwg.org/svg2-draft/paths.html#PathDataLinetoCommands"}
+   "v" {:label [::vertical-line "Vertical Line"]
+        :url "https://svgwg.org/svg2-draft/paths.html#PathDataLinetoCommands"}
+   "h" {:label [::horizontal-line "Horizontal Line"]
+        :url "https://svgwg.org/svg2-draft/paths.html#PathDataLinetoCommands"}
+   "c" {:label [::cubic-bezier "Cubic Bézier Curve"]
+        :url "https://svgwg.org/svg2-draft/paths.html#PathDataCubicBezierCommands"}
+   "s" {:label [::shortcut-cubic-bezier "Shortcut Cubic Bézier Curve"]
+        :url "https://svgwg.org/svg2-draft/paths.html#PathDataCubicBezierCommands"}
+   "q" {:label [::quadratic-bezier-curve "Quadratic Bézier Curve"]
+        :url "https://svgwg.org/svg2-draft/paths.html#PathDataQuadraticBezierCommands"}
+   "t" {:label [::shortcut-quadratic "Shortcut Quadratic Bézier Curve"]
+        :url "https://svgwg.org/svg2-draft/paths.html#PathDataQuadraticBezierCommands"}
+   "a" {:label [::elliptical-arc-curve "Elliptical Arc Curve"]
+        :url "https://svgwg.org/svg2-draft/paths.html#PathDataEllipticalArcCommands"}
+   "z" {:label [::close-path "Close Path"]
+        :url "https://svgwg.org/svg2-draft/paths.html#PathDataClosePathCommand"}})
 
 (defn ->command
   [c]
-  (get (path-commands) (keyword (string/lower-case c))))
+  (get path-commands (string/lower-case c)))
 
 (defn remove-segment-by-index
   [path i]

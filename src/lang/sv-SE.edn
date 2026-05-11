@@ -361,6 +361,14 @@
                           bildförhållande måste passa in i en viewport med ett
                           annat bildförhållande."}
 
+ :renderer.tool.impl.element.path
+ {:click-to-start "Klicka för att lägga till den första punkten."
+  :click-to-add "Klicka för att lägga till ett segment, eller klicka och dra
+                 för att lägga till en kurva."
+  :double-click-to-end "Dubbelklicka eller högerklicka för att slutföra banan."
+  :create-path "Skapa bana"
+  :label "Bana"}
+
  :renderer.tool.impl.element.polyline
  {:label "Polylinje"
   :create-polyline "Skapa polylinje"}

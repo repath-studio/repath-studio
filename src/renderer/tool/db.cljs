@@ -67,6 +67,7 @@
    [:label {:optional true} Translation]
    [:action HandleAction]
    [:type [:= :handle]]
+   [:rounded {:optional true} boolean?]
    [:cursor {:optional true} Cursor]
    [:x {:optional true} number?]
    [:y {:optional true} number?]

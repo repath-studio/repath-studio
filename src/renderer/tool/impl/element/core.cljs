@@ -11,6 +11,7 @@
    [renderer.tool.impl.element.ellipse]
    [renderer.tool.impl.element.image]
    [renderer.tool.impl.element.line]
+   [renderer.tool.impl.element.path]
    [renderer.tool.impl.element.poly]
    [renderer.tool.impl.element.polygon]
    [renderer.tool.impl.element.polyline]
@@ -61,6 +62,7 @@
                          :tool/ellipse
                          :tool/rect
                          :tool/line
+                         :tool/path
                          :tool/polyline
                          :tool/polygon
                          :tool/image

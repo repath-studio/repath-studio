@@ -410,6 +410,15 @@
   :idle "Arraste a régua para a tela para criar um guia."
   :create "Solte para finalizar o guia."}
 
+ :renderer.tool.impl.element.path
+ {:click-to-start "Clique para adicionar o primeiro ponto."
+  :click-to-add "Clique para adicionar um segmento, ou clique e arraste para
+                 adicionar uma curva."
+  :double-click-to-end "Duplo clique ou clique direito para finalizar o
+                        caminho."
+  :create-path "Criar caminho"
+  :label "Caminho"}
+
  :renderer.tool.impl.element.polyline
  {:label "Polilinha"
   :create-polyline "Criar polilinha"}

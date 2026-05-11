@@ -24,6 +24,15 @@
  :-> :pointer-offset)
 
 (rf/reg-sub
+ ::drag-pointer
+ :-> :drag-pointer)
+
+(rf/reg-sub
+ ::drag?
+ :<- [::drag-pointer]
+ :-> boolean)
+
+(rf/reg-sub
  ::adjusted-pointer-offset
  :-> :adjusted-pointer-offset)
 
