@@ -1,5 +1,6 @@
 (ns renderer.core
   (:require
+   ["@sentry/react" :as sentry]
    ["electron-log/renderer"]
    [re-frame.core :as rf]
    [re-pressed.core :as re-pressed]
@@ -52,8 +53,12 @@
 ██████╔╝░░░██║░░░╚██████╔╝██████╔╝██║╚█████╔╝
 ╚═════╝░░░░╚═╝░░░░╚═════╝░╚═════╝░╚═╝░╚════╝░")
 
+(def root-options
+  #js {:onCaughtError (.reactErrorHandler sentry)
+       :onRecoverableError (.reactErrorHandler sentry)})
+
 (defonce root (delay (-> (.getElementById js/document "app")
-                         (ra.dom.client/create-root))))
+                         (ra.dom.client/create-root root-options))))
 
 (defn ^:dev/after-load mount-root! []
   (rf/clear-subscription-cache!)
