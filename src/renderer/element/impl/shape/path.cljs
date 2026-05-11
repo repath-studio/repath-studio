@@ -89,8 +89,7 @@
 
       nil)))
 
-(m/=> handles [:-> [:vector Vec2] int? PathSegment [:maybe PathPointType]
-               [:maybe [:vector map?]]])
+(m/=> handles [:-> [:vector Vec2] int? PathSegment [:maybe [:vector map?]]])
 (defn handles
   [endpoints index segment]
   (let [command (utils.path/segment->command segment)
@@ -142,7 +141,7 @@
                                     :y ay
                                     :type :handle
                                     :action :edit
-                                    :rounded rounded
+                                    :rounded (boolean rounded)
                                     :element-id element-id}])))
        (into [:g])))
 

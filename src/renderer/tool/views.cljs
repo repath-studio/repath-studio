@@ -8,9 +8,11 @@
    [renderer.document.subs :as-alias document.subs]
    [renderer.i18n.views :as i18n.views]
    [renderer.input.impl.pointer :as input.impl.pointer]
+   [renderer.tool.db :refer [Handle]]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.bounds :as utils.bounds]))
 
+(m/=> handle [:-> Handle any?])
 (defn handle
   [el]
   (let [{:keys [x y id cursor element-id label orientation rounded]} el

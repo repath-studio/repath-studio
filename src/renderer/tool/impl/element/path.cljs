@@ -39,7 +39,7 @@
    [:div (i18n.views/t [::double-click-to-end
                         "Double or right click to finalize the path."])]])
 
-(m/=> next-control-point [:-> [:vector any?] [:tuple string? string?]])
+(m/=> next-control-point [:-> [:vector any?] Vec2])
 (defn next-control-point
   [segments]
   (let [segment (-> segments utils.path/drop-last-segment last)]
@@ -58,12 +58,12 @@
   (->> (tool.handlers/snapped-offset db)
        (element.handlers/adjusted-point db)))
 
-(m/=> update-path [:-> App App])
+(m/=> update-path [:-> App fn? [:* any?] App])
 (defn update-path
   [db f & args]
   (apply element.handlers/update-selected db update-in [:attrs :d] f args))
 
-(m/=> add-to-path [:-> string? string?])
+(m/=> add-to-path [:-> string? string? [:* number?] string?])
 (defn add-to-path
   [d command & coords]
   (->> (mapv utils.length/->fixed coords)
@@ -105,7 +105,7 @@
         (->> (if out-cp
                ["C" (first out-cp) (second out-cp) x y x y]
                ["L" x y])
-             (into segments)
+             (conj segments)
              (utils.path/segments->string))))))
 
 (defmethod tool.hierarchy/on-pointer-up [::path :create]
@@ -124,7 +124,7 @@
                          (let [[ax ay] anchor
                                [cp1-x cp1-y] (next-control-point segments)]
                            (->> ["C" cp1-x cp1-y cp2-x cp2-y ax ay]
-                                (into (utils.path/drop-last-segment segments))
+                                (conj (utils.path/drop-last-segment segments))
                                 (utils.path/segments->string)))
                          %)))))
 

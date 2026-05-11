@@ -20,7 +20,7 @@
                     :fill "var(--accent)"
                     :r (/ 3 zoom)}] children)))
 
-(m/=> line [:-> Vec2 Vec2 any?])
+(m/=> line [:-> Vec2 Vec2 [:* any?] any?])
 (defn line
   [[x1 y1] [x2 y2] & {:keys [stroke
                              stroke-width
@@ -42,7 +42,7 @@
             :stroke-linecap stroke-linecap
             :stroke-dasharray (/ stroke-dasharray zoom)}]))
 
-(m/=> cross [:-> Vec2 any?])
+(m/=> cross [:-> Vec2 number? any?])
 (defn cross
   [[x y] size]
   (let [mid (/ size 2)

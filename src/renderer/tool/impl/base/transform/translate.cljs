@@ -66,7 +66,7 @@
       :vertical
       :horizontal)))
 
-(m/=> translate [:-> App Vec2 [:maybe Orientation] App])
+(m/=> translate [:-> App Vec2 boolean? App])
 (defn translate
   [db offset lock-direction?]
   (let [[offset-x offset-y] offset
