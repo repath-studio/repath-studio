@@ -50,8 +50,7 @@
                       (string/lower-case prop))))
 
 (m/=> match-font-by-weight [:->
-                            string?
-                            [:sequential JS_Object]
+                            string? [:sequential JS_Object]
                             [:sequential JS_Object]])
 (defn match-font-by-weight
   [weight fonts]

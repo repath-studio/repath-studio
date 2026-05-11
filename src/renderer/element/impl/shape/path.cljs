@@ -168,7 +168,8 @@
                                                 :offset offset}))
           (into [:g]))]))
 
-(m/=> translate-seg-point [:-> PathSegments number? PathPointType Vec2
+(m/=> translate-seg-point [:->
+                           PathSegments number? PathPointType Vec2
                            PathSegment])
 (defn translate-seg-point
   [segments index point-type delta]

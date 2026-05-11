@@ -31,14 +31,15 @@
     (throw (ex-info "Language not registered" {:id lang-id}))
     (assoc-in db [:languages lang-id :dictionary k] v)))
 
-(m/=> supported-lang? [:-> LanguageRegistry [:maybe LanguageCodeIdentifier]
+(m/=> supported-lang? [:->
+                       LanguageRegistry [:maybe LanguageCodeIdentifier]
                        boolean?])
 (defn supported-lang?
   [languages lang]
   (contains? languages lang))
 
-(m/=> computed-lang [:-> LanguageRegistry LanguageId
-                     [:maybe LanguageCodeIdentifier]
+(m/=> computed-lang [:->
+                     LanguageRegistry LanguageId [:maybe LanguageCodeIdentifier]
                      LanguageCodeIdentifier])
 (defn computed-lang
   [languages user-lang system-lang]
