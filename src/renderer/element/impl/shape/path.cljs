@@ -208,15 +208,32 @@
       (-> (translate-seg-point index :end-control-point delta)
           (translate-seg-point (inc index) :start-control-point delta)))))
 
+(defn snap-control-point-to-angle
+  [segments index point-type offset]
+  (let [endpoints (acc-endpoints segments)
+        anchor (if (= point-type :start-control-point)
+                 (get endpoints (dec index))
+                 (get endpoints index))
+        cp-pos (->px-point (get segments index) point-type)
+        new-cp-pos (matrix/add cp-pos offset)
+        snapped (input.handlers/snap-angle anchor new-cp-pos)]
+    (matrix/sub snapped cp-pos)))
+
 (defmethod element.hierarchy/edit :path
   [el offset handle lock?]
-  (let [offset (cond-> offset lock? input.handlers/lock-direction)
-        index (js/parseInt (namespace handle))
-        point-type (keyword (name handle))]
+  (let [point-type (keyword (name handle))
+        index (js/parseInt (namespace handle))]
     (update-in el [:attrs :d]
-               #(->> (utils.path/string->segments %)
-                     (translate-point index point-type offset)
-                     (utils.path/segments->string)))))
+               #(let [segments (utils.path/string->segments %)
+                      snap-fn (if (= point-type :end-point)
+                                input.handlers/lock-direction
+                                (partial snap-control-point-to-angle
+                                         segments index
+                                         point-type))
+                      offset (cond->> offset lock? snap-fn)]
+                  (->> segments
+                       (translate-point index point-type offset)
+                       (utils.path/segments->string))))))
 
 (defmethod element.hierarchy/path :path
   [el]
