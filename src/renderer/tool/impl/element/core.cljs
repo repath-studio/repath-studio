@@ -58,11 +58,12 @@
 (rf/dispatch [::action.events/register-action-group
               {:id :tools/elements
                :label [::elements "Elements"]
-               :actions [:tool/path
-                         :tool/circle
+               :actions [:tool/circle
                          :tool/ellipse
                          :tool/rect
                          :tool/line
+                         :tool/path
+
                          :tool/polyline
                          :tool/polygon
                          :tool/image
