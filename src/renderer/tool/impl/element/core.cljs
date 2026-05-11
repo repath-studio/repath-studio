@@ -63,7 +63,6 @@
                          :tool/rect
                          :tool/line
                          :tool/path
-
                          :tool/polyline
                          :tool/polygon
                          :tool/image
