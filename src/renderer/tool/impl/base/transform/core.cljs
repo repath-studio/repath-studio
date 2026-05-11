@@ -20,7 +20,6 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.tool.views :as tool.views]
    [renderer.utils.bounds :as utils.bounds]
-   [renderer.utils.key :as utils.key]
    [renderer.utils.length :as utils.length]
    [renderer.utils.svg :as utils.svg]))
 
@@ -128,8 +127,7 @@
                :label [::label "Transform"]
                :icon "pointer"
                :event [::tool.events/activate ::transform]
-               :active [::tool.subs/active? ::transform]
-               :shortcuts [{:keyCode (utils.key/codes "S")}]}])
+               :active [::tool.subs/active? ::transform]}])
 
 (rf/reg-global-interceptor
  (rf/->interceptor
