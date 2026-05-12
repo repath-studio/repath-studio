@@ -16,8 +16,8 @@
    [renderer.tool.impl.base.pan :as-alias tool.impl.base.pan]
    [renderer.utils.math :as utils.math]))
 
-(m/=> adjusted-pointer-pos [:-> App Vec2 Vec2])
-(defn adjusted-pointer-pos
+(m/=> adjusted-pos [:-> App Vec2 Vec2])
+(defn adjusted-pos
   [db pos]
   (let [{:keys [zoom pan]} (get-in db [:documents (:active-document db)])]
     (-> pos
@@ -55,7 +55,7 @@
         distance (matrix/distance pos1 pos2)
         midpoint (-> (matrix/add pos1 pos2)
                      (matrix/div 2))
-        adjusted-midpoint (adjusted-pointer-pos db midpoint)]
+        adjusted-midpoint (adjusted-pos db midpoint)]
     (cond-> db
       :always
       (assoc :active-pointers active-pointers
@@ -116,32 +116,43 @@
     (> (matrix/distance pointer-offset pointer-pos)
        drag-threshold)))
 
+(defn drag?
+  [db e]
+  (let [{:keys [pointer-offset active-pointers]} db
+        {:keys [pointer-id]} e]
+    (and pointer-offset
+         (contains? active-pointers pointer-id)
+         (significant-drag? db e))))
+
 (defn snap-to-angle?
   [db e]
   (and (:pointer-offset db)
        (or (:ctrl-key e)
            (tool.handlers/multi-touch? db))))
 
+(defn adjusted-pointer-pos
+  [db e]
+  (let [{:keys [adjusted-pointer-offset]} db
+        {:keys [pointer-pos]} e]
+    (cond->> (adjusted-pos db pointer-pos)
+      (snap-to-angle? db e)
+      (snap-angle adjusted-pointer-offset))))
+
 (m/=> on-pointer-move [:-> App PointerEvent App])
 (defn on-pointer-move
   [db e]
-  (let [{:keys [pointer-offset drag-pointer active-pointers]} db
-        {:keys [pointer-pos pointer-id]} e
-        multi-touch? (tool.handlers/multi-touch? db)
-        pointer-pos (cond->> pointer-pos
-                      (snap-to-angle? db e)
-                      (snap-angle pointer-offset))]
+  (let [{:keys [drag-pointer]} db
+        {:keys [pointer-pos]} e
+        multi-touch? (tool.handlers/multi-touch? db)]
     (if (and multi-touch? (not drag-pointer))
       (on-pinch db e)
-      (cond-> (if (and pointer-offset
-                       (contains? active-pointers pointer-id)
-                       (significant-drag? db e))
+      (cond-> (if (drag? db e)
                 (on-drag db e)
                 (tool.hierarchy/on-pointer-move db e))
 
         (or (drag-pointer? db e) (not drag-pointer))
         (assoc :pointer-pos pointer-pos
-               :adjusted-pointer-pos (adjusted-pointer-pos db pointer-pos))))))
+               :adjusted-pointer-pos (adjusted-pointer-pos db e))))))
 
 (m/=> on-pointer-down [:-> App PointerEvent App])
 (defn on-pointer-down
@@ -158,7 +169,7 @@
       (or (= button :middle)
           (and (= button :left) (empty? active-pointers)))
       (assoc :pointer-offset pointer-pos
-             :adjusted-pointer-offset (adjusted-pointer-pos db pointer-pos)
+             :adjusted-pointer-offset (adjusted-pos db pointer-pos)
              :nearest-neighbor-offset (:point nearest-neighbor))
 
       (or (= button :middle)
@@ -305,7 +316,7 @@
   (case (:type e)
     "drop"
     (let [{:keys [data-transfer pointer-pos]} e
-          position (adjusted-pointer-pos db pointer-pos)]
+          position (adjusted-pos db pointer-pos)]
       (app.handlers/add-fx db [::input.effects/drop [position data-transfer]]))
 
     db))
