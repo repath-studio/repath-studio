@@ -394,12 +394,10 @@
 
  :renderer.tool.impl.element.rect
  {:label "Rektangel"
-  :help [:div "Håll %1 för att låsa proportioner."]
   :create-rectangle "Skapa rektangel"}
 
  :renderer.tool.impl.element.svg
  {:label "Svg"
-  :help [:div "Håll %1 för att låsa proportioner."]
   :create-svg "Skapa svg"}
 
  :renderer.tool.impl.extension.blob
@@ -617,8 +615,7 @@
 
  :renderer.tool.impl.element.ellipse
  {:label "Ellips"
-  :create-ellipse "Skapa ellips"
-  :help [:div "Håll %1 för att låsa proportioner."]}
+  :create-ellipse "Skapa ellips"}
 
  :renderer.tool.impl.element.line
  {:label "Linje"

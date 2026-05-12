@@ -357,12 +357,10 @@
 
  :renderer.tool.impl.element.rect
  {:label "مستطيل"
-  :help [:div "اضغط %1 لقفل النسب."]
   :create-rectangle "إنشاء مستطيل"}
 
  :renderer.tool.impl.element.svg
  {:label "SVG"
-  :help [:div "اضغط %1 لقفل النسب."]
   :create-svg "إنشاء svg"}
 
  :renderer.tool.impl.extension.blob
@@ -590,8 +588,7 @@
 
  :renderer.tool.impl.element.ellipse
  {:label "قطع ناقص"
-  :create-ellipse "إنشاء قطع ناقص"
-  :help [:div "اضغط %1 لقفل النسب."]}
+  :create-ellipse "إنشاء قطع ناقص"}
 
  :renderer.tool.impl.element.line
  {:label "خط"

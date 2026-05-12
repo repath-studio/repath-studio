@@ -13,7 +13,8 @@
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
-   [renderer.tool.impl.base.pan :as-alias tool.impl.base.pan]))
+   [renderer.tool.impl.base.pan :as-alias tool.impl.base.pan]
+   [renderer.utils.math :as utils.math]))
 
 (m/=> adjusted-pointer-pos [:-> App Vec2 Vec2])
 (defn adjusted-pointer-pos
@@ -30,6 +31,17 @@
   (if (> (abs x) (abs y))
     [x 0]
     [0 y]))
+
+(m/=> snap-angle [:-> Vec2 Vec2 Vec2])
+(defn snap-angle
+  "Snaps the end position to the nearest 15 degree angle."
+  [start end]
+  (let [degrees (utils.math/angle start end)
+        snapped (* (Math/round (/ degrees 15)) 15)
+        r (matrix/distance start end)
+        [x1 y1] start]
+    [(+ x1 (utils.math/angle-dx snapped r))
+     (+ y1 (utils.math/angle-dy snapped r))]))
 
 (m/=> on-pinch [:-> App PointerEvent App])
 (defn on-pinch
@@ -108,8 +120,12 @@
 (defn on-pointer-move
   [db e]
   (let [{:keys [pointer-offset drag-pointer active-pointers]} db
-        {:keys [pointer-pos pointer-id]} e]
-    (if (and (tool.handlers/multi-touch? db) (not drag-pointer))
+        {:keys [pointer-pos pointer-id]} e
+        multi-touch? (tool.handlers/multi-touch? db)
+        pointer-pos (cond->> pointer-pos
+                      (or (:ctrl-key e) multi-touch?)
+                      (snap-angle pointer-offset))]
+    (if (and multi-touch? (not drag-pointer))
       (on-pinch db e)
       (cond-> (if (and pointer-offset
                        (contains? active-pointers pointer-id)

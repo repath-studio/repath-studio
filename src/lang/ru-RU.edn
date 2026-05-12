@@ -369,12 +369,10 @@
 
  :renderer.tool.impl.element.rect
  {:label "Прямоугольник"
-  :help [:div "Удерживайте %1 для блокировки пропорций."]
   :create-rectangle "Создать прямоугольник"}
 
  :renderer.tool.impl.element.svg
  {:label "SVG"
-  :help [:div "Удерживайте %1 для блокировки пропорций."]
   :create-svg "Создать SVG"}
 
  :renderer.tool.impl.extension.blob
@@ -615,8 +613,7 @@
 
  :renderer.tool.impl.element.ellipse
  {:label "Эллипс"
-  :create-ellipse "Создать эллипс"
-  :help [:div "Удерживайте %1 для блокировки пропорций."]}
+  :create-ellipse "Создать эллипс"}
 
  :renderer.tool.impl.element.line
  {:label "Линия"

@@ -53,14 +53,14 @@
 
 (defmethod tool.hierarchy/on-drag [::measure :create]
   [db _e]
-  (let [[offset-x offset-y] (tool.handlers/snapped-offset db)
-        [x y] (tool.handlers/snapped-position db)
-        [adjacent opposite] (matrix/sub [offset-x offset-y] [x y])
+  (let [offset (tool.handlers/snapped-offset db)
+        position (tool.handlers/snapped-position db)
+        [adjacent opposite] (matrix/sub offset position)
         hypotenuse (Math/hypot adjacent opposite)]
-    (app.handlers/add-fx db [::set-measure-attrs {:x1 offset-x
-                                                  :y1 offset-y
-                                                  :x2 x
-                                                  :y2 y
+    (app.handlers/add-fx db [::set-measure-attrs {:x1 (first offset)
+                                                  :y1 (second offset)
+                                                  :x2 (first position)
+                                                  :y2 (second position)
                                                   :hypotenuse hypotenuse}])))
 
 (defmethod tool.hierarchy/render ::measure

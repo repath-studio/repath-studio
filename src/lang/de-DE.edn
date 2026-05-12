@@ -387,12 +387,10 @@
 
  :renderer.tool.impl.element.rect
  {:label "Rechteck"
-  :help [:div "Halten Sie %1, um die Proportionen zu sperren."]
   :create-rectangle "Rechteck erstellen"}
 
  :renderer.tool.impl.element.svg
  {:label "SVG"
-  :help [:div "Halten Sie %1, um die Proportionen zu sperren."]
   :create-svg "SVG erstellen"}
 
  :renderer.tool.impl.extension.blob
@@ -635,8 +633,7 @@
 
  :renderer.tool.impl.element.ellipse
  {:label "Ellipse"
-  :create-ellipse "Ellipse erstellen"
-  :help [:div "Halten Sie %1, um die Proportionen zu sperren."]}
+  :create-ellipse "Ellipse erstellen"}
 
  :renderer.tool.impl.element.line
  {:label "Linie"
