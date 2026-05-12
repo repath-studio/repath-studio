@@ -116,6 +116,12 @@
     (> (matrix/distance pointer-offset pointer-pos)
        drag-threshold)))
 
+(defn snap-to-angle?
+  [db e]
+  (and (:pointer-offset db)
+       (or (:ctrl-key e)
+           (tool.handlers/multi-touch? db))))
+
 (m/=> on-pointer-move [:-> App PointerEvent App])
 (defn on-pointer-move
   [db e]
@@ -123,7 +129,7 @@
         {:keys [pointer-pos pointer-id]} e
         multi-touch? (tool.handlers/multi-touch? db)
         pointer-pos (cond->> pointer-pos
-                      (or (:ctrl-key e) multi-touch?)
+                      (snap-to-angle? db e)
                       (snap-angle pointer-offset))]
     (if (and multi-touch? (not drag-pointer))
       (on-pinch db e)
