@@ -35,10 +35,9 @@
 (defmethod tool.hierarchy/on-drag [::line :create]
   [db _e]
   (let [position (tool.handlers/snapped-position db)
-        [min-x min-y] (element.handlers/parent-offset db)
-        [x y] (matrix/sub position [min-x min-y])
-        x (utils.length/->fixed x)
-        y (utils.length/->fixed y)]
+        [x y] (->> (element.handlers/parent-offset db)
+                   (matrix/sub position)
+                   (mapv utils.length/->fixed))]
     (element.handlers/update-selected db #(-> %
                                               (assoc-in [:attrs :x2] x)
                                               (assoc-in [:attrs :y2] y)))))
