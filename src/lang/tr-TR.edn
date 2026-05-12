@@ -387,12 +387,10 @@
 
  :renderer.tool.impl.element.rect
  {:label "Dikdörtgen"
-  :help [:div "Oranları kilitlemek için %1 tuşunu basılı tutun."]
   :create-rectangle "Dikdörtgen oluştur"}
 
  :renderer.tool.impl.element.svg
  {:label "SVG"
-  :help [:div "Oranları kilitlemek için %1 tuşunu basılı tutun."]
   :create-svg "SVG oluştur"}
 
  :renderer.tool.impl.extension.blob
@@ -610,8 +608,7 @@
 
  :renderer.tool.impl.element.ellipse
  {:label "Elips"
-  :create-ellipse "Elips oluştur"
-  :help [:div "Oranları kilitlemek için %1 tuşunu basılı tutun."]}
+  :create-ellipse "Elips oluştur"}
 
  :renderer.tool.impl.element.line
  {:label "Çizgi"

@@ -405,12 +405,10 @@
 
  :renderer.tool.impl.element.rect
  {:label "Rechthoek"
-  :help [:div "Houd %1 ingedrukt om verhoudingen te vergrendelen."]
   :create-rectangle "Rechthoek maken"}
 
  :renderer.tool.impl.element.svg
  {:label "Svg"
-  :help [:div "Houd %1 ingedrukt om verhoudingen te vergrendelen."]
   :create-svg "Svg maken"}
 
  :renderer.tool.impl.extension.blob
@@ -632,8 +630,7 @@
 
  :renderer.tool.impl.element.ellipse
  {:label "Ellips"
-  :create-ellipse "Ellips maken"
-  :help [:div "Houd %1 ingedrukt om verhoudingen te vergrendelen."]}
+  :create-ellipse "Ellips maken"}
 
  :renderer.tool.impl.element.line
  {:label "Lijn"

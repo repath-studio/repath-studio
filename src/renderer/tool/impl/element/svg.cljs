@@ -6,21 +6,14 @@
    [renderer.element.handlers :as element.handlers]
    [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
-   [renderer.i18n.views :as i18n.views]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.key :as utils.key]
-   [renderer.utils.length :as utils.length]
-   [renderer.views :as views]))
+   [renderer.utils.length :as utils.length]))
 
 (hierarchy/derive! ::svg ::tool.hierarchy/element)
-
-(defmethod tool.hierarchy/help [::svg :create]
-  []
-  (i18n.views/t [::help [:div "Hold %1 to lock proportions."]]
-                [[views/kbd "Ctrl"]]))
 
 (defn attributes
   [db lock-ratio]

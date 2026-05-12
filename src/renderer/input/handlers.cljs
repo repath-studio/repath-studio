@@ -120,8 +120,12 @@
 (defn on-pointer-move
   [db e]
   (let [{:keys [pointer-offset drag-pointer active-pointers]} db
-        {:keys [pointer-pos pointer-id]} e]
-    (if (and (tool.handlers/multi-touch? db) (not drag-pointer))
+        {:keys [pointer-pos pointer-id]} e
+        multi-touch? (tool.handlers/multi-touch? db)
+        pointer-pos (cond->> pointer-pos
+                      (or (:ctrl-key e) multi-touch?)
+                      (snap-angle pointer-offset))]
+    (if (and multi-touch? (not drag-pointer))
       (on-pinch db e)
       (cond-> (if (and pointer-offset
                        (contains? active-pointers pointer-id)

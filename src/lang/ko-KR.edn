@@ -356,12 +356,10 @@
 
  :renderer.tool.impl.element.rect
  {:label "사각형"
-  :help [:div "%1을 누르면 비율을 고정합니다."]
   :create-rectangle "사각형 생성"}
 
  :renderer.tool.impl.element.svg
  {:label "SVG"
-  :help [:div "%1을 누르면 비율을 고정합니다."]
   :create-svg "SVG 생성"}
 
  :renderer.tool.impl.extension.blob
@@ -571,8 +569,7 @@
 
  :renderer.tool.impl.element.ellipse
  {:label "타원"
-  :create-ellipse "타원 생성"
-  :help [:div "%1을 누르면 비율을 고정합니다."]}
+  :create-ellipse "타원 생성"}
 
  :renderer.tool.impl.element.line
  {:label "선"

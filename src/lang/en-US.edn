@@ -386,12 +386,10 @@
 
  :renderer.tool.impl.element.rect
  {:label "Rectangle"
-  :help [:div "Hold %1 to lock proportions."]
   :create-rectangle "Create rectangle"}
 
  :renderer.tool.impl.element.svg
  {:label "Svg"
-  :help [:div "Hold %1 to lock proportions."]
   :create-svg "Create svg"}
 
  :renderer.tool.impl.extension.blob
@@ -603,8 +601,7 @@
 
  :renderer.tool.impl.element.ellipse
  {:label "Ellipse"
-  :create-ellipse "Create ellipse"
-  :help [:div "Hold %1 to lock proportions."]}
+  :create-ellipse "Create ellipse"}
 
  :renderer.tool.impl.element.line
  {:label "Line"

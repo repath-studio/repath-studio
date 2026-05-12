@@ -390,12 +390,10 @@
 
  :renderer.tool.impl.element.rect
  {:label "Ορθογώνιο"
-  :help [:div "Κρατήστε %1 για να κλειδώσετε τις αναλογίες."]
   :create-rectangle "Δημιουργία ορθ. παραλληλόγραμου"}
 
  :renderer.tool.impl.element.svg
  {:label "Svg"
-  :help [:div "Κρατήστε %1 για να κλειδώσετε τις αναλογίες."]
   :create-svg "Δημιουργία svg"}
 
  :renderer.tool.impl.extension.blob
@@ -639,8 +637,7 @@
 
  :renderer.tool.impl.element.ellipse
  {:label "Έλλειψη"
-  :create-ellipse "Δημιουργία έλλειψης"
-  :help [:div "Κρατήστε %1 για να κλειδώσετε τις αναλογίες."]}
+  :create-ellipse "Δημιουργία έλλειψης"}
 
  :renderer.tool.impl.element.line
  {:label "Γραμμή"

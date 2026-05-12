@@ -9,7 +9,6 @@
    [renderer.element.handlers :as element.handlers]
    [renderer.hierarchy :as hierarchy]
    [renderer.i18n.views :as i18n.views]
-   [renderer.input.handlers :as input.handlers]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
@@ -17,8 +16,7 @@
    [renderer.utils.key :as utils.key]
    [renderer.utils.length :as utils.length]
    [renderer.utils.math :as utils.math]
-   [renderer.utils.svg :as utils.svg]
-   [renderer.views :as views]))
+   [renderer.utils.svg :as utils.svg]))
 
 (hierarchy/derive! ::measure ::tool.hierarchy/tool)
 
@@ -35,10 +33,7 @@
 
 (defmethod tool.hierarchy/help [::measure :create]
   []
-  [:<>
-   (i18n.views/t [::release-to-finalize "Release to finalize the measurement."])
-   (i18n.views/t [::snap-to-angle [:div "Hold %1 to snap to angle."]]
-                 [[views/kbd "Ctrl"]])])
+  (i18n.views/t [::release-to-finalize "Release to finalize the measurement."]))
 
 (defmethod tool.hierarchy/on-activate ::measure
   [db]
@@ -57,17 +52,15 @@
   (tool.handlers/set-state db :idle))
 
 (defmethod tool.hierarchy/on-drag [::measure :create]
-  [db e]
-  (let [[offset-x offset-y] (tool.handlers/snapped-offset db)
-        [x y] (cond->> (tool.handlers/snapped-position db)
-                (:ctrl-key e)
-                (input.handlers/snap-angle [offset-x offset-y]))
-        [adjacent opposite] (matrix/sub [offset-x offset-y] [x y])
+  [db _e]
+  (let [offset (tool.handlers/snapped-offset db)
+        position (tool.handlers/snapped-position db)
+        [adjacent opposite] (matrix/sub offset position)
         hypotenuse (Math/hypot adjacent opposite)]
-    (app.handlers/add-fx db [::set-measure-attrs {:x1 offset-x
-                                                  :y1 offset-y
-                                                  :x2 x
-                                                  :y2 y
+    (app.handlers/add-fx db [::set-measure-attrs {:x1 (first offset)
+                                                  :y1 (second offset)
+                                                  :x2 (first position)
+                                                  :y2 (second position)
                                                   :hypotenuse hypotenuse}])))
 
 (defmethod tool.hierarchy/render ::measure
