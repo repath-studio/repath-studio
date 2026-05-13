@@ -5,7 +5,7 @@
    [re-frame.core :as rf]
    [renderer.app.db :refer [App]]
    [renderer.app.handlers :as app.handlers]
-   [renderer.db :refer [JS_Object]]
+   [renderer.db :refer [JS_Object Vec2]]
    [renderer.effects :as-alias effects]
    [renderer.element.db :refer [Element]]
    [renderer.frame.handlers :as frame.handlers]
@@ -125,6 +125,7 @@
     (> (matrix/distance pointer-offset pointer-pos)
        drag-threshold)))
 
+(m/=> drag? [:-> App PointerEvent boolean?])
 (defn drag?
   [db e]
   (let [{:keys [pointer-offset active-pointers]} db
@@ -133,12 +134,14 @@
          (contains? active-pointers pointer-id)
          (significant-drag? db e))))
 
+(m/=> snap-to-angle? [:-> App PointerEvent boolean?])
 (defn snap-to-angle?
   [db e]
   (and (:pointer-offset db)
        (or (:ctrl-key e)
            (input.handlers/multi-touch? db))))
 
+(m/=> adjusted-pointer-pos [:-> App PointerEvent Vec2])
 (defn adjusted-pointer-pos
   [db e]
   (let [{:keys [adjusted-pointer-offset]} db
@@ -203,6 +206,7 @@
       (app.handlers/add-fx [::input.effects/release-pointer-capture
                             pointer-id])))
 
+(m/=> on-pointer-up [:-> App PointerEvent App])
 (defn on-pointer-up
   [db e]
   (let [{:keys [cached-tool active-pointers pinch-distance drag-pointer]} db
