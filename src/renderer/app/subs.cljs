@@ -4,39 +4,6 @@
    [renderer.utils.platform :as utils.platform]))
 
 (rf/reg-sub
- ::active-pointers
- :-> :active-pointers)
-
-(rf/reg-sub
- ::pinch-distance
- :-> :pinch-distance)
-
-(rf/reg-sub
- ::pointer-pos
- :-> :pointer-pos)
-
-(rf/reg-sub
- ::adjusted-pointer-pos
- :-> :adjusted-pointer-pos)
-
-(rf/reg-sub
- ::pointer-offset
- :-> :pointer-offset)
-
-(rf/reg-sub
- ::drag-pointer
- :-> :drag-pointer)
-
-(rf/reg-sub
- ::drag?
- :<- [::drag-pointer]
- :-> boolean)
-
-(rf/reg-sub
- ::adjusted-pointer-offset
- :-> :adjusted-pointer-offset)
-
-(rf/reg-sub
  ::dom-rect
  :-> :dom-rect)
 

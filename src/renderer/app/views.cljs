@@ -18,6 +18,7 @@
    [renderer.home.views :as home.views]
    [renderer.i18n.subs :as-alias i18n.subs]
    [renderer.i18n.views :as i18n.views]
+   [renderer.input.subs :as-alias input.subs]
    [renderer.menubar.views :as menubar.views]
    [renderer.panel.subs :as-alias panel.subs]
    [renderer.panel.views :as panel.views]
@@ -56,13 +57,13 @@
 (defn debug-rows
   []
   (let [viewbox @(rf/subscribe [::frame.subs/viewbox])
-        active-pointers @(rf/subscribe [::app.subs/active-pointers])
-        pinch-distance @(rf/subscribe [::app.subs/pinch-distance])
-        pointer-pos @(rf/subscribe [::app.subs/pointer-pos])
-        adjusted-pos @(rf/subscribe [::app.subs/adjusted-pointer-pos])
-        pointer-offset @(rf/subscribe [::app.subs/pointer-offset])
-        adjusted-offset @(rf/subscribe [::app.subs/adjusted-pointer-offset])
-        drag? @(rf/subscribe [::tool.subs/drag?])
+        active-pointers @(rf/subscribe [::input.subs/active-pointers])
+        pinch-distance @(rf/subscribe [::input.subs/pinch-distance])
+        pointer-pos @(rf/subscribe [::input.subs/pointer-pos])
+        adjusted-pos @(rf/subscribe [::input.subs/adjusted-pointer-pos])
+        pointer-offset @(rf/subscribe [::input.subs/pointer-offset])
+        adjusted-offset @(rf/subscribe [::input.subs/adjusted-pointer-offset])
+        drag? @(rf/subscribe [::input.subs/drag?])
         pan @(rf/subscribe [::document.subs/pan])
         active-tool @(rf/subscribe [::tool.subs/active])
         cached-tool @(rf/subscribe [::tool.subs/cached])

@@ -8,13 +8,13 @@
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.app.db :refer [App]]
-   [renderer.app.subs :as-alias app.subs]
    [renderer.db :refer [Vec2]]
    [renderer.document.handlers :as document.handlers]
    [renderer.element.handlers :as element.handlers]
    [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
+   [renderer.input.subs :as-alias input.subs]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
@@ -148,9 +148,9 @@
 
 (defmethod tool.hierarchy/render ::path
   []
-  (let [starting-point @(rf/subscribe [::tool.subs/snapped-position])
-        ending-point @(rf/subscribe [::tool.subs/snapped-offset])
-        drag? @(rf/subscribe [::app.subs/drag?])]
+  (let [starting-point @(rf/subscribe [::input.subs/snapped-position])
+        ending-point @(rf/subscribe [::input.subs/snapped-offset])
+        drag? @(rf/subscribe [::input.subs/drag?])]
     (when drag?
       [utils.svg/arm starting-point ending-point])))
 

@@ -36,23 +36,6 @@
  :-> :anchor-offset)
 
 (rf/reg-sub
- ::drag-pointer
- :-> :drag-pointer)
-
-(rf/reg-sub
- ::snapped-position
- :-> tool.handlers/snapped-position)
-
-(rf/reg-sub
- ::snapped-offset
- :-> tool.handlers/snapped-offset)
-
-(rf/reg-sub
- ::drag?
- :<- [::drag-pointer]
- boolean)
-
-(rf/reg-sub
  ::cursor
  :-> :cursor)
 
