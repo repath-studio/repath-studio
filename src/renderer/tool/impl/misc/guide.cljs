@@ -8,7 +8,7 @@
    [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
-   [renderer.input.handlers :as input.handlers]
+   [renderer.input.impl.pointer :as input.impl.pointer]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
@@ -55,7 +55,7 @@
   (-> db
       (history.handlers/reset-state)
       (assoc-in [:active-pointers pointer-id] e)
-      (input.handlers/on-drag-start e)))
+      (input.impl.pointer/on-drag-start e)))
 
 (defmethod tool.hierarchy/on-pointer-move [::guide :create]
   [db _e]

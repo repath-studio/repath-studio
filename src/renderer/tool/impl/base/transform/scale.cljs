@@ -7,6 +7,7 @@
    [renderer.element.handlers :as element.handlers]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
+   [renderer.input.handlers :as input.handlers]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
@@ -131,7 +132,7 @@
 (defn ratio-locked?
   [db e]
   (or (:ctrl-key e)
-      (tool.handlers/multi-touch? db)
+      (input.handlers/multi-touch? db)
       (element.handlers/ratio-locked? db)))
 
 (defmethod tool.hierarchy/on-drag [::transform/transform :scale]

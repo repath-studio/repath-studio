@@ -10,6 +10,7 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
+   [renderer.input.handlers :as input.handlers]
    [renderer.tool.db :refer [Handle]]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
@@ -60,7 +61,7 @@
 (defn reduce-by-area
   [db e f]
   (let [{:keys [alt-key]} e
-        intersecting? (or alt-key (tool.handlers/multi-touch? db))]
+        intersecting? (or alt-key (input.handlers/multi-touch? db))]
     (transduce
      (comp
       (element.handlers/visible)

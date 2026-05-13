@@ -10,6 +10,7 @@
    [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
+   [renderer.input.handlers :as input.handlers]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
@@ -77,7 +78,7 @@
 (defmethod tool.hierarchy/on-drag [::edit :edit]
   [db e]
   (let [{:keys [element-id id]} (:clicked-element db)
-        lock? (or (:ctrl-key e) (tool.handlers/multi-touch? db))
+        lock? (or (:ctrl-key e) (input.handlers/multi-touch? db))
         offset (matrix/add (tool.handlers/pointer-delta db)
                            (snap.handlers/nearest-delta db))]
     (cond-> db

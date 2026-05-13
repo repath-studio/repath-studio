@@ -6,12 +6,12 @@
    ["@repath-studio/react-color" :refer [ChromePicker PhotoshopPicker]]
    [re-frame.core :as rf]
    [renderer.action.views :as action.views]
-   [renderer.app.subs :as-alias app.subs]
    [renderer.document.events :as-alias document.events]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.events :as-alias element.events]
    [renderer.frame.events :as-alias frame.events]
    [renderer.i18n.views :as i18n.views]
+   [renderer.input.subs :as-alias input.subs]
    [renderer.snap.views :as snap.views]
    [renderer.timeline.views :as timeline.views]
    [renderer.utils.key :as utils.key]
@@ -20,7 +20,7 @@
    [renderer.window.subs :as-alias window.subs]))
 
 (defn coordinates []
-  (let [[x y] @(rf/subscribe [::app.subs/adjusted-pointer-pos])]
+  (let [[x y] @(rf/subscribe [::input.subs/adjusted-pointer-pos])]
     [:div.flex-col.font-mono.leading-tight.hidden.mx-1
      {:class "xl:flex"
       :style {:min-width "90px"}

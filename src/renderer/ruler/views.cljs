@@ -2,10 +2,10 @@
   (:require
    [clojure.string :as string]
    [re-frame.core :as rf]
-   [renderer.app.subs :as-alias app.subs]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.subs :as-alias element.subs]
    [renderer.frame.subs :as-alias frame.subs]
+   [renderer.input.subs :as-alias input.subs]
    [renderer.ruler.subs :as-alias ruler.subs]
    [renderer.tool.events :as tool.events]
    [renderer.tool.impl.misc.guide :as-alias tool.impl.misc.guide]
@@ -33,7 +33,7 @@
 
 (defn pointer
   [orientation]
-  (let [[x y] @(rf/subscribe [::app.subs/pointer-pos])
+  (let [[x y] @(rf/subscribe [::input.subs/pointer-pos])
         pointer-size (/ ruler-size 5)
         color "var(--color-accent)"
         vertical (= orientation :vertical)]
