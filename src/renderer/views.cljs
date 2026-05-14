@@ -85,7 +85,7 @@
     label]
    [:> Switch/Root
     (merge-with-class
-     {:class "bg-overlay relative rounded-full w-10 h-6
+     {:class "bg-overlay relative rounded-full w-10 h-6 shrink-0
               data-[state=checked]:bg-accent data-disabled:opacity-50"
       :dir "ltr"}
      props)

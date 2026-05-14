@@ -1,6 +1,7 @@
 (ns renderer.document.handlers
   (:require
    [config :as config]
+   [de-dupe.core :refer [de-dupe-eq]]
    [malli.core :as m]
    [malli.transform :as m.transform]
    [renderer.app.db :refer [App]]
@@ -45,13 +46,13 @@
 (m/=> persisted-format [:-> App DocumentId PersistedDocument])
 (defn persisted-format
   [db id]
-  (-> PersistedDocument
-      (m/decode (entity db id) m.transform/strip-extra-keys-transformer)
-      (assoc :version (:version db))
-      (update :elements (fn [elements]
-                          (into {}
-                                (map (fn [[k v]] [k (dissoc v :selected)]))
-                                elements)))))
+  (let [document (-> PersistedDocument
+                     (m/decode (entity db id)
+                               m.transform/strip-extra-keys-transformer)
+                     (assoc :version (:version db)))]
+    (if (:persist-document-history db)
+      (update-in document [:history :states] de-dupe-eq)
+      (dissoc document :history :saved-history-index))))
 
 (m/=> close [:-> App DocumentId App])
 (defn close

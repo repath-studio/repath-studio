@@ -2,6 +2,7 @@
   (:require
    [re-frame.core :as rf]
    [renderer.app.effects :as-alias app.effects]
+   [renderer.app.events :refer [persist]]
    [renderer.effects :as-alias effects]
    [renderer.history.handlers :as history.handlers]
    [renderer.tool.handlers :as tool.handlers]))
@@ -50,6 +51,12 @@
  ::clear
  (fn [db _]
    (history.handlers/drop-rest db)))
+
+(rf/reg-event-db
+ ::toggle-persist-document-history
+ [persist]
+ (fn [db [_]]
+   (update db :persist-document-history not)))
 
 (rf/reg-event-db
  ::tree-view-updated

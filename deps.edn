@@ -8,6 +8,9 @@
         day8.re-frame/test {:mvn/version "0.1.7"}
         day8.re-frame/tracing {:mvn/version "0.6.2"}
         day8/shadow-git-inject {:mvn/version "0.0.10"}
+        day8/de-dupe {:git/url "https://github.com/day8/de-dupe.git"
+                      :sha "381a89ff08d5dcad4d874433402e4bede53c8aaa"
+                      :deps/manifest :deps}
         metosin/malli {:mvn/version "0.20.1"}
         net.mikera/core.matrix {:mvn/version "0.63.0"}
         org.clj-commons/hickory {:mvn/version "0.7.7"}

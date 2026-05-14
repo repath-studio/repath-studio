@@ -2,6 +2,7 @@
   (:require
    [cljs.reader :as cljs.reader]
    [config :as config]
+   [de-dupe.core :refer [expand]]
    [malli.error :as m.error]
    [re-frame.core :as rf]
    [renderer.app.effects :as-alias app.effects]
@@ -289,7 +290,10 @@
  [(rf/inject-cofx ::effects/guid)
   (rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now guid]} [_ document]]
-   (let [migrated-document (utils.compatibility/migrate-document document)
+   (let [document (cond-> document
+                    (:history document)
+                    (update-in [:history :states] expand))
+         migrated-document (utils.compatibility/migrate-document document)
          is-migrated (not= document migrated-document)
          document (merge document.db/default {:id guid} migrated-document)
          {:keys [id file-handle]} document]
@@ -298,8 +302,10 @@
               :always
               (-> (document.handlers/create-tab (dissoc document :file-handle))
                   (document.handlers/center)
-                  (document.handlers/add-recent document)
-                  (history.handlers/finalize now [::load-doc "Load document"]))
+                  (document.handlers/add-recent document))
+
+              (not (:history document))
+              (history.handlers/finalize now [::load-doc "Load document"])
 
               (not is-migrated)
               (document.handlers/update-saved-history-index id))

@@ -156,6 +156,19 @@
 
      [:div.flex.gap-2.flex-col
       [legend]
+      [:div.flex.justify-around.p-1
+       [views/switch
+        [:span
+         [:span.bg-warning.rounded-full.px-1.py-0.5.text-xs.mx-2.text-primary
+          {:class "uppercase"}
+          (i18n.views/t [::experimental "experimental"])]
+         (i18n.views/t [::persist-document-history
+                        "Persist document history on save"])]
+        {:id "guide-snap"
+         :default-checked
+         @(rf/subscribe [::history.subs/persist-document-history?])
+         :on-checked-change
+         #(rf/dispatch [::history.events/toggle-persist-document-history])}]]
       [views/button-group
        [:button.button.flex-1
         {:on-click #(rf/dispatch [::history.events/tree-view-updated

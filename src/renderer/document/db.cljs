@@ -41,7 +41,8 @@
 (def PersistedDocument
   (->> Document
        (m/children)
-       (filter (comp #(some #{%} [:id :title :path :version :elements]) first))
+       (filter (comp #(some #{%} [:id :title :path :version :elements
+                                  :history :saved-history-index]) first))
        (into [:map {:closed true}])))
 
 (def RecentDocument
