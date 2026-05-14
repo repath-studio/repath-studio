@@ -689,7 +689,9 @@
   :select-element "Επιλογή στοιχείου"
   :delete-selection "Διαγραφή επιλεγμένου"
   :oldest "Παλαιότερο"
-  :newest "Νεότερο"}
+  :newest "Νεότερο"
+  :experimental "Πειραματικό"
+  :persist-document-history "Διατήρηση ιστορικού εγγράφου κατά την αποθήκευση"}
 
  :renderer.timeline.views
  {:speed "Ταχύτητα"

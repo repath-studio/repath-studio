@@ -625,7 +625,9 @@
   :select-element "要素を選択"
   :delete-selection "選択を削除"
   :oldest "最古"
-  :newest "最新"}
+  :newest "最新"
+  :experimental "実験的"
+  :persist-document-history "保存時にドキュメント履歴を保持"}
 
  :renderer.timeline.views
  {:speed "速度"

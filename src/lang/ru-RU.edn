@@ -665,7 +665,9 @@
   :select-element "Выделить элемент"
   :delete-selection "Удалить выделенное"
   :oldest "Самые старые"
-  :newest "Самые новые"}
+  :newest "Самые новые"
+  :experimental "Экспериментальный"
+  :persist-document-history "Сохранять историю документа при сохранении"}
 
  :renderer.timeline.views
  {:speed "Скорость"
