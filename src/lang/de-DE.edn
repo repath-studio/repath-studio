@@ -687,7 +687,6 @@
   :delete-selection "Auswahl löschen"
   :oldest "Älteste"
   :newest "Neueste"
-  :experimental "Experimentell"
   :persist-document-history "Dokumentverlauf beim Speichern beibehalten"}
 
  :renderer.timeline.views

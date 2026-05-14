@@ -666,7 +666,6 @@
   :delete-selection "Eliminar seleção"
   :oldest "Mais antigo"
   :newest "Mais recente"
-  :experimental "Experimental"
   :persist-document-history "Manter o histórico do documento ao guardar"}
 
  :renderer.timeline.views

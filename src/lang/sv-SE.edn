@@ -668,7 +668,6 @@
   :delete-selection "Ta bort markering"
   :oldest "Äldsta"
   :newest "Nyaste"
-  :experimental "Experimentell"
   :persist-document-history "Bevara dokumenthistorik vid spara"}
 
  :renderer.timeline.views

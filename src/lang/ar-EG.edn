@@ -641,7 +641,6 @@
   :delete-selection "حذف التحديد"
   :oldest "الأقدم"
   :newest "الأحدث"
-  :experimental "تجريبي"
   :persist-document-history "الاحتفاظ بسجل المستند عند الحفظ"}
 
  :renderer.timeline.views

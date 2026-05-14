@@ -683,7 +683,6 @@
   :delete-selection "Selectie verwijderen"
   :oldest "Oudste"
   :newest "Nieuwste"
-  :experimental "Experimenteel"
   :persist-document-history "Documentgeschiedenis bewaren bij opslaan"}
 
  :renderer.timeline.views

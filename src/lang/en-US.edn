@@ -654,7 +654,6 @@
   :delete-selection "Delete selection"
   :oldest "Oldest"
   :newest "Newest"
-  :experimental "experimental"
   :persist-document-history "Persist document history on save"}
 
  :renderer.timeline.views

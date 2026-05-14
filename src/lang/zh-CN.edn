@@ -587,7 +587,6 @@
   :delete-selection "删除选择"
   :oldest "最旧的"
   :newest "最新的"
-  :experimental "实验性"
   :persist-document-history "保存时保留文档历史记录"}
 
  :renderer.timeline.views

@@ -666,7 +666,6 @@
   :delete-selection "Удалить выделенное"
   :oldest "Самые старые"
   :newest "Самые новые"
-  :experimental "Экспериментальный"
   :persist-document-history "Сохранять историю документа при сохранении"}
 
  :renderer.timeline.views

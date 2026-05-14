@@ -682,7 +682,6 @@
   :delete-selection "Elimina selezione"
   :oldest "Più vecchio"
   :newest "Più recente"
-  :experimental "Sperimentale"
   :persist-document-history "Mantieni la cronologia del documento al
                              salvataggio"}
 
