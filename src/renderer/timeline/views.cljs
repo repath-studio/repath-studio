@@ -81,12 +81,12 @@
      [views/switch
       (i18n.views/t [::grid-snap "Grid snap"])
       {:id "grid-snap"
-       :default-checked grid-snap?
+       :checked grid-snap?
        :on-checked-change #(rf/dispatch [::timeline.events/set-grid-snap %])}]
      [views/switch
       (i18n.views/t [::guide-snap "Guide snap"])
       {:id "guide-snap"
-       :default-checked guide-snap?
+       :checked guide-snap?
        :on-checked-change #(rf/dispatch [::timeline.events/set-guide-snap
                                          %])}]]))
 

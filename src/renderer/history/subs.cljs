@@ -5,10 +5,6 @@
    [renderer.history.handlers :as history.handlers]))
 
 (rf/reg-sub
- ::persist-document-history?
- :-> :persist-document-history)
-
-(rf/reg-sub
  ::history
  :-> history.handlers/history)
 

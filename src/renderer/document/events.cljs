@@ -448,6 +448,12 @@
  (fn [db [_]]
    (document.handlers/center db)))
 
+(rf/reg-event-db
+ ::toggle-persist-history
+ [persist]
+ (fn [db [_]]
+   (document.handlers/toggle-persist-history db)))
+
 (rf/reg-event-fx
  ::export
  (fn [{:keys [db]} [_ mime-type]]

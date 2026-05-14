@@ -94,8 +94,6 @@
    [:user-lang {:default "system"
                 :persist true} LanguageId]
    [:system-lang {:optional true} LanguageCodeIdentifier]
-   [:persist-document-history {:default false
-                               :persist true} boolean?]
    [:languages {:default {}} LanguageRegistry]
    [:icons {:default icon.defaults/icons} Icons]
    [:platform {:optional true} Platform]
