@@ -25,6 +25,17 @@
         (matrix/div zoom)
         (matrix/add pan))))
 
+(defn multi-touch?
+  [db]
+  (> (count (:active-pointers db)) 1))
+
+(m/=> snap-to-angle? [:-> App PointerEvent boolean?])
+(defn snap-to-angle?
+  [db e]
+  (and (not= (:state db) :scale)
+       (or (:ctrl-key e)
+           (multi-touch? db))))
+
 (m/=> snap-angle [:-> Vec2 Vec2 Vec2])
 (defn snap-angle
   "Snaps the end position to the nearest 15 degree angle."
@@ -35,10 +46,6 @@
         [x1 y1] start]
     [(+ x1 (utils.math/angle-dx snapped r))
      (+ y1 (utils.math/angle-dy snapped r))]))
-
-(defn multi-touch?
-  [db]
-  (> (count (:active-pointers db)) 1))
 
 (m/=> clear-pointer-data [:-> App App])
 (defn clear-pointer-data

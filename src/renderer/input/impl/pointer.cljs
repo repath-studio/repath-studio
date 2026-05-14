@@ -134,20 +134,14 @@
          (contains? active-pointers pointer-id)
          (significant-drag? db e))))
 
-(m/=> snap-to-angle? [:-> App PointerEvent boolean?])
-(defn snap-to-angle?
-  [db e]
-  (and (:pointer-offset db)
-       (or (:ctrl-key e)
-           (input.handlers/multi-touch? db))))
-
 (m/=> adjusted-pointer-pos [:-> App PointerEvent Vec2])
 (defn adjusted-pointer-pos
   [db e]
   (let [{:keys [adjusted-pointer-offset]} db
         {:keys [pointer-pos]} e]
     (cond->> (input.handlers/adjusted-pos db pointer-pos)
-      (snap-to-angle? db e)
+      (and (:pointer-offset db)
+           (input.handlers/snap-to-angle? db e))
       (input.handlers/snap-angle adjusted-pointer-offset))))
 
 (defmethod input.hierarchy/pointer "pointermove"
