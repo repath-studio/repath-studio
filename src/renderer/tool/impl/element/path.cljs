@@ -39,13 +39,6 @@
    [:div (i18n.views/t [::double-click-to-end
                         "Double or right click to finalize the path."])]])
 
-(m/=> next-control-point [:-> [:vector any?] Vec2])
-(defn next-control-point
-  [segments]
-  (let [segment (-> segments utils.path/drop-last-segment last)]
-    (or (utils.path/outgoing-cp segment)
-        (utils.path/segment-point segment :end-point))))
-
 (m/=> adjusted-pointer-position [:-> App Vec2])
 (defn adjusted-pointer-position
   [db]
@@ -103,7 +96,7 @@
             last-segment (last segments)
             out-cp (utils.path/outgoing-cp last-segment)]
         (->> (if out-cp
-               ["C" (first out-cp) (second out-cp) x y x y]
+               ["S" x y x y]
                ["L" x y])
              (conj segments)
              (utils.path/segments->string))))))
@@ -121,9 +114,8 @@
                           (matrix/sub drag-pos))]
     (update-path db #(let [segments (utils.path/string->segments %)]
                        (if (> (count segments) 1)
-                         (let [[ax ay] anchor
-                               [cp1-x cp1-y] (next-control-point segments)]
-                           (->> ["C" cp1-x cp1-y cp2-x cp2-y ax ay]
+                         (let [[ax ay] anchor]
+                           (->> ["S" cp2-x cp2-y ax ay]
                                 (conj (utils.path/drop-last-segment segments))
                                 (utils.path/segments->string)))
                          %)))))
