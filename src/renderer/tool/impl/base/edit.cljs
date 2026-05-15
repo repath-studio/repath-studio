@@ -93,7 +93,8 @@
 
       element-id
       (element.handlers/update-el element-id
-                                  element.hierarchy/edit-drag offset id lock?))))
+                                  element.hierarchy/edit-drag
+                                  offset id lock?))))
 
 (defmethod tool.hierarchy/on-drag-end [::edit :edit]
   [db e]
