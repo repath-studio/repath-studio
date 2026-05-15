@@ -102,8 +102,7 @@
     (update-in el [:attrs :points] #(-> (utils.attribute/points->vec %)
                                         (update index transform-point)
                                         (flatten)
-                                        (->> (string/join " ")
-                                             (string/trim))))))
+                                        (->> (string/join " "))))))
 
 (defmethod element.hierarchy/bbox ::element.hierarchy/poly
   [el]
