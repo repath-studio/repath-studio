@@ -8,6 +8,7 @@
    [malli.core :as m]
    [re-frame.core :as rf]
    [renderer.app.subs :as-alias app.subs]
+   [renderer.attribute.impl.d :as attribute.impl.d]
    [renderer.db :refer [PathSegment PathSegments PathPointType Vec2]]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
@@ -162,9 +163,13 @@
   (->> (handles endpoints segments index segment)
        (map (fn [{:keys [point-type pos rounded implied]}]
               (let [[ax ay] (matrix/add offset pos)
+                    label (-> (utils.path/segment->command segment)
+                              (attribute.impl.d/path-commands)
+                              :label)
                     h [tool.views/handle {:id (keyword index point-type)
                                           :x ax
                                           :y ay
+                                          :label label
                                           :type :handle
                                           :action :edit
                                           :rounded (boolean rounded)
@@ -297,11 +302,11 @@
                                                             offset
                                                             active-indices))]
     [:g
-     (when segment-d
-       [:path {:d segment-d
-               :fill "transparent"
-               :stroke-width (/ 1 zoom)
-               :stroke "var(--accent)"}])
+     [:path {:d (or segment-d "")
+             :visibility (when-not segment-d "hidden")
+             :fill "none"
+             :stroke-width (/ 1 zoom)
+             :stroke "var(--accent)"}]
      (->> segments
           (map-indexed (partial render-arms props))
           (into [:g]))
