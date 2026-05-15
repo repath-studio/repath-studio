@@ -6,10 +6,14 @@
    ["svgpath" :as svgpath]
    [clojure.core.matrix :as matrix]
    [malli.core :as m]
+   [re-frame.core :as rf]
+   [renderer.app.subs :as-alias app.subs]
    [renderer.db :refer [PathSegment PathSegments PathPointType Vec2]]
+   [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
    [renderer.input.handlers :as input.handlers]
+   [renderer.tool.subs :as-alias tool.subs]
    [renderer.tool.views :as tool.views]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
@@ -179,11 +183,13 @@
                  (utils.path/abs-endpoint segment)
                  (conj acc))) [] segments))
 
+(m/=> c->s-segment [:-> PathSegment PathSegment])
 (defn c->s-segment
   [segment]
   (let [[_ _cp1x _cp1y cp2x cp2y x y] segment]
     ["S" cp2x cp2y x y]))
 
+(m/=> s->c-segment [:-> PathSegments int? PathSegment])
 (defn s->c-segment
   [segments index]
   (let [[_ cp2x cp2y x y] (get segments index)
@@ -193,6 +199,7 @@
         [cp1x cp1y] (or (utils.path/outgoing-cp prev-segment) prev-ep)]
     ["C" cp1x cp1y cp2x cp2y x y]))
 
+(m/=> toggle-command [:-> PathSegments int? PathSegments])
 (defn toggle-command
   [segments index]
   (let [segment (get segments index)
@@ -204,24 +211,97 @@
 
 (defmethod element.hierarchy/edit-click :path
   [el handle]
-  (let [point-type (keyword (name handle))]
-    (if (= point-type :end-point)
-      (let [index (inc (js/parseInt (namespace handle)))]
-        (update-in el [:attrs :d]
-                   #(some-> %
-                            utils.path/string->segments
-                            (toggle-command index)
-                            utils.path/segments->string)))
-      el)))
+  (let [point-type (keyword (name handle))
+        index (js/parseInt (namespace handle))]
+    (cond-> el
+      (= point-type :end-point)
+      (update-in [:attrs :d]
+                 #(some-> %
+                          (utils.path/string->segments)
+                          (toggle-command (inc index))
+                          (utils.path/segments->string))))))
+
+(m/=> ->highlight-segments [:->
+                            PathSegments [:vector Vec2] Vec2 int?
+                            [:maybe PathSegments]])
+(defn ->highlight-segments
+  [segments endpoints offset index]
+  (let [segment (get segments index)
+        cmd (utils.path/segment->command segment)
+        prev-ep (some->> (dec index)
+                         (get endpoints)
+                         (mapv utils.length/unit->px)
+                         (matrix/add offset))
+        ep (some-> segment
+                   (->px-point :end-point)
+                   (matrix/add offset))]
+    (when (and prev-ep ep)
+      (case cmd
+        "C"
+        (let [cp1 (matrix/add (->px-point segment :start-control-point) offset)
+              cp2 (matrix/add (->px-point segment :end-control-point) offset)]
+          [(concat ["M"] prev-ep) (concat ["C"] cp1 cp2 ep)])
+
+        "S"
+        (let [cp1 (or (some->> (dec index)
+                               (get segments)
+                               (utils.path/outgoing-cp)
+                               (mapv utils.length/unit->px)
+                               (matrix/add offset))
+                      prev-ep)
+              cp2 (matrix/add (->px-point segment :start-control-point) offset)]
+          [(concat ["M"] prev-ep) (concat ["C"] cp1 cp2 ep)])
+
+        "Q"
+        (let [cp (matrix/add (->px-point segment :start-control-point) offset)]
+          [(concat ["M"] prev-ep) ["Q"] cp ep])
+
+        [(concat ["M"] prev-ep) (concat ["L"] ep)]))))
+
+(defn active-segment-indices
+  [segments index point-type]
+  (let [next-cmd (utils.path/segment->command (get segments (inc index)))]
+    (cond-> #{index}
+      (and (= point-type :end-point)
+           (get segments (inc index)))
+      (conj (inc index))
+
+      (and (= point-type :end-control-point)
+           (= next-cmd "S"))
+      (conj (inc index)))))
+
+(defn editing-segments-path
+  [segments endpoints offset indices]
+  (->> indices
+       (mapv (partial ->highlight-segments segments endpoints offset))
+       utils.path/segments->string))
 
 (defmethod element.hierarchy/render-edit :path
   [el]
-  (let [segments (->> el :attrs :d utils.path/string->segments)
+  (let [editing? @(rf/subscribe [::tool.subs/editing?])
+        clicked-element @(rf/subscribe [::app.subs/clicked-element])
+        zoom @(rf/subscribe [::document.subs/zoom])
+        segments (->> el :attrs :d utils.path/string->segments)
+        endpoints (acc-endpoints segments)
+        offset (utils.element/offset el)
         props {:element-id (:id el)
-               :endpoints (acc-endpoints segments)
+               :endpoints endpoints
                :segments segments
-               :offset (utils.element/offset el)}]
+               :offset offset}
+        active-index (when (and editing?
+                                (= (:element-id clicked-element) (:id el)))
+                       (some-> clicked-element :id namespace js/parseInt))
+        active-pt (when active-index (keyword (name (:id clicked-element))))
+        active-indices (active-segment-indices segments active-index active-pt)
+        segment-d (when active-index (editing-segments-path segments endpoints
+                                                            offset
+                                                            active-indices))]
     [:g
+     (when segment-d
+       [:path {:d segment-d
+               :fill "transparent"
+               :stroke-width (/ 1 zoom)
+               :stroke "var(--accent)"}])
      (->> segments
           (map-indexed (partial render-arms props))
           (into [:g]))
