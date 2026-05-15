@@ -77,7 +77,7 @@
   [_ k v {:keys [disabled]}]
   (let [state-idle (= @(rf/subscribe [::tool.subs/state]) :idle)]
     [:div.flex.gap-px.w-full
-     [attribute.views/form-input k (if state-idle v "waiting")
+     [attribute.views/form-input k v
       {:disabled (or disabled
                      (not v)
                      (not state-idle))}]

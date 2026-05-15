@@ -150,7 +150,7 @@
   [_ k v {:keys [disabled]}]
   (let [idle (= @(rf/subscribe [::tool.subs/state]) :idle)]
     [:div.flex.gap-px.w-full
-     [attribute.views/form-input k (if idle v "waiting")
+     [attribute.views/form-input k v
       {:disabled (or disabled (not v) (not idle))}]
      (when v
        [:> Popover/Root {:modal true}
