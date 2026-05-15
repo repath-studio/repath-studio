@@ -64,7 +64,7 @@
            (mapv utils.length/unit->px)))
 
 (defn render-arms
-  [endpoints offset index segment]
+  [{:keys [endpoints segments offset]} index segment]
   (let [prev-ep (some-> (get endpoints (dec index)) (matrix/add offset))
         cp0 (some-> segment
                     (->px-point :start-control-point)
@@ -80,7 +80,12 @@
          [utils.svg/arm cp1 ep]])
 
       "S"
-      [utils.svg/arm cp0 ep]
+      [:<>
+       (when-let [implied-cp1 (some-> (get segments (dec index))
+                                      utils.path/outgoing-cp
+                                      (matrix/add offset))]
+         [utils.svg/arm prev-ep implied-cp1])
+       [utils.svg/arm cp0 ep]]
 
       `"Q"
       [:<>
@@ -89,9 +94,11 @@
 
       nil)))
 
-(m/=> handles [:-> [:vector Vec2] int? PathSegment [:maybe [:vector map?]]])
+(m/=> handles [:->
+               [:vector Vec2] PathSegments int? PathSegment
+               [:maybe [:vector map?]]])
 (defn handles
-  [endpoints index segment]
+  [endpoints segments index segment]
   (let [command (utils.path/segment->command segment)
         prev-ep (get endpoints (dec index))]
     (case command
@@ -110,7 +117,22 @@
        {:point-type :end-point
         :pos (->px-point segment :end-point)}]
 
-      ("S" "Q")
+      "S"
+      (let [cp0 (->px-point segment :start-control-point)
+            implied-cp1 (some-> (get segments (dec index))
+                                utils.path/outgoing-cp
+                                (->> (mapv utils.length/unit->px)))]
+        (cond-> [{:point-type :start-control-point
+                  :pos cp0
+                  :rounded true}
+                 {:point-type :end-point
+                  :pos (->px-point segment :end-point)}]
+          implied-cp1 (conj {:point-type :implied-control-point
+                             :pos implied-cp1
+                             :rounded true
+                             :implied true})))
+
+      "Q"
       [{:point-type :start-control-point
         :pos (->px-point segment :start-control-point)
         :rounded true}
@@ -132,17 +154,21 @@
       nil)))
 
 (defn render-handles
-  [{:keys [element-id endpoints offset]} index segment]
-  (->> (handles endpoints index segment)
-       (map (fn [{:keys [point-type pos rounded]}]
-              (let [[ax ay] (matrix/add offset pos)]
-                [tool.views/handle {:id (keyword index point-type)
-                                    :x ax
-                                    :y ay
-                                    :type :handle
-                                    :action :edit
-                                    :rounded (boolean rounded)
-                                    :element-id element-id}])))
+  [{:keys [element-id endpoints segments offset]} index segment]
+  (->> (handles endpoints segments index segment)
+       (map (fn [{:keys [point-type pos rounded implied]}]
+              (let [[ax ay] (matrix/add offset pos)
+                    h [tool.views/handle {:id (keyword index point-type)
+                                          :x ax
+                                          :y ay
+                                          :type :handle
+                                          :action :edit
+                                          :rounded (boolean rounded)
+                                          :element-id element-id}]]
+                (if implied
+                  [:g {:pointer-events "none"
+                       :opacity 0.5} h]
+                  h))))
        (into [:g])))
 
 (m/=> acc-endpoints [:-> PathSegments [:vector Vec2]])
@@ -153,19 +179,54 @@
                  (utils.path/abs-endpoint segment)
                  (conj acc))) [] segments))
 
+(defn c->s-segment
+  [segment]
+  (let [[_ _cp1x _cp1y cp2x cp2y x y] segment]
+    ["S" cp2x cp2y x y]))
+
+(defn s->c-segment
+  [segments index]
+  (let [[_ cp2x cp2y x y] (get segments index)
+        prev-segment (get segments (dec index))
+        endpoints (acc-endpoints segments)
+        prev-ep (get endpoints (dec index))
+        [cp1x cp1y] (or (utils.path/outgoing-cp prev-segment) prev-ep)]
+    ["C" cp1x cp1y cp2x cp2y x y]))
+
+(defn toggle-command
+  [segments index]
+  (let [segment (get segments index)
+        command (utils.path/segment->command segment)]
+    (case command
+      "C" (assoc segments index (c->s-segment segment))
+      "S" (assoc segments index (s->c-segment segments index))
+      segments)))
+
+(defmethod element.hierarchy/edit-click :path
+  [el handle]
+  (let [point-type (keyword (name handle))]
+    (if (= point-type :end-point)
+      (let [index (inc (js/parseInt (namespace handle)))]
+        (update-in el [:attrs :d]
+                   #(some-> %
+                            utils.path/string->segments
+                            (toggle-command index)
+                            utils.path/segments->string)))
+      el)))
+
 (defmethod element.hierarchy/render-edit :path
   [el]
-  (let [offset (utils.element/offset el)
-        segments (->> el :attrs :d utils.path/string->segments)
-        endpoints (acc-endpoints segments)]
+  (let [segments (->> el :attrs :d utils.path/string->segments)
+        props {:element-id (:id el)
+               :endpoints (acc-endpoints segments)
+               :segments segments
+               :offset (utils.element/offset el)}]
     [:g
      (->> segments
-          (map-indexed (partial render-arms endpoints offset))
+          (map-indexed (partial render-arms props))
           (into [:g]))
      (->> segments
-          (map-indexed (partial render-handles {:element-id (:id el)
-                                                :endpoints endpoints
-                                                :offset offset}))
+          (map-indexed (partial render-handles props))
           (into [:g]))]))
 
 (m/=> translate-seg-point [:->
@@ -203,15 +264,25 @@
 (defn translate-point
   [index point-type delta segments]
   (let [segments (translate-seg-point segments index point-type delta)]
-    (cond-> segments
-      (= point-type :end-point)
-      (-> (translate-seg-point index :end-control-point delta)
-          (translate-seg-point (inc index) :start-control-point delta)))))
+    (if (= point-type :end-point)
+      (let [cmd (utils.path/segment->command (get segments index))
+            next-cmd (utils.path/segment->command (get segments (inc index)))]
+        (cond-> segments
+          (= cmd "C")
+          (translate-seg-point index :end-control-point delta)
+
+          (= cmd "S")
+          (translate-seg-point index :start-control-point delta)
+
+          (not= next-cmd "S")
+          (translate-seg-point (inc index) :start-control-point delta)))
+      segments)))
 
 (defn snap-control-point-to-angle
   [segments index point-type offset]
   (let [endpoints (acc-endpoints segments)
-        anchor (if (= point-type :start-control-point)
+        cmd (utils.path/segment->command (get segments index))
+        anchor (if (and (= point-type :start-control-point) (not= cmd "S"))
                  (get endpoints (dec index))
                  (get endpoints index))
         cp-pos (->px-point (get segments index) point-type)
@@ -219,7 +290,7 @@
         snapped (input.handlers/snap-angle anchor new-cp-pos)]
     (matrix/sub snapped cp-pos)))
 
-(defmethod element.hierarchy/edit :path
+(defmethod element.hierarchy/edit-drag :path
   [el offset handle lock?]
   (let [point-type (keyword (name handle))
         index (js/parseInt (namespace handle))]

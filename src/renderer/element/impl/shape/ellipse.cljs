@@ -75,7 +75,7 @@
         [rx ry] (map utils.length/unit->px [rx ry])]
     (* Math/PI rx ry)))
 
-(defmethod element.hierarchy/edit :ellipse
+(defmethod element.hierarchy/edit-drag :ellipse
   [el [x y] handle _lock?]
   (let [{{:keys [rx ry]} :attrs} el]
     (case handle

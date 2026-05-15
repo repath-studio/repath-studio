@@ -31,8 +31,12 @@
   (fn [el _ratio _pivot-point] (:tag el))
   :hierarchy hierarchy/hierarchy)
 
-(defmulti edit
+(defmulti edit-drag
   (fn [el _offset _handle _lock?] (:tag el))
+  :hierarchy hierarchy/hierarchy)
+
+(defmulti edit-click
+  (fn [el _handle] (:tag el))
   :hierarchy hierarchy/hierarchy)
 
 (defmulti properties identity :hierarchy hierarchy/hierarchy)
@@ -46,5 +50,6 @@
 (defmethod snapping-points :default [] [])
 (defmethod translate :default [el _offset] el)
 (defmethod scale :default [el _ratio _pivot-point] el)
-(defmethod edit :default [el _offset _handle _lock?] el)
+(defmethod edit-drag :default [el _offset _handle _lock?] el)
+(defmethod edit-click :default [el _handle] el)
 (defmethod properties :default [])
