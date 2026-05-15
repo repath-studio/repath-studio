@@ -83,7 +83,7 @@
      ["Active tool" active-tool]
      ["Cached tool" cached-tool]
      ["State" tool-state]
-     ["Clicked element" (:id clicked-element)]
+     ["Clicked element" (str (:id clicked-element))]
      ["Ignored elements" ignored-ids]
      ["Snap" (map->str nearest-neighbor)]]))
 
