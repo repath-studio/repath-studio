@@ -48,16 +48,22 @@
 
 (defmethod tool.hierarchy/on-pointer-up [::edit :idle]
   [db e]
-  (let [{:keys [shift-key button element]} e]
-    (if-not (and (= button :right)
-                 (:selected element))
+  (let [{:keys [shift-key ctrl-key element]} e
+        db (dissoc db :clicked-element)]
+    (cond
+      (and ctrl-key (= (:type element) :handle))
+      (-> db
+          (element.handlers/update-el (:element-id element)
+                                      element.hierarchy/edit-click
+                                      (:id element))
+          (history.handlers/finalize (:timestamp e) [::edit "Edit"]))
+
+      :else
       (-> db
           (element.handlers/clear-ignored)
-          (dissoc :clicked-element)
           (element.handlers/toggle-selection (:id element) shift-key)
           (history.handlers/finalize (:timestamp e)
-                                     [::select-element "Select element"]))
-      (dissoc db :clicked-element))))
+                                     [::select-element "Select element"])))))
 
 (defmethod tool.hierarchy/on-pointer-move [::edit :idle]
   [db e]
@@ -87,7 +93,7 @@
 
       element-id
       (element.handlers/update-el element-id
-                                  element.hierarchy/edit offset id lock?))))
+                                  element.hierarchy/edit-drag offset id lock?))))
 
 (defmethod tool.hierarchy/on-drag-end [::edit :edit]
   [db e]

@@ -92,7 +92,7 @@
          (map-indexed (partial render-handle el margin))
          (into [:g]))))
 
-(defmethod element.hierarchy/edit ::element.hierarchy/poly
+(defmethod element.hierarchy/edit-drag ::element.hierarchy/poly
   [el offset handle lock?]
   (let [index (js/parseInt (name handle))
         [x y] (cond-> offset lock? input.handlers/lock-direction)
