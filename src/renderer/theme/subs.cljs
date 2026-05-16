@@ -27,7 +27,7 @@
  ::computed-mode
  :<- [::mode]
  :<- [::native-mode]
- :-> (partial apply theme.handlers/compute-mode))
+ :-> (partial apply theme.handlers/computed-mode))
 
 (rf/reg-sub
  ::codemirror
