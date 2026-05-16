@@ -718,8 +718,9 @@
 
 (m/=> overlapping-svg [:-> App BBox Element])
 (defn overlapping-svg
+  "Finds the topmost svg that contains or overlaps with the given bounding box."
   [db el-bbox]
-  (let [svgs (reverse (root-svgs db))] ; Reverse to select top svgs first.
+  (let [svgs (reverse (root-svgs db))]
     (or (some #(when (utils.bounds/contained? el-bbox (:bbox %)) %) svgs)
         (some #(when (utils.bounds/intersect? el-bbox (:bbox %)) %) svgs)
         (root db))))
