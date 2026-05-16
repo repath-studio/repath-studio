@@ -43,7 +43,7 @@
         offset (utils.element/scale-offset ratio pivot-point)
         ratio (apply min ratio)]
     (-> el
-        (attribute.hierarchy/update-attr :r * ratio)
+        (attribute.hierarchy/update-attr :r #(abs (* % ratio)))
         (element.hierarchy/translate offset))))
 
 (defmethod element.hierarchy/bbox :circle
