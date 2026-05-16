@@ -76,4 +76,4 @@
 (m/=> drag [:-> App DragEvent App])
 (defn drag
   [db e]
-  (input.hierarchy/wheel db e))
+  (input.hierarchy/drag db e))
