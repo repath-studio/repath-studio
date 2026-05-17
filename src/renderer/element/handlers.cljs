@@ -672,6 +672,7 @@
 (m/=> scale [:-> App Vec2 Vec2 boolean? App])
 (defn scale
   [db ratio pivot-point recursive]
+  ;; TODO: Handle position on recursive scale.
   (let [ids-to-scale (cond-> (selected-ids db)
                        recursive
                        (set/union (descendant-ids db)))]

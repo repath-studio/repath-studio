@@ -121,9 +121,7 @@
                  in-place
                  (pivot-offset handle bbox pivot-point))
         ratio (matrix/div (matrix/add dimensions offset) dimensions)
-        ratio (cond-> ratio ratio-locked (lock-ratio handle))
-        ;; TODO: Handle position on recursive scale.
-        ratio (mapv (fn [r] (if (neg? r) (min r -0.01) (max r 0.01))) ratio)]
+        ratio (cond-> ratio ratio-locked (lock-ratio handle))]
     (-> db
         (assoc :pivot-point pivot-point)
         (element.handlers/scale ratio pivot-point recursive))))
