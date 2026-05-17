@@ -1,6 +1,5 @@
 (ns renderer.tool.impl.base.edit
   (:require
-
    [clojure.core.matrix :as matrix]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
@@ -46,24 +45,35 @@
       element
       (assoc :clicked-element element))))
 
-(defmethod tool.hierarchy/on-pointer-up [::edit :idle]
+(defn edit-click
   [db e]
-  (let [{:keys [shift-key ctrl-key element]} e
-        db (dissoc db :clicked-element)]
-    (cond
-      (and ctrl-key (= (:type element) :handle))
-      (-> db
+  (let [{:keys [element]} e]
+    (cond-> db
+      (= (:type element) :handle)
+      (-> (dissoc :clicked-element)
           (element.handlers/update-el (:element-id element)
                                       element.hierarchy/edit-click
                                       (:id element))
-          (history.handlers/finalize (:timestamp e) [::edit "Edit"]))
+          (history.handlers/finalize (:timestamp e) [::edit "Edit"])))))
+
+(defmethod tool.hierarchy/on-pointer-up [::edit :idle]
+  [db e]
+  (let [{:keys [shift-key ctrl-key element]} e]
+    (cond
+      ctrl-key
+      (edit-click db e)
 
       :else
       (-> db
+          (dissoc db :clicked-element)
           (element.handlers/clear-ignored)
           (element.handlers/toggle-selection (:id element) shift-key)
           (history.handlers/finalize (:timestamp e)
                                      [::select-element "Select element"])))))
+
+(defmethod tool.hierarchy/on-double-click [::edit :idle]
+  [db e]
+  (edit-click db e))
 
 (defmethod tool.hierarchy/on-pointer-move [::edit :idle]
   [db e]

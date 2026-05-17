@@ -204,8 +204,8 @@
         [cp1x cp1y] (or (utils.path/outgoing-cp prev-segment) prev-ep)]
     ["C" cp1x cp1y cp2x cp2y x y]))
 
-(m/=> toggle-command [:-> PathSegments int? PathSegments])
-(defn toggle-command
+(m/=> toggle-shorthand [:-> PathSegments int? PathSegments])
+(defn toggle-shorthand
   [segments index]
   (let [segment (get segments index)
         command (utils.path/segment->command segment)]
@@ -223,7 +223,7 @@
       (update-in [:attrs :d]
                  #(some-> %
                           (utils.path/string->segments)
-                          (toggle-command (inc index))
+                          (toggle-shorthand (inc index))
                           (utils.path/segments->string))))))
 
 (m/=> ->highlight-segments [:->
