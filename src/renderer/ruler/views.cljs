@@ -138,6 +138,7 @@
     [:svg
      {:width (if vertical ruler-size "100%")
       :height (if vertical "100%" ruler-size)
+      :cursor (if vertical "col-resize" "row-resize")
       :on-pointer-down (fn [e]
                          ;; Prevent action when if the event was propagated
                          ;; through a panel separator.

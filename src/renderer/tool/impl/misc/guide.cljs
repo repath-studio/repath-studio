@@ -26,8 +26,8 @@
 (defn cursor
   [orientation]
   (if (= orientation :horizontal)
-    "ns-resize"
-    "ew-resize"))
+    "row-resize"
+    "col-resize"))
 
 (defmethod tool.hierarchy/help [::guide :idle]
   []
