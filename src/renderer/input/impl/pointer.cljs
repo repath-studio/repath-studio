@@ -161,7 +161,7 @@
 
 (defmethod input.hierarchy/pointer "pointerdown"
   [db e]
-  (let [{:keys [nearest-neighbor active-pointers]} db
+  (let [{:keys [active-pointers]} db
         {:keys [button pointer-pos pointer-id]} e]
     (cond-> db
       (not= button :right)
@@ -172,10 +172,11 @@
 
       (or (= button :middle)
           (and (= button :left) (empty? active-pointers)))
-      (assoc :pointer-offset pointer-pos
+      (assoc :pointer-pos pointer-pos
+             :adjusted-pointer-pos (adjusted-pointer-pos db e)
+             :pointer-offset pointer-pos
              :adjusted-pointer-offset (input.handlers/adjusted-pos db
-                                                                   pointer-pos)
-             :nearest-neighbor-offset (:point nearest-neighbor))
+                                                                   pointer-pos))
 
       (or (= button :middle)
           (empty? active-pointers))

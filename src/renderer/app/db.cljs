@@ -45,6 +45,7 @@
    [:cached-tool {:optional true} Tool]
    [:active-pointers {:default {}} [:map-of PointerId PointerEvent]]
    [:pointer-pos {:default [0 0]} Vec2]
+   [:last-origin {:optional true} Vec2]
    [:pointer-offset {:optional true} Vec2]
    [:adjusted-pointer-pos {:default [0 0]} Vec2]
    [:adjusted-pointer-offset {:optional true} Vec2]
@@ -57,7 +58,7 @@
    [:zoom-sensitivity {:default 0.9} [:and number? [:>= 0.01] [:<= 0.99]]]
    [:event-timestamp {:optional true} number?]
    [:features {:optional true} [:set Feature]]
-   [:double-click-delta {:default 250} [:and number? pos?]]
+   [:double-click-delta {:default 300} [:and number? pos?]]
    [:state {:default :idle} State]
    [:cached-state {:optional true} State]
    [:grid {:default false
@@ -82,7 +83,7 @@
    [:recent {:max 10
              :default []
              :persist true} [:vector RecentDocument]]
-   [:drag-threshold {:default 1} number?]
+   [:drag-threshold {:default 2} number?]
    [:system-fonts {:optional true} SystemFonts]
    [:debug-info {:default false
                  :persist true} boolean?]
