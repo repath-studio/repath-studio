@@ -65,7 +65,7 @@
   (update-el db))
 
 (defmethod tool.hierarchy/on-pointer-down [::circle :create]
-  [db e]
+  [db _e]
   (update-el db))
 
 (defmethod tool.hierarchy/on-pointer-move [::circle :create]
