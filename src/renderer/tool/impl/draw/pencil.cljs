@@ -48,7 +48,7 @@
     (-> db
         (element.handlers/swap path)
         (history.handlers/finalize (:timestamp e) [::draw-line "Draw line"])
-        (tool.handlers/deactivate))))
+        (tool.handlers/activate ::pencil))))
 
 (rf/dispatch [::action.events/register-action
               {:id :tool/pencil

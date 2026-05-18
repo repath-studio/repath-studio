@@ -62,6 +62,11 @@
   ;; pointer movement.
   (rf/dispatch-sync [::input.events/pointer (->clj el e)]))
 
+(m/=> touch? [:-> PointerEvent boolean?])
+(defn touch?
+  [e]
+  (= (:pointer-type e) "touch"))
+
 (m/=> drag-pointer? [:-> App PointerEvent boolean?])
 (defn drag-pointer?
   [db e]
@@ -172,10 +177,14 @@
 
       (or (= button :middle)
           (and (= button :left) (empty? active-pointers)))
-      (assoc :pointer-offset pointer-pos
+      (assoc :pointer-pos pointer-pos
+             :adjusted-pointer-pos (adjusted-pointer-pos db e)
+             :pointer-offset pointer-pos
              :adjusted-pointer-offset (input.handlers/adjusted-pos db
-                                                                   pointer-pos)
-             :nearest-neighbor-offset (:point nearest-neighbor))
+                                                                   pointer-pos))
+
+      (not (touch? e))
+      (assoc :nearest-neighbor-offset (:point nearest-neighbor))
 
       (or (= button :middle)
           (empty? active-pointers))

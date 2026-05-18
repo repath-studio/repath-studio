@@ -17,8 +17,8 @@
 
 (hierarchy/derive! ::circle ::tool.hierarchy/element)
 
-(defmethod tool.hierarchy/on-drag-start [::circle :idle]
-  [db _e]
+(defn create-el
+  [db]
   (let [offset (tool.handlers/snapped-offset db)
         position (tool.handlers/snapped-position db)
         radius (matrix/distance position offset)
@@ -35,19 +35,50 @@
                                        :stroke stroke
                                        :r radius}}))))
 
-(defmethod tool.hierarchy/on-drag [::circle :create]
-  [db _e]
-  (let [offset (tool.handlers/snapped-offset db)
-        position (tool.handlers/snapped-position db)
-        radius (utils.length/->fixed (matrix/distance position offset))]
+(defn update-el
+  [db]
+  (let [position (tool.handlers/snapped-position db)
+        {:keys [cx cy]} (->> db element.handlers/selected first :attrs)
+        radius (-> position
+                   (matrix/sub (element.handlers/parent-offset db))
+                   (matrix/distance [cx cy])
+                   (utils.length/->fixed))]
     (element.handlers/update-selected db #(assoc-in % [:attrs :r] radius))))
 
-(defmethod tool.hierarchy/on-drag-end [::circle :create]
+(defn finalize
   [db e]
   (-> db
       (history.handlers/finalize (:timestamp e)
                                  [::create-circle "Create circle"])
       (tool.handlers/deactivate)))
+
+(defmethod tool.hierarchy/on-drag-start [::circle :idle]
+  [db _e]
+  (create-el db))
+
+(defmethod tool.hierarchy/on-pointer-up [::circle :idle]
+  [db _e]
+  (create-el db))
+
+(defmethod tool.hierarchy/on-drag [::circle :create]
+  [db _e]
+  (update-el db))
+
+(defmethod tool.hierarchy/on-pointer-down [::circle :create]
+  [db _e]
+  (update-el db))
+
+(defmethod tool.hierarchy/on-pointer-move [::circle :create]
+  [db _e]
+  (update-el db))
+
+(defmethod tool.hierarchy/on-drag-end [::circle :create]
+  [db e]
+  (finalize db e))
+
+(defmethod tool.hierarchy/on-pointer-up [::circle :create]
+  [db e]
+  (finalize db e))
 
 (defmethod tool.hierarchy/snapping-points [::circle :create]
   [db]

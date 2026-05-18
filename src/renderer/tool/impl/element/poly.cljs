@@ -44,12 +44,9 @@
 
     (input.handlers/snap-to-angle? db e)
     (input.handlers/snap-angle (->> (element.handlers/selected db)
-                                    (first)
-                                    :attrs
-                                    :points
+                                    first :attrs :points
                                     (utils.attribute/points->vec)
-                                    (pop)
-                                    (peek)
+                                    pop peek
                                     (mapv utils.length/unit->px)))
 
     :always
@@ -60,10 +57,6 @@
   (update-points db #(->> (adjusted-pointer-position db e)
                           (into [%])
                           (string/join " "))))
-
-(defmethod tool.hierarchy/on-drag-end [::tool.hierarchy/poly :idle]
-  [db e]
-  (tool.hierarchy/on-pointer-up db e))
 
 (defmethod tool.hierarchy/on-drag-end [::tool.hierarchy/poly :create]
   [db e]
@@ -85,3 +78,11 @@
                         (->> (concat point-vector point)
                              (flatten)
                              (string/join " ")))))))
+
+(defmethod tool.hierarchy/on-drag-start [::tool.hierarchy/poly :idle]
+  [db e]
+  (tool.hierarchy/on-pointer-up db e))
+
+(defmethod tool.hierarchy/on-drag [::tool.hierarchy/poly :create]
+  [db e]
+  (tool.hierarchy/on-pointer-move db e))
