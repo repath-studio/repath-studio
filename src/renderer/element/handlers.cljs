@@ -181,7 +181,7 @@
   (let [el (entity db id)
         children (children-ids db id)
         bbox (if (= (:tag el) :g)
-               (let [b (map #(adjusted-bbox db %) children)]
+               (let [b (map (partial adjusted-bbox db) children)]
                  (when (seq b) (apply utils.bounds/union b)))
                (adjusted-bbox db id))]
     (if (or (not bbox) (utils.element/root? el))
@@ -673,7 +673,8 @@
 (defn scale
   [db ratio pivot-point recursive]
   ;; TODO: Handle position on recursive scale.
-  (let [ids-to-scale (cond-> (selected-ids db)
+  (let [ratio (mapv #(if (or (infinite? %) (js/isNaN %)) 1 %) ratio)
+        ids-to-scale (cond-> (selected-ids db)
                        recursive
                        (set/union (descendant-ids db)))]
     (reduce
@@ -920,9 +921,10 @@
   ([db]
    (group db (top-selected-sorted-ids db)))
   ([db ids]
-   (reduce (fn [db id] (set-parent db id (-> db selected-ids first)))
-           (add db {:tag :g
-                    :parent (:id (parent db))}) ids)))
+   (let [db (reduce (fn [db id] (set-parent db id (-> db selected-ids first)))
+                    (add db {:tag :g
+                             :parent (:id (parent db))}) ids)]
+     (refresh-bbox db (-> db selected-ids first)))))
 
 (m/=> ungroup [:function
                [:-> App App]
