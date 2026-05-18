@@ -22,20 +22,16 @@
   [db]
   (let [fill (document.handlers/attr db :fill)
         stroke (document.handlers/attr db :stroke)
-        parent-offset (element.handlers/parent-offset db)
         [offset-x offset-y] (tool.handlers/snapped-offset db)
         [x y] (tool.handlers/snapped-position db)
         [width height] (mapv (comp utils.length/->fixed abs)
                              [(- x offset-x) (- y offset-y)])
-        x (cond-> offset-x (< x offset-x) (- width))
-        y (cond-> offset-y (< y offset-y) (- height))
-        [x y] (mapv utils.length/->fixed [x y])
-        new-origin (matrix/sub (tool.handlers/snapped-position db)
-                               parent-offset)]
+        origin [(cond-> offset-x (< x offset-x) (- width))
+                (cond-> offset-y (< y offset-y) (- height))]
+        [x y] (mapv utils.length/->fixed origin)]
     (-> db
-        (assoc :last-origin new-origin)
+        (assoc :last-origin origin)
         (tool.handlers/set-state :create)
-        (assoc :last-origin new-origin)
         (element.handlers/add {:type :element
                                :tag :rect
                                :attrs {:x x
@@ -48,8 +44,9 @@
 (defn update-el
   [db e]
   (let [pointer-pos (tool.handlers/snapped-position db)
-        position (matrix/sub pointer-pos (element.handlers/parent-offset db))
-        origin (:last-origin db)
+        parent-offset (element.handlers/parent-offset db)
+        position (matrix/sub pointer-pos parent-offset)
+        origin (matrix/sub (:last-origin db) parent-offset)
         position (cond->> position
                    (input.handlers/snap-to-angle? db e)
                    (input.handlers/snap-angle origin))
