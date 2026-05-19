@@ -35,17 +35,13 @@
 
 (defn allowed-url?
   [^js/Url url]
-  (contains? allowed-urls (.-host url)))
-
-(defn secure-url?
-  [^js/Url url]
-  (= (.-protocol url) "https:"))
+  (and (= (.-protocol url) "https:")
+       (contains? allowed-urls (.-host url))))
 
 (defn open-external!
   [url]
   (let [url-parsed (js/URL. url)]
-    (when (and (secure-url? url-parsed)
-               (allowed-url? url-parsed))
+    (when (allowed-url? url-parsed)
       (.openExternal shell url-parsed.href))))
 
 (defn register-ipc-on-events! []
