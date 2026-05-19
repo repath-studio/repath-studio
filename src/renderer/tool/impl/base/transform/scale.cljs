@@ -7,6 +7,7 @@
    [renderer.element.handlers :as element.handlers]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
+   [renderer.input.handlers :as input.handlers]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
@@ -120,9 +121,7 @@
                  in-place
                  (pivot-offset handle bbox pivot-point))
         ratio (matrix/div (matrix/add dimensions offset) dimensions)
-        ratio (cond-> ratio ratio-locked (lock-ratio handle))
-        ;; TODO: Handle negative ratio, and position on recursive scale.
-        ratio (mapv #(max % 0.01) ratio)]
+        ratio (cond-> ratio ratio-locked (lock-ratio handle))]
     (-> db
         (assoc :pivot-point pivot-point)
         (element.handlers/scale ratio pivot-point recursive))))
@@ -131,7 +130,7 @@
 (defn ratio-locked?
   [db e]
   (or (:ctrl-key e)
-      (tool.handlers/multi-touch? db)
+      (input.handlers/multi-touch? db)
       (element.handlers/ratio-locked? db)))
 
 (defmethod tool.hierarchy/on-drag [::transform/transform :scale]

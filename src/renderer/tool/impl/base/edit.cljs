@@ -1,6 +1,5 @@
 (ns renderer.tool.impl.base.edit
   (:require
-
    [clojure.core.matrix :as matrix]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
@@ -10,6 +9,7 @@
    [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
+   [renderer.input.handlers :as input.handlers]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
@@ -45,18 +45,35 @@
       element
       (assoc :clicked-element element))))
 
+(defn edit-click
+  [db e]
+  (let [{:keys [element]} e]
+    (cond-> db
+      (= (:type element) :handle)
+      (-> (dissoc :clicked-element)
+          (element.handlers/update-el (:element-id element)
+                                      element.hierarchy/edit-click
+                                      (:id element))
+          (history.handlers/finalize (:timestamp e) [::edit "Edit"])))))
+
 (defmethod tool.hierarchy/on-pointer-up [::edit :idle]
   [db e]
-  (let [{:keys [shift-key button element]} e]
-    (if-not (and (= button :right)
-                 (:selected element))
+  (let [{:keys [shift-key ctrl-key element]} e]
+    (cond
+      ctrl-key
+      (edit-click db e)
+
+      :else
       (-> db
+          (dissoc db :clicked-element)
           (element.handlers/clear-ignored)
-          (dissoc :clicked-element)
           (element.handlers/toggle-selection (:id element) shift-key)
           (history.handlers/finalize (:timestamp e)
-                                     [::select-element "Select element"]))
-      (dissoc db :clicked-element))))
+                                     [::select-element "Select element"])))))
+
+(defmethod tool.hierarchy/on-double-click [::edit :idle]
+  [db e]
+  (edit-click db e))
 
 (defmethod tool.hierarchy/on-pointer-move [::edit :idle]
   [db e]
@@ -77,7 +94,7 @@
 (defmethod tool.hierarchy/on-drag [::edit :edit]
   [db e]
   (let [{:keys [element-id id]} (:clicked-element db)
-        lock? (or (:ctrl-key e) (tool.handlers/multi-touch? db))
+        lock? (or (:ctrl-key e) (input.handlers/multi-touch? db))
         offset (matrix/add (tool.handlers/pointer-delta db)
                            (snap.handlers/nearest-delta db))]
     (cond-> db
@@ -86,7 +103,8 @@
 
       element-id
       (element.handlers/update-el element-id
-                                  element.hierarchy/edit offset id lock?))))
+                                  element.hierarchy/edit-drag
+                                  offset id lock?))))
 
 (defmethod tool.hierarchy/on-drag-end [::edit :edit]
   [db e]

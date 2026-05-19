@@ -181,7 +181,7 @@
   (let [el (entity db id)
         children (children-ids db id)
         bbox (if (= (:tag el) :g)
-               (let [b (map #(adjusted-bbox db %) children)]
+               (let [b (map (partial adjusted-bbox db) children)]
                  (when (seq b) (apply utils.bounds/union b)))
                (adjusted-bbox db id))]
     (if (or (not bbox) (utils.element/root? el))
@@ -672,7 +672,9 @@
 (m/=> scale [:-> App Vec2 Vec2 boolean? App])
 (defn scale
   [db ratio pivot-point recursive]
-  (let [ids-to-scale (cond-> (selected-ids db)
+  ;; TODO: Handle position on recursive scale.
+  (let [ratio (mapv #(if (or (infinite? %) (js/isNaN %)) 1 %) ratio)
+        ids-to-scale (cond-> (selected-ids db)
                        recursive
                        (set/union (descendant-ids db)))]
     (reduce
@@ -718,8 +720,9 @@
 
 (m/=> overlapping-svg [:-> App BBox Element])
 (defn overlapping-svg
+  "Finds the topmost svg that contains or overlaps with the given bounding box."
   [db el-bbox]
-  (let [svgs (reverse (root-svgs db))] ; Reverse to select top svgs first.
+  (let [svgs (reverse (root-svgs db))]
     (or (some #(when (utils.bounds/contained? el-bbox (:bbox %)) %) svgs)
         (some #(when (utils.bounds/intersect? el-bbox (:bbox %)) %) svgs)
         (root db))))
@@ -918,9 +921,10 @@
   ([db]
    (group db (top-selected-sorted-ids db)))
   ([db ids]
-   (reduce (fn [db id] (set-parent db id (-> db selected-ids first)))
-           (add db {:tag :g
-                    :parent (:id (parent db))}) ids)))
+   (let [db (reduce (fn [db id] (set-parent db id (-> db selected-ids first)))
+                    (add db {:tag :g
+                             :parent (:id (parent db))}) ids)]
+     (refresh-bbox db (-> db selected-ids first)))))
 
 (m/=> ungroup [:function
                [:-> App App]

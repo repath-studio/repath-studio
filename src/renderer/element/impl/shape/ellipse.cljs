@@ -43,8 +43,8 @@
                          (matrix/sub pivot-point))
         offset (utils.element/scale-offset ratio pivot-point)]
     (-> el
-        (attribute.hierarchy/update-attr :rx * x)
-        (attribute.hierarchy/update-attr :ry * y)
+        (attribute.hierarchy/update-attr :rx #(abs (* % x)))
+        (attribute.hierarchy/update-attr :ry #(abs (* % y)))
         (element.hierarchy/translate offset))))
 
 (defmethod element.hierarchy/bbox :ellipse
@@ -75,7 +75,7 @@
         [rx ry] (map utils.length/unit->px [rx ry])]
     (* Math/PI rx ry)))
 
-(defmethod element.hierarchy/edit :ellipse
+(defmethod element.hierarchy/edit-drag :ellipse
   [el [x y] handle _lock?]
   (let [{{:keys [rx ry]} :attrs} el]
     (case handle

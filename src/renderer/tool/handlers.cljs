@@ -7,6 +7,7 @@
    [renderer.frame.db :refer [DomRect]]
    [renderer.frame.handlers :as frame.handlers]
    [renderer.history.handlers :as history.handlers]
+   [renderer.input.handlers :as input.handlers]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.db :refer [Tool State Cursor]]
    [renderer.tool.hierarchy :as tool.hierarchy]
@@ -91,19 +92,6 @@
 
       :else 0)))
 
-(m/=> clear-pointer-data [:-> App App])
-(defn clear-pointer-data
-  [db]
-  (-> db
-      (assoc :active-pointers {})
-      (dissoc :drag-pointer :pointer-offset :adjusted-pointer-offset
-              :nearest-neighbor :nearest-neighbor-offset
-              :pinch-distance :pinch-midpoint)))
-
-(defn multi-touch?
-  [db]
-  (> (count (:active-pointers db)) 1))
-
 (m/=> pan-out-of-canvas [:-> App DomRect Vec2 Vec2 App])
 (defn pan-out-of-canvas
   [db dom-rect pointer-pos pointer-offset]
@@ -147,5 +135,5 @@
     (reset-cached)
 
     :always
-    (-> (clear-pointer-data)
+    (-> (input.handlers/clear-pointer-data)
         (set-state :idle))))

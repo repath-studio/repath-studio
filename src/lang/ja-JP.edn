@@ -342,12 +342,10 @@
 
  :renderer.tool.impl.element.rect
  {:label "矩形"
-  :help [:div "%1を押しながら比率をロック。"]
   :create-rectangle "矩形を作成"}
 
  :renderer.tool.impl.element.svg
  {:label "SVG"
-  :help [:div "%1を押しながら比率をロック。"]
   :create-svg "SVGを作成"}
 
  :renderer.tool.impl.extension.blob
@@ -575,8 +573,7 @@
 
  :renderer.tool.impl.element.ellipse
  {:label "楕円"
-  :create-ellipse "楕円を作成"
-  :help [:div "%1を押しながら比率をロック。"]}
+  :create-ellipse "楕円を作成"}
 
  :renderer.tool.impl.element.line
  {:label "線"

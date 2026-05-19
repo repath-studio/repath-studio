@@ -104,7 +104,7 @@
   (let [offset (utils.element/scale-offset ratio pivot-point)
         ratio (apply min ratio)]
     (-> el
-        (attribute.hierarchy/update-attr :size * ratio)
+        (attribute.hierarchy/update-attr :size #(abs (* % ratio)))
         (element.hierarchy/translate offset))))
 
 (defmethod element.hierarchy/render :blob
@@ -156,7 +156,7 @@
         (.translate x y)
         (.toString))))
 
-(defmethod element.hierarchy/edit :blob
+(defmethod element.hierarchy/edit-drag :blob
   [el [x y] handle _lock?]
   (case handle
     :size

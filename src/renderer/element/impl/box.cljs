@@ -20,14 +20,19 @@
 
 (defmethod element.hierarchy/scale ::element.hierarchy/box
   [el ratio pivot-point]
-  (let [[x y] ratio
-        offset (utils.element/scale-offset ratio pivot-point)]
+  (let [[rx ry] ratio
+        {{:keys [width height]} :attrs} el
+        w (utils.length/unit->px width)
+        h (utils.length/unit->px height)
+        [offset-x offset-y] (utils.element/scale-offset ratio pivot-point)
+        offset [(+ offset-x (min 0 (* w rx)))
+                (+ offset-y (min 0 (* h ry)))]]
     (-> el
-        (attribute.hierarchy/update-attr :width * x)
-        (attribute.hierarchy/update-attr :height * y)
+        (attribute.hierarchy/update-attr :width #(abs (* % rx)))
+        (attribute.hierarchy/update-attr :height #(abs (* % ry)))
         (element.hierarchy/translate offset))))
 
-(defmethod element.hierarchy/edit ::element.hierarchy/box
+(defmethod element.hierarchy/edit-drag ::element.hierarchy/box
   [el offset handle lock?]
   (let [[x y] (cond-> offset
                 lock?

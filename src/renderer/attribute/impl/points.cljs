@@ -45,9 +45,7 @@
      :default-value y
      :disabled true
      :on-pointer-up attribute.views/pointer-up-handler!}]
-   [:button.button.bg-transparent.text-foreground-muted.h-full.rounded
-    {:on-click #(remove-nth points index)}
-    [views/icon "times"]]])
+   [views/icon-button "times" {:on-click #(remove-nth points index)}]])
 
 (defn points-popover
   [points disabled]
@@ -68,7 +66,7 @@
       [views/scroll-area
        [:div.p-4.flex.flex-col.gap-px
         (map-indexed (fn [index point]
-                       ^{:key (str "point-" index)}
+                       ^{:key (str index point)}
                        [point-row index point points]) points)]]]
      [views/popover-arrow]]]])
 
@@ -77,7 +75,7 @@
   [_ k v {:keys [disabled]}]
   (let [state-idle (= @(rf/subscribe [::tool.subs/state]) :idle)]
     [:div.flex.gap-px.w-full
-     [attribute.views/form-input k (if state-idle v "waiting")
+     [attribute.views/form-input k v
       {:disabled (or disabled
                      (not v)
                      (not state-idle))}]

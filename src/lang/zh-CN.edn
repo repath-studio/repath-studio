@@ -312,12 +312,10 @@
 
  :renderer.tool.impl.element.rect
  {:label "矩形"
-  :help [:div "按住 %1 锁定比例。"]
   :create-rectangle "创建矩形"}
 
  :renderer.tool.impl.element.svg
  {:label "SVG"
-  :help [:div "按住 %1 锁定比例。"]
   :create-svg "创建 SVG"}
 
  :renderer.tool.impl.extension.blob
@@ -536,8 +534,7 @@
 
  :renderer.tool.impl.element.ellipse
  {:label "椭圆"
-  :create-ellipse "创建椭圆"
-  :help [:div "按住 %1 锁定比例。"]}
+  :create-ellipse "创建椭圆"}
 
  :renderer.tool.impl.element.line
  {:label "线条"

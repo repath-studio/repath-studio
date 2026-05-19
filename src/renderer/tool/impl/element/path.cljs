@@ -8,13 +8,13 @@
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.app.db :refer [App]]
-   [renderer.app.subs :as-alias app.subs]
    [renderer.db :refer [Vec2]]
    [renderer.document.handlers :as document.handlers]
    [renderer.element.handlers :as element.handlers]
    [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
+   [renderer.input.subs :as-alias input.subs]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
@@ -38,13 +38,6 @@
                          curve."])]
    [:div (i18n.views/t [::double-click-to-end
                         "Double or right click to finalize the path."])]])
-
-(m/=> next-control-point [:-> [:vector any?] Vec2])
-(defn next-control-point
-  [segments]
-  (let [segment (-> segments utils.path/drop-last-segment last)]
-    (or (utils.path/outgoing-cp segment)
-        (utils.path/segment-point segment :end-point))))
 
 (m/=> adjusted-pointer-position [:-> App Vec2])
 (defn adjusted-pointer-position
@@ -103,7 +96,7 @@
             last-segment (last segments)
             out-cp (utils.path/outgoing-cp last-segment)]
         (->> (if out-cp
-               ["C" (first out-cp) (second out-cp) x y x y]
+               ["S" x y x y]
                ["L" x y])
              (conj segments)
              (utils.path/segments->string))))))
@@ -121,9 +114,8 @@
                           (matrix/sub drag-pos))]
     (update-path db #(let [segments (utils.path/string->segments %)]
                        (if (> (count segments) 1)
-                         (let [[ax ay] anchor
-                               [cp1-x cp1-y] (next-control-point segments)]
-                           (->> ["C" cp1-x cp1-y cp2-x cp2-y ax ay]
+                         (let [[ax ay] anchor]
+                           (->> ["S" cp2-x cp2-y ax ay]
                                 (conj (utils.path/drop-last-segment segments))
                                 (utils.path/segments->string)))
                          %)))))
@@ -148,9 +140,9 @@
 
 (defmethod tool.hierarchy/render ::path
   []
-  (let [starting-point @(rf/subscribe [::tool.subs/snapped-position])
-        ending-point @(rf/subscribe [::tool.subs/snapped-offset])
-        drag? @(rf/subscribe [::app.subs/drag?])]
+  (let [starting-point @(rf/subscribe [::input.subs/snapped-position])
+        ending-point @(rf/subscribe [::input.subs/snapped-offset])
+        drag? @(rf/subscribe [::input.subs/drag?])]
     (when drag?
       [utils.svg/arm starting-point ending-point])))
 

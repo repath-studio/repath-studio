@@ -8,6 +8,7 @@
    [renderer.element.handlers :as element.handlers]
    [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
+   [renderer.input.handlers :as input.handlers]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
@@ -17,8 +18,8 @@
 
 (hierarchy/derive! ::line ::tool.hierarchy/element)
 
-(defmethod tool.hierarchy/on-drag-start [::line :idle]
-  [db _e]
+(defn create-el
+  [db]
   (let [[offset-x offset-y] (tool.handlers/snapped-offset db)
         [x y] (tool.handlers/snapped-position db)
         stroke (document.handlers/attr db :stroke)]
@@ -32,21 +33,53 @@
                                        :y2 y
                                        :stroke stroke}}))))
 
-(defmethod tool.hierarchy/on-drag [::line :create]
-  [db _e]
-  (let [position (tool.handlers/snapped-position db)
-        [x y] (->> (element.handlers/parent-offset db)
-                   (matrix/sub position)
-                   (mapv utils.length/->fixed))]
+(defn update-el
+  [db e]
+  (let [pointer-pos (tool.handlers/snapped-position db)
+        end-pos (matrix/sub pointer-pos (element.handlers/parent-offset db))
+        {:keys [x1 y1]} (->> db element.handlers/selected first :attrs)
+        start-pos (mapv utils.length/unit->px [x1 y1])
+        end-pos (cond->> end-pos
+                  (input.handlers/snap-to-angle? db e)
+                  (input.handlers/snap-angle start-pos))
+        [x2 y2] (mapv utils.length/->fixed end-pos)]
     (element.handlers/update-selected db #(-> %
-                                              (assoc-in [:attrs :x2] x)
-                                              (assoc-in [:attrs :y2] y)))))
+                                              (assoc-in [:attrs :x2] x2)
+                                              (assoc-in [:attrs :y2] y2)))))
 
-(defmethod tool.hierarchy/on-drag-end [::line :create]
+(defn finalize
   [db e]
   (-> db
       (history.handlers/finalize (:timestamp e) [::create-line "Create line"])
       (tool.handlers/deactivate)))
+
+(defmethod tool.hierarchy/on-drag-start [::line :idle]
+  [db _e]
+  (create-el db))
+
+(defmethod tool.hierarchy/on-pointer-up [::line :idle]
+  [db _e]
+  (create-el db))
+
+(defmethod tool.hierarchy/on-drag [::line :create]
+  [db e]
+  (update-el db e))
+
+(defmethod tool.hierarchy/on-pointer-down [::line :create]
+  [db e]
+  (update-el db e))
+
+(defmethod tool.hierarchy/on-pointer-move [::line :create]
+  [db e]
+  (update-el db e))
+
+(defmethod tool.hierarchy/on-drag-end [::line :create]
+  [db e]
+  (finalize db e))
+
+(defmethod tool.hierarchy/on-pointer-up [::line :create]
+  [db e]
+  (finalize db e))
 
 (rf/dispatch [::action.events/register-action
               {:id :tool/line

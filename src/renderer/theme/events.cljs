@@ -19,7 +19,7 @@
 (rf/reg-event-fx
  ::update-data-theme
  (fn [{:keys [db]} _]
-   (let [mode (theme.handlers/computed-mode db)]
+   (let [mode (theme.handlers/mode db)]
      {::effects/set-document-attr ["data-theme" (name mode)]})))
 
 (rf/reg-event-fx
@@ -28,7 +28,7 @@
    (cond-> {}
      (app.handlers/mobile? db)
      (assoc ::theme.effects/set-mobile-status-bar-style
-            (theme.handlers/computed-mode db)))))
+            (theme.handlers/mode db)))))
 
 (rf/reg-event-fx
  ::update-meta-color

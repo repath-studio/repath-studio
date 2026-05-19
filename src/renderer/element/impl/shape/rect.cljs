@@ -33,19 +33,24 @@
 
 (defmethod element.hierarchy/scale :rect
   [el ratio pivot-point]
-  (let [[x y] ratio
-        offset (utils.element/scale-offset ratio pivot-point)]
+  (let [[rx ry] ratio
+        {{:keys [width height]} :attrs} el
+        w (utils.length/unit->px width)
+        h (utils.length/unit->px height)
+        [offset-x offset-y] (utils.element/scale-offset ratio pivot-point)
+        offset [(+ offset-x (min 0 (* w rx)))
+                (+ offset-y (min 0 (* h ry)))]]
     (cond-> el
       :always
-      (-> (attribute.hierarchy/update-attr :width * x)
-          (attribute.hierarchy/update-attr :height * y)
+      (-> (attribute.hierarchy/update-attr :width #(abs (* % rx)))
+          (attribute.hierarchy/update-attr :height #(abs (* % ry)))
           (element.hierarchy/translate offset))
 
       (-> el :attrs :rx)
-      (attribute.hierarchy/update-attr :rx * x)
+      (attribute.hierarchy/update-attr :rx #(abs (* % rx)))
 
       (-> el :attrs :ry)
-      (attribute.hierarchy/update-attr :ry * y))))
+      (attribute.hierarchy/update-attr :ry #(abs (* % ry))))))
 
 (defn clamp-radius-to-size
   [el]
@@ -56,7 +61,7 @@
         (attribute.hierarchy/update-attr :rx min (/ width 2))
         (attribute.hierarchy/update-attr :ry min (/ height 2)))))
 
-(defmethod element.hierarchy/edit :rect
+(defmethod element.hierarchy/edit-drag :rect
   [el offset handle lock?]
   (let [[x y] (cond-> offset
                 (and (contains? #{:position :size} handle)

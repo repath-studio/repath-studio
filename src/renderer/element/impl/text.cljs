@@ -52,12 +52,17 @@
 (defmethod element.hierarchy/scale :text
   [el ratio pivot-point]
   (let [bounds (element.hierarchy/bbox el)
-        [_w h] (utils.bounds/->dimensions bounds)
-        pivot-point (matrix/sub pivot-point [0 (/ h 2)])
-        offset (utils.element/scale-offset ratio pivot-point)
-        ratio (apply min ratio)]
+        [w h] (utils.bounds/->dimensions bounds)
+        y-attr (utils.length/unit->px (get-in el [:attrs :y]))
+        ascent (- y-attr (second bounds))
+        descent (- h ascent)
+        pivot-point (matrix/sub pivot-point [0 ascent])
+        [offset-x offset-y] (utils.element/scale-offset ratio pivot-point)
+        ratio (apply min ratio)
+        offset [(+ offset-x (min 0 (* w ratio)))
+                (+ offset-y (* (- (min 0 ratio)) (- ascent descent)))]]
     (-> el
-        (attribute.hierarchy/update-attr :font-size * ratio)
+        (attribute.hierarchy/update-attr :font-size #(abs (* % ratio)))
         (element.hierarchy/translate offset))))
 
 (defn get-text!

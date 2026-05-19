@@ -380,12 +380,10 @@
 
  :renderer.tool.impl.element.rect
  {:label "Rectangle"
-  :help [:div "Maintenez %1 pour verrouiller les proportions."]
   :create-rectangle "Créer un rectangle"}
 
  :renderer.tool.impl.element.svg
  {:label "SVG"
-  :help [:div "Maintenez %1 pour verrouiller les proportions."]
   :create-svg "Créer un SVG"}
 
  :renderer.tool.impl.extension.blob
@@ -626,8 +624,7 @@
 
  :renderer.tool.impl.element.ellipse
  {:label "Ellipse"
-  :create-ellipse "Créer une ellipse"
-  :help [:div "Maintenez %1 pour verrouiller les proportions."]}
+  :create-ellipse "Créer une ellipse"}
 
  :renderer.tool.impl.element.line
  {:label "Ligne"

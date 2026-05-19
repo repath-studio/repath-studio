@@ -403,12 +403,10 @@
 
  :renderer.tool.impl.element.rect
  {:label "Rettangolo"
-  :help [:div "Tieni premuto %1 per bloccare le proporzioni."]
   :create-rectangle "Crea rettangolo"}
 
  :renderer.tool.impl.element.svg
  {:label "Svg"
-  :help [:div "Tieni premuto %1 per bloccare le proporzioni."]
   :create-svg "Crea svg"}
 
  :renderer.tool.impl.extension.blob
@@ -631,8 +629,7 @@
 
  :renderer.tool.impl.element.ellipse
  {:label "Ellisse"
-  :create-ellipse "Crea ellisse"
-  :help [:div "Tieni premuto %1 per bloccare le proporzioni."]}
+  :create-ellipse "Crea ellisse"}
 
  :renderer.tool.impl.element.line
  {:label "Linea"

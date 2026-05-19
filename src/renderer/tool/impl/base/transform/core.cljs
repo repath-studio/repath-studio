@@ -111,7 +111,8 @@
      (when (seq bbox)
        [:<>
         [tool.views/wrapping-bbox bbox]
-        [tool.views/bounding-corners bbox]])
+        (when (= state :idle)
+          [tool.views/corner-handles bbox])])
 
      (when (and (= state :scale) (seq bbox))
        [:<>

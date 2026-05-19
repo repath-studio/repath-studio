@@ -100,15 +100,13 @@
       (matrix/add [0 (- (/ (- min-size h) 2))
                    0 (/ (- min-size h) 2)]))))
 
-(m/=> bounding-corners [:-> BBox any?])
-(defn bounding-corners
+(m/=> corner-handles [:-> BBox any?])
+(defn corner-handles
   [bbox]
   (let [idle? @(rf/subscribe [::tool.subs/idle?])
-        clicked-element @(rf/subscribe [::app.subs/clicked-element])
         bbox (cond-> bbox idle? min-bbox)
         [min-x min-y max-x max-y] bbox
-        [w h] (utils.bounds/->dimensions bbox)
-        show? (fn [id] (or idle? (= id (:id clicked-element))))]
+        [w h] (utils.bounds/->dimensions bbox)]
     (->> [{:x min-x
            :y min-y
            :id :top-left
@@ -141,7 +139,6 @@
            :y max-y
            :id :bottom-middle
            :cursor "ns-resize"}]
-         (filter (comp show? :id))
          (mapv (comp handle
                      (partial merge {:type :handle
                                      :action :scale})))
