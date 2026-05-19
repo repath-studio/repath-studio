@@ -682,7 +682,8 @@
   :select-element "Element selecteren"
   :delete-selection "Selectie verwijderen"
   :oldest "Oudste"
-  :newest "Nieuwste"}
+  :newest "Nieuwste"
+  :persist-document-history "Documentgeschiedenis bewaren bij opslaan"}
 
  :renderer.timeline.views
  {:speed "Snelheid"

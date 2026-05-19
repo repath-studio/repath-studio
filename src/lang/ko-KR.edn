@@ -621,7 +621,8 @@
   :select-element "요소 선택"
   :delete-selection "선택 삭제"
   :oldest "가장 오래된"
-  :newest "가장 최신"}
+  :newest "가장 최신"
+  :persist-document-history "저장 시 문서 기록 유지"}
 
  :renderer.timeline.views
  {:speed "속도"

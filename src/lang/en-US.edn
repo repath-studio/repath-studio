@@ -653,7 +653,8 @@
   :select-element "Select element"
   :delete-selection "Delete selection"
   :oldest "Oldest"
-  :newest "Newest"}
+  :newest "Newest"
+  :persist-document-history "Persist document history on save"}
 
  :renderer.timeline.views
  {:speed "Speed"

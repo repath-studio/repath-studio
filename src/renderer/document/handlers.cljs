@@ -1,6 +1,7 @@
 (ns renderer.document.handlers
   (:require
    [config :as config]
+   [de-dupe.core :refer [de-dupe-eq]]
    [malli.core :as m]
    [malli.transform :as m.transform]
    [renderer.app.db :refer [App]]
@@ -45,13 +46,13 @@
 (m/=> persisted-format [:-> App DocumentId PersistedDocument])
 (defn persisted-format
   [db id]
-  (-> PersistedDocument
-      (m/decode (entity db id) m.transform/strip-extra-keys-transformer)
-      (assoc :version (:version db))
-      (update :elements (fn [elements]
-                          (into {}
-                                (map (fn [[k v]] [k (dissoc v :selected)]))
-                                elements)))))
+  (let [document (-> PersistedDocument
+                     (m/decode (entity db id)
+                               m.transform/strip-extra-keys-transformer)
+                     (assoc :version (:version db)))]
+    (if (:persist-history document)
+      (update-in document [:history :states] de-dupe-eq)
+      (dissoc document :history :persist-history :saved-history-index))))
 
 (m/=> close [:-> App DocumentId App])
 (defn close
@@ -180,7 +181,9 @@
    (update-saved-history-index db (:active-document db)))
   ([db id]
    (let [position (get-in db [:documents id :history :position])]
-     (assoc-in db [:documents id :saved-history-index] position))))
+     (-> db
+         (assoc-in [:documents id :saved-history-index] position)
+         (update-in [:documents id] dissoc :dirty)))))
 
 (m/=> search-by-path [:-> App string? [:maybe DocumentId]])
 (defn search-by-path
@@ -199,7 +202,8 @@
   ([db id]
    (let [document (get-in db [:documents id])
          history-position (get-in document [:history :position])]
-     (= (:saved-history-index document) history-position))))
+     (and (= (:saved-history-index document) history-position)
+          (not (:dirty document))))))
 
 (m/=> open? [:-> App DocumentId boolean?])
 (defn open?
@@ -229,3 +233,14 @@
   (->> (:recent db)
        (filter #(not (open? db (:id %))))
        (reverse)))
+
+(m/=> toggle-persist-history [:-> App App])
+(defn toggle-persist-history
+  [db]
+  (print (get-in db (path db :persist-history)))
+  (cond-> db
+    (:active-document db)
+    (update-in (path db :persist-history) not)
+
+    :always
+    (assoc-in (path db :dirty) true)))

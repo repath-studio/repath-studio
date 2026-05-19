@@ -28,6 +28,8 @@
    [:collapsed-ids {:default #{}} [:set ElementId]]
    [:ignored-ids {:default #{}} [:set [:or HandleId ElementId]]]
    [:zoom {:default 1} ZoomFactor]
+   [:persist-history {:optional true} boolean?]
+   [:dirty {:optional true} boolean?]
    [:rotate {:default 0} number?]
    [:history {:optional true} History]
    [:pan {:default [0 0]} Vec2]
@@ -41,7 +43,10 @@
 (def PersistedDocument
   (->> Document
        (m/children)
-       (filter (comp #(some #{%} [:id :title :path :version :elements]) first))
+       (filter (comp #(some #{%} [:id :title :path :version :elements
+                                  :persist-history :history
+                                  :saved-history-index])
+                     first))
        (into [:map {:closed true}])))
 
 (def RecentDocument

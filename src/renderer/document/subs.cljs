@@ -166,6 +166,11 @@
  :-> :preview-label)
 
 (rf/reg-sub
+ ::persist-history?
+ :<- [::active]
+ :-> :persist-history)
+
+(rf/reg-sub
  ::read-only?
  :<- [::preview-label]
  :<- [::timeline.subs/time]

@@ -681,7 +681,9 @@
   :select-element "Seleziona elemento"
   :delete-selection "Elimina selezione"
   :oldest "Più vecchio"
-  :newest "Più recente"}
+  :newest "Più recente"
+  :persist-document-history "Mantieni la cronologia del documento al
+                             salvataggio"}
 
  :renderer.timeline.views
  {:speed "Velocità"
