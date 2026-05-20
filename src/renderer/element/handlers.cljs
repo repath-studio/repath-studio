@@ -671,7 +671,8 @@
 
 (m/=> scale-pivot [:-> Vec2 map? [:set ElementId] fn?])
 (defn scale-pivot
-  "Returns the scaling pivot point based on the element's ancestry."
+  "Returns a function that calculates the scaling pivot point based on the
+   element's ancestry."
   [pivot origins top-ids]
   (fn [db id]
     (when-let [el-origin (get origins id)]
@@ -685,7 +686,8 @@
   [db ratio pivot-point recursive]
   (let [ratio (mapv #(if (or (infinite? %) (js/isNaN %)) 1 %) ratio)
         top-ids (top-ancestor-ids db)
-        ids-to-scale (cond-> top-ids recursive (set/union (descendant-ids db)))
+        ids-to-scale (cond-> (selected-ids db)
+                       recursive (set/union (descendant-ids db)))
         origins (->> ids-to-scale
                      (keep (fn [id]
                              (when-let [bb (:bbox (entity db id))]
