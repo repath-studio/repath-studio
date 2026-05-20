@@ -8,7 +8,7 @@
   {:css-paths ["/styles.css"]
    :background/options [{:id :light-mode
                          :title "Light mode"
-                         :value {:background/background-color "#fff"
+                         :value {:background/background-color "#eee"
                                  :background/document-data {:theme "light"}}}
                         {:id :dark-mode
                          :title "Dark mode"
@@ -16,8 +16,7 @@
                                  :background/document-data {:theme "dark"}}}]
    :background/default-option-id :dark-mode
    :viewport/defaults {:viewport/padding [0]
-                       :viewport/width "100%"
-                       :viewport/height "500px"}
+                       :viewport/width "100%"}
    :canvas/gallery-defaults {:viewport/padding [0]
                              :viewport/width "100%"
                              :viewport/height 41}}})
