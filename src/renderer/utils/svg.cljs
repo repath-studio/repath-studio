@@ -4,7 +4,6 @@
    ["react" :as react]
    [malli.core :as m]
    [re-frame.core :as rf]
-   [renderer.app.db :refer [App]]
    [renderer.db :refer [BBox Vec2]]
    [renderer.document.subs :as-alias document.subs]
    [renderer.utils.bounds :as utils.bounds]
@@ -168,21 +167,3 @@
      [:rect (merge attrs {:stroke "var(--accent)"
                           :stroke-width (/ 1 zoom)
                           :stroke-dasharray (when dashed? (/ 5 zoom))})]]))
-
-(m/=> select-box [:-> App any?])
-(defn select-box
-  [db]
-  (let [zoom (get-in db [:documents (:active-document db) :zoom])
-        [pos-x pos-y] (:adjusted-pointer-pos db)
-        [offset-x offset-y] (:adjusted-pointer-offset db)]
-    {:tag :rect
-     :attrs {:x (min pos-x offset-x)
-             :y (min pos-y offset-y)
-             :width (abs (- pos-x offset-x))
-             :height (abs (- pos-y offset-y))
-             :shape-rendering "crispEdges"
-             :fill-opacity ".1"
-             :fill "var(--accent)"
-             :stroke "var(--accent)"
-             :stroke-opacity ".5"
-             :stroke-width (/ 1 zoom)}}))

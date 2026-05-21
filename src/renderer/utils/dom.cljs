@@ -21,6 +21,7 @@
           (.getData "id")
           (uuid)))
 
+(m/=> content-overflow? [:-> JS_Object boolean?])
 (defn content-overflow?
   [el]
   (and el (or (> (.-scrollWidth el) (.-clientWidth el))

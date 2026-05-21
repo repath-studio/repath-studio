@@ -4,6 +4,7 @@
    [malli.core :as m]
    [renderer.app.db :refer [App]]
    [renderer.db :refer [Vec2]]
+   [renderer.element.db :refer [Element]]
    [renderer.frame.db :refer [DomRect]]
    [renderer.frame.handlers :as frame.handlers]
    [renderer.history.handlers :as history.handlers]
@@ -137,3 +138,21 @@
     :always
     (-> (input.handlers/clear-pointer-data)
         (set-state :idle))))
+
+(m/=> select-box [:-> App Element])
+(defn select-box
+  [db]
+  (let [zoom (get-in db [:documents (:active-document db) :zoom])
+        [pos-x pos-y] (:adjusted-pointer-pos db)
+        [offset-x offset-y] (:adjusted-pointer-offset db)]
+    {:tag :rect
+     :attrs {:x (str (min pos-x offset-x))
+             :y (str (min pos-y offset-y))
+             :width (str (abs (- pos-x offset-x)))
+             :height (str (abs (- pos-y offset-y)))
+             :shape-rendering "crispEdges"
+             :fill-opacity ".1"
+             :fill "var(--accent)"
+             :stroke "var(--accent)"
+             :stroke-opacity ".5"
+             :stroke-width (str (/ 1 zoom))}}))
