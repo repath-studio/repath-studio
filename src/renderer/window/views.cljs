@@ -103,7 +103,7 @@
   [:div.drag.grow.items-center
    {:dir "ltr"
     :class "pointer-events-none truncate lg:absolute lg:justify-center px-1
-            lg:left-1/2 lg:-translate-x-1/2 z-[-1] lg:flex"}
+            lg:left-1/2 lg:-translate-x-1/2 lg:flex"}
    s])
 
 (defn language-select
