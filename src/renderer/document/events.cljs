@@ -1,6 +1,6 @@
 (ns renderer.document.events
   (:require
-   [cljs.reader :as cljs.reader]
+   [clojure.edn :as edn]
    [config :as config]
    [malli.error :as m.error]
    [re-frame.core :as rf]
@@ -162,7 +162,7 @@
 
 (defn string->edn
   [s]
-  (try (cljs.reader/read-string s)
+  (try (edn/read-string s)
        (catch :default _err nil)))
 
 (rf/reg-event-fx
