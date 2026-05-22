@@ -5,7 +5,7 @@
 
 (defn svg-elements!
   []
-  (some-> (utils.dom/frame-document!)
+  (some-> (utils.dom/get-frame-document)
           (.querySelectorAll "svg")))
 
 (rf/reg-fx

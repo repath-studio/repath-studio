@@ -42,7 +42,7 @@
 (rf/reg-fx
  ::focus-canvas
  (fn []
-   (some-> (utils.dom/canvas-element!)
+   (some-> (utils.dom/get-canvas-element)
            (.focus))))
 
 (rf/reg-fx
@@ -57,7 +57,7 @@
            (.querySelector (str "meta[name='" k "']"))
            (.setAttribute "content" v))))
 
-(defn legacy-file-open!
+(defn show-legacy-open-file-dialog
   [cb]
   (let [el (js/document.createElement "input")]
     (set! (.-type el) "file")
@@ -89,7 +89,7 @@
                  (f args)
                  (request-permission-and-run mode f args))))))
 
-(defn- write-file!
+(defn- write-file
   [{:keys [data on-success on-error formatter file-handle]}]
   (-> (.createWritable file-handle)
       (.then (fn [^js/FileSystemWritableFileStream writable-stream]
@@ -112,15 +112,15 @@
  (fn [{:keys [options on-error file-handle]
        :as args}]
    (if file-handle
-     (query-permission-and-run "readwrite" write-file! args)
+     (query-permission-and-run "readwrite" write-file args)
      (some-> (.-showSaveFilePicker js/window)
              (.call js/window (clj->js options))
-             (.then #(write-file! (assoc args :file-handle %)))
+             (.then #(write-file (assoc args :file-handle %)))
              (.catch (fn [^js/Error error]
                        (when (and on-error (not (abort-error? error)))
                          (rf/dispatch (conj on-error error)))))))))
 
-(defn- get-file!
+(defn- get-file
   [{:keys [on-success on-error file-handle]}]
   (-> (.getFile file-handle)
       (.then #(some-> on-success (conj file-handle %) rf/dispatch))
@@ -131,17 +131,17 @@
  (fn [{:keys [options on-error on-success file-handle]
        :as args}]
    (if file-handle
-     (query-permission-and-run "readwrite" get-file! args)
+     (query-permission-and-run "readwrite" get-file args)
      (if (.-showOpenFilePicker js/window)
        (-> (.showOpenFilePicker js/window (clj->js options))
            (.then (fn [file-handles]
                     (when on-success
                       (doseq [^js/FileSystemFileHandle file-handle file-handles]
-                        (get-file! (assoc args :file-handle file-handle))))))
+                        (get-file (assoc args :file-handle file-handle))))))
            (.catch (fn [^js/Error error]
                      (when (and on-error (not (abort-error? error)))
                        (rf/dispatch (conj on-error error))))))
-       (legacy-file-open! #(rf/dispatch (conj on-success nil %)))))))
+       (show-legacy-open-file-dialog #(rf/dispatch (conj on-success nil %)))))))
 
 (rf/reg-fx
  ::file-read-as

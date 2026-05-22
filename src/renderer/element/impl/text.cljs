@@ -65,7 +65,7 @@
         (attribute.hierarchy/update-attr :font-size #(abs (* % ratio)))
         (element.hierarchy/translate offset))))
 
-(defn get-text!
+(defn get-text
   "Retrieves the input value and replaces spaces with no-break space to maintain
    user intent."
   [e]
@@ -117,7 +117,7 @@
        :on-focus #(.. % -target select)
        :on-pointer-down #(.stopPropagation %)
        :on-pointer-up #(.stopPropagation %)
-       :on-blur #(rf/dispatch [::set-text id (get-text! %)])
+       :on-blur #(rf/dispatch [::set-text id (get-text %)])
        :on-key-down #(utils.key/down-handler! % content identity id)
        :ref (fn [this]
               (when this
@@ -140,7 +140,7 @@
   [el]
   (let [{:keys [attrs content]} el
         {:keys [x y font-family]} attrs
-        computed-styles (utils.font/get-computed-styles! el)
+        computed-styles (utils.font/get-computed-styles el)
         {:keys [font-size font-style font-weight]} computed-styles
         [x y font-size] (mapv utils.length/unit->px [x y font-size])
         props {:x x
@@ -162,4 +162,4 @@
 
 (defmethod element.hierarchy/bbox :text
   [el]
-  (:bbox (utils.font/get-computed-styles! el)))
+  (:bbox (utils.font/get-computed-styles el)))

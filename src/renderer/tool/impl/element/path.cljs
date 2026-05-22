@@ -53,8 +53,8 @@
 
 (m/=> update-path [:-> App fn? [:* any?] App])
 (defn update-path
-  [db f & args]
-  (apply element.handlers/update-selected db update-in [:attrs :d] f args))
+  [db f & more]
+  (apply element.handlers/update-selected db update-in [:attrs :d] f more))
 
 (m/=> add-to-path [:-> string? string? [:* number?] string?])
 (defn add-to-path

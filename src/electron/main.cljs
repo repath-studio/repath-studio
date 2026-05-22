@@ -16,9 +16,9 @@
 (defonce main-window (atom nil))
 (defonce loading-window (atom nil))
 
-(defn send-to-renderer!
+(defn send-to-renderer
   ([channel]
-   (send-to-renderer! channel nil))
+   (send-to-renderer channel nil))
   ([channel data]
    (.send (.-webContents ^js @main-window) channel (clj->js data))))
 
@@ -38,18 +38,18 @@
   (and (= (.-protocol url) "https:")
        (contains? allowed-urls (.-host url))))
 
-(defn open-external!
+(defn open-external
   [url]
   (let [url-parsed (js/URL. url)]
     (when (allowed-url? url-parsed)
       (.openExternal shell url-parsed.href))))
 
-(defn register-ipc-on-events! []
+(defn register-ipc-on-events []
   (doseq
    [[e f]
     [["initialized" #(.close ^js @loading-window)]
      ["relaunch" #(doto app (.relaunch) (.exit))]
-     ["open-remote-url" open-external!]
+     ["open-remote-url" open-external]
      ["open-directory" #(.showItemInFolder shell %)]
      ["window-minimize" #(.minimize ^js @main-window)]
      ["window-toggle-fullscreen" #(.setFullScreen ^js @main-window
@@ -60,16 +60,16 @@
                                    (.maximize ^js @main-window))]]]
     (.on ipcMain e #(f %2))))
 
-(defn register-ipc-handle-events! []
+(defn register-ipc-handle-events []
   (doseq
    [[e f]
-    [["open-documents" file/open!]
-     ["save-document" file/save!]
-     ["save-document-as" file/save-as!]
-     ["print" file/print!]]]
+    [["open-documents" file/open]
+     ["save-document" file/save]
+     ["save-document-as" file/save-as]
+     ["print" file/show-print-dialog]]]
     (.handle ipcMain e #(f %2))))
 
-(defn register-window-events! []
+(defn register-window-events []
   (doseq
    [[window-event renderer-event]
     [["maximize" "window-maximized"]
@@ -78,9 +78,9 @@
      ["leave-full-screen" "window-leaved-fullscreen"]
      ["minimize" "window-minimized"]
      ["restore" "window-restored"]]]
-    (.on ^js @main-window window-event #(send-to-renderer! renderer-event))))
+    (.on ^js @main-window window-event #(send-to-renderer renderer-event))))
 
-(defn register-web-contents-events! []
+(defn register-web-contents-events []
   (let [web-contents (.-webContents ^js @main-window)]
     (doseq
      [[web-contents-event f]
@@ -88,20 +88,20 @@
        ["closed" #(reset! main-window nil)]]]
       (.on web-contents web-contents-event f))))
 
-(defn set-window-open-handler! []
+(defn set-window-open-handler []
   (.setWindowOpenHandler (.-webContents ^js @main-window)
                          (fn [details]
-                           (open-external! (.-url details))
+                           (open-external (.-url details))
                            #js {:action "deny"})))
 
-(defn on-ready-to-show!
+(defn on-ready-to-show
   [^js window]
-  (send-to-renderer! (if (.isMaximized window)
-                       "window-maximized"
-                       "window-unmaximized"))
-  (send-to-renderer! (if (.isFullScreen window)
-                       "window-entered-fullscreen"
-                       "window-leaved-fullscreen")))
+  (send-to-renderer (if (.isMaximized window)
+                      "window-maximized"
+                      "window-unmaximized"))
+  (send-to-renderer (if (.isFullScreen window)
+                      "window-entered-fullscreen"
+                      "window-leaved-fullscreen")))
 
 (defn resource-path
   [s]
@@ -138,17 +138,17 @@
              (.manage win-state ^js @main-window)
              (.initialize log)))
 
-    (.on ^js @main-window "ready-to-show" #(on-ready-to-show! @main-window))
+    (.on ^js @main-window "ready-to-show" #(on-ready-to-show @main-window))
 
     (.loadURL ^js @main-window (if config/debug?
                                  "http://localhost:8080"
                                  (resource-path "/public/index.html")))
 
-    (set-window-open-handler!)
-    (register-web-contents-events!)
-    (register-ipc-on-events!)
-    (register-ipc-handle-events!)
-    (register-window-events!)
+    (set-window-open-handler)
+    (register-web-contents-events)
+    (register-ipc-on-events)
+    (register-ipc-handle-events)
+    (register-window-events)
 
     (.checkForUpdatesAndNotify autoUpdater)))
 

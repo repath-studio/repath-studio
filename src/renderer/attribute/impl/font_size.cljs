@@ -18,7 +18,7 @@
 (defmethod attribute.hierarchy/update-attr [::element.hierarchy/element
                                             :font-size]
   [el attribute f & more]
-  (let [font-size (:font-size (utils.font/get-computed-styles! el))
+  (let [font-size (:font-size (utils.font/get-computed-styles el))
         font-size (utils.length/unit->px font-size)]
     (assoc-in el [:attrs attribute] (str (apply f font-size more)))))
 

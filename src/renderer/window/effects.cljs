@@ -8,7 +8,7 @@
  (fn [coeffects _]
    (assoc coeffects :focused
           (boolean (or (.hasFocus js/document)
-                       (some-> (utils.dom/frame-document!)
+                       (some-> (utils.dom/get-frame-document)
                                (.hasFocus)))))))
 
 (rf/reg-cofx

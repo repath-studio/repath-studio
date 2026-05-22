@@ -3,15 +3,15 @@
    [malli.core :as m]
    [renderer.db :refer [JS_Object]]))
 
-(defn frame-document!
+(defn get-frame-document
   []
   (some-> (.getElementById js/document "frame")
           (.-contentWindow)
           (.-document)))
 
-(defn canvas-element!
+(defn get-canvas-element
   []
-  (some-> (frame-document!)
+  (some-> (get-frame-document)
           (.getElementById "canvas")))
 
 (m/=> event->uuid [:-> JS_Object [:maybe uuid?]])
@@ -24,5 +24,5 @@
 (m/=> content-overflow? [:-> JS_Object boolean?])
 (defn content-overflow?
   [el]
-  (and el (or (> (.-scrollWidth el) (.-clientWidth el))
-              (> (.-scrollHeight el) (.-clientHeight el)))))
+  (boolean (and el (or (> (.-scrollWidth el) (.-clientWidth el))
+                       (> (.-scrollHeight el) (.-clientHeight el))))))
