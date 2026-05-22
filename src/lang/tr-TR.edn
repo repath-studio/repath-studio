@@ -660,7 +660,8 @@
   :select-element "Öğe seç"
   :delete-selection "Seçimi sil"
   :oldest "En eski"
-  :newest "En yeni"}
+  :newest "En yeni"
+  :persist-document-history "Kaydetme sırasında belge geçmişini koru"}
 
  :renderer.timeline.views
  {:speed "Hız"

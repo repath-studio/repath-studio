@@ -640,7 +640,8 @@
   :select-element "تحديد عنصر"
   :delete-selection "حذف التحديد"
   :oldest "الأقدم"
-  :newest "الأحدث"}
+  :newest "الأحدث"
+  :persist-document-history "الاحتفاظ بسجل المستند عند الحفظ"}
 
  :renderer.timeline.views
  {:speed "السرعة"

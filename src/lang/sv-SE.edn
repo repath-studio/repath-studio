@@ -667,7 +667,8 @@
   :select-element "Markera element"
   :delete-selection "Ta bort markering"
   :oldest "Äldsta"
-  :newest "Nyaste"}
+  :newest "Nyaste"
+  :persist-document-history "Bevara dokumenthistorik vid spara"}
 
  :renderer.timeline.views
  {:speed "Hastighet"

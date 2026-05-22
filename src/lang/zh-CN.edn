@@ -586,7 +586,8 @@
   :select-element "选择元素"
   :delete-selection "删除选择"
   :oldest "最旧的"
-  :newest "最新的"}
+  :newest "最新的"
+  :persist-document-history "保存时保留文档历史记录"}
 
  :renderer.timeline.views
  {:speed "速度"

@@ -6,6 +6,8 @@
    [clojure.core.matrix :as matrix]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
+   [renderer.document.events :as-alias document.events]
+   [renderer.document.subs :as-alias document.subs]
    [renderer.history.events :as-alias history.events]
    [renderer.history.handlers :as history.handlers]
    [renderer.history.subs :as-alias history.subs]
@@ -156,6 +158,14 @@
 
      [:div.flex.gap-2.flex-col
       [legend]
+      [:div.flex.justify-around.p-1
+       [views/switch
+        (i18n.views/t [::persist-document-history
+                       "Persist document history on save"])
+        {:id "persist-document-history"
+         :checked @(rf/subscribe [::document.subs/persist-history?])
+         :on-checked-change #(rf/dispatch
+                              [::document.events/toggle-persist-history])}]]
       [views/button-group
        [:button.button.flex-1
         {:on-click #(rf/dispatch [::history.events/tree-view-updated

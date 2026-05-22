@@ -677,7 +677,9 @@
   :select-element "Sélectionner l'élément"
   :delete-selection "Supprimer la sélection"
   :oldest "Plus ancien"
-  :newest "Plus récent"}
+  :newest "Plus récent"
+  :persist-document-history "Conserver l'historique du document lors de la
+                             sauvegarde"}
 
  :renderer.timeline.views
  {:speed "Vitesse"
