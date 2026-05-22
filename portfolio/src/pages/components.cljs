@@ -75,7 +75,7 @@
       :max 50
       :step 1
       :default-value @store
-      :on-value-change (fn [v] (reset! store v))}]]
+      :on-value-commit (fn [v] (reset! store v))}]]
    [:div.w-64.h-8
     [views/slider
      {:min 0
@@ -83,7 +83,7 @@
       :step 1
       :disabled true
       :default-value @store
-      :on-value-change (fn [v] (reset! store v))}]]
+      :on-value-commit (fn [v] (reset! store v))}]]
    [:span.v-divider]
    [:div (first @store)]])
 

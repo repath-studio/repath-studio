@@ -135,9 +135,9 @@
   [db e]
   (let [{:keys [pointer-offset active-pointers]} db
         {:keys [pointer-id]} e]
-    (and pointer-offset
-         (contains? active-pointers pointer-id)
-         (significant-drag? db e))))
+    (boolean (and pointer-offset
+                  (contains? active-pointers pointer-id)
+                  (significant-drag? db e)))))
 
 (m/=> adjusted-pointer-pos [:-> App PointerEvent Vec2])
 (defn adjusted-pointer-pos

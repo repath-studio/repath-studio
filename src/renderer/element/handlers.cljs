@@ -669,23 +669,38 @@
          offset (matrix/sub position center)]
      (update-el db id element.hierarchy/translate offset))))
 
+(m/=> scale-pivot [:-> Vec2 map? [:set ElementId] fn?])
+(defn scale-pivot
+  "Returns a function that calculates the scaling pivot point based on the
+   element's ancestry."
+  [pivot origins top-ids]
+  (fn [db id]
+    (when-let [el-origin (get origins id)]
+      (if (contains? top-ids id)
+        (matrix/sub pivot el-origin)
+        (when-let [ancestor-origin (some #(get origins %) (ancestor-ids db id))]
+          (matrix/sub ancestor-origin el-origin))))))
+
 (m/=> scale [:-> App Vec2 Vec2 boolean? App])
 (defn scale
   [db ratio pivot-point recursive]
-  ;; TODO: Handle position on recursive scale.
   (let [ratio (mapv #(if (or (infinite? %) (js/isNaN %)) 1 %) ratio)
+        top-ids (top-ancestor-ids db)
         ids-to-scale (cond-> (selected-ids db)
-                       recursive
-                       (set/union (descendant-ids db)))]
-    (reduce
-     (fn [db id]
-       (let [adjusted-pivot-point (some->> (entity db id)
-                                           :bbox
-                                           (take 2)
-                                           (matrix/sub pivot-point))]
-         (update-el db id element.hierarchy/scale ratio adjusted-pivot-point)))
-     db
-     ids-to-scale)))
+                       recursive (set/union (descendant-ids db)))
+        origins (->> ids-to-scale
+                     (keep (fn [id]
+                             (when-let [bb (:bbox (entity db id))]
+                               [id (into [] (take 2 bb))])))
+                     (into {}))
+        get-pivot (scale-pivot pivot-point origins top-ids)]
+    (->> ids-to-scale
+         (reduce (fn [db id]
+                   (let [pivot (get-pivot db id)]
+                     (cond-> db
+                       pivot
+                       (update-el id element.hierarchy/scale ratio pivot))))
+                 db))))
 
 (m/=> align [:function
              [:-> App Direction App]

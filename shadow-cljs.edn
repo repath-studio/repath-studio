@@ -4,12 +4,7 @@
                   :compiler-options {:source-map true
                                      :silence-optimizations-warning true
                                      :output-feature-set :es-unsupported
-                                     :language-in :unsupported}
-                  :js-options {:resolve
-                               {"fs" {:target :npm
-                                      :require "graceful-fs"}
-                                "stream" {:target :npm
-                                          :require "stream-browserify"}}}}
+                                     :language-in :unsupported}}
 
  :jvm-opts ["-Xmx2G"]
 

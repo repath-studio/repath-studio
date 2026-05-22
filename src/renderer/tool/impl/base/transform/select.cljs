@@ -10,13 +10,13 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
+   [renderer.input.db :refer [PointerEvent]]
    [renderer.input.handlers :as input.handlers]
    [renderer.tool.db :refer [Handle]]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.transform.core :as-alias transform]
    [renderer.utils.bounds :as utils.bounds]
-   [renderer.utils.svg :as utils.svg]
    [renderer.views :as views]))
 
 (defmethod tool.hierarchy/help [::transform/transform :select]
@@ -57,7 +57,7 @@
             (utils.bounds/contained? el-bbox selection-bbox))))
       false))
 
-(m/=> reduce-by-area [:-> App boolean? ifn? App])
+(m/=> reduce-by-area [:-> App PointerEvent ifn? App])
 (defn reduce-by-area
   [db e f]
   (let [{:keys [alt-key]} e
@@ -80,10 +80,10 @@
   [db]
   (app.handlers/add-fx db [::set-select-box nil]))
 
-(m/=> select-rect [:-> App boolean? App])
+(m/=> select-rect [:-> App boolean? Element])
 (defn select-rect
   [db intersecting?]
-  (cond-> (utils.svg/select-box db)
+  (cond-> (tool.handlers/select-box db)
     (not intersecting?)
     (assoc-in [:attrs :fill] "transparent")))
 

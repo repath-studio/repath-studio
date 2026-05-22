@@ -15,7 +15,6 @@
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.key :as utils.key]
-   [renderer.utils.svg :as utils.svg]
    [renderer.views :as views]))
 
 (hierarchy/derive! ::zoom ::tool.hierarchy/tool)
@@ -63,7 +62,7 @@
 
 (defmethod tool.hierarchy/on-drag [::zoom :select]
   [db _e]
-  (app.handlers/add-fx db [::set-select-box (utils.svg/select-box db)]))
+  (app.handlers/add-fx db [::set-select-box (tool.handlers/select-box db)]))
 
 (defmethod tool.hierarchy/on-drag-end [::zoom :select]
   [db e]
