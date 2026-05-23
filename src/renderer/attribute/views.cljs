@@ -297,7 +297,7 @@
   []
   (let [selected-elements @(rf/subscribe [::element.subs/selected])
         selected-tags @(rf/subscribe [::element.subs/selected-tags])
-        selected-attrs @(rf/subscribe [::element.subs/selected-attrs])
+        edit-attributes @(rf/subscribe [::element.subs/edit-attributes])
         selected-locked? @(rf/subscribe [::element.subs/selected-locked?])
         tool-state @(rf/subscribe [::tool.subs/state])
         tool-cached-state @(rf/subscribe [::tool.subs/cached-state])
@@ -308,10 +308,10 @@
     (when-first [el selected-elements]
       [:div
        [heading el selected-elements selected-tags tag]
-       (when (seq selected-attrs)
+       (when (seq edit-attributes)
          [:div.grid.grid-cols-2.grid-flow-row.my-px.w-full.gap-px
           {:style {:grid-template-columns "minmax(120px, 120px) 1fr"}}
-          (for [[k v] selected-attrs]
+          (for [[k v] edit-attributes]
             ^{:key k}
             [row k v locked? tag])])])))
 

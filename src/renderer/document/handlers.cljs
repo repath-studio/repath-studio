@@ -211,12 +211,16 @@
 (m/=> open? [:-> App DocumentId boolean?])
 (defn open?
   [db id]
-  (some #{id} (:document-tabs db)))
+  (->> (:document-tabs db)
+       (some #{id})
+       (boolean)))
 
 (m/=> recent? [:-> App DocumentId boolean?])
 (defn recent?
   [db id]
-  (some #(= id (:id %)) (:recent db)))
+  (->> (:recent db)
+       (some #(= id (:id %)))
+       (boolean)))
 
 (m/=> saved-ids [:-> App sequential?])
 (defn saved-ids

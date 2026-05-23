@@ -89,10 +89,36 @@
 (m/=> attributes [:-> map? map?])
 (defn attributes
   "Returns existing attributes merged with defaults."
-  [{:keys [tag attrs]}]
-  (cond->> attrs
-    tag
-    (merge (utils.attribute/defaults-memo tag))))
+  [el]
+  (let [{:keys [tag attrs]} el]
+    (cond->> attrs
+      tag
+      (merge (utils.attribute/defaults-memo tag)))))
+
+(m/=> sorted-attributes [:-> Element [:sequential [:tuple keyword? string?]]])
+(defn sorted-attributes
+  [el]
+  (let [props (properties el)]
+    (->> (attributes el)
+         (sort-by (fn [[id _]] (-> props :attrs (.indexOf id)))))))
+
+(m/=> common-attributes [:-> [:sequential Element] ElementAttrs])
+(defn common-attributes
+  [els]
+  (->> els
+       (map attributes)
+       (apply utils.map/merge-common-with
+              (fn [v1 v2] (when (= v1 v2) v1)))))
+
+(m/=> edit-attributes [:->
+                       [:sequential Element]
+                       [:sequential [:tuple keyword? string?]]])
+(defn edit-attributes
+  [els]
+  (->> (if (second els)
+         (-> els common-attributes (dissoc :id))
+         (-> els first sorted-attributes))
+       (sort-by (fn [[id _]] (.indexOf utils.attribute/order id)))))
 
 (m/=> supported-attr? [:-> map? keyword? boolean?])
 (defn supported-attr?
