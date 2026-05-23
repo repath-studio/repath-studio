@@ -162,6 +162,13 @@
   [db id]
   (update-in db (path db :collapsed-ids) disj id))
 
+(m/=> toggle-el-collapsed [:-> App ElementId App])
+(defn toggle-el-collapsed
+  [db id]
+  (if (contains? (get-in db (path db :collapsed-ids)) id)
+    (expand-el db id)
+    (collapse-el db id)))
+
 (m/=> attr [:-> App keyword? string?])
 (defn attr
   [db k]

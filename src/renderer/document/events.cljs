@@ -54,6 +54,12 @@
    (document.handlers/expand-el db id)))
 
 (rf/reg-event-db
+ ::toggle-el-collapsed
+ [persist]
+ (fn [db [_ id]]
+   (document.handlers/toggle-el-collapsed db id)))
+
+(rf/reg-event-db
  ::swap-colors
  [persist]
  (fn [db [_]]

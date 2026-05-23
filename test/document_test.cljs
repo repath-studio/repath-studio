@@ -154,7 +154,11 @@
 
        (testing "expand"
          (rf/dispatch [::document.events/expand-el id])
-         (is (empty? @collapsed-ids)))))
+         (is (empty? @collapsed-ids)))
+
+       (testing "toggle-collapsed"
+         (rf/dispatch [::document.events/toggle-el-collapsed id])
+         (is (= #{id} @collapsed-ids)))))
 
    (testing "hover elements"
      (let [hovered-ids (rf/subscribe [::document.subs/hovered-ids])

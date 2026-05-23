@@ -140,9 +140,7 @@
             outline-inherit button-size-small rounded-xs"
     :on-double-click #(.stopPropagation %)
     :on-click #(do (.stopPropagation %)
-                   (rf/dispatch (if collapsed
-                                  [::document.events/expand-el id]
-                                  [::document.events/collapse-el id])))}])
+                   (rf/dispatch [::document.events/toggle-el-collapsed id]))}])
 
 (defn item-toggles
   [{:keys [id locked visible]}]
