@@ -43,7 +43,7 @@
   [e id]
   (rf/dispatch-sync [::element.events/set-label id (.. e -target -value)])
   (when-not (.-relatedTarget e)
-    (.focus (tree.effects/query-by-id! id))))
+    (.focus (tree.effects/query-by-id id))))
 
 (defn label-input
   [el tag-label edit-mode?]
