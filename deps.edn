@@ -12,7 +12,7 @@
         net.mikera/core.matrix {:mvn/version "0.63.0"}
         org.clj-commons/hickory {:mvn/version "0.7.7"}
         org.clojure/math.combinatorics {:mvn/version "0.3.2"}
-        org.slf4j/slf4j-nop {:mvn/version "2.0.17"}
+        org.slf4j/slf4j-nop {:mvn/version "2.0.18"}
         re-frame/re-frame {:mvn/version "1.4.7"}
         re-pressed/re-pressed {:mvn/version "0.3.2"}
         reagent/reagent {:mvn/version "2.0.1"}
