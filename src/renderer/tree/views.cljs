@@ -1,6 +1,7 @@
 (ns renderer.tree.views
   (:require
    ["@radix-ui/react-context-menu" :as ContextMenu]
+   ["react" :as react]
    [clojure.string :as string]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
@@ -40,13 +41,13 @@
                   (rf/dispatch [::element.events/toggle-prop id k title]))}]))
 
 (defn set-item-label!
-  [e id]
+  [e id tree-ref]
   (rf/dispatch-sync [::element.events/set-label id (.. e -target -value)])
   (when-not (.-relatedTarget e)
-    (.focus (tree.effects/query-by-id id))))
+    (.focus (tree.effects/query-by-id id tree-ref))))
 
 (defn label-input
-  [el tag-label edit-mode?]
+  [el tag-label edit-mode? tree-ref]
   (let [{:keys [id label tag]} el]
     [:input.bg-transparent.w-full
      {:class ["font-[inherit]! leading-[inherit]!"
@@ -58,19 +59,20 @@
       :enter-key-hint "done"
       :on-drag-start #(.preventDefault %)
       :on-focus #(.. % -target select)
-      :on-key-down #(utils.key/down-handler! % label set-item-label! id)
+      :on-key-down #(utils.key/down-handler! % label
+                                             set-item-label! id tree-ref)
       :on-blur (fn [e]
                  (reset! edit-mode? false)
-                 (set-item-label! e id))}]))
+                 (set-item-label! e id tree-ref))}]))
 
 (defn item-label
-  [el edit-mode?]
+  [el edit-mode? tree-ref]
   (let [{:keys [label visible selected tag]} el
         properties (element.hierarchy/properties tag)
         tag-label (or (some-> properties :label i18n.views/t)
                       (string/capitalize (name tag)))]
     (if @edit-mode?
-      [label-input el tag-label edit-mode?]
+      [label-input el tag-label edit-mode? tree-ref]
       [:div.flex.w-full.overflow-hidden
        [:div.truncate
         {:class [(when-not visible "opacity-60")
@@ -96,15 +98,15 @@
   (reset! last-focused-id id))
 
 (defn key-down-handler!
-  [e id edit-mode?]
+  [e id edit-mode? tree-ref]
   (case (.-code e)
     "ArrowUp"
     (do (.stopPropagation e)
-        (rf/dispatch [::tree.events/focus-up id]))
+        (rf/dispatch [::tree.events/focus-up id tree-ref]))
 
     "ArrowDown"
     (do (.stopPropagation e)
-        (rf/dispatch [::tree.events/focus-down id]))
+        (rf/dispatch [::tree.events/focus-down id tree-ref]))
 
     "ArrowLeft"
     (do (.stopPropagation e)
@@ -119,7 +121,7 @@
         (rf/dispatch [::element.events/select id (.-ctrlKey e)]))
 
     "Escape"
-    (rf/dispatch [::tree.events/focus])
+    (rf/dispatch [::tree.events/focus tree-ref])
 
     "Space"
     (do (.stopPropagation e)
@@ -160,12 +162,12 @@
     :inactive-title [::hide "Hide"]}])
 
 (defn on-list-item-click!
-  [id]
+  [id tree-ref]
   (fn [e]
     (.stopPropagation e)
     (if (.-shiftKey e)
       (rf/dispatch-sync [::tree.events/select-range
-                         @last-focused-id id])
+                         @last-focused-id id tree-ref])
       (do (rf/dispatch [::element.events/select
                         id (.-ctrlKey e)])
           (reset! last-focused-id id)))))
@@ -191,14 +193,15 @@
     [views/icon icon {:class ["shrink-0" (when-not visible "opacity-60")]}]))
 
 (defn list-item-button
-  [el {:keys [depth collapsed hovered]}]
+  [el {:keys [depth collapsed hovered tree-ref]}]
   (let [{:keys [id selected children]} el
         md? @(rf/subscribe [::window.subs/md?])
         collapse-button-width (if md? 21 27) ; TODO: Get from CSS variable.
         padding (* collapse-button-width (cond-> depth (seq children) dec))]
     (reagent/with-let [edit-mode? (reagent/atom false)]
-      [:div.list-item-button.button.flex.px-1.items-center.text-start.group
-       {:class ["hover:bg-overlay outline-inset"
+      [:div.button.flex.px-1.items-center.text-start.group
+       {:class [tree.effects/item-class
+                "hover:bg-overlay outline-inset"
                 (when selected "accent")
                 (when hovered "bg-overlay")
                 (when-not md? "h-10")]
@@ -208,13 +211,13 @@
         :on-pointer-enter #(rf/dispatch [::document.events/set-hovered-id id])
         :ref (on-list-item-ref-update! selected)
         :draggable true
-        :on-key-down #(key-down-handler! % id edit-mode?)
+        :on-key-down #(key-down-handler! % id edit-mode? tree-ref)
         :on-drag-start #(-> % .-dataTransfer (.setData "id" (str id)))
         :on-drag-enter #(rf/dispatch [::document.events/set-hovered-id id])
         :on-drag-over #(.preventDefault %)
         :on-drop #(drop-handler! % id)
         :on-pointer-down (on-list-item-pointer-down! id selected)
-        :on-click (on-list-item-click! id)}
+        :on-click (on-list-item-click! id tree-ref)}
        [:div.shrink-0 {:style {:flex-basis padding}}]
        [:div.flex-1.flex.items-center.justify-between.w-full.overflow-hidden
         (when (seq children)
@@ -222,12 +225,12 @@
         [:div.flex-1.overflow-hidden.flex.items-center
          {:class "gap-1.5"}
          [list-item-icon el]
-         [item-label el edit-mode?]]
+         [item-label el edit-mode? tree-ref]]
         (->> (item-toggles el)
              (map item-prop-toggle)
              (into [:<>]))]])))
 
-(defn item [el depth elements]
+(defn item [el depth elements tree-ref]
   (let [{:keys [selected children id]} el
         has-children (seq children)
         hovered-ids @(rf/subscribe [::document.subs/hovered-ids])
@@ -237,39 +240,42 @@
           :role "menuitem"}
      [list-item-button el {:depth depth
                            :collapsed collapsed
-                           :hovered (contains? hovered-ids id)}]
+                           :hovered (contains? hovered-ids id)
+                           :tree-ref tree-ref}]
      (when (and has-children (not collapsed))
        [:ul {:role "menu"}
         (for [el (mapv (fn [k] (get elements k)) (reverse children))]
           ^{:key (:id el)}
-          [item el (inc depth) elements])])]))
+          [item el (inc depth) elements tree-ref])])]))
 
 (defn inner-sidebar-render
   [root-children elements]
-  [:div#tree-sidebar.flex.flex-1.bg-primary.h-full.overflow-hidden
-   ;; When the tree is hovered, ignore the hovered class of the elements,
-   ;; if the element itself is not also hovered.
-   {:class "hover:**:[&.list-item-button]:not-hover:bg-inherit
-            focus-visible:outline-default focus-visible:outline-inset"
-    :on-click #(rf/dispatch [::element.events/deselect-all])
-    :tab-index 0
-    :on-key-down #(case (.-code %)
-                    "ArrowUp"
-                    (do (.stopPropagation %)
-                        (rf/dispatch [::tree.events/focus-last]))
+  (let [ref (react/createRef)]
+    [:div.flex.flex-1.bg-primary.h-full.overflow-hidden
+     ;; When the tree is hovered, ignore the hovered class of the elements,
+     ;; if the element itself is not also hovered.
+     {:class (str "hover:**:[&." tree.effects/item-class "]:not-hover:bg-inherit
+                 focus-visible:outline-default focus-visible:outline-inset")
+      :on-click #(rf/dispatch [::element.events/deselect-all])
+      :tab-index 0
+      :ref ref
+      :on-key-down #(case (.-code %)
+                      "ArrowUp"
+                      (do (.stopPropagation %)
+                          (rf/dispatch [::tree.events/focus-last ref]))
 
-                    "ArrowDown"
-                    (do (.stopPropagation %)
-                        (rf/dispatch [::tree.events/focus-first]))
+                      "ArrowDown"
+                      (do (.stopPropagation %)
+                          (rf/dispatch [::tree.events/focus-first ref]))
 
-                    nil)}
-   [views/scroll-area
-    [:ul.overflow-hidden.w-full
-     {:role "menu"
-      :on-pointer-leave #(rf/dispatch [::document.events/clear-hovered])}
-     (for [el (reverse root-children)]
-       ^{:key (:id el)}
-       [item el 1 elements])]]])
+                      nil)}
+     [views/scroll-area
+      [:ul.overflow-hidden.w-full
+       {:role "menu"
+        :on-pointer-leave #(rf/dispatch [::document.events/clear-hovered])}
+       (for [el (reverse root-children)]
+         ^{:key (:id el)}
+         [item el 1 elements ref])]]]))
 
 (defn inner-sidebar []
   (let [idle? @(rf/subscribe [::tool.subs/idle?])

@@ -1,7 +1,6 @@
 (ns renderer.element.impl.container.canvas
   "The main SVG element that hosts all pages."
   (:require
-   [config :as config]
    [re-frame.core :as rf]
    [renderer.a11y.subs :as-alias a11y.subs]
    [renderer.app.subs :as-alias app.subs]
@@ -19,6 +18,7 @@
    [renderer.snap.views :as snap.views]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
+   [renderer.utils.dom :as utils.dom]
    [renderer.utils.element :as utils.element]
    [renderer.utils.svg :as utils.svg]))
 
@@ -74,7 +74,7 @@
         pointer-handler (partial input.impl.pointer/handler! el)
         filters @(rf/subscribe [::a11y.subs/filters])
         snap? @(rf/subscribe [::snap.subs/active?])]
-    [:svg {:id config/canvas-id
+    [:svg {:id utils.dom/canvas-id
            :on-pointer-up pointer-handler
            :on-pointer-down pointer-handler
            :on-pointer-move pointer-handler

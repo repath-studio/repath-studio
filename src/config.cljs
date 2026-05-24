@@ -15,10 +15,6 @@
 
 (def save-info-keys [:id :title :path])
 
-(def canvas-id "canvas")
-
-(def frame-id "frame")
-
 (def sentry {:dsn SENTRY-DSN
              :environment (if debug? "development" "production")
              :release version
