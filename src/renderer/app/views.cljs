@@ -347,7 +347,7 @@
 
 (defn center-panel
   []
-  (let [properties? @(rf/subscribe [::panel.subs/visible? :properties])
+  (let [properties? @(rf/subscribe [::panel.subs/visible? :attributes])
         active-tool @(rf/subscribe [::tool.subs/active])
         md? @(rf/subscribe [::window.subs/md?])
         desktop? @(rf/subscribe [::app.subs/desktop?])]
@@ -373,7 +373,7 @@
          [:<>
           [panel.views/separator]
           [panel.views/panel
-           {:id :properties
+           {:id :attributes
             :defaultSize 320
             :minSize 320
             :groupResizeBehavior "preserve-pixel-size"

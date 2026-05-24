@@ -202,7 +202,7 @@
               :panel/toggle-xml
               :panel/toggle-timeline
               :panel/toggle-history
-              :panel/toggle-properties]
+              :panel/toggle-attributes]
              (map action.views/deref-action)
              (map radio-button)
              (into [:<>]))
