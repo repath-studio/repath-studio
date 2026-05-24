@@ -15,7 +15,7 @@
   [tree-ref]
   (some-> tree-ref
           (.-current)
-          (.querySelectorAll ".list-item-button")
+          (.querySelectorAll (str "." item-class))
           (->> (.from js/Array))))
 
 (rf/reg-fx
