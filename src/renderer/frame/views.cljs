@@ -3,6 +3,7 @@
    ["@radix-ui/react-context-menu" :as ContextMenu]
    ["react" :as react]
    ["react-frame-component" :default Frame :refer [useFrame]]
+   [config :as config]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
    [reagent.dom.server :as server]
@@ -102,7 +103,7 @@
             :class "overflow-hidden flex-1 border-0"
             :on-key-down on-keyboard-event
             :on-key-up on-keyboard-event
-            :id "frame"
+            :id config/frame-id
             :title (i18n.views/t [::main-canvas "main canvas"])
             :ref ref
             :style {:background (-> root-el :attrs :fill)}}

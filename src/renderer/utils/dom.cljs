@@ -1,18 +1,19 @@
 (ns renderer.utils.dom
   (:require
+   [config :as config]
    [malli.core :as m]
    [renderer.db :refer [JS_Object]]))
 
 (defn get-frame-document
   []
-  (some-> (.getElementById js/document "frame")
+  (some-> (.getElementById js/document config/frame-id)
           (.-contentWindow)
           (.-document)))
 
 (defn get-canvas-element
   []
   (some-> (get-frame-document)
-          (.getElementById "canvas")))
+          (.getElementById config/canvas-id)))
 
 (m/=> event->uuid [:-> JS_Object [:maybe uuid?]])
 (defn event->uuid

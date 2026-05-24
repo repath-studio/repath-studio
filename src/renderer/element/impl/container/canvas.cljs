@@ -1,6 +1,7 @@
 (ns renderer.element.impl.container.canvas
   "The main SVG element that hosts all pages."
   (:require
+   [config :as config]
    [re-frame.core :as rf]
    [renderer.a11y.subs :as-alias a11y.subs]
    [renderer.app.subs :as-alias app.subs]
@@ -73,22 +74,23 @@
         pointer-handler (partial input.impl.pointer/handler! el)
         filters @(rf/subscribe [::a11y.subs/filters])
         snap? @(rf/subscribe [::snap.subs/active?])]
-    [:svg#canvas {:on-pointer-up pointer-handler
-                  :on-pointer-down pointer-handler
-                  :on-pointer-move pointer-handler
-                  :on-context-menu (when-not idle? pointer-handler)
-                  :on-key-up input.impl.keyboard/handler!
-                  :on-key-down input.impl.keyboard/handler!
-                  :tab-index 0 ; Enable keyboard events
-                  :viewBox viewbox-attr
-                  :on-drop input.impl.drag/handler!
-                  :on-drag-over input.impl.drag/handler!
-                  :width width
-                  :height height
-                  :transform (str "rotate(" rotate ")")
-                  :cursor cursor
-                  :style {:outline 0
-                          :background (:fill attrs)}}
+    [:svg {:id config/canvas-id
+           :on-pointer-up pointer-handler
+           :on-pointer-down pointer-handler
+           :on-pointer-move pointer-handler
+           :on-context-menu (when-not idle? pointer-handler)
+           :on-key-up input.impl.keyboard/handler!
+           :on-key-down input.impl.keyboard/handler!
+           :tab-index 0 ; Enable keyboard events
+           :viewBox viewbox-attr
+           :on-drop input.impl.drag/handler!
+           :on-drag-over input.impl.drag/handler!
+           :width width
+           :height height
+           :transform (str "rotate(" rotate ")")
+           :cursor cursor
+           :style {:outline 0
+                   :background (:fill attrs)}}
      (for [el child-elements]
        ^{:key (:id el)}
        [element.hierarchy/render el])
