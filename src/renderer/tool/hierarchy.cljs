@@ -60,7 +60,7 @@
 
 (defmulti on-deactivate :tool :hierarchy hierarchy/hierarchy)
 (defmulti render identity :hierarchy hierarchy/hierarchy)
-(defmulti right-panel identity :hierarchy hierarchy/hierarchy)
+(defmulti attributes-panel identity :hierarchy hierarchy/hierarchy)
 
 (defmethod on-pointer-down :default [db _e] db)
 (defmethod on-pointer-up :default [db _e] db)

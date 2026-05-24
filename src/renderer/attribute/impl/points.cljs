@@ -1,14 +1,18 @@
 (ns renderer.attribute.impl.points
   "https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/points"
   (:require
-   ["@radix-ui/react-popover" :as Popover]
    [clojure.string :as string]
    [re-frame.core :as rf]
+   [renderer.app.subs :as-alias app.subs]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.views :as attribute.views]
    [renderer.element.events :as-alias element.events]
    [renderer.element.hierarchy :as-alias element.hierarchy]
+   [renderer.element.subs :as-alias element.subs]
    [renderer.i18n.views :as i18n.views]
+   [renderer.tool.events :as-alias tool.events]
+   [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.tool.impl.base.edit :as tool.impl.base.edit]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.vec :as utils.vec]
@@ -31,44 +35,33 @@
 
 (defn point-row
   [index [x y] points]
-  [:div.grid.grid-flow-col.gap-px
-   {:dir "ltr"
-    :style {:grid-template-columns "minmax(0, 40px) 3fr 3fr 27px"}}
-   [:label.form-element.px-1.bg-transparent index]
-   [:input.form-element.bg-transparent
-    {:key (str "x-" index)
-     :default-value x
-     :disabled true
-     :on-pointer-up attribute.views/pointer-up-handler!}]
-   [:input.form-element.bg-transparent
-    {:key (str "y-" index)
-     :default-value y
-     :disabled true
-     :on-pointer-up attribute.views/pointer-up-handler!}]
-   [views/icon-button "times" {:on-click #(remove-nth points index)}]])
+  (let [clicked-element @(rf/subscribe [::app.subs/clicked-element])
+        handle-id (keyword (str index))]
+    [:div.grid.grid-flow-col.gap-px.bg-primary
+     {:dir "ltr"
+      :style {:grid-template-columns "minmax(0, 40px) 3fr 3fr 27px"}}
+     [:label.form-element.px-1
+      {:class (when (= handle-id (:id clicked-element))
+                "bg-accent! text-accent-foreground!")}
+      index]
+     [:input.form-element
+      {:key (str "x-" index)
+       :default-value x
+       :disabled true
+       :on-pointer-up attribute.views/pointer-up-handler!}]
+     [:input.form-element
+      {:key (str "y-" index)
+       :default-value y
+       :disabled true
+       :on-pointer-up attribute.views/pointer-up-handler!}]
+     [views/icon-button "times" {:on-click #(remove-nth points index)}]]))
 
-(defn points-popover
-  [points disabled]
-  [:> Popover/Root {:modal true}
-   [:> Popover/Trigger
-    {:title (i18n.views/t [::edit-points "Edit points"])
-     :class "form-control-button"
-     :disabled disabled}
-    [views/icon "pencil"]]
-   [:> Popover/Portal
-    [:> Popover/Content
-     {:sideOffset 5
-      :class "popover-content"
-      :align "end"
-      :on-escape-key-down #(.stopPropagation %)}
-     [:div.flex.overflow-hidden
-      {:style {:max-height "50vh"}}
-      [views/scroll-area
-       [:div.p-4.flex.flex-col.gap-px
-        (map-indexed (fn [index point]
-                       ^{:key (str index point)}
-                       [point-row index point points]) points)]]]
-     [views/popover-arrow]]]])
+(defn points-form
+  [points]
+  [:div.flex.flex-col.gap-px
+   (map-indexed (fn [index point]
+                  ^{:key (str index point)}
+                  [point-row index point points]) points)])
 
 (defmethod attribute.hierarchy/form-element [::element.hierarchy/element
                                              :points]
@@ -79,4 +72,21 @@
       {:disabled (or disabled
                      (not v)
                      (not state-idle))}]
-     (when v [points-popover (utils.attribute/points->vec v) disabled])]))
+     (when v
+       [views/icon-button "pencil"
+        {:title (i18n.views/t [::edit-points "Edit points"])
+         :class "form-control-button"
+         :on-click #(rf/dispatch [::tool.events/activate
+                                  ::tool.impl.base.edit/edit])
+         :disabled disabled}])]))
+
+(defmethod tool.hierarchy/attributes-panel [::tool.impl.base.edit/edit
+                                            ::element.hierarchy/poly]
+  []
+  (let [selected-elements @(rf/subscribe [::element.subs/selected])
+        element (first selected-elements)
+        v (get-in element [:attrs :points])]
+    [:div.flex.flex-col.gap-px
+     [:div.flex.bg-primary.py-5.px-4.gap-1.items-center
+      [:h1.flex-1.text-lg.overflow-hidden.text-ellipsis.button-size "points"]]
+     [points-form (utils.attribute/points->vec v)]]))

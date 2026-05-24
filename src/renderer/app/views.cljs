@@ -104,12 +104,16 @@
      [:div.absolute.bg-accent.top-2.left-2.px-1.rounded.text-accent-foreground
       preview-label])])
 
-(defn right-panel
+(defn attributes-panel
   [active-tool]
-  [:div.flex.flex-col.h-full.bg-secondary.grow.overflow-hidden
-   [views/scroll-area
-    (tool.hierarchy/right-panel active-tool)]
-   [:div.bg-primary.grow.flex]])
+  (let [selected @(rf/subscribe [::element.subs/selected])
+        tag (if (= 1 (count selected))
+              (:tag (first selected))
+              :default)]
+    [:div.flex.flex-col.h-full.bg-secondary.grow.overflow-hidden
+     [views/scroll-area
+      (tool.hierarchy/attributes-panel [active-tool tag])]
+     [:div.bg-primary.grow.flex]]))
 
 (defn guides-locked-toggle
   []
@@ -339,7 +343,7 @@
        :label [::attributes "Attributes"]
        :direction "right"
        :disabled (not some-selected?)}
-      [right-panel active-tool]]]))
+      [attributes-panel active-tool]]]))
 
 (defn center-panel
   []
@@ -374,7 +378,7 @@
             :minSize 320
             :groupResizeBehavior "preserve-pixel-size"
             :class "flex gap-px"}
-           [right-panel active-tool]]])]
+           [attributes-panel active-tool]]])]
       (when md?
         [:div.bg-primary.flex
          [toolbar.views/action-toolbar

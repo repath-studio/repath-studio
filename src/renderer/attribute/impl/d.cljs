@@ -1,7 +1,6 @@
 (ns renderer.attribute.impl.d
   "https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/d"
   (:require
-   ["@radix-ui/react-popover" :as Popover]
    ["svgpath" :as svgpath]
    [clojure.string :as string]
    [re-frame.core :as rf]
@@ -9,8 +8,12 @@
    [renderer.attribute.views :as attribute.views]
    [renderer.element.events :as-alias element.events]
    [renderer.element.hierarchy :as-alias element.hierarchy]
+   [renderer.element.subs :as-alias element.subs]
    [renderer.events :as-alias events]
    [renderer.i18n.views :as i18n.views]
+   [renderer.tool.events :as-alias tool.events]
+   [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.tool.impl.base.edit :as tool.impl.base.edit]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.views :as views]))
 
@@ -118,7 +121,7 @@
   [index segment path]
   (let [command (first segment)
         {:keys [label url]} (->command command)]
-    [:div.my-2
+    [:div.bg-primary.p-2
      #_[:div (string/join " " segment)]
      [:div.flex.items-center.justify-between.mb-1
       [:span
@@ -141,9 +144,9 @@
     [:div.flex.overflow-hidden
      {:style {:max-height "50vh"}}
      [views/scroll-area
-      [:div.p-4.flex.flex-col
+      [:div.flex.flex-col.gap-px
        (map-indexed (fn [index segment]
-                      ^{:key (str "segment-" index)}
+                      ^{:key (str segment)}
                       [segment-row index segment path]) segments)]]]))
 
 (defmethod attribute.hierarchy/form-element [::element.hierarchy/element :d]
@@ -153,17 +156,19 @@
      [attribute.views/form-input k v
       {:disabled (or disabled (not v) (not idle))}]
      (when v
-       [:> Popover/Root {:modal true}
-        [:> Popover/Trigger
-         {:title (i18n.views/t [::edit "Edit path"])
-          :class "form-control-button"
-          :disabled disabled}
-         [views/icon "pencil"]]
-        [:> Popover/Portal
-         [:> Popover/Content
-          {:sideOffset 5
-           :class "popover-content"
-           :align "end"
-           :on-escape-key-down #(.stopPropagation %)}
-          (when idle [edit-form v])
-          [views/popover-arrow]]]])]))
+       [views/icon-button "pencil"
+        {:title (i18n.views/t [::edit "Edit path"])
+         :class "form-control-button"
+         :on-click #(rf/dispatch [::tool.events/activate
+                                  ::tool.impl.base.edit/edit])
+         :disabled disabled}])]))
+
+(defmethod tool.hierarchy/attributes-panel [::tool.impl.base.edit/edit :path]
+  []
+  (let [selected-elements @(rf/subscribe [::element.subs/selected])
+        element (first selected-elements)
+        v (get-in element [:attrs :d])]
+    [:div.flex.flex-col.gap-px
+     [:div.flex.bg-primary.py-5.px-4.gap-1.items-center
+      [:h1.flex-1.text-lg.overflow-hidden.text-ellipsis.button-size "d"]]
+     [edit-form v]]))

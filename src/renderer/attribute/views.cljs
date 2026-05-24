@@ -315,4 +315,4 @@
             ^{:key k}
             [row k v locked? tag])])])))
 
-(defmethod tool.hierarchy/right-panel :default [] [form])
+(defmethod tool.hierarchy/attributes-panel :default [] [form])
