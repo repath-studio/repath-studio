@@ -1,5 +1,6 @@
 (ns renderer.document.db
   (:require
+   [config :as config]
    [malli.core :as m]
    [malli.transform :as m.transform]
    [renderer.db :refer [Vec2 JS_Object]]
@@ -52,7 +53,7 @@
 (def RecentDocument
   (->> Document
        (m/children)
-       (filter (comp #(some #{%} [:id :title :path]) first))
+       (filter (comp #(some #{%} config/save-info-keys) first))
        (into [:map {:closed true}])))
 
 (def valid? (m/validator Document))

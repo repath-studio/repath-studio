@@ -13,7 +13,7 @@
 
 (def default-path "documents")
 
-(def save-info-keys [:id :title :path :file-handle])
+(def save-info-keys [:id :title :path])
 
 (def sentry {:dsn SENTRY-DSN
              :environment (if debug? "development" "production")

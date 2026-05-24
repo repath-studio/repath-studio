@@ -202,7 +202,7 @@
               [:-> App DocumentId boolean?]])
 (defn saved?
   ([db]
-   (some->> (:active-document db) (saved? db)))
+   (boolean (some->> (:active-document db) (saved? db))))
   ([db id]
    (let [document (get-in db [:documents id])
          history-position (get-in document [:history :position])]

@@ -117,7 +117,7 @@
   [els]
   (->> (if (second els)
          (-> els common-attributes (dissoc :id))
-         (-> els first sorted-attributes))
+         (some-> els first sorted-attributes))
        (sort-by (fn [[id _]] (.indexOf utils.attribute/order id)))))
 
 (m/=> supported-attr? [:-> map? keyword? boolean?])
