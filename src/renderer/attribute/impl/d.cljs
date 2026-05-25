@@ -14,6 +14,7 @@
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.edit :as tool.impl.base.edit]
+   [renderer.tool.impl.element.path :as tool.impl.element.path]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.views :as views]))
 
@@ -138,16 +139,22 @@
      [segment-form segment index]]))
 
 (defn edit-form
-  [v]
-  (let [path (-> v svgpath)
+  []
+  (let [selected-elements @(rf/subscribe [::element.subs/selected])
+        element (first selected-elements)
+        v (get-in element [:attrs :d])
+        path (-> v svgpath)
         segments (.-segments path)]
-    [:div.flex.overflow-hidden
-     {:style {:max-height "50vh"}}
-     [views/scroll-area
-      [:div.flex.flex-col.gap-px
-       (map-indexed (fn [index segment]
-                      ^{:key (str segment)}
-                      [segment-row index segment path]) segments)]]]))
+    [:div.flex.flex-col.gap-px
+     [:div.flex.bg-primary.py-5.px-4.gap-1.items-center
+      [:h1.flex-1.text-lg.overflow-hidden.text-ellipsis.button-size "d"]]
+     [:div.flex.overflow-hidden
+      {:style {:max-height "50vh"}}
+      [views/scroll-area
+       [:div.flex.flex-col.gap-px
+        (map-indexed (fn [index segment]
+                       ^{:key (str segment)}
+                       [segment-row index segment path]) segments)]]]]))
 
 (defmethod attribute.hierarchy/form-element [::element.hierarchy/element :d]
   [_ k v {:keys [disabled]}]
@@ -165,10 +172,8 @@
 
 (defmethod tool.hierarchy/attributes-panel [::tool.impl.base.edit/edit :path]
   []
-  (let [selected-elements @(rf/subscribe [::element.subs/selected])
-        element (first selected-elements)
-        v (get-in element [:attrs :d])]
-    [:div.flex.flex-col.gap-px
-     [:div.flex.bg-primary.py-5.px-4.gap-1.items-center
-      [:h1.flex-1.text-lg.overflow-hidden.text-ellipsis.button-size "d"]]
-     [edit-form v]]))
+  [edit-form])
+
+(defmethod tool.hierarchy/attributes-panel [::tool.impl.element.path/path :path]
+  []
+  [edit-form])

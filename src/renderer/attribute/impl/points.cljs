@@ -57,11 +57,18 @@
      [views/icon-button "times" {:on-click #(remove-nth points index)}]]))
 
 (defn points-form
-  [points]
-  [:div.flex.flex-col.gap-px
-   (map-indexed (fn [index point]
-                  ^{:key (str index point)}
-                  [point-row index point points]) points)])
+  []
+  (let [selected-elements @(rf/subscribe [::element.subs/selected])
+        element (first selected-elements)
+        v (get-in element [:attrs :points])
+        points (utils.attribute/points->vec v)]
+    [:div.flex.flex-col.gap-px.overflow-hidden
+     [:div.flex.bg-primary.py-5.px-4.gap-1.items-center
+      [:h1.flex-1.text-lg.overflow-hidden.text-ellipsis.button-size "points"]]
+     [:div.flex.flex-col.gap-px
+      (map-indexed (fn [index point]
+                     ^{:key (str index point)}
+                     [point-row index point points]) points)]]))
 
 (defmethod attribute.hierarchy/form-element [::element.hierarchy/element
                                              :points]
@@ -83,10 +90,9 @@
 (defmethod tool.hierarchy/attributes-panel [::tool.impl.base.edit/edit
                                             ::element.hierarchy/poly]
   []
-  (let [selected-elements @(rf/subscribe [::element.subs/selected])
-        element (first selected-elements)
-        v (get-in element [:attrs :points])]
-    [:div.flex.flex-col.gap-px
-     [:div.flex.bg-primary.py-5.px-4.gap-1.items-center
-      [:h1.flex-1.text-lg.overflow-hidden.text-ellipsis.button-size "points"]]
-     [points-form (utils.attribute/points->vec v)]]))
+  [points-form])
+
+(defmethod tool.hierarchy/attributes-panel [::tool.hierarchy/poly
+                                            ::element.hierarchy/poly]
+  []
+  [points-form])

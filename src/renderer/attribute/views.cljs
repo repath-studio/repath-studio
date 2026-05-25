@@ -306,10 +306,10 @@
                     (not= tool-state :idle)
                     (and tool-cached-state (not= tool-cached-state :idle)))]
     (when-first [el selected-elements]
-      [:div
+      [:div.flex.flex-col.gap-px
        [heading el selected-elements selected-tags tag]
        (when (seq edit-attributes)
-         [:div.grid.grid-cols-2.grid-flow-row.my-px.w-full.gap-px
+         [:div.grid.grid-cols-2.grid-flow-row.w-full.gap-px
           {:style {:grid-template-columns "minmax(120px, 120px) 1fr"}}
           (for [[k v] edit-attributes]
             ^{:key k}

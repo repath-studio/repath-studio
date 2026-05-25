@@ -110,7 +110,7 @@
         tag (if (= 1 (count selected))
               (:tag (first selected))
               :default)]
-    [:div.flex.flex-col.h-full.bg-secondary.grow.overflow-hidden
+    [:div.flex.flex-col.h-full.bg-secondary.grow.overflow-hidden.gap-px
      [views/scroll-area
       (tool.hierarchy/attributes-panel [active-tool tag])]
      [:div.bg-primary.grow.flex]]))
