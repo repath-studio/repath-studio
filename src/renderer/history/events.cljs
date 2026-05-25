@@ -3,8 +3,7 @@
    [re-frame.core :as rf]
    [renderer.app.effects :as-alias app.effects]
    [renderer.effects :as-alias effects]
-   [renderer.history.handlers :as history.handlers]
-   [renderer.tool.handlers :as tool.handlers]))
+   [renderer.history.handlers :as history.handlers]))
 
 (rf/reg-event-db
  ::undo
