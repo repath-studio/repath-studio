@@ -59,8 +59,7 @@
       :enter-key-hint "done"
       :on-drag-start #(.preventDefault %)
       :on-focus #(.. % -target select)
-      :on-key-down #(utils.key/down-handler! % label
-                                             set-item-label! id tree-ref)
+      :on-key-down #(utils.key/down-handler % label set-item-label! id tree-ref)
       :on-blur (fn [e]
                  (reset! edit-mode? false)
                  (set-item-label! e id tree-ref))}]))
@@ -97,7 +96,7 @@
   [id]
   (reset! last-focused-id id))
 
-(defn key-down-handler!
+(defn key-down-handler
   [e id edit-mode? tree-ref]
   (case (.-code e)
     "ArrowUp"
@@ -211,7 +210,7 @@
         :on-pointer-enter #(rf/dispatch [::document.events/set-hovered-id id])
         :ref (on-list-item-ref-update! selected)
         :draggable true
-        :on-key-down #(key-down-handler! % id edit-mode? tree-ref)
+        :on-key-down #(key-down-handler % id edit-mode? tree-ref)
         :on-drag-start #(-> % .-dataTransfer (.setData "id" (str id)))
         :on-drag-enter #(rf/dispatch [::document.events/set-hovered-id id])
         :on-drag-over #(.preventDefault %)

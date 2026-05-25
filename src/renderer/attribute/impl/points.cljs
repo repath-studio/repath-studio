@@ -15,6 +15,7 @@
    [renderer.tool.impl.base.edit :as tool.impl.base.edit]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.attribute :as utils.attribute]
+   [renderer.utils.key :as utils.key]
    [renderer.utils.vec :as utils.vec]
    [renderer.views :as views]))
 
@@ -33,28 +34,52 @@
                     (string/join " "))]
     (rf/dispatch [::element.events/set-attr :points points])))
 
+(defn set-point
+  [e {:keys [index points value axis]}]
+  (let [new-v (.. e -target -value)]
+    (if (js/isNaN new-v)
+      (set! (.. e -target -value) value)
+      (let [prev-point (nth points index)
+            new-point (if (= axis :x)
+                        [new-v (second prev-point)]
+                        [(first prev-point) new-v])
+            points (assoc points index new-point)
+            points (->> points
+                        (flatten)
+                        (string/join " "))]
+        (rf/dispatch [::element.events/set-attr :points points])))))
+
+(defn input
+  [index v points axis]
+  (let [idle? @(rf/subscribe [::tool.subs/idle?])
+        point-attrs {:index index
+                     :points points
+                     :value v
+                     :axis axis}]
+    [:input.form-element
+     {:key (str axis index)
+      :default-value v
+      :enter-key-hint "done"
+      :disabled (not idle?)
+      :on-blur #(set-point % point-attrs)
+      :on-pointer-up attribute.views/pointer-up-handler
+      :on-key-down #(utils.key/down-handler % set-point point-attrs)}]))
+
 (defn point-row
   [index [x y] points]
   (let [clicked-element @(rf/subscribe [::app.subs/clicked-element])
-        handle-id (keyword (str index))]
+        handle-id (keyword (str index))
+        active? (= handle-id (:id clicked-element))]
     [:div.grid.grid-flow-col.gap-px.bg-primary
      {:dir "ltr"
       :style {:grid-template-columns "minmax(0, 40px) 3fr 3fr 27px"}}
-     [:label.form-element.px-1
-      {:class (when (= handle-id (:id clicked-element))
-                "bg-accent! text-accent-foreground!")}
+     [:span.form-element
+      {:class (when active? "bg-accent! text-accent-foreground!")}
       index]
-     [:input.form-element
-      {:key (str "x-" index)
-       :default-value x
-       :disabled true
-       :on-pointer-up attribute.views/pointer-up-handler!}]
-     [:input.form-element
-      {:key (str "y-" index)
-       :default-value y
-       :disabled true
-       :on-pointer-up attribute.views/pointer-up-handler!}]
-     [views/icon-button "times" {:on-click #(remove-nth points index)}]]))
+     [input index x points :x]
+     [input index y points :y]
+     [views/icon-button "times"
+      {:on-click #(remove-nth points index)}]]))
 
 (defn points-form
   []

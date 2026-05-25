@@ -83,7 +83,7 @@
               :appearance "textfield"}
       :default-value value
       :on-blur #(set-zoom % value)
-      :on-key-down #(utils.key/down-handler! % value set-zoom % value)
+      :on-key-down #(utils.key/down-handler % value set-zoom % value)
       :on-wheel #(rf/dispatch (if (pos? (.-deltaY %))
                                 [::frame.events/zoom-out]
                                 [::frame.events/zoom-in]))}]))

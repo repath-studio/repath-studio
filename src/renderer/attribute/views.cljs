@@ -74,9 +74,9 @@
       (when-let [spec-url (utils.attribute/spec-url attr data)]
         [info-button spec-url [::specification "Specification"]])]]))
 
-(defn update-handler!
+(defn update-handler
   ([event k old-v]
-   (update-handler! event k old-v true))
+   (update-handler event k old-v true))
   ([event k old-v finalize?]
    (let [new-v (.. event -target -value)]
      (when-not (= new-v old-v)
@@ -84,7 +84,7 @@
                        ::element.events/set-attr
                        ::element.events/preview-attr) k new-v])))))
 
-(defn pointer-up-handler!
+(defn pointer-up-handler
   [event]
   (let [target (.-target event)
         start-pos (.-selectionStart target)
@@ -104,10 +104,10 @@
             :id (name k)
             :default-value v
             :enter-key-hint "done"
-            :on-pointer-up pointer-up-handler!
+            :on-pointer-up pointer-up-handler
             :placeholder (if v placeholder "multiple")
-            :on-blur #(update-handler! % k v)
-            :on-key-down #(utils.key/down-handler! % v update-handler! k v)})]
+            :on-blur #(update-handler % k v)
+            :on-key-down #(utils.key/down-handler % v update-handler k v)})]
    (when-not (or (empty? (str v)) disabled)
      [:button.form-control-button.bg-primary!.absolute!.right-0.p1.invisible
       {:class "hover:bg-transparent rtl:right-auto rtl:left-0
