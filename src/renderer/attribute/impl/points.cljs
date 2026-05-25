@@ -83,16 +83,15 @@
        [views/icon-button "pencil"
         {:title (i18n.views/t [::edit-points "Edit points"])
          :class "form-control-button"
-         :on-click #(rf/dispatch [::tool.events/activate
-                                  ::tool.impl.base.edit/edit])
+         :on-click #(rf/dispatch [::tool.events/edit])
          :disabled disabled}])]))
 
-(defmethod tool.hierarchy/attributes-panel [::tool.impl.base.edit/edit
-                                            ::element.hierarchy/poly]
+(defmethod tool.hierarchy/attributes-panel
+  [::tool.impl.base.edit/edit ::element.hierarchy/poly]
   []
   [points-form])
 
-(defmethod tool.hierarchy/attributes-panel [::tool.hierarchy/poly
-                                            ::element.hierarchy/poly]
+(defmethod tool.hierarchy/attributes-panel
+  [::tool.hierarchy/poly ::element.hierarchy/poly]
   []
   [points-form])

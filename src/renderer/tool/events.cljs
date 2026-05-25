@@ -15,6 +15,11 @@
      (tool.handlers/activate tool opts))))
 
 (rf/reg-event-db
+ ::edit
+ (fn [db [_]]
+   (tool.handlers/edit db)))
+
+(rf/reg-event-db
  ::set-state
  (fn [db [_ state]]
    (tool.handlers/set-state db state)))

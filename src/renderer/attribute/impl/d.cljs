@@ -166,8 +166,7 @@
        [views/icon-button "pencil"
         {:title (i18n.views/t [::edit "Edit path"])
          :class "form-control-button"
-         :on-click #(rf/dispatch [::tool.events/activate
-                                  ::tool.impl.base.edit/edit])
+         :on-click #(rf/dispatch [::tool.events/edit])
          :disabled disabled}])]))
 
 (defmethod tool.hierarchy/attributes-panel [::tool.impl.base.edit/edit :path]
