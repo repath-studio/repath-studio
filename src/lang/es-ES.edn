@@ -535,17 +535,23 @@
   :async "Asincrónicamente"
   :auto "Automático"}
 
- :renderer.tool.impl.base.edit
- {:label "Editar"
-  :help-idle-drag [:div "Arrastre un asa para modificar su forma."]
-  :help-idle-click [:div "Haga clic en un elemento para cambiar la selección"]
-  :help-edit [:div "Mantenga %1 para restringir la dirección."]
-  :help-type [:div "Ingrese su texto."]
-  :select-element "Seleccionar elemento"
-  :edit "Editar"
-  :centroid "Centroide"
-  :handle "asa"
-  :tool-edit "Editar"}
+ :renderer.tool.impl.base.edit.core
+ {:centroid "Centroide"
+  :label "Editar"}
+
+ :renderer.tool.impl.base.edit.idle
+ {:help-idle-drag [:div "Arrastre un asa para modificar su forma."]
+  :help-idle-click [:div "Haga clic en un elemento para cambiar la selección"]}
+
+ :renderer.tool.impl.base.edit.select
+ {:select-element "Seleccionar elemento"}
+
+ :renderer.tool.impl.base.edit.edit
+ {:help-edit [:div "Mantenga %1 para restringir la dirección."]
+  :handle "asa"}
+
+ :renderer.tool.impl.base.edit.type
+ {:help-type [:div "Ingrese su texto."]}
 
  :renderer.tool.impl.base.transform.core
  {:label "Transformar"

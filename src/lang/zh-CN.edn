@@ -457,17 +457,23 @@
   :async "异步"
   :auto "自动"}
 
- :renderer.tool.impl.base.edit
- {:label "编辑"
-  :help-idle-drag [:div "拖动控制柄修改您的形状。"]
-  :help-idle-click [:div "点击元素更改选择"]
-  :help-edit [:div "按住 %1 限制方向。"]
-  :help-type [:div "输入您的文本。"]
-  :select-element "选择元素"
-  :edit "编辑"
-  :centroid "质心"
-  :handle "句柄"
-  :tool-edit "编辑"}
+ :renderer.tool.impl.base.edit.core
+ {:centroid "质心"
+  :label "编辑"}
+
+ :renderer.tool.impl.base.edit.idle
+ {:help-idle-drag [:div "拖动控制柄修改您的形状。"]
+  :help-idle-click [:div "点击元素更改选择"]}
+
+ :renderer.tool.impl.base.edit.select
+ {:select-element "选择元素"}
+
+ :renderer.tool.impl.base.edit.edit
+ {:help-edit [:div "按住 %1 限制方向。"]
+  :handle "句柄"}
+
+ :renderer.tool.impl.base.edit.type
+ {:help-type [:div "输入您的文本。"]}
 
  :renderer.tool.impl.base.transform.core
  {:label "变换"

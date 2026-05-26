@@ -510,17 +510,23 @@
   :async "غير متزامن"
   :auto "تلقائي"}
 
- :renderer.tool.impl.base.edit
- {:label "تحرير"
-  :help-idle-drag [:div "اسحب مقبضاً لتعديل شكلك."]
-  :help-idle-click [:div "انقر على عنصر لتغيير التحديد"]
-  :help-edit [:div "اضغط %1 لتقييد الاتجاه."]
-  :help-type [:div "أدخل النص الخاص بك."]
-  :select-element "تحديد عنصر"
-  :edit "تحرير"
-  :centroid "مركز الكتلة"
-  :handle "مقبض"
-  :tool-edit "تحرير"}
+ :renderer.tool.impl.base.edit.core
+ {:centroid "مركز الكتلة"
+  :label "تحرير"}
+
+ :renderer.tool.impl.base.edit.idle
+ {:help-idle-drag [:div "اسحب مقبضاً لتعديل شكلك."]
+  :help-idle-click [:div "انقر على عنصر لتغيير التحديد"]}
+
+ :renderer.tool.impl.base.edit.select
+ {:select-element "تحديد عنصر"}
+
+ :renderer.tool.impl.base.edit.edit
+ {:help-edit [:div "اضغط %1 لتقييد الاتجاه."]
+  :handle "مقبض"}
+
+ :renderer.tool.impl.base.edit.type
+ {:help-type [:div "أدخل النص الخاص بك."]}
 
  :renderer.tool.impl.base.transform.core
  {:label "تحويل"

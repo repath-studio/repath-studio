@@ -523,17 +523,23 @@
   :async "Asynchronously"
   :auto "Auto"}
 
- :renderer.tool.impl.base.edit
- {:label "Edit"
-  :help-idle-drag [:div "Drag a handle to modify your shape."]
-  :help-idle-click [:div "Click on an element to change selection"]
-  :help-edit [:div "Hold %1 to restrict direction."]
-  :help-type [:div "Enter your text."]
-  :select-element "Select element"
-  :edit "Edit"
-  :centroid "Centroid"
-  :handle "handle"
-  :tool-edit "Edit"}
+ :renderer.tool.impl.base.edit.core
+ {:centroid "Centroid"
+  :label "Edit"}
+
+ :renderer.tool.impl.base.edit.idle
+ {:help-idle-drag [:div "Drag a handle to modify your shape."]
+  :help-idle-click [:div "Click on an element to change selection"]}
+
+ :renderer.tool.impl.base.edit.select
+ {:select-element "Select element"}
+
+ :renderer.tool.impl.base.edit.edit
+ {:help-edit [:div "Hold %1 to restrict direction."]
+  :handle "handle"}
+
+  :renderer.tool.impl.base.edit.type
+  {:help-type [:div "Enter your text."]}
 
  :renderer.tool.impl.base.transform.core
  {:label "Transform"

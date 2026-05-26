@@ -546,17 +546,23 @@
   :async "Asincronamente"
   :auto "Automatico"}
 
- :renderer.tool.impl.base.edit
- {:label "Modifica"
-  :help-idle-drag [:div "Trascina una maniglia per modificare la tua forma."]
-  :help-idle-click [:div "Clicca su un elemento per cambiare selezione"]
-  :help-edit [:div "Tieni premuto %1 per limitare la direzione."]
-  :help-type [:div "Inserisci il tuo testo."]
-  :select-element "Seleziona elemento"
-  :edit "Modifica"
-  :centroid "Centroide"
-  :handle "maniglia"
-  :tool-edit "Modifica"}
+ :renderer.tool.impl.base.edit.core
+ {:centroid "Centroide"
+  :label "Modifica"}
+
+ :renderer.tool.impl.base.edit.idle
+ {:help-idle-drag [:div "Trascina una maniglia per modificare la tua forma."]
+  :help-idle-click [:div "Clicca su un elemento per cambiare selezione"]}
+
+ :renderer.tool.impl.base.edit.select
+ {:select-element "Seleziona elemento"}
+
+ :renderer.tool.impl.base.edit.edit
+ {:help-edit [:div "Tieni premuto %1 per limitare la direzione."]
+  :handle "maniglia"}
+
+ :renderer.tool.impl.base.edit.type
+ {:help-type [:div "Inserisci il tuo testo."]}
 
  :renderer.tool.impl.base.transform.core
  {:label "Trasforma"

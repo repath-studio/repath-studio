@@ -555,17 +555,23 @@
   :async "Ασύγχρονα"
   :auto "Αυτόματα"}
 
- :renderer.tool.impl.base.edit
- {:label "Επεξεργασία"
-  :help-idle-drag [:div "Σύρετε μια λαβή για να τροποποιήσετε το σχήμα σας."]
-  :help-idle-click [:div "Κάντε κλικ σε ένα στοιχείο για αλλάξετε επιλογή"]
-  :help-edit [:div "Κρατήστε %1 για να περιορίσετε την κατεύθυνση."]
-  :help-type [:div "Εισάγετε κείμενο."]
-  :select-element "Επιλογή στοιχείου"
-  :edit "Επεξεργασία"
-  :centroid "Κέντρο μάζας"
-  :handle "χειριστήριο"
-  :tool-edit "Επεξεργασία"}
+ :renderer.tool.impl.base.edit.core
+ {:centroid "Κέντρο μάζας"
+  :label "Επεξεργασία"}
+
+ :renderer.tool.impl.base.edit.idle
+ {:help-idle-drag [:div "Σύρετε μια λαβή για να τροποποιήσετε το σχήμα σας."]
+  :help-idle-click [:div "Κάντε κλικ σε ένα στοιχείο για αλλάξετε επιλογή"]}
+
+ :renderer.tool.impl.base.edit.select
+ {:select-element "Επιλογή στοιχείου"}
+
+ :renderer.tool.impl.base.edit.edit
+ {:help-edit [:div "Κρατήστε %1 για να περιορίσετε την κατεύθυνση."]
+  :handle "χειριστήριο"}
+
+ :renderer.tool.impl.base.edit.type
+ {:help-type [:div "Εισάγετε κείμενο."]}
 
  :renderer.tool.impl.base.transform.core
  {:label "Μετασχηματισμός"

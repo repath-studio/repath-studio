@@ -530,17 +530,23 @@
   :async "Асинхронно"
   :auto "Автоматически"}
 
- :renderer.tool.impl.base.edit
- {:label "Редактирование"
-  :help-idle-drag [:div "Перетащите маркер для изменения вашей формы."]
-  :help-idle-click [:div "Щёлкните на элементе для изменения выделения"]
-  :help-edit [:div "Удерживайте %1 для ограничения направления."]
-  :help-type [:div "Введите ваш текст."]
-  :select-element "Выбрать элемент"
-  :edit "Редактировать"
-  :centroid "Центроид"
-  :handle "ручка"
-  :tool-edit "Редактирование"}
+ :renderer.tool.impl.base.edit.core
+ {:centroid "Центроид"
+  :label "Редактирование"}
+
+ :renderer.tool.impl.base.edit.idle
+ {:help-idle-drag [:div "Перетащите маркер для изменения вашей формы."]
+  :help-idle-click [:div "Щёлкните на элементе для изменения выделения"]}
+
+ :renderer.tool.impl.base.edit.select
+ {:select-element "Выбрать элемент"}
+
+ :renderer.tool.impl.base.edit.edit
+ {:help-edit [:div "Удерживайте %1 для ограничения направления."]
+  :handle "ручка"}
+
+ :renderer.tool.impl.base.edit.type
+ {:help-type [:div "Введите ваш текст."]}
 
  :renderer.tool.impl.base.transform.core
  {:label "Трансформация"

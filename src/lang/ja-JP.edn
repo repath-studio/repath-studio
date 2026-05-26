@@ -495,17 +495,23 @@
   :async "非同期的に"
   :auto "自動"}
 
- :renderer.tool.impl.base.edit
- {:label "編集"
-  :help-idle-drag [:div "ハンドルをドラッグして形状を変更。"]
-  :help-idle-click [:div "要素をクリックして選択を変更"]
-  :help-edit [:div "%1を押しながら方向を制限。"]
-  :help-type [:div "テキストを入力してください。"]
-  :select-element "要素を選択"
-  :edit "編集"
-  :centroid "重心"
-  :handle "ハンドル"
-  :tool-edit "編集"}
+ :renderer.tool.impl.base.edit.core
+ {:centroid "重心"
+  :label "編集"}
+
+ :renderer.tool.impl.base.edit.idle
+ {:help-idle-drag [:div "ハンドルをドラッグして形状を変更。"]
+  :help-idle-click [:div "要素をクリックして選択を変更"]}
+
+ :renderer.tool.impl.base.edit.select
+ {:select-element "要素を選択"}
+
+ :renderer.tool.impl.base.edit.edit
+ {:help-edit [:div "%1を押しながら方向を制限。"]
+  :handle "ハンドル"}
+
+ :renderer.tool.impl.base.edit.type
+ {:help-type [:div "テキストを入力してください。"]}
 
  :renderer.tool.impl.base.transform.core
  {:label "変形"

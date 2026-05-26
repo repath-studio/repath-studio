@@ -548,17 +548,23 @@
   :async "Asynchroon"
   :auto "Automatisch"}
 
- :renderer.tool.impl.base.edit
- {:label "Bewerken"
-  :help-idle-drag [:div "Sleep een handvat om uw vorm te wijzigen."]
-  :help-idle-click [:div "Klik op een element om selectie te wijzigen"]
-  :help-edit [:div "Houd %1 ingedrukt om richting te beperken."]
-  :help-type [:div "Voer uw tekst in."]
-  :select-element "Selecteer element"
-  :edit "Bewerken"
-  :centroid "Zwaartepunt"
-  :handle "handvat"
-  :tool-edit "Bewerken"}
+ :renderer.tool.impl.base.edit.core
+ {:centroid "Zwaartepunt"
+  :label "Bewerken"}
+
+ :renderer.tool.impl.base.edit.idle
+ {:help-idle-drag [:div "Sleep een handvat om uw vorm te wijzigen."]
+  :help-idle-click [:div "Klik op een element om selectie te wijzigen"]}
+
+ :renderer.tool.impl.base.edit.select
+ {:select-element "Selecteer element"}
+
+ :renderer.tool.impl.base.edit.edit
+ {:help-edit [:div "Houd %1 ingedrukt om richting te beperken."]
+  :handle "handvat"}
+
+ :renderer.tool.impl.base.edit.type
+ {:help-type [:div "Voer uw tekst in."]}
 
  :renderer.tool.impl.base.transform.core
  {:label "Transformeren"

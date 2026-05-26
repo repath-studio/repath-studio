@@ -541,17 +541,23 @@
   :async "Asynchrone"
   :auto "Automatique"}
 
- :renderer.tool.impl.base.edit
- {:label "Éditer"
-  :help-idle-drag [:div "Faites glisser une poignée pour modifier votre forme."]
-  :help-idle-click [:div "Cliquez sur un élément pour changer la sélection"]
-  :help-edit [:div "Maintenez %1 pour restreindre la direction."]
-  :help-type [:div "Entrez votre texte."]
-  :select-element "Sélectionner un élément"
-  :edit "Éditer"
-  :centroid "Centroïde"
-  :handle "poignée"
-  :tool-edit "Éditer"}
+ :renderer.tool.impl.base.edit.core
+ {:centroid "Centroïde"
+  :label "Éditer"}
+
+ :renderer.tool.impl.base.edit.idle
+ {:help-idle-drag [:div "Faites glisser une poignée pour modifier votre forme."]
+  :help-idle-click [:div "Cliquez sur un élément pour changer la sélection"]}
+
+ :renderer.tool.impl.base.edit.select
+ {:select-element "Sélectionner un élément"}
+
+ :renderer.tool.impl.base.edit.edit
+ {:help-edit [:div "Maintenez %1 pour restreindre la direction."]
+  :handle "poignée"}
+
+ :renderer.tool.impl.base.edit.type
+ {:help-type [:div "Entrez votre texte."]}
 
  :renderer.tool.impl.base.transform.core
  {:label "Transformer"

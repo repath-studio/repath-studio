@@ -550,18 +550,24 @@
   :async "Asynchron"
   :auto "Automatisch"}
 
- :renderer.tool.impl.base.edit
- {:label "Bearbeiten"
-  :help-idle-drag [:div "Ziehen Sie einen Griff, um Ihre Form zu ändern."]
+ :renderer.tool.impl.base.edit.core
+ {:centroid "Schwerpunkt"
+  :label "Bearbeiten"}
+
+ :renderer.tool.impl.base.edit.idle
+ {:help-idle-drag [:div "Ziehen Sie einen Griff, um Ihre Form zu ändern."]
   :help-idle-click [:div "Klicken Sie auf ein Element, um die Auswahl zu
-                          ändern"]
-  :help-edit [:div "Halten Sie %1, um die Richtung zu beschränken."]
-  :help-type [:div "Geben Sie Ihren Text ein."]
-  :select-element "Element auswählen"
-  :edit "Bearbeiten"
-  :centroid "Schwerpunkt"
-  :handle "Griff"
-  :tool-edit "Bearbeiten"}
+                          ändern"]}
+
+ :renderer.tool.impl.base.edit.select
+ {:select-element "Element auswählen"}
+
+ :renderer.tool.impl.base.edit.edit
+ {:help-edit [:div "Halten Sie %1, um die Richtung zu beschränken."]
+  :handle "Griff"}
+
+ :renderer.tool.impl.base.edit.type
+ {:help-type [:div "Geben Sie Ihren Text ein."]}
 
  :renderer.tool.impl.base.transform.core
  {:label "Transformieren"

@@ -534,17 +534,23 @@
   :async "Asynkront"
   :auto "Automatisk"}
 
- :renderer.tool.impl.base.edit
- {:label "Redigera"
-  :help-idle-drag [:div "Dra ett handtag för att ändra din form."]
-  :help-idle-click [:div "Klicka på ett element för att ändra markering"]
-  :help-edit [:div "Håll %1 för att begränsa riktning."]
-  :help-type [:div "Ange din text."]
-  :select-element "Välj element"
-  :edit "Redigera"
-  :centroid "Centroid"
-  :handle "handtag"
-  :tool-edit "Redigera"}
+ :renderer.tool.impl.base.edit.core
+ {:centroid "Centroid"
+  :label "Redigera"}
+
+ :renderer.tool.impl.base.edit.idle
+ {:help-idle-drag [:div "Dra ett handtag för att ändra din form."]
+  :help-idle-click [:div "Klicka på ett element för att ändra markering"]}
+
+ :renderer.tool.impl.base.edit.select
+ {:select-element "Välj element"}
+
+ :renderer.tool.impl.base.edit.edit
+ {:help-edit [:div "Håll %1 för att begränsa riktning."]
+  :handle "handtag"}
+
+ :renderer.tool.impl.base.edit.type
+ {:help-type [:div "Ange din text."]}
 
  :renderer.tool.impl.base.transform.core
  {:label "Transformera"

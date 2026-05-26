@@ -491,17 +491,23 @@
   :async "비동기식"
   :auto "자동"}
 
- :renderer.tool.impl.base.edit
- {:label "편집"
-  :help-idle-drag [:div "핸들을 드래그하여 모양을 수정합니다."]
-  :help-idle-click [:div "요소를 클릭하여 선택을 변경합니다"]
-  :help-edit [:div "%1을 누르면 방향을 제한합니다."]
-  :help-type [:div "텍스트를 입력하세요."]
-  :select-element "요소 선택"
-  :edit "편집"
-  :centroid "도심"
-  :handle "핸들"
-  :tool-edit "편집"}
+ :renderer.tool.impl.base.edit.core
+ {:centroid "도심"
+  :label "편집"}
+
+ :renderer.tool.impl.base.edit.idle
+ {:help-idle-drag [:div "핸들을 드래그하여 모양을 수정합니다."]
+  :help-idle-click [:div "요소를 클릭하여 선택을 변경합니다"]}
+
+ :renderer.tool.impl.base.edit.select
+ {:select-element "요소 선택"}
+
+ :renderer.tool.impl.base.edit.edit
+ {:help-edit [:div "%1을 누르면 방향을 제한합니다."]
+  :handle "핸들"}
+
+ :renderer.tool.impl.base.edit.type
+ {:help-type [:div "텍스트를 입력하세요."]}
 
  :renderer.tool.impl.base.transform.core
  {:label "변환"
