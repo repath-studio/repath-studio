@@ -7,15 +7,16 @@
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.db :refer [Element]]
    [renderer.element.handlers :as element.handlers]
+   [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
    [renderer.hierarchy :as hierarchy]
    [renderer.tool.events :as-alias tool.events]
+   [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.transform.clone]
    [renderer.tool.impl.base.transform.edit]
    [renderer.tool.impl.base.transform.idle]
    [renderer.tool.impl.base.transform.scale]
-   [renderer.tool.impl.base.transform.select :as transform.select]
    [renderer.tool.impl.base.transform.translate]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.tool.views :as tool.views]
@@ -32,7 +33,7 @@
       (element.handlers/clear-hovered)
       (assoc :pivot-point [0 0])
       (assoc :anchor-offset (:anchor-point db))
-      (transform.select/clear-select-box)))
+      (tool.handlers/set-select-box nil)))
 
 (defn pivot-handle
   []
@@ -99,7 +100,8 @@
         selected-elements @(rf/subscribe [::element.subs/selected])
         bbox @(rf/subscribe [::element.subs/bbox])
         hovered-elements @(rf/subscribe [::element.subs/hovered])
-        touch? @(rf/subscribe [::app.subs/supported-feature? :touch])]
+        touch? @(rf/subscribe [::app.subs/supported-feature? :touch])
+        select-box @(rf/subscribe [::tool.subs/select-box])]
     [:<>
      (into [:<>]
            (map #(bounding-box % false) selected-elements))
@@ -121,7 +123,7 @@
 
      [pivot-handle]
 
-     [transform.select/render-select-box]]))
+     [element.hierarchy/render select-box]]))
 
 (rf/dispatch [::action.events/register-action
               {:id :tool/transform

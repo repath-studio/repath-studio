@@ -12,7 +12,7 @@
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.db :refer [Tool State Cursor]]
    [renderer.tool.hierarchy :as tool.hierarchy]
-   [renderer.tool.impl.base.edit :as-alias tool.impl.base.edit]
+   [renderer.tool.impl.base.edit.core :as-alias tool.impl.base.edit]
    [renderer.tool.impl.base.transform.core :as-alias tool.impl.base.transform]))
 
 (m/=> set-state [:-> App State App])
@@ -156,3 +156,8 @@
              :stroke "var(--accent)"
              :stroke-opacity ".5"
              :stroke-width (str (/ 1 zoom))}}))
+
+(m/=> set-select-box [:-> App Element App])
+(defn set-select-box
+  [db el]
+  (assoc db :select-box el))

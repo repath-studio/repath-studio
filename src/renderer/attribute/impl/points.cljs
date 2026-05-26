@@ -12,7 +12,7 @@
    [renderer.i18n.views :as i18n.views]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.hierarchy :as tool.hierarchy]
-   [renderer.tool.impl.base.edit :as tool.impl.base.edit]
+   [renderer.tool.impl.base.edit.core :as tool.impl.base.edit]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.key :as utils.key]

@@ -2,7 +2,7 @@
   (:require
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
-   [renderer.tool.impl.base.edit]
+   [renderer.tool.impl.base.edit.core]
    [renderer.tool.impl.base.pan]
    [renderer.tool.impl.base.transform.core]
    [renderer.tool.impl.base.zoom]))

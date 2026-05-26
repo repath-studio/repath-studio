@@ -2,9 +2,7 @@
   (:require
    [malli.core :as m]
    [re-frame.core :as rf]
-   [reagent.core :as reagent]
    [renderer.app.db :refer [App]]
-   [renderer.app.handlers :as app.handlers]
    [renderer.element.db :refer [Element]]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
@@ -16,6 +14,7 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.transform.core :as-alias transform]
+   [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.views :as views]))
@@ -24,13 +23,6 @@
   []
   (i18n.views/t [::select [:div "Hold %1 to select intersecting elements."]]
                 [[views/kbd "Alt"]]))
-
-(defonce select-box (reagent/atom nil))
-
-(rf/reg-fx
- ::set-select-box
- (fn [value]
-   (reset! select-box value)))
 
 (m/=> selectable? [:-> [:or Element Handle nil?] boolean?])
 (defn selectable?
@@ -50,7 +42,8 @@
 (m/=> hovered? [:-> Element boolean? boolean?])
 (defn hovered?
   [el intersecting?]
-  (let [selection-bbox (element.hierarchy/bbox @select-box)
+  (let [select-box @(rf/subscribe [::tool.subs/select-box])
+        selection-bbox (element.hierarchy/bbox select-box)
         el-bbox (:bbox el)]
     (if (and selection-bbox el-bbox)
       (if intersecting?
@@ -63,23 +56,12 @@
   [db e f]
   (let [{:keys [alt-key]} e
         intersecting? (or alt-key (input.handlers/multi-touch? db))]
-    (transduce
-     (comp
-      (element.handlers/visible)
-      (filter #(hovered? % intersecting?))
-      (map :id))
-     (fn [db id]
-       (cond-> db
-         id (f id)))
-     db (element.handlers/entities db))))
-
-(defn render-select-box
-  []
-  [element.hierarchy/render @select-box])
-
-(defn clear-select-box
-  [db]
-  (app.handlers/add-fx db [::set-select-box nil]))
+    (transduce (comp (element.handlers/visible)
+                     (filter #(hovered? % intersecting?))
+                     (map :id))
+               (fn [db id] (cond-> db id (f id)))
+               db
+               (element.handlers/entities db))))
 
 (m/=> select-rect [:-> App boolean? Element])
 (defn select-rect
@@ -93,7 +75,7 @@
   (let [{:keys [alt-key]} e]
     (-> db
         (element.handlers/clear-hovered)
-        (app.handlers/add-fx [::set-select-box (select-rect db alt-key)])
+        (tool.handlers/set-select-box (select-rect db alt-key))
         (reduce-by-area e element.handlers/hover))))
 
 (defmethod tool.hierarchy/on-drag-end [::transform/transform :select]
@@ -104,7 +86,7 @@
 
     :always
     (-> (reduce-by-area e element.handlers/select)
-        (clear-select-box)
+        (tool.handlers/set-select-box nil)
         (dissoc :clicked-element :pivot-point)
         (tool.handlers/set-state :idle)
         (history.handlers/finalize (:timestamp e)

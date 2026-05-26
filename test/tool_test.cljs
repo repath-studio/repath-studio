@@ -7,7 +7,7 @@
    [renderer.element.events :as-alias element.events]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.hierarchy :as tool.hierarchy]
-   [renderer.tool.impl.base.edit :as-alias tool.impl.base.edit]
+   [renderer.tool.impl.base.edit.core :as-alias tool.impl.base.edit]
    [renderer.tool.impl.base.transform.core :as-alias tool.impl.base.transform]
    [renderer.tool.subs :as-alias tool.subs]))
 
