@@ -1,26 +1,48 @@
 (ns renderer.tool.impl.base.edit
   (:require
    [clojure.core.matrix :as matrix]
+   [malli.core :as m]
    [re-frame.core :as rf]
+   [reagent.core :as reagent]
    [renderer.action.events :as-alias action.events]
+   [renderer.app.db :refer [App]]
+   [renderer.app.handlers :as app.handlers]
+   [renderer.element.db :refer [Element]]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
    [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
+   [renderer.input.db :refer [PointerEvent]]
    [renderer.input.handlers :as input.handlers]
    [renderer.snap.handlers :as snap.handlers]
+   [renderer.tool.db :refer [Handle]]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
+   [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.key :as utils.key]
    [renderer.utils.svg :as utils.svg]
    [renderer.views :as views]))
 
 (hierarchy/derive! ::edit ::tool.hierarchy/tool)
+
+(defonce select-box (reagent/atom nil))
+
+(rf/reg-fx
+ ::set-select-box
+ (fn [value]
+   (reset! select-box value)))
+
+(m/=> selectable? [:-> [:or Element Handle nil?] boolean?])
+(defn selectable?
+  [el]
+  (and (= :handle (:type el))
+       (not (:selected el))
+       (not= :canvas (:tag el))))
 
 (defmethod tool.hierarchy/help [::edit :idle]
   []
@@ -56,11 +78,18 @@
                                       (:id element))
           (history.handlers/finalize (:timestamp e) [::edit "Edit"])))))
 
+(defn clear-select-box
+  [db]
+  (app.handlers/add-fx db [::set-select-box nil]))
+
 (defmethod tool.hierarchy/on-pointer-up [::edit :idle]
   [db e]
   (let [{:keys [shift-key ctrl-key element]} e]
     (cond
       ctrl-key
+      (edit-click db e)
+
+      (= (:type element) :handle)
       (edit-click db e)
 
       :else
@@ -87,9 +116,12 @@
 
 (defmethod tool.hierarchy/on-drag-start [::edit :idle]
   [db _e]
-  (cond-> db
+  (cond
     (= (-> db :clicked-element :type) :handle)
-    (tool.handlers/set-state :edit)))
+    (tool.handlers/set-state db :edit)
+
+    :else
+    (tool.handlers/set-state db :select)))
 
 (defmethod tool.hierarchy/on-drag [::edit :edit]
   [db e]
@@ -106,12 +138,58 @@
                                   element.hierarchy/edit-drag
                                   offset id lock?))))
 
+(m/=> select-rect [:-> App boolean? Element])
+(defn select-rect
+  [db intersecting?]
+  (cond-> (tool.handlers/select-box db)
+    (not intersecting?)
+    (assoc-in [:attrs :fill] "transparent")))
+
+(m/=> hovered? [:-> Handle boolean? boolean?])
+(defn hovered?
+  [handle]
+  (boolean (when-let [selection-bbox (element.hierarchy/bbox @select-box)]
+             (utils.bounds/contained-point? selection-bbox
+                                            [(:x handle) (:y handle)]))))
+
+(m/=> reduce-by-area [:-> App PointerEvent ifn? App])
+(defn reduce-by-area
+  [db f]
+  (transduce
+   (comp
+    (element.handlers/visible)
+    (filter #(hovered? %))
+    (map :id))
+   (fn [db id]
+     (cond-> db
+       id (f id)))
+   db (element.handlers/entities db)))
+
+(defmethod tool.hierarchy/on-drag [::edit :select]
+  [db e]
+  (let [{:keys [alt-key]} e]
+    (-> db
+        (element.handlers/clear-hovered)
+        (app.handlers/add-fx [::set-select-box (select-rect db alt-key)])
+        (reduce-by-area element.handlers/hover))))
+
 (defmethod tool.hierarchy/on-drag-end [::edit :edit]
   [db e]
   (-> db
       (tool.handlers/set-state :idle)
       (dissoc :clicked-element)
       (history.handlers/finalize (:timestamp e) [::edit "Edit"])))
+
+(defmethod tool.hierarchy/on-drag-end [::edit :select]
+  [db e]
+  (cond-> db
+    (not (:shift-key e))
+    element.handlers/deselect
+
+    :always
+    (-> (reduce-by-area element.handlers/select)
+        (clear-select-box)
+        (tool.handlers/set-state :idle))))
 
 (defmethod tool.hierarchy/snapping-points [::edit :edit]
   [db]
@@ -143,7 +221,7 @@
                          pos (matrix/add offset pos)]
                      [utils.svg/dot pos
                       [:title (i18n.views/t [::centroid "Centroid"])]]))]))
-         (into [:g]))))
+         (into [:g [element.hierarchy/render @select-box]]))))
 
 (rf/dispatch [::action.events/register-action
               {:id :tool/edit
