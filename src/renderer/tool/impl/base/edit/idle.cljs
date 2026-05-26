@@ -1,5 +1,6 @@
 (ns renderer.tool.impl.base.edit.idle
   (:require
+   [renderer.document.handlers :as document.handlers]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.history.handlers :as history.handlers]
@@ -15,20 +16,6 @@
    (i18n.views/t [::help-idle-click
                   "Click on an element to change selection"])])
 
-(defn toggle-handle-selection
-  [db id additive]
-  (let [{:keys [active-document]} db
-        {:keys [selected-handles]} (get-in db [:documents active-document])
-        selected? (contains? selected-handles id)]
-    (cond
-      additive
-      (update-in db
-                 [:documents active-document :selected-handles]
-                 (if selected? disj conj) id)
-
-      :else
-      (assoc-in db [:documents active-document :selected-handles] #{id}))))
-
 (defmethod tool.hierarchy/on-pointer-down [::edit/edit :idle]
   [db e]
   (let [{:keys [element]} e]
@@ -41,7 +28,7 @@
   (let [{:keys [shift-key element]} e]
     (case (:type element)
       :handle
-      (toggle-handle-selection db (:id element) shift-key)
+      (document.handlers/toggle-handle-selection db (:id element) shift-key)
 
       :element
       (-> db
@@ -85,7 +72,7 @@
       (= (:type clicked-element) :handle)
       (cond-> db
         (not selected?)
-        (toggle-handle-selection id (:shift-key e))
+        (document.handlers/toggle-handle-selection id (:shift-key e))
 
         :always
         (tool.handlers/set-state :edit))

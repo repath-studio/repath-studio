@@ -5,6 +5,7 @@
    [re-frame.core :as rf]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.views :as attribute.views]
+   [renderer.document.events :as-alias document.events]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.events :as-alias element.events]
    [renderer.element.hierarchy :as-alias element.hierarchy]
@@ -59,6 +60,7 @@
     [:input.form-element
      {:key (str axis index)
       :default-value v
+      :aria-label (name axis)
       :enter-key-hint "done"
       :disabled (not idle?)
       :on-blur #(set-point % point-attrs)
@@ -71,9 +73,12 @@
         selected? @(rf/subscribe [::document.subs/handle-selected? handle-id])]
     [:div.grid.grid-flow-col.gap-px
      {:dir "ltr"
-      :style {:grid-template-columns "minmax(0, 40px) 3fr 3fr 27px"}}
-     [:span.form-element.flex-1.py-0!.h-full!
-      {:class ["leading-[27px]"
+      :style {:grid-template-columns "minmax(0, 60px) 3fr 3fr 27px"}}
+     [:span.form-element.flex-1.py-0!.h-full!.px-4!
+      {:on-click #(rf/dispatch [::document.events/toggle-handle-selection
+                                handle-id
+                                (.-shiftKey %)])
+       :class ["leading-[27px]"
                (when selected? "bg-accent! text-accent-foreground!")]}
       index]
      [input index x points :x]
