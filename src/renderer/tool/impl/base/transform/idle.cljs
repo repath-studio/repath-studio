@@ -82,18 +82,16 @@
 (m/=> drag-start->state [:-> [:or Element Handle] State])
 (defn drag-start->state
   [el]
-  (let [{el-type :type
-         :keys [tag action]} el]
-    (case el-type
-      :element
-      (if (= tag :canvas)
-        :select
-        :translate)
+  (case (:type el)
+    :element
+    (if (utils.element/root? el)
+      :select
+      :translate)
 
-      :handle
-      action
+    :handle
+    (:action el)
 
-      :idle)))
+    :idle))
 
 (defmethod tool.hierarchy/on-drag-start [::transform/transform :idle]
   [db e]

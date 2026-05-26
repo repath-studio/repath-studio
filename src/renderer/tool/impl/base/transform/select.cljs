@@ -17,6 +17,7 @@
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.transform.core :as-alias transform]
    [renderer.utils.bounds :as utils.bounds]
+   [renderer.utils.element :as utils.element]
    [renderer.views :as views]))
 
 (defmethod tool.hierarchy/help [::transform/transform :select]
@@ -34,10 +35,9 @@
 (m/=> selectable? [:-> [:or Element Handle nil?] boolean?])
 (defn selectable?
   [el]
-  (and el
+  (and (= (:type el) :element)
        (not (:selected el))
-       (not= :handle (:type el))
-       (not= :canvas (:tag el))))
+       (not (utils.element/root? el))))
 
 (m/=> select-element [:-> App boolean? App])
 (defn select-element
@@ -50,12 +50,13 @@
 (m/=> hovered? [:-> Element boolean? boolean?])
 (defn hovered?
   [el intersecting?]
-  (or (when-let [selection-bbox (element.hierarchy/bbox @select-box)]
-        (when-let [el-bbox (:bbox el)]
-          (if intersecting?
-            (utils.bounds/intersect? el-bbox selection-bbox)
-            (utils.bounds/contained? el-bbox selection-bbox))))
-      false))
+  (let [selection-bbox (element.hierarchy/bbox @select-box)
+        el-bbox (:bbox el)]
+    (if (and selection-bbox el-bbox)
+      (if intersecting?
+        (utils.bounds/intersect? el-bbox selection-bbox)
+        (utils.bounds/contained? el-bbox selection-bbox))
+      false)))
 
 (m/=> reduce-by-area [:-> App PointerEvent ifn? App])
 (defn reduce-by-area
