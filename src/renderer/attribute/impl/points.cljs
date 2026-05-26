@@ -3,9 +3,9 @@
   (:require
    [clojure.string :as string]
    [re-frame.core :as rf]
-   [renderer.app.subs :as-alias app.subs]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.views :as attribute.views]
+   [renderer.document.subs :as-alias document.subs]
    [renderer.element.events :as-alias element.events]
    [renderer.element.hierarchy :as-alias element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
@@ -67,19 +67,19 @@
 
 (defn point-row
   [index [x y] points]
-  (let [clicked-element @(rf/subscribe [::app.subs/clicked-element])
-        handle-id (keyword (str index))
-        active? (= handle-id (:id clicked-element))]
-    [:div.grid.grid-flow-col.gap-px.bg-primary
+  (let [handle-id (keyword (str index))
+        selected? @(rf/subscribe [::document.subs/handle-selected? handle-id])]
+    [:div.grid.grid-flow-col.gap-px
      {:dir "ltr"
       :style {:grid-template-columns "minmax(0, 40px) 3fr 3fr 27px"}}
-     [:span.form-element
-      {:class (when active? "bg-accent! text-accent-foreground!")}
+     [:span.form-element..bg-primary
+      {:class (when selected? "bg-accent! text-accent-foreground!")}
       index]
      [input index x points :x]
      [input index y points :y]
      [views/icon-button "times"
-      {:on-click #(remove-nth points index)}]]))
+      {:class "form-control-button rounded-none"
+       :on-click #(remove-nth points index)}]]))
 
 (defn points-form
   []
@@ -87,7 +87,7 @@
         element (first selected-elements)
         v (get-in element [:attrs :points])
         points (utils.attribute/points->vec v)]
-    [:div.flex.flex-col.gap-px.overflow-hidden
+    [:div.flex.flex-col.gap-px
      [:div.flex.bg-primary.py-5.px-4.gap-1.items-center
       [:h1.flex-1.text-lg.overflow-hidden.text-ellipsis.button-size "points"]]
      [:div.flex.flex-col.gap-px

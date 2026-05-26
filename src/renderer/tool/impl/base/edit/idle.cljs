@@ -15,16 +15,19 @@
    (i18n.views/t [::help-idle-click
                   "Click on an element to change selection"])])
 
-(defn edit-click
-  [db e]
-  (let [{:keys [element]} e]
-    (cond-> db
-      (= (:type element) :handle)
-      (-> (dissoc :clicked-element)
-          (element.handlers/update-el (:element-id element)
-                                      element.hierarchy/edit-click
-                                      (:id element))
-          (history.handlers/finalize (:timestamp e) [::edit/label "Edit"])))))
+(defn toggle-handle-selection
+  [db id additive]
+  (let [{:keys [active-document]} db
+        {:keys [selected-handles]} (get-in db [:documents active-document])
+        selected? (contains? selected-handles id)]
+    (cond
+      additive
+      (update-in db
+                 [:documents active-document :selected-handles]
+                 (if selected? disj conj) id)
+
+      :else
+      (assoc-in db [:documents active-document :selected-handles] #{id}))))
 
 (defmethod tool.hierarchy/on-pointer-down [::edit/edit :idle]
   [db e]
@@ -35,25 +38,31 @@
 
 (defmethod tool.hierarchy/on-pointer-up [::edit/edit :idle]
   [db e]
-  (let [{:keys [shift-key ctrl-key element]} e]
-    (cond
-      ctrl-key
-      (edit-click db e)
+  (let [{:keys [shift-key element]} e]
+    (case (:type element)
+      :handle
+      (toggle-handle-selection db (:id element) shift-key)
 
-      (= (:type element) :handle)
-      (edit-click db e)
-
-      :else
+      :element
       (-> db
           (dissoc db :clicked-element)
           (element.handlers/clear-ignored)
           (element.handlers/toggle-selection (:id element) shift-key)
           (history.handlers/finalize (:timestamp e)
-                                     [::select-element "Select element"])))))
+                                     [::select-element "Select element"]))
+
+      db)))
 
 (defmethod tool.hierarchy/on-double-click [::edit/edit :idle]
   [db e]
-  (edit-click db e))
+  (let [{:keys [element]} e]
+    (cond-> db
+      (= (:type element) :handle)
+      (-> (dissoc :clicked-element)
+          (element.handlers/update-el (:element-id element)
+                                      element.hierarchy/edit-click
+                                      (:id element))
+          (history.handlers/finalize (:timestamp e) [::edit/label "Edit"])))))
 
 (defmethod tool.hierarchy/on-pointer-move [::edit/edit :idle]
   [db e]
@@ -66,13 +75,23 @@
       (element.handlers/hover el-id))))
 
 (defmethod tool.hierarchy/on-drag-start [::edit/edit :idle]
-  [db _e]
-  (cond
-    (= (-> db :clicked-element :type) :handle)
-    (tool.handlers/set-state db :edit)
+  [db e]
+  (let [{:keys [clicked-element]} db
+        {:keys [active-document]} db
+        {:keys [id]} clicked-element
+        {:keys [selected-handles]} (get-in db [:documents active-document])
+        selected? (contains? selected-handles id)]
+    (cond
+      (= (:type clicked-element) :handle)
+      (cond-> db
+        (not selected?)
+        (toggle-handle-selection id (:shift-key e))
 
-    :else
-    (tool.handlers/set-state db :select)))
+        :always
+        (tool.handlers/set-state :edit))
+
+      :else
+      (tool.handlers/set-state db :select))))
 
 (defmethod tool.hierarchy/snapping-elements [::edit/edit :idle]
   [db]

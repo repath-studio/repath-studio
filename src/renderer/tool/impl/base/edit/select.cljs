@@ -3,7 +3,6 @@
    [malli.core :as m]
    [re-frame.core :as rf]
    [renderer.app.db :refer [App]]
-   [renderer.element.db :refer [Element]]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.input.db :refer [PointerEvent]]
@@ -13,13 +12,6 @@
    [renderer.tool.impl.base.edit.core :as-alias edit]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.bounds :as utils.bounds]))
-
-(m/=> selectable? [:-> [:or Element Handle nil?] boolean?])
-(defn selectable?
-  [el]
-  (and (= :handle (:type el))
-       (not (:selected el))
-       (not= :canvas (:tag el))))
 
 (m/=> hovered? [:-> Handle boolean? boolean?])
 (defn hovered?

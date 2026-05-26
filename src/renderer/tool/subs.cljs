@@ -28,6 +28,13 @@
  :-> :cached-tool)
 
 (rf/reg-sub
+ ::cached-or-active
+ :<- [::cached]
+ :<- [::active]
+ (fn [[cached active] _]
+   (or cached active)))
+
+(rf/reg-sub
  ::pivot-point
  :-> :pivot-point)
 

@@ -17,9 +17,19 @@
   (i18n.views/t [::help-edit "Hold %1 to restrict direction."]
                 [[views/kbd "Ctrl"]]))
 
+(defn update-element
+  [db element-id offset lock?]
+  (let [{:keys [active-document]} db
+        {:keys [selected-handles]} (get-in db [:documents active-document])]
+    (reduce (fn [db id]
+              (element.handlers/update-el db element-id
+                                          element.hierarchy/edit-drag
+                                          offset id lock?))
+            db selected-handles)))
+
 (defmethod tool.hierarchy/on-drag [::edit/edit :edit]
   [db e]
-  (let [{:keys [element-id id]} (:clicked-element db)
+  (let [{:keys [element-id]} (:clicked-element db)
         lock? (or (:ctrl-key e) (input.handlers/multi-touch? db))
         offset (matrix/add (tool.handlers/pointer-delta db)
                            (snap.handlers/nearest-delta db))]
@@ -28,9 +38,7 @@
       (history.handlers/reset-state)
 
       element-id
-      (element.handlers/update-el element-id
-                                  element.hierarchy/edit-drag
-                                  offset id lock?))))
+      (update-element element-id offset lock?))))
 
 (defmethod tool.hierarchy/on-drag-end [::edit/edit :edit]
   [db e]

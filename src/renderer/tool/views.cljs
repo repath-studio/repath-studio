@@ -15,10 +15,11 @@
 (m/=> handle [:-> Handle any?])
 (defn handle
   [el]
-  (let [{:keys [x y id cursor element-id label orientation rounded]} el
+  (let [{:keys [x y id cursor label orientation rounded]} el
         zoom @(rf/subscribe [::document.subs/zoom])
         clicked-element @(rf/subscribe [::app.subs/clicked-element])
         handle-size @(rf/subscribe [::document.subs/handle-size])
+        selected? @(rf/subscribe [::document.subs/handle-selected? id])
         pointer-handler (partial input.impl.pointer/handler! el)
         stroke-width (/ 1 zoom)
         vertical-size (cond-> handle-size (= orientation :vertical) (* 0.7))
@@ -26,8 +27,7 @@
         rx (when rounded (/ handle-size 2))
         x (- x (/ horizontal-size 2))
         y (- y (/ vertical-size 2))
-        active (and (= (:id clicked-element) id)
-                    (= (:element-id clicked-element) element-id))]
+        active (or selected? (= (:id clicked-element) id))]
     [:g
      [:rect {:stroke "var(--accent-foreground)"
              :stroke-opacity ".5"

@@ -33,11 +33,11 @@
 
 (m/=> select-element [:-> App boolean? App])
 (defn select-element
-  [db multiple]
+  [db additive]
   (let [{:keys [clicked-element]} db]
     (cond-> db
       (selectable? clicked-element)
-      (element.handlers/toggle-selection (:id clicked-element) multiple))))
+      (element.handlers/toggle-selection (:id clicked-element) additive))))
 
 (m/=> hovered? [:-> Element boolean? boolean?])
 (defn hovered?

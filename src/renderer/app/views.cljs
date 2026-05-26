@@ -297,7 +297,7 @@
 (defn bottom-bar
   []
   (let [some-selected? @(rf/subscribe [::element.subs/some-selected?])
-        active-tool @(rf/subscribe [::tool.subs/active])
+        tool @(rf/subscribe [::tool.subs/cached-or-active])
         mac? @(rf/subscribe [::app.subs/mac?])]
     [:div.flex.justify-evenly.p-2.gap-1.rtl:flex-row-reverse
 
@@ -343,12 +343,12 @@
        :label [::attributes "Attributes"]
        :direction "right"
        :disabled (not some-selected?)}
-      [attributes-panel active-tool]]]))
+      [attributes-panel tool]]]))
 
 (defn center-panel
   []
   (let [properties? @(rf/subscribe [::panel.subs/visible? :attributes])
-        active-tool @(rf/subscribe [::tool.subs/active])
+        tool @(rf/subscribe [::tool.subs/cached-or-active])
         md? @(rf/subscribe [::window.subs/md?])
         desktop? @(rf/subscribe [::app.subs/desktop?])]
     [:div.flex.flex-col.flex-1.overflow-hidden.h-full
@@ -378,7 +378,7 @@
             :minSize 320
             :groupResizeBehavior "preserve-pixel-size"
             :class "flex gap-px"}
-           [attributes-panel active-tool]]])]
+           [attributes-panel tool]]])]
       (when md?
         [:div.bg-primary.flex
          [toolbar.views/action-toolbar

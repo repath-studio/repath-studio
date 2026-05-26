@@ -156,6 +156,16 @@
  :-> :ignored-ids)
 
 (rf/reg-sub
+ ::selected-handles
+ :<- [::active]
+ :-> :selected-handles)
+
+(rf/reg-sub
+ ::handle-selected?
+ :<- [::selected-handles]
+ :=> contains?)
+
+(rf/reg-sub
  ::saved-history-index
  :<- [::active]
  :-> :saved-history-index)
