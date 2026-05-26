@@ -72,8 +72,9 @@
     [:div.grid.grid-flow-col.gap-px
      {:dir "ltr"
       :style {:grid-template-columns "minmax(0, 40px) 3fr 3fr 27px"}}
-     [:span.form-element..bg-primary
-      {:class (when selected? "bg-accent! text-accent-foreground!")}
+     [:span.form-element.flex-1.py-0!.h-full!
+      {:class ["leading-[27px]"
+               (when selected? "bg-accent! text-accent-foreground!")]}
       index]
      [input index x points :x]
      [input index y points :y]
@@ -88,8 +89,8 @@
         v (get-in element [:attrs :points])
         points (utils.attribute/points->vec v)]
     [:div.flex.flex-col.gap-px
-     [:div.flex.bg-primary.py-5.px-4.gap-1.items-center
-      [:h1.flex-1.text-lg.overflow-hidden.text-ellipsis.button-size "points"]]
+     [attribute.views/heading "points" :points]
+
      [:div.flex.flex-col.gap-px
       (map-indexed (fn [index point]
                      ^{:key (str index point)}

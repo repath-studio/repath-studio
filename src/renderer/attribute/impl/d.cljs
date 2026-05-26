@@ -146,8 +146,7 @@
         path (-> v svgpath)
         segments (.-segments path)]
     [:div.flex.flex-col.gap-px
-     [:div.flex.bg-primary.py-5.px-4.gap-1.items-center
-      [:h1.flex-1.text-lg.overflow-hidden.text-ellipsis.button-size "d"]]
+     [attribute.views/heading "d" :d]
      [:div.flex.overflow-hidden
       {:style {:max-height "50vh"}}
       [views/scroll-area

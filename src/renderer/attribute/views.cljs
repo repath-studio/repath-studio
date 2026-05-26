@@ -200,7 +200,7 @@
    {:id :syntax
     :label [::syntax "Syntax"]}])
 
-(defn title
+(defn attr-label
   [tag k]
   (let [clicked-element @(rf/subscribe [::app.subs/clicked-element])
         property (utils.attribute/property-data-memo k)
@@ -240,7 +240,7 @@
   [k v locked? tag]
   (let [initial (utils.attribute/initial-memo tag k)]
     [:<>
-     [title tag k]
+     [attr-label tag k]
      [:div.flex.flex-1
       [attribute.hierarchy/form-element tag k v
        {:disabled locked?
@@ -274,24 +274,26 @@
         [views/hovercard-arrow]]]]]))
 
 (defn heading
-  [el selected-elements selected-tags tag]
-  (let [multitag? (next selected-tags)]
-    [:div.flex.bg-primary.py-5.px-4.gap-1.items-center
-     [:h1.flex-1.text-lg.overflow-hidden.text-ellipsis.button-size
-      (if-not (next selected-elements)
-        (let [el-label (:label el)
-              properties (element.hierarchy/properties tag)]
-          (if (empty? el-label)
-            (or (some-> properties :label i18n.views/t)
-                (string/capitalize (name tag)))
-            el-label))
-        (i18n.views/t [::attributes-title "%1 %2 elements"]
-                      [(count selected-elements)
-                       (when-not multitag?
-                         (name tag))]))]
+  [label tag]
+  [:div.flex.bg-primary.py-5.px-4.gap-1.items-center
+   [:h1.flex-1.text-lg.overflow-hidden.text-ellipsis.button-size label]
+   [tag-info tag]])
 
-     (when-not multitag?
-       [tag-info tag])]))
+(defn head
+  [el selected-elements selected-tags tag]
+  (let [multitag? (next selected-tags)
+        label (if-not (next selected-elements)
+                (let [el-label (:label el)
+                      properties (element.hierarchy/properties tag)]
+                  (if (empty? el-label)
+                    (or (some-> properties :label i18n.views/t)
+                        (string/capitalize (name tag)))
+                    el-label))
+                (i18n.views/t [::attributes-title "%1 %2 elements"]
+                              [(count selected-elements)
+                               (when-not multitag?
+                                 (name tag))]))]
+    [heading label (when-not multitag? tag)]))
 
 (defn form
   []
@@ -307,7 +309,7 @@
                     (and tool-cached-state (not= tool-cached-state :idle)))]
     (when-first [el selected-elements]
       [:div.flex.flex-col.gap-px
-       [heading el selected-elements selected-tags tag]
+       [head el selected-elements selected-tags tag]
        (when (seq edit-attributes)
          [:div.grid.grid-cols-2.grid-flow-row.w-full.gap-px
           {:style {:grid-template-columns "minmax(120px, 120px) 1fr"}}
