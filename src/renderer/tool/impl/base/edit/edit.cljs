@@ -18,27 +18,28 @@
                 [[views/kbd "Ctrl"]]))
 
 (defn update-element
-  [db element-id offset lock?]
-  (let [{:keys [active-document]} db
-        {:keys [selected-handles]} (get-in db [:documents active-document])]
-    (reduce (fn [db id]
-              (element.handlers/update-el db element-id
-                                          element.hierarchy/edit-drag
-                                          offset id lock?))
-            db selected-handles)))
+  [db el offset lock?]
+  (->> (:selected-handles el)
+       (reduce (fn [db handle-id]
+                 (element.handlers/update-el db (:id el)
+                                             element.hierarchy/edit-drag
+                                             offset handle-id lock?)) db)))
 
 (defmethod tool.hierarchy/on-drag [::edit/edit :edit]
   [db e]
-  (let [{:keys [element-id]} (:clicked-element db)
-        lock? (or (:ctrl-key e) (input.handlers/multi-touch? db))
+  (let [{:keys [shift-key ctrl-key]} e
+        lock? (or ctrl-key (input.handlers/multi-touch? db))
+        {:keys [id element-id]} (:clicked-element db)
+        db (history.handlers/reset-state db)
+        handle-selected? (element.handlers/handle-selected? db element-id id)
+        db (cond-> (history.handlers/reset-state db)
+             (not handle-selected?)
+             (element.handlers/toggle-handle-selection element-id id
+                                                       shift-key))
         offset (matrix/add (tool.handlers/pointer-delta db)
                            (snap.handlers/nearest-delta db))]
-    (cond-> db
-      :always
-      (history.handlers/reset-state)
-
-      element-id
-      (update-element element-id offset lock?))))
+    (->> (element.handlers/selected db)
+         (reduce (fn [db el] (update-element db el offset lock?)) db))))
 
 (defmethod tool.hierarchy/on-drag-end [::edit/edit :edit]
   [db e]

@@ -357,3 +357,9 @@
        (let [extension (last (string/split (.-name file) "."))]
          (when (= extension "rps")
            {:dispatch [::document.events/file-read nil file-handle file]}))))))
+
+(rf/reg-event-db
+ ::toggle-handle-selection
+ [(finalize [::toggle-handle-selection "Toggle handle selection"])]
+ (fn [db [_ el-id handle-id additive]]
+   (element.handlers/toggle-handle-selection db el-id handle-id additive)))

@@ -1,6 +1,5 @@
 (ns renderer.tool.impl.base.edit.idle
   (:require
-   [renderer.document.handlers :as document.handlers]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.history.handlers :as history.handlers]
@@ -26,13 +25,15 @@
 (defmethod tool.hierarchy/on-pointer-up [::edit/edit :idle]
   [db e]
   (let [{:keys [shift-key element]} e
-        {:keys [id]} element]
+        {:keys [id element-id]} element]
     (cond-> db
       :always
       (dissoc :clicked-element)
 
       (= (:type element) :handle)
-      (document.handlers/toggle-handle-selection id shift-key)
+      (-> (element.handlers/toggle-handle-selection element-id id shift-key)
+          (history.handlers/finalize (:timestamp e)
+                                     [::select-handle "Select handle"]))
 
       (= (:type element) :element)
       (-> (element.handlers/clear-ignored)
@@ -53,31 +54,19 @@
 
 (defmethod tool.hierarchy/on-pointer-move [::edit/edit :idle]
   [db e]
-  (let [el-id (-> e :element :id)]
-    (cond-> db
-      :always
+  (-> db
       (element.handlers/clear-hovered)
-
-      el-id
-      (element.handlers/hover el-id))))
+      (element.handlers/hover (-> e :element :id))))
 
 (defmethod tool.hierarchy/on-drag-start [::edit/edit :idle]
   [db e]
   (let [{:keys [clicked-element]} db
-        {:keys [active-document]} db
-        {:keys [id]} clicked-element
-        {:keys [selected-handles]} (get-in db [:documents active-document])
-        selected? (contains? selected-handles id)]
-    (cond
-      (= (:type clicked-element) :handle)
-      (cond-> db
-        (not selected?)
-        (document.handlers/toggle-handle-selection id (:shift-key e))
-
-        :always
-        (tool.handlers/set-state :edit))
-
-      :else
+        {:keys [shift-key]} e
+        {:keys [id element-id]} clicked-element]
+    (if (= (:type clicked-element) :handle)
+      (-> db
+          (element.handlers/toggle-handle-selection element-id id shift-key)
+          (tool.handlers/set-state :edit))
       (tool.handlers/set-state db :select))))
 
 (defmethod tool.hierarchy/snapping-elements [::edit/edit :idle]

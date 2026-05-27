@@ -142,3 +142,10 @@
  ::not-every-top-level?
  :<- [::every-top-level?]
  :-> not)
+
+(rf/reg-sub
+ ::handle-selected?
+ :<- [::document.subs/elements]
+ (fn [elements [_ el-id handle-id]]
+   (-> (get-in elements [el-id :selected-handles])
+       (contains? handle-id))))

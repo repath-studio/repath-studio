@@ -4,18 +4,14 @@
   (:require
    [clojure.core.matrix :as matrix]
    [clojure.string :as string]
-   [re-frame.core :as rf]
-   [renderer.app.subs :as-alias app.subs]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
-   [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
    [renderer.input.handlers :as input.handlers]
    [renderer.tool.views :as tool.views]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
-   [renderer.utils.length :as utils.length]
-   [renderer.utils.svg :as utils.svg]))
+   [renderer.utils.length :as utils.length]))
 
 (hierarchy/derive! :line ::element.hierarchy/shape)
 
@@ -62,30 +58,14 @@
 
 (defmethod element.hierarchy/render-edit :line
   [el]
-  (let [clicked-element @(rf/subscribe [::app.subs/clicked-element])
-        zoom @(rf/subscribe [::document.subs/zoom])
-        margin (/ 15 zoom)
-        offset (utils.element/offset el)
+  (let [offset (utils.element/offset el)
         {{:keys [x1 y1 x2 y2]} :attrs} el
         [x1 y1 x2 y2] (mapv utils.length/unit->px [x1 y1 x2 y2])
         [x1 y1] (matrix/add offset [x1 y1])
         [x2 y2] (matrix/add offset [x2 y2])]
     [:g
      {:key ::edit-handles}
-     (map (fn [handle]
-            (let [{:keys [x y id]} handle
-                  is-active (and (= (:id clicked-element) id)
-                                 (= (:element-id clicked-element) (:id el)))]
-              ^{:key id}
-              [:g
-               [tool.views/handle handle]
-               (when is-active
-                 [utils.svg/label
-                  (string/join " " [(utils.length/->fixed x 2 false)
-                                    (utils.length/->fixed y 2 false)])
-                  {:x (- x margin)
-                   :y (+ y margin)
-                   :text-anchor "end"}])]))
+     (map (fn [handle] ^{:key (:id handle)} [tool.views/handle handle])
           [{:x x1
             :y y1
             :id :starting-point

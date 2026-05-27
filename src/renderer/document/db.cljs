@@ -35,7 +35,6 @@
    [:zoom {:default 1} ZoomFactor]
    [:rotate {:default 0} number?]
    [:history {:optional true} History]
-   [:selected-handles {:default #{}} [:set HandleId]]
    [:pan {:default [0 0]} Vec2]
    [:elements {:default {}
                :persist true} [:map-of ElementId Element]]

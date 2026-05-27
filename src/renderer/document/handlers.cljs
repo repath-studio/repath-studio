@@ -12,7 +12,6 @@
    [renderer.element.handlers :as element.handlers]
    [renderer.frame.handlers :as frame.handlers]
    [renderer.snap.handlers :as snap.handlers]
-   [renderer.tool.db :refer [HandleId]]
    [renderer.utils.vec :as utils.vec]))
 
 (m/=> path [:function
@@ -51,7 +50,10 @@
       (assoc :version (:version db))
       (update :elements (fn [elements]
                           (into {}
-                                (map (fn [[k v]] [k (dissoc v :selected)]))
+                                (map (fn [[k v]]
+                                       [k (dissoc v
+                                                  :selected
+                                                  :selected-handles)]))
                                 elements)))))
 
 (m/=> close [:-> App DocumentId App])
@@ -241,19 +243,3 @@
   (->> (:recent db)
        (filter #(not (open? db (:id %))))
        (reverse)))
-
-(m/=> select-handle [:-> App HandleId App])
-(defn select-handle
-  [db id]
-  (assoc-in db (path db :selected-handles) #{id}))
-
-(m/=> toggle-handle-selection [:-> App HandleId boolean? App])
-(defn toggle-handle-selection
-  [db id additive]
-  (let [{:keys [active-document]} db
-        {:keys [selected-handles]} (get-in db [:documents active-document])
-        selected? (contains? selected-handles id)
-        update-fn (if selected? disj conj)]
-    (if additive
-      (update-in db (path db :selected-handles) update-fn id)
-      (select-handle db id))))

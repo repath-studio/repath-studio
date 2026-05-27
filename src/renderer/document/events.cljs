@@ -81,11 +81,6 @@
        (document.handlers/assoc-attr k v)
        (element.handlers/set-attr k v))))
 
-(rf/reg-event-db
- ::toggle-handle-selection
- (fn [db [_ k additive]]
-   (document.handlers/toggle-handle-selection db k additive)))
-
 (rf/reg-event-fx
  ::close
  [persist]

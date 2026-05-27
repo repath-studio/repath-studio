@@ -5,11 +5,11 @@
    [re-frame.core :as rf]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.views :as attribute.views]
-   [renderer.document.events :as-alias document.events]
-   [renderer.document.subs :as-alias document.subs]
    [renderer.element.events :as-alias element.events]
+   [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as-alias element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
+   [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.hierarchy :as tool.hierarchy]
@@ -28,12 +28,20 @@
      system. If the attribute contains an odd number of coordinates, the last
      one will be ignored."]])
 
-(defn remove-nth
-  [points index]
-  (let [points (->> (utils.vec/remove-nth points index)
-                    (flatten)
-                    (string/join " "))]
-    (rf/dispatch [::element.events/set-attr :points points])))
+(rf/reg-event-db
+ ::remove-points
+ (fn [db [_ el-id indexes timestamp]]
+   (let [v (get-in (element.handlers/entity db el-id) [:attrs :points])
+         points (utils.attribute/points->vec v)
+         points (->> indexes
+                     (reduce utils.vec/remove-nth points)
+                     (flatten)
+                     (string/join " "))]
+     (-> db
+         (element.handlers/assoc-prop el-id :selected-handles #{})
+         (element.handlers/set-attr el-id :points points)
+         (history.handlers/finalize timestamp
+                                    [::remove-points "Remove Points"])))))
 
 (defn set-point
   [e {:keys [index points value axis]}]
@@ -68,16 +76,16 @@
       :on-key-down #(utils.key/down-handler % set-point point-attrs)}]))
 
 (defn point-row
-  [index [x y] points]
+  [el-id index [x y] points]
   (let [handle-id (keyword (str index))
-        selected? @(rf/subscribe [::document.subs/handle-selected? handle-id])]
+        selected? @(rf/subscribe [::element.subs/handle-selected?
+                                  el-id handle-id])]
     [:div.grid.grid-flow-col.gap-px
      {:dir "ltr"
       :style {:grid-template-columns "minmax(0, 60px) 3fr 3fr 27px"}}
      [:span.form-element.flex-1.py-0!.h-full!.px-4!
-      {:on-click #(rf/dispatch [::document.events/toggle-handle-selection
-                                handle-id
-                                (.-shiftKey %)])
+      {:on-click #(rf/dispatch [::element.events/toggle-handle-selection
+                                el-id handle-id (.-shiftKey %)])
        :class ["leading-[27px]"
                (when selected? "bg-accent! text-accent-foreground!")]}
       index]
@@ -85,7 +93,9 @@
      [input index y points :y]
      [views/icon-button "times"
       {:class "form-control-button rounded-none"
-       :on-click #(remove-nth points index)}]]))
+       :title (i18n.views/t [::remove-point "Remove point"])
+       :on-click #(rf/dispatch [::remove-points
+                                el-id #{index} (.-timestamp %)])}]]))
 
 (defn points-form
   []
@@ -99,7 +109,7 @@
      [:div.flex.flex-col.gap-px
       (map-indexed (fn [index point]
                      ^{:key (str index point)}
-                     [point-row index point points]) points)]]))
+                     [point-row (:id element) index point points]) points)]]))
 
 (defmethod attribute.hierarchy/form-element [::element.hierarchy/element
                                              :points]

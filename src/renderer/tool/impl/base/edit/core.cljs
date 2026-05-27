@@ -20,12 +20,6 @@
 
 (hierarchy/derive! ::edit ::tool.hierarchy/tool)
 
-(defmethod tool.hierarchy/on-activate ::edit
-  [db]
-  (cond-> db
-    (:active-document db)
-    (assoc-in [:documents (:active-document db) :selected-handles] #{})))
-
 (defmethod tool.hierarchy/render ::edit
   []
   (let [selected-elements @(rf/subscribe [::element.subs/selected])

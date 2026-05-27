@@ -412,7 +412,9 @@
   ([db]
    (reduce deselect db (selected-ids db)))
   ([db id]
-   (assoc-prop db id :selected false)))
+   (-> db
+       (assoc-prop id :selected-handles #{})
+       (assoc-prop id :selected false))))
 
 (m/=> collapse [:-> App ElementId App])
 (defn collapse
@@ -1000,3 +1002,19 @@
   [db els]
   (let [options (-> db :snap :options)]
     (into [] (mapcat #(utils.element/acc-snapping-points % options)) els)))
+
+(defn handle-selected?
+  [db el-id handle-id]
+  (-> (get-in db (path db el-id :selected-handles))
+      (contains? handle-id)))
+
+(m/=> toggle-handle-selection [:-> App HandleId boolean? App])
+(defn toggle-handle-selection
+  [db el-id handle-id additive]
+  (if additive
+    (update-in db (path db el-id :selected-handles)
+               (if (handle-selected? db el-id handle-id) disj conj)
+               handle-id)
+    (-> db
+        (assoc-prop :selected-handles #{})
+        (assoc-prop el-id :selected-handles #{handle-id}))))

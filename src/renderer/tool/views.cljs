@@ -6,6 +6,7 @@
    [renderer.app.subs :as-alias app.subs]
    [renderer.db :refer [BBox]]
    [renderer.document.subs :as-alias document.subs]
+   [renderer.element.subs :as-alias element.subs]
    [renderer.i18n.views :as i18n.views]
    [renderer.input.impl.pointer :as input.impl.pointer]
    [renderer.tool.db :refer [Handle]]
@@ -15,11 +16,12 @@
 (m/=> handle [:-> Handle any?])
 (defn handle
   [el]
-  (let [{:keys [x y id cursor label orientation rounded]} el
+  (let [{:keys [x y id cursor label orientation rounded element-id]} el
         zoom @(rf/subscribe [::document.subs/zoom])
         clicked-element @(rf/subscribe [::app.subs/clicked-element])
         handle-size @(rf/subscribe [::document.subs/handle-size])
-        selected? @(rf/subscribe [::document.subs/handle-selected? id])
+        selected? @(rf/subscribe [::element.subs/handle-selected?
+                                  element-id id])
         pointer-handler (partial input.impl.pointer/handler! el)
         stroke-width (/ 1 zoom)
         vertical-size (cond-> handle-size (= orientation :vertical) (* 0.7))
