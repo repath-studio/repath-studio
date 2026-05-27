@@ -110,7 +110,7 @@
 
      (when (seq bbox)
        [:<>
-        [tool.views/wrapping-bbox bbox]
+        [tool.views/selected-bbox bbox]
         (when (= state :idle)
           [tool.views/corner-handles bbox])])
 

@@ -31,7 +31,7 @@
               :persist true} string?]
    [:hovered-ids {:default #{}} [:set [:or HandleId ElementId]]]
    [:collapsed-ids {:default #{}} [:set ElementId]]
-   [:ignored-ids {:default #{}} [:set [:or HandleId ElementId]]]
+   [:ignored-ids {:default #{}} [:set ElementId]]
    [:zoom {:default 1} ZoomFactor]
    [:rotate {:default 0} number?]
    [:history {:optional true} History]
