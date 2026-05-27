@@ -110,11 +110,8 @@
        (into [:<>]
              (map #(bounding-box % true) hovered-elements)))
 
-     (when (seq bbox)
-       [:<>
-        [tool.views/wrapping-bbox bbox]
-        (when (= state :idle)
-          [tool.views/corner-handles bbox])])
+     (when (and (seq bbox) (= state :idle))
+       [tool.views/corner-handles bbox])
 
      (when (and (= state :scale) (seq bbox))
        [:<>
