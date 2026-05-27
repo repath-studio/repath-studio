@@ -53,8 +53,8 @@
              :height vertical-size
              :pointer-events "none"}]]))
 
-(m/=> wrapping-bbox [:-> BBox any?])
-(defn wrapping-bbox
+(m/=> selected-bbox [:-> BBox any?])
+(defn selected-bbox
   [bbox]
   (let [zoom @(rf/subscribe [::document.subs/zoom])
         id :bbox

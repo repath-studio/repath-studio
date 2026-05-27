@@ -18,6 +18,7 @@
    [renderer.snap.views :as snap.views]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
+   [renderer.tool.views :as tool.views]
    [renderer.utils.dom :as utils.dom]
    [renderer.utils.element :as utils.element]
    [renderer.utils.svg :as utils.svg]))
@@ -66,6 +67,7 @@
         {:keys [width height]} @(rf/subscribe [::app.subs/dom-rect])
         read-only? @(rf/subscribe [::document.subs/read-only?])
         cursor @(rf/subscribe [::tool.subs/cursor])
+        bbox @(rf/subscribe [::element.subs/bbox])
         active-tool @(rf/subscribe [::tool.subs/active])
         rotate @(rf/subscribe [::document.subs/rotate])
         grid? @(rf/subscribe [::app.subs/grid?])
@@ -91,6 +93,9 @@
            :cursor cursor
            :style {:outline 0
                    :background (:fill attrs)}}
+     (when (seq bbox)
+       [tool.views/selected-bbox bbox])
+
      (for [el child-elements]
        ^{:key (:id el)}
        [element.hierarchy/render el])
