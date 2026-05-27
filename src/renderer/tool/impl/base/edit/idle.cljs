@@ -25,30 +25,30 @@
 
 (defmethod tool.hierarchy/on-pointer-up [::edit/edit :idle]
   [db e]
-  (let [{:keys [shift-key element]} e]
-    (case (:type element)
-      :handle
-      (document.handlers/toggle-handle-selection db (:id element) shift-key)
+  (let [{:keys [shift-key element]} e
+        {:keys [id]} element]
+    (cond-> db
+      :always
+      (dissoc :clicked-element)
 
-      :element
-      (-> db
-          (dissoc db :clicked-element)
-          (element.handlers/clear-ignored)
-          (element.handlers/toggle-selection (:id element) shift-key)
+      (= (:type element) :handle)
+      (document.handlers/toggle-handle-selection id shift-key)
+
+      (= (:type element) :element)
+      (-> (element.handlers/clear-ignored)
+          (element.handlers/toggle-selection id shift-key)
           (history.handlers/finalize (:timestamp e)
-                                     [::select-element "Select element"]))
-
-      db)))
+                                     [::select-element "Select element"])))))
 
 (defmethod tool.hierarchy/on-double-click [::edit/edit :idle]
   [db e]
-  (let [{:keys [element]} e]
+  (let [{:keys [element]} e
+        {:keys [element-id id]} element]
     (cond-> db
       (= (:type element) :handle)
       (-> (dissoc :clicked-element)
-          (element.handlers/update-el (:element-id element)
-                                      element.hierarchy/edit-click
-                                      (:id element))
+          (element.handlers/update-el element-id
+                                      element.hierarchy/edit-click id)
           (history.handlers/finalize (:timestamp e) [::edit/label "Edit"])))))
 
 (defmethod tool.hierarchy/on-pointer-move [::edit/edit :idle]

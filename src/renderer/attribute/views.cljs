@@ -277,7 +277,7 @@
   [label tag]
   [:div.flex.bg-primary.py-5.px-4.gap-1.items-center
    [:h1.flex-1.text-lg.overflow-hidden.text-ellipsis.button-size label]
-   [tag-info tag]])
+   (when tag [tag-info tag])])
 
 (defn head
   [el selected-elements selected-tags tag]
