@@ -50,6 +50,10 @@
   (fn [db _e] [(:tool db) (:state db)])
   :hierarchy hierarchy/hierarchy)
 
+(defmulti on-delete
+  (fn [db] [(:tool db) (:state db)])
+  :hierarchy hierarchy/hierarchy)
+
 (defmulti help
   (fn [tool state] [tool state])
   :hierarchy hierarchy/hierarchy)
@@ -74,6 +78,7 @@
 (defmethod on-key-down :default [db _e] db)
 (defmethod on-activate :default [db & {:as _props}] db)
 (defmethod on-deactivate :default [db] db)
+(defmethod on-delete :default [db] db)
 (defmethod render :default [])
 (defmethod snapping-points :default [])
 (defmethod snapping-elements :default [])

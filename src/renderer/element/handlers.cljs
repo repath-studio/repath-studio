@@ -1003,9 +1003,15 @@
   (let [options (-> db :snap :options)]
     (into [] (mapcat #(utils.element/acc-snapping-points % options)) els)))
 
+(m/=> selected-handles [:-> App ElementId [:set HandleId]])
+(defn selected-handles
+  [db el-id]
+  (get-in db (path db el-id :selected-handles)))
+
+(m/=> handle-selected? [:-> App ElementId HandleId boolean?])
 (defn handle-selected?
   [db el-id handle-id]
-  (-> (get-in db (path db el-id :selected-handles))
+  (-> (selected-handles db el-id)
       (contains? handle-id)))
 
 (m/=> toggle-handle-selection [:-> App HandleId boolean? App])

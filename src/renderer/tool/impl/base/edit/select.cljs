@@ -24,12 +24,12 @@
 (m/=> reduce-by-area [:-> App PointerEvent ifn? App])
 (defn reduce-by-area
   [db f]
-  (transduce (comp (element.handlers/visible)
-                   (filter #(hovered? %))
-                   (map :id))
-             (fn [db id] (cond-> db id (f id)))
-             db
-             (element.handlers/entities db)))
+  (->> (element.handlers/entities db)
+       (transduce (comp (element.handlers/visible)
+                        (filter #(hovered? %))
+                        (map :id))
+                  (fn [db id] (cond-> db id (f id)))
+                  db)))
 
 (defmethod tool.hierarchy/on-drag [::edit/edit :select]
   [db _e]
@@ -42,7 +42,7 @@
   [db e]
   (cond-> db
     (not (:shift-key e))
-    element.handlers/deselect
+    (element.handlers/assoc-prop :selected-handles #{})
 
     :always
     (-> (reduce-by-area element.handlers/select)
