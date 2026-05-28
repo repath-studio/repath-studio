@@ -132,7 +132,7 @@
       :action :edit
       :rounded true
       :element-id (:id el)
-      :position [max-x (- max-y ry)]
+      :position [max-x (+ min-y ry)]
       :id :ry
       :label [::ry-handle "y radius handle"]}]))
 
