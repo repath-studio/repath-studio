@@ -59,7 +59,7 @@
         (attribute.hierarchy/update-attr :rx min (/ width 2))
         (attribute.hierarchy/update-attr :ry min (/ height 2)))))
 
-(defmethod element.hierarchy/edit-drag :rect
+(defmethod element.hierarchy/handle-drag :rect
   [el offset handle lock?]
   (let [[x y] (cond-> offset
                 (and (contains? #{:position :size} handle)

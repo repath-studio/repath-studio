@@ -155,7 +155,7 @@
         (.translate x y)
         (.toString))))
 
-(defmethod element.hierarchy/edit-drag :blob
+(defmethod element.hierarchy/handle-drag :blob
   [el [x y] handle _lock?]
   (case handle
     :size

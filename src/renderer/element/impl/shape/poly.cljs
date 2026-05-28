@@ -75,7 +75,7 @@
        (map-indexed (partial handle el))
        (into [])))
 
-(defmethod element.hierarchy/edit-drag ::element.hierarchy/poly
+(defmethod element.hierarchy/handle-drag ::element.hierarchy/poly
   [el offset handle-id lock?]
   (let [index (js/parseInt (name handle-id))
         [x y] (cond-> offset lock? input.handlers/lock-direction)

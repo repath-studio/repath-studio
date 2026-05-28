@@ -79,7 +79,7 @@
 
 (defmethod element.hierarchy/render-to-string :guide [_el] nil)
 
-(defmethod element.hierarchy/edit-drag :guide
+(defmethod element.hierarchy/handle-drag :guide
   [el offset handle lock?]
   (let [[x y] (cond-> offset
                 lock?

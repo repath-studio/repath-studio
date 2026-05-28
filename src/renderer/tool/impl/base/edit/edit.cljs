@@ -22,7 +22,7 @@
   (->> (:selected-handles el)
        (reduce (fn [db handle-id]
                  (element.handlers/update-el db (:id el)
-                                             element.hierarchy/edit-drag
+                                             element.hierarchy/handle-drag
                                              offset handle-id lock?)) db)))
 
 (defmethod tool.hierarchy/on-drag [::edit/edit :edit]

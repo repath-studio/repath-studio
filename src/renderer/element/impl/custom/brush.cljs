@@ -194,7 +194,7 @@
                          :element-id (:id el)})))
        (into [])))
 
-(defmethod element.hierarchy/edit-drag :brush
+(defmethod element.hierarchy/handle-drag :brush
   [el offset handle lock?]
   (let [index (js/parseInt (name handle))
         [x y] (cond-> offset

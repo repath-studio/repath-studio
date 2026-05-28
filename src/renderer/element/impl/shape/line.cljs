@@ -77,7 +77,7 @@
       :action :edit
       :element-id (:id el)}]))
 
-(defmethod element.hierarchy/edit-drag :line
+(defmethod element.hierarchy/handle-drag :line
   [el offset handle lock?]
   (let [[x y] (cond-> offset
                 lock?

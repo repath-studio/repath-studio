@@ -31,7 +31,7 @@
         (attribute.hierarchy/update-attr :height #(abs (* % ry)))
         (element.hierarchy/translate offset))))
 
-(defmethod element.hierarchy/edit-drag ::element.hierarchy/box
+(defmethod element.hierarchy/handle-drag ::element.hierarchy/box
   [el offset handle lock?]
   (let [[x y] (cond-> offset
                 lock?

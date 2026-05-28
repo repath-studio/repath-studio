@@ -209,7 +209,7 @@
       "S" (assoc segments index (s->c-segment segments index))
       segments)))
 
-(defmethod element.hierarchy/edit-click :path
+(defmethod element.hierarchy/handle-click :path
   [el handle]
   (let [point-type (keyword (name handle))
         index (js/parseInt (namespace handle))]
@@ -381,7 +381,7 @@
         snapped (input.handlers/snap-angle anchor new-cp-pos)]
     (matrix/sub snapped cp-pos)))
 
-(defmethod element.hierarchy/edit-drag :path
+(defmethod element.hierarchy/handle-drag :path
   [el offset handle lock?]
   (let [point-type (keyword (name handle))
         index (js/parseInt (namespace handle))]

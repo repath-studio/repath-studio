@@ -48,7 +48,7 @@
       (= (:type element) :handle)
       (-> (dissoc :clicked-element)
           (element.handlers/update-el element-id
-                                      element.hierarchy/edit-click id)
+                                      element.hierarchy/handle-click id)
           (history.handlers/finalize (:timestamp e) [::edit/label "Edit"])))))
 
 (defmethod tool.hierarchy/on-pointer-move [::edit/edit :idle]

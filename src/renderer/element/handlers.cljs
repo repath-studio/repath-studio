@@ -14,7 +14,7 @@
     :as element.db
     :refer [ElementAttrs Element ElementId ElementTag AnimationTag Direction]]
    [renderer.element.hierarchy :as element.hierarchy]
-   [renderer.tool.db :refer [HandleId]]
+   [renderer.tool.db :refer [Handle HandleId]]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
@@ -997,8 +997,8 @@
     (into [] (mapcat #(utils.element/acc-snapping-points % options)) els)))
 
 (m/=> handles [:function
-               [:-> App [:vector HandleId]]
-               [:-> App ElementId [:vector HandleId]]])
+               [:-> App [:vector Handle]]
+               [:-> App ElementId [:vector Handle]]])
 (defn handles
   ([db]
    (reduce (fn [acc id] (into acc (handles db id))) [] (selected-ids db)))

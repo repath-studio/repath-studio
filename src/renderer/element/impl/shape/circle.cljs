@@ -68,7 +68,7 @@
                       "A" r r 0 0 1 (+ cx r) cy
                       "z"])))
 
-(defmethod element.hierarchy/edit-drag :circle
+(defmethod element.hierarchy/handle-drag :circle
   [el [x _y] handle _lock?]
   (case handle
     :r (attribute.hierarchy/update-attr el :r #(abs (+ % x)))
