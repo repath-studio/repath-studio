@@ -33,7 +33,6 @@
    [:collapsed-ids {:default #{}} [:set ElementId]]
    [:ignored-ids {:default #{}} [:set [:or HandleId ElementId]]]
    [:zoom {:default 1} ZoomFactor]
-   [:rotate {:default 0} number?]
    [:history {:optional true} History]
    [:pan {:default [0 0]} Vec2]
    [:elements {:default {}

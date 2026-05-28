@@ -89,11 +89,6 @@
    (and zoom (> zoom 0.01))))
 
 (rf/reg-sub
- ::rotate
- :<- [::active]
- :-> :rotate)
-
-(rf/reg-sub
  ::attrs
  :<- [::active]
  :-> :attrs)
