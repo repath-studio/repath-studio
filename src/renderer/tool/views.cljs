@@ -51,7 +51,7 @@
                               "var(--accent)"
                               "var(--foreground-muted)")
                     :pointer-events "none"
-                    :stroke-width (/ 1 zoom)})]]))
+                    :stroke-width (/ (if (or active hovered?) 2 1) zoom)})]]))
 
 (m/=> selected-bbox [:-> BBox any?])
 (defn selected-bbox
