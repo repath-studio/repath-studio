@@ -57,14 +57,11 @@
 (defn selected-bbox
   [bbox]
   (let [zoom @(rf/subscribe [::document.subs/zoom])
-        id :bbox
-        ignored-ids @(rf/subscribe [::document.subs/ignored-ids])
-        ignored? (contains? ignored-ids id)
         [min-x min-y] bbox
         [w h] (utils.bounds/->dimensions bbox)
         pointer-handler (partial input.impl.pointer/handler! {:type :handle
                                                               :action :translate
-                                                              :id id})
+                                                              :id :bbox})
         rect-attrs {:x min-x
                     :y min-y
                     :width w
@@ -72,16 +69,11 @@
                     :stroke-opacity ".3"
                     :fill "transparent"
                     :shape-rendering "crispEdges"}]
-    [:g
-     [:rect (merge rect-attrs {:stroke-width (/ 2 zoom)
-                               :stroke "var(--accent-foreground)"
-                               :pointer-events (when ignored? "none")
-                               :on-pointer-up pointer-handler
-                               :on-pointer-down pointer-handler
-                               :on-pointer-move pointer-handler})]
-     [:rect (merge rect-attrs {:stroke-width (/ 1 zoom)
-                               :pointer-events "none"
-                               :stroke "var(--accent)"})]]))
+    [:rect (merge rect-attrs {:stroke-width (/ 2 zoom)
+                              :stroke "var(--accent-foreground)"
+                              :on-pointer-up pointer-handler
+                              :on-pointer-down pointer-handler
+                              :on-pointer-move pointer-handler})]))
 
 (m/=> min-bbox [:-> BBox BBox])
 (defn min-bbox

@@ -108,8 +108,11 @@
        (into [:<>]
              (map #(bounding-box % true) hovered-elements)))
 
-     (when (and (seq bbox) (= state :idle))
-       [tool.views/corner-handles bbox])
+     (when (seq bbox)
+       [:<>
+        [utils.svg/bounding-box bbox false]
+        (when (= state :idle)
+          [tool.views/corner-handles bbox])])
 
      (when (and (= state :scale) (seq bbox))
        [:<>
