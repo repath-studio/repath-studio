@@ -1,21 +1,26 @@
 (ns renderer.attribute.impl.d
   "https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/d"
   (:require
-   ["svgpath" :as svgpath]
    [clojure.string :as string]
    [re-frame.core :as rf]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.views :as attribute.views]
+   [renderer.document.events :as-alias document.events]
+   [renderer.document.subs :as-alias document.subs]
    [renderer.element.events :as-alias element.events]
+   [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as-alias element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
    [renderer.events :as-alias events]
+   [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.edit.core :as tool.impl.base.edit]
    [renderer.tool.impl.element.path :as tool.impl.element.path]
    [renderer.tool.subs :as-alias tool.subs]
+   [renderer.utils.key :as utils.key]
+   [renderer.utils.path :as utils.path]
    [renderer.views :as views]))
 
 (defmethod attribute.hierarchy/description [::element.hierarchy/element :d]
@@ -48,85 +53,122 @@
   [c]
   (get path-commands (string/upper-case c)))
 
-(defn remove-segment-by-index
-  [path i]
-  (set! (.-segments path) (.splice (.-segments path) i 1))
-  (rf/dispatch [::element.events/set-attr :p (.toString path)]))
+(defn segment-id
+  [index]
+  (keyword (str index) "end-point"))
+
+(defn segment-index
+  [id]
+  (some-> id namespace js/parseInt))
+
+(defn segment-active?
+  [ids index]
+  (some #(and (keyword? %)
+              (= (segment-index %) index)) ids))
+
+(rf/reg-event-db
+ ::drop-segment
+ (fn [db [_ el-id index timestamp]]
+   (-> db
+       (element.handlers/select-handle (segment-id index) el-id)
+       (element.handlers/delete-segments)
+       (history.handlers/finalize timestamp
+                                  [::remove-segment "Remove segment"]))))
+
+(defn set-segment-value
+  [e {:keys [d index field-index value]}]
+  (let [new-v (.. e -target -value)]
+    (if (or (string/blank? new-v) (js/isNaN new-v))
+      (set! (.. e -target -value) value)
+      (let [updated-d (-> d
+                          (utils.path/string->segments)
+                          (assoc-in [index field-index] new-v)
+                          (utils.path/segments->string))]
+        (rf/dispatch [::element.events/set-attr :d updated-d])))))
+
+(defn segment-input
+  [{:keys [d index]} {:keys [field-index value]}]
+  (let [idle? @(rf/subscribe [::tool.subs/idle?])
+        attrs {:d d
+               :index index
+               :field-index field-index
+               :value value}]
+    [:input.form-element
+     {:key (str index "-" field-index "-" value)
+      :default-value value
+      :enter-key-hint "done"
+      :disabled (not idle?)
+      :on-blur #(set-segment-value % attrs)
+      :on-pointer-up attribute.views/pointer-up-handler
+      :on-key-down #(utils.key/down-handler % value set-segment-value attrs)}]))
+
+(defn segment-field
+  [ctx label field-index segment]
+  (let [v (nth segment 1)]
+    [:<>
+     [:label.form-element.px-1 label]
+     [segment-input ctx {:field-index field-index
+                         :value v}]]))
 
 (defmulti segment-form (fn [segment _] (-> (first segment)
                                            (string/lower-case)
                                            (keyword))))
 
 (defmethod segment-form :default
-  [segment index]
+  [segment ctx]
   [:div.grid.grid-cols-4.gap-px
-   [:label.form-element.px-1 "x"]
-   [:input.form-element
-    {:key (str "x-" index)
-     :default-value (nth segment 1)}]
-   [:label.form-element.px-1 "y"]
-   [:input.form-element
-    {:key (str "y-" index)
-     :default-value (nth segment 2)}]])
+   [segment-field ctx "x" 1 segment]
+   [segment-field ctx "y" 2 segment]])
 
 (defmethod segment-form :h
-  [segment index]
-  [:input.form-element {:key (str "width-" index)
-                        :default-value (nth segment 1)}])
+  [segment ctx]
+  [:div.grid.grid-cols-2.gap-px
+   [segment-field ctx "x" 1 segment]])
 
 (defmethod segment-form :v
-  [segment index]
-  [:input.form-element {:key (str "height-" index)
-                        :default-value (nth segment 1)}])
+  [segment ctx]
+  [:div.grid.grid-cols-2.gap-px
+   [segment-field ctx "y" 1 segment]])
 
-(defmethod segment-form :z [_segment _index])
+(defmethod segment-form :z [_segment _ctx])
 
 (defmethod segment-form :a
-  [segment index]
+  [segment ctx]
   [:div
    [:div.grid.grid-cols-4.gap-px
-    [:label.form-element.px-1 "rx"]
-    [:input.form-element
-     {:key (str "rx-" index)
-      :default-value (nth segment 1)}]
-    [:label.form-element.px-1 "ry"]
-    [:input.form-element
-     {:key (str "ry-" index)
-      :default-value (nth segment 2)}]]
+    [segment-field ctx "rx" 1 segment]
+    [segment-field ctx "ry" 2 segment]]
    [:div.grid.grid-cols-2.gap-px
-    [:label.form-element.px-1.text-nowrap "x-axis-rotation"]
-    [:input.form-element
-     {:key (str "x-axis-rotation-" index)
-      :default-value (nth segment 3)}]]
+    [segment-field ctx "x-axis-rotation" 3 segment]]
    [:div.grid.grid-cols-2.gap-px
-    [:label.form-element.px-1.text-nowrap "large-arc-flag"]
-    [:input.form-element
-     {:key (str "large-arc-flag-" index)
-      :default-value (nth segment 4)}]]
+    [segment-field ctx "large-arc-flag" 4 segment]]
    [:div.grid.grid-cols-2.gap-px
-    [:label.form-element.px-1.text-nowrap "sweep-flag"]
-    [:input.form-element
-     {:key (str "sweep-flag" index)
-      :default-value (nth segment 5)}]]
+    [segment-field ctx "sweep-flag" 5 segment]]
    [:div.grid.grid-cols-4.gap-px
-    [:label.form-element.px-1 "x"]
-    [:input.form-element
-     {:key (str "x-" index)
-      :default-value (nth segment 6)}]
-    [:label.form-element.px-1. "y"]
-    [:input.form-element
-     {:key (str "y-" index)
-      :default-value (nth segment 7)}]]])
+    [segment-field ctx "x" 6 segment]
+    [segment-field ctx "y" 7 segment]]])
 
 (defn segment-row
-  [index segment path]
-  (let [command (first segment)
-        {:keys [label url]} (->command command)]
+  [{:keys [el-id index segment d selected-handles]}]
+  (let [hovered-ids @(rf/subscribe [::document.subs/hovered-ids])
+        command (first segment)
+        {:keys [label url]} (->command command)
+        id (segment-id index)
+        hovered? (segment-active? hovered-ids index)
+        selected? (segment-active? selected-handles index)]
     [:div.bg-primary.p-2
-     #_[:div (string/join " " segment)]
+     {:on-pointer-enter #(rf/dispatch [::document.events/set-hovered-id id])
+      :on-pointer-leave #(rf/dispatch [::document.events/clear-hovered])
+      :class [(when (and hovered? (not selected?)) "bg-overlay")
+              (when selected? "bg-accent text-accent-foreground")]}
      [:div.flex.items-center.justify-between.mb-1
       [:span
-       [:span.bg-primary.p-1 (first segment)]
+       [:button.p-1.text-inherit
+        {:on-click #(rf/dispatch [::element.events/toggle-handle-selection
+                                  el-id id (.-shiftKey %)])
+         :class ["font-mono"
+                 (when selected? "bg-accent-foreground/10 rounded")]}
+        (first segment)]
        [:button.p-1.text-inherit
         {:on-click #(rf/dispatch [::events/open-remote-url url])}
         (i18n.views/t label)]
@@ -134,26 +176,37 @@
          (i18n.views/t [::relative "(Relative)"])
          (i18n.views/t [::absolute "(Absolute)"]))]
       [:button.icon-button.small.bg-transparent.text-foreground-muted
-       {:on-click #(remove-segment-by-index path index)}
+       {:on-click #(rf/dispatch [::drop-segment el-id index (.-timestamp %)])
+        :disabled (zero? index)
+        :title (if (zero? index)
+                 (i18n.views/t [::move-required
+                                "The initial move segment cannot be removed"])
+                 (i18n.views/t [::remove-segment "Remove segment"]))}
        [views/icon "times"]]]
-     [segment-form segment index]]))
+     [segment-form segment {:d d
+                            :index index}]]))
 
 (defn edit-form
   []
   (let [selected-elements @(rf/subscribe [::element.subs/selected])
         element (first selected-elements)
         v (get-in element [:attrs :d])
-        path (-> v svgpath)
-        segments (.-segments path)]
+        segments (utils.path/string->segments v)
+        {:keys [id tag selected-handles]} element]
     [:div.flex.flex-col.gap-px
-     [attribute.views/heading "d" (:tag element) :d]
+     [attribute.views/heading "d" tag :d]
      [:div.flex.overflow-hidden
       {:style {:max-height "50vh"}}
       [views/scroll-area
        [:div.flex.flex-col.gap-px
         (map-indexed (fn [index segment]
                        ^{:key (str segment)}
-                       [segment-row index segment path]) segments)]]]]))
+                       [segment-row {:el-id id
+                                     :index index
+                                     :segment segment
+                                     :d v
+                                     :selected-handles selected-handles}])
+                     segments)]]]]))
 
 (defmethod attribute.hierarchy/form-element [::element.hierarchy/element :d]
   [_ k v {:keys [disabled]}]
