@@ -23,7 +23,7 @@
 (defmulti centroid :tag :hierarchy hierarchy/hierarchy)
 (defmulti snapping-points :tag :hierarchy hierarchy/hierarchy)
 (defmulti bbox :tag :hierarchy hierarchy/hierarchy)
-
+(defmulti delete-segments :tag :hierarchy hierarchy/hierarchy)
 (defmulti translate
   (fn [el _offset] (:tag el))
   :hierarchy hierarchy/hierarchy)
@@ -47,6 +47,7 @@
 (defmethod render-edit :default [])
 (defmethod handles :default [])
 (defmethod bbox :default [])
+(defmethod delete-segments :default [el] el)
 (defmethod area :default [])
 (defmethod centroid :default [])
 (defmethod snapping-points :default [] [])

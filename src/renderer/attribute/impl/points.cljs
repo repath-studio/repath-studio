@@ -18,7 +18,6 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.key :as utils.key]
-   [renderer.utils.vec :as utils.vec]
    [renderer.views :as views]))
 
 (defmethod attribute.hierarchy/description [::element.hierarchy/element :points]
@@ -30,19 +29,12 @@
      one will be ignored."]])
 
 (rf/reg-event-db
- ::remove-points
- (fn [db [_ el-id indexes timestamp]]
-   (let [v (get-in (element.handlers/entity db el-id) [:attrs :points])
-         points (utils.attribute/points->vec v)
-         points (->> indexes
-                     (reduce utils.vec/remove-nth points)
-                     (flatten)
-                     (string/join " "))]
-     (-> db
-         (element.handlers/assoc-prop el-id :selected-handles #{})
-         (element.handlers/set-attr el-id :points points)
-         (history.handlers/finalize timestamp
-                                    [::remove-points "Remove Points"])))))
+ ::drop-point
+ (fn [db [_ el-id index timestamp]]
+   (-> db
+       (element.handlers/select-handle (keyword (str index)) el-id)
+       (element.handlers/delete-segments)
+       (history.handlers/finalize timestamp [::remove-points "Remove point"]))))
 
 (defn set-point
   [e {:keys [index points value axis]}]
@@ -100,8 +92,7 @@
      [views/icon-button "times"
       {:class "form-control-button rounded-none"
        :title (i18n.views/t [::remove-point "Remove point"])
-       :on-click #(rf/dispatch [::remove-points
-                                el-id #{index} (.-timestamp %)])}]]))
+       :on-click #(rf/dispatch [::drop-point el-id index (.-timestamp %)])}]]))
 
 (defn points-form
   []

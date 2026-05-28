@@ -8,7 +8,8 @@
    [renderer.input.handlers :as input.handlers]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.element :as utils.element]
-   [renderer.utils.length :as utils.length]))
+   [renderer.utils.length :as utils.length]
+   [renderer.utils.vec]))
 
 (hierarchy/derive! ::element.hierarchy/poly ::element.hierarchy/shape)
 
@@ -121,3 +122,19 @@
 (defmethod element.hierarchy/snapping-points ::element.hierarchy/poly
   [el]
   (->vertices el))
+
+(defmethod element.hierarchy/delete-segments ::element.hierarchy/poly
+  [el]
+  (let [points (-> el :attrs :points utils.attribute/points->vec)
+        segments (->> (:selected-handles el)
+                      (map #(js/parseInt (name %)))
+                      (into #{}))
+        updated-points (->> points
+                            (keep-indexed (fn [index point]
+                                            (when-not (contains? segments index)
+                                              point)))
+                            (flatten)
+                            (string/join " "))]
+    (-> el
+        (assoc :selected-handles #{})
+        (assoc-in [:attrs :points] updated-points))))

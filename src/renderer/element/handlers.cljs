@@ -1031,3 +1031,15 @@
     (-> db
         (assoc-prop :selected-handles #{})
         (assoc-prop el-id :selected-handles #{handle-id}))))
+
+(m/=> delete-segments [:function
+                       [:-> App App]
+                       [:-> App ElementId App]])
+(defn delete-segments
+  ([db]
+   (->> (selected-ids db)
+        (reduce delete-segments db)))
+  ([db id]
+   (-> db
+       (update-in (path db id) element.hierarchy/delete-segments)
+       (refresh-bbox id))))

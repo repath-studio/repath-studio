@@ -70,3 +70,7 @@
 (defmethod tool.hierarchy/snapping-elements [::edit/edit :idle]
   [db]
   (element.handlers/non-selected-visible db))
+
+(defmethod tool.hierarchy/on-delete [::edit/edit :idle]
+  [db]
+  (element.handlers/delete-segments db))
