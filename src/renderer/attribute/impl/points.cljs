@@ -104,7 +104,7 @@
         v (get-in element [:attrs :points])
         points (utils.attribute/points->vec v)]
     [:div.flex.flex-col.gap-px
-     [attribute.views/heading "points" :points]
+     [attribute.views/heading "points" (:tag element) :points]
 
      [:div.flex.flex-col.gap-px
       (map-indexed (fn [index point]

@@ -146,7 +146,7 @@
         path (-> v svgpath)
         segments (.-segments path)]
     [:div.flex.flex-col.gap-px
-     [attribute.views/heading "d" :d]
+     [attribute.views/heading "d" (:tag element) :d]
      [:div.flex.overflow-hidden
       {:style {:max-height "50vh"}}
       [views/scroll-area

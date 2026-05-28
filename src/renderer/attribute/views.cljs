@@ -200,11 +200,26 @@
    {:id :syntax
     :label [::syntax "Syntax"]}])
 
+(defn attr-card-content
+  [tag k]
+  (let [property (utils.attribute/property-data-memo k)
+        description (attribute.hierarchy/description tag k)]
+    [:div.p-5
+     [:h2.mb-4.text-lg.font-mono.text-foreground-hovered k]
+     (when description
+       [:p (i18n.views/t description)])
+     (when (utils.attribute/compatibility tag k)
+       [:<>
+        (when property
+          (->> features
+               (map (partial feature property))
+               (into [:<>])))
+        [caniusethis {:tag tag
+                      :attr k}]])]))
+
 (defn attr-label
   [tag k]
   (let [clicked-element @(rf/subscribe [::app.subs/clicked-element])
-        property (utils.attribute/property-data-memo k)
-        description (attribute.hierarchy/description tag k)
         active (and (= (:type clicked-element) :handle)
                     (= (:key clicked-element) key))]
     [:> HoverCard/Root
@@ -222,18 +237,7 @@
         :class "popover-content"
         :align "start"
         :on-escape-key-down #(.stopPropagation %)}
-       [:div.p-5
-        [:h2.mb-4.text-lg.font-mono.text-foreground-hovered k]
-        (when description
-          [:p (i18n.views/t description)])
-        (when (utils.attribute/compatibility tag k)
-          [:<>
-           (when property
-             (into [:<>]
-                   (map (partial feature property))
-                   features))
-           [caniusethis {:tag tag
-                         :attr k}]])]
+       [attr-card-content tag k]
        [views/hovercard-arrow]]]]))
 
 (defn row
@@ -247,8 +251,8 @@
         :default-value initial
         :placeholder initial}]]]))
 
-(defn tag-info
-  [tag]
+(defn heading-info
+  [tag attr]
   (let [properties (element.hierarchy/properties tag)]
     [:div
      [:> HoverCard/Root
@@ -263,21 +267,23 @@
          :class "popover-content"
          :align "end"
          :on-escape-key-down #(.stopPropagation %)}
-        [:div.p-5
-         [:h2.mb-4.text-lg.font-mono.text-foreground-hovered
-          (str "<" (name tag) ">")]
-         (when-let [description (:description properties)]
-           [:p (i18n.views/t description)])
-         [caniusethis {:tag tag}]
-         (when-let [url (:url properties)]
-           [:div.flex [info-button url]])]
+        (if attr
+          [attr-card-content tag attr]
+          [:div.p-5
+           [:h2.mb-4.text-lg.font-mono.text-foreground-hovered
+            (str "<" (name tag) ">")]
+           (when-let [description (:description properties)]
+             [:p (i18n.views/t description)])
+           [caniusethis {:tag tag}]
+           (when-let [url (:url properties)]
+             [:div.flex [info-button url]])])
         [views/hovercard-arrow]]]]]))
 
 (defn heading
-  [label tag]
+  [label tag attr]
   [:div.flex.bg-primary.py-5.px-4.gap-1.items-center
    [:h1.flex-1.text-lg.overflow-hidden.text-ellipsis.button-size label]
-   (when tag [tag-info tag])])
+   (when tag [heading-info tag attr])])
 
 (defn head
   [el selected-elements selected-tags tag]
@@ -293,7 +299,7 @@
                               [(count selected-elements)
                                (when-not multitag?
                                  (name tag))]))]
-    [heading label (when-not multitag? tag)]))
+    [heading label (when-not multitag? tag) nil]))
 
 (defn form
   []
