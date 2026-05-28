@@ -551,13 +551,6 @@
     (:active-document db)
     (assoc-in [:documents (:active-document db) :hovered-ids] #{})))
 
-(m/=> unignore [:-> App [:or ElementId HandleId] App])
-(defn unignore
-  [db id]
-  (cond-> db
-    (:active-document db)
-    (update-in [:documents (:active-document db) :ignored-ids] disj id)))
-
 (m/=> clear-ignored [:-> App App])
 (defn clear-ignored
   [db]

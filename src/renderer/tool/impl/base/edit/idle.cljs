@@ -36,8 +36,7 @@
                                      [::select-handle "Select handle"]))
 
       (= (:type element) :element)
-      (-> (element.handlers/clear-ignored)
-          (element.handlers/toggle-selection id shift-key)
+      (-> (element.handlers/toggle-selection id shift-key)
           (history.handlers/finalize (:timestamp e)
                                      [::select-element "Select element"])))))
 

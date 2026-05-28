@@ -22,9 +22,6 @@
                      (and element (not (utils.element/root? element))))
         cursor (if movable? "move" "default")]
     (cond-> db
-      (not (:shift-key e))
-      (element.handlers/clear-ignored)
-
       :always
       (-> (element.handlers/clear-hovered)
           (tool.handlers/set-cursor cursor))
