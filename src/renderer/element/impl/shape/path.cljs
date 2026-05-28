@@ -215,43 +215,6 @@
                           (toggle-shorthand (inc index))
                           (utils.path/segments->string))))))
 
-(m/=> ->highlight-segments [:->
-                            PathSegments [:vector Vec2] Vec2 int?
-                            [:maybe PathSegments]])
-(defn ->highlight-segments
-  [segments endpoints offset index]
-  (let [segment (get segments index)
-        cmd (utils.path/segment->command segment)
-        prev-ep (some->> (dec index)
-                         (get endpoints)
-                         (mapv utils.length/unit->px)
-                         (matrix/add offset))
-        ep (some-> segment
-                   (->px-point :end-point)
-                   (matrix/add offset))]
-    (when (and prev-ep ep)
-      (case cmd
-        "C"
-        (let [cp1 (matrix/add (->px-point segment :start-control-point) offset)
-              cp2 (matrix/add (->px-point segment :end-control-point) offset)]
-          [(concat ["M"] prev-ep) (concat ["C"] cp1 cp2 ep)])
-
-        "S"
-        (let [cp1 (or (some->> (dec index)
-                               (get segments)
-                               (utils.path/outgoing-cp)
-                               (mapv utils.length/unit->px)
-                               (matrix/add offset))
-                      prev-ep)
-              cp2 (matrix/add (->px-point segment :start-control-point) offset)]
-          [(concat ["M"] prev-ep) (concat ["C"] cp1 cp2 ep)])
-
-        "Q"
-        (let [cp (matrix/add (->px-point segment :start-control-point) offset)]
-          [(concat ["M"] prev-ep) ["Q"] cp ep])
-
-        [(concat ["M"] prev-ep) (concat ["L"] ep)]))))
-
 (defmethod element.hierarchy/handles :path
   [el]
   (let [segments (->> el :attrs :d utils.path/string->segments)
