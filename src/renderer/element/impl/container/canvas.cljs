@@ -69,7 +69,6 @@
         cursor @(rf/subscribe [::tool.subs/cursor])
         bbox @(rf/subscribe [::element.subs/bbox])
         active-tool @(rf/subscribe [::tool.subs/active])
-        rotate @(rf/subscribe [::document.subs/rotate])
         grid? @(rf/subscribe [::app.subs/grid?])
         state @(rf/subscribe [::tool.subs/state])
         idle? @(rf/subscribe [::tool.subs/idle?])
@@ -89,7 +88,6 @@
            :on-drag-over input.impl.drag/handler!
            :width width
            :height height
-           :transform (str "rotate(" rotate ")")
            :cursor cursor
            :style {:outline 0
                    :background (:fill attrs)}}
