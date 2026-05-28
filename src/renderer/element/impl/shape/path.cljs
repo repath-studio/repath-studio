@@ -6,15 +6,11 @@
    ["svgpath" :as svgpath]
    [clojure.core.matrix :as matrix]
    [malli.core :as m]
-   [re-frame.core :as rf]
-   [renderer.app.subs :as-alias app.subs]
    [renderer.attribute.impl.d :as attribute.impl.d]
    [renderer.db :refer [PathSegment PathSegments PathPointType Vec2]]
-   [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
    [renderer.input.handlers :as input.handlers]
-   [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
    [renderer.utils.path :as utils.path]
@@ -256,24 +252,6 @@
 
         [(concat ["M"] prev-ep) (concat ["L"] ep)]))))
 
-(defn active-segment-indices
-  [segments index point-type]
-  (let [next-cmd (utils.path/segment->command (get segments (inc index)))]
-    (cond-> #{index}
-      (and (= point-type :end-point)
-           (get segments (inc index)))
-      (conj (inc index))
-
-      (and (= point-type :end-control-point)
-           (= next-cmd "S"))
-      (conj (inc index)))))
-
-(defn editing-segments-path
-  [segments endpoints offset indices]
-  (->> indices
-       (mapv (partial ->highlight-segments segments endpoints offset))
-       utils.path/segments->string))
-
 (defmethod element.hierarchy/handles :path
   [el]
   (let [segments (->> el :attrs :d utils.path/string->segments)
@@ -290,33 +268,16 @@
 
 (defmethod element.hierarchy/render-edit :path
   [el]
-  (let [editing? @(rf/subscribe [::tool.subs/editing?])
-        clicked-element @(rf/subscribe [::app.subs/clicked-element])
-        zoom @(rf/subscribe [::document.subs/zoom])
-        segments (->> el :attrs :d utils.path/string->segments)
+  (let [segments (->> el :attrs :d utils.path/string->segments)
         endpoints (acc-endpoints segments)
         offset (utils.element/offset el)
         props {:parent (:id el)
                :endpoints endpoints
                :segments segments
-               :offset offset}
-        active-index (when (and editing?
-                                (= (:parent clicked-element) (:id el)))
-                       (some-> clicked-element :id namespace js/parseInt))
-        active-pt (when active-index (keyword (name (:id clicked-element))))
-        active-indices (active-segment-indices segments active-index active-pt)
-        segment-d (when active-index (editing-segments-path segments endpoints
-                                                            offset
-                                                            active-indices))]
-    [:g
-     [:path {:d (or segment-d "")
-             :visibility (when-not segment-d "hidden")
-             :fill "none"
-             :stroke-width (/ 1 zoom)
-             :stroke "var(--accent)"}]
-     (->> segments
-          (map-indexed (partial render-arms props))
-          (into [:g]))]))
+               :offset offset}]
+    (->> segments
+         (map-indexed (partial render-arms props))
+         (into [:g]))))
 
 (m/=> translate-seg-point [:->
                            PathSegments number? PathPointType Vec2
@@ -394,6 +355,25 @@
                   (->> segments
                        (translate-point index point-type offset)
                        (utils.path/segments->string))))))
+
+(defmethod element.hierarchy/delete-segments :path
+  [el]
+  (let [segments (-> el :attrs :d utils.path/string->segments)
+        selected-indices (->> (:selected-handles el)
+                              (keep namespace)
+                              (map js/parseInt)
+                              (remove zero?)
+                              (into #{}))
+        updated-segments (->> segments
+                              (keep-indexed (fn [index segment]
+                                              (when-not (contains?
+                                                         selected-indices
+                                                         index)
+                                                segment)))
+                              (into []))]
+    (-> el
+        (assoc :selected-handles #{})
+        (assoc-in [:attrs :d] (utils.path/segments->string updated-segments)))))
 
 (defmethod element.hierarchy/path :path
   [el]
