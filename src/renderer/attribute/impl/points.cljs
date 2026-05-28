@@ -5,6 +5,7 @@
    [re-frame.core :as rf]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.views :as attribute.views]
+   [renderer.document.events :as-alias document.events]
    [renderer.element.events :as-alias element.events]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as-alias element.hierarchy]
@@ -78,15 +79,20 @@
 (defn point-row
   [el-id index [x y] points]
   (let [handle-id (keyword (str index))
+        hovered? @(rf/subscribe [::element.subs/hovered? handle-id])
         selected? @(rf/subscribe [::element.subs/handle-selected?
                                   el-id handle-id])]
     [:div.grid.grid-flow-col.gap-px
      {:dir "ltr"
+      :on-pointer-enter #(rf/dispatch [::document.events/set-hovered-id
+                                       handle-id])
+      :on-pointer-leave #(rf/dispatch [::document.events/clear-hovered])
       :style {:grid-template-columns "minmax(0, 60px) 3fr 3fr 27px"}}
      [:span.form-element.flex-1.py-0!.h-full!.px-4!
       {:on-click #(rf/dispatch [::element.events/toggle-handle-selection
                                 el-id handle-id (.-shiftKey %)])
        :class ["leading-[27px]"
+               (when (and hovered? (not selected?)) "bg-overlay!")
                (when selected? "bg-accent! text-accent-foreground!")]}
       index]
      [input index x points :x]
