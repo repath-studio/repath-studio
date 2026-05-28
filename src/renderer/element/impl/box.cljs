@@ -56,13 +56,13 @@
   (let [[min-x min-y max-x max-y] (:bbox el)]
     [{:type :handle
       :action :edit
-      :element-id (:id el)
+      :parent (:id el)
       :position [min-x min-y]
       :id :position
       :label [::position-handle "position handle"]}
      {:type :handle
       :action :edit
-      :element-id (:id el)
+      :parent (:id el)
       :position [max-x max-y]
       :id :size
       :label [::size-handle "size handle"]}]))

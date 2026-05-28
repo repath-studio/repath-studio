@@ -16,14 +16,12 @@
 (m/=> handle [:-> Handle any?])
 (defn handle
   [el]
-  (let [{:keys [position id cursor label orientation rounded implied
-                element-id]} el
+  (let [{:keys [position id cursor label orientation rounded implied parent]} el
         [x y] position
         zoom @(rf/subscribe [::document.subs/zoom])
         clicked-element @(rf/subscribe [::app.subs/clicked-element])
         handle-size @(rf/subscribe [::document.subs/handle-size])
-        selected? @(rf/subscribe [::element.subs/handle-selected?
-                                  element-id id])
+        selected? @(rf/subscribe [::element.subs/handle-selected? parent id])
         hovered? @(rf/subscribe [::element.subs/hovered? id])
         pointer-handler (partial input.impl.pointer/handler! el)
         vertical-size (cond-> handle-size (= orientation :vertical) (* 0.7))

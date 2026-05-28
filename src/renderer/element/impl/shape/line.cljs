@@ -65,13 +65,13 @@
       :label [::starting-point "starting point"]
       :type :handle
       :action :edit
-      :element-id (:id el)}
+      :v (:id el)}
      {:position (matrix/add offset [x2 y2])
       :id :ending-point
       :label [::ending-point "ending point"]
       :type :handle
       :action :edit
-      :element-id (:id el)}]))
+      :parent (:id el)}]))
 
 (defmethod element.hierarchy/handle-drag :line
   [el offset handle lock?]

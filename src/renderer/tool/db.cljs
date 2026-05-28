@@ -74,4 +74,4 @@
    [:position {:optional true} Vec2]
    [:size {:optional true} number?]
    [:stroke-width {:optional true} number?]
-   [:element-id {:optional true} ElementId]])
+   [:parent {:optional true} ElementId]])

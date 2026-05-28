@@ -173,7 +173,7 @@
     [{:type :handle
       :action :edit
       :label [::size-handle "size handle"]
-      :element-id (:id el)
+      :parent (:id el)
       :position (matrix/add [x1 y1] size)
       :id :size}]))
 

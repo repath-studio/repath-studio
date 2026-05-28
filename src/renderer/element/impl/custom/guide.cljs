@@ -101,7 +101,7 @@
       :label [::position "position"]
       :type :handle
       :action :edit
-      :element-id (:id el)}]))
+      :parent (:id el)}]))
 
 (defmethod attribute.hierarchy/description [:guide :orientation]
   []

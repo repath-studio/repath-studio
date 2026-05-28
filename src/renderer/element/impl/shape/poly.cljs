@@ -65,7 +65,7 @@
      :label [::point "point"]
      :type :handle
      :action :edit
-     :element-id (:id el)}))
+     :parent (:id el)}))
 
 (defmethod element.hierarchy/handles ::element.hierarchy/poly
   [el]

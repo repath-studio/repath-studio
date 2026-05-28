@@ -158,7 +158,7 @@
       nil)))
 
 (defn segment-handles
-  [{:keys [element-id endpoints segments offset]} index segment]
+  [{:keys [parent endpoints segments offset]} index segment]
   (->> (handles endpoints segments index segment)
        (mapv (fn [{:keys [point-type pos rounded implied]}]
                (let [label (-> (utils.path/segment->command segment)
@@ -171,7 +171,7 @@
                   :action :edit
                   :implied implied
                   :rounded (boolean rounded)
-                  :element-id element-id})))))
+                  :parent parent})))))
 
 (m/=> acc-endpoints [:-> PathSegments [:vector Vec2]])
 (defn acc-endpoints
@@ -279,7 +279,7 @@
   (let [segments (->> el :attrs :d utils.path/string->segments)
         endpoints (acc-endpoints segments)
         offset (utils.element/offset el)
-        props {:element-id (:id el)
+        props {:parent (:id el)
                :endpoints endpoints
                :segments segments
                :offset offset}]
@@ -296,12 +296,12 @@
         segments (->> el :attrs :d utils.path/string->segments)
         endpoints (acc-endpoints segments)
         offset (utils.element/offset el)
-        props {:element-id (:id el)
+        props {:parent (:id el)
                :endpoints endpoints
                :segments segments
                :offset offset}
         active-index (when (and editing?
-                                (= (:element-id clicked-element) (:id el)))
+                                (= (:parent clicked-element) (:id el)))
                        (some-> clicked-element :id namespace js/parseInt))
         active-pt (when active-index (keyword (name (:id clicked-element))))
         active-indices (active-segment-indices segments active-index active-pt)

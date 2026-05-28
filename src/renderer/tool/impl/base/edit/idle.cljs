@@ -25,13 +25,13 @@
 (defmethod tool.hierarchy/on-pointer-up [::edit/edit :idle]
   [db e]
   (let [{:keys [shift-key element]} e
-        {:keys [id element-id]} element]
+        {:keys [id parent]} element]
     (cond-> db
       :always
       (dissoc :clicked-element)
 
       (= (:type element) :handle)
-      (-> (element.handlers/toggle-handle-selection element-id id shift-key)
+      (-> (element.handlers/toggle-handle-selection parent id shift-key)
           (history.handlers/finalize (:timestamp e)
                                      [::select-handle "Select handle"]))
 
@@ -43,12 +43,11 @@
 (defmethod tool.hierarchy/on-double-click [::edit/edit :idle]
   [db e]
   (let [{:keys [element]} e
-        {:keys [element-id id]} element]
+        {:keys [parent id]} element]
     (cond-> db
       (= (:type element) :handle)
       (-> (dissoc :clicked-element)
-          (element.handlers/update-el element-id
-                                      element.hierarchy/handle-click id)
+          (element.handlers/update-el parent element.hierarchy/handle-click id)
           (history.handlers/finalize (:timestamp e) [::edit/label "Edit"])))))
 
 (defmethod tool.hierarchy/on-pointer-move [::edit/edit :idle]
@@ -61,10 +60,10 @@
   [db e]
   (let [{:keys [clicked-element]} db
         {:keys [shift-key]} e
-        {:keys [id element-id]} clicked-element]
+        {:keys [id parent]} clicked-element]
     (if (= (:type clicked-element) :handle)
       (-> db
-          (element.handlers/toggle-handle-selection element-id id shift-key)
+          (element.handlers/toggle-handle-selection parent id shift-key)
           (tool.handlers/set-state :edit))
       (tool.handlers/set-state db :select))))
 

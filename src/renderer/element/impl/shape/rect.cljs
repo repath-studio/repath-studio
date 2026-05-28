@@ -111,27 +111,27 @@
         [rx ry] (mapv utils.length/unit->px [rx ry])]
     [{:type :handle
       :action :edit
-      :element-id (:id el)
+      :parent (:id el)
       :position [min-x min-y]
       :id :position
       :label [::position-handle "position handle"]}
      {:type :handle
       :action :edit
-      :element-id (:id el)
+      :parent (:id el)
       :position [max-x max-y]
       :id :size
       :label [::size-handle "size handle"]}
      {:type :handle
       :action :edit
       :rounded true
-      :element-id (:id el)
+      :parent (:id el)
       :position [(- max-x rx) min-y]
       :id :rx
       :label [::rx-handle "x radius handle"]}
      {:type :handle
       :action :edit
       :rounded true
-      :element-id (:id el)
+      :parent (:id el)
       :position [max-x (+ min-y ry)]
       :id :ry
       :label [::ry-handle "y radius handle"]}]))

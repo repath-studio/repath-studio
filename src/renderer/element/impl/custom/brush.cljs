@@ -188,7 +188,7 @@
                          :type :handle
                          :label [::brush-point "brush point"]
                          :action :edit
-                         :element-id (:id el)
+                         :parent (:id el)
                          :position (matrix/add (utils.element/offset el)
                                                point)})))
        (into [])))

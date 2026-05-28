@@ -29,12 +29,12 @@
   [db e]
   (let [{:keys [shift-key ctrl-key]} e
         lock? (or ctrl-key (input.handlers/multi-touch? db))
-        {:keys [id element-id]} (:clicked-element db)
+        {:keys [id parent]} (:clicked-element db)
         db (history.handlers/reset-state db)
-        handle-selected? (element.handlers/handle-selected? db element-id id)
+        handle-selected? (element.handlers/handle-selected? db parent id)
         db (cond-> (history.handlers/reset-state db)
              (not handle-selected?)
-             (element.handlers/toggle-handle-selection element-id id
+             (element.handlers/toggle-handle-selection parent id
                                                        shift-key))
         offset (matrix/add (tool.handlers/pointer-delta db)
                            (snap.handlers/nearest-delta db))]

@@ -30,7 +30,7 @@
                                 (not (:rounded %))))
                   (fn [db handle] (cond-> db
                                     (:id handle)
-                                    (f (:id handle) (:element-id handle))))
+                                    (f (:id handle) (:parent handle))))
                   db)))
 
 (defmethod tool.hierarchy/on-drag [::edit/edit :select]

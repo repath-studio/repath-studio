@@ -89,14 +89,14 @@
         [rx ry] (matrix/div (utils.bounds/->dimensions bbox) 2)]
     [{:type :handle
       :action :edit
-      :element-id (:id el)
+      :parent (:id el)
       :position [(+ cx rx) cy]
       :id :rx
       :cursor "ew-resize"
       :label [::rx-handle "x radius handle"]}
      {:type :handle
       :action :edit
-      :element-id (:id el)
+      :parent (:id el)
       :position [cx (- cy ry)]
       :id :ry
       :cursor "ns-resize"
