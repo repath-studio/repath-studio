@@ -19,7 +19,7 @@
   [handle]
   (if-let [selection-bbox (-> @(rf/subscribe [::tool.subs/select-box])
                               (element.hierarchy/bbox))]
-    (utils.bounds/contained-point? selection-bbox [(:x handle) (:y handle)])
+    (utils.bounds/contained-point? selection-bbox (:position handle))
     false))
 
 (m/=> reduce-by-area [:-> App PointerEvent ifn? App])
