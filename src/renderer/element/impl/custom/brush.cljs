@@ -182,16 +182,15 @@
   [el]
   (->> el :attrs :points
        (points->vec)
-       (map-indexed (fn [index [x y]]
-                      (let [[x y] (mapv utils.length/unit->px [x y])
-                            [x y] (matrix/add (utils.element/offset el) [x y])]
+       (map-indexed (fn [index point]
+                      (let [point (mapv utils.length/unit->px point)]
                         {:id (keyword (str index))
-                         :x x
-                         :y y
                          :type :handle
                          :label [::brush-point "brush point"]
                          :action :edit
-                         :element-id (:id el)})))
+                         :element-id (:id el)
+                         :position (matrix/add (utils.element/offset el)
+                                               point)})))
        (into [])))
 
 (defmethod element.hierarchy/handle-drag :brush

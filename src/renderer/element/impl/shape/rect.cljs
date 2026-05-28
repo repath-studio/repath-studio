@@ -112,31 +112,27 @@
     [{:type :handle
       :action :edit
       :element-id (:id el)
-      :x min-x
-      :y min-y
+      :position [min-x min-y]
       :id :position
       :label [::position-handle "position handle"]}
      {:type :handle
       :action :edit
       :element-id (:id el)
-      :x max-x
-      :y max-y
+      :position [max-x max-y]
       :id :size
       :label [::size-handle "size handle"]}
      {:type :handle
       :action :edit
       :rounded true
       :element-id (:id el)
-      :x (- max-x rx)
-      :y min-y
+      :position [(- max-x rx) min-y]
       :id :rx
       :label [::rx-handle "x radius handle"]}
      {:type :handle
       :action :edit
       :rounded true
       :element-id (:id el)
-      :x max-x
-      :y (+ min-y ry)
+      :position [max-x (- max-y ry)]
       :id :ry
       :label [::ry-handle "y radius handle"]}]))
 

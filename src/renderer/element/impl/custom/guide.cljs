@@ -96,8 +96,7 @@
   [el]
   (let [{:keys [attrs]} el
         {:keys [x y]} attrs]
-    [{:x x
-      :y y
+    [{:position [x y]
       :id :position
       :label [::position "position"]
       :type :handle

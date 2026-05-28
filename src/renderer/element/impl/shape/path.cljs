@@ -161,13 +161,11 @@
   [{:keys [element-id endpoints segments offset]} index segment]
   (->> (handles endpoints segments index segment)
        (mapv (fn [{:keys [point-type pos rounded implied]}]
-               (let [[ax ay] (matrix/add offset pos)
-                     label (-> (utils.path/segment->command segment)
+               (let [label (-> (utils.path/segment->command segment)
                                (attribute.impl.d/path-commands)
                                :label)]
                  {:id (keyword index point-type)
-                  :x ax
-                  :y ay
+                  :position (matrix/add offset pos)
                   :label label
                   :type :handle
                   :action :edit

@@ -79,8 +79,7 @@
   (let [bbox (:bbox el)
         [cx cy] (utils.bounds/center bbox)
         r (/ (first (utils.bounds/->dimensions bbox)) 2)]
-    [{:x (+ cx r)
-      :y cy
+    [{:position [(+ cx r) cy]
       :id :r
       :label [::r-handle "radius handle"]
       :cursor "ew-resize"

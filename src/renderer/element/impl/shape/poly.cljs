@@ -56,14 +56,12 @@
 
 (defn handle
   [el index point]
-  (let [id (keyword (str index))
-        offset (utils.element/offset el)
-        [x y] (->> point
-                   (mapv utils.length/unit->px)
-                   (matrix/add offset))]
-    {:id id
-     :x x
-     :y y
+  (let [offset (utils.element/offset el)
+        position (->> point
+                      (mapv utils.length/unit->px)
+                      (matrix/add offset))]
+    {:id (keyword (str index))
+     :position position
      :label [::point "point"]
      :type :handle
      :action :edit

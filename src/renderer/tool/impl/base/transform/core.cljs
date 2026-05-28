@@ -42,20 +42,19 @@
         anchor-offset @(rf/subscribe [::tool.subs/anchor-offset])
         state @(rf/subscribe [::tool.subs/state])
         handle-size @(rf/subscribe [::document.subs/handle-size])
-        [x y] (when bbox
-                (let [[min-x min-y] bbox
-                      [w h] (utils.bounds/->dimensions bbox)
-                      [fx fy] anchor-offset]
-                  [(+ min-x (* fx w)) (+ min-y (* fy h))]))]
+        position (when bbox
+                   (let [[min-x min-y] bbox
+                         [w h] (utils.bounds/->dimensions bbox)
+                         [fx fy] anchor-offset]
+                     [(+ min-x (* fx w)) (+ min-y (* fy h))]))]
     [:g
      (when (and pivot-point (= state :scale))
        [utils.svg/times pivot-point])
      (when (and bbox (contains? #{:edit :idle} state))
        [:g
-        [utils.svg/cross [x y] (* handle-size 1.5)]
+        [utils.svg/cross position (* handle-size 1.5)]
         [tool.views/handle {:id :pivot-handle
-                            :x x
-                            :y y
+                            :position position
                             :rounded true
                             :type :handle
                             :label [::pivot-point "pivot point"]

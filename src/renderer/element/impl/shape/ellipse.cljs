@@ -90,16 +90,14 @@
     [{:type :handle
       :action :edit
       :element-id (:id el)
-      :x (+ cx rx)
-      :y cy
+      :position [(+ cx rx) cy]
       :id :rx
       :cursor "ew-resize"
       :label [::rx-handle "x radius handle"]}
      {:type :handle
       :action :edit
       :element-id (:id el)
-      :x cx
-      :y (- cy ry)
+      :position [cx (- cy ry)]
       :id :ry
       :cursor "ns-resize"
       :label [::ry-handle "y radius handle"]}]))

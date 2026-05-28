@@ -1,5 +1,6 @@
 (ns renderer.tool.db
   (:require
+   [renderer.db :refer [Vec2]]
    [renderer.element.db :refer [ElementId]]
    [renderer.hierarchy :as hierarchy]
    [renderer.i18n.db :refer [Translation]]
@@ -70,8 +71,7 @@
    [:rounded {:optional true} boolean?]
    [:implied {:optional true} boolean?]
    [:cursor {:optional true} Cursor]
-   [:x {:optional true} number?]
-   [:y {:optional true} number?]
+   [:position {:optional true} Vec2]
    [:size {:optional true} number?]
    [:stroke-width {:optional true} number?]
    [:element-id {:optional true} ElementId]])

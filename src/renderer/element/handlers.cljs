@@ -985,8 +985,7 @@
         svg (-> svg
                 (assoc :label label)
                 (update :attrs dissoc :desc :version :xmlns)
-                (assoc-in [:attrs :x] x)
-                (assoc-in [:attrs :y] y))]
+                (assoc-in [:attrs :position] position))]
     (-> (add db svg)
         (collapse-all))))
 

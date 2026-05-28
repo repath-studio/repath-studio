@@ -169,14 +169,12 @@
         offset (utils.element/offset el)
         [x1 y1] (cond->> [x y]
                   (not (utils.element/svg? el))
-                  (matrix/add offset))
-        [x2 y2] (matrix/add [x1 y1] size)]
+                  (matrix/add offset))]
     [{:type :handle
       :action :edit
       :label [::size-handle "size handle"]
       :element-id (:id el)
-      :x x2
-      :y y2
+      :position (matrix/add [x1 y1] size)
       :id :size}]))
 
 (defmethod element.hierarchy/render-edit :blob

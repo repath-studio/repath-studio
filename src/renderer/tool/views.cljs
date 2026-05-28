@@ -16,7 +16,9 @@
 (m/=> handle [:-> Handle any?])
 (defn handle
   [el]
-  (let [{:keys [x y id cursor label orientation rounded implied element-id]} el
+  (let [{:keys [position id cursor label orientation rounded implied
+                element-id]} el
+        [x y] position
         zoom @(rf/subscribe [::document.subs/zoom])
         clicked-element @(rf/subscribe [::app.subs/clicked-element])
         handle-size @(rf/subscribe [::document.subs/handle-size])
@@ -99,36 +101,28 @@
         bbox (cond-> bbox idle? min-bbox)
         [min-x min-y max-x max-y] bbox
         [w h] (utils.bounds/->dimensions bbox)]
-    (->> [{:x min-x
-           :y min-y
+    (->> [{:position [min-x min-y]
            :id :top-left
            :cursor "nwse-resize"}
-          {:x max-x
-           :y min-y
+          {:position [max-x min-y]
            :id :top-right
            :cursor "nesw-resize"}
-          {:x min-x
-           :y max-y
+          {:position [min-x max-y]
            :id :bottom-left
            :cursor "nesw-resize"}
-          {:x max-x
-           :y max-y
+          {:position [max-x max-y]
            :id :bottom-right
            :cursor "nwse-resize"}
-          {:x (+ min-x (/ w 2))
-           :y min-y
+          {:position [(+ min-x (/ w 2)) min-y]
            :id :top-middle
            :cursor "ns-resize"}
-          {:x max-x
-           :y (+ min-y (/ h 2))
+          {:position [max-x (+ min-y (/ h 2))]
            :id :middle-right
            :cursor "ew-resize"}
-          {:x min-x
-           :y (+ min-y (/ h 2))
+          {:position [min-x (+ min-y (/ h 2))]
            :id :middle-left
            :cursor "ew-resize"}
-          {:x (+ min-x (/ w 2))
-           :y max-y
+          {:position [(+ min-x (/ w 2)) max-y]
            :id :bottom-middle
            :cursor "ns-resize"}]
          (mapv (comp handle

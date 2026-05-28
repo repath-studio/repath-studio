@@ -57,15 +57,13 @@
     [{:type :handle
       :action :edit
       :element-id (:id el)
-      :x min-x
-      :y min-y
+      :position [min-x min-y]
       :id :position
       :label [::position-handle "position handle"]}
      {:type :handle
       :action :edit
       :element-id (:id el)
-      :x max-x
-      :y max-y
+      :position [max-x max-y]
       :id :size
       :label [::size-handle "size handle"]}]))
 

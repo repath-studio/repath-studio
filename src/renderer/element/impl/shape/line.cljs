@@ -59,18 +59,14 @@
   [el]
   (let [offset (utils.element/offset el)
         {{:keys [x1 y1 x2 y2]} :attrs} el
-        [x1 y1 x2 y2] (mapv utils.length/unit->px [x1 y1 x2 y2])
-        [x1 y1] (matrix/add offset [x1 y1])
-        [x2 y2] (matrix/add offset [x2 y2])]
-    [{:x x1
-      :y y1
+        [x1 y1 x2 y2] (mapv utils.length/unit->px [x1 y1 x2 y2])]
+    [{:position (matrix/add offset [x1 y1])
       :id :starting-point
       :label [::starting-point "starting point"]
       :type :handle
       :action :edit
       :element-id (:id el)}
-     {:x x2
-      :y y2
+     {:position (matrix/add offset [x2 y2])
       :id :ending-point
       :label [::ending-point "ending point"]
       :type :handle
