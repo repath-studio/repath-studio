@@ -66,7 +66,6 @@
       :else
       (-> db
           (dissoc db :clicked-element)
-          (element.handlers/clear-ignored)
           (element.handlers/toggle-selection (:id element) shift-key)
           (history.handlers/finalize (:timestamp e)
                                      [::select-element "Select element"])))))
