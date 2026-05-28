@@ -5,6 +5,7 @@
    [renderer.app.db :refer [App]]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.history.handlers :as history.handlers]
    [renderer.input.db :refer [PointerEvent]]
    [renderer.tool.db :refer [Handle]]
    [renderer.tool.handlers :as tool.handlers]
@@ -24,11 +25,12 @@
 (m/=> reduce-by-area [:-> App PointerEvent ifn? App])
 (defn reduce-by-area
   [db f]
-  (->> (element.handlers/entities db)
-       (transduce (comp (element.handlers/visible)
-                        (filter #(hovered? %))
-                        (map :id))
-                  (fn [db id] (cond-> db id (f id)))
+  (->> (element.handlers/handles db)
+       (transduce (filter #(and (hovered? %)
+                                (not (:rounded %))))
+                  (fn [db handle] (cond-> db
+                                    (:id handle)
+                                    (f (:id handle) (:element-id handle))))
                   db)))
 
 (defmethod tool.hierarchy/on-drag [::edit/edit :select]
@@ -45,6 +47,8 @@
     (element.handlers/assoc-prop :selected-handles #{})
 
     :always
-    (-> (reduce-by-area element.handlers/select)
+    (-> (reduce-by-area element.handlers/select-handle)
         (tool.handlers/set-select-box nil)
-        (tool.handlers/set-state :idle))))
+        (tool.handlers/set-state :idle)
+        (history.handlers/finalize (.-timeStamp e)
+                                   [::select-handles "Select handles"]))))

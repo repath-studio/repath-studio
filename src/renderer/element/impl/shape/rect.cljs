@@ -5,10 +5,8 @@
    [clojure.string :as string]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.element.hierarchy :as element.hierarchy]
-   [renderer.element.impl.box :as element.impl.box]
    [renderer.hierarchy :as hierarchy]
    [renderer.input.handlers :as input.handlers]
-   [renderer.tool.views :as tool.views]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]))
@@ -105,26 +103,42 @@
 
       el)))
 
-(defmethod element.hierarchy/render-edit :rect
+(defmethod element.hierarchy/handles :rect
   [el]
   (let [el-bbox (:bbox el)
-        [_min-x min-y max-x _max-y] el-bbox
+        [min-x min-y max-x max-y] el-bbox
         {{:keys [rx ry]} :attrs} el
         [rx ry] (mapv utils.length/unit->px [rx ry])]
-    (->> [{:x (- max-x rx)
-           :y min-y
-           :id :rx
-           :label [::rx-handle "x radius handle"]}
-          {:x max-x
-           :y (+ min-y ry)
-           :id :ry
-           :label [::ry-handle "y radius handle"]}]
-         (mapv (comp tool.views/handle
-                     (partial merge {:type :handle
-                                     :action :edit
-                                     :rounded true
-                                     :element-id (:id el)})))
-         (into [:g [element.impl.box/render-edit-handles el-bbox (:id el)]]))))
+    [{:type :handle
+      :action :edit
+      :element-id (:id el)
+      :x min-x
+      :y min-y
+      :id :position
+      :label [::position-handle "position handle"]}
+     {:type :handle
+      :action :edit
+      :element-id (:id el)
+      :x max-x
+      :y max-y
+      :id :size
+      :label [::size-handle "size handle"]}
+     {:type :handle
+      :action :edit
+      :rounded true
+      :element-id (:id el)
+      :x (- max-x rx)
+      :y min-y
+      :id :rx
+      :label [::rx-handle "x radius handle"]}
+     {:type :handle
+      :action :edit
+      :rounded true
+      :element-id (:id el)
+      :x max-x
+      :y (+ min-y ry)
+      :id :ry
+      :label [::ry-handle "y radius handle"]}]))
 
 (defmethod element.hierarchy/path :rect
   [el]

@@ -8,7 +8,6 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
    [renderer.input.handlers :as input.handlers]
-   [renderer.tool.views :as tool.views]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]))
@@ -56,30 +55,27 @@
     (string/join " " ["M" x1 y1
                       "L" x2 y2])))
 
-(defmethod element.hierarchy/render-edit :line
+(defmethod element.hierarchy/handles :line
   [el]
   (let [offset (utils.element/offset el)
         {{:keys [x1 y1 x2 y2]} :attrs} el
         [x1 y1 x2 y2] (mapv utils.length/unit->px [x1 y1 x2 y2])
         [x1 y1] (matrix/add offset [x1 y1])
         [x2 y2] (matrix/add offset [x2 y2])]
-    [:g
-     {:key ::edit-handles}
-     (map (fn [handle] ^{:key (:id handle)} [tool.views/handle handle])
-          [{:x x1
-            :y y1
-            :id :starting-point
-            :label [::starting-point "starting point"]
-            :type :handle
-            :action :edit
-            :element-id (:id el)}
-           {:x x2
-            :y y2
-            :id :ending-point
-            :label [::ending-point "ending point"]
-            :type :handle
-            :action :edit
-            :element-id (:id el)}])]))
+    [{:x x1
+      :y y1
+      :id :starting-point
+      :label [::starting-point "starting point"]
+      :type :handle
+      :action :edit
+      :element-id (:id el)}
+     {:x x2
+      :y y2
+      :id :ending-point
+      :label [::ending-point "ending point"]
+      :type :handle
+      :action :edit
+      :element-id (:id el)}]))
 
 (defmethod element.hierarchy/edit-drag :line
   [el offset handle lock?]

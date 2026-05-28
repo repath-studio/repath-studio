@@ -15,7 +15,6 @@
    [renderer.hierarchy :as hierarchy]
    [renderer.input.handlers :as input.handlers]
    [renderer.tool.subs :as-alias tool.subs]
-   [renderer.tool.views :as tool.views]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
    [renderer.utils.path :as utils.path]
@@ -158,27 +157,23 @@
 
       nil)))
 
-(defn render-handles
+(defn segment-handles
   [{:keys [element-id endpoints segments offset]} index segment]
   (->> (handles endpoints segments index segment)
-       (map (fn [{:keys [point-type pos rounded implied]}]
-              (let [[ax ay] (matrix/add offset pos)
-                    label (-> (utils.path/segment->command segment)
-                              (attribute.impl.d/path-commands)
-                              :label)
-                    h [tool.views/handle {:id (keyword index point-type)
-                                          :x ax
-                                          :y ay
-                                          :label label
-                                          :type :handle
-                                          :action :edit
-                                          :rounded (boolean rounded)
-                                          :element-id element-id}]]
-                (if implied
-                  [:g {:pointer-events "none"
-                       :opacity 0.5} h]
-                  h))))
-       (into [:g])))
+       (mapv (fn [{:keys [point-type pos rounded implied]}]
+               (let [[ax ay] (matrix/add offset pos)
+                     label (-> (utils.path/segment->command segment)
+                               (attribute.impl.d/path-commands)
+                               :label)]
+                 {:id (keyword index point-type)
+                  :x ax
+                  :y ay
+                  :label label
+                  :type :handle
+                  :action :edit
+                  :implied implied
+                  :rounded (boolean rounded)
+                  :element-id element-id})))))
 
 (m/=> acc-endpoints [:-> PathSegments [:vector Vec2]])
 (defn acc-endpoints
@@ -281,6 +276,20 @@
        (mapv (partial ->highlight-segments segments endpoints offset))
        utils.path/segments->string))
 
+(defmethod element.hierarchy/handles :path
+  [el]
+  (let [segments (->> el :attrs :d utils.path/string->segments)
+        endpoints (acc-endpoints segments)
+        offset (utils.element/offset el)
+        props {:element-id (:id el)
+               :endpoints endpoints
+               :segments segments
+               :offset offset}]
+    (->> segments
+         (map-indexed (partial segment-handles props))
+         (flatten)
+         (into []))))
+
 (defmethod element.hierarchy/render-edit :path
   [el]
   (let [editing? @(rf/subscribe [::tool.subs/editing?])
@@ -309,9 +318,6 @@
              :stroke "var(--accent)"}]
      (->> segments
           (map-indexed (partial render-arms props))
-          (into [:g]))
-     (->> segments
-          (map-indexed (partial render-handles props))
           (into [:g]))]))
 
 (m/=> translate-seg-point [:->

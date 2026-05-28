@@ -14,6 +14,7 @@
    [renderer.tool.impl.base.edit.select]
    [renderer.tool.impl.base.edit.type]
    [renderer.tool.subs :as-alias tool.subs]
+   [renderer.tool.views :as tool.views]
    [renderer.utils.element :as utils.element]
    [renderer.utils.key :as utils.key]
    [renderer.utils.svg :as utils.svg]))
@@ -28,6 +29,9 @@
          (map (fn [el]
                 [:g
                  [element.hierarchy/render-edit el]
+                 (->> (element.hierarchy/handles el)
+                      (map tool.views/handle)
+                      (into [:g]))
                  (when-let [pos (element.hierarchy/centroid el)]
                    (let [offset (utils.element/offset el)
                          pos (matrix/add offset pos)]

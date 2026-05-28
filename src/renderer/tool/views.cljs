@@ -16,44 +16,42 @@
 (m/=> handle [:-> Handle any?])
 (defn handle
   [el]
-  (let [{:keys [x y id cursor label orientation rounded element-id]} el
+  (let [{:keys [x y id cursor label orientation rounded implied element-id]} el
         zoom @(rf/subscribe [::document.subs/zoom])
         clicked-element @(rf/subscribe [::app.subs/clicked-element])
         handle-size @(rf/subscribe [::document.subs/handle-size])
         selected? @(rf/subscribe [::element.subs/handle-selected?
                                   element-id id])
+        hovered? @(rf/subscribe [::element.subs/hovered? id])
         pointer-handler (partial input.impl.pointer/handler! el)
-        stroke-width (/ 1 zoom)
         vertical-size (cond-> handle-size (= orientation :vertical) (* 0.7))
         horizontal-size (cond-> handle-size (= orientation :horizontal) (* 0.7))
-        rx (when rounded (/ handle-size 2))
-        x (- x (/ horizontal-size 2))
-        y (- y (/ vertical-size 2))
-        active (or selected? (= (:id clicked-element) id))]
-    [:g
-     [:rect {:stroke "var(--accent-foreground)"
-             :stroke-opacity ".5"
-             :stroke-width (/ 3 zoom)
-             :x x
-             :y y
-             :rx rx
-             :width horizontal-size
-             :height vertical-size
-             :cursor (or cursor "move")
-             :on-pointer-up pointer-handler
-             :on-pointer-down pointer-handler
-             :on-pointer-move pointer-handler}
-      (when label
-        [:title (i18n.views/t label)])]
-     [:rect {:fill (if active "var(--accent)" "var(--accent-foreground)")
-             :stroke (if active "var(--accent)" "var(--foreground-muted)")
-             :stroke-width stroke-width
-             :x x
-             :y y
-             :rx rx
-             :width horizontal-size
-             :height vertical-size
-             :pointer-events "none"}]]))
+        active (or selected? (= (:id clicked-element) id))
+        attrs {:x (- x (/ horizontal-size 2))
+               :y (- y (/ vertical-size 2))
+               :rx (when rounded (/ handle-size 2))
+               :width horizontal-size
+               :height vertical-size}]
+    [:g (when implied {:pointer-events "none"
+                       :opacity 0.5})
+     [:rect (merge attrs
+                   {:stroke "var(--accent-foreground)"
+                    :stroke-opacity ".5"
+                    :stroke-width (/ 3 zoom)
+                    :cursor (or cursor "move")
+                    :on-pointer-up pointer-handler
+                    :on-pointer-down pointer-handler
+                    :on-pointer-move pointer-handler})
+      (when label [:title (i18n.views/t label)])]
+     [:rect (merge attrs
+                   {:fill (if active
+                            "var(--accent)"
+                            "var(--accent-foreground)")
+                    :stroke (if (or active hovered?)
+                              "var(--accent)"
+                              "var(--foreground-muted)")
+                    :pointer-events "none"
+                    :stroke-width (/ 1 zoom)})]]))
 
 (m/=> selected-bbox [:-> BBox any?])
 (defn selected-bbox

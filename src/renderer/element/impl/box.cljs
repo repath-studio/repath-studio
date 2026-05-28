@@ -6,7 +6,6 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
    [renderer.input.handlers :as input.handlers]
-   [renderer.tool.views :as tool.views]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]))
 
@@ -52,25 +51,23 @@
 
       el)))
 
-(defn render-edit-handles
-  [[min-x min-y max-x max-y] element-id]
-  (->> [{:x min-x
-         :y min-y
-         :id :position
-         :label [::position-handle "position handle"]}
-        {:x max-x
-         :y max-y
-         :id :size
-         :label [::size-handle "size handle"]}]
-       (mapv (comp tool.views/handle
-                   (partial merge {:type :handle
-                                   :action :edit
-                                   :element-id element-id})))
-       (into [:g])))
-
-(defmethod element.hierarchy/render-edit ::element.hierarchy/box
+(defmethod element.hierarchy/handles ::element.hierarchy/box
   [el]
-  (render-edit-handles (:bbox el) (:id el)))
+  (let [[min-x min-y max-x max-y] (:bbox el)]
+    [{:type :handle
+      :action :edit
+      :element-id (:id el)
+      :x min-x
+      :y min-y
+      :id :position
+      :label [::position-handle "position handle"]}
+     {:type :handle
+      :action :edit
+      :element-id (:id el)
+      :x max-x
+      :y max-y
+      :id :size
+      :label [::size-handle "size handle"]}]))
 
 (defmethod element.hierarchy/bbox ::element.hierarchy/box
   [el]

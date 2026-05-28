@@ -996,6 +996,16 @@
   (let [options (-> db :snap :options)]
     (into [] (mapcat #(utils.element/acc-snapping-points % options)) els)))
 
+(m/=> handles [:function
+               [:-> App [:vector HandleId]]
+               [:-> App ElementId [:vector HandleId]]])
+(defn handles
+  ([db]
+   (reduce (fn [acc id] (into acc (handles db id))) [] (selected-ids db)))
+  ([db el-id]
+   (-> (entity db el-id)
+       (element.hierarchy/handles))))
+
 (m/=> selected-handles [:-> App ElementId [:set HandleId]])
 (defn selected-handles
   [db el-id]
@@ -1006,6 +1016,11 @@
   [db el-id handle-id]
   (-> (selected-handles db el-id)
       (contains? handle-id)))
+
+(m/=> select-handle [:-> App HandleId ElementId App])
+(defn select-handle
+  [db handle-id el-id]
+  (update-in db (path db el-id :selected-handles) conj handle-id))
 
 (m/=> toggle-handle-selection [:-> App HandleId boolean? App])
 (defn toggle-handle-selection

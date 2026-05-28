@@ -14,7 +14,6 @@
    [renderer.hierarchy :as hierarchy]
    [renderer.i18n.views :as i18n.views]
    [renderer.input.impl.pointer :as input.impl.pointer]
-   [renderer.tool.views :as tool.views]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
@@ -163,6 +162,23 @@
     (attribute.hierarchy/update-attr el :size #(max 0 (+ % (min x y))))
     el))
 
+(defmethod element.hierarchy/handles :blob
+  [el]
+  (let [{{:keys [x y size]} :attrs} el
+        [x y size] (mapv utils.length/unit->px [x y size])
+        offset (utils.element/offset el)
+        [x1 y1] (cond->> [x y]
+                  (not (utils.element/svg? el))
+                  (matrix/add offset))
+        [x2 y2] (matrix/add [x1 y1] size)]
+    [{:type :handle
+      :action :edit
+      :label [::size-handle "size handle"]
+      :element-id (:id el)
+      :x x2
+      :y y2
+      :id :size}]))
+
 (defmethod element.hierarchy/render-edit :blob
   [el]
   (let [{{:keys [x y size]} :attrs} el
@@ -174,12 +190,4 @@
         [x2 y2] (matrix/add [x1 y1] size)]
     [:<>
      [utils.svg/line [x1 y1] [x2 y2]]
-     [tool.views/handle
-      {:type :handle
-       :action :edit
-       :label [::size-handle "size handle"]
-       :element-id (:id el)
-       :x x2
-       :y y2
-       :id :size}]
      [utils.svg/times [x1 y1]]]))
