@@ -107,37 +107,37 @@
         :pos (->px-point segment :end-point)}]
 
       "C"
-      [(when prev-ep
+      [{:point-type :end-point
+        :pos (->px-point segment :end-point)}
+       (when prev-ep
          {:point-type :start-control-point
           :pos (->px-point segment :start-control-point)
           :rounded true})
        {:point-type :end-control-point
         :pos (->px-point segment :end-control-point)
-        :rounded true}
-       {:point-type :end-point
-        :pos (->px-point segment :end-point)}]
+        :rounded true}]
 
       "S"
       (let [cp0 (->px-point segment :start-control-point)
             implied-cp1 (some-> (get segments (dec index))
                                 utils.path/outgoing-cp
                                 (->> (mapv utils.length/unit->px)))]
-        (cond-> [{:point-type :start-control-point
+        (cond-> [{:point-type :end-point
+                  :pos (->px-point segment :end-point)}
+                 {:point-type :start-control-point
                   :pos cp0
-                  :rounded true}
-                 {:point-type :end-point
-                  :pos (->px-point segment :end-point)}]
+                  :rounded true}]
           implied-cp1 (conj {:point-type :implied-control-point
                              :pos implied-cp1
                              :rounded true
                              :implied true})))
 
       "Q"
-      [{:point-type :start-control-point
+      [{:point-type :end-point
+        :pos (->px-point segment :end-point)}
+       {:point-type :start-control-point
         :pos (->px-point segment :start-control-point)
-        :rounded true}
-       {:point-type :end-point
-        :pos (->px-point segment :end-point)}]
+        :rounded true}]
 
       "H"
       [(when-let [[_ prev-y] prev-ep]
@@ -165,7 +165,7 @@
                   :label label
                   :type :handle
                   :action :edit
-                  :implied implied
+                  :implied (boolean implied)
                   :rounded (boolean rounded)
                   :parent parent})))))
 

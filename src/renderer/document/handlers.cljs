@@ -12,6 +12,7 @@
    [renderer.element.handlers :as element.handlers]
    [renderer.frame.handlers :as frame.handlers]
    [renderer.snap.handlers :as snap.handlers]
+   [renderer.tool.db :refer [HandleId]]
    [renderer.utils.vec :as utils.vec]))
 
 (m/=> path [:function
@@ -150,7 +151,7 @@
        (element.handlers/create-default-canvas size)
        (center))))
 
-(m/=> set-hovered-ids [:-> App [:set ElementId] App])
+(m/=> set-hovered-ids [:-> App [:set [:or ElementId HandleId]] App])
 (defn set-hovered-ids
   [db ids]
   (assoc-in db (path db :hovered-ids) ids))

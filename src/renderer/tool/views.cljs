@@ -32,13 +32,13 @@
                :rx (when rounded (/ handle-size 2))
                :width horizontal-size
                :height vertical-size}]
-    [:g (when implied {:pointer-events "none"
-                       :opacity 0.5})
+    [:g
      [:rect (merge attrs
                    {:stroke "var(--accent-foreground)"
                     :stroke-opacity ".5"
-                    :stroke-width (/ (if (or active hovered?) 5 3) zoom)
+                    :stroke-width (/ (if (or active hovered?) 4 3) zoom)
                     :cursor (or cursor "move")
+                    :pointer-events (when implied "none")
                     :on-pointer-up pointer-handler
                     :on-pointer-down pointer-handler
                     :on-pointer-move pointer-handler})
@@ -46,10 +46,10 @@
      [:rect (merge attrs
                    {:fill (if active
                             "var(--accent)"
-                            "var(--accent-foreground)")
+                            (if implied "lightgray" "var(--accent-foreground)"))
                     :stroke (if (or active hovered?)
                               "var(--accent)"
-                              "var(--foreground-muted)")
+                              (when-not implied "var(--foreground-muted)"))
                     :pointer-events "none"
                     :stroke-width (/ (if (or active hovered?) 2 1) zoom)})]]))
 
