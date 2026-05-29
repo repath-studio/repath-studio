@@ -394,8 +394,8 @@
  :renderer.attribute.impl.d
  {:description "d 属性定义要绘制的路径。"
   :edit "编辑路径"
-  :absolute "（绝对）"
-  :relative "（相对）"
+  :absolute "绝对"
+  :relative "相对"
   :move-to "移动到"
   :line-to "线条到"
   :vertical-line "垂直线"

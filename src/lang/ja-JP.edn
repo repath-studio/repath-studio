@@ -425,8 +425,8 @@
  :renderer.attribute.impl.d
  {:description "d属性は描画するパスを定義します。"
   :edit "パスを編集"
-  :absolute "（絶対）"
-  :relative "（相対）"
+  :absolute "絶対"
+  :relative "相対"
   :move-to "移動"
   :line-to "直線"
   :vertical-line "垂直線"

@@ -471,8 +471,8 @@
  :renderer.attribute.impl.d
  {:description "L'attributo d definisce un tracciato da disegnare."
   :edit "Modifica tracciato"
-  :absolute "(Assoluto)"
-  :relative "(Relativo)"
+  :absolute "Assoluto"
+  :relative "Relativo"
   :move-to "Sposta a"
   :line-to "Linea a"
   :vertical-line "Linea verticale"

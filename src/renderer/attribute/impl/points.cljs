@@ -32,6 +32,7 @@
  ::drop-point
  (fn [db [_ el-id index timestamp]]
    (-> db
+       (element.handlers/clear-selected-handles el-id)
        (element.handlers/select-handle (keyword (str index)) el-id)
        (element.handlers/delete-segments)
        (history.handlers/finalize timestamp [::remove-points "Remove point"]))))
@@ -74,12 +75,12 @@
         hovered? @(rf/subscribe [::element.subs/hovered? handle-id])
         selected? @(rf/subscribe [::element.subs/handle-selected?
                                   el-id handle-id])]
-    [:div.grid.grid-flow-col.gap-px
+    [:div.grid.grid-flow-col.gap-px.text-right
      {:dir "ltr"
       :on-pointer-enter #(rf/dispatch [::document.events/set-hovered-id
                                        handle-id])
       :on-pointer-leave #(rf/dispatch [::document.events/clear-hovered])
-      :style {:grid-template-columns "minmax(0, 60px) 3fr 3fr 27px"}}
+      :style {:grid-template-columns "minmax(0, 60px) 1fr 1fr auto"}}
      [:span.form-element.flex-1.py-0!.h-full!.px-4!
       {:on-click #(rf/dispatch [::element.events/toggle-handle-selection
                                 el-id handle-id (.-shiftKey %)])

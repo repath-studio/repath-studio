@@ -478,8 +478,8 @@
  :renderer.attribute.impl.d
  {:description "To χαρακτηριστικό d καθορίζει τη διαδρομή που θα σχεδιαστεί."
   :edit "Επεξεργασία διαδρομής"
-  :absolute "(Απόλυτο)"
-  :relative "(Σχετικό)"
+  :absolute "Απόλυτο"
+  :relative "Σχετικό"
   :move-to "Μετακίνηση προς"
   :line-to "Γραμμή προς"
   :vertical-line "Κάθετη γραμμή"

@@ -473,8 +473,8 @@
  :renderer.attribute.impl.d
  {:description "Het d attribuut definieert een pad om te tekenen."
   :edit "Pad bewerken"
-  :absolute "(Absoluut)"
-  :relative "(Relatief)"
+  :absolute "Absoluut"
+  :relative "Relatief"
   :move-to "Verplaats naar"
   :line-to "Lijn naar"
   :vertical-line "Verticale lijn"

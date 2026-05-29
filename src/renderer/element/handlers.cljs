@@ -1022,6 +1022,10 @@
   [db handle-id el-id]
   (update-in db (path db el-id :selected-handles) conj handle-id))
 
+(defn clear-selected-handles
+  [db el-id]
+  (assoc-in db (path db el-id :selected-handles) #{}))
+
 (m/=> toggle-handle-selection [:-> App HandleId boolean? App])
 (defn toggle-handle-selection
   [db el-id handle-id additive]
@@ -1040,7 +1044,7 @@
   ([db]
    (->> (selected-ids db)
         (reduce delete-segments db)))
-  ([db id]
+  ([db el-id]
    (-> db
-       (update-in (path db id) element.hierarchy/delete-segments)
-       (refresh-bbox id))))
+       (update-in (path db el-id) element.hierarchy/delete-segments)
+       (refresh-bbox el-id))))

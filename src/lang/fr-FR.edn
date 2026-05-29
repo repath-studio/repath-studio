@@ -467,8 +467,8 @@
  :renderer.attribute.impl.d
  {:description "L'attribut d définit un chemin à dessiner."
   :edit "Éditer le chemin"
-  :absolute "(Absolu)"
-  :relative "(Relatif)"
+  :absolute "Absolu"
+  :relative "Relatif"
   :move-to "Déplacer vers"
   :line-to "Ligne vers"
   :vertical-line "Ligne verticale"

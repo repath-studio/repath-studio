@@ -37,7 +37,7 @@
      [:rect (merge attrs
                    {:stroke "var(--accent-foreground)"
                     :stroke-opacity ".5"
-                    :stroke-width (/ 3 zoom)
+                    :stroke-width (/ (if (or active hovered?) 5 3) zoom)
                     :cursor (or cursor "move")
                     :on-pointer-up pointer-handler
                     :on-pointer-down pointer-handler

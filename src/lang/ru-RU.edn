@@ -457,8 +457,8 @@
  :renderer.attribute.impl.d
  {:description "Атрибут d определяет контур для рисования."
   :edit "Редактировать контур"
-  :absolute "(Абсолютный)"
-  :relative "(Относительный)"
+  :absolute "Абсолютный"
+  :relative "Относительный"
   :move-to "Переместить в"
   :line-to "Линия в"
   :vertical-line "Вертикальная линия"

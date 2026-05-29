@@ -441,8 +441,8 @@
  :renderer.attribute.impl.d
  {:description "خاصية d تحدد مساراً ليتم رسمه."
   :edit "تحرير المسار"
-  :absolute "(مطلق)"
-  :relative "(نسبي)"
+  :absolute "مطلق"
+  :relative "نسبي"
   :move-to "الانتقال إلى"
   :line-to "خط إلى"
   :vertical-line "خط عمودي"

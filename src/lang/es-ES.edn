@@ -462,8 +462,8 @@
  :renderer.attribute.impl.d
  {:description "El atributo d define un trazado a dibujar."
   :edit "Editar trazado"
-  :absolute "(Absoluto)"
-  :relative "(Relativo)"
+  :absolute "Absoluto"
+  :relative "Relativo"
   :move-to "Mover a"
   :line-to "Línea a"
   :vertical-line "Línea vertical"

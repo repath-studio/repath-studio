@@ -462,8 +462,8 @@
  :renderer.attribute.impl.d
  {:description "Attributet d definierar en bana att rita."
   :edit "Redigera bana"
-  :absolute "(Absolut)"
-  :relative "(Relativ)"
+  :absolute "Absolut"
+  :relative "Relativ"
   :move-to "Flytta till"
   :line-to "Linje till"
   :vertical-line "Vertikal linje"

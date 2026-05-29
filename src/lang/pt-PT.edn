@@ -460,8 +460,8 @@
  :renderer.attribute.impl.d
  {:description "O atributo d define um caminho a desenhar."
   :edit "Editar caminho"
-  :absolute "(Absoluto)"
-  :relative "(Relativo)"
+  :absolute "Absoluto"
+  :relative "Relativo"
   :move-to "Mover para"
   :line-to "Linha para"
   :vertical-line "Linha vertical"

@@ -476,8 +476,8 @@
  :renderer.attribute.impl.d
  {:description "Das d-Attribut definiert einen zu zeichnenden Pfad."
   :edit "Pfad bearbeiten"
-  :absolute "(Absolut)"
-  :relative "(Relativ)"
+  :absolute "Absolut"
+  :relative "Relativ"
   :move-to "Bewegen zu"
   :line-to "Linie zu"
   :vertical-line "Vertikale Linie"

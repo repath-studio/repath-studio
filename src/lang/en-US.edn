@@ -453,8 +453,8 @@
  :renderer.attribute.impl.d
  {:description "The d attribute defines a path to be drawn."
   :edit "Edit path"
-  :absolute "(Absolute)"
-  :relative "(Relative)"
+  :absolute "Absolute"
+  :relative "Relative"
   :move-to "Move To"
   :line-to "Line To"
   :vertical-line "Vertical Line"

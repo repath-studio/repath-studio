@@ -421,8 +421,8 @@
  :renderer.attribute.impl.d
  {:description "d 속성은 그릴 패스를 정의합니다."
   :edit "패스 편집"
-  :absolute "(절대)"
-  :relative "(상대)"
+  :absolute "절대"
+  :relative "상대"
   :move-to "이동"
   :line-to "직선"
   :vertical-line "수직선"

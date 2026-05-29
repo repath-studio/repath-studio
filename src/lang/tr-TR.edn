@@ -454,8 +454,8 @@
  :renderer.attribute.impl.d
  {:description "d özniteliği çizilecek yolu tanımlar."
   :edit "Yolu düzenle"
-  :absolute "(Mutlak)"
-  :relative "(Göreceli)"
+  :absolute "Mutlak"
+  :relative "Göreceli"
   :move-to "Şuraya Taşı"
   :line-to "Şuraya Çizgi"
   :vertical-line "Dikey Çizgi"

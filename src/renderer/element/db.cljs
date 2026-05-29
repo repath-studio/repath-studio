@@ -44,7 +44,7 @@
    [:visible {:optional true} boolean?]
    [:locked {:optional true} boolean?]
    [:selected {:optional true} boolean?]
-   [:selected-handles {:default #{}} [:set keyword?]]
+   [:selected-handles {:optional true} [:set keyword?]]
    [:children {:optional true} [:vector ElementId]]
    [:bbox {:optional true} BBox]
    [:content {:optional true} string?]

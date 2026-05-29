@@ -70,6 +70,7 @@
  ::drop-segment
  (fn [db [_ el-id index timestamp]]
    (-> db
+       (element.handlers/clear-selected-handles el-id)
        (element.handlers/select-handle (segment-id index) el-id)
        (element.handlers/delete-segments)
        (history.handlers/finalize timestamp
@@ -87,14 +88,15 @@
         (rf/dispatch [::element.events/set-attr :d updated-d])))))
 
 (defn segment-input
-  [{:keys [d index]} {:keys [field-index value]}]
+  [{:keys [d index]} {:keys [field-index value id]}]
   (let [idle? @(rf/subscribe [::tool.subs/idle?])
         attrs {:d d
                :index index
                :field-index field-index
                :value value}]
-    [:input.form-element
-     {:key (str index "-" field-index "-" value)
+    [:input.form-element.min-w-0
+     {:id id
+      :key (str index "-" field-index "-" value)
       :default-value value
       :enter-key-hint "done"
       :disabled (not idle?)
@@ -104,49 +106,64 @@
 
 (defn segment-field
   [ctx label field-index segment]
-  (let [v (nth segment 1)]
+  (let [v (nth segment field-index)
+        input-id (str "seg-" (:index ctx) "-" field-index)]
     [:<>
-     [:label.form-element.px-1 label]
+     [:label.form-element {:for input-id
+                           :title label} label]
      [segment-input ctx {:field-index field-index
-                         :value v}]]))
+                         :value v
+                         :id input-id}]]))
 
 (defmulti segment-form (fn [segment _] (-> (first segment)
                                            (string/lower-case)
                                            (keyword))))
 
+(defn mapped-segment-forms
+  [segment ctx field-indices]
+  (->> field-indices
+       (map-indexed (fn [i label] [segment-field ctx label (inc i) segment]))))
+
 (defmethod segment-form :default
   [segment ctx]
-  [:div.grid.grid-cols-4.gap-px
-   [segment-field ctx "x" 1 segment]
-   [segment-field ctx "y" 2 segment]])
+  (mapped-segment-forms segment ctx ["x" "y"]))
 
 (defmethod segment-form :h
   [segment ctx]
-  [:div.grid.grid-cols-2.gap-px
-   [segment-field ctx "x" 1 segment]])
+  [[segment-field ctx "x" 1 segment]
+   [:div.col-span-2.bg-primary]])
 
 (defmethod segment-form :v
   [segment ctx]
-  [:div.grid.grid-cols-2.gap-px
-   [segment-field ctx "y" 1 segment]])
+  [[segment-field ctx "y" 1 segment]
+   [:div.col-span-2.bg-primary]])
 
 (defmethod segment-form :z [_segment _ctx])
 
+(defmethod segment-form :c
+  [segment ctx]
+  (mapped-segment-forms segment ctx ["x1" "y1" "x2" "y2" "x" "y"]))
+
+(defmethod segment-form :s
+  [segment ctx]
+  (mapped-segment-forms segment ctx ["x2" "y2" "x" "y"]))
+
+(defmethod segment-form :q
+  [segment ctx]
+  (mapped-segment-forms segment ctx ["x1" "y1" "x" "y"]))
+
 (defmethod segment-form :a
   [segment ctx]
-  [:div
-   [:div.grid.grid-cols-4.gap-px
-    [segment-field ctx "rx" 1 segment]
-    [segment-field ctx "ry" 2 segment]]
-   [:div.grid.grid-cols-2.gap-px
-    [segment-field ctx "x-axis-rotation" 3 segment]]
-   [:div.grid.grid-cols-2.gap-px
-    [segment-field ctx "large-arc-flag" 4 segment]]
-   [:div.grid.grid-cols-2.gap-px
-    [segment-field ctx "sweep-flag" 5 segment]]
-   [:div.grid.grid-cols-4.gap-px
-    [segment-field ctx "x" 6 segment]
-    [segment-field ctx "y" 7 segment]]])
+  [[segment-field ctx "rx" 1 segment]
+   [segment-field ctx "ry" 2 segment]
+   [segment-field ctx "x-rotation" 3 segment]
+   [:div.col-span-2.bg-primary]
+   [segment-field ctx "large-arc" 4 segment]
+   [:div.col-span-2.bg-primary]
+   [segment-field ctx "sweep" 5 segment]
+   [:div.col-span-2.bg-primary]
+   [segment-field ctx "x" 6 segment]
+   [segment-field ctx "y" 7 segment]])
 
 (defn segment-row
   [{:keys [el-id index segment d selected-handles]}]
@@ -156,35 +173,35 @@
         id (segment-id index)
         hovered? (segment-active? hovered-ids index)
         selected? (segment-active? selected-handles index)]
-    [:div.bg-primary.p-2
+    [:div.flex.flex-col.gap-px
      {:on-pointer-enter #(rf/dispatch [::document.events/set-hovered-id id])
-      :on-pointer-leave #(rf/dispatch [::document.events/clear-hovered])
-      :class [(when (and hovered? (not selected?)) "bg-overlay")
-              (when selected? "bg-accent text-accent-foreground")]}
-     [:div.flex.items-center.justify-between.mb-1
-      [:span
-       [:button.p-1.text-inherit
-        {:on-click #(rf/dispatch [::element.events/toggle-handle-selection
-                                  el-id id (.-shiftKey %)])
-         :class ["font-mono"
-                 (when selected? "bg-accent-foreground/10 rounded")]}
-        (first segment)]
-       [:button.p-1.text-inherit
-        {:on-click #(rf/dispatch [::events/open-remote-url url])}
-        (i18n.views/t label)]
-       (if (= command (string/lower-case command))
-         (i18n.views/t [::relative "(Relative)"])
-         (i18n.views/t [::absolute "(Absolute)"]))]
-      [:button.icon-button.small.bg-transparent.text-foreground-muted
-       {:on-click #(rf/dispatch [::drop-segment el-id index (.-timestamp %)])
-        :disabled (zero? index)
-        :title (if (zero? index)
-                 (i18n.views/t [::move-required
-                                "The initial move segment cannot be removed"])
-                 (i18n.views/t [::remove-segment "Remove segment"]))}
-       [views/icon "times"]]]
-     [segment-form segment {:d d
-                            :index index}]]))
+      :on-pointer-leave #(rf/dispatch [::document.events/clear-hovered])}
+     [:div.flex
+      [:div.bg-primary.flex-1.flex.p-1
+       {:on-click #(rf/dispatch [::element.events/toggle-handle-selection
+                                 el-id id (.-shiftKey %)])
+        :class [(when (and hovered? (not selected?)) "bg-overlay!")
+                (when selected? "bg-accent! text-accent-foreground")]}
+       [:div.font-mono.px-2.font-bold
+        (str "[" (first segment) "]")]
+       [:div.flex-1
+        [:span.underline.decoration-dotted.cursor-pointer
+         {:on-click #(rf/dispatch [::events/open-remote-url url])}
+         (i18n.views/t label)]
+        [:div.text-foreground-muted
+         (if (= command (string/lower-case command))
+           (i18n.views/t [::relative "Relative"])
+           (i18n.views/t [::absolute "Absolute"]))]]
+       (when (pos? index)
+         [::button.form-control-button.min-h-auto!.bg-transparent!
+          {:on-click #(rf/dispatch [::drop-segment el-id index (.-timestamp %)])
+           :disabled (zero? index)
+           :title (i18n.views/t [::remove-segment "Remove segment"])}
+          [views/icon "times"]])]]
+     (some->> (segment-form segment {:d d
+                                     :index index})
+              (into [:div.grid.gap-px
+                     {:style {:grid-template-columns "auto 1fr auto 1fr"}}]))]))
 
 (defn edit-form
   []
@@ -195,18 +212,15 @@
         {:keys [id tag selected-handles]} element]
     [:div.flex.flex-col.gap-px
      [attribute.views/heading "d" tag :d]
-     [:div.flex.overflow-hidden
-      {:style {:max-height "50vh"}}
-      [views/scroll-area
-       [:div.flex.flex-col.gap-px
-        (map-indexed (fn [index segment]
-                       ^{:key (str segment)}
-                       [segment-row {:el-id id
-                                     :index index
-                                     :segment segment
-                                     :d v
-                                     :selected-handles selected-handles}])
-                     segments)]]]]))
+     [:div.flex.flex-col.gap-px
+      (map-indexed (fn [index segment]
+                     ^{:key (str segment)}
+                     [segment-row {:el-id id
+                                   :index index
+                                   :segment segment
+                                   :d v
+                                   :selected-handles selected-handles}])
+                   segments)]]))
 
 (defmethod attribute.hierarchy/form-element [::element.hierarchy/element :d]
   [_ k v {:keys [disabled]}]
