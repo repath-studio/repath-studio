@@ -25,19 +25,20 @@
   []
   (let [selected-elements @(rf/subscribe [::element.subs/selected])
         select-box @(rf/subscribe [::tool.subs/select-box])]
-    (->> selected-elements
-         (map (fn [el]
-                [:g
-                 [element.hierarchy/render-edit el]
-                 (->> (element.hierarchy/handles el)
-                      (map tool.views/handle)
-                      (into [:g]))
-                 (when-let [pos (element.hierarchy/centroid el)]
-                   (let [offset (utils.element/offset el)
-                         pos (matrix/add offset pos)]
-                     [utils.svg/dot pos
-                      [:title (i18n.views/t [::centroid "Centroid"])]]))]))
-         (into [:g [element.hierarchy/render select-box]]))))
+    (when (seq selected-elements)
+      (->> selected-elements
+           (map (fn [el]
+                  [:g
+                   [element.hierarchy/render-edit el]
+                   (->> (element.hierarchy/handles el)
+                        (map tool.views/handle)
+                        (into [:g]))
+                   (when-let [pos (element.hierarchy/centroid el)]
+                     (let [offset (utils.element/offset el)
+                           pos (matrix/add offset pos)]
+                       [utils.svg/dot pos
+                        [:title (i18n.views/t [::centroid "Centroid"])]]))]))
+           (into [:g [element.hierarchy/render select-box]])))))
 
 (rf/dispatch [::action.events/register-action
               {:id :tool/edit

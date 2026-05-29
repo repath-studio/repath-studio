@@ -119,6 +119,10 @@
                                            (string/lower-case)
                                            (keyword))))
 
+(defn col-span
+  []
+  [:div.col-span-2.bg-primary])
+
 (defn mapped-segment-forms
   [segment ctx field-indices]
   (->> field-indices
@@ -131,12 +135,12 @@
 (defmethod segment-form :h
   [segment ctx]
   [[segment-field ctx "x" 1 segment]
-   [:div.col-span-2.bg-primary]])
+   [col-span]])
 
 (defmethod segment-form :v
   [segment ctx]
   [[segment-field ctx "y" 1 segment]
-   [:div.col-span-2.bg-primary]])
+   [col-span]])
 
 (defmethod segment-form :z [_segment _ctx])
 
@@ -157,11 +161,11 @@
   [[segment-field ctx "rx" 1 segment]
    [segment-field ctx "ry" 2 segment]
    [segment-field ctx "x-rotation" 3 segment]
-   [:div.col-span-2.bg-primary]
+   [col-span]
    [segment-field ctx "large-arc" 4 segment]
-   [:div.col-span-2.bg-primary]
+   [col-span]
    [segment-field ctx "sweep" 5 segment]
-   [:div.col-span-2.bg-primary]
+   [col-span]
    [segment-field ctx "x" 6 segment]
    [segment-field ctx "y" 7 segment]])
 
@@ -177,7 +181,7 @@
      {:on-pointer-enter #(rf/dispatch [::document.events/set-hovered-id id])
       :on-pointer-leave #(rf/dispatch [::document.events/clear-hovered])}
      [:div.flex
-      [:div.bg-primary.flex-1.flex.p-1
+      [:div.bg-primary.flex-1.flex.px-1.py-2
        {:on-click #(rf/dispatch [::element.events/toggle-handle-selection
                                  el-id id (.-shiftKey %)])
         :class [(when (and hovered? (not selected?)) "bg-overlay!")
@@ -186,15 +190,18 @@
         (str "[" (first segment) "]")]
        [:div.flex-1
         [:span.underline.decoration-dotted.cursor-pointer
-         {:on-click #(rf/dispatch [::events/open-remote-url url])}
+         {:on-click #(do (.stopPropagation %)
+                         (rf/dispatch [::events/open-remote-url url]))}
          (i18n.views/t label)]
         [:div.text-foreground-muted
          (if (= command (string/lower-case command))
            (i18n.views/t [::relative "Relative"])
            (i18n.views/t [::absolute "Absolute"]))]]
        (when (pos? index)
-         [::button.form-control-button.min-h-auto!.bg-transparent!
-          {:on-click #(rf/dispatch [::drop-segment el-id index (.-timestamp %)])
+         [::button.form-control-button.min-h-auto!.bg-transparent!.h-6.75!
+          {:on-click #(do (.stopPropagation %)
+                          (rf/dispatch [::drop-segment
+                                        el-id index (.-timestamp %)]))
            :disabled (zero? index)
            :title (i18n.views/t [::remove-segment "Remove segment"])}
           [views/icon "times"]])]]
@@ -212,15 +219,14 @@
         {:keys [id tag selected-handles]} element]
     [:div.flex.flex-col.gap-px
      [attribute.views/heading "d" tag :d]
-     [:div.flex.flex-col.gap-px
-      (map-indexed (fn [index segment]
-                     ^{:key (str segment)}
-                     [segment-row {:el-id id
-                                   :index index
-                                   :segment segment
-                                   :d v
-                                   :selected-handles selected-handles}])
-                   segments)]]))
+     (->> segments
+          (map-indexed (fn [index segment]
+                         [segment-row {:el-id id
+                                       :index index
+                                       :segment segment
+                                       :d v
+                                       :selected-handles selected-handles}]))
+          (into [:div.flex.flex-col.gap-px]))]))
 
 (defmethod attribute.hierarchy/form-element [::element.hierarchy/element :d]
   [_ k v {:keys [disabled]}]

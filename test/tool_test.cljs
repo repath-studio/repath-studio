@@ -23,7 +23,7 @@
      (testing "edit tool"
        (rf/dispatch [::tool.events/activate ::tool.impl.base.edit/edit])
        (is (= @active-tool ::tool.impl.base.edit/edit))
-       (is (= (tool.hierarchy/render ::tool.impl.base.edit/edit) [:g]))
+       (is (= (tool.hierarchy/render ::tool.impl.base.edit/edit) nil))
 
        (rf/dispatch [::element.events/add {:tag :rect
                                            :attrs {:width 100

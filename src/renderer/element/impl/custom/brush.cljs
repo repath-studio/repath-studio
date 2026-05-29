@@ -183,7 +183,7 @@
   (->> el :attrs :points
        (points->vec)
        (map-indexed (fn [index point]
-                      (let [point (mapv utils.length/unit->px point)]
+                      (let [point (mapv utils.length/unit->px (take 2 point))]
                         {:id (keyword (str index))
                          :type :handle
                          :label [::brush-point "brush point"]

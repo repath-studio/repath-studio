@@ -157,7 +157,7 @@
              :stroke-opacity ".5"
              :stroke-width (str (/ 1 zoom))}}))
 
-(m/=> set-select-box [:-> App Element App])
+(m/=> set-select-box [:-> App [:maybe Element] App])
 (defn set-select-box
   [db el]
   (assoc db :select-box el))

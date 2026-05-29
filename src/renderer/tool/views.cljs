@@ -26,7 +26,7 @@
         pointer-handler (partial input.impl.pointer/handler! el)
         vertical-size (cond-> handle-size (= orientation :vertical) (* 0.7))
         horizontal-size (cond-> handle-size (= orientation :horizontal) (* 0.7))
-        active (or selected? (= (:id clicked-element) id))
+        active (or selected? (= clicked-element el))
         attrs {:x (- x (/ horizontal-size 2))
                :y (- y (/ vertical-size 2))
                :rx (when rounded (/ handle-size 2))
@@ -70,7 +70,6 @@
                     :fill "transparent"
                     :shape-rendering "crispEdges"}]
     [:rect (merge rect-attrs {:stroke-width (/ 2 zoom)
-                              :stroke "var(--accent-foreground)"
                               :on-pointer-up pointer-handler
                               :on-pointer-down pointer-handler
                               :on-pointer-move pointer-handler})]))
