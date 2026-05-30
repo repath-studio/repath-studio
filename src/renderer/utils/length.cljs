@@ -75,7 +75,7 @@
   ([v precision remove-trailing-zeros]
    (cond-> (.toFixed v precision)
      remove-trailing-zeros
-     (-> js/parseFloat str)))) ; REVIEW
+     (-> js/parseFloat str))))
 
 (m/=> transform [:-> [:or string? number? nil?] ifn? [:* any?] string?])
 (defn transform

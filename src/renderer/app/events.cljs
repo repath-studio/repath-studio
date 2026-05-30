@@ -125,7 +125,7 @@
     ;; The order of the following events is important.
     ;; Changes require thorough testing on all platforms.
     :fx (into [[:dispatch [::error.events/init-reporting]]
-               ;; We initialize values that might flicker the view first.
+               ;; We initialize values that might flicker the view
                [:dispatch [::theme.events/set-native-mode]]
                [:dispatch [::theme.events/update-data-theme]]
                [:dispatch [::theme.events/update-meta-color]]
