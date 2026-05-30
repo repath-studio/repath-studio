@@ -13,30 +13,33 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.bounds :as utils.bounds]))
 
+(defn common-handle-attrs
+  [position size rounded]
+  (let [[x y] position
+        half-size (/ size 2)]
+    {:x (- x half-size)
+     :y (- y half-size)
+     :rx (when rounded half-size)
+     :width size
+     :height size}))
+
 (m/=> handle [:-> Handle any?])
 (defn handle
   [el]
-  (let [{:keys [position id cursor label orientation rounded implied parent]} el
-        [x y] position
-        zoom @(rf/subscribe [::document.subs/zoom])
+  (let [{:keys [position id cursor label rounded implied parent]} el
         clicked-element @(rf/subscribe [::app.subs/clicked-element])
         handle-size @(rf/subscribe [::document.subs/handle-size])
-        selected? @(rf/subscribe [::element.subs/handle-selected? parent id])
-        hovered? @(rf/subscribe [::element.subs/hovered? id])
+        selected @(rf/subscribe [::element.subs/handle-selected? parent id])
+        selected (or selected (= clicked-element el))
+        hovered @(rf/subscribe [::element.subs/hovered? id])
         pointer-handler (partial input.impl.pointer/handler! el)
-        vertical-size (cond-> handle-size (= orientation :vertical) (* 0.7))
-        horizontal-size (cond-> handle-size (= orientation :horizontal) (* 0.7))
-        active (or selected? (= clicked-element el))
-        attrs {:x (- x (/ horizontal-size 2))
-               :y (- y (/ vertical-size 2))
-               :rx (when rounded (/ handle-size 2))
-               :width horizontal-size
-               :height vertical-size}]
+        attrs (common-handle-attrs position handle-size rounded)
+        active (or selected hovered)]
     [:g
      [:rect (merge attrs
                    {:stroke "var(--accent-foreground)"
                     :stroke-opacity ".5"
-                    :stroke-width (/ (if (or active hovered?) 4 3) zoom)
+                    :stroke-width 3
                     :cursor (or cursor "move")
                     :pointer-events (when implied "none")
                     :on-pointer-up pointer-handler
@@ -44,14 +47,15 @@
                     :on-pointer-move pointer-handler})
       (when label [:title (i18n.views/t label)])]
      [:rect (merge attrs
-                   {:fill (if active
-                            "var(--accent)"
-                            (if implied "lightgray" "var(--accent-foreground)"))
-                    :stroke (if (or active hovered?)
-                              "var(--accent)"
-                              (when-not implied "var(--foreground-muted)"))
+                   {:fill (cond
+                            selected "var(--accent)"
+                            implied "lightgray"
+                            :else "var(--accent-foreground)")
+                    :stroke (cond
+                              active "var(--accent)"
+                              (not implied) "var(--foreground-muted)")
                     :pointer-events "none"
-                    :stroke-width (/ (if (or active hovered?) 2 1) zoom)})]]))
+                    :stroke-width 1})]]))
 
 (m/=> selected-bbox [:-> BBox any?])
 (defn selected-bbox

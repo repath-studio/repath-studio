@@ -142,27 +142,28 @@
       "H"
       [(when-let [[_ prev-y] prev-ep]
          {:point-type :end-point
-          :pos (->> [(second segment) prev-y]
-                    (mapv utils.length/unit->px))})]
+          :cursor "ew-resize"
+          :pos (mapv utils.length/unit->px [(second segment) prev-y])})]
 
       "V"
       [(when-let [[prev-x _] prev-ep]
          {:point-type :end-point
-          :pos (->> [prev-x (second segment)]
-                    (mapv utils.length/unit->px))})]
+          :cursor "ns-resize"
+          :pos (mapv utils.length/unit->px [prev-x (second segment)])})]
 
       nil)))
 
 (defn segment-handles
   [{:keys [parent endpoints segments offset]} index segment]
   (->> (handles endpoints segments index segment)
-       (mapv (fn [{:keys [point-type pos rounded implied]}]
+       (mapv (fn [{:keys [point-type pos rounded implied cursor]}]
                (let [label (-> (utils.path/segment->command segment)
                                (attribute.impl.d/path-commands)
                                :label)]
                  {:id (keyword index point-type)
                   :position (matrix/add offset pos)
                   :label label
+                  :cursor cursor
                   :type :handle
                   :action :edit
                   :implied (boolean implied)
