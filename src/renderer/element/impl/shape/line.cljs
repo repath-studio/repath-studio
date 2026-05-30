@@ -4,18 +4,13 @@
   (:require
    [clojure.core.matrix :as matrix]
    [clojure.string :as string]
-   [re-frame.core :as rf]
-   [renderer.app.subs :as-alias app.subs]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
-   [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
    [renderer.input.handlers :as input.handlers]
-   [renderer.tool.views :as tool.views]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
-   [renderer.utils.length :as utils.length]
-   [renderer.utils.svg :as utils.svg]))
+   [renderer.utils.length :as utils.length]))
 
 (hierarchy/derive! :line ::element.hierarchy/shape)
 
@@ -60,48 +55,25 @@
     (string/join " " ["M" x1 y1
                       "L" x2 y2])))
 
-(defmethod element.hierarchy/render-edit :line
+(defmethod element.hierarchy/handles :line
   [el]
-  (let [clicked-element @(rf/subscribe [::app.subs/clicked-element])
-        zoom @(rf/subscribe [::document.subs/zoom])
-        margin (/ 15 zoom)
-        offset (utils.element/offset el)
+  (let [offset (utils.element/offset el)
         {{:keys [x1 y1 x2 y2]} :attrs} el
-        [x1 y1 x2 y2] (mapv utils.length/unit->px [x1 y1 x2 y2])
-        [x1 y1] (matrix/add offset [x1 y1])
-        [x2 y2] (matrix/add offset [x2 y2])]
-    [:g
-     {:key ::edit-handles}
-     (map (fn [handle]
-            (let [{:keys [x y id]} handle
-                  is-active (and (= (:id clicked-element) id)
-                                 (= (:element-id clicked-element) (:id el)))]
-              ^{:key id}
-              [:g
-               [tool.views/handle handle]
-               (when is-active
-                 [utils.svg/label
-                  (string/join " " [(utils.length/->fixed x 2 false)
-                                    (utils.length/->fixed y 2 false)])
-                  {:x (- x margin)
-                   :y (+ y margin)
-                   :text-anchor "end"}])]))
-          [{:x x1
-            :y y1
-            :id :starting-point
-            :label [::starting-point "starting point"]
-            :type :handle
-            :action :edit
-            :element-id (:id el)}
-           {:x x2
-            :y y2
-            :id :ending-point
-            :label [::ending-point "ending point"]
-            :type :handle
-            :action :edit
-            :element-id (:id el)}])]))
+        [x1 y1 x2 y2] (mapv utils.length/unit->px [x1 y1 x2 y2])]
+    [{:position (matrix/add offset [x1 y1])
+      :id :starting-point
+      :label [::starting-point "starting point"]
+      :type :handle
+      :action :edit
+      :v (:id el)}
+     {:position (matrix/add offset [x2 y2])
+      :id :ending-point
+      :label [::ending-point "ending point"]
+      :type :handle
+      :action :edit
+      :parent (:id el)}]))
 
-(defmethod element.hierarchy/edit-drag :line
+(defmethod element.hierarchy/handle-drag :line
   [el offset handle lock?]
   (let [[x y] (cond-> offset
                 lock?

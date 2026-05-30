@@ -108,7 +108,8 @@
   :group-selection "选择成组"
   :ungroup-selection "选择取消成组"
   :cut-selection "剪切选择"
-  :trace-image "描摹图像"}
+  :trace-image "描摹图像"
+  :toggle-handle-selection "Toggle handle selection"}
 
  :renderer.element.impl.animation.animate
  {:label "动画"
@@ -394,8 +395,8 @@
  :renderer.attribute.impl.d
  {:description "d 属性定义要绘制的路径。"
   :edit "编辑路径"
-  :absolute "（绝对）"
-  :relative "（相对）"
+  :absolute "绝对"
+  :relative "相对"
   :move-to "移动到"
   :line-to "线条到"
   :vertical-line "垂直线"
@@ -405,7 +406,8 @@
   :quadratic-bezier-curve "二次贝塞尔曲线"
   :shortcut-quadratic "简写二次贝塞尔曲线"
   :elliptical-arc-curve "椭圆弧曲线"
-  :close-path "闭合路径"}
+  :close-path "闭合路径"
+  :remove-segment "Remove segment"}
 
  :renderer.attribute.impl.length
  {:increase "增加"
@@ -457,17 +459,23 @@
   :async "异步"
   :auto "自动"}
 
- :renderer.tool.impl.base.edit
- {:label "编辑"
-  :help-idle-drag [:div "拖动控制柄修改您的形状。"]
-  :help-idle-click [:div "点击元素更改选择"]
-  :help-edit [:div "按住 %1 限制方向。"]
-  :help-type [:div "输入您的文本。"]
-  :select-element "选择元素"
-  :edit "编辑"
-  :centroid "质心"
-  :handle "句柄"
-  :tool-edit "编辑"}
+ :renderer.tool.impl.base.edit.core
+ {:centroid "质心"
+  :label "编辑"}
+
+ :renderer.tool.impl.base.edit.idle
+ {:help-idle-drag [:div "拖动控制柄修改您的形状。"]
+  :help-idle-click [:div "点击元素更改选择"]}
+
+ :renderer.tool.impl.base.edit.select
+ {:select-element "选择元素"}
+
+ :renderer.tool.impl.base.edit.edit
+ {:help-edit [:div "按住 %1 限制方向。"]
+  :handle "句柄"}
+
+ :renderer.tool.impl.base.edit.type
+ {:help-type [:div "输入您的文本。"]}
 
  :renderer.tool.impl.base.transform.core
  {:label "变换"
@@ -605,7 +613,8 @@
  {:select-file "选择文件"}
 
  :renderer.attribute.impl.points
- {:edit-points "编辑点"}
+ {:edit-points "编辑点"
+  :remove-point "Remove point"}
 
  :renderer.frame.views
  {:main-canvas "主画布"}

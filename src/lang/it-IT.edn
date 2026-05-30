@@ -110,7 +110,8 @@
   :group-selection "Raggruppa selezione"
   :ungroup-selection "Separa selezione"
   :cut-selection "Taglia selezione"
-  :trace-image "Traccia immagine"}
+  :trace-image "Traccia immagine"
+  :toggle-handle-selection "Toggle handle selection"}
 
  :renderer.element.impl.animation.animate
  {:label "Anima"
@@ -471,8 +472,8 @@
  :renderer.attribute.impl.d
  {:description "L'attributo d definisce un tracciato da disegnare."
   :edit "Modifica tracciato"
-  :absolute "(Assoluto)"
-  :relative "(Relativo)"
+  :absolute "Assoluto"
+  :relative "Relativo"
   :move-to "Sposta a"
   :line-to "Linea a"
   :vertical-line "Linea verticale"
@@ -482,7 +483,8 @@
   :quadratic-bezier-curve "Curva di Bézier quadratica"
   :shortcut-quadratic "Curva di Bézier quadratica scorciatoia"
   :elliptical-arc-curve "Curva ad arco ellittico"
-  :close-path "Chiudi tracciato"}
+  :close-path "Chiudi tracciato"
+  :remove-segment "Remove segment"}
 
  :renderer.attribute.impl.length
  {:increase "Aumenta"
@@ -546,17 +548,23 @@
   :async "Asincronamente"
   :auto "Automatico"}
 
- :renderer.tool.impl.base.edit
- {:label "Modifica"
-  :help-idle-drag [:div "Trascina una maniglia per modificare la tua forma."]
-  :help-idle-click [:div "Clicca su un elemento per cambiare selezione"]
-  :help-edit [:div "Tieni premuto %1 per limitare la direzione."]
-  :help-type [:div "Inserisci il tuo testo."]
-  :select-element "Seleziona elemento"
-  :edit "Modifica"
-  :centroid "Centroide"
-  :handle "maniglia"
-  :tool-edit "Modifica"}
+ :renderer.tool.impl.base.edit.core
+ {:centroid "Centroide"
+  :label "Modifica"}
+
+ :renderer.tool.impl.base.edit.idle
+ {:help-idle-drag [:div "Trascina una maniglia per modificare la tua forma."]
+  :help-idle-click [:div "Clicca su un elemento per cambiare selezione"]}
+
+ :renderer.tool.impl.base.edit.select
+ {:select-element "Seleziona elemento"}
+
+ :renderer.tool.impl.base.edit.edit
+ {:help-edit [:div "Tieni premuto %1 per limitare la direzione."]
+  :handle "maniglia"}
+
+ :renderer.tool.impl.base.edit.type
+ {:help-type [:div "Inserisci il tuo testo."]}
 
  :renderer.tool.impl.base.transform.core
  {:label "Trasforma"
@@ -700,7 +708,8 @@
  {:select-file "Seleziona file"}
 
  :renderer.attribute.impl.points
- {:edit-points "Modifica punti"}
+ {:edit-points "Modifica punti"
+  :remove-point "Remove point"}
 
  :renderer.frame.views
  {:main-canvas "tela principale"}

@@ -110,7 +110,8 @@
   :group-selection "Grouper la sélection"
   :ungroup-selection "Dégrouper la sélection"
   :cut-selection "Couper la sélection"
-  :trace-image "Vectoriser l'image"}
+  :trace-image "Vectoriser l'image"
+  :toggle-handle-selection "Toggle handle selection"}
 
  :renderer.element.impl.animation.animate
  {:label "Animer"
@@ -467,8 +468,8 @@
  :renderer.attribute.impl.d
  {:description "L'attribut d définit un chemin à dessiner."
   :edit "Éditer le chemin"
-  :absolute "(Absolu)"
-  :relative "(Relatif)"
+  :absolute "Absolu"
+  :relative "Relatif"
   :move-to "Déplacer vers"
   :line-to "Ligne vers"
   :vertical-line "Ligne verticale"
@@ -478,7 +479,8 @@
   :quadratic-bezier-curve "Courbe de Bézier quadratique"
   :shortcut-quadratic "Raccourci Bézier quadratique"
   :elliptical-arc-curve "Courbe d'arc elliptique"
-  :close-path "Fermer le chemin"}
+  :close-path "Fermer le chemin"
+  :remove-segment "Remove segment"}
 
  :renderer.attribute.impl.length
  {:increase "Augmenter"
@@ -541,17 +543,23 @@
   :async "Asynchrone"
   :auto "Automatique"}
 
- :renderer.tool.impl.base.edit
- {:label "Éditer"
-  :help-idle-drag [:div "Faites glisser une poignée pour modifier votre forme."]
-  :help-idle-click [:div "Cliquez sur un élément pour changer la sélection"]
-  :help-edit [:div "Maintenez %1 pour restreindre la direction."]
-  :help-type [:div "Entrez votre texte."]
-  :select-element "Sélectionner un élément"
-  :edit "Éditer"
-  :centroid "Centroïde"
-  :handle "poignée"
-  :tool-edit "Éditer"}
+ :renderer.tool.impl.base.edit.core
+ {:centroid "Centroïde"
+  :label "Éditer"}
+
+ :renderer.tool.impl.base.edit.idle
+ {:help-idle-drag [:div "Faites glisser une poignée pour modifier votre forme."]
+  :help-idle-click [:div "Cliquez sur un élément pour changer la sélection"]}
+
+ :renderer.tool.impl.base.edit.select
+ {:select-element "Sélectionner un élément"}
+
+ :renderer.tool.impl.base.edit.edit
+ {:help-edit [:div "Maintenez %1 pour restreindre la direction."]
+  :handle "poignée"}
+
+ :renderer.tool.impl.base.edit.type
+ {:help-type [:div "Entrez votre texte."]}
 
  :renderer.tool.impl.base.transform.core
  {:label "Transformer"
@@ -696,7 +704,8 @@
  {:select-file "Sélectionner un fichier"}
 
  :renderer.attribute.impl.points
- {:edit-points "Éditer les points"}
+ {:edit-points "Éditer les points"
+  :remove-point "Remove point"}
 
  :renderer.frame.views
  {:main-canvas "canevas principal"}

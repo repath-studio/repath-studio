@@ -121,6 +121,7 @@
    [:pivot-point {:optional true} Vec2]
    [:anchor-point {:default [0.5 0.5]} Vec2]
    [:anchor-offset {:default [0.5 0.5]} Vec2]
+   [:select-box {:optional true} [:maybe Element]]
    [:clicked-element {:optional true} [:or Element Handle]]
    [:clipboard {:default {}} [:map {:closed true}
                               [:bbox {:optional true} BBox]

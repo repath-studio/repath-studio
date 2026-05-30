@@ -109,7 +109,8 @@
   :group-selection "تجميع التحديد"
   :ungroup-selection "إلغاء تجميع التحديد"
   :cut-selection "قص التحديد"
-  :trace-image "تتبع الصورة"}
+  :trace-image "تتبع الصورة"
+  :toggle-handle-selection "Toggle handle selection"}
 
  :renderer.element.impl.animation.animate
  {:label "تحريك"
@@ -441,8 +442,8 @@
  :renderer.attribute.impl.d
  {:description "خاصية d تحدد مساراً ليتم رسمه."
   :edit "تحرير المسار"
-  :absolute "(مطلق)"
-  :relative "(نسبي)"
+  :absolute "مطلق"
+  :relative "نسبي"
   :move-to "الانتقال إلى"
   :line-to "خط إلى"
   :vertical-line "خط عمودي"
@@ -452,7 +453,8 @@
   :quadratic-bezier-curve "منحنى بيزيه التربيعي"
   :shortcut-quadratic "منحنى بيزيه التربيعي المختصر"
   :elliptical-arc-curve "منحنى القوس البيضاوي"
-  :close-path "إغلاق المسار"}
+  :close-path "إغلاق المسار"
+  :remove-segment "Remove segment"}
 
  :renderer.attribute.impl.length
  {:increase "زيادة"
@@ -510,17 +512,23 @@
   :async "غير متزامن"
   :auto "تلقائي"}
 
- :renderer.tool.impl.base.edit
- {:label "تحرير"
-  :help-idle-drag [:div "اسحب مقبضاً لتعديل شكلك."]
-  :help-idle-click [:div "انقر على عنصر لتغيير التحديد"]
-  :help-edit [:div "اضغط %1 لتقييد الاتجاه."]
-  :help-type [:div "أدخل النص الخاص بك."]
-  :select-element "تحديد عنصر"
-  :edit "تحرير"
-  :centroid "مركز الكتلة"
-  :handle "مقبض"
-  :tool-edit "تحرير"}
+ :renderer.tool.impl.base.edit.core
+ {:centroid "مركز الكتلة"
+  :label "تحرير"}
+
+ :renderer.tool.impl.base.edit.idle
+ {:help-idle-drag [:div "اسحب مقبضاً لتعديل شكلك."]
+  :help-idle-click [:div "انقر على عنصر لتغيير التحديد"]}
+
+ :renderer.tool.impl.base.edit.select
+ {:select-element "تحديد عنصر"}
+
+ :renderer.tool.impl.base.edit.edit
+ {:help-edit [:div "اضغط %1 لتقييد الاتجاه."]
+  :handle "مقبض"}
+
+ :renderer.tool.impl.base.edit.type
+ {:help-type [:div "أدخل النص الخاص بك."]}
 
  :renderer.tool.impl.base.transform.core
  {:label "تحويل"
@@ -659,7 +667,8 @@
  {:select-file "اختيار ملف"}
 
  :renderer.attribute.impl.points
- {:edit-points "تحرير النقاط"}
+ {:edit-points "تحرير النقاط"
+  :remove-point "Remove point"}
 
  :renderer.frame.views
  {:main-canvas "اللوحة الرئيسية"}

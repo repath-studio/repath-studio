@@ -55,7 +55,12 @@
 
 (def root-options
   #js {:onCaughtError (.reactErrorHandler sentry)
-       :onRecoverableError (.reactErrorHandler sentry)})
+       :onRecoverableError (.reactErrorHandler sentry)
+       :onUncaughtError (.reactErrorHandler
+                         sentry
+                         (fn [error info]
+                           (js/console.warn "Uncaught error:"
+                                            error (.-componentStack info))))})
 
 (defonce root (delay (-> (.getElementById js/document "app")
                          (ra.dom.client/create-root root-options))))

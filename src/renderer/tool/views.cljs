@@ -6,52 +6,56 @@
    [renderer.app.subs :as-alias app.subs]
    [renderer.db :refer [BBox]]
    [renderer.document.subs :as-alias document.subs]
+   [renderer.element.subs :as-alias element.subs]
    [renderer.i18n.views :as i18n.views]
    [renderer.input.impl.pointer :as input.impl.pointer]
    [renderer.tool.db :refer [Handle]]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.bounds :as utils.bounds]))
 
+(defn common-handle-attrs
+  [position size rounded]
+  (let [[x y] position
+        half-size (/ size 2)]
+    {:x (- x half-size)
+     :y (- y half-size)
+     :rx (when rounded half-size)
+     :width size
+     :height size}))
+
 (m/=> handle [:-> Handle any?])
 (defn handle
   [el]
-  (let [{:keys [x y id cursor element-id label orientation rounded]} el
-        zoom @(rf/subscribe [::document.subs/zoom])
+  (let [{:keys [position id cursor label rounded implied parent]} el
         clicked-element @(rf/subscribe [::app.subs/clicked-element])
         handle-size @(rf/subscribe [::document.subs/handle-size])
+        selected @(rf/subscribe [::element.subs/handle-selected? parent id])
+        selected (or selected (= clicked-element el))
+        hovered @(rf/subscribe [::element.subs/hovered? id])
         pointer-handler (partial input.impl.pointer/handler! el)
-        stroke-width (/ 1 zoom)
-        vertical-size (cond-> handle-size (= orientation :vertical) (* 0.7))
-        horizontal-size (cond-> handle-size (= orientation :horizontal) (* 0.7))
-        rx (when rounded (/ handle-size 2))
-        x (- x (/ horizontal-size 2))
-        y (- y (/ vertical-size 2))
-        active (and (= (:id clicked-element) id)
-                    (= (:element-id clicked-element) element-id))]
+        attrs (common-handle-attrs position handle-size rounded)
+        active (or selected hovered)]
     [:g
-     [:rect {:stroke "var(--accent-foreground)"
-             :stroke-opacity ".5"
-             :stroke-width (/ 3 zoom)
-             :x x
-             :y y
-             :rx rx
-             :width horizontal-size
-             :height vertical-size
-             :cursor (or cursor "move")
-             :on-pointer-up pointer-handler
-             :on-pointer-down pointer-handler
-             :on-pointer-move pointer-handler}
-      (when label
-        [:title (i18n.views/t label)])]
-     [:rect {:fill (if active "var(--accent)" "var(--accent-foreground)")
-             :stroke (if active "var(--accent)" "var(--foreground-muted)")
-             :stroke-width stroke-width
-             :x x
-             :y y
-             :rx rx
-             :width horizontal-size
-             :height vertical-size
-             :pointer-events "none"}]]))
+     [:rect (merge attrs
+                   {:stroke "var(--accent-foreground)"
+                    :stroke-opacity ".5"
+                    :stroke-width 3
+                    :cursor (or cursor "move")
+                    :pointer-events (when implied "none")
+                    :on-pointer-up pointer-handler
+                    :on-pointer-down pointer-handler
+                    :on-pointer-move pointer-handler})
+      (when label [:title (i18n.views/t label)])]
+     [:rect (merge attrs
+                   {:fill (cond
+                            selected "var(--accent)"
+                            implied "lightgray"
+                            :else "var(--accent-foreground)")
+                    :stroke (cond
+                              active "var(--accent)"
+                              (not implied) "var(--foreground-muted)")
+                    :pointer-events "none"
+                    :stroke-width 1})]]))
 
 (m/=> selected-bbox [:-> BBox any?])
 (defn selected-bbox
@@ -70,7 +74,6 @@
                     :fill "transparent"
                     :shape-rendering "crispEdges"}]
     [:rect (merge rect-attrs {:stroke-width (/ 2 zoom)
-                              :stroke "var(--accent-foreground)"
                               :on-pointer-up pointer-handler
                               :on-pointer-down pointer-handler
                               :on-pointer-move pointer-handler})]))
@@ -99,36 +102,28 @@
         bbox (cond-> bbox idle? min-bbox)
         [min-x min-y max-x max-y] bbox
         [w h] (utils.bounds/->dimensions bbox)]
-    (->> [{:x min-x
-           :y min-y
+    (->> [{:position [min-x min-y]
            :id :top-left
            :cursor "nwse-resize"}
-          {:x max-x
-           :y min-y
+          {:position [max-x min-y]
            :id :top-right
            :cursor "nesw-resize"}
-          {:x min-x
-           :y max-y
+          {:position [min-x max-y]
            :id :bottom-left
            :cursor "nesw-resize"}
-          {:x max-x
-           :y max-y
+          {:position [max-x max-y]
            :id :bottom-right
            :cursor "nwse-resize"}
-          {:x (+ min-x (/ w 2))
-           :y min-y
+          {:position [(+ min-x (/ w 2)) min-y]
            :id :top-middle
            :cursor "ns-resize"}
-          {:x max-x
-           :y (+ min-y (/ h 2))
+          {:position [max-x (+ min-y (/ h 2))]
            :id :middle-right
            :cursor "ew-resize"}
-          {:x min-x
-           :y (+ min-y (/ h 2))
+          {:position [min-x (+ min-y (/ h 2))]
            :id :middle-left
            :cursor "ew-resize"}
-          {:x (+ min-x (/ w 2))
-           :y max-y
+          {:position [(+ min-x (/ w 2)) max-y]
            :id :bottom-middle
            :cursor "ns-resize"}]
          (mapv (comp handle

@@ -1,17 +1,23 @@
 (ns renderer.attribute.impl.points
   "https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/points"
   (:require
-   ["@radix-ui/react-popover" :as Popover]
    [clojure.string :as string]
    [re-frame.core :as rf]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.views :as attribute.views]
+   [renderer.document.events :as-alias document.events]
    [renderer.element.events :as-alias element.events]
+   [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as-alias element.hierarchy]
+   [renderer.element.subs :as-alias element.subs]
+   [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
+   [renderer.tool.events :as-alias tool.events]
+   [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.tool.impl.base.edit.core :as tool.impl.base.edit]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.attribute :as utils.attribute]
-   [renderer.utils.vec :as utils.vec]
+   [renderer.utils.key :as utils.key]
    [renderer.views :as views]))
 
 (defmethod attribute.hierarchy/description [::element.hierarchy/element :points]
@@ -22,53 +28,86 @@
      system. If the attribute contains an odd number of coordinates, the last
      one will be ignored."]])
 
-(defn remove-nth
-  [points index]
-  (let [points (->> (utils.vec/remove-nth points index)
-                    (flatten)
-                    (string/join " "))]
-    (rf/dispatch [::element.events/set-attr :points points])))
+(rf/reg-event-db
+ ::drop-point
+ (fn [db [_ el-id index timestamp]]
+   (-> db
+       (element.handlers/clear-selected-handles el-id)
+       (element.handlers/select-handle (keyword (str index)) el-id)
+       (element.handlers/delete-segments)
+       (history.handlers/finalize timestamp [::remove-point "Remove point"]))))
+
+(defn set-point
+  [e {:keys [index points value axis]}]
+  (let [new-v (.. e -target -value)]
+    (if (js/isNaN new-v)
+      (set! (.. e -target -value) value)
+      (let [prev-point (nth points index)
+            new-point (if (= axis :x)
+                        [new-v (second prev-point)]
+                        [(first prev-point) new-v])
+            points (assoc points index new-point)
+            points (->> points
+                        (flatten)
+                        (string/join " "))]
+        (rf/dispatch [::element.events/set-attr :points points])))))
+
+(defn input
+  [index v points axis]
+  (let [idle? @(rf/subscribe [::tool.subs/idle?])
+        point-attrs {:index index
+                     :points points
+                     :value v
+                     :axis axis}]
+    [:input.form-element
+     {:key (str axis index)
+      :default-value v
+      :aria-label (name axis)
+      :enter-key-hint "done"
+      :disabled (not idle?)
+      :on-blur #(set-point % point-attrs)
+      :on-pointer-up attribute.views/pointer-up-handler
+      :on-key-down #(utils.key/down-handler % set-point point-attrs)}]))
 
 (defn point-row
-  [index [x y] points]
-  [:div.grid.grid-flow-col.gap-px
-   {:dir "ltr"
-    :style {:grid-template-columns "minmax(0, 40px) 3fr 3fr 27px"}}
-   [:label.form-element.px-1.bg-transparent index]
-   [:input.form-element.bg-transparent
-    {:key (str "x-" index)
-     :default-value x
-     :disabled true
-     :on-pointer-up attribute.views/pointer-up-handler!}]
-   [:input.form-element.bg-transparent
-    {:key (str "y-" index)
-     :default-value y
-     :disabled true
-     :on-pointer-up attribute.views/pointer-up-handler!}]
-   [views/icon-button "times" {:on-click #(remove-nth points index)}]])
+  [el-id index [x y] points]
+  (let [handle-id (keyword (str index))
+        hovered? @(rf/subscribe [::element.subs/hovered? handle-id])
+        selected? @(rf/subscribe [::element.subs/handle-selected?
+                                  el-id handle-id])]
+    [:div.grid.grid-flow-col.gap-px.text-right
+     {:dir "ltr"
+      :on-pointer-enter #(rf/dispatch [::document.events/set-hovered-id
+                                       handle-id])
+      :on-pointer-leave #(rf/dispatch [::document.events/clear-hovered])
+      :style {:grid-template-columns "minmax(0, 60px) 1fr 1fr auto"}}
+     [:span.form-element.flex-1.py-0!.h-full!.px-4!
+      {:on-click #(rf/dispatch [::element.events/toggle-handle-selection
+                                el-id handle-id (.-shiftKey %)])
+       :class ["leading-[27px]"
+               (when (and hovered? (not selected?)) "bg-overlay!")
+               (when selected? "bg-accent! text-accent-foreground!")]}
+      index]
+     [input index x points :x]
+     [input index y points :y]
+     [views/icon-button "times"
+      {:class "form-control-button rounded-none"
+       :title (i18n.views/t [::remove-point "Remove point"])
+       :on-click #(rf/dispatch [::drop-point el-id index (.-timestamp %)])}]]))
 
-(defn points-popover
-  [points disabled]
-  [:> Popover/Root {:modal true}
-   [:> Popover/Trigger
-    {:title (i18n.views/t [::edit-points "Edit points"])
-     :class "form-control-button"
-     :disabled disabled}
-    [views/icon "pencil"]]
-   [:> Popover/Portal
-    [:> Popover/Content
-     {:sideOffset 5
-      :class "popover-content"
-      :align "end"
-      :on-escape-key-down #(.stopPropagation %)}
-     [:div.flex.overflow-hidden
-      {:style {:max-height "50vh"}}
-      [views/scroll-area
-       [:div.p-4.flex.flex-col.gap-px
-        (map-indexed (fn [index point]
-                       ^{:key (str index point)}
-                       [point-row index point points]) points)]]]
-     [views/popover-arrow]]]])
+(defn points-form
+  []
+  (let [selected-elements @(rf/subscribe [::element.subs/selected])
+        element (first selected-elements)
+        v (get-in element [:attrs :points])
+        points (utils.attribute/points->vec v)]
+    [:div.flex.flex-col.gap-px
+     [attribute.views/heading "points" (:tag element) :points]
+
+     [:div.flex.flex-col.gap-px
+      (map-indexed (fn [index point]
+                     ^{:key (str index point)}
+                     [point-row (:id element) index point points]) points)]]))
 
 (defmethod attribute.hierarchy/form-element [::element.hierarchy/element
                                              :points]
@@ -79,4 +118,19 @@
       {:disabled (or disabled
                      (not v)
                      (not state-idle))}]
-     (when v [points-popover (utils.attribute/points->vec v) disabled])]))
+     (when v
+       [views/icon-button "pencil"
+        {:title (i18n.views/t [::edit-points "Edit points"])
+         :class "form-control-button"
+         :on-click #(rf/dispatch [::tool.events/edit])
+         :disabled disabled}])]))
+
+(defmethod tool.hierarchy/attributes-panel
+  [::tool.impl.base.edit/edit ::element.hierarchy/poly]
+  []
+  [points-form])
+
+(defmethod tool.hierarchy/attributes-panel
+  [::tool.hierarchy/poly ::element.hierarchy/poly]
+  []
+  [points-form])

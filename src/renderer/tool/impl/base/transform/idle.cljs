@@ -139,3 +139,7 @@
       (utils.key/arrow? k)
       (history.handlers/finalize (:timestamp e)
                                  [::move-selection "Move selection"]))))
+
+(defmethod tool.hierarchy/on-delete [::transform/transform :idle]
+  [db]
+  (element.handlers/delete db))

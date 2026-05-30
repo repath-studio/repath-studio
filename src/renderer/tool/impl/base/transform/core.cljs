@@ -7,15 +7,16 @@
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.db :refer [Element]]
    [renderer.element.handlers :as element.handlers]
+   [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
    [renderer.hierarchy :as hierarchy]
    [renderer.tool.events :as-alias tool.events]
+   [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.transform.clone]
    [renderer.tool.impl.base.transform.edit]
    [renderer.tool.impl.base.transform.idle]
    [renderer.tool.impl.base.transform.scale]
-   [renderer.tool.impl.base.transform.select :as transform.select]
    [renderer.tool.impl.base.transform.translate]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.tool.views :as tool.views]
@@ -32,7 +33,7 @@
       (element.handlers/clear-hovered)
       (assoc :pivot-point [0 0])
       (assoc :anchor-offset (:anchor-point db))
-      (transform.select/clear-select-box)))
+      (tool.handlers/set-select-box nil)))
 
 (defn pivot-handle
   []
@@ -41,20 +42,19 @@
         anchor-offset @(rf/subscribe [::tool.subs/anchor-offset])
         state @(rf/subscribe [::tool.subs/state])
         handle-size @(rf/subscribe [::document.subs/handle-size])
-        [x y] (when bbox
-                (let [[min-x min-y] bbox
-                      [w h] (utils.bounds/->dimensions bbox)
-                      [fx fy] anchor-offset]
-                  [(+ min-x (* fx w)) (+ min-y (* fy h))]))]
+        position (when bbox
+                   (let [[min-x min-y] bbox
+                         [w h] (utils.bounds/->dimensions bbox)
+                         [fx fy] anchor-offset]
+                     [(+ min-x (* fx w)) (+ min-y (* fy h))]))]
     [:g
      (when (and pivot-point (= state :scale))
        [utils.svg/times pivot-point])
      (when (and bbox (contains? #{:edit :idle} state))
        [:g
-        [utils.svg/cross [x y] (* handle-size 1.5)]
+        [utils.svg/cross position (* handle-size 1.5)]
         [tool.views/handle {:id :pivot-handle
-                            :x x
-                            :y y
+                            :position position
                             :rounded true
                             :type :handle
                             :label [::pivot-point "pivot point"]
@@ -99,7 +99,8 @@
         selected-elements @(rf/subscribe [::element.subs/selected])
         bbox @(rf/subscribe [::element.subs/bbox])
         hovered-elements @(rf/subscribe [::element.subs/hovered])
-        touch? @(rf/subscribe [::app.subs/supported-feature? :touch])]
+        touch? @(rf/subscribe [::app.subs/supported-feature? :touch])
+        select-box @(rf/subscribe [::tool.subs/select-box])]
     [:<>
      (into [:<>]
            (map #(bounding-box % false) selected-elements))
@@ -121,7 +122,7 @@
 
      [pivot-handle]
 
-     [transform.select/render-select-box]]))
+     [element.hierarchy/render select-box]]))
 
 (rf/dispatch [::action.events/register-action
               {:id :tool/transform

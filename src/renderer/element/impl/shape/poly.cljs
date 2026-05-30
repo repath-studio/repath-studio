@@ -3,16 +3,13 @@
   (:require
    [clojure.core.matrix :as matrix]
    [clojure.string :as string]
-   [re-frame.core :as rf]
-   [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
    [renderer.input.handlers :as input.handlers]
-   [renderer.tool.views :as tool.views]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
-   [renderer.utils.svg :as utils.svg]))
+   [renderer.utils.vec]))
 
 (hierarchy/derive! ::element.hierarchy/poly ::element.hierarchy/shape)
 
@@ -58,43 +55,28 @@
                      (string/join " ")
                      (string/trim)))))
 
-(defn render-handle
-  [el margin index point]
-  (let [id (keyword (str index))
-        is-active (and (= (:id (:clicked-element el)) id)
-                       (= (:element-id (:clicked-element el))
-                          (:id el)))
-        offset (utils.element/offset el)
-        [x y] (->> point
-                   (mapv utils.length/unit->px)
-                   (matrix/add offset))]
-    [:g
-     [tool.views/handle {:id id
-                         :x x
-                         :y y
-                         :label [::point "point"]
-                         :type :handle
-                         :action :edit
-                         :element-id (:id el)}]
-     (when is-active
-       (let [label (->> [x y]
-                        (mapv #(utils.length/->fixed % 2 false))
-                        (string/join " "))]
-         [utils.svg/label label {:x (- x margin)
-                                 :y (+ y margin)
-                                 :text-anchor "end"}]))]))
+(defn handle
+  [el index point]
+  (let [offset (utils.element/offset el)
+        position (->> point
+                      (mapv utils.length/unit->px)
+                      (matrix/add offset))]
+    {:id (keyword (str index))
+     :position position
+     :label [::point "point"]
+     :type :handle
+     :action :edit
+     :parent (:id el)}))
 
-(defmethod element.hierarchy/render-edit ::element.hierarchy/poly
+(defmethod element.hierarchy/handles ::element.hierarchy/poly
   [el]
-  (let [zoom @(rf/subscribe [::document.subs/zoom])
-        margin (/ 15 zoom)]
-    (->> (utils.attribute/points->vec (-> el :attrs :points))
-         (map-indexed (partial render-handle el margin))
-         (into [:g]))))
+  (->> (utils.attribute/points->vec (-> el :attrs :points))
+       (map-indexed (partial handle el))
+       (into [])))
 
-(defmethod element.hierarchy/edit-drag ::element.hierarchy/poly
-  [el offset handle lock?]
-  (let [index (js/parseInt (name handle))
+(defmethod element.hierarchy/handle-drag ::element.hierarchy/poly
+  [el offset handle-id lock?]
+  (let [index (js/parseInt (name handle-id))
         [x y] (cond-> offset lock? input.handlers/lock-direction)
         transform-point (fn [[px py]]
                           (list (utils.length/transform px + x)
@@ -140,3 +122,19 @@
 (defmethod element.hierarchy/snapping-points ::element.hierarchy/poly
   [el]
   (->vertices el))
+
+(defmethod element.hierarchy/delete-segments ::element.hierarchy/poly
+  [el]
+  (let [points (-> el :attrs :points utils.attribute/points->vec)
+        segments (->> (:selected-handles el)
+                      (map #(js/parseInt (name %)))
+                      (into #{}))
+        updated-points (->> points
+                            (keep-indexed (fn [index point]
+                                            (when-not (contains? segments index)
+                                              point)))
+                            (flatten)
+                            (string/join " "))]
+    (-> el
+        (assoc :selected-handles #{})
+        (assoc-in [:attrs :points] updated-points))))

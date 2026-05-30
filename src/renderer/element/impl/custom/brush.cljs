@@ -12,7 +12,6 @@
    [renderer.hierarchy :as hierarchy]
    [renderer.input.handlers :as input.handlers]
    [renderer.input.impl.pointer :as input.impl.pointer]
-   [renderer.tool.views :as tool.views]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]))
@@ -179,23 +178,22 @@
   [el]
   (points->path (-> el :attrs :points) (select-keys (:attrs el) option-keys)))
 
-(defmethod element.hierarchy/render-edit :brush
+(defmethod element.hierarchy/handles :brush
   [el]
-  (->> (-> el :attrs :points)
+  (->> el :attrs :points
        (points->vec)
-       (map-indexed (fn [index [x y]]
-                      (let [[x y] (mapv utils.length/unit->px [x y])
-                            [x y] (matrix/add (utils.element/offset el) [x y])]
-                        [tool.views/handle {:id (keyword (str index))
-                                            :x x
-                                            :y y
-                                            :type :handle
-                                            :label [::brush-point "brush point"]
-                                            :action :edit
-                                            :element-id (:id el)}])))
-       (into [:g])))
+       (map-indexed (fn [index point]
+                      (let [point (mapv utils.length/unit->px (take 2 point))]
+                        {:id (keyword (str index))
+                         :type :handle
+                         :label [::brush-point "brush point"]
+                         :action :edit
+                         :parent (:id el)
+                         :position (matrix/add (utils.element/offset el)
+                                               point)})))
+       (into [])))
 
-(defmethod element.hierarchy/edit-drag :brush
+(defmethod element.hierarchy/handle-drag :brush
   [el offset handle lock?]
   (let [index (js/parseInt (name handle))
         [x y] (cond-> offset

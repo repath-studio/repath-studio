@@ -2,7 +2,7 @@
   (:require
    [re-frame.core :as rf]
    [renderer.tool.handlers :as tool.handlers]
-   [renderer.tool.impl.base.edit :as-alias tool.impl.base.edit]))
+   [renderer.tool.impl.base.edit.core :as-alias tool.impl.base.edit]))
 
 (rf/reg-sub
  ::active
@@ -28,6 +28,13 @@
  :-> :cached-tool)
 
 (rf/reg-sub
+ ::cached-or-active
+ :<- [::cached]
+ :<- [::active]
+ (fn [[cached active] _]
+   (or cached active)))
+
+(rf/reg-sub
  ::pivot-point
  :-> :pivot-point)
 
@@ -47,6 +54,10 @@
  ::idle?
  :<- [::state]
  :-> (partial = :idle))
+
+(rf/reg-sub
+ ::select-box
+ :-> :select-box)
 
 (rf/reg-sub
  ::cached-state

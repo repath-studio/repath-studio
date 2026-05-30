@@ -109,7 +109,8 @@
   :group-selection "Auswahl gruppieren"
   :ungroup-selection "Auswahl gruppierung aufheben"
   :cut-selection "Auswahl ausschneiden"
-  :trace-image "Bild nachzeichnen"}
+  :trace-image "Bild nachzeichnen"
+  :toggle-handle-selection "Toggle handle selection"}
 
  :renderer.element.impl.animation.animate
  {:label "Animieren"
@@ -476,8 +477,8 @@
  :renderer.attribute.impl.d
  {:description "Das d-Attribut definiert einen zu zeichnenden Pfad."
   :edit "Pfad bearbeiten"
-  :absolute "(Absolut)"
-  :relative "(Relativ)"
+  :absolute "Absolut"
+  :relative "Relativ"
   :move-to "Bewegen zu"
   :line-to "Linie zu"
   :vertical-line "Vertikale Linie"
@@ -487,7 +488,8 @@
   :quadratic-bezier-curve "Quadratische Bézier-Kurve"
   :shortcut-quadratic "Quadratische Bézier-Verknüpfung"
   :elliptical-arc-curve "Elliptische Bogenkurve"
-  :close-path "Pfad schließen"}
+  :close-path "Pfad schließen"
+  :remove-segment "Remove segment"}
 
  :renderer.attribute.impl.length
  {:increase "Erhöhen"
@@ -550,18 +552,24 @@
   :async "Asynchron"
   :auto "Automatisch"}
 
- :renderer.tool.impl.base.edit
- {:label "Bearbeiten"
-  :help-idle-drag [:div "Ziehen Sie einen Griff, um Ihre Form zu ändern."]
+ :renderer.tool.impl.base.edit.core
+ {:centroid "Schwerpunkt"
+  :label "Bearbeiten"}
+
+ :renderer.tool.impl.base.edit.idle
+ {:help-idle-drag [:div "Ziehen Sie einen Griff, um Ihre Form zu ändern."]
   :help-idle-click [:div "Klicken Sie auf ein Element, um die Auswahl zu
-                          ändern"]
-  :help-edit [:div "Halten Sie %1, um die Richtung zu beschränken."]
-  :help-type [:div "Geben Sie Ihren Text ein."]
-  :select-element "Element auswählen"
-  :edit "Bearbeiten"
-  :centroid "Schwerpunkt"
-  :handle "Griff"
-  :tool-edit "Bearbeiten"}
+                          ändern"]}
+
+ :renderer.tool.impl.base.edit.select
+ {:select-element "Element auswählen"}
+
+ :renderer.tool.impl.base.edit.edit
+ {:help-edit [:div "Halten Sie %1, um die Richtung zu beschränken."]
+  :handle "Griff"}
+
+ :renderer.tool.impl.base.edit.type
+ {:help-type [:div "Geben Sie Ihren Text ein."]}
 
  :renderer.tool.impl.base.transform.core
  {:label "Transformieren"
@@ -705,7 +713,8 @@
  {:select-file "Datei auswählen"}
 
  :renderer.attribute.impl.points
- {:edit-points "Punkte bearbeiten"}
+ {:edit-points "Punkte bearbeiten"
+  :remove-point "Remove point"}
 
  :renderer.frame.views
  {:main-canvas "Hauptleinwand"}

@@ -6,7 +6,6 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
    [renderer.input.handlers :as input.handlers]
-   [renderer.tool.views :as tool.views]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]))
 
@@ -32,7 +31,7 @@
         (attribute.hierarchy/update-attr :height #(abs (* % ry)))
         (element.hierarchy/translate offset))))
 
-(defmethod element.hierarchy/edit-drag ::element.hierarchy/box
+(defmethod element.hierarchy/handle-drag ::element.hierarchy/box
   [el offset handle lock?]
   (let [[x y] (cond-> offset
                 lock?
@@ -52,25 +51,21 @@
 
       el)))
 
-(defn render-edit-handles
-  [[min-x min-y max-x max-y] element-id]
-  (->> [{:x min-x
-         :y min-y
-         :id :position
-         :label [::position-handle "position handle"]}
-        {:x max-x
-         :y max-y
-         :id :size
-         :label [::size-handle "size handle"]}]
-       (mapv (comp tool.views/handle
-                   (partial merge {:type :handle
-                                   :action :edit
-                                   :element-id element-id})))
-       (into [:g])))
-
-(defmethod element.hierarchy/render-edit ::element.hierarchy/box
+(defmethod element.hierarchy/handles ::element.hierarchy/box
   [el]
-  (render-edit-handles (:bbox el) (:id el)))
+  (let [[min-x min-y max-x max-y] (:bbox el)]
+    [{:type :handle
+      :action :edit
+      :parent (:id el)
+      :position [min-x min-y]
+      :id :position
+      :label [::position-handle "position handle"]}
+     {:type :handle
+      :action :edit
+      :parent (:id el)
+      :position [max-x max-y]
+      :id :size
+      :label [::size-handle "size handle"]}]))
 
 (defmethod element.hierarchy/bbox ::element.hierarchy/box
   [el]

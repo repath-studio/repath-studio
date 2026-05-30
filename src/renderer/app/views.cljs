@@ -104,12 +104,17 @@
      [:div.absolute.bg-accent.top-2.left-2.px-1.rounded.text-accent-foreground
       preview-label])])
 
-(defn right-panel
-  [active-tool]
-  [:div.flex.flex-col.h-full.bg-secondary.grow.overflow-hidden
-   [views/scroll-area
-    (tool.hierarchy/right-panel active-tool)]
-   [:div.bg-primary.grow.flex]])
+(defn attributes-panel
+  []
+  (let [selected @(rf/subscribe [::element.subs/selected])
+        tool @(rf/subscribe [::tool.subs/cached-or-active])
+        tag (if (= 1 (count selected))
+              (:tag (first selected))
+              :default)]
+    [:div.flex.flex-col.h-full.bg-secondary.grow.overflow-hidden.gap-px
+     [views/scroll-area
+      (tool.hierarchy/attributes-panel [tool tag])]
+     [:div.bg-primary.grow.flex]]))
 
 (defn guides-locked-toggle
   []
@@ -293,7 +298,6 @@
 (defn bottom-bar
   []
   (let [some-selected? @(rf/subscribe [::element.subs/some-selected?])
-        active-tool @(rf/subscribe [::tool.subs/active])
         mac? @(rf/subscribe [::app.subs/mac?])]
     [:div.flex.justify-evenly.p-2.gap-1.rtl:flex-row-reverse
 
@@ -339,12 +343,11 @@
        :label [::attributes "Attributes"]
        :direction "right"
        :disabled (not some-selected?)}
-      [right-panel active-tool]]]))
+      [attributes-panel]]]))
 
 (defn center-panel
   []
-  (let [properties? @(rf/subscribe [::panel.subs/visible? :properties])
-        active-tool @(rf/subscribe [::tool.subs/active])
+  (let [properties? @(rf/subscribe [::panel.subs/visible? :attributes])
         md? @(rf/subscribe [::window.subs/md?])
         desktop? @(rf/subscribe [::app.subs/desktop?])]
     [:div.flex.flex-col.flex-1.overflow-hidden.h-full
@@ -369,12 +372,12 @@
          [:<>
           [panel.views/separator]
           [panel.views/panel
-           {:id :properties
+           {:id :attributes
             :defaultSize 320
             :minSize 320
             :groupResizeBehavior "preserve-pixel-size"
             :class "flex gap-px"}
-           [right-panel active-tool]]])]
+           [attributes-panel]]])]
       (when md?
         [:div.bg-primary.flex
          [toolbar.views/action-toolbar

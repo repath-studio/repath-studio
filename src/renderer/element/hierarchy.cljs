@@ -17,12 +17,13 @@
 (defmulti render :tag :hierarchy hierarchy/hierarchy)
 (defmulti render-to-string :tag :hierarchy hierarchy/hierarchy)
 (defmulti render-edit :tag :hierarchy hierarchy/hierarchy)
+(defmulti handles :tag :hierarchy hierarchy/hierarchy)
 (defmulti path :tag :hierarchy hierarchy/hierarchy)
 (defmulti area :tag :hierarchy hierarchy/hierarchy)
 (defmulti centroid :tag :hierarchy hierarchy/hierarchy)
 (defmulti snapping-points :tag :hierarchy hierarchy/hierarchy)
 (defmulti bbox :tag :hierarchy hierarchy/hierarchy)
-
+(defmulti delete-segments :tag :hierarchy hierarchy/hierarchy)
 (defmulti translate
   (fn [el _offset] (:tag el))
   :hierarchy hierarchy/hierarchy)
@@ -31,11 +32,11 @@
   (fn [el _ratio _pivot-point] (:tag el))
   :hierarchy hierarchy/hierarchy)
 
-(defmulti edit-drag
+(defmulti handle-drag
   (fn [el _offset _handle _lock?] (:tag el))
   :hierarchy hierarchy/hierarchy)
 
-(defmulti edit-click
+(defmulti handle-click
   (fn [el _handle] (:tag el))
   :hierarchy hierarchy/hierarchy)
 
@@ -44,12 +45,14 @@
 (defmethod render :default [])
 (defmethod render-to-string :default [el] [render el])
 (defmethod render-edit :default [])
+(defmethod handles :default [])
 (defmethod bbox :default [])
+(defmethod delete-segments :default [el] el)
 (defmethod area :default [])
 (defmethod centroid :default [])
 (defmethod snapping-points :default [] [])
 (defmethod translate :default [el _offset] el)
 (defmethod scale :default [el _ratio _pivot-point] el)
-(defmethod edit-drag :default [el _offset _handle _lock?] el)
-(defmethod edit-click :default [el _handle] el)
+(defmethod handle-drag :default [el _offset _handle _lock?] el)
+(defmethod handle-click :default [el _handle] el)
 (defmethod properties :default [])

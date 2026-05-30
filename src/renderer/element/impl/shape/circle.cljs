@@ -7,7 +7,6 @@
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
-   [renderer.tool.views :as tool.views]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
@@ -69,11 +68,24 @@
                       "A" r r 0 0 1 (+ cx r) cy
                       "z"])))
 
-(defmethod element.hierarchy/edit-drag :circle
+(defmethod element.hierarchy/handle-drag :circle
   [el [x _y] handle _lock?]
   (case handle
     :r (attribute.hierarchy/update-attr el :r #(abs (+ % x)))
     el))
+
+(defmethod element.hierarchy/handles :circle
+  [el]
+  (let [bbox (:bbox el)
+        [cx cy] (utils.bounds/center bbox)
+        r (/ (first (utils.bounds/->dimensions bbox)) 2)]
+    [{:position [(+ cx r) cy]
+      :id :r
+      :label [::r-handle "radius handle"]
+      :cursor "ew-resize"
+      :type :handle
+      :action :edit
+      :parent (:id el)}]))
 
 (defmethod element.hierarchy/render-edit :circle
   [el]
@@ -85,13 +97,4 @@
      [utils.svg/line [cx cy] [(+ cx r) cy] :stroke-dasharray 5]
      [utils.svg/label (utils.length/->fixed r 2 false) {:x (+ cx (/ r 2))
                                                         :y cy}]
-     [utils.svg/times [cx cy]]
-     [tool.views/handle {:x (+ cx r)
-                         :y cy
-                         :id :r
-                         :label [::r-handle "radius handle"]
-                         :cursor "ew-resize"
-                         :type :handle
-                         :action :edit
-                         :element-id (:id el)}
-      [:title {:key "r-title"} "r"]]]))
+     [utils.svg/times [cx cy]]]))

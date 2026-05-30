@@ -109,7 +109,8 @@
   :group-selection "Group selection"
   :ungroup-selection "Ungroup selection"
   :cut-selection "Cut selection"
-  :trace-image "Trace image"}
+  :trace-image "Trace image"
+  :toggle-handle-selection "Toggle handle selection"}
 
  :renderer.element.impl.animation.animate
  {:label "Animate"
@@ -453,8 +454,8 @@
  :renderer.attribute.impl.d
  {:description "The d attribute defines a path to be drawn."
   :edit "Edit path"
-  :absolute "(Absolute)"
-  :relative "(Relative)"
+  :absolute "Absolute"
+  :relative "Relative"
   :move-to "Move To"
   :line-to "Line To"
   :vertical-line "Vertical Line"
@@ -464,7 +465,8 @@
   :quadratic-bezier-curve "Quadratic Bézier Curve"
   :shortcut-quadratic "Shortcut Quadratic Bézier Curve"
   :elliptical-arc-curve "Elliptical Arc Curve"
-  :close-path "Close Path"}
+  :close-path "Close Path"
+  :remove-segment "Remove segment"}
 
  :renderer.attribute.impl.length
  {:increase "Increase"
@@ -523,17 +525,23 @@
   :async "Asynchronously"
   :auto "Auto"}
 
- :renderer.tool.impl.base.edit
- {:label "Edit"
-  :help-idle-drag [:div "Drag a handle to modify your shape."]
-  :help-idle-click [:div "Click on an element to change selection"]
-  :help-edit [:div "Hold %1 to restrict direction."]
-  :help-type [:div "Enter your text."]
-  :select-element "Select element"
-  :edit "Edit"
-  :centroid "Centroid"
-  :handle "handle"
-  :tool-edit "Edit"}
+ :renderer.tool.impl.base.edit.core
+ {:centroid "Centroid"
+  :label "Edit"}
+
+ :renderer.tool.impl.base.edit.idle
+ {:help-idle-drag [:div "Drag a handle to modify your shape."]
+  :help-idle-click [:div "Click on an element to change selection"]}
+
+ :renderer.tool.impl.base.edit.select
+ {:select-element "Select element"}
+
+ :renderer.tool.impl.base.edit.edit
+ {:help-edit [:div "Hold %1 to restrict direction."]
+  :handle "handle"}
+
+ :renderer.tool.impl.base.edit.type
+ {:help-type [:div "Enter your text."]}
 
  :renderer.tool.impl.base.transform.core
  {:label "Transform"
@@ -672,7 +680,8 @@
  {:select-file "Select file"}
 
  :renderer.attribute.impl.points
- {:edit-points "Edit points"}
+ {:edit-points "Edit points"
+  :remove-point "Remove point"}
 
  :renderer.frame.views
  {:main-canvas "main canvas"}
