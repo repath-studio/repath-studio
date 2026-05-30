@@ -1,9 +1,11 @@
 (ns renderer.input.hierarchy)
 
-(defmulti keyboard (fn [_db e] (:type e)))
-(defmulti pointer (fn [_db e] (:type e)))
-(defmulti wheel (fn [_db e] (:type e)))
-(defmulti drag (fn [_db e] (:type e)))
+(defn dispatch [_db e] (:type e))
+
+(defmulti keyboard dispatch)
+(defmulti pointer dispatch)
+(defmulti wheel dispatch)
+(defmulti drag dispatch)
 
 (defmethod keyboard :default [db _e] db)
 (defmethod pointer :default [db _e] db)
