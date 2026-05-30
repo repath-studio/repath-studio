@@ -109,7 +109,8 @@
   :group-selection "Gruppera markering"
   :ungroup-selection "Dela upp markeringsgrupp"
   :cut-selection "Klipp ut markering"
-  :trace-image "Spåra bild"}
+  :trace-image "Spåra bild"
+  :toggle-handle-selection "Toggle handle selection"}
 
  :renderer.element.impl.animation.animate
  {:label "Animera"
@@ -473,7 +474,8 @@
   :quadratic-bezier-curve "Kvadratisk Bézier kurva"
   :shortcut-quadratic "Genväg kvadratisk Bézier kurva"
   :elliptical-arc-curve "Elliptisk båge kurva"
-  :close-path "Stäng bana"}
+  :close-path "Stäng bana"
+  :remove-segment "Remove segment"}
 
  :renderer.attribute.impl.length
  {:increase "Öka"
@@ -692,7 +694,8 @@
  {:select-file "Välj fil"}
 
  :renderer.attribute.impl.points
- {:edit-points "Redigera punkter"}
+ {:edit-points "Redigera punkter"
+  :remove-point "Remove point"}
 
  :renderer.frame.views
  {:main-canvas "huvudduk"}

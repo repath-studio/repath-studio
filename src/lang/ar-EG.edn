@@ -109,7 +109,8 @@
   :group-selection "تجميع التحديد"
   :ungroup-selection "إلغاء تجميع التحديد"
   :cut-selection "قص التحديد"
-  :trace-image "تتبع الصورة"}
+  :trace-image "تتبع الصورة"
+  :toggle-handle-selection "Toggle handle selection"}
 
  :renderer.element.impl.animation.animate
  {:label "تحريك"
@@ -452,7 +453,8 @@
   :quadratic-bezier-curve "منحنى بيزيه التربيعي"
   :shortcut-quadratic "منحنى بيزيه التربيعي المختصر"
   :elliptical-arc-curve "منحنى القوس البيضاوي"
-  :close-path "إغلاق المسار"}
+  :close-path "إغلاق المسار"
+  :remove-segment "Remove segment"}
 
  :renderer.attribute.impl.length
  {:increase "زيادة"
@@ -665,7 +667,8 @@
  {:select-file "اختيار ملف"}
 
  :renderer.attribute.impl.points
- {:edit-points "تحرير النقاط"}
+ {:edit-points "تحرير النقاط"
+  :remove-point "Remove point"}
 
  :renderer.frame.views
  {:main-canvas "اللوحة الرئيسية"}

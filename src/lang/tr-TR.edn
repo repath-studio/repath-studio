@@ -109,7 +109,8 @@
   :group-selection "Seçimi grupla"
   :ungroup-selection "Seçim grubunu çöz"
   :cut-selection "Seçimi kes"
-  :trace-image "Resim izini sür"}
+  :trace-image "Resim izini sür"
+  :toggle-handle-selection "Toggle handle selection"}
 
  :renderer.element.impl.animation.animate
  {:label "Animasyon"
@@ -465,7 +466,8 @@
   :quadratic-bezier-curve "Kuadratik Bézier Eğrisi"
   :shortcut-quadratic "Kısayol Kuadratik Bézier Eğrisi"
   :elliptical-arc-curve "Eliptik Yay Eğrisi"
-  :close-path "Yolu Kapat"}
+  :close-path "Yolu Kapat"
+  :remove-segment "Remove segment"}
 
  :renderer.attribute.impl.length
  {:increase "Artır"
@@ -685,7 +687,8 @@
  {:select-file "Dosya seç"}
 
  :renderer.attribute.impl.points
- {:edit-points "Noktaları düzenle"}
+ {:edit-points "Noktaları düzenle"
+  :remove-point "Remove point"}
 
  :renderer.frame.views
  {:main-canvas "ana tuval"}

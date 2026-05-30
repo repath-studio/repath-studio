@@ -109,7 +109,8 @@
   :group-selection "選択をグループ化"
   :ungroup-selection "選択のグループ化を解除"
   :cut-selection "選択を切り取り"
-  :trace-image "画像をトレース"}
+  :trace-image "画像をトレース"
+  :toggle-handle-selection "Toggle handle selection"}
 
  :renderer.element.impl.animation.animate
  {:label "アニメーション"
@@ -436,7 +437,8 @@
   :quadratic-bezier-curve "2次ベジェ曲線"
   :shortcut-quadratic "ショートカット2次ベジェ曲線"
   :elliptical-arc-curve "楕円弧曲線"
-  :close-path "パスを閉じる"}
+  :close-path "パスを閉じる"
+  :remove-segment "Remove segment"}
 
  :renderer.attribute.impl.length
  {:increase "増加"
@@ -650,7 +652,8 @@
  {:select-file "ファイルを選択"}
 
  :renderer.attribute.impl.points
- {:edit-points "ポイントを編集"}
+ {:edit-points "ポイントを編集"
+  :remove-point "Remove point"}
 
  :renderer.frame.views
  {:main-canvas "メインキャンバス"}

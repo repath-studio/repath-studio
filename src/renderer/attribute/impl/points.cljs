@@ -35,7 +35,7 @@
        (element.handlers/clear-selected-handles el-id)
        (element.handlers/select-handle (keyword (str index)) el-id)
        (element.handlers/delete-segments)
-       (history.handlers/finalize timestamp [::remove-points "Remove point"]))))
+       (history.handlers/finalize timestamp [::remove-point "Remove point"]))))
 
 (defn set-point
   [e {:keys [index points value axis]}]

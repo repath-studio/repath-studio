@@ -109,7 +109,8 @@
   :group-selection "Auswahl gruppieren"
   :ungroup-selection "Auswahl gruppierung aufheben"
   :cut-selection "Auswahl ausschneiden"
-  :trace-image "Bild nachzeichnen"}
+  :trace-image "Bild nachzeichnen"
+  :toggle-handle-selection "Toggle handle selection"}
 
  :renderer.element.impl.animation.animate
  {:label "Animieren"
@@ -487,7 +488,8 @@
   :quadratic-bezier-curve "Quadratische Bézier-Kurve"
   :shortcut-quadratic "Quadratische Bézier-Verknüpfung"
   :elliptical-arc-curve "Elliptische Bogenkurve"
-  :close-path "Pfad schließen"}
+  :close-path "Pfad schließen"
+  :remove-segment "Remove segment"}
 
  :renderer.attribute.impl.length
  {:increase "Erhöhen"
@@ -711,7 +713,8 @@
  {:select-file "Datei auswählen"}
 
  :renderer.attribute.impl.points
- {:edit-points "Punkte bearbeiten"}
+ {:edit-points "Punkte bearbeiten"
+  :remove-point "Remove point"}
 
  :renderer.frame.views
  {:main-canvas "Hauptleinwand"}

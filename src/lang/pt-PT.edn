@@ -109,7 +109,8 @@
   :group-selection "Agrupar seleção"
   :ungroup-selection "Desagrupar seleção"
   :cut-selection "Cortar seleção"
-  :trace-image "Vetorizar imagem"}
+  :trace-image "Vetorizar imagem"
+  :toggle-handle-selection "Toggle handle selection"}
 
  :renderer.element.impl.animation.animate
  {:label "Animar"
@@ -471,7 +472,8 @@
   :quadratic-bezier-curve "Curva de Bézier quadrática"
   :shortcut-quadratic "Curva de Bézier quadrática de atalho"
   :elliptical-arc-curve "Curva de arco elíptico"
-  :close-path "Fechar caminho"}
+  :close-path "Fechar caminho"
+  :remove-segment "Remove segment"}
 
  :renderer.attribute.impl.length
  {:increase "Aumentar"
@@ -690,7 +692,8 @@
  {:select-file "Selecionar ficheiro"}
 
  :renderer.attribute.impl.points
- {:edit-points "Editar pontos"}
+ {:edit-points "Editar pontos"
+  :remove-point "Remove point"}
 
  :renderer.frame.views
  {:main-canvas "tela principal"}

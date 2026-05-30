@@ -109,7 +109,8 @@
   :group-selection "선택 그룹화"
   :ungroup-selection "선택 그룹 해제"
   :cut-selection "선택 잘라내기"
-  :trace-image "이미지 추적"}
+  :trace-image "이미지 추적"
+  :toggle-handle-selection "Toggle handle selection"}
 
  :renderer.element.impl.animation.animate
  {:label "애니메이션"
@@ -432,7 +433,8 @@
   :quadratic-bezier-curve "2차 베지어 곡선"
   :shortcut-quadratic "단축 2차 베지어 곡선"
   :elliptical-arc-curve "타원 호 곡선"
-  :close-path "패스 닫기"}
+  :close-path "패스 닫기"
+  :remove-segment "Remove segment"}
 
  :renderer.attribute.impl.length
  {:increase "증가"
@@ -646,7 +648,8 @@
  {:select-file "파일 선택"}
 
  :renderer.attribute.impl.points
- {:edit-points "점 편집"}
+ {:edit-points "점 편집"
+  :remove-point "Remove point"}
 
  :renderer.frame.views
  {:main-canvas "메인 캔버스"}

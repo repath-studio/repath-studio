@@ -109,7 +109,8 @@
   :group-selection "Ομαδοποίηση επιλογής"
   :ungroup-selection "Αποομαδοποίηση επιλογής"
   :cut-selection "Αποκοπή επιλογής"
-  :trace-image "Ανίχνευση εικόνας"}
+  :trace-image "Ανίχνευση εικόνας"
+  :toggle-handle-selection "Toggle handle selection"}
 
  :renderer.element.impl.animation.animate
  {:label "Κίνηση"
@@ -489,7 +490,8 @@
   :quadratic-bezier-curve "Τετραγωνική καμπύλη Bézier"
   :shortcut-quadratic "Συντομευμένη τετραγωνική καμπύλη Bézier"
   :elliptical-arc-curve "Ελλειπτική καμπύλη τόξου"
-  :close-path "Κλείσιμο διαδρομής"}
+  :close-path "Κλείσιμο διαδρομής"
+  :remove-segment "Remove segment"}
 
  :renderer.attribute.impl.length
  {:increase "Αύξηση"
@@ -714,7 +716,8 @@
  {:select-file "Επιλογή αρχείου"}
 
  :renderer.attribute.impl.points
- {:edit-points "Επεξεργασία σημείων"}
+ {:edit-points "Επεξεργασία σημείων"
+  :remove-point "Remove point"}
 
  :renderer.frame.views
  {:main-canvas "κύριος καμβάς"}

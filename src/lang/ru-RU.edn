@@ -110,7 +110,8 @@
   :group-selection "Группировать выделенное"
   :ungroup-selection "Разгруппировать выделенное"
   :cut-selection "Вырезать выделенное"
-  :trace-image "Трассировать изображение"}
+  :trace-image "Трассировать изображение"
+  :toggle-handle-selection "Toggle handle selection"}
 
  :renderer.element.impl.animation.animate
  {:label "Анимировать"
@@ -468,7 +469,8 @@
   :quadratic-bezier-curve "Квадратичная кривая Безье"
   :shortcut-quadratic "Сокращённая квадратичная кривая Безье"
   :elliptical-arc-curve "Эллиптическая дуговая кривая"
-  :close-path "Закрыть контур"}
+  :close-path "Закрыть контур"
+  :remove-segment "Remove segment"}
 
  :renderer.attribute.impl.length
  {:increase "Увеличить"
@@ -690,7 +692,8 @@
  {:select-file "Выбрать файл"}
 
  :renderer.attribute.impl.points
- {:edit-points "Редактировать точки"}
+ {:edit-points "Редактировать точки"
+  :remove-point "Remove point"}
 
  :renderer.frame.views
  {:main-canvas "основной холст"}

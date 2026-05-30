@@ -108,7 +108,8 @@
   :group-selection "选择成组"
   :ungroup-selection "选择取消成组"
   :cut-selection "剪切选择"
-  :trace-image "描摹图像"}
+  :trace-image "描摹图像"
+  :toggle-handle-selection "Toggle handle selection"}
 
  :renderer.element.impl.animation.animate
  {:label "动画"
@@ -405,7 +406,8 @@
   :quadratic-bezier-curve "二次贝塞尔曲线"
   :shortcut-quadratic "简写二次贝塞尔曲线"
   :elliptical-arc-curve "椭圆弧曲线"
-  :close-path "闭合路径"}
+  :close-path "闭合路径"
+  :remove-segment "Remove segment"}
 
  :renderer.attribute.impl.length
  {:increase "增加"
@@ -611,7 +613,8 @@
  {:select-file "选择文件"}
 
  :renderer.attribute.impl.points
- {:edit-points "编辑点"}
+ {:edit-points "编辑点"
+  :remove-point "Remove point"}
 
  :renderer.frame.views
  {:main-canvas "主画布"}

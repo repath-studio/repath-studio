@@ -109,7 +109,8 @@
   :group-selection "Group selection"
   :ungroup-selection "Ungroup selection"
   :cut-selection "Cut selection"
-  :trace-image "Trace image"}
+  :trace-image "Trace image"
+  :toggle-handle-selection "Toggle handle selection"}
 
  :renderer.element.impl.animation.animate
  {:label "Animate"
@@ -464,7 +465,8 @@
   :quadratic-bezier-curve "Quadratic Bézier Curve"
   :shortcut-quadratic "Shortcut Quadratic Bézier Curve"
   :elliptical-arc-curve "Elliptical Arc Curve"
-  :close-path "Close Path"}
+  :close-path "Close Path"
+  :remove-segment "Remove segment"}
 
  :renderer.attribute.impl.length
  {:increase "Increase"
@@ -538,8 +540,8 @@
  {:help-edit [:div "Hold %1 to restrict direction."]
   :handle "handle"}
 
-  :renderer.tool.impl.base.edit.type
-  {:help-type [:div "Enter your text."]}
+ :renderer.tool.impl.base.edit.type
+ {:help-type [:div "Enter your text."]}
 
  :renderer.tool.impl.base.transform.core
  {:label "Transform"
@@ -678,7 +680,8 @@
  {:select-file "Select file"}
 
  :renderer.attribute.impl.points
- {:edit-points "Edit points"}
+ {:edit-points "Edit points"
+  :remove-point "Remove point"}
 
  :renderer.frame.views
  {:main-canvas "main canvas"}

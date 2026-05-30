@@ -109,7 +109,8 @@
   :group-selection "Selectie groeperen"
   :ungroup-selection "Selectiegroepering opheffen"
   :cut-selection "Selectie knippen"
-  :trace-image "Afbeelding traceren"}
+  :trace-image "Afbeelding traceren"
+  :toggle-handle-selection "Toggle handle selection"}
 
  :renderer.element.impl.animation.animate
  {:label "Animeren"
@@ -484,7 +485,8 @@
   :quadratic-bezier-curve "Kwadratische Bézier curve"
   :shortcut-quadratic "Snelkoppeling kwadratische Bézier curve"
   :elliptical-arc-curve "Elliptische boog curve"
-  :close-path "Pad sluiten"}
+  :close-path "Pad sluiten"
+  :remove-segment "Remove segment"}
 
  :renderer.attribute.impl.length
  {:increase "Verhogen"
@@ -707,7 +709,8 @@
  {:select-file "Bestand selecteren"}
 
  :renderer.attribute.impl.points
- {:edit-points "Punten bewerken"}
+ {:edit-points "Punten bewerken"
+  :remove-point "Remove point"}
 
  :renderer.frame.views
  {:main-canvas "hoofdcanvas"}
