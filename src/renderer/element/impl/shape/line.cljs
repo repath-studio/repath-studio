@@ -65,7 +65,7 @@
       :label [::starting-point "starting point"]
       :type :handle
       :action :edit
-      :v (:id el)}
+      :parent (:id el)}
      {:position (matrix/add offset [x2 y2])
       :id :ending-point
       :label [::ending-point "ending point"]

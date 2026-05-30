@@ -57,5 +57,6 @@
 (def default (m/decode Element
                        {:type :element
                         :visible true
+                        :selected-handles #{}
                         :children []}
                        m.transform/default-value-transformer))

@@ -6,7 +6,6 @@
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.history.handlers :as history.handlers]
-   [renderer.input.db :refer [PointerEvent]]
    [renderer.tool.db :refer [Handle]]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
@@ -22,7 +21,7 @@
     (utils.bounds/contained-point? selection-bbox (:position handle))
     false))
 
-(m/=> reduce-by-area [:-> App PointerEvent ifn? App])
+(m/=> reduce-by-area [:-> App ifn? App])
 (defn reduce-by-area
   [db f]
   (->> (element.handlers/handles db)
@@ -50,5 +49,5 @@
     (-> (reduce-by-area element.handlers/select-handle)
         (tool.handlers/set-select-box nil)
         (tool.handlers/set-state :idle)
-        (history.handlers/finalize (.-timeStamp e)
+        (history.handlers/finalize (:timestamp e)
                                    [::select-handles "Select handles"]))))
