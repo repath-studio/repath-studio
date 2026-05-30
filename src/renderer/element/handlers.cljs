@@ -1022,9 +1022,14 @@
   [db handle-id el-id]
   (update-in db (path db el-id :selected-handles) conj handle-id))
 
+(m/=> clear-selected-handles [:function
+                              [:-> App App]
+                              [:-> App ElementId App]])
 (defn clear-selected-handles
-  [db el-id]
-  (assoc-in db (path db el-id :selected-handles) #{}))
+  ([db]
+   (reduce clear-selected-handles db (selected-ids db)))
+  ([db el-id]
+   (assoc-in db (path db el-id :selected-handles) #{})))
 
 (m/=> toggle-handle-selection [:-> App HandleId boolean? App])
 (defn toggle-handle-selection

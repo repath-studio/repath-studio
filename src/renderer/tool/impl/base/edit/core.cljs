@@ -3,6 +3,7 @@
    [clojure.core.matrix :as matrix]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
+   [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
    [renderer.hierarchy :as hierarchy]
@@ -20,6 +21,14 @@
    [renderer.utils.svg :as utils.svg]))
 
 (hierarchy/derive! ::edit ::tool.hierarchy/tool)
+
+(defmethod tool.hierarchy/on-activate ::edit
+  [db]
+  (element.handlers/clear-selected-handles db))
+
+(defmethod tool.hierarchy/on-deactivate ::edit
+  [db]
+  (element.handlers/clear-selected-handles db))
 
 (defmethod tool.hierarchy/render ::edit
   []
