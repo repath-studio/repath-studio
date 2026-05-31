@@ -28,26 +28,25 @@
         [x y] position
         half-size (/ handle-size 2)]
     [:g
-     [:rect
-      {:x (- x half-size)
-       :y (- y half-size)
-       :rx (when rounded half-size)
-       :width handle-size
-       :height handle-size
-       :stroke-opacity ".5"
-       :stroke-width (/ (if active 2 1) zoom)
-       :cursor (or cursor "move")
-       :pointer-events (when implied "none")
-       :on-pointer-up pointer-handler
-       :on-pointer-down pointer-handler
-       :on-pointer-move pointer-handler
-       :fill (cond
-               selected "var(--accent)"
-               implied "lightgray"
-               :else "var(--accent-foreground)")
-       :stroke (cond
-                 active "var(--accent)"
-                 (not implied) "var(--foreground-muted)")}
+     [:rect {:x (- x half-size)
+             :y (- y half-size)
+             :rx (when rounded half-size)
+             :width handle-size
+             :height handle-size
+             :stroke-opacity ".5"
+             :stroke-width (/ (if active 2 1) zoom)
+             :cursor (or cursor "move")
+             :pointer-events (when implied "none")
+             :on-pointer-up pointer-handler
+             :on-pointer-down pointer-handler
+             :on-pointer-move pointer-handler
+             :fill (cond
+                     selected "var(--accent)"
+                     implied "lightgray"
+                     :else "var(--accent-foreground)")
+             :stroke (cond
+                       active "var(--accent)"
+                       (not implied) "var(--foreground-muted)")}
       (when label [:title (i18n.views/t label)])]]))
 
 (m/=> selected-bbox [:-> BBox any?])
@@ -58,18 +57,18 @@
         [w h] (utils.bounds/->dimensions bbox)
         pointer-handler (partial input.impl.pointer/handler! {:type :handle
                                                               :action :translate
-                                                              :id :bbox})
-        rect-attrs {:x min-x
-                    :y min-y
-                    :width w
-                    :height h
-                    :stroke-opacity ".3"
-                    :fill "transparent"
-                    :shape-rendering "crispEdges"}]
-    [:rect (merge rect-attrs {:stroke-width (/ 2 zoom)
-                              :on-pointer-up pointer-handler
-                              :on-pointer-down pointer-handler
-                              :on-pointer-move pointer-handler})]))
+                                                              :id :bbox})]
+    [:rect {:x min-x
+            :y min-y
+            :width w
+            :height h
+            :stroke-opacity ".3"
+            :fill "transparent"
+            :shape-rendering "crispEdges"
+            :stroke-width (/ 2 zoom)
+            :on-pointer-up pointer-handler
+            :on-pointer-down pointer-handler
+            :on-pointer-move pointer-handler}]))
 
 (m/=> min-bbox [:-> BBox BBox])
 (defn min-bbox

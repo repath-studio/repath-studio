@@ -23,6 +23,7 @@
             :type :element
             :visible true
             :children []
+            :selected-handles #{}
             :attrs {:x "10"
                     :y "20"}}))))
 
