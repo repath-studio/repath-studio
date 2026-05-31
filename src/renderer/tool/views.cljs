@@ -13,49 +13,42 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.bounds :as utils.bounds]))
 
-(defn common-handle-attrs
-  [position size rounded]
-  (let [[x y] position
-        half-size (/ size 2)]
-    {:x (- x half-size)
-     :y (- y half-size)
-     :rx (when rounded half-size)
-     :width size
-     :height size}))
-
 (m/=> handle [:-> Handle any?])
 (defn handle
   [el]
   (let [{:keys [position id cursor label rounded implied parent]} el
         clicked-element @(rf/subscribe [::app.subs/clicked-element])
         handle-size @(rf/subscribe [::document.subs/handle-size])
+        zoom @(rf/subscribe [::document.subs/zoom])
         selected @(rf/subscribe [::element.subs/handle-selected? parent id])
         selected (or selected (= clicked-element el))
         hovered @(rf/subscribe [::element.subs/hovered? id])
         pointer-handler (partial input.impl.pointer/handler! el)
-        attrs (common-handle-attrs position handle-size rounded)
-        active (or selected hovered)]
+        active (or selected hovered)
+        [x y] position
+        half-size (/ handle-size 2)]
     [:g
-     [:rect (merge attrs
-                   {:stroke "var(--accent-foreground)"
-                    :stroke-opacity ".5"
-                    :stroke-width 3
-                    :cursor (or cursor "move")
-                    :pointer-events (when implied "none")
-                    :on-pointer-up pointer-handler
-                    :on-pointer-down pointer-handler
-                    :on-pointer-move pointer-handler})
-      (when label [:title (i18n.views/t label)])]
-     [:rect (merge attrs
-                   {:fill (cond
-                            selected "var(--accent)"
-                            implied "lightgray"
-                            :else "var(--accent-foreground)")
-                    :stroke (cond
-                              active "var(--accent)"
-                              (not implied) "var(--foreground-muted)")
-                    :pointer-events "none"
-                    :stroke-width 1})]]))
+     [:rect
+      {:x (- x half-size)
+       :y (- y half-size)
+       :rx (when rounded half-size)
+       :width handle-size
+       :height handle-size
+       :stroke-opacity ".5"
+       :stroke-width (/ (if active 2 1) zoom)
+       :cursor (or cursor "move")
+       :pointer-events (when implied "none")
+       :on-pointer-up pointer-handler
+       :on-pointer-down pointer-handler
+       :on-pointer-move pointer-handler
+       :fill (cond
+               selected "var(--accent)"
+               implied "lightgray"
+               :else "var(--accent-foreground)")
+       :stroke (cond
+                 active "var(--accent)"
+                 (not implied) "var(--foreground-muted)")}
+      (when label [:title (i18n.views/t label)])]]))
 
 (m/=> selected-bbox [:-> BBox any?])
 (defn selected-bbox
