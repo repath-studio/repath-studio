@@ -1,7 +1,6 @@
 (ns renderer.tool.impl.base.transform.select
   (:require
    [malli.core :as m]
-   [re-frame.core :as rf]
    [renderer.app.db :refer [App]]
    [renderer.element.db :refer [Element]]
    [renderer.element.handlers :as element.handlers]
@@ -14,7 +13,6 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.transform.core :as-alias transform]
-   [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.views :as views]))
