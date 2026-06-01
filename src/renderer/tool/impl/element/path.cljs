@@ -88,7 +88,8 @@
 
 (defmethod tool.hierarchy/on-pointer-move [::path :create]
   [db _e]
-  (let [[x y] (adjusted-pointer-position db)]
+  (let [[x y] (->> (adjusted-pointer-position db)
+                   (mapv utils.length/->fixed))]
     (update-path
      db
      #(let [segments (-> (utils.path/string->segments %)
@@ -110,11 +111,11 @@
   [db _e]
   (let [anchor (adjusted-pointer-offset db)
         drag-pos (adjusted-pointer-position db)
-        [cp2-x cp2-y] (-> (matrix/mul anchor 2)
-                          (matrix/sub drag-pos))]
+        [cp2-x cp2-y] (->> (matrix/sub (matrix/mul anchor 2) drag-pos)
+                           (mapv utils.length/->fixed))]
     (update-path db #(let [segments (utils.path/string->segments %)]
                        (if (> (count segments) 1)
-                         (let [[ax ay] anchor]
+                         (let [[ax ay] (mapv utils.length/->fixed anchor)]
                            (->> ["S" cp2-x cp2-y ax ay]
                                 (conj (utils.path/drop-last-segment segments))
                                 (utils.path/segments->string)))

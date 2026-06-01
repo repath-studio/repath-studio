@@ -38,6 +38,7 @@
   (update-in el [:attrs :d] #(some-> %
                                      (svgpath)
                                      (.translate x y)
+                                     (.round 3)
                                      (.toString))))
 
 (defmethod element.hierarchy/scale :path
@@ -51,6 +52,7 @@
                                        (svgpath)
                                        (.scale scale-x scale-y)
                                        (.translate x y)
+                                       (.round 3)
                                        (.toString)))))
 
 (defmethod element.hierarchy/bbox :path

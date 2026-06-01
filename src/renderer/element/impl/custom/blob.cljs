@@ -153,6 +153,7 @@
         (.svgPath options)
         (svgpath)
         (.translate x y)
+        (.round 3)
         (.toString))))
 
 (defmethod element.hierarchy/handle-drag :blob
