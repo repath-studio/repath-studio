@@ -7,9 +7,12 @@
    [clojure.string :as string]
    [clojure.zip :as zip]
    [malli.core :as m]
+   [malli.transform :as m.transform]
    [reagent.dom.server :as dom.server]
    [renderer.db :refer [BBox Vec2 JS_Element]]
-   [renderer.element.db :as element.db :refer [Element ElementAttrs]]
+   [renderer.element.db
+    :as element.db
+    :refer [Element ElementAttrs PersistedElement]]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.snap.db :refer [SnapOptions]]
    [renderer.utils.attribute :as utils.attribute]
@@ -259,3 +262,10 @@
 
       :else
       (recur (zip/next loc)))))
+
+(m/=> persisted [:-> Element PersistedElement])
+(defn persisted
+  [el]
+  (m/decode PersistedElement
+            el
+            m.transform/strip-extra-keys-transformer))

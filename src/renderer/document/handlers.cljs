@@ -13,6 +13,7 @@
    [renderer.frame.handlers :as frame.handlers]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.db :refer [HandleId]]
+   [renderer.utils.element :as utils.element]
    [renderer.utils.vec :as utils.vec]))
 
 (m/=> path [:function
@@ -43,19 +44,24 @@
   (-> (assoc db :active-document id)
       (snap.handlers/rebuild-tree)))
 
-(m/=> persisted-format [:-> App DocumentId PersistedDocument])
-(defn persisted-format
+(m/=> recent [:-> Document RecentDocument])
+(defn recent
+  [document]
+  (m/decode RecentDocument
+            document
+            m.transform/strip-extra-keys-transformer))
+
+(m/=> persisted [:-> App DocumentId PersistedDocument])
+(defn persisted
   [db id]
   (-> PersistedDocument
       (m/decode (entity db id) m.transform/strip-extra-keys-transformer)
       (assoc :version (:version db))
       (update :elements (fn [elements]
-                          (into {}
-                                (map (fn [[k v]]
-                                       [k (dissoc v
-                                                  :selected
-                                                  :selected-handles)]))
-                                elements)))))
+                          (->> elements
+                               (map (fn [[k v]]
+                                      [k (utils.element/persisted v)]))
+                               (into {}))))))
 
 (m/=> close [:-> App DocumentId App])
 (defn close
@@ -82,9 +88,7 @@
     (cond-> db
       (or (:path document)
           (:file-handle document))
-      (update :recent #(->> (m/decode RecentDocument
-                                      document
-                                      m.transform/strip-extra-keys-transformer)
+      (update :recent #(->> (recent document)
                             (conj (filterv (complement equals?) %))
                             (take-last max-recent)
                             (vec))))))
@@ -92,11 +96,11 @@
 (m/=> move-recent-to-front [:-> App DocumentId App])
 (defn move-recent-to-front
   [db id]
-  (let [recent (get db :recent)
-        idx (.indexOf (map :id recent) id)]
+  (let [recent-documents (:recent db)
+        idx (.indexOf (map :id recent-documents) id)]
     (cond-> db
       (>= idx 0)
-      (update :recent #(utils.vec/move % idx (dec (count recent)))))))
+      (update :recent #(utils.vec/move % idx (dec (count recent-documents)))))))
 
 (m/=> remove-recent [:-> App DocumentId App])
 (defn remove-recent

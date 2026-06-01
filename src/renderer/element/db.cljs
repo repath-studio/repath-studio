@@ -36,23 +36,39 @@
 
 (def Element
   [:map {:closed true}
-   [:id {:optional true} ElementId]
-   [:tag ElementTag]
-   [:label {:optional true} string?]
-   [:parent {:optional true} ElementId]
-   [:type {:optional true} [:= :element]]
-   [:visible {:optional true} boolean?]
-   [:locked {:optional true} boolean?]
+   [:id {:optional true
+         :persist true} ElementId]
+   [:tag {:persist true} ElementTag]
+   [:label {:optional true
+            :persist true} string?]
+   [:parent {:optional true
+             :persist true} ElementId]
+   [:type {:optional true
+           :persist true} [:= :element]]
+   [:visible {:optional true
+              :persist true} boolean?]
+   [:locked {:optional true
+             :persist true} boolean?]
    [:selected {:optional true} boolean?]
    [:selected-handles {:optional true} [:set keyword?]]
-   [:children {:optional true} [:vector ElementId]]
-   [:bbox {:optional true} BBox]
-   [:content {:optional true} string?]
-   [:attrs {:optional true} ElementAttrs]])
+   [:children {:optional true
+               :persist true} [:vector ElementId]]
+   [:bbox {:optional true
+           :persist true} BBox]
+   [:content {:optional true
+              :persist true} string?]
+   [:attrs {:optional true
+            :persist true} ElementAttrs]])
 
 (def valid? (m/validator Element))
 
 (def explain (m/explainer Element))
+
+(def PersistedElement
+  (->> Element
+       (m/children)
+       (filter (comp :persist second))
+       (into [:map {:closed true}])))
 
 (def default (m/decode Element
                        {:type :element
