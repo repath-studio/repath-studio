@@ -1,7 +1,6 @@
 (ns renderer.tool.impl.base.edit.select
   (:require
    [malli.core :as m]
-   [re-frame.core :as rf]
    [renderer.app.db :refer [App]]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
@@ -10,23 +9,22 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.edit.core :as-alias edit]
-   [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.bounds :as utils.bounds]))
 
-(m/=> hovered? [:-> Handle boolean? boolean?])
-(defn hovered?
-  [handle]
-  (if-let [selection-bbox (-> @(rf/subscribe [::tool.subs/select-box])
-                              (element.hierarchy/bbox))]
-    (utils.bounds/contained-point? selection-bbox (:position handle))
-    false))
+(m/=> selectable? [:-> App Handle boolean?])
+(defn selectable?
+  [db handle]
+  (and (not (:rounded handle))
+       (:select-box db)
+       (some-> (:select-box db)
+               (element.hierarchy/bbox)
+               (utils.bounds/contained-point? (:position handle)))))
 
 (m/=> reduce-by-area [:-> App ifn? App])
 (defn reduce-by-area
   [db f]
   (->> (element.handlers/handles db)
-       (transduce (filter #(and (hovered? %)
-                                (not (:rounded %))))
+       (transduce (filter (partial selectable? db))
                   (fn [db handle] (cond-> db
                                     (:id handle)
                                     (f (:id handle) (:parent handle))))

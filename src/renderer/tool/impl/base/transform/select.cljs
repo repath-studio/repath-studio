@@ -41,9 +41,8 @@
 
 (m/=> hovered? [:-> Element boolean? boolean?])
 (defn hovered?
-  [el intersecting?]
-  (let [select-box @(rf/subscribe [::tool.subs/select-box])
-        selection-bbox (element.hierarchy/bbox select-box)
+  [db intersecting? el]
+  (let [selection-bbox (element.hierarchy/bbox (:select-box db))
         el-bbox (:bbox el)]
     (if (and selection-bbox el-bbox)
       (if intersecting?
@@ -57,7 +56,7 @@
   (let [{:keys [alt-key]} e
         intersecting? (or alt-key (input.handlers/multi-touch? db))]
     (transduce (comp (element.handlers/visible)
-                     (filter #(hovered? % intersecting?))
+                     (filter (partial hovered? db intersecting?))
                      (map :id))
                (fn [db id] (cond-> db id (f id)))
                db

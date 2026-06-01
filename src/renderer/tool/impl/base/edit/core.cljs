@@ -40,7 +40,7 @@
                   [:g
                    [element.hierarchy/render-edit el]
                    (->> (element.hierarchy/handles el)
-                        (map tool.views/handle)
+                        (map (fn [el] [tool.views/handle el]))
                         (into [:g]))
                    (when-let [pos (element.hierarchy/centroid el)]
                      (let [offset (utils.element/offset el)
