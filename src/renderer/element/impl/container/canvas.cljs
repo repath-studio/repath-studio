@@ -69,6 +69,7 @@
         cursor @(rf/subscribe [::tool.subs/cursor])
         bbox @(rf/subscribe [::element.subs/bbox])
         active-tool @(rf/subscribe [::tool.subs/active])
+        edit? @(rf/subscribe [::tool.subs/editing?])
         grid? @(rf/subscribe [::app.subs/grid?])
         state @(rf/subscribe [::tool.subs/state])
         idle? @(rf/subscribe [::tool.subs/idle?])
@@ -91,7 +92,7 @@
            :cursor cursor
            :style {:outline 0
                    :background (:fill attrs)}}
-     (when (seq bbox)
+     (when (and (seq bbox) (not edit?))
        [tool.views/selected-bbox bbox])
 
      (for [el child-elements]
