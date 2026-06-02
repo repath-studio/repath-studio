@@ -50,13 +50,13 @@
 
 (defmethod tool.hierarchy/snapping-points [::edit/edit :edit]
   [db]
-  (when-let [el (:clicked-element db)]
+  (when-let [{:keys [position label]
+              :as el} (:clicked-element db)]
     [(with-meta
-       (matrix/add [(:x el) (:y el)]
+       (matrix/add [(first position) (second position)]
                    (tool.handlers/pointer-delta db))
        {:label (when (= (:type el) :handle)
-                 (or (:label el)
-                     [::handle "handle"]))})]))
+                 (or label [::handle "handle"]))})]))
 
 (defmethod tool.hierarchy/snapping-elements [::edit/edit :edit]
   [db]
