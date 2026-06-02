@@ -4,6 +4,39 @@ All notable user facing changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 0.4.15 (2026-06-02)
+
+**Added**
+
+- Introduce a tool that can be used to create paths and implement editing [#137](https://github.com/repath-studio/repath-studio/pull/137)
+- Path editing enhancements [#141](https://github.com/repath-studio/repath-studio/pull/141)
+- Points and path editing enhancements [#144](https://github.com/repath-studio/repath-studio/pull/144)
+- Angle snapping [#138](https://github.com/repath-studio/repath-studio/pull/138)
+- Negative and zero scale ratio support
+- Cursor on ruler hover to indicate the guide tool
+
+**Removed**
+
+- Default transform pan tool shortcuts
+- Waiting state from d and points attribute
+
+**Changed**
+
+- Display loading indicator sooner
+- Use default handle size for stroke width of ghost elements
+- Move selected bbox to bottom
+- Always round path segments to default precision
+
+**Fixed**
+
+- Guide tool cancel
+- Prevent dropping a parent on its children
+- Drag start event at the edge of edit handles
+- Sentry initialization
+- Text element offset on scale
+- Pivot point on recursive scale
+- Title-bar visibility regression
+
 ## 0.4.14 (2025-05-02)
 
 **Added**
