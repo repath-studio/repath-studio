@@ -31,33 +31,31 @@
 
 (defmethod element.hierarchy/scale :rect
   [el ratio pivot-point]
-  (let [[rx ry] ratio
-        {{:keys [width height]} :attrs} el
-        w (utils.length/unit->px width)
-        h (utils.length/unit->px height)
+  (let [[x-ratio y-ratio] ratio
+        {{:keys [width height rx ry]} :attrs} el
+        [w h] (mapv utils.length/unit->px [width height])
         [offset-x offset-y] (utils.element/scale-offset ratio pivot-point)
-        offset [(+ offset-x (min 0 (* w rx)))
-                (+ offset-y (min 0 (* h ry)))]]
+        offset [(+ offset-x (min 0 (* w x-ratio)))
+                (+ offset-y (min 0 (* h y-ratio)))]]
     (cond-> el
       :always
-      (-> (attribute.hierarchy/update-attr :width #(abs (* % rx)))
-          (attribute.hierarchy/update-attr :height #(abs (* % ry)))
+      (-> (attribute.hierarchy/update-attr :width #(abs (* % x-ratio)))
+          (attribute.hierarchy/update-attr :height #(abs (* % y-ratio)))
           (element.hierarchy/translate offset))
 
-      (-> el :attrs :rx)
-      (attribute.hierarchy/update-attr :rx #(abs (* % rx)))
+      rx
+      (attribute.hierarchy/update-attr :rx #(abs (* % x-ratio)))
 
-      (-> el :attrs :ry)
-      (attribute.hierarchy/update-attr :ry #(abs (* % ry))))))
+      ry
+      (attribute.hierarchy/update-attr :ry #(abs (* % y-ratio))))))
 
 (defn clamp-radius-to-size
   [el]
-  (let [{:keys [attrs]} el
-        width (utils.length/unit->px (:width attrs))
-        height (utils.length/unit->px (:height attrs))]
-    (-> el
-        (attribute.hierarchy/update-attr :rx min (/ width 2))
-        (attribute.hierarchy/update-attr :ry min (/ height 2)))))
+  (let [{{:keys [rx ry width height]} :attrs} el
+        [w h] (mapv utils.length/unit->px [width height])]
+    (cond-> el
+      rx (attribute.hierarchy/update-attr :rx min (/ w 2))
+      ry (attribute.hierarchy/update-attr :ry min (/ h 2)))))
 
 (defmethod element.hierarchy/handle-drag :rect
   [el offset handle lock?]
@@ -105,8 +103,7 @@
 
 (defmethod element.hierarchy/handles :rect
   [el]
-  (let [el-bbox (:bbox el)
-        [min-x min-y max-x max-y] el-bbox
+  (let [[min-x min-y max-x max-y] (:bbox el)
         {{:keys [rx ry]} :attrs} el
         [rx ry] (mapv utils.length/unit->px [rx ry])]
     [{:type :handle
