@@ -25,12 +25,14 @@
                                              :font-weight]
   [_ k v attrs]
   (let [available-weights @(rf/subscribe [::element.subs/font-weights])
-        weights (sort (if (seq available-weights)
-                        available-weights
-                        (keys utils.attribute/weight-name-mapping)))]
+        weights (if (seq available-weights)
+                  available-weights
+                  (keys utils.attribute/weight-name-mapping))]
     [attribute.views/select-input k v
      (merge attrs
             {:default-value "400"
-             :items (mapv #(do {:key %
-                                :label [k (label %)]
-                                :value %}) weights)})]))
+             :items (->> weights
+                         (sort)
+                         (mapv #(hash-map :key %
+                                          :label [k (label %)]
+                                          :value %)))})]))

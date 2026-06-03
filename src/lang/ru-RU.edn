@@ -110,7 +110,8 @@
   :group-selection "Группировать выделенное"
   :ungroup-selection "Разгруппировать выделенное"
   :cut-selection "Вырезать выделенное"
-  :trace-image "Трассировать изображение"}
+  :trace-image "Трассировать изображение"
+  :toggle-handle-selection "Toggle handle selection"}
 
  :renderer.element.impl.animation.animate
  {:label "Анимировать"
@@ -457,8 +458,8 @@
  :renderer.attribute.impl.d
  {:description "Атрибут d определяет контур для рисования."
   :edit "Редактировать контур"
-  :absolute "(Абсолютный)"
-  :relative "(Относительный)"
+  :absolute "Абсолютный"
+  :relative "Относительный"
   :move-to "Переместить в"
   :line-to "Линия в"
   :vertical-line "Вертикальная линия"
@@ -468,7 +469,8 @@
   :quadratic-bezier-curve "Квадратичная кривая Безье"
   :shortcut-quadratic "Сокращённая квадратичная кривая Безье"
   :elliptical-arc-curve "Эллиптическая дуговая кривая"
-  :close-path "Закрыть контур"}
+  :close-path "Закрыть контур"
+  :remove-segment "Remove segment"}
 
  :renderer.attribute.impl.length
  {:increase "Увеличить"
@@ -530,17 +532,23 @@
   :async "Асинхронно"
   :auto "Автоматически"}
 
- :renderer.tool.impl.base.edit
- {:label "Редактирование"
-  :help-idle-drag [:div "Перетащите маркер для изменения вашей формы."]
-  :help-idle-click [:div "Щёлкните на элементе для изменения выделения"]
-  :help-edit [:div "Удерживайте %1 для ограничения направления."]
-  :help-type [:div "Введите ваш текст."]
-  :select-element "Выбрать элемент"
-  :edit "Редактировать"
-  :centroid "Центроид"
-  :handle "ручка"
-  :tool-edit "Редактирование"}
+ :renderer.tool.impl.base.edit.core
+ {:centroid "Центроид"
+  :label "Редактирование"}
+
+ :renderer.tool.impl.base.edit.idle
+ {:help-idle-drag [:div "Перетащите маркер для изменения вашей формы."]
+  :help-idle-click [:div "Щёлкните на элементе для изменения выделения"]}
+
+ :renderer.tool.impl.base.edit.select
+ {:select-element "Выбрать элемент"}
+
+ :renderer.tool.impl.base.edit.edit
+ {:help-edit [:div "Удерживайте %1 для ограничения направления."]
+  :handle "ручка"}
+
+ :renderer.tool.impl.base.edit.type
+ {:help-type [:div "Введите ваш текст."]}
 
  :renderer.tool.impl.base.transform.core
  {:label "Трансформация"
@@ -684,7 +692,8 @@
  {:select-file "Выбрать файл"}
 
  :renderer.attribute.impl.points
- {:edit-points "Редактировать точки"}
+ {:edit-points "Редактировать точки"
+  :remove-point "Remove point"}
 
  :renderer.frame.views
  {:main-canvas "основной холст"}

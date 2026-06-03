@@ -99,20 +99,15 @@
   [items opts]
   [:div.flex-1.border-b.border-border.h-full.overflow-hidden.flex
    [views/scroll-area
-    {:ref (fn [this]
-            (when this
-              (rf/dispatch [::events/scroll-to-bottom this])))}
-    (into
-     [:div.p-1 {:dir "ltr"}]
-     (map (fn [i]
-            [:div.font-mono.p-1.flex.text-xs.min-h-4 [item i opts]]) items))]])
+    {:ref #(rf/dispatch [::events/scroll-to-bottom %])}
+    (->> items
+         (map (fn [i] [:div.font-mono.p-1.flex.text-xs.min-h-4 [item i opts]]))
+         (into [:div.p-1 {:dir "ltr"}]))]])
 
 (defn completion-item
   [text selected active set-active]
   [:div.p-1.bg-secondary.text-nowrap
-   {:ref (fn [this]
-           (when (and this selected)
-             (rf/dispatch [::events/scroll-into-view this])))
+   {:ref #(when selected (rf/dispatch [::events/scroll-into-view %]))
     :on-click set-active
     :class (when selected (if active
                             "bg-accent! text-accent-foreground!"

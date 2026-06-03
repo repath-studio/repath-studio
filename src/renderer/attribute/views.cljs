@@ -74,9 +74,9 @@
       (when-let [spec-url (utils.attribute/spec-url attr data)]
         [info-button spec-url [::specification "Specification"]])]]))
 
-(defn update-handler!
+(defn update-handler
   ([event k old-v]
-   (update-handler! event k old-v true))
+   (update-handler event k old-v true))
   ([event k old-v finalize?]
    (let [new-v (.. event -target -value)]
      (when-not (= new-v old-v)
@@ -84,7 +84,7 @@
                        ::element.events/set-attr
                        ::element.events/preview-attr) k new-v])))))
 
-(defn pointer-up-handler!
+(defn pointer-up-handler
   [event]
   (let [target (.-target event)
         start-pos (.-selectionStart target)
@@ -104,10 +104,10 @@
             :id (name k)
             :default-value v
             :enter-key-hint "done"
-            :on-pointer-up pointer-up-handler!
+            :on-pointer-up pointer-up-handler
             :placeholder (if v placeholder "multiple")
-            :on-blur #(update-handler! % k v)
-            :on-key-down #(utils.key/down-handler! % v update-handler! k v)})]
+            :on-blur #(update-handler % k v)
+            :on-key-down #(utils.key/down-handler % v update-handler k v)})]
    (when-not (or (empty? (str v)) disabled)
      [:button.form-control-button.bg-primary!.absolute!.right-0.p1.invisible
       {:class "hover:bg-transparent rtl:right-auto rtl:left-0
@@ -200,11 +200,26 @@
    {:id :syntax
     :label [::syntax "Syntax"]}])
 
-(defn title
+(defn attr-card-content
+  [tag k]
+  (let [property (utils.attribute/property-data-memo k)
+        description (attribute.hierarchy/description tag k)]
+    [:div.p-5
+     [:h2.mb-4.text-lg.font-mono.text-foreground-hovered k]
+     (when description
+       [:p (i18n.views/t description)])
+     (when (utils.attribute/compatibility tag k)
+       [:<>
+        (when property
+          (->> features
+               (map (partial feature property))
+               (into [:<>])))
+        [caniusethis {:tag tag
+                      :attr k}]])]))
+
+(defn attr-label
   [tag k]
   (let [clicked-element @(rf/subscribe [::app.subs/clicked-element])
-        property (utils.attribute/property-data-memo k)
-        description (attribute.hierarchy/description tag k)
         active (and (= (:type clicked-element) :handle)
                     (= (:key clicked-element) key))]
     [:> HoverCard/Root
@@ -222,33 +237,22 @@
         :class "popover-content"
         :align "start"
         :on-escape-key-down #(.stopPropagation %)}
-       [:div.p-5
-        [:h2.mb-4.text-lg.font-mono.text-foreground-hovered k]
-        (when description
-          [:p (i18n.views/t description)])
-        (when (utils.attribute/compatibility tag k)
-          [:<>
-           (when property
-             (into [:<>]
-                   (map (partial feature property))
-                   features))
-           [caniusethis {:tag tag
-                         :attr k}]])]
+       [attr-card-content tag k]
        [views/hovercard-arrow]]]]))
 
 (defn row
   [k v locked? tag]
   (let [initial (utils.attribute/initial-memo tag k)]
     [:<>
-     [title tag k]
+     [attr-label tag k]
      [:div.flex.flex-1
       [attribute.hierarchy/form-element tag k v
        {:disabled locked?
         :default-value initial
         :placeholder initial}]]]))
 
-(defn tag-info
-  [tag]
+(defn heading-info
+  [tag attr]
   (let [properties (element.hierarchy/properties tag)]
     [:div
      [:> HoverCard/Root
@@ -263,41 +267,45 @@
          :class "popover-content"
          :align "end"
          :on-escape-key-down #(.stopPropagation %)}
-        [:div.p-5
-         [:h2.mb-4.text-lg.font-mono.text-foreground-hovered
-          (str "<" (name tag) ">")]
-         (when-let [description (:description properties)]
-           [:p (i18n.views/t description)])
-         [caniusethis {:tag tag}]
-         (when-let [url (:url properties)]
-           [:div.flex [info-button url]])]
+        (if attr
+          [attr-card-content tag attr]
+          [:div.p-5
+           [:h2.mb-4.text-lg.font-mono.text-foreground-hovered
+            (str "<" (name tag) ">")]
+           (when-let [description (:description properties)]
+             [:p (i18n.views/t description)])
+           [caniusethis {:tag tag}]
+           (when-let [url (:url properties)]
+             [:div.flex [info-button url]])])
         [views/hovercard-arrow]]]]]))
 
 (defn heading
-  [el selected-elements selected-tags tag]
-  (let [multitag? (next selected-tags)]
-    [:div.flex.bg-primary.py-5.px-4.gap-1.items-center
-     [:h1.flex-1.text-lg.overflow-hidden.text-ellipsis.button-size
-      (if-not (next selected-elements)
-        (let [el-label (:label el)
-              properties (element.hierarchy/properties tag)]
-          (if (empty? el-label)
-            (or (some-> properties :label i18n.views/t)
-                (string/capitalize (name tag)))
-            el-label))
-        (i18n.views/t [::attributes-title "%1 %2 elements"]
-                      [(count selected-elements)
-                       (when-not multitag?
-                         (name tag))]))]
+  [label tag attr]
+  [:div.flex.bg-primary.py-5.px-4.gap-1.items-center
+   [:h1.flex-1.text-lg.overflow-hidden.text-ellipsis.button-size label]
+   (when tag [heading-info tag attr])])
 
-     (when-not multitag?
-       [tag-info tag])]))
+(defn head
+  [el selected-elements selected-tags tag]
+  (let [multitag? (next selected-tags)
+        label (if-not (next selected-elements)
+                (let [el-label (:label el)
+                      properties (element.hierarchy/properties tag)]
+                  (if (empty? el-label)
+                    (or (some-> properties :label i18n.views/t)
+                        (string/capitalize (name tag)))
+                    el-label))
+                (i18n.views/t [::attributes-title "%1 %2 elements"]
+                              [(count selected-elements)
+                               (when-not multitag?
+                                 (name tag))]))]
+    [heading label (when-not multitag? tag) nil]))
 
 (defn form
   []
   (let [selected-elements @(rf/subscribe [::element.subs/selected])
         selected-tags @(rf/subscribe [::element.subs/selected-tags])
-        selected-attrs @(rf/subscribe [::element.subs/selected-attrs])
+        edit-attributes @(rf/subscribe [::element.subs/edit-attributes])
         selected-locked? @(rf/subscribe [::element.subs/selected-locked?])
         tool-state @(rf/subscribe [::tool.subs/state])
         tool-cached-state @(rf/subscribe [::tool.subs/cached-state])
@@ -306,13 +314,13 @@
                     (not= tool-state :idle)
                     (and tool-cached-state (not= tool-cached-state :idle)))]
     (when-first [el selected-elements]
-      [:div
-       [heading el selected-elements selected-tags tag]
-       (when (seq selected-attrs)
-         [:div.grid.grid-cols-2.grid-flow-row.my-px.w-full.gap-px
+      [:div.flex.flex-col.gap-px
+       [head el selected-elements selected-tags tag]
+       (when (seq edit-attributes)
+         [:div.grid.grid-cols-2.grid-flow-row.w-full.gap-px
           {:style {:grid-template-columns "minmax(120px, 120px) 1fr"}}
-          (for [[k v] selected-attrs]
+          (for [[k v] edit-attributes]
             ^{:key k}
             [row k v locked? tag])])])))
 
-(defmethod tool.hierarchy/right-panel :default [] [form])
+(defmethod tool.hierarchy/attributes-panel :default [] [form])

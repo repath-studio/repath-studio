@@ -132,8 +132,7 @@
         :on-drag-enter #(reset! dragged-over? true)
         :on-drag-leave #(reset! dragged-over? false)
         :on-drop (partial on-tab-drop id dragged-over?)
-        :ref #(when (and % active?)
-                (rf/dispatch [::events/scroll-into-view %]))}
+        :ref #(when active? (rf/dispatch [::events/scroll-into-view %]))}
        [document-title id]
        [close-button id saved?]])))
 

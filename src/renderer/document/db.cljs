@@ -1,5 +1,6 @@
 (ns renderer.document.db
   (:require
+   [config :as config]
    [malli.core :as m]
    [malli.transform :as m.transform]
    [renderer.db :refer [Vec2 JS_Object]]
@@ -19,19 +20,23 @@
 
 (def Document
   [:map {:closed true}
-   [:id {:optional true} DocumentId]
-   [:title {:optional true} DocumentTitle]
-   [:path {:optional true} string?]
+   [:id {:optional true
+         :persist true} DocumentId]
+   [:title {:optional true
+            :persist true} DocumentTitle]
+   [:path {:optional true
+           :persist true} string?]
    [:saved-history-index {:optional true} HistoryIndex]
-   [:version {:optional true} string?]
+   [:version {:optional true
+              :persist true} string?]
    [:hovered-ids {:default #{}} [:set [:or HandleId ElementId]]]
    [:collapsed-ids {:default #{}} [:set ElementId]]
    [:ignored-ids {:default #{}} [:set [:or HandleId ElementId]]]
    [:zoom {:default 1} ZoomFactor]
-   [:rotate {:default 0} number?]
    [:history {:optional true} History]
    [:pan {:default [0 0]} Vec2]
-   [:elements {:default {}} [:map-of ElementId Element]]
+   [:elements {:default {}
+               :persist true} [:map-of ElementId Element]]
    [:centered {:optional true} boolean?]
    [:attrs {:default {:fill "white"
                       :stroke "black"}} [:map-of keyword? string?]]
@@ -41,13 +46,13 @@
 (def PersistedDocument
   (->> Document
        (m/children)
-       (filter (comp #(some #{%} [:id :title :path :version :elements]) first))
+       (filter (comp :persist second))
        (into [:map {:closed true}])))
 
 (def RecentDocument
   (->> Document
        (m/children)
-       (filter (comp #(some #{%} [:id :title :path]) first))
+       (filter (comp #(some #{%} config/save-info-keys) first))
        (into [:map {:closed true}])))
 
 (def valid? (m/validator Document))

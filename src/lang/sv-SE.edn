@@ -109,7 +109,8 @@
   :group-selection "Gruppera markering"
   :ungroup-selection "Dela upp markeringsgrupp"
   :cut-selection "Klipp ut markering"
-  :trace-image "Spåra bild"}
+  :trace-image "Spåra bild"
+  :toggle-handle-selection "Toggle handle selection"}
 
  :renderer.element.impl.animation.animate
  {:label "Animera"
@@ -462,8 +463,8 @@
  :renderer.attribute.impl.d
  {:description "Attributet d definierar en bana att rita."
   :edit "Redigera bana"
-  :absolute "(Absolut)"
-  :relative "(Relativ)"
+  :absolute "Absolut"
+  :relative "Relativ"
   :move-to "Flytta till"
   :line-to "Linje till"
   :vertical-line "Vertikal linje"
@@ -473,7 +474,8 @@
   :quadratic-bezier-curve "Kvadratisk Bézier kurva"
   :shortcut-quadratic "Genväg kvadratisk Bézier kurva"
   :elliptical-arc-curve "Elliptisk båge kurva"
-  :close-path "Stäng bana"}
+  :close-path "Stäng bana"
+  :remove-segment "Remove segment"}
 
  :renderer.attribute.impl.length
  {:increase "Öka"
@@ -534,17 +536,23 @@
   :async "Asynkront"
   :auto "Automatisk"}
 
- :renderer.tool.impl.base.edit
- {:label "Redigera"
-  :help-idle-drag [:div "Dra ett handtag för att ändra din form."]
-  :help-idle-click [:div "Klicka på ett element för att ändra markering"]
-  :help-edit [:div "Håll %1 för att begränsa riktning."]
-  :help-type [:div "Ange din text."]
-  :select-element "Välj element"
-  :edit "Redigera"
-  :centroid "Centroid"
-  :handle "handtag"
-  :tool-edit "Redigera"}
+ :renderer.tool.impl.base.edit.core
+ {:centroid "Centroid"
+  :label "Redigera"}
+
+ :renderer.tool.impl.base.edit.idle
+ {:help-idle-drag [:div "Dra ett handtag för att ändra din form."]
+  :help-idle-click [:div "Klicka på ett element för att ändra markering"]}
+
+ :renderer.tool.impl.base.edit.select
+ {:select-element "Välj element"}
+
+ :renderer.tool.impl.base.edit.edit
+ {:help-edit [:div "Håll %1 för att begränsa riktning."]
+  :handle "handtag"}
+
+ :renderer.tool.impl.base.edit.type
+ {:help-type [:div "Ange din text."]}
 
  :renderer.tool.impl.base.transform.core
  {:label "Transformera"
@@ -686,7 +694,8 @@
  {:select-file "Välj fil"}
 
  :renderer.attribute.impl.points
- {:edit-points "Redigera punkter"}
+ {:edit-points "Redigera punkter"
+  :remove-point "Remove point"}
 
  :renderer.frame.views
  {:main-canvas "huvudduk"}

@@ -109,7 +109,8 @@
   :group-selection "Ομαδοποίηση επιλογής"
   :ungroup-selection "Αποομαδοποίηση επιλογής"
   :cut-selection "Αποκοπή επιλογής"
-  :trace-image "Ανίχνευση εικόνας"}
+  :trace-image "Ανίχνευση εικόνας"
+  :toggle-handle-selection "Toggle handle selection"}
 
  :renderer.element.impl.animation.animate
  {:label "Κίνηση"
@@ -478,8 +479,8 @@
  :renderer.attribute.impl.d
  {:description "To χαρακτηριστικό d καθορίζει τη διαδρομή που θα σχεδιαστεί."
   :edit "Επεξεργασία διαδρομής"
-  :absolute "(Απόλυτο)"
-  :relative "(Σχετικό)"
+  :absolute "Απόλυτο"
+  :relative "Σχετικό"
   :move-to "Μετακίνηση προς"
   :line-to "Γραμμή προς"
   :vertical-line "Κάθετη γραμμή"
@@ -489,7 +490,8 @@
   :quadratic-bezier-curve "Τετραγωνική καμπύλη Bézier"
   :shortcut-quadratic "Συντομευμένη τετραγωνική καμπύλη Bézier"
   :elliptical-arc-curve "Ελλειπτική καμπύλη τόξου"
-  :close-path "Κλείσιμο διαδρομής"}
+  :close-path "Κλείσιμο διαδρομής"
+  :remove-segment "Remove segment"}
 
  :renderer.attribute.impl.length
  {:increase "Αύξηση"
@@ -555,17 +557,23 @@
   :async "Ασύγχρονα"
   :auto "Αυτόματα"}
 
- :renderer.tool.impl.base.edit
- {:label "Επεξεργασία"
-  :help-idle-drag [:div "Σύρετε μια λαβή για να τροποποιήσετε το σχήμα σας."]
-  :help-idle-click [:div "Κάντε κλικ σε ένα στοιχείο για αλλάξετε επιλογή"]
-  :help-edit [:div "Κρατήστε %1 για να περιορίσετε την κατεύθυνση."]
-  :help-type [:div "Εισάγετε κείμενο."]
-  :select-element "Επιλογή στοιχείου"
-  :edit "Επεξεργασία"
-  :centroid "Κέντρο μάζας"
-  :handle "χειριστήριο"
-  :tool-edit "Επεξεργασία"}
+ :renderer.tool.impl.base.edit.core
+ {:centroid "Κέντρο μάζας"
+  :label "Επεξεργασία"}
+
+ :renderer.tool.impl.base.edit.idle
+ {:help-idle-drag [:div "Σύρετε μια λαβή για να τροποποιήσετε το σχήμα σας."]
+  :help-idle-click [:div "Κάντε κλικ σε ένα στοιχείο για αλλάξετε επιλογή"]}
+
+ :renderer.tool.impl.base.edit.select
+ {:select-element "Επιλογή στοιχείου"}
+
+ :renderer.tool.impl.base.edit.edit
+ {:help-edit [:div "Κρατήστε %1 για να περιορίσετε την κατεύθυνση."]
+  :handle "χειριστήριο"}
+
+ :renderer.tool.impl.base.edit.type
+ {:help-type [:div "Εισάγετε κείμενο."]}
 
  :renderer.tool.impl.base.transform.core
  {:label "Μετασχηματισμός"
@@ -708,7 +716,8 @@
  {:select-file "Επιλογή αρχείου"}
 
  :renderer.attribute.impl.points
- {:edit-points "Επεξεργασία σημείων"}
+ {:edit-points "Επεξεργασία σημείων"
+  :remove-point "Remove point"}
 
  :renderer.frame.views
  {:main-canvas "κύριος καμβάς"}

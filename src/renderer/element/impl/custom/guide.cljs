@@ -10,8 +10,7 @@
    [renderer.frame.subs :as-alias frame.subs]
    [renderer.hierarchy :as hierarchy]
    [renderer.input.handlers :as input.handlers]
-   [renderer.input.impl.pointer :as input.impl.pointer]
-   [renderer.tool.views :as tool.views]))
+   [renderer.input.impl.pointer :as input.impl.pointer]))
 
 (hierarchy/derive! :guide ::element.hierarchy/renderable)
 
@@ -80,7 +79,7 @@
 
 (defmethod element.hierarchy/render-to-string :guide [_el] nil)
 
-(defmethod element.hierarchy/edit-drag :guide
+(defmethod element.hierarchy/handle-drag :guide
   [el offset handle lock?]
   (let [[x y] (cond-> offset
                 lock?
@@ -93,17 +92,16 @@
 
       el)))
 
-(defmethod element.hierarchy/render-edit :guide
+(defmethod element.hierarchy/handles :guide
   [el]
   (let [{:keys [attrs]} el
         {:keys [x y]} attrs]
-    [tool.views/handle {:x x
-                        :y y
-                        :id :position
-                        :label [::position "position"]
-                        :type :handle
-                        :action :edit
-                        :element-id (:id el)}]))
+    [{:position [x y]
+      :id :position
+      :label [::position "position"]
+      :type :handle
+      :action :edit
+      :parent (:id el)}]))
 
 (defmethod attribute.hierarchy/description [:guide :orientation]
   []

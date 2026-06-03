@@ -109,7 +109,8 @@
   :group-selection "Seçimi grupla"
   :ungroup-selection "Seçim grubunu çöz"
   :cut-selection "Seçimi kes"
-  :trace-image "Resim izini sür"}
+  :trace-image "Resim izini sür"
+  :toggle-handle-selection "Toggle handle selection"}
 
  :renderer.element.impl.animation.animate
  {:label "Animasyon"
@@ -454,8 +455,8 @@
  :renderer.attribute.impl.d
  {:description "d özniteliği çizilecek yolu tanımlar."
   :edit "Yolu düzenle"
-  :absolute "(Mutlak)"
-  :relative "(Göreceli)"
+  :absolute "Mutlak"
+  :relative "Göreceli"
   :move-to "Şuraya Taşı"
   :line-to "Şuraya Çizgi"
   :vertical-line "Dikey Çizgi"
@@ -465,7 +466,8 @@
   :quadratic-bezier-curve "Kuadratik Bézier Eğrisi"
   :shortcut-quadratic "Kısayol Kuadratik Bézier Eğrisi"
   :elliptical-arc-curve "Eliptik Yay Eğrisi"
-  :close-path "Yolu Kapat"}
+  :close-path "Yolu Kapat"
+  :remove-segment "Remove segment"}
 
  :renderer.attribute.impl.length
  {:increase "Artır"
@@ -526,17 +528,23 @@
   :async "Eşzamansız"
   :auto "Otomatik"}
 
- :renderer.tool.impl.base.edit
- {:label "Düzenle"
-  :help-idle-drag [:div "Şeklinizi değiştirmek için bir tutamacı sürükleyin."]
-  :help-idle-click [:div "Seçimi değiştirmek için bir öğeye tıklayın"]
-  :help-edit [:div "Yönü kısıtlamak için %1 tuşunu basılı tutun."]
-  :help-type [:div "Metninizi girin."]
-  :select-element "Eleman seç"
-  :edit "Düzenle"
-  :centroid "Ağırlık merkezi"
-  :handle "tutamak"
-  :tool-edit "Düzenle"}
+ :renderer.tool.impl.base.edit.core
+ {:centroid "Ağırlık merkezi"
+  :label "Düzenle"}
+
+ :renderer.tool.impl.base.edit.idle
+ {:help-idle-drag [:div "Şeklinizi değiştirmek için bir tutamacı sürükleyin."]
+  :help-idle-click [:div "Seçimi değiştirmek için bir öğeye tıklayın"]}
+
+ :renderer.tool.impl.base.edit.select
+ {:select-element "Eleman seç"}
+
+ :renderer.tool.impl.base.edit.edit
+ {:help-edit [:div "Yönü kısıtlamak için %1 tuşunu basılı tutun."]
+  :handle "tutamak"}
+
+ :renderer.tool.impl.base.edit.type
+ {:help-type [:div "Metninizi girin."]}
 
  :renderer.tool.impl.base.transform.core
  {:label "Dönüştür"
@@ -679,7 +687,8 @@
  {:select-file "Dosya seç"}
 
  :renderer.attribute.impl.points
- {:edit-points "Noktaları düzenle"}
+ {:edit-points "Noktaları düzenle"
+  :remove-point "Remove point"}
 
  :renderer.frame.views
  {:main-canvas "ana tuval"}

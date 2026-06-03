@@ -25,7 +25,7 @@
 (m/=> valid-unit? [:-> string? boolean?])
 (defn valid-unit?
   [s]
-  (contains? units s))
+  (contains? units (string/lower-case s)))
 
 (m/=> multiplier [:-> string? number?])
 (defn multiplier
@@ -75,7 +75,7 @@
   ([v precision remove-trailing-zeros]
    (cond-> (.toFixed v precision)
      remove-trailing-zeros
-     (-> js/parseFloat str)))) ; REVIEW
+     (-> js/parseFloat str))))
 
 (m/=> transform [:-> [:or string? number? nil?] ifn? [:* any?] string?])
 (defn transform

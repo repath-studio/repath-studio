@@ -1,6 +1,6 @@
 (ns renderer.document.events
   (:require
-   [cljs.reader :as cljs.reader]
+   [clojure.edn :as edn]
    [config :as config]
    [malli.error :as m.error]
    [re-frame.core :as rf]
@@ -52,6 +52,12 @@
  [persist]
  (fn [db [_ id]]
    (document.handlers/expand-el db id)))
+
+(rf/reg-event-db
+ ::toggle-el-collapsed
+ [persist]
+ (fn [db [_ id]]
+   (document.handlers/toggle-el-collapsed db id)))
 
 (rf/reg-event-db
  ::swap-colors
@@ -162,7 +168,7 @@
 
 (defn string->edn
   [s]
-  (try (cljs.reader/read-string s)
+  (try (edn/read-string s)
        (catch :default _err nil)))
 
 (rf/reg-event-fx
@@ -337,7 +343,7 @@
  ::save
  (fn [{:keys [db]} [_ {:keys [close id]}]]
    (let [id (or id (:active-document db))
-         document (document.handlers/persisted-format db id)
+         document (document.handlers/persisted db id)
          on-success [::saved close]
          on-error [::app.events/toast-error]]
      (when (and id (= (:state db) :idle))
@@ -366,7 +372,7 @@
  ::save-as
  (fn [{:keys [db]} [_ _]]
    (let [id (:active-document db)
-         document (document.handlers/persisted-format db id)
+         document (document.handlers/persisted db id)
          on-success [::saved false]
          on-error [::app.events/toast-error]]
      (cond
@@ -388,7 +394,7 @@
  ::download
  (fn [{:keys [db]} [_]]
    (when-let [data (some->> (:active-document db)
-                            (document.handlers/persisted-format db)
+                            (document.handlers/persisted db)
                             (document.handlers/->save-format))]
      {:db (document.handlers/update-saved-history-index db)
       ::effects/download {:data data

@@ -18,6 +18,8 @@
    [renderer.snap.views :as snap.views]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
+   [renderer.tool.views :as tool.views]
+   [renderer.utils.dom :as utils.dom]
    [renderer.utils.element :as utils.element]
    [renderer.utils.svg :as utils.svg]))
 
@@ -65,30 +67,34 @@
         {:keys [width height]} @(rf/subscribe [::app.subs/dom-rect])
         read-only? @(rf/subscribe [::document.subs/read-only?])
         cursor @(rf/subscribe [::tool.subs/cursor])
+        bbox @(rf/subscribe [::element.subs/bbox])
         active-tool @(rf/subscribe [::tool.subs/active])
-        rotate @(rf/subscribe [::document.subs/rotate])
+        edit? @(rf/subscribe [::tool.subs/editing?])
         grid? @(rf/subscribe [::app.subs/grid?])
         state @(rf/subscribe [::tool.subs/state])
         idle? @(rf/subscribe [::tool.subs/idle?])
         pointer-handler (partial input.impl.pointer/handler! el)
         filters @(rf/subscribe [::a11y.subs/filters])
         snap? @(rf/subscribe [::snap.subs/active?])]
-    [:svg#canvas {:on-pointer-up pointer-handler
-                  :on-pointer-down pointer-handler
-                  :on-pointer-move pointer-handler
-                  :on-context-menu (when-not idle? pointer-handler)
-                  :on-key-up input.impl.keyboard/handler!
-                  :on-key-down input.impl.keyboard/handler!
-                  :tab-index 0 ; Enable keyboard events
-                  :viewBox viewbox-attr
-                  :on-drop input.impl.drag/handler!
-                  :on-drag-over input.impl.drag/handler!
-                  :width width
-                  :height height
-                  :transform (str "rotate(" rotate ")")
-                  :cursor cursor
-                  :style {:outline 0
-                          :background (:fill attrs)}}
+    [:svg {:id utils.dom/canvas-id
+           :on-pointer-up pointer-handler
+           :on-pointer-down pointer-handler
+           :on-pointer-move pointer-handler
+           :on-context-menu (when-not idle? pointer-handler)
+           :on-key-up input.impl.keyboard/handler!
+           :on-key-down input.impl.keyboard/handler!
+           :tab-index 0 ; Enable keyboard events
+           :viewBox viewbox-attr
+           :on-drop input.impl.drag/handler!
+           :on-drag-over input.impl.drag/handler!
+           :width width
+           :height height
+           :cursor cursor
+           :style {:outline 0
+                   :background (:fill attrs)}}
+     (when (and (seq bbox) (not edit?))
+       [tool.views/selected-bbox bbox])
+
      (for [el child-elements]
        ^{:key (:id el)}
        [element.hierarchy/render el])

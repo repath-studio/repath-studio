@@ -11,6 +11,7 @@
    [renderer.element.handlers :as element.handlers]
    [renderer.history.events :refer [finalize]]
    [renderer.tool.handlers :as tool.handlers]
+   [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.extra :refer [partial-right]]))
@@ -83,7 +84,7 @@
  ::delete
  [(finalize [::delete-selection "Delete selection"])]
  (fn [db _]
-   (element.handlers/delete db)))
+   (tool.hierarchy/on-delete db)))
 
 (rf/reg-event-db
  ::deselect-all
@@ -357,3 +358,9 @@
        (let [extension (last (string/split (.-name file) "."))]
          (when (= extension "rps")
            {:dispatch [::document.events/file-read nil file-handle file]}))))))
+
+(rf/reg-event-db
+ ::toggle-handle-selection
+ [(finalize [::toggle-handle-selection "Toggle handle selection"])]
+ (fn [db [_ el-id handle-id additive]]
+   (element.handlers/toggle-handle-selection db el-id handle-id additive)))

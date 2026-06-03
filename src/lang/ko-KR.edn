@@ -109,7 +109,8 @@
   :group-selection "선택 그룹화"
   :ungroup-selection "선택 그룹 해제"
   :cut-selection "선택 잘라내기"
-  :trace-image "이미지 추적"}
+  :trace-image "이미지 추적"
+  :toggle-handle-selection "Toggle handle selection"}
 
  :renderer.element.impl.animation.animate
  {:label "애니메이션"
@@ -421,8 +422,8 @@
  :renderer.attribute.impl.d
  {:description "d 속성은 그릴 패스를 정의합니다."
   :edit "패스 편집"
-  :absolute "(절대)"
-  :relative "(상대)"
+  :absolute "절대"
+  :relative "상대"
   :move-to "이동"
   :line-to "직선"
   :vertical-line "수직선"
@@ -432,7 +433,8 @@
   :quadratic-bezier-curve "2차 베지어 곡선"
   :shortcut-quadratic "단축 2차 베지어 곡선"
   :elliptical-arc-curve "타원 호 곡선"
-  :close-path "패스 닫기"}
+  :close-path "패스 닫기"
+  :remove-segment "Remove segment"}
 
  :renderer.attribute.impl.length
  {:increase "증가"
@@ -491,17 +493,23 @@
   :async "비동기식"
   :auto "자동"}
 
- :renderer.tool.impl.base.edit
- {:label "편집"
-  :help-idle-drag [:div "핸들을 드래그하여 모양을 수정합니다."]
-  :help-idle-click [:div "요소를 클릭하여 선택을 변경합니다"]
-  :help-edit [:div "%1을 누르면 방향을 제한합니다."]
-  :help-type [:div "텍스트를 입력하세요."]
-  :select-element "요소 선택"
-  :edit "편집"
-  :centroid "도심"
-  :handle "핸들"
-  :tool-edit "편집"}
+ :renderer.tool.impl.base.edit.core
+ {:centroid "도심"
+  :label "편집"}
+
+ :renderer.tool.impl.base.edit.idle
+ {:help-idle-drag [:div "핸들을 드래그하여 모양을 수정합니다."]
+  :help-idle-click [:div "요소를 클릭하여 선택을 변경합니다"]}
+
+ :renderer.tool.impl.base.edit.select
+ {:select-element "요소 선택"}
+
+ :renderer.tool.impl.base.edit.edit
+ {:help-edit [:div "%1을 누르면 방향을 제한합니다."]
+  :handle "핸들"}
+
+ :renderer.tool.impl.base.edit.type
+ {:help-type [:div "텍스트를 입력하세요."]}
 
  :renderer.tool.impl.base.transform.core
  {:label "변환"
@@ -640,7 +648,8 @@
  {:select-file "파일 선택"}
 
  :renderer.attribute.impl.points
- {:edit-points "점 편집"}
+ {:edit-points "점 편집"
+  :remove-point "Remove point"}
 
  :renderer.frame.views
  {:main-canvas "메인 캔버스"}

@@ -7,8 +7,7 @@
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.handlers :as element.handlers]
    [renderer.utils.attribute :as utils.attribute]
-   [renderer.utils.element :as utils.element]
-   [renderer.utils.map :as utils.map]))
+   [renderer.utils.element :as utils.element]))
 
 (rf/reg-sub
  ::root
@@ -90,23 +89,9 @@
  :-> (comp boolean seq rest))
 
 (rf/reg-sub
- ::selected-attrs
+ ::edit-attributes
  :<- [::selected]
- :<- [::multiple-selected?]
- (fn [[selected-elements multiple-selected?] _]
-   (when (seq selected-elements)
-     (let [attrs (->> selected-elements
-                      (map utils.element/attributes)
-                      (apply utils.map/merge-common-with
-                             (fn [v1 v2] (when (= v1 v2) v1))))
-           attrs (if multiple-selected?
-                   (dissoc attrs :id)
-                   (let [el (first selected-elements)
-                         props (utils.element/properties el)]
-                     (->> (utils.element/attributes el)
-                          (sort-by (fn [[id _]]
-                                     (-> props :attrs (.indexOf id)))))))]
-       (sort-by (fn [[id _]] (.indexOf utils.attribute/order id)) attrs)))))
+ :-> utils.element/edit-attributes)
 
 (rf/reg-sub
  ::bbox
@@ -157,3 +142,10 @@
  ::not-every-top-level?
  :<- [::every-top-level?]
  :-> not)
+
+(rf/reg-sub
+ ::handle-selected?
+ :<- [::document.subs/elements]
+ (fn [elements [_ el-id handle-id]]
+   (-> (get-in elements [el-id :selected-handles])
+       (contains? handle-id))))

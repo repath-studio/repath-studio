@@ -7,9 +7,12 @@
    [clojure.string :as string]
    [clojure.zip :as zip]
    [malli.core :as m]
+   [malli.transform :as m.transform]
    [reagent.dom.server :as dom.server]
    [renderer.db :refer [BBox Vec2 JS_Element]]
-   [renderer.element.db :as element.db :refer [Element ElementAttrs]]
+   [renderer.element.db
+    :as element.db
+    :refer [Element ElementAttrs PersistedElement]]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.snap.db :refer [SnapOptions]]
    [renderer.utils.attribute :as utils.attribute]
@@ -89,10 +92,36 @@
 (m/=> attributes [:-> map? map?])
 (defn attributes
   "Returns existing attributes merged with defaults."
-  [{:keys [tag attrs]}]
-  (cond->> attrs
-    tag
-    (merge (utils.attribute/defaults-memo tag))))
+  [el]
+  (let [{:keys [tag attrs]} el]
+    (cond->> attrs
+      tag
+      (merge (utils.attribute/defaults-memo tag)))))
+
+(m/=> sorted-attributes [:-> Element [:sequential [:tuple keyword? string?]]])
+(defn sorted-attributes
+  [el]
+  (let [props (properties el)]
+    (->> (attributes el)
+         (sort-by (fn [[id _]] (-> props :attrs (.indexOf id)))))))
+
+(m/=> common-attributes [:-> [:sequential Element] ElementAttrs])
+(defn common-attributes
+  [els]
+  (->> els
+       (map attributes)
+       (apply utils.map/merge-common-with
+              (fn [v1 v2] (when (= v1 v2) v1)))))
+
+(m/=> edit-attributes [:->
+                       [:sequential Element]
+                       [:sequential [:tuple keyword? string?]]])
+(defn edit-attributes
+  [els]
+  (->> (if (second els)
+         (-> els common-attributes (dissoc :id))
+         (some-> els first sorted-attributes))
+       (sort-by (fn [[id _]] (.indexOf utils.attribute/order id)))))
 
 (m/=> supported-attr? [:-> map? keyword? boolean?])
 (defn supported-attr?
@@ -233,3 +262,10 @@
 
       :else
       (recur (zip/next loc)))))
+
+(m/=> persisted [:-> Element PersistedElement])
+(defn persisted
+  [el]
+  (m/decode PersistedElement
+            el
+            m.transform/strip-extra-keys-transformer))

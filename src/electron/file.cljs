@@ -14,27 +14,27 @@
    :filters [{:name config/ext
               :extensions [config/ext]}]})
 
-(defn serialize-document
+(defn serialize
   [data file-path]
   (pr-str (assoc data
                  :path file-path
                  :title (.basename path file-path))))
 
-(defn write-file!
+(defn write
   [file-path data]
   (let [document (-> (reduce dissoc data config/save-info-keys)
                      (pr-str))]
     (-> (.writeFile fs/promises file-path document "utf-8")
         (.then #(-> (select-keys data [:id])
-                    (serialize-document file-path))))))
+                    (serialize file-path))))))
 
-(defn read!
+(defn read
   [file-path]
   (let [data (.readFileSync fs file-path "utf-8")
         document (edn/read-string data)]
-    (serialize-document document file-path)))
+    (serialize document file-path)))
 
-(defn save-dialog!
+(defn show-save-dialog
   [options]
   (-> (.showSaveDialog dialog (clj->js options))
       (.then (fn [^js/Object result]
@@ -42,7 +42,7 @@
                  (js/Promise.reject)
                  (-> result js->clj (get "filePath")))))))
 
-(defn save-as!
+(defn save-as
   [data]
   (let [document (edn/read-string data)
         file-path (:path document)
@@ -53,33 +53,33 @@
 
                   :always
                   (update :defaultPath #(.join path % (:title document))))]
-    (-> (save-dialog! options)
+    (-> (show-save-dialog options)
         (.then (fn [file-path]
                  (some-> file-path
-                         (write-file! document)))))))
+                         (write document)))))))
 
-(defn save!
+(defn save
   [data]
   (let [document (edn/read-string data)
         file-path (:path document)]
     (if (and file-path (.existsSync fs file-path))
-      (write-file! file-path document)
-      (save-as! data))))
+      (write file-path document)
+      (save-as data))))
 
-(defn open!
+(defn open
   [file-path]
   (if file-path
-    (array (read! file-path))
+    (array (read file-path))
     (-> (.showOpenDialog dialog (clj->js dialog-options))
         (.then (fn [^js/Object result]
                  (if (.-canceled result)
                    (js/Promise.reject)
                    (->> (.-filePaths result)
-                        (mapv read!)
+                        (mapv read)
                         (clj->js)
                         (js/Promise.resolve))))))))
 
-(defn print!
+(defn show-print-dialog
   [content]
   (let [window (BrowserWindow. #js {:autoHideMenuBar true
                                     :title "Print Preview"})]

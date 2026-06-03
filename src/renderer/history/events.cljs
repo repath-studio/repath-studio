@@ -3,8 +3,7 @@
    [re-frame.core :as rf]
    [renderer.app.effects :as-alias app.effects]
    [renderer.effects :as-alias effects]
-   [renderer.history.handlers :as history.handlers]
-   [renderer.tool.handlers :as tool.handlers]))
+   [renderer.history.handlers :as history.handlers]))
 
 (rf/reg-event-db
  ::undo
@@ -76,12 +75,8 @@
                                           [::app.effects/persist])))))))
 
 (defn finalize
-  "Returns an interceptor that:
-   1. Checks if (:state db) is :idle, short-circuiting if not.
-   2. Injects a performance timestamp into coeffects as :now.
-   3. Deactivates the current tool.
-   4. After the handler runs, calls history.handlers/finalize on the
-      resulting db.
+  "Returns an interceptor that calls history.handlers/finalize on the db after
+   the handler runs.
 
    Accepts either static explanation args:
      (finalize [::lock-selection \"Lock selection\"])
@@ -93,20 +88,9 @@
   [& explanation]
   (rf/->interceptor
    :id ::finalize
-   :before (fn [context]
-             (let [db (rf/get-coeffect context :db)]
-               (if (or (= (:state db) :idle)
-                       (not (:active-document db)))
-                 (cond-> context
-                   :always
-                   (rf/assoc-coeffect :now (.now js/performance))
-
-                   (:active-document db)
-                   (rf/assoc-coeffect :db (tool.handlers/deactivate db)))
-                 (assoc context :queue []))))
    :after (fn [context]
             (if-let [db (rf/get-effect context :db)]
-              (let [now (rf/get-coeffect context :now)
+              (let [now (.now js/performance)
                     event (rf/get-coeffect context :event)
                     expl (if (fn? (first explanation))
                            ((first explanation) event)

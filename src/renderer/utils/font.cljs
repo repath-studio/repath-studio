@@ -11,11 +11,11 @@
    [renderer.utils.dom :as utils.dom]
    [renderer.utils.element :as utils.element]))
 
-(m/=> get-computed-styles! [:-> Element [:maybe map?]])
-(defn get-computed-styles!
+(m/=> get-computed-styles [:-> Element [:maybe map?]])
+(defn get-computed-styles
   [{:keys [content]
     :as el}]
-  (when-let [svg (utils.dom/canvas-element!)]
+  (when-let [svg (utils.dom/get-canvas-element)]
     (let [dom-el (utils.element/->dom-element el)]
       (.appendChild svg dom-el)
       (set! (.-innerHTML dom-el) (if (empty? content) "\u00a0" content))

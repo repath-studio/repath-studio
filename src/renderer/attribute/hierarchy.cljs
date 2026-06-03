@@ -2,20 +2,13 @@
   (:require
    [renderer.hierarchy :as hierarchy]))
 
-(defmulti initial
-  (fn [tag k] [tag k])
-  :hierarchy hierarchy/hierarchy)
+(defn dispatch [tag k & _more] [tag k])
 
+(defmulti initial dispatch :hierarchy hierarchy/hierarchy)
+(defmulti description dispatch :hierarchy hierarchy/hierarchy)
+(defmulti form-element dispatch :hierarchy hierarchy/hierarchy)
 (defmulti update-attr
   (fn [el k & _more] [(:tag el) k])
-  :hierarchy hierarchy/hierarchy)
-
-(defmulti description
-  (fn [tag k] [tag k])
-  :hierarchy hierarchy/hierarchy)
-
-(defmulti form-element
-  (fn [tag k _v _attrs] [tag k])
   :hierarchy hierarchy/hierarchy)
 
 (defmethod initial :default [_tag _k] nil)

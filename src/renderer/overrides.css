@@ -119,6 +119,10 @@
   @apply p-0;
 }
 
+.CodeMirror-scroll {
+  @apply overflow-hidden!;
+}
+
 /* react-timeline-editor */
 
 .timeline-editor {

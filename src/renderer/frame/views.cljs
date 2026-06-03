@@ -14,6 +14,7 @@
    [renderer.i18n.views :as i18n.views]
    [renderer.input.impl.wheel :as input.impl.wheel]
    [renderer.tool.subs :as-alias tool.subs]
+   [renderer.utils.dom :as utils.dom]
    [renderer.views :as views]))
 
 (defn inner-component
@@ -102,7 +103,7 @@
             :class "overflow-hidden flex-1 border-0"
             :on-key-down on-keyboard-event
             :on-key-up on-keyboard-event
-            :id "frame"
+            :id utils.dom/frame-id
             :title (i18n.views/t [::main-canvas "main canvas"])
             :ref ref
             :style {:background (-> root-el :attrs :fill)}}

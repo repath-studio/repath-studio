@@ -7,7 +7,6 @@
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
-   [renderer.tool.views :as tool.views]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
@@ -75,13 +74,33 @@
         [rx ry] (map utils.length/unit->px [rx ry])]
     (* Math/PI rx ry)))
 
-(defmethod element.hierarchy/edit-drag :ellipse
+(defmethod element.hierarchy/handle-drag :ellipse
   [el [x y] handle _lock?]
   (let [{{:keys [rx ry]} :attrs} el]
     (case handle
       :rx (attribute.hierarchy/update-attr el (if rx :rx :ry) #(abs (+ % x)))
       :ry (attribute.hierarchy/update-attr el (if ry :ry :rx) #(abs (- % y)))
       el)))
+
+(defmethod element.hierarchy/handles :ellipse
+  [el]
+  (let [bbox (:bbox el)
+        [cx cy] (utils.bounds/center bbox)
+        [rx ry] (matrix/div (utils.bounds/->dimensions bbox) 2)]
+    [{:type :handle
+      :action :edit
+      :parent (:id el)
+      :position [(+ cx rx) cy]
+      :id :rx
+      :cursor "ew-resize"
+      :label [::rx-handle "x radius handle"]}
+     {:type :handle
+      :action :edit
+      :parent (:id el)
+      :position [cx (- cy ry)]
+      :id :ry
+      :cursor "ns-resize"
+      :label [::ry-handle "y radius handle"]}]))
 
 (defmethod element.hierarchy/render-edit :ellipse
   [el]
@@ -103,20 +122,4 @@
                                                          :y cy}]
 
      [utils.svg/label (utils.length/->fixed ry 2 false) {:x cx
-                                                         :y (- cy (/ ry 2))}]
-
-     (->> [{:x (+ cx rx)
-            :y cy
-            :id :rx
-            :cursor "ew-resize"
-            :label [::rx-handle "x radius handle"]}
-           {:x cx
-            :y (- cy ry)
-            :id :ry
-            :cursor "ns-resize"
-            :label [::ry-handle "y radius handle"]}]
-          (mapv (comp tool.views/handle
-                      (partial merge {:type :handle
-                                      :action :edit
-                                      :element-id (:id el)})))
-          (into [:g]))]))
+                                                         :y (- cy (/ ry 2))}]]))

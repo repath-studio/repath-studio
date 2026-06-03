@@ -22,9 +22,6 @@
                      (and element (not (utils.element/root? element))))
         cursor (if movable? "move" "default")]
     (cond-> db
-      (not (:shift-key e))
-      (element.handlers/clear-ignored)
-
       :always
       (-> (element.handlers/clear-hovered)
           (tool.handlers/set-cursor cursor))
@@ -44,24 +41,20 @@
 
 (defmethod tool.hierarchy/on-pointer-down [::transform/transform :idle]
   [db e]
-  (let [{:keys [button element]} e]
+  (let [{:keys [button element]} e
+        {:keys [selected id]} element]
     (cond-> db
       element
       (assoc :clicked-element element)
 
-      (and (= button :right)
-           (not= (:id element) :bbox))
-      (element.handlers/toggle-selection (:id element) (:shift-key e))
-
-      :always
-      (element.handlers/ignore :bbox))))
+      (and (= button :right) (not selected))
+      (element.handlers/toggle-selection id (:shift-key e)))))
 
 (defmethod tool.hierarchy/on-pointer-up [::transform/transform :idle]
   [db e]
   (let [{:keys [element timestamp]} e]
     (-> db
         (dissoc :clicked-element)
-        (element.handlers/unignore :bbox)
         (element.handlers/toggle-selection (:id element) (:shift-key e))
         (history.handlers/finalize timestamp
                                    (if (:selected element)
@@ -82,18 +75,16 @@
 (m/=> drag-start->state [:-> [:or Element Handle] State])
 (defn drag-start->state
   [el]
-  (let [{el-type :type
-         :keys [tag action]} el]
-    (case el-type
-      :element
-      (if (= tag :canvas)
-        :select
-        :translate)
+  (case (:type el)
+    :element
+    (if (utils.element/root? el)
+      :select
+      :translate)
 
-      :handle
-      action
+    :handle
+    (:action el)
 
-      :idle)))
+    :idle))
 
 (defmethod tool.hierarchy/on-drag-start [::transform/transform :idle]
   [db e]
@@ -135,9 +126,6 @@
   [db e]
   (let [k (:key e)]
     (cond-> db
-      (= k "Shift")
-      (element.handlers/ignore :bbox)
-
       (utils.key/arrow? k)
       (element.handlers/translate (event->offset e))
 
@@ -148,9 +136,10 @@
   [db e]
   (let [k (:key e)]
     (cond-> db
-      (= k "Shift")
-      (element.handlers/clear-ignored)
-
       (utils.key/arrow? k)
       (history.handlers/finalize (:timestamp e)
                                  [::move-selection "Move selection"]))))
+
+(defmethod tool.hierarchy/on-delete [::transform/transform :idle]
+  [db]
+  (element.handlers/delete db))

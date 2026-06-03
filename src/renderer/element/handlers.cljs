@@ -14,7 +14,7 @@
     :as element.db
     :refer [ElementAttrs Element ElementId ElementTag AnimationTag Direction]]
    [renderer.element.hierarchy :as element.hierarchy]
-   [renderer.tool.db :refer [HandleId]]
+   [renderer.tool.db :refer [Handle HandleId]]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
@@ -412,7 +412,9 @@
   ([db]
    (reduce deselect db (selected-ids db)))
   ([db id]
-   (assoc-prop db id :selected false)))
+   (-> db
+       (assoc-prop id :selected-handles #{})
+       (assoc-prop id :selected false))))
 
 (m/=> collapse [:-> App ElementId App])
 (defn collapse
@@ -548,13 +550,6 @@
   (cond-> db
     (:active-document db)
     (assoc-in [:documents (:active-document db) :hovered-ids] #{})))
-
-(m/=> unignore [:-> App [:or ElementId HandleId] App])
-(defn unignore
-  [db id]
-  (cond-> db
-    (:active-document db)
-    (update-in [:documents (:active-document db) :ignored-ids] disj id)))
 
 (m/=> clear-ignored [:-> App App])
 (defn clear-ignored
@@ -1000,3 +995,61 @@
   [db els]
   (let [options (-> db :snap :options)]
     (into [] (mapcat #(utils.element/acc-snapping-points % options)) els)))
+
+(m/=> handles [:function
+               [:-> App [:vector Handle]]
+               [:-> App ElementId [:vector Handle]]])
+(defn handles
+  ([db]
+   (reduce (fn [acc id] (into acc (handles db id))) [] (selected-ids db)))
+  ([db el-id]
+   (-> (entity db el-id)
+       (element.hierarchy/handles))))
+
+(m/=> selected-handles [:-> App ElementId [:set HandleId]])
+(defn selected-handles
+  [db el-id]
+  (get-in db (path db el-id :selected-handles)))
+
+(m/=> handle-selected? [:-> App ElementId HandleId boolean?])
+(defn handle-selected?
+  [db el-id handle-id]
+  (-> (selected-handles db el-id)
+      (contains? handle-id)))
+
+(m/=> select-handle [:-> App HandleId ElementId App])
+(defn select-handle
+  [db handle-id el-id]
+  (update-in db (path db el-id :selected-handles) conj handle-id))
+
+(m/=> clear-selected-handles [:function
+                              [:-> App App]
+                              [:-> App ElementId App]])
+(defn clear-selected-handles
+  ([db]
+   (reduce clear-selected-handles db (selected-ids db)))
+  ([db el-id]
+   (assoc-in db (path db el-id :selected-handles) #{})))
+
+(m/=> toggle-handle-selection [:-> App HandleId boolean? App])
+(defn toggle-handle-selection
+  [db el-id handle-id additive]
+  (if additive
+    (update-in db (path db el-id :selected-handles)
+               (if (handle-selected? db el-id handle-id) disj conj)
+               handle-id)
+    (-> db
+        (assoc-prop :selected-handles #{})
+        (assoc-prop el-id :selected-handles #{handle-id}))))
+
+(m/=> delete-segments [:function
+                       [:-> App App]
+                       [:-> App ElementId App]])
+(defn delete-segments
+  ([db]
+   (->> (selected-ids db)
+        (reduce delete-segments db)))
+  ([db el-id]
+   (-> db
+       (update-in (path db el-id) element.hierarchy/delete-segments)
+       (refresh-bbox el-id))))

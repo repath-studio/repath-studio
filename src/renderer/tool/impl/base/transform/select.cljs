@@ -1,10 +1,7 @@
 (ns renderer.tool.impl.base.transform.select
   (:require
    [malli.core :as m]
-   [re-frame.core :as rf]
-   [reagent.core :as reagent]
    [renderer.app.db :refer [App]]
-   [renderer.app.handlers :as app.handlers]
    [renderer.element.db :refer [Element]]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
@@ -17,6 +14,7 @@
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.transform.core :as-alias transform]
    [renderer.utils.bounds :as utils.bounds]
+   [renderer.utils.element :as utils.element]
    [renderer.views :as views]))
 
 (defmethod tool.hierarchy/help [::transform/transform :select]
@@ -24,61 +22,43 @@
   (i18n.views/t [::select [:div "Hold %1 to select intersecting elements."]]
                 [[views/kbd "Alt"]]))
 
-(defonce select-box (reagent/atom nil))
-
-(rf/reg-fx
- ::set-select-box
- (fn [value]
-   (reset! select-box value)))
-
 (m/=> selectable? [:-> [:or Element Handle nil?] boolean?])
 (defn selectable?
   [el]
-  (and el
+  (and (= (:type el) :element)
        (not (:selected el))
-       (not= :handle (:type el))
-       (not= :canvas (:tag el))))
+       (not (utils.element/root? el))))
 
 (m/=> select-element [:-> App boolean? App])
 (defn select-element
-  [db multiple]
+  [db additive]
   (let [{:keys [clicked-element]} db]
     (cond-> db
       (selectable? clicked-element)
-      (element.handlers/toggle-selection (:id clicked-element) multiple))))
+      (element.handlers/toggle-selection (:id clicked-element) additive))))
 
 (m/=> hovered? [:-> Element boolean? boolean?])
 (defn hovered?
-  [el intersecting?]
-  (or (when-let [selection-bbox (element.hierarchy/bbox @select-box)]
-        (when-let [el-bbox (:bbox el)]
-          (if intersecting?
-            (utils.bounds/intersect? el-bbox selection-bbox)
-            (utils.bounds/contained? el-bbox selection-bbox))))
-      false))
+  [db intersecting? el]
+  (let [selection-bbox (element.hierarchy/bbox (:select-box db))
+        el-bbox (:bbox el)]
+    (if (and selection-bbox el-bbox)
+      (if intersecting?
+        (utils.bounds/intersect? el-bbox selection-bbox)
+        (utils.bounds/contained? el-bbox selection-bbox))
+      false)))
 
 (m/=> reduce-by-area [:-> App PointerEvent ifn? App])
 (defn reduce-by-area
   [db e f]
   (let [{:keys [alt-key]} e
         intersecting? (or alt-key (input.handlers/multi-touch? db))]
-    (transduce
-     (comp
-      (element.handlers/visible)
-      (filter #(hovered? % intersecting?))
-      (map :id))
-     (fn [db id]
-       (cond-> db
-         id (f id)))
-     db (element.handlers/entities db))))
-
-(defn render-select-box
-  []
-  [element.hierarchy/render @select-box])
-
-(defn clear-select-box
-  [db]
-  (app.handlers/add-fx db [::set-select-box nil]))
+    (transduce (comp (element.handlers/visible)
+                     (filter (partial hovered? db intersecting?))
+                     (map :id))
+               (fn [db id] (cond-> db id (f id)))
+               db
+               (element.handlers/entities db))))
 
 (m/=> select-rect [:-> App boolean? Element])
 (defn select-rect
@@ -92,7 +72,7 @@
   (let [{:keys [alt-key]} e]
     (-> db
         (element.handlers/clear-hovered)
-        (app.handlers/add-fx [::set-select-box (select-rect db alt-key)])
+        (tool.handlers/set-select-box (select-rect db alt-key))
         (reduce-by-area e element.handlers/hover))))
 
 (defmethod tool.hierarchy/on-drag-end [::transform/transform :select]
@@ -103,7 +83,7 @@
 
     :always
     (-> (reduce-by-area e element.handlers/select)
-        (clear-select-box)
+        (tool.handlers/set-select-box nil)
         (dissoc :clicked-element :pivot-point)
         (tool.handlers/set-state :idle)
         (history.handlers/finalize (:timestamp e)

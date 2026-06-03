@@ -18,11 +18,11 @@
                             :ctrlKey true}]}])
 
 (rf/dispatch [::action.events/register-action
-              {:id :panel/toggle-properties
+              {:id :panel/toggle-attributes
                :label [::panel-properties "Properties"]
                :icon "properties"
-               :event [::panel.events/toggle :properties]
-               :active [::panel.subs/visible? :properties]
+               :event [::panel.events/toggle :attributes]
+               :active [::panel.subs/visible? :attributes]
                :available [::window.subs/md?]
                :shortcuts [{:keyCode (utils.key/codes "P")
                             :ctrlKey true}]}])
@@ -69,4 +69,4 @@
                          :panel/toggle-timeline
                          :panel/toggle-repl-history
                          :panel/toggle-history
-                         :panel/toggle-properties]}])
+                         :panel/toggle-attributes]}])

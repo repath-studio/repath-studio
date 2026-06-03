@@ -12,6 +12,8 @@
    [renderer.element.handlers :as element.handlers]
    [renderer.frame.handlers :as frame.handlers]
    [renderer.snap.handlers :as snap.handlers]
+   [renderer.tool.db :refer [HandleId]]
+   [renderer.utils.element :as utils.element]
    [renderer.utils.vec :as utils.vec]))
 
 (m/=> path [:function
@@ -42,16 +44,24 @@
   (-> (assoc db :active-document id)
       (snap.handlers/rebuild-tree)))
 
-(m/=> persisted-format [:-> App DocumentId PersistedDocument])
-(defn persisted-format
+(m/=> recent [:-> Document RecentDocument])
+(defn recent
+  [document]
+  (m/decode RecentDocument
+            document
+            m.transform/strip-extra-keys-transformer))
+
+(m/=> persisted [:-> App DocumentId PersistedDocument])
+(defn persisted
   [db id]
   (-> PersistedDocument
       (m/decode (entity db id) m.transform/strip-extra-keys-transformer)
       (assoc :version (:version db))
       (update :elements (fn [elements]
-                          (into {}
-                                (map (fn [[k v]] [k (dissoc v :selected)]))
-                                elements)))))
+                          (->> elements
+                               (map (fn [[k v]]
+                                      [k (utils.element/persisted v)]))
+                               (into {}))))))
 
 (m/=> close [:-> App DocumentId App])
 (defn close
@@ -78,9 +88,7 @@
     (cond-> db
       (or (:path document)
           (:file-handle document))
-      (update :recent #(->> (m/decode RecentDocument
-                                      document
-                                      m.transform/strip-extra-keys-transformer)
+      (update :recent #(->> (recent document)
                             (conj (filterv (complement equals?) %))
                             (take-last max-recent)
                             (vec))))))
@@ -88,11 +96,11 @@
 (m/=> move-recent-to-front [:-> App DocumentId App])
 (defn move-recent-to-front
   [db id]
-  (let [recent (get db :recent)
-        idx (.indexOf (map :id recent) id)]
+  (let [recent-documents (:recent db)
+        idx (.indexOf (map :id recent-documents) id)]
     (cond-> db
       (>= idx 0)
-      (update :recent #(utils.vec/move % idx (dec (count recent)))))))
+      (update :recent #(utils.vec/move % idx (dec (count recent-documents)))))))
 
 (m/=> remove-recent [:-> App DocumentId App])
 (defn remove-recent
@@ -147,7 +155,7 @@
        (element.handlers/create-default-canvas size)
        (center))))
 
-(m/=> set-hovered-ids [:-> App [:set ElementId] App])
+(m/=> set-hovered-ids [:-> App [:set [:or ElementId HandleId]] App])
 (defn set-hovered-ids
   [db ids]
   (assoc-in db (path db :hovered-ids) ids))
@@ -161,6 +169,13 @@
 (defn expand-el
   [db id]
   (update-in db (path db :collapsed-ids) disj id))
+
+(m/=> toggle-el-collapsed [:-> App ElementId App])
+(defn toggle-el-collapsed
+  [db id]
+  (if (contains? (get-in db (path db :collapsed-ids)) id)
+    (expand-el db id)
+    (collapse-el db id)))
 
 (m/=> attr [:-> App keyword? string?])
 (defn attr
@@ -195,7 +210,7 @@
               [:-> App DocumentId boolean?]])
 (defn saved?
   ([db]
-   (some->> (:active-document db) (saved? db)))
+   (boolean (some->> (:active-document db) (saved? db))))
   ([db id]
    (let [document (get-in db [:documents id])
          history-position (get-in document [:history :position])]
@@ -204,12 +219,16 @@
 (m/=> open? [:-> App DocumentId boolean?])
 (defn open?
   [db id]
-  (some #{id} (:document-tabs db)))
+  (->> (:document-tabs db)
+       (some #{id})
+       (boolean)))
 
 (m/=> recent? [:-> App DocumentId boolean?])
 (defn recent?
   [db id]
-  (some #(= id (:id %)) (:recent db)))
+  (->> (:recent db)
+       (some #(= id (:id %)))
+       (boolean)))
 
 (m/=> saved-ids [:-> App sequential?])
 (defn saved-ids

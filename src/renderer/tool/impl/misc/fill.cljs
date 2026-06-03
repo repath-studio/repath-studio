@@ -52,7 +52,7 @@
 (defmethod tool.hierarchy/on-pointer-down [::fill :idle]
   [db e]
   (-> db
-      (assoc :clicked-element (-> e :element))
+      (assoc :clicked-element (:element e))
       (history.handlers/reset-state)))
 
 (rf/dispatch [::action.events/register-action
