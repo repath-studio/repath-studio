@@ -266,7 +266,7 @@
       (fn [_this]
         (let [dom-el (.-current ref)
               options (clj->js (merge cm-defaults options))]
-          (reset! cm (.fromTextArea codemirror dom-el options))
+          (reset! cm (codemirror dom-el options))
           (.setValue @cm value)
           (.on @cm "renderLine" cm-render-line)
           (.on @cm "keydown" (fn [_editor evt] (.stopPropagation evt)))
@@ -287,11 +287,8 @@
             (.setOption @cm (name k) v))))
 
       :reagent-render
-      (fn [value]
-        [:textarea (merge {:value value
-                           :on-blur #()
-                           :on-change #()
-                           :ref ref} attrs)])})))
+      (fn []
+        [:div (merge {:ref ref} attrs)])})))
 
 (defn toaster
   [theme]

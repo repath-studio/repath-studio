@@ -222,7 +222,7 @@
   (let [xml @(rf/subscribe [::element.subs/xml])
         codemirror-theme @(rf/subscribe [::theme.subs/codemirror])]
     [views/scroll-area
-     [:div.p-1
+     [:div.p-1.flex
       [views/cm-editor xml
        {:options {:mode "text/xml"
                   :readOnly true
