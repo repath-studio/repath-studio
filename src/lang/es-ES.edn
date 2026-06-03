@@ -874,4 +874,7 @@
  {:transform "Transformar"}
 
  :renderer.tool.impl.misc.core
- {:misc "Miscelánea"}}
+ {:misc "Miscelánea"}
+
+ :renderer.utils.element
+ {:centroid "centroide"}}

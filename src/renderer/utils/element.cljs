@@ -79,10 +79,14 @@
 (defn acc-snapping-points
   [el options]
   (let [points (or (when (contains? options :nodes)
-                     (mapv #(with-meta
-                              (matrix/add % (offset el))
-                              (merge (meta %) {:id (:id el)}))
-                           (element.hierarchy/snapping-points el)))
+                     (let [centroid (element.hierarchy/centroid el)]
+                       (mapv #(with-meta
+                                (matrix/add % (offset el))
+                                (merge (meta %) {:id (:id el)}))
+                             (cond-> (element.hierarchy/snapping-points el)
+                               centroid
+                               (conj (with-meta centroid
+                                       {:label [::centroid "centroid"]}))))))
                    [])]
     (cond-> points
       (:bbox el)

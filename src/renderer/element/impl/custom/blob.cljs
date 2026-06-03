@@ -136,9 +136,10 @@
 
 (defmethod element.hierarchy/centroid :blob
   [el]
-  (let [{{:keys [x y size]} :attrs} el
+  (let [offset (utils.element/offset el)
+        {{:keys [x y size]} :attrs} el
         [x y size] (mapv utils.length/unit->px [x y size])]
-    (matrix/add [x y] (/ size 2))))
+    (matrix/add [x y] (/ size 2) offset)))
 
 (defmethod element.hierarchy/path :blob
   [el]
