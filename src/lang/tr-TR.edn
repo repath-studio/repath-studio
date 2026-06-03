@@ -863,4 +863,7 @@
  {:transform "Dönüştür"}
 
  :renderer.tool.impl.misc.core
- {:misc "Miscallaneous"}}
+ {:misc "Miscallaneous"}
+
+ :renderer.utils.element
+ {:centroid "ağırlık merkezi"}}

@@ -881,4 +881,7 @@
  {:transform "Transformer"}
 
  :renderer.tool.impl.misc.core
- {:misc "Divers"}}
+ {:misc "Divers"}
+
+ :renderer.utils.element
+ {:centroid "centroïde"}}
