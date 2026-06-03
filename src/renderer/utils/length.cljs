@@ -25,7 +25,7 @@
 (m/=> valid-unit? [:-> string? boolean?])
 (defn valid-unit?
   [s]
-  (contains? units s))
+  (contains? units (string/lower-case s)))
 
 (m/=> multiplier [:-> string? number?])
 (defn multiplier
