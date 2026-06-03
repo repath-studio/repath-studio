@@ -81,16 +81,12 @@
 (defn axis-pan-offset
   [position offset size]
   (let [threshold (min (/ size 10) 100)
-        step (min (/ size 50) 100)]
+        step (min (/ size 50) 100)
+        neg-step? (and (< position threshold) (< position offset))
+        pos-step? (and (> position (- size threshold)) (> position offset))]
     (cond
-      (and (< position threshold)
-           (< position offset))
-      (- step)
-
-      (and (> position (- size threshold))
-           (> position offset))
-      step
-
+      neg-step? (- step)
+      pos-step? step
       :else 0)))
 
 (m/=> pan-out-of-canvas [:-> App DomRect Vec2 Vec2 App])
@@ -103,7 +99,7 @@
     (cond-> db
       (not-every? zero? pan)
       (-> (frame.handlers/pan-by pan)
-          ; REVIEW: Can we improve performance?
+          ;; REVIEW: Can we improve performance?
           (snap.handlers/update-viewport-tree)))))
 
 (defn set-cached
