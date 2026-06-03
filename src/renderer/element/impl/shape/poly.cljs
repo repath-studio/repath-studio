@@ -115,6 +115,9 @@
 
 (defmethod element.hierarchy/centroid ::element.hierarchy/poly
   [el]
+  ;; Calculates the centroid of a polygon using an extension of the Shoelace
+  ;; Formula. This method works for both convex and concave polygons, but not
+  ;; for self-intersecting ones.
   (let [offset (utils.element/offset el)
         vertices (->vertices el)
         count-v (count vertices)
