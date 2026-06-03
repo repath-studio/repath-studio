@@ -8,7 +8,7 @@
 
 (def ppi 96)
 
-;; TODO: Find an agnostic way to handle percentages and em (we need to a base).
+;; TODO: Find an agnostic way to handle percentages and em (we need a base).
 (def units
   {"px" 1
    "ch" 8
@@ -84,7 +84,7 @@
   ([v f & more]
    (let [[n unit] (utils.unit/parse v)]
      (-> (apply f (->px n unit) more)
-         (->fixed)
          (js/parseFloat)
          (->unit unit)
+         (->fixed)
          (str (when (valid-unit? unit) unit))))))
