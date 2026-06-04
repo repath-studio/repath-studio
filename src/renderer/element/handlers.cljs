@@ -1031,7 +1031,7 @@
   ([db el-id]
    (assoc-in db (path db el-id :selected-handles) #{})))
 
-(m/=> toggle-handle-selection [:-> App HandleId boolean? App])
+(m/=> toggle-handle-selection [:-> App ElementId HandleId boolean? App])
 (defn toggle-handle-selection
   [db el-id handle-id additive]
   (if additive

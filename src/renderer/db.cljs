@@ -50,8 +50,6 @@
    "A" "a"
    "Z" "z"])
 
-(def PathSegment
-  [:cat PathCommand [:* number?]])
+(def PathSegment JS_Array)
 
-(def PathSegments
-  [:vector PathSegment])
+(def PathSegments JS_Array)
