@@ -33,13 +33,16 @@
            :stroke-linecap
            :opacity]})
 
-(defmethod element.hierarchy/translate :path
-  [el [x y]]
-  (update-in el [:attrs :d] #(some-> %
-                                     (svgpath)
-                                     (.translate x y)
+(defn update-path
+  [el f]
+  (update-in el [:attrs :d] #(some-> (svgpath %)
+                                     (f)
                                      (.round 3)
                                      (.toString))))
+
+(defmethod element.hierarchy/translate :path
+  [el [x y]]
+  (update-path el #(.translate % x y)))
 
 (defmethod element.hierarchy/scale :path
   [el ratio pivot-point]
@@ -48,12 +51,9 @@
         [x y] (element.hierarchy/bbox el)
         [x y] (-> (matrix/add [x y] offset)
                   (matrix/sub (matrix/mul ratio [x y])))]
-    (update-in el [:attrs :d] #(some-> %
-                                       (svgpath)
-                                       (.scale scale-x scale-y)
-                                       (.translate x y)
-                                       (.round 3)
-                                       (.toString)))))
+    (update-path el #(-> %
+                         (.scale scale-x scale-y)
+                         (.translate x y)))))
 
 (defmethod element.hierarchy/bbox :path
   [el]
