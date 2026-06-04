@@ -30,7 +30,7 @@
       :reverse (.reverse path))
     (get-d path)))
 
-(m/=> point-indices [:-> string? PathPointType [:maybe Vec2]])
+(m/=> point-indices [:-> [:maybe string?] PathPointType [:maybe Vec2]])
 (defn point-indices
   "Returns the vector indices if the point-type is defined for the command.
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/d#path_commands"
@@ -101,21 +101,22 @@
 (m/=> string->segments [:-> [:maybe string?] [:maybe PathSegments]])
 (defn string->segments
   [d]
-  (some-> d svgpath .abs .-segments js->clj))
+  (some-> d svgpath .abs .-segments))
 
 (m/=> segments->string [:-> PathSegments string?])
 (defn segments->string
   [segments]
   (->> segments
-       (flatten)
+       (map #(string/join " " %))
        (string/join " ")))
 
 (m/=> drop-last-segment [:-> PathSegments PathSegments])
 (defn drop-last-segment
   [segments]
-  (cond-> segments
-    (> (count segments) 1)
-    pop))
+  (let [n (count segments)]
+    (if (> n 1)
+      (.slice segments 0 (dec n))
+      segments)))
 
 (m/=> boolean-operation [:-> string? string? BooleanOperation string?])
 (defn boolean-operation

@@ -94,13 +94,13 @@
      db
      #(let [segments (-> (utils.path/string->segments %)
                          (utils.path/drop-last-segment))
-            last-segment (last segments)
+            last-segment (aget segments (dec (count segments)))
             out-cp (utils.path/outgoing-cp last-segment)]
-        (->> (if out-cp
-               ["S" x y x y]
-               ["L" x y])
-             (conj segments)
-             (utils.path/segments->string))))))
+        (-> segments
+            (.concat #js [(if out-cp
+                            #js ["S" x y x y]
+                            #js ["L" x y])])
+            (utils.path/segments->string))))))
 
 (defmethod tool.hierarchy/on-pointer-up [::path :create]
   [db _e]
@@ -116,9 +116,9 @@
     (update-path db #(let [segments (utils.path/string->segments %)]
                        (if (> (count segments) 1)
                          (let [[ax ay] (mapv utils.length/->fixed anchor)]
-                           (->> ["S" cp2-x cp2-y ax ay]
-                                (conj (utils.path/drop-last-segment segments))
-                                (utils.path/segments->string)))
+                           (-> (utils.path/drop-last-segment segments)
+                               (.concat #js [#js ["S" cp2-x cp2-y ax ay]])
+                               (utils.path/segments->string)))
                          %)))))
 
 (defmethod tool.hierarchy/on-drag-end [::path :create]

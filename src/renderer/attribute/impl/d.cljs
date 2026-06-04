@@ -6,7 +6,6 @@
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.views :as attribute.views]
    [renderer.document.events :as-alias document.events]
-   [renderer.document.subs :as-alias document.subs]
    [renderer.element.events :as-alias element.events]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as-alias element.hierarchy]
@@ -81,11 +80,13 @@
   (let [new-v (.. e -target -value)]
     (if (or (string/blank? new-v) (js/isNaN new-v))
       (set! (.. e -target -value) value)
-      (let [updated-d (-> d
-                          (utils.path/string->segments)
-                          (assoc-in [index field-index] new-v)
-                          (utils.path/segments->string))]
-        (rf/dispatch [::element.events/set-attr :d updated-d])))))
+      (let [segments (utils.path/string->segments d)
+            new-seg (.slice (aget segments index))]
+        (aset new-seg field-index new-v)
+        (let [new-segs (.slice segments)]
+          (aset new-segs index new-seg)
+          (rf/dispatch [::element.events/set-attr :d
+                        (utils.path/segments->string new-segs)]))))))
 
 (defn segment-input
   [{:keys [d index]} {:keys [field-index value id]}]
@@ -171,11 +172,10 @@
 
 (defn segment-row
   [{:keys [el-id index segment d selected-handles]}]
-  (let [hovered-ids @(rf/subscribe [::document.subs/hovered-ids])
-        command (first segment)
+  (let [command (first segment)
         {:keys [label url]} (->command command)
         id (segment-id index)
-        hovered? (segment-active? hovered-ids index)
+        hovered? @(rf/subscribe [::element.subs/hovered? id])
         selected? (segment-active? selected-handles index)]
     [:div.flex.flex-col.gap-px
      {:on-pointer-enter #(rf/dispatch [::document.events/set-hovered-id id])
@@ -221,6 +221,7 @@
      [attribute.views/heading "d" tag :d]
      (->> segments
           (map-indexed (fn [index segment]
+                         ^{:key index}
                          [segment-row {:el-id id
                                        :index index
                                        :segment segment
