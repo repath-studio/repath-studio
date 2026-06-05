@@ -156,22 +156,25 @@
       nil)))
 
 (defn segment-handles
-  [{:keys [parent endpoints segments offset]} index segment]
+  [{:keys [parent endpoints segments offset cp-indices]} index segment]
   (->> (handles endpoints segments index segment)
-       (mapv (fn [{:keys [point-type pos rounded implied cursor]}]
-               (let [label (-> (utils.path/segment->command segment)
-                               (attribute.impl.d/path-commands)
-                               :label)]
-                 (cond-> {:id (keyword index point-type)
-                          :position (matrix/add offset pos)
-                          :label label
-                          :type :handle
-                          :action :edit
-                          :implied (boolean implied)
-                          :rounded (boolean rounded)
-                          :parent parent}
-                   cursor
-                   (assoc :cursor cursor)))))))
+       (keep (fn [{:keys [point-type pos rounded implied cursor]}]
+               (when (or (= point-type :end-point)
+                         (contains? cp-indices index))
+                 (let [label (-> (utils.path/segment->command segment)
+                                 (attribute.impl.d/path-commands)
+                                 :label)]
+                   (cond-> {:id (keyword index point-type)
+                            :position (matrix/add offset pos)
+                            :label label
+                            :type :handle
+                            :action :edit
+                            :implied (boolean implied)
+                            :rounded (boolean rounded)
+                            :parent parent}
+                     cursor
+                     (assoc :cursor cursor))))))
+       (into [])))
 
 (m/=> acc-endpoints [:-> PathSegments [:vector Vec2]])
 (defn acc-endpoints
@@ -227,10 +230,15 @@
   (let [segments (->> el :attrs :d utils.path/string->segments)
         endpoints (acc-endpoints segments)
         offset (utils.element/offset el)
+        selected (->> (:selected-handles el)
+                      (keep #(some-> (namespace %) js/parseInt))
+                      (into #{}))
+        cp-indices (into #{} (mapcat (fn [i] [i (inc i)]) selected))
         props {:parent (:id el)
                :endpoints endpoints
                :segments segments
-               :offset offset}]
+               :offset offset
+               :cp-indices cp-indices}]
     (->> segments
          (map-indexed (partial segment-handles props))
          (flatten)
@@ -241,12 +249,18 @@
   (let [segments (->> el :attrs :d utils.path/string->segments)
         endpoints (acc-endpoints segments)
         offset (utils.element/offset el)
+        selected (->> (:selected-handles el)
+                      (keep #(some-> (namespace %) js/parseInt))
+                      (into #{}))
+        cp-indices (into #{} (mapcat (fn [i] [i (inc i)]) selected))
         props {:parent (:id el)
                :endpoints endpoints
                :segments segments
                :offset offset}]
     (->> segments
-         (map-indexed (partial render-arms props))
+         (map-indexed (fn [index segment]
+                        (when (contains? cp-indices index)
+                          (render-arms props index segment))))
          (into [:g]))))
 
 (m/=> translate-seg-point [:->
