@@ -2,6 +2,7 @@
   "https://www.w3.org/TR/SVG/shapes.html#RectElement
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/rect"
   (:require
+   [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.element.hierarchy :as element.hierarchy]
@@ -9,7 +10,8 @@
    [renderer.input.handlers :as input.handlers]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
-   [renderer.utils.length :as utils.length]))
+   [renderer.utils.length :as utils.length]
+   [renderer.utils.math :as utils.math]))
 
 (hierarchy/derive! :rect ::element.hierarchy/box)
 (hierarchy/derive! :rect ::element.hierarchy/shape)
@@ -141,16 +143,22 @@
         ry (utils.length/unit->px (if (and (not ry) rx) rx ry))
         rx (if (> rx (/ width 2)) (/ width 2) rx)
         ry (if (> ry (/ height 2)) (/ height 2) ry)
-        curved? (and (> rx 0) (> ry 0))]
+        curved? (and (> rx 0) (> ry 0))
+        y2-full (+ y height)
+        x2-full (+ x width)
+        [x1 y1] (matrix/add [x y] [rx ry])
+        [x2 y2] (matrix/sub [x2-full y2-full] [rx ry])
+        [krx kry] (matrix/mul [rx ry] utils.math/KAPPA)]
     (cond-> []
-      :always (conj "M" (+ x rx) y
-                    "H" (- (+ x width) rx))
-      curved? (conj "A" rx ry 0 0 1 (+ x width) (+ y ry))
-      :always (conj "V" (- (+ y height) ry))
-      curved? (conj "A" rx ry 0 0 1 (- (+ x width) rx) (+ y height))
-      :always (conj "H" (+ x rx))
-      curved? (conj "A" rx ry 0 0 1 x (- (+ y height) ry))
-      curved? (conj "V" (+ y ry))
-      curved? (conj "A" rx ry 0 0 1 (+ x rx) y)
+      :always (conj "M" x1 y
+                    "L" x2 y)
+      curved? (conj "C" (+ x2 krx) y x2-full (- y1 kry) x2-full y1)
+      :always (conj "L" x2-full y2)
+      curved? (conj "C" x2-full (+ y2 kry) (+ x2 krx) y2-full x2 y2-full)
+      :always (conj "L" x1 y2-full)
+      curved? (conj "C" (- x1 krx) y2-full x (+ y2 kry) x y2)
+      curved? (conj "L" x y1)
+      curved? (conj "C" x (- y1 kry) (- x1 krx) y x1 y)
       :always (conj "z")
-      :always (->> (string/join " ")))))
+      :always (->> (map #(cond-> % (number? %) utils.length/->fixed))
+                   (string/join " ")))))

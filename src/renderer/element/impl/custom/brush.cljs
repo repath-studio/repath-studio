@@ -176,7 +176,9 @@
 
 (defmethod element.hierarchy/path :brush
   [el]
-  (points->path (-> el :attrs :points) (select-keys (:attrs el) option-keys)))
+  (let [options (select-keys (:attrs el) option-keys)]
+    (-> el :attrs :points
+        (points->path options))))
 
 (defmethod element.hierarchy/handles :brush
   [el]

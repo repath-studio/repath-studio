@@ -32,9 +32,10 @@
 
     (is (= (element.hierarchy/path circle-el)
            (string/join " " ["M 50 0"
-                             "A 50 50 0 0 1 0 50"
-                             "A 50 50 0 0 1 -50 0"
-                             "A 50 50 0 0 1 50 0"
+                             "C 50 27.614 27.614 50 0 50"
+                             "S -50 27.614 -50 0"
+                             "S -27.614 -50 0 -50"
+                             "S 50 -27.614 50 0"
                              "z"])))))
 
 (deftest rect
@@ -68,8 +69,9 @@
 
     (is (= (element.hierarchy/path rect-el)
            (string/join " " ["M 0 0"
-                             "H 50 V 50"
-                             "H 0"
+                             "L 50 0"
+                             "L 50 50"
+                             "L 0 50"
                              "z"])))))
 
 (deftest ellipse
@@ -103,9 +105,10 @@
 
     (is (= (element.hierarchy/path ellipse-el)
            (string/join " " ["M 50 0"
-                             "A 50 50 0 0 1 0 50"
-                             "A 50 50 0 0 1 -50 0"
-                             "A 50 50 0 0 1 50 0"
+                             "C 50 27.614 27.614 50 0 50"
+                             "S -50 27.614 -50 0"
+                             "S -27.614 -50 0 -50"
+                             "S 50 -27.614 50 0"
                              "z"])))))
 
 (deftest line
