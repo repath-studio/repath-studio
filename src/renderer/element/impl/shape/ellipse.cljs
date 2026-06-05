@@ -10,6 +10,7 @@
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
+   [renderer.utils.math :as utils.math]
    [renderer.utils.svg :as utils.svg]))
 
 (hierarchy/derive! :ellipse ::element.hierarchy/shape)
@@ -59,12 +60,16 @@
   (let [{{:keys [cx cy rx ry]} :attrs} el
         rx (or rx ry)
         ry (or ry rx)
-        [cx cy rx ry] (mapv utils.length/unit->px [cx cy rx ry])]
-    (string/join " " ["M" (+ cx rx) cy
-                      "A" rx ry 0 0 1 cx (+ cy ry)
-                      "A" rx ry 0 0 1 (- cx rx) cy
-                      "A" rx ry 0 0 1 (+ cx rx) cy
-                      "z"])))
+        [cx cy rx ry] (mapv utils.length/unit->px [cx cy rx ry])
+        [krx kry] (matrix/mul [rx ry] utils.math/KAPPA)]
+    (->> ["M" (+ cx rx) cy
+          "C" (+ cx rx) (+ cy kry) (+ cx krx) (+ cy ry) cx (+ cy ry)
+          "S" (- cx rx) (+ cy kry) (- cx rx) cy
+          "S" (- cx krx) (- cy ry) cx (- cy ry)
+          "S" (+ cx rx) (- cy kry) (+ cx rx) cy
+          "z"]
+         (map #(cond-> % (number? %) utils.length/->fixed))
+         (string/join " "))))
 
 (defmethod element.hierarchy/area :ellipse
   [el]
