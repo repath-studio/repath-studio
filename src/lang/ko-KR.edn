@@ -821,4 +821,7 @@
  {:transform "변형"}
 
  :renderer.tool.impl.misc.core
- {:misc "Miscallaneous"}}
+ {:misc "Miscallaneous"}
+
+ :renderer.utils.element
+ {:centroid "무게중심"}}

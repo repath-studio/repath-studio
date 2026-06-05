@@ -1,6 +1,5 @@
 (ns renderer.tool.impl.base.edit.core
   (:require
-   [clojure.core.matrix :as matrix]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.element.handlers :as element.handlers]
@@ -16,7 +15,6 @@
    [renderer.tool.impl.base.edit.type]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.tool.views :as tool.views]
-   [renderer.utils.element :as utils.element]
    [renderer.utils.key :as utils.key]
    [renderer.utils.svg :as utils.svg]))
 
@@ -42,11 +40,9 @@
                    (->> (element.hierarchy/handles el)
                         (map (fn [handle] [tool.views/handle handle]))
                         (into [:g]))
-                   (when-let [pos (element.hierarchy/centroid el)]
-                     (let [offset (utils.element/offset el)
-                           pos (matrix/add offset pos)]
-                       [utils.svg/dot pos
-                        [:title (i18n.views/t [::centroid "Centroid"])]]))]))
+                   (when-let [centroid (element.hierarchy/centroid el)]
+                     [utils.svg/dot centroid
+                      [:title (i18n.views/t [::centroid "Centroid"])]])]))
            (into [:g [element.hierarchy/render select-box]])))))
 
 (rf/dispatch [::action.events/register-action

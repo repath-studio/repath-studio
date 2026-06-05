@@ -892,4 +892,7 @@
  {:transform "Μετασχηματισμός"}
 
  :renderer.tool.impl.misc.core
- {:misc "Διάφορα"}}
+ {:misc "Διάφορα"}
+
+ :renderer.utils.element
+ {:centroid "κεντροειδές"}}

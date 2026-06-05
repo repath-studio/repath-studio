@@ -115,13 +115,30 @@
 
 (defmethod element.hierarchy/centroid ::element.hierarchy/poly
   [el]
-  (let [vertices (->vertices el)]
-    (-> (reduce matrix/add [0 0] vertices)
-        (matrix/div (count vertices)))))
+  ;; Calculates the centroid of a polygon using an extension of the Shoelace
+  ;; Formula. This method works for both convex and concave polygons, but not
+  ;; for self-intersecting ones.
+  (let [offset (utils.element/offset el)
+        vertices (->vertices el)
+        count-v (count vertices)
+        [cx cy cross-sum] (reduce-kv
+                           (fn [[cx cy s] index [x1 y1]]
+                             (let [[x2 y2] (if (= index (dec count-v))
+                                             (first vertices)
+                                             (nth vertices (inc index)))
+                                   cross (- (* x1 y2) (* x2 y1))]
+                               [(+ cx (* (+ x1 x2) cross))
+                                (+ cy (* (+ y1 y2) cross))
+                                (+ s cross)]))
+                           [0 0 0]
+                           vertices)
+        denom (* 3 cross-sum)]
+    (matrix/add [(/ cx denom) (/ cy denom)]
+                offset)))
 
 (defmethod element.hierarchy/snapping-points ::element.hierarchy/poly
   [el]
-  (->vertices el))
+  (mapv #(with-meta % {:label [::point "point"]}) (->vertices el)))
 
 (defmethod element.hierarchy/delete-segments ::element.hierarchy/poly
   [el]

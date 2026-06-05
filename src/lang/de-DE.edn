@@ -890,4 +890,7 @@
  {:transform "Transformieren"}
 
  :renderer.tool.impl.misc.core
- {:misc "Verschiedenes"}}
+ {:misc "Verschiedenes"}
+
+ :renderer.utils.element
+ {:centroid "Schwerpunkt"}}

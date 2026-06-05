@@ -869,4 +869,7 @@
  {:transform "Transformera"}
 
  :renderer.tool.impl.misc.core
- {:misc "Miscallaneous"}}
+ {:misc "Miscallaneous"}
+
+ :renderer.utils.element
+ {:centroid "centroid"}}

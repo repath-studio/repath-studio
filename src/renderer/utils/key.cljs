@@ -11,7 +11,7 @@
   (contains? #{"ArrowUp" "ArrowDown" "ArrowLeft" "ArrowRight"} k))
 
 (defn down-handler
-  "Generic on-key-down handler for uncontrolled input elements that dispatches
+  "Generic on-key-down handler for uncontrolled input elements, that dispatches
    an event `f` in order to update a db value on keyboard enter, or reset to the
    initial value `v` on escape.
 
