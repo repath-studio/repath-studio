@@ -263,11 +263,9 @@
                           (render-arms props index segment))))
          (into [:g]))))
 
-(m/=> translate-seg-point [:->
-                           PathSegments number? PathPointType Vec2
-                           PathSegment])
-(defn translate-seg-point
-  [segments index point-type delta]
+(m/=> translate-point [:-> PathSegments number? Vec2 PathPointType PathSegment])
+(defn translate-point
+  [index delta point-type segments]
   (let [segment (aget segments index)
         [dx dy] delta
         cmd (utils.path/segment->command segment)]
@@ -294,23 +292,25 @@
             (doto (.slice segments) (aset index new-seg)))
           segments)))))
 
-(m/=> translate-point [:-> int? PathPointType Vec2 PathSegments PathSegments])
-(defn translate-point
-  [index point-type delta segments]
-  (let [segments (translate-seg-point segments index point-type delta)]
-    (if (= point-type :end-point)
-      (let [cmd (utils.path/segment->command (aget segments index))
-            next-cmd (utils.path/segment->command (aget segments (inc index)))]
-        (cond-> segments
-          (= cmd "C")
-          (translate-seg-point index :end-control-point delta)
+(m/=> translate-controls [:->
+                          int? Vec2 [:set keyword?] PathSegments
+                          PathSegments])
+(defn translate-controls
+  [index delta selected-handles segments]
+  (let [cmd (utils.path/segment->command (aget segments index))
+        next-cmd (utils.path/segment->command (aget segments (inc index)))
+        movable? (fn [index point-type]
+                   (not (contains? selected-handles
+                                   (keyword index point-type))))]
+    (cond->> segments
+      (and (= cmd "C") (movable? index "end-control-point"))
+      (translate-point index delta :end-control-point)
 
-          (= cmd "S")
-          (translate-seg-point index :start-control-point delta)
+      (and (= cmd "S") (movable? index "start-control-point"))
+      (translate-point index delta :start-control-point)
 
-          (not= next-cmd "S")
-          (translate-seg-point (inc index) :start-control-point delta)))
-      segments)))
+      (and (not= next-cmd "S") (movable? (inc index) "start-control-point"))
+      (translate-point (inc index) delta :start-control-point))))
 
 (defn snap-control-point-to-angle
   [segments index point-type offset]
@@ -336,9 +336,15 @@
                                          segments index
                                          point-type))
                       offset (cond->> offset lock? snap-fn)]
-                  (->> segments
-                       (translate-point index point-type offset)
-                       (utils.path/segments->string))))))
+                  (cond->> segments
+                    :always
+                    (translate-point index offset point-type)
+
+                    (= point-type :end-point)
+                    (translate-controls index offset (:selected-handles el))
+
+                    :always
+                    (utils.path/segments->string))))))
 
 (defmethod element.hierarchy/delete-segments :path
   [el]
