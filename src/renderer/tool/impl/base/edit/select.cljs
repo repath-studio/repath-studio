@@ -14,8 +14,7 @@
 (m/=> selectable? [:-> App Handle boolean?])
 (defn selectable?
   [db handle]
-  (and (not (:rounded handle))
-       (:select-box db)
+  (and (:select-box db)
        (some-> (:select-box db)
                (element.hierarchy/bbox)
                (utils.bounds/contained-point? (:position handle)))))
