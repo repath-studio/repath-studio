@@ -230,11 +230,12 @@
 (defn edit-form
   []
   (let [selected-elements @(rf/subscribe [::element.subs/selected])
-        idle? @(rf/subscribe [::tool.subs/idle?])
+        state @(rf/subscribe [::tool.subs/state])
         element (first selected-elements)
         v (get-in element [:attrs :d])
         segments (utils.path/string->segments v)]
-    (if idle?
+    (if (or (state #{:idle :create})
+            (< (count segments) 20))
       [segments-form segments element]
       (reagent/with-let [segments segments
                          element element]
