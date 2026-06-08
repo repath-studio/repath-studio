@@ -306,6 +306,9 @@
       (and (= cmd "C") (movable? index "end-control-point"))
       (translate-point index delta :end-control-point)
 
+      (and (= cmd "Q") (movable? index "start-control-point"))
+      (translate-point index delta :start-control-point)
+
       (and (= cmd "S") (movable? index "start-control-point"))
       (translate-point index delta :start-control-point)
 

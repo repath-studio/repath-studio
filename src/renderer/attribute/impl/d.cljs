@@ -3,6 +3,7 @@
   (:require
    [clojure.string :as string]
    [re-frame.core :as rf]
+   [reagent.core :as reagent]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.views :as attribute.views]
    [renderer.document.events :as-alias document.events]
@@ -210,12 +211,9 @@
               (into [:div.grid.gap-px
                      {:style {:grid-template-columns "auto 1fr auto 1fr"}}]))]))
 
-(defn edit-form
-  []
-  (let [selected-elements @(rf/subscribe [::element.subs/selected])
-        element (first selected-elements)
-        v (get-in element [:attrs :d])
-        segments (utils.path/string->segments v)
+(defn segments-form
+  [segments element]
+  (let [v (get-in element [:attrs :d])
         {:keys [id tag selected-handles]} element]
     [:div.flex.flex-col.gap-px
      [attribute.views/heading "d" tag :d]
@@ -228,6 +226,19 @@
                                        :d v
                                        :selected-handles selected-handles}]))
           (into [:div.flex.flex-col.gap-px]))]))
+
+(defn edit-form
+  []
+  (let [selected-elements @(rf/subscribe [::element.subs/selected])
+        idle? @(rf/subscribe [::tool.subs/idle?])
+        element (first selected-elements)
+        v (get-in element [:attrs :d])
+        segments (utils.path/string->segments v)]
+    (if idle?
+      [segments-form segments element]
+      (reagent/with-let [segments segments
+                         element element]
+        [segments-form segments element]))))
 
 (defmethod attribute.hierarchy/form-element [::element.hierarchy/element :d]
   [_ k v {:keys [disabled]}]
