@@ -17,7 +17,7 @@
 (rf/reg-event-db
  ::show-about
  (fn [db [_]]
-   (dialog.handlers/create db {:title config/app-name
+   (dialog.handlers/create db {:title [:div.sr-only config/app-name]
                                :content [dialog.views/about]})))
 
 (rf/reg-event-db

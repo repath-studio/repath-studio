@@ -31,10 +31,14 @@
   (let [user-agent @(rf/subscribe [::app.subs/user-agent])]
     [:div
      [:p
-      [:span.block
-       [:strong (i18n.views/t [::version "Version:"])] config/version]
-      [:span.block
-       [:strong (i18n.views/t [::browser "Browser:"])] user-agent]]
+      [:img.w-full.grayscale {:src "img/banner.png"
+                              :alt "Repath Studio banner"}]]
+     [:p.grid.grid-cols-2.gap-3
+      {:style {:grid-template-columns "auto 1fr"}}
+      [:strong (i18n.views/t [::version "Version:"])]
+      [:code config/version]
+      [:strong (i18n.views/t [::browser "Browser:"])]
+      [:code user-agent]]
      [button-bar
       [button {:label [::ok "OK"]
                :auto-focus true
