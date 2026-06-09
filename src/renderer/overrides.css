@@ -100,7 +100,7 @@
 }
 
 .CodeMirror-gutters {
-  @apply bg-secondary!;
+  @apply bg-primary! border-0!;
 }
 
 .CodeMirror-placeholder {

@@ -221,13 +221,12 @@
   []
   (let [xml @(rf/subscribe [::element.subs/xml])
         codemirror-theme @(rf/subscribe [::theme.subs/codemirror])]
-    [views/scroll-area
-     [:div.p-1.flex
-      [views/cm-editor xml
-       {:options {:mode "text/xml"
-                  :readOnly true
-                  :screenReaderLabel "XML"
-                  :theme codemirror-theme}}]]]))
+    [views/cm-editor xml
+     {:options {:mode "text/xml"
+                :readOnly true
+                :lineNumbers true
+                :screenReaderLabel "XML"
+                :theme codemirror-theme}}]))
 
 (defn center-top-group
   []
@@ -246,8 +245,10 @@
            :class "relative"
            :defaultSize 300
            :minSize 100}
-          [:div.h-full.bg-primary.flex
-           [xml-panel]]
+          [:div.flex.bg-primary.overflow-hidden.h-full
+           [views/scroll-area
+            [:div.flex.py-3
+             [xml-panel]]]]
           [panel.views/close-button :xml]]
          [panel.views/separator]])
 
@@ -313,7 +314,9 @@
        :label [::xml "XML"]
        :direction "left"
        :content-class (when mac? "pt-8")}
-      [xml-panel]]
+      [views/scroll-area
+       [:div.py-3
+        [xml-panel]]]]
 
      [:span.v-divider]
 
