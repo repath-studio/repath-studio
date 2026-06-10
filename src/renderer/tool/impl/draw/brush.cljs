@@ -73,8 +73,9 @@
 
 (defmethod tool.hierarchy/render ::brush
   []
-  (when-not (= :create @(rf/subscribe [::tool.subs/state]))
-    [element.hierarchy/render @brush]))
+  (let [state @(rf/subscribe [::tool.subs/state])]
+    (when-not (= :create state)
+      [element.hierarchy/render @brush])))
 
 (rf/dispatch [::action.events/register-action
               {:id :tool/brush

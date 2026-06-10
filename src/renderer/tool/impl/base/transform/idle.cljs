@@ -52,12 +52,13 @@
 
 (defmethod tool.hierarchy/on-pointer-up [::transform/transform :idle]
   [db e]
-  (let [{:keys [element timestamp]} e]
+  (let [{:keys [element timestamp shift-key]} e
+        {:keys [selected id]} element]
     (-> db
         (dissoc :clicked-element)
-        (element.handlers/toggle-selection (:id element) (:shift-key e))
+        (element.handlers/toggle-selection id shift-key)
         (history.handlers/finalize timestamp
-                                   (if (:selected element)
+                                   (if selected
                                      [::deselect-element "Deselect element"]
                                      [::select-element "Select element"])))))
 
