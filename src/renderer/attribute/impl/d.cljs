@@ -206,7 +206,7 @@
      [:> Select/Trigger
       {:class "form-control-button flex gap-1 px-2!
                bg-transparent! hover:bg-overlay! text-inherit!"
-       :title (i18n.views/t [::select "Select command"])}
+       :title (i18n.views/t [::convert-segment "Convert segment"])}
       [:> Select/Value {:as-child true}
        [:span.text-ellipsis.overflow-hidden (i18n.views/t label)]]
       (when-not disabled?
@@ -248,8 +248,8 @@
        [:div.flex.items-center.gap-2.justify-between.w-full.overflow-hidden
         [:div.flex.overflow-hidden
          [:button.form-control-button.bg-overlay!.text-inherit!
-          {:title (i18n.views/t [::show-specification
-                                 "Show command specification"])
+          {:title (i18n.views/t [::open-command-specification
+                                 "Open command specification"])
            :on-click #(do (.stopPropagation %)
                           (rf/dispatch [::events/open-remote-url url]))}
           command]

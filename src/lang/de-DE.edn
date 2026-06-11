@@ -489,7 +489,9 @@
   :shortcut-quadratic "Quadratische Bézier-Verknüpfung"
   :elliptical-arc-curve "Elliptische Bogenkurve"
   :close-path "Pfad schließen"
-  :remove-segment "Remove segment"}
+  :remove-segment "Remove segment"
+  :convert-segment "Convert segment"
+  :open-command-specification "Open command specification"}
 
  :renderer.attribute.impl.length
  {:increase "Erhöhen"

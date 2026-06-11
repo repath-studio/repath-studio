@@ -470,7 +470,9 @@
   :shortcut-quadratic "Сокращённая квадратичная кривая Безье"
   :elliptical-arc-curve "Эллиптическая дуговая кривая"
   :close-path "Закрыть контур"
-  :remove-segment "Remove segment"}
+  :remove-segment "Remove segment"
+  :convert-segment "Convert segment"
+  :open-command-specification "Open command specification"}
 
  :renderer.attribute.impl.length
  {:increase "Увеличить"

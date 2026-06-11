@@ -466,7 +466,9 @@
   :shortcut-quadratic "Shortcut Quadratic Bézier Curve"
   :elliptical-arc-curve "Elliptical Arc Curve"
   :close-path "Close Path"
-  :remove-segment "Remove segment"}
+  :remove-segment "Remove segment"
+  :convert-segment "Convert segment"
+  :open-command-specification "Open command specification"}
 
  :renderer.attribute.impl.length
  {:increase "Increase"
