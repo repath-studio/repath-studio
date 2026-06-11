@@ -1,6 +1,7 @@
 (ns renderer.attribute.impl.d
   "https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/d"
   (:require
+   ["@radix-ui/react-select" :as Select]
    [clojure.string :as string]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
@@ -75,6 +76,18 @@
        (element.handlers/delete-segments)
        (history.handlers/finalize timestamp
                                   [::remove-segment "Remove segment"]))))
+
+(rf/reg-event-db
+ ::convert-segment
+ (fn [db [_ el-id index command timestamp]]
+   (-> db
+       (element.handlers/update-attr
+        el-id :d #(some-> %
+                          (utils.path/string->segments)
+                          (utils.path/convert-segment index command)
+                          (utils.path/segments->string)))
+       (history.handlers/finalize timestamp [::convert-segment
+                                             "Convert segment"]))))
 
 (defn set-segment-value
   [e {:keys [d index field-index value]}]
@@ -171,45 +184,91 @@
    [segment-field ctx "x" 6 segment]
    [segment-field ctx "y" 7 segment]])
 
+(defn command-item
+  [[command {:keys [label]}]]
+  [:> Select/Item
+   {:value command
+    :disabled (contains? #{"Z" "M" "A" "T"} (string/upper-case command))
+    :class "menu-item"}
+   [:> Select/ItemText
+    (i18n.views/t label)
+    [:div.menu-item-indicator.w-6! command]]])
+
+(defn command-select
+  [el-id index command]
+  (let [disabled? (contains? #{"M" "Z"} (string/upper-case command))
+        {:keys [label]} (->command command)]
+    [:> Select/Root
+     {:value (string/upper-case command)
+      :onValueChange #(rf/dispatch [::convert-segment el-id index %
+                                    (js/Date.now)])
+      :disabled disabled?}
+     [:> Select/Trigger
+      {:class "form-control-button flex gap-1 px-2!
+               bg-transparent! hover:bg-overlay! text-inherit!"
+       :title (i18n.views/t [::select "Select command"])}
+      [:> Select/Value {:as-child true}
+       [:span.text-ellipsis.overflow-hidden (i18n.views/t label)]]
+      (when-not disabled?
+        [:> Select/Icon
+         [views/icon "chevron-down"]])]
+     [:> Select/Portal
+      [:> Select/Content
+       {:class "menu-content rounded-sm select-content"
+        :on-key-down #(.stopPropagation %)
+        :on-escape-key-down #(.stopPropagation %)}
+       (->> path-commands
+            (map command-item)
+            (into [:> Select/Viewport {:class "select-viewport"}]))]]]))
+
+(defn segment-delete-button
+  [el-id index]
+  [:button.form-control-button.bg-transparent!.hover:bg-overlay!
+   {:on-click #(do (.stopPropagation %)
+                   (rf/dispatch [::drop-segment el-id index (js/Date.now)]))
+    :title (i18n.views/t [::remove-segment "Remove segment"])}
+   [views/icon "times"]])
+
 (defn segment-row
   [{:keys [el-id index segment d selected-handles]}]
   (let [command (first segment)
-        {:keys [label url]} (->command command)
+        {:keys [url]} (->command command)
         id (segment-id index)
         hovered? @(rf/subscribe [::element.subs/hovered? id])
         selected? (segment-active? selected-handles index)]
-    [:div.flex.flex-col.gap-px
+    [:div.flex.flex-col.gap-px.overflow-hidden
      {:on-pointer-enter #(rf/dispatch [::document.events/set-hovered-id id])
       :on-pointer-leave #(rf/dispatch [::document.events/clear-hovered])}
-     [:div.flex
-      [:div.bg-primary.flex-1.flex.px-1.py-2
+     [:div.flex.overflow-hidden
+      [:div.bg-primary.flex-1.flex.p-2.overflow-hidden
        {:on-click #(rf/dispatch [::element.events/toggle-handle-selection
                                  el-id id (.-shiftKey %)])
         :class [(when (and hovered? (not selected?)) "bg-overlay!")
-                (when selected? "bg-accent! text-accent-foreground")]}
-       [:div.font-mono.px-2.font-bold
-        (str "[" (first segment) "]")]
-       [:div.flex-1
-        [:span.underline.decoration-dotted.cursor-pointer
-         {:on-click #(do (.stopPropagation %)
-                         (rf/dispatch [::events/open-remote-url url]))}
-         (i18n.views/t label)]
-        [:div.text-foreground-muted
-         (if (= command (string/lower-case command))
-           (i18n.views/t [::relative "Relative"])
-           (i18n.views/t [::absolute "Absolute"]))]]
+                (when selected? "bg-accent! text-accent-foreground!")]}
+       [:div.flex.items-center.gap-2.justify-between.w-full.overflow-hidden
+        [:div.flex.overflow-hidden
+         [:button.form-control-button.bg-overlay!.text-inherit!
+          {:title (i18n.views/t [::show-specification
+                                 "Show command specification"])
+           :on-click #(do (.stopPropagation %)
+                          (rf/dispatch [::events/open-remote-url url]))}
+          command]
+         [command-select el-id index command]]]
+
        (when (pos? index)
-         [::button.form-control-button.min-h-auto!.bg-transparent!.h-6.75!
-          {:on-click #(do (.stopPropagation %)
-                          (rf/dispatch [::drop-segment
-                                        el-id index (.-timestamp %)]))
-           :disabled (zero? index)
-           :title (i18n.views/t [::remove-segment "Remove segment"])}
-          [views/icon "times"]])]]
+         [:div.flex
+          [:button.form-control-button.opacity-50
+           {:class "bg-transparent! hover:bg-overlay! text-inherit! px-2!"
+            :disabled true}
+           (if (= command (string/lower-case command))
+             (i18n.views/t [::relative "Relative"])
+             (i18n.views/t [::absolute "Absolute"]))]
+          [segment-delete-button el-id index]])]]
+
      (some->> (segment-form segment {:d d
                                      :index index})
               (into [:div.grid.gap-px
-                     {:style {:grid-template-columns "auto 1fr auto 1fr"}}]))]))
+                     {:style {:grid-template-columns "38px 1fr auto 1fr"}}]))]))
 
 (defn segments-form
   [segments element]

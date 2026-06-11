@@ -176,42 +176,19 @@
                      (assoc :cursor cursor))))))
        (into [])))
 
-(m/=> acc-endpoints [:-> PathSegments [:vector Vec2]])
-(defn acc-endpoints
-  [segments]
-  (reduce (fn [acc segment]
-            (->> (peek acc)
-                 (utils.path/abs-endpoint segment)
-                 (conj acc))) [] segments))
-
-(m/=> c->s-segment [:-> PathSegment PathSegment])
-(defn c->s-segment
-  [segment]
-  (let [[_ _cp1x _cp1y cp2x cp2y x y] segment]
-    #js ["S" cp2x cp2y x y]))
-
-(m/=> s->c-segment [:-> PathSegments int? PathSegment])
-(defn s->c-segment
+(m/=> cycle-segment [:-> PathSegments int? PathSegments])
+(defn cycle-segment
   [segments index]
-  (let [[_ cp2x cp2y x y] (aget segments index)
-        prev-segment (aget segments (dec index))
-        endpoints (acc-endpoints segments)
-        prev-ep (get endpoints (dec index))
-        [cp1x cp1y] (or (utils.path/outgoing-cp prev-segment) prev-ep)]
-    #js ["C" cp1x cp1y cp2x cp2y x y]))
-
-(m/=> toggle-shorthand [:-> PathSegments int? PathSegments])
-(defn toggle-shorthand
-  [segments index]
-  (let [segment (aget segments index)
-        command (utils.path/segment->command segment)
-        new-seg (case command
-                  "C" (c->s-segment segment)
-                  "S" (s->c-segment segments index)
-                  nil)]
-    (if new-seg
-      (doto (.slice segments) (aset index new-seg))
-      segments)))
+  (let [command (utils.path/segment->command (aget segments index))
+        next-cmd (case command
+                   ("H" "V") "L"
+                   ("L" "T") "Q"
+                   "Q" "C"
+                   "C" "S"
+                   "S" "L"
+                   nil)]
+    (cond-> segments
+      next-cmd (utils.path/convert-segment index next-cmd))))
 
 (defmethod element.hierarchy/handle-click :path
   [el handle]
@@ -222,23 +199,27 @@
       (update-in [:attrs :d]
                  #(some-> %
                           (utils.path/string->segments)
-                          (toggle-shorthand (inc index))
+                          (cycle-segment index)
                           (utils.path/segments->string))))))
 
-(defmethod element.hierarchy/handles :path
-  [el]
-  (let [segments (->> el :attrs :d utils.path/string->segments)
-        endpoints (acc-endpoints segments)
+(defn segment-props
+  [el segments]
+  (let [endpoints (utils.path/acc-endpoints segments)
         offset (utils.element/offset el)
         selected (->> (:selected-handles el)
                       (keep #(some-> (namespace %) js/parseInt))
                       (into #{}))
-        cp-indices (into #{} (mapcat (fn [i] [i (inc i)]) selected))
-        props {:parent (:id el)
-               :endpoints endpoints
-               :segments segments
-               :offset offset
-               :cp-indices cp-indices}]
+        cp-indices (into #{} (mapcat (fn [i] [i (inc i)]) selected))]
+    {:parent (:id el)
+     :endpoints endpoints
+     :segments segments
+     :offset offset
+     :cp-indices cp-indices}))
+
+(defmethod element.hierarchy/handles :path
+  [el]
+  (let [segments (->> el :attrs :d utils.path/string->segments)
+        props (segment-props el segments)]
     (->> segments
          (map-indexed (partial segment-handles props))
          (flatten)
@@ -247,19 +228,10 @@
 (defmethod element.hierarchy/render-edit :path
   [el]
   (let [segments (->> el :attrs :d utils.path/string->segments)
-        endpoints (acc-endpoints segments)
-        offset (utils.element/offset el)
-        selected (->> (:selected-handles el)
-                      (keep #(some-> (namespace %) js/parseInt))
-                      (into #{}))
-        cp-indices (into #{} (mapcat (fn [i] [i (inc i)]) selected))
-        props {:parent (:id el)
-               :endpoints endpoints
-               :segments segments
-               :offset offset}]
+        props (segment-props el segments)]
     (->> segments
          (map-indexed (fn [index segment]
-                        (when (contains? cp-indices index)
+                        (when (contains? (:cp-indices props) index)
                           (render-arms props index segment))))
          (into [:g]))))
 
@@ -319,7 +291,7 @@
 
 (defn snap-control-point-to-angle
   [segments index point-type offset]
-  (let [endpoints (acc-endpoints segments)
+  (let [endpoints (utils.path/acc-endpoints segments)
         cmd (utils.path/segment->command (aget segments index))
         anchor (if (and (= point-type :start-control-point) (not= cmd "S"))
                  (get endpoints (dec index))
