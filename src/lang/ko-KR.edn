@@ -434,7 +434,9 @@
   :shortcut-quadratic "단축 2차 베지어 곡선"
   :elliptical-arc-curve "타원 호 곡선"
   :close-path "패스 닫기"
-  :remove-segment "Remove segment"}
+  :remove-segment "Remove segment"
+  :convert-segment "Convert segment"
+  :open-command-specification "Open command specification"}
 
  :renderer.attribute.impl.length
  {:increase "증가"
