@@ -223,7 +223,7 @@
 
 (defn segment-delete-button
   [el-id index]
-  [:button.form-control-button.bg-transparent!.hover:bg-overlay!
+  [:button.form-control-button.bg-transparent!.hover:bg-overlay!.text-inherit!
    {:on-click #(do (.stopPropagation %)
                    (rf/dispatch [::drop-segment el-id index (js/Date.now)]))
     :title (i18n.views/t [::remove-segment "Remove segment"])}
