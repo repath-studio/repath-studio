@@ -90,7 +90,8 @@
         idle? @(rf/subscribe [::tool.subs/idle?])
         editing? @(rf/subscribe [::tool.subs/editing?])]
     (when-not (and editing? (:selected el))
-      [element.views/render-to-dom el child-els idle?])))
+      [:g {:cursor (when editing? "text")}
+       [element.views/render-to-dom el child-els idle?]])))
 
 (defmethod element.hierarchy/render-edit :text
   [el]
