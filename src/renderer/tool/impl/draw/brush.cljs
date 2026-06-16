@@ -69,7 +69,7 @@
   [db e]
   (-> db
       (history.handlers/finalize (:timestamp e) [::draw-brush "Draw brush"])
-      (tool.handlers/activate ::brush)))
+      (tool.handlers/deactivate)))
 
 (defmethod tool.hierarchy/render ::brush
   []
