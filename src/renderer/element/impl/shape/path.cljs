@@ -156,59 +156,39 @@
       nil)))
 
 (defn segment-handles
-  [{:keys [parent endpoints segments offset]} index segment]
+  [{:keys [parent endpoints segments offset cp-indices]} index segment]
   (->> (handles endpoints segments index segment)
-       (mapv (fn [{:keys [point-type pos rounded implied cursor]}]
-               (let [label (-> (utils.path/segment->command segment)
-                               (attribute.impl.d/path-commands)
-                               :label)]
-                 (cond-> {:id (keyword index point-type)
-                          :position (matrix/add offset pos)
-                          :label label
-                          :type :handle
-                          :action :edit
-                          :implied (boolean implied)
-                          :rounded (boolean rounded)
-                          :parent parent}
-                   cursor
-                   (assoc :cursor cursor)))))))
+       (keep (fn [{:keys [point-type pos rounded implied cursor]}]
+               (when (or (= point-type :end-point)
+                         (contains? cp-indices index))
+                 (let [label (-> (utils.path/segment->command segment)
+                                 (attribute.impl.d/path-commands)
+                                 :label)]
+                   (cond-> {:id (keyword index point-type)
+                            :position (matrix/add offset pos)
+                            :label label
+                            :type :handle
+                            :action :edit
+                            :implied (boolean implied)
+                            :rounded (boolean rounded)
+                            :parent parent}
+                     cursor
+                     (assoc :cursor cursor))))))
+       (into [])))
 
-(m/=> acc-endpoints [:-> PathSegments [:vector Vec2]])
-(defn acc-endpoints
-  [segments]
-  (reduce (fn [acc segment]
-            (->> (peek acc)
-                 (utils.path/abs-endpoint segment)
-                 (conj acc))) [] segments))
-
-(m/=> c->s-segment [:-> PathSegment PathSegment])
-(defn c->s-segment
-  [segment]
-  (let [[_ _cp1x _cp1y cp2x cp2y x y] segment]
-    #js ["S" cp2x cp2y x y]))
-
-(m/=> s->c-segment [:-> PathSegments int? PathSegment])
-(defn s->c-segment
+(m/=> cycle-segment [:-> PathSegments int? PathSegments])
+(defn cycle-segment
   [segments index]
-  (let [[_ cp2x cp2y x y] (aget segments index)
-        prev-segment (aget segments (dec index))
-        endpoints (acc-endpoints segments)
-        prev-ep (get endpoints (dec index))
-        [cp1x cp1y] (or (utils.path/outgoing-cp prev-segment) prev-ep)]
-    #js ["C" cp1x cp1y cp2x cp2y x y]))
-
-(m/=> toggle-shorthand [:-> PathSegments int? PathSegments])
-(defn toggle-shorthand
-  [segments index]
-  (let [segment (aget segments index)
-        command (utils.path/segment->command segment)
-        new-seg (case command
-                  "C" (c->s-segment segment)
-                  "S" (s->c-segment segments index)
-                  nil)]
-    (if new-seg
-      (doto (.slice segments) (aset index new-seg))
-      segments)))
+  (let [command (utils.path/segment->command (aget segments index))
+        next-cmd (case command
+                   ("H" "V") "L"
+                   ("L" "T") "Q"
+                   "Q" "C"
+                   "C" "S"
+                   "S" "L"
+                   nil)]
+    (cond-> segments
+      next-cmd (utils.path/convert-segment index next-cmd))))
 
 (defmethod element.hierarchy/handle-click :path
   [el handle]
@@ -219,18 +199,27 @@
       (update-in [:attrs :d]
                  #(some-> %
                           (utils.path/string->segments)
-                          (toggle-shorthand (inc index))
+                          (cycle-segment index)
                           (utils.path/segments->string))))))
+
+(defn segment-props
+  [el segments]
+  (let [endpoints (utils.path/acc-endpoints segments)
+        offset (utils.element/offset el)
+        selected (->> (:selected-handles el)
+                      (keep #(some-> (namespace %) js/parseInt))
+                      (into #{}))
+        cp-indices (into #{} (mapcat (fn [i] [i (inc i)]) selected))]
+    {:parent (:id el)
+     :endpoints endpoints
+     :segments segments
+     :offset offset
+     :cp-indices cp-indices}))
 
 (defmethod element.hierarchy/handles :path
   [el]
   (let [segments (->> el :attrs :d utils.path/string->segments)
-        endpoints (acc-endpoints segments)
-        offset (utils.element/offset el)
-        props {:parent (:id el)
-               :endpoints endpoints
-               :segments segments
-               :offset offset}]
+        props (segment-props el segments)]
     (->> segments
          (map-indexed (partial segment-handles props))
          (flatten)
@@ -239,21 +228,16 @@
 (defmethod element.hierarchy/render-edit :path
   [el]
   (let [segments (->> el :attrs :d utils.path/string->segments)
-        endpoints (acc-endpoints segments)
-        offset (utils.element/offset el)
-        props {:parent (:id el)
-               :endpoints endpoints
-               :segments segments
-               :offset offset}]
+        props (segment-props el segments)]
     (->> segments
-         (map-indexed (partial render-arms props))
+         (map-indexed (fn [index segment]
+                        (when (contains? (:cp-indices props) index)
+                          (render-arms props index segment))))
          (into [:g]))))
 
-(m/=> translate-seg-point [:->
-                           PathSegments number? PathPointType Vec2
-                           PathSegment])
-(defn translate-seg-point
-  [segments index point-type delta]
+(m/=> translate-point [:-> PathSegments number? Vec2 PathPointType PathSegment])
+(defn translate-point
+  [index delta point-type segments]
   (let [segment (aget segments index)
         [dx dy] delta
         cmd (utils.path/segment->command segment)]
@@ -280,27 +264,34 @@
             (doto (.slice segments) (aset index new-seg)))
           segments)))))
 
-(m/=> translate-point [:-> int? PathPointType Vec2 PathSegments PathSegments])
-(defn translate-point
-  [index point-type delta segments]
-  (let [segments (translate-seg-point segments index point-type delta)]
-    (if (= point-type :end-point)
-      (let [cmd (utils.path/segment->command (aget segments index))
-            next-cmd (utils.path/segment->command (aget segments (inc index)))]
-        (cond-> segments
-          (= cmd "C")
-          (translate-seg-point index :end-control-point delta)
+(m/=> translate-controls [:->
+                          int? Vec2 [:set keyword?] PathSegments
+                          PathSegments])
+(defn translate-controls
+  [index delta selected-handles segments]
+  (let [cmd (utils.path/segment->command (aget segments index))
+        next-cmd (utils.path/segment->command (aget segments (inc index)))
+        movable? (fn [index point-type]
+                   (not (contains? selected-handles
+                                   (keyword index point-type))))]
+    (cond->> segments
+      (and (= cmd "C") (movable? index "end-control-point"))
+      (translate-point index delta :end-control-point)
 
-          (= cmd "S")
-          (translate-seg-point index :start-control-point delta)
+      (and (= cmd "Q")
+           (movable? index "start-control-point")
+           (movable? (dec index) "end-point"))
+      (translate-point index delta :start-control-point)
 
-          (not= next-cmd "S")
-          (translate-seg-point (inc index) :start-control-point delta)))
-      segments)))
+      (and (= cmd "S") (movable? index "start-control-point"))
+      (translate-point index delta :start-control-point)
+
+      (and (not= next-cmd "S") (movable? (inc index) "start-control-point"))
+      (translate-point (inc index) delta :start-control-point))))
 
 (defn snap-control-point-to-angle
   [segments index point-type offset]
-  (let [endpoints (acc-endpoints segments)
+  (let [endpoints (utils.path/acc-endpoints segments)
         cmd (utils.path/segment->command (aget segments index))
         anchor (if (and (= point-type :start-control-point) (not= cmd "S"))
                  (get endpoints (dec index))
@@ -322,9 +313,15 @@
                                          segments index
                                          point-type))
                       offset (cond->> offset lock? snap-fn)]
-                  (->> segments
-                       (translate-point index point-type offset)
-                       (utils.path/segments->string))))))
+                  (cond->> segments
+                    :always
+                    (translate-point index offset point-type)
+
+                    (= point-type :end-point)
+                    (translate-controls index offset (:selected-handles el))
+
+                    :always
+                    (utils.path/segments->string))))))
 
 (defmethod element.hierarchy/delete-segments :path
   [el]

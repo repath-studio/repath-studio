@@ -53,8 +53,7 @@
   (when-let [{:keys [position label]
               :as el} (:clicked-element db)]
     [(with-meta
-       (matrix/add [(first position) (second position)]
-                   (tool.handlers/pointer-delta db))
+       (matrix/add position (tool.handlers/pointer-delta db))
        {:label (when (= (:type el) :handle)
                  (or label [::handle "handle"]))})]))
 

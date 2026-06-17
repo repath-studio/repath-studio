@@ -52,8 +52,10 @@
   [el]
   (let [{{:keys [x1 y1 x2 y2]} :attrs} el
         [x1 y1 x2 y2] (mapv utils.length/unit->px [x1 y1 x2 y2])]
-    (string/join " " ["M" x1 y1
-                      "L" x2 y2])))
+    (->> ["M" x1 y1
+          "L" x2 y2]
+         (map #(cond-> % (number? %) utils.length/->fixed))
+         (string/join " "))))
 
 (defmethod element.hierarchy/handles :line
   [el]

@@ -475,7 +475,9 @@
   :shortcut-quadratic "Curva de Bézier cuadrática de acceso directo"
   :elliptical-arc-curve "Curva de arco elíptico"
   :close-path "Cerrar trazado"
-  :remove-segment "Remove segment"}
+  :remove-segment "Remove segment"
+  :convert-segment "Convert segment"
+  :open-command-specification "Open command specification"}
 
  :renderer.attribute.impl.length
  {:increase "Aumentar"

@@ -1,6 +1,7 @@
 (ns renderer.tool.views
   (:require
    [clojure.core.matrix :as matrix]
+   [clojure.string :as string]
    [malli.core :as m]
    [re-frame.core :as rf]
    [renderer.app.subs :as-alias app.subs]
@@ -27,15 +28,19 @@
         pointer-handler (partial input.impl.pointer/handler! el)
         active (or selected hovered)
         [x y] position
+        scale (if hovered 1.3 1)
         half-size (/ handle-size 2)]
     [:g
-     [:rect {:x (- x half-size)
+     [:rect {:style {:transition "transform 0.1s ease-out"}
+             :transform (str "scale(" scale ")")
+             :transform-origin (string/join " " position)
+             :x (- x half-size)
              :y (- y half-size)
              :rx (when rounded half-size)
              :width handle-size
              :height handle-size
              :stroke-opacity ".5"
-             :stroke-width (/ (if active 2 1) zoom)
+             :stroke-width (/ 1 zoom)
              :cursor (or cursor "move")
              :pointer-events (when implied "none")
              :on-pointer-up pointer-handler

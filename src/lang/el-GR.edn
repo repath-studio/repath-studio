@@ -491,7 +491,9 @@
   :shortcut-quadratic "Συντομευμένη τετραγωνική καμπύλη Bézier"
   :elliptical-arc-curve "Ελλειπτική καμπύλη τόξου"
   :close-path "Κλείσιμο διαδρομής"
-  :remove-segment "Remove segment"}
+  :remove-segment "Remove segment"
+  :convert-segment "Convert segment"
+  :open-command-specification "Open command specification"}
 
  :renderer.attribute.impl.length
  {:increase "Αύξηση"

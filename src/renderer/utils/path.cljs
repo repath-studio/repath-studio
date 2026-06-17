@@ -118,6 +118,86 @@
       (.slice segments 0 (dec n))
       segments)))
 
+(m/=> acc-endpoints [:-> PathSegments [:vector Vec2]])
+(defn acc-endpoints
+  [segments]
+  (reduce (fn [acc segment]
+            (->> (peek acc)
+                 (abs-endpoint segment)
+                 (conj acc))) [] segments))
+
+(m/=> c->s-segment [:-> PathSegment PathSegment])
+(defn c->s-segment
+  [segment]
+  (let [[_ _cp1x _cp1y cp2x cp2y x y] segment]
+    #js ["S" cp2x cp2y x y]))
+
+(m/=> line->q-segment [:-> PathSegment Vec2 PathSegment])
+(defn line->q-segment
+  "Converts an L or T segment to a quadratic bezier with the control point
+   placed at the midpoint of the line."
+  [segment prev-ep]
+  (let [[_ x y] segment
+        [prev-x prev-y] prev-ep
+        mid-x (/ (+ prev-x x) 2)
+        mid-y (/ (+ prev-y y) 2)]
+    #js ["Q" mid-x mid-y x y]))
+
+(m/=> q->c-segment [:-> PathSegment Vec2 PathSegment])
+(defn q->c-segment
+  [segment prev-ep]
+  (let [[_ qcp-x qcp-y x y] segment
+        [prev-x prev-y] prev-ep
+        cp1x (+ prev-x (* (/ 2.0 3.0) (- qcp-x prev-x)))
+        cp1y (+ prev-y (* (/ 2.0 3.0) (- qcp-y prev-y)))
+        cp2x (+ x (* (/ 2.0 3.0) (- qcp-x x)))
+        cp2y (+ y (* (/ 2.0 3.0) (- qcp-y y)))]
+    #js ["C" cp1x cp1y cp2x cp2y x y]))
+
+(defn- segment-for-command
+  [segment prev-segment prev-ep command]
+  (let [current (segment->command segment)
+        [ex ey] (abs-endpoint segment prev-ep)
+        [prev-x prev-y] prev-ep]
+    (case command
+      "L" #js ["L" ex ey]
+      "H" #js ["H" ex]
+      "V" #js ["V" ey]
+      "Q" (case current
+            "C" #js ["Q"
+                     (/ (+ (aget segment 1) (aget segment 3)) 2)
+                     (/ (+ (aget segment 2) (aget segment 4)) 2)
+                     ex ey]
+            "S" #js ["Q" (aget segment 1) (aget segment 2) ex ey]
+            #js ["Q" (/ (+ prev-x ex) 2) (/ (+ prev-y ey) 2) ex ey])
+      "C" (case current
+            "Q" (q->c-segment segment prev-ep)
+            "S" (let [[_ cp2x cp2y] segment
+                      [cp1x cp1y] (or (outgoing-cp prev-segment) prev-ep)]
+                  #js ["C" cp1x cp1y cp2x cp2y ex ey])
+            (-> #js ["L" ex ey]
+                (line->q-segment prev-ep)
+                (q->c-segment prev-ep)))
+      "S" (when (= current "C") (c->s-segment segment))
+      nil)))
+
+(m/=> convert-segment [:-> PathSegments int? string? PathSegments])
+(defn convert-segment
+  "Converts the segment at index to the given command type."
+  [segments index command]
+  (let [endpoints (acc-endpoints segments)
+        prev-ep (get endpoints (dec index))
+        segment (aget segments index)]
+    (if (= (segment->command segment) command)
+      segments
+      (let [new-seg (segment-for-command segment
+                                         (aget segments (dec index))
+                                         prev-ep
+                                         command)]
+        (if new-seg
+          (doto (.slice segments) (aset index new-seg))
+          segments)))))
+
 (m/=> boolean-operation [:-> string? string? BooleanOperation string?])
 (defn boolean-operation
   [path-a path-b operation]

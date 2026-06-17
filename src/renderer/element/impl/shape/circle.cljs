@@ -10,6 +10,7 @@
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
+   [renderer.utils.math :as utils.math]
    [renderer.utils.svg :as utils.svg]))
 
 (hierarchy/derive! :circle ::element.hierarchy/shape)
@@ -61,12 +62,16 @@
 (defmethod element.hierarchy/path :circle
   [el]
   (let [{{:keys [cx cy r]} :attrs} el
-        [cx cy r] (map utils.length/unit->px [cx cy r])]
-    (string/join " " ["M" (+ cx r) cy
-                      "A" r r 0 0 1 cx (+ cy r)
-                      "A" r r 0 0 1 (- cx r) cy
-                      "A" r r 0 0 1 (+ cx r) cy
-                      "z"])))
+        [cx cy r] (map utils.length/unit->px [cx cy r])
+        kr (* utils.math/KAPPA r)]
+    (->> ["M" (+ cx r) cy
+          "C" (+ cx r) (+ cy kr) (+ cx kr) (+ cy r) cx (+ cy r)
+          "S" (- cx r) (+ cy kr) (- cx r) cy
+          "S" (- cx kr) (- cy r) cx (- cy r)
+          "S" (+ cx r) (- cy kr) (+ cx r) cy
+          "z"]
+         (map #(cond-> % (number? %) utils.length/->fixed))
+         (string/join " "))))
 
 (defmethod element.hierarchy/handle-drag :circle
   [el [x _y] handle _lock?]

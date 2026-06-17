@@ -3,6 +3,7 @@
   (:require
    [clojure.string :as string]
    [re-frame.core :as rf]
+   [reagent.core :as reagent]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.views :as attribute.views]
    [renderer.document.events :as-alias document.events]
@@ -96,18 +97,27 @@
        :on-click #(rf/dispatch [::drop-point el-id index (.-timestamp %)])}]]))
 
 (defn points-form
+  [element points]
+  [:div.flex.flex-col.gap-px
+   [attribute.views/heading "points" (:tag element) :points]
+   [:div.flex.flex-col.gap-px
+    (map-indexed (fn [index point]
+                   ^{:key (str index point)}
+                   [point-row (:id element) index point points]) points)]])
+
+(defn edit-form
   []
   (let [selected-elements @(rf/subscribe [::element.subs/selected])
+        state @(rf/subscribe [::tool.subs/state])
         element (first selected-elements)
         v (get-in element [:attrs :points])
         points (utils.attribute/points->vec v)]
-    [:div.flex.flex-col.gap-px
-     [attribute.views/heading "points" (:tag element) :points]
-
-     [:div.flex.flex-col.gap-px
-      (map-indexed (fn [index point]
-                     ^{:key (str index point)}
-                     [point-row (:id element) index point points]) points)]]))
+    (if (or (state #{:idle :create})
+            (< (count points) 40))
+      [points-form element points]
+      (reagent/with-let [points points
+                         element element]
+        [points-form element points]))))
 
 (defmethod attribute.hierarchy/form-element [::element.hierarchy/element
                                              :points]
@@ -128,9 +138,9 @@
 (defmethod tool.hierarchy/attributes-panel
   [::tool.impl.base.edit/edit ::element.hierarchy/poly]
   []
-  [points-form])
+  [edit-form])
 
 (defmethod tool.hierarchy/attributes-panel
   [::tool.hierarchy/poly ::element.hierarchy/poly]
   []
-  [points-form])
+  [edit-form])

@@ -407,7 +407,9 @@
   :shortcut-quadratic "简写二次贝塞尔曲线"
   :elliptical-arc-curve "椭圆弧曲线"
   :close-path "闭合路径"
-  :remove-segment "Remove segment"}
+  :remove-segment "Remove segment"
+  :convert-segment "Convert segment"
+  :open-command-specification "Open command specification"}
 
  :renderer.attribute.impl.length
  {:increase "增加"

@@ -10,8 +10,7 @@
 (rf/reg-sub
  ::selected-lang?
  :<- [::user-lang]
- (fn [user-lang [_ lang]]
-   (= user-lang lang)))
+ :=> =)
 
 (rf/reg-sub
  ::system-lang

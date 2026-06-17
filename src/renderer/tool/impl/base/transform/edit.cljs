@@ -49,10 +49,9 @@
 
 (defmethod tool.hierarchy/snapping-points [::transform/transform :edit]
   [db]
-  (when-let [el (:clicked-element db)]
+  (when-let [{:keys [position]} (:clicked-element db)]
     [(with-meta
-       (matrix/add [(:x el) (:y el)]
-                   (tool.handlers/pointer-delta db))
+       (matrix/add position (tool.handlers/pointer-delta db))
        {:label [::pivot-handle "pivot handle"]})]))
 
 (defmethod tool.hierarchy/snapping-elements [::transform/transform :edit]

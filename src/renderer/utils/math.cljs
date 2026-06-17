@@ -4,6 +4,11 @@
    [malli.core :as m]
    [renderer.db :refer [Vec2]]))
 
+(def KAPPA
+  "Constant for converting a quarter-circle/ellipse arc to a cubic Bézier curve.
+   Calculated as: 4/3 * (√2 - 1)"
+  0.5522847498)
+
 (m/=> clamp [:-> number? number? number? number?])
 (defn clamp
   "Clamps a number within the provided bounds."
