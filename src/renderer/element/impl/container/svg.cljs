@@ -12,6 +12,7 @@
    [renderer.input.impl.pointer :as input.impl.pointer]))
 
 (hierarchy/derive! :svg ::element.hierarchy/container)
+(hierarchy/derive! :svg ::element.hierarchy/box)
 
 (def label [::label "SVG"])
 

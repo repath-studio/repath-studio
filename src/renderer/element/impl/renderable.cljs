@@ -6,7 +6,8 @@
    [renderer.element.subs :as-alias element.subs]
    [renderer.element.views :as element.views]
    [renderer.hierarchy :as hierarchy]
-   [renderer.tool.subs :as-alias tool.subs]))
+   [renderer.tool.subs :as-alias tool.subs]
+   [renderer.utils.element :as utils.element]))
 
 (hierarchy/derive! ::element.hierarchy/renderable ::element.hierarchy/element)
 
@@ -15,3 +16,7 @@
   (let [child-els @(rf/subscribe [::element.subs/filter-visible (:children el)])
         idle? @(rf/subscribe [::tool.subs/idle?])]
     [element.views/render-to-dom el child-els idle?]))
+
+(defmethod element.hierarchy/bbox ::element.hierarchy/renderable
+  [el]
+  (:bbox (utils.element/get-computed-styles el)))

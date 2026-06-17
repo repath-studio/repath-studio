@@ -21,19 +21,6 @@
                                 other SVG elements."]
    :attrs [:transform]})
 
-(defn translate!
-  [transform [x y]]
-  (let [g (js/document.createElementNS "http://www.w3.org/2000/svg" "g")
-        _ (.setAttributeNS g nil "transform" (or transform ""))
-        m (.consolidate (.. g -transform -baseVal))
-        matrix (if m (.-matrix m) (js/DOMMatrixReadOnly.))
-        matrix (.translate matrix x y)]
-    (.toString matrix)))
-
-(defmethod element.hierarchy/translate :g
-  [el offset]
-  (update-in el [:attrs :transform] translate! offset))
-
 (defmethod element.hierarchy/render :g
   [el]
   (let [{:keys [attrs children bbox]} el

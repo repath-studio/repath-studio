@@ -10,7 +10,7 @@
    [renderer.hierarchy :as hierarchy]
    [renderer.utils.element :as utils.element]))
 
-(hierarchy/derive! ::element.hierarchy/container ::element.hierarchy/box)
+(hierarchy/derive! ::element.hierarchy/container ::element.hierarchy/renderable)
 
 (hierarchy/derive! :a ::element.hierarchy/container)
 (hierarchy/derive! :clipPath ::element.hierarchy/container)

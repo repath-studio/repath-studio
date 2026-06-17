@@ -572,6 +572,15 @@
       (assoc :clipboard {:elements els
                          :bbox (bbox db)}))))
 
+(m/=> remove-child [:-> App ElementId ElementId App])
+(defn remove-child
+  [db parent-id child-id]
+  (-> db
+      (update-prop parent-id :children
+                   utils.vec/remove-nth
+                   (children-index db child-id))
+      (refresh-bbox parent-id)))
+
 (m/=> delete [:function
               [:-> App App]
               [:-> App ElementId App]])
@@ -583,8 +592,7 @@
          db (if (utils.element/root? el) db (reduce delete db (:children el)))]
      (cond-> db
        (not (utils.element/root? el))
-       (-> (update-prop (:parent el) :children
-                        utils.vec/remove-nth (children-index db id))
+       (-> (remove-child (:parent el) id)
            (update-in (path db) dissoc id)
            (expand id))))))
 
@@ -649,7 +657,13 @@
   ([db offset]
    (reduce (partial-right translate offset) db (top-ancestor-ids db)))
   ([db id offset]
-   (update-el db id element.hierarchy/translate offset)))
+   (let [el (entity db id)]
+     (if (= (:tag el) :g)
+       (-> (reduce (fn [db child-id] (translate db child-id offset))
+                   db
+                   (:children el))
+           (refresh-bbox id))
+       (update-el db id element.hierarchy/translate offset)))))
 
 (m/=> place [:function
              [:-> App Vec2 App]
@@ -662,7 +676,7 @@
    (let [el (entity db id)
          center (utils.bounds/center (element.hierarchy/bbox el))
          offset (matrix/sub position center)]
-     (update-el db id element.hierarchy/translate offset))))
+     (translate db offset))))
 
 (m/=> scale-pivot [:-> Vec2 map? [:set ElementId] fn?])
 (defn scale-pivot
@@ -691,10 +705,20 @@
         get-pivot (scale-pivot pivot-point origins top-ids)]
     (->> ids-to-scale
          (reduce (fn [db id]
-                   (let [pivot (get-pivot db id)]
-                     (cond-> db
+                   (let [pivot (get-pivot db id)
+                         el (entity db id)]
+                     (cond
+                       (and (= (:tag el) :g) pivot)
+                       (-> (reduce (fn [db child-id]
+                                     (update-el db child-id
+                                                element.hierarchy/scale
+                                                ratio pivot))
+                                   db
+                                   (:children el))
+                           (refresh-bbox id))
+
                        pivot
-                       (update-el id element.hierarchy/scale ratio pivot))))
+                       (update-el db id element.hierarchy/scale ratio pivot))))
                  db))))
 
 (m/=> align [:function

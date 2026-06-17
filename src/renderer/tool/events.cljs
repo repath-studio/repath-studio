@@ -2,6 +2,7 @@
   (:require
    [re-frame.core :as rf]
    [renderer.element.events :as-alias element.events]
+   [renderer.element.handlers :as element.handlers]
    [renderer.tool.db :as tool.db]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.impl.base.transform.core :as-alias tool.impl.base.transform]))
@@ -28,7 +29,8 @@
  ::cancel
  (fn [{:keys [db]} _]
    (if (and (= (:tool db) ::tool.impl.base.transform/transform)
-            (= (:state db) :idle))
+            (= (:state db) :idle)
+            (seq (element.handlers/selected db)))
      {:dispatch [::element.events/deselect-all]}
      {:db (tool.handlers/cancel db)})))
 

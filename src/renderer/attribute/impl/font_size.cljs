@@ -4,7 +4,7 @@
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.views :as attribute.views]
    [renderer.element.hierarchy :as-alias element.hierarchy]
-   [renderer.utils.font :as utils.font]
+   [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]))
 
 (defmethod attribute.hierarchy/description [::element.hierarchy/element
@@ -18,7 +18,7 @@
 (defmethod attribute.hierarchy/update-attr [::element.hierarchy/element
                                             :font-size]
   [el attribute f & more]
-  (let [font-size (:font-size (utils.font/get-computed-styles el))
+  (let [font-size (:font-size (utils.element/get-computed-styles el))
         font-size (utils.length/unit->px font-size)]
     (assoc-in el [:attrs attribute] (str (apply f font-size more)))))
 
