@@ -62,12 +62,9 @@
   [start end]
   [:g
    [line start end
-    :stroke "var(--bg-primary"
-    :stroke-width 3
-    :stroke-opacity ".5"]
+    :stroke "var(--primary)"]
    [line start end
-    :stroke "var(--foreground-muted)"
-    :stroke-opacity 0.7
+    :stroke "var(--foreground-default)"
     :stroke-dasharray 4]])
 
 (m/=> arc [:-> Vec2 number? number? number? any?])
