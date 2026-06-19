@@ -175,6 +175,23 @@
           (+ max-x offset-x)
           (+ max-y offset-y)])))))
 
+(defn propagate-bbox
+  [db id]
+  (loop [db db
+         current-id id]
+    (if-let [parent-id (:parent (entity db current-id))]
+      (let [parent-el (entity db parent-id)]
+        (if (= (:tag parent-el) :g)
+          (let [children (children-ids db parent-id)
+                bbox (let [b (map (partial adjusted-bbox db) children)]
+                       (when (seq b) (apply utils.bounds/union b)))]
+            (cond-> db
+              bbox
+              (-> (update-in (path db parent-id) assoc :bbox bbox)
+                  (recur parent-id))))
+          db))
+      db)))
+
 (m/=> refresh-bbox [:-> App ElementId App])
 (defn refresh-bbox
   [db id]
@@ -187,7 +204,8 @@
     (if (or (not bbox) (utils.element/root? el))
       db
       (-> (reduce refresh-bbox db children)
-          (update-in (path db id) assoc :bbox bbox)))))
+          (update-in (path db id) assoc :bbox bbox)
+          (propagate-bbox id)))))
 
 (m/=> update-el [:function
                  [:-> App ElementId ifn? App]
@@ -657,11 +675,9 @@
   ([db offset]
    (reduce (partial-right translate offset) db (top-ancestor-ids db)))
   ([db id offset]
-   (let [el (entity db id)]
-     (if (= (:tag el) :g)
-       (-> (reduce (fn [db child-id] (translate db child-id offset))
-                   db
-                   (:children el))
+   (let [{:keys [tag children locked]} (entity db id)]
+     (if (and (= tag :g) (not locked))
+       (-> (reduce (partial-right translate offset) db children)
            (refresh-bbox id))
        (update-el db id element.hierarchy/translate offset)))))
 
@@ -690,6 +706,23 @@
         (when-let [ancestor-origin (some #(get origins %) (ancestor-ids db id))]
           (matrix/sub ancestor-origin el-origin))))))
 
+(m/=> scale-group [:-> App ElementId Vec2 Vec2 [:set ElementId] App])
+(defn scale-group
+  [db id ratio pivot-point ids-to-scale]
+  (let [children (remove ids-to-scale (:children (entity db id)))
+        child-origins (->> children
+                           (keep (fn [child-id]
+                                   (when-let [bb (:bbox (entity db child-id))]
+                                     [child-id (into [] (take 2 bb))])))
+                           (into {}))]
+    (-> (reduce (fn [db child-id]
+                  (if-let [child-origin (get child-origins child-id)]
+                    (update-el db child-id element.hierarchy/scale ratio
+                               (matrix/sub pivot-point child-origin))
+                    db))
+                db children)
+        (refresh-bbox id))))
+
 (m/=> scale [:-> App Vec2 Vec2 boolean? App])
 (defn scale
   [db ratio pivot-point recursive]
@@ -703,23 +736,17 @@
                                [id (into [] (take 2 bb))])))
                      (into {}))
         get-pivot (scale-pivot pivot-point origins top-ids)]
-    (->> ids-to-scale
-         (reduce (fn [db id]
-                   (let [pivot (get-pivot db id)
-                         el (entity db id)]
-                     (cond
-                       (and (= (:tag el) :g) pivot)
-                       (-> (reduce (fn [db child-id]
-                                     (update-el db child-id
-                                                element.hierarchy/scale
-                                                ratio pivot))
-                                   db
-                                   (:children el))
-                           (refresh-bbox id))
+    (reduce (fn [db id]
+              (let [pivot (get-pivot db id)
+                    {:keys [tag locked]} (entity db id)]
+                (cond
+                  (and (= tag :g) (not locked) pivot)
+                  (scale-group db id ratio pivot-point ids-to-scale)
 
-                       pivot
-                       (update-el db id element.hierarchy/scale ratio pivot))))
-                 db))))
+                  pivot
+                  (update-el db id element.hierarchy/scale ratio pivot))))
+            db
+            ids-to-scale)))
 
 (m/=> align [:function
              [:-> App Direction App]
@@ -955,10 +982,11 @@
   ([db]
    (group db (top-selected-sorted-ids db)))
   ([db ids]
-   (let [db (reduce (fn [db id] (set-parent db id (-> db selected-ids first)))
-                    (add db {:tag :g
-                             :parent (:id (parent db))}) ids)]
-     (refresh-bbox db (-> db selected-ids first)))))
+   (let [db (add db {:tag :g
+                     :parent (:id (parent db))})
+         group-id (-> db selected-ids first)]
+     (-> (reduce (partial-right set-parent group-id) db ids)
+         (refresh-bbox group-id)))))
 
 (m/=> ungroup [:function
                [:-> App App]
@@ -967,20 +995,22 @@
   ([db]
    (reduce ungroup db (selected-ids db)))
   ([db id]
-   (cond-> db
-     (and (not (locked? db id)) (= (:tag (entity db id)) :g))
-     (as-> db db
-       (let [index (children-index db id)]
-         (reduce
-          (fn [db child-id]
-            (-> db
-                (set-parent child-id (:parent (entity db id)) index)
-                ;; Group attributes are inherited by its children,
-                ;; so we need to maintain the presentation attrs.
-                (inherit-attrs (entity db id) child-id)
-                (select child-id)))
-          db (reverse (children-ids db id))))
-       (delete db id)))))
+   (let [{:keys [tag locked]
+          :as el} (entity db id)]
+     (cond-> db
+       (and (not locked) (= tag :g))
+       (as-> db db
+         (let [index (children-index db id)]
+           (reduce
+            (fn [db child-id]
+              (-> db
+                  (set-parent child-id (:parent el) index)
+                  ;; Group attributes are inherited by its children,
+                  ;; so we need to maintain the presentation attrs.
+                  (inherit-attrs el child-id)
+                  (select child-id)))
+            db (reverse (children-ids db id))))
+         (delete db id))))))
 
 (m/=> manipulate-path [:function
                        [:-> App PathManipulation App]
