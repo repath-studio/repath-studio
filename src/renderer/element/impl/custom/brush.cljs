@@ -14,7 +14,8 @@
    [renderer.input.impl.pointer :as input.impl.pointer]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.element :as utils.element]
-   [renderer.utils.length :as utils.length]))
+   [renderer.utils.length :as utils.length]
+   [renderer.utils.path :as utils.path]))
 
 (hierarchy/derive! :brush ::element.hierarchy/renderable)
 
@@ -178,7 +179,8 @@
   [el]
   (let [options (select-keys (:attrs el) option-keys)]
     (-> el :attrs :points
-        (points->path options))))
+        (points->path options)
+        (utils.path/manipulate nil))))
 
 (defmethod element.hierarchy/handles :brush
   [el]

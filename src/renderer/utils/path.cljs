@@ -27,7 +27,8 @@
       :simplify (.simplify path)
       :smooth (.smooth path)
       :flatten (.flatten path)
-      :reverse (.reverse path))
+      :reverse (.reverse path)
+      path)
     (get-d path)))
 
 (m/=> point-indices [:-> [:maybe string?] PathPointType [:maybe Vec2]])
