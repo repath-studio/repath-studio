@@ -87,12 +87,13 @@
     (segment-point segment :end-point)))
 
 (m/=> outgoing-cp [:-> [:maybe PathSegment] [:maybe Vec2]])
+(m/=> outgoing-cp [:-> [:maybe PathSegment] [:maybe Vec2]])
 (defn outgoing-cp
   "Returns the outgoing control point.
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/d#cubic_b%C3%A9zier_curve"
   [segment]
   (let [command (segment->command segment)]
-    (when (contains? #{"C" "S"} command)
+    (when (contains? #{"C" "S" "Q"} command)
       (let [[ex ey] (segment-point segment :end-point)
             cp (if (= command "C") :end-control-point :start-control-point)
             [cp2x cp2y] (segment-point segment cp)]
@@ -170,6 +171,8 @@
                      (/ (+ (aget segment 2) (aget segment 4)) 2)
                      ex ey]
             "S" #js ["Q" (aget segment 1) (aget segment 2) ex ey]
+            "T" (let [[cpx cpy] (or (outgoing-cp prev-segment) prev-ep)]
+                  #js ["Q" cpx cpy ex ey])
             #js ["Q" (/ (+ prev-x ex) 2) (/ (+ prev-y ey) 2) ex ey])
       "C" (case current
             "Q" (q->c-segment segment prev-ep)

@@ -255,15 +255,14 @@
           command]
          [command-select el-id index command]]]
 
-       (when (pos? index)
-         [:div.flex
-          [:button.form-control-button.opacity-50
-           {:class "bg-transparent! hover:bg-overlay! text-inherit! px-2!"
-            :disabled true}
-           (if (= command (string/lower-case command))
-             (i18n.views/t [::relative "Relative"])
-             (i18n.views/t [::absolute "Absolute"]))]
-          [segment-delete-button el-id index]])]]
+       [:div.flex
+        [:button.form-control-button.opacity-50
+         {:class "bg-transparent! hover:bg-overlay! text-inherit! px-2!"
+          :disabled true}
+         (if (= command (string/lower-case command))
+           (i18n.views/t [::relative "Relative"])
+           (i18n.views/t [::absolute "Absolute"]))]
+        [segment-delete-button el-id index]]]]
 
      (some->> (segment-form segment {:d d
                                      :index index})
