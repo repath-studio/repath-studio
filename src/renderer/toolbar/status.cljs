@@ -138,7 +138,7 @@
            children)
      [:> Popover/Portal
       [:> Popover/Content
-       {:class "popover-content max-w-fit"
+       {:class "popover-content max-w-fit!"
         :align "start"
         :side "top"
         :align-offset (:align-offset props)
