@@ -328,9 +328,9 @@
                                          :selected-handles selected-handles}]))
             (into [:div.flex.flex-col.gap-px])))
      (when-not (utils.path/closed? segments)
-       [add-segment-dropdown id (if (pos? (count segments))
-                                  (dissoc path-commands "M")
-                                  (select-keys path-commands ["M"]))])]))
+       [add-segment-dropdown id (cond-> path-commands
+                                  (zero? (count segments))
+                                  (select-keys ["M"]))])]))
 
 (defn edit-form
   []
