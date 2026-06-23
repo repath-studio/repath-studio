@@ -67,7 +67,7 @@
 
 (defn render-arms
   [{:keys [endpoints segments offset]} index segment]
-  (let [prev-ep (some-> (get endpoints (dec index)) (matrix/add offset))
+  (let [prev-ep (some-> endpoints (get (dec index)) (matrix/add offset))
         cp0 (some-> segment
                     (->px-point :start-control-point)
                     (matrix/add offset))
@@ -84,12 +84,12 @@
       "S"
       [:<>
        (when-let [implied-cp1 (some-> (aget segments (dec index))
-                                      utils.path/outgoing-cp
+                                      (utils.path/outgoing-cp)
                                       (matrix/add offset))]
          [utils.svg/arm prev-ep implied-cp1])
        [utils.svg/arm cp0 ep]]
 
-      `"Q"
+      "Q"
       [:<>
        (when prev-ep [utils.svg/arm prev-ep cp0])
        [utils.svg/arm cp0 ep]]
