@@ -289,7 +289,7 @@
                 (when selected? "bg-accent! text-accent-foreground!")]}
        [:div.flex.items-center.gap-2.justify-between.w-full.overflow-hidden
         [:div.flex.overflow-hidden
-         [:button.form-control-button.bg-overlay!.text-inherit!
+         [:button.form-control-button.bg-overlay!.text-inherit!.cursor-pointer
           {:title (i18n.views/t [::open-command-specification
                                  "Open command specification"])
            :on-click #(do (.stopPropagation %)
