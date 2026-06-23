@@ -33,24 +33,24 @@
         pressure (:pressure e)
         pressure (if (zero? pressure) 1 pressure)
         r (* (/ 16 2) pressure)
-        stroke (document.handlers/attr db :stroke)]
+        fill (document.handlers/attr db :fill)]
     (app.handlers/add-fx db [::set-brush {:type :element
                                           :tag :circle
                                           :attrs {:cx x
                                                   :cy y
                                                   :r r
-                                                  :fill stroke}}])))
+                                                  :fill fill}}])))
 
 (defmethod tool.hierarchy/on-drag-start [::brush :idle]
   [db e]
   (let [point (string/join " " (conj (:adjusted-pointer-pos db) (:pressure e)))
-        stroke (document.handlers/attr db :stroke)]
+        fill (document.handlers/attr db :fill)]
     (-> db
         (tool.handlers/set-state :create)
         (element.handlers/add {:type :element
                                :tag :brush
                                :attrs {:points point
-                                       :stroke stroke
+                                       :fill fill
                                        :size 16
                                        :thinning 0.5
                                        :smoothing 0.5

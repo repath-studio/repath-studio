@@ -27,7 +27,7 @@
                                 perfect-freehand."]
    :url "https://github.com/steveruizok/perfect-freehand"
    :attrs [:points
-           :stroke
+           :fill
            :opacity
            :size
            :thinning
@@ -124,9 +124,7 @@
                    :on-pointer-up pointer-handler
                    :on-pointer-down pointer-handler
                    :on-pointer-move pointer-handler}
-                  (-> attrs
-                      (select-keys [:id :class :opacity])
-                      (assoc :fill (:stroke attrs))))]))
+                  (select-keys attrs [:id :class :opacity :fill]))]))
 
 (defn points->vec
   [points]
