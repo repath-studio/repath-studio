@@ -317,15 +317,16 @@
         {:keys [id tag selected-handles]} element]
     [:div.flex.flex-col.gap-px
      [attribute.views/heading "d" tag :d]
-     (->> segments
-          (map-indexed (fn [index segment]
-                         ^{:key index}
-                         [segment-row {:el-id id
-                                       :index index
-                                       :segment segment
-                                       :d v
-                                       :selected-handles selected-handles}]))
-          (into [:div.flex.flex-col.gap-px]))
+     (when (seq segments)
+       (->> segments
+            (map-indexed (fn [index segment]
+                           ^{:key index}
+                           [segment-row {:el-id id
+                                         :index index
+                                         :segment segment
+                                         :d v
+                                         :selected-handles selected-handles}]))
+            (into [:div.flex.flex-col.gap-px])))
      (when-not (utils.path/closed? segments)
        [add-segment-dropdown id (if (pos? (count segments))
                                   (dissoc path-commands "M")
