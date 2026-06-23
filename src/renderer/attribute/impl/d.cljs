@@ -1,6 +1,7 @@
 (ns renderer.attribute.impl.d
   "https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/d"
   (:require
+   ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
    ["@radix-ui/react-select" :as Select]
    [clojure.string :as string]
    [re-frame.core :as rf]
@@ -30,25 +31,35 @@
 
 (def path-commands
   {"M" {:label [::move-to "Move To"]
-        :url "https://svgwg.org/svg2-draft/paths.html#PathDataMovetoCommands"}
+        :url "https://svgwg.org/svg2-draft/paths.html#PathDataMovetoCommands"
+        :default-segment ["M" 0 0]}
    "L" {:label [::line-to "Line To"]
-        :url "https://svgwg.org/svg2-draft/paths.html#PathDataLinetoCommands"}
+        :url "https://svgwg.org/svg2-draft/paths.html#PathDataLinetoCommands"
+        :default-segment ["L" 0 0]}
    "V" {:label [::vertical-line "Vertical Line"]
-        :url "https://svgwg.org/svg2-draft/paths.html#PathDataLinetoCommands"}
+        :url "https://svgwg.org/svg2-draft/paths.html#PathDataLinetoCommands"
+        :default-segment ["V" 0]}
    "H" {:label [::horizontal-line "Horizontal Line"]
-        :url "https://svgwg.org/svg2-draft/paths.html#PathDataLinetoCommands"}
+        :url "https://svgwg.org/svg2-draft/paths.html#PathDataLinetoCommands"
+        :default-segment ["H" 0]}
    "C" {:label [::cubic-bezier "Cubic Bézier Curve"]
-        :url "https://svgwg.org/svg2-draft/paths.html#PathDataCubicBezierCommands"}
+        :url "https://svgwg.org/svg2-draft/paths.html#PathDataCubicBezierCommands"
+        :default-segment ["C" 0 0 0 0 0 0]}
    "S" {:label [::shortcut-cubic-bezier "Shortcut Cubic Bézier Curve"]
-        :url "https://svgwg.org/svg2-draft/paths.html#PathDataCubicBezierCommands"}
+        :url "https://svgwg.org/svg2-draft/paths.html#PathDataCubicBezierCommands"
+        :default-segment ["S" 0 0 0 0]}
    "Q" {:label [::quadratic-bezier-curve "Quadratic Bézier Curve"]
-        :url "https://svgwg.org/svg2-draft/paths.html#PathDataQuadraticBezierCommands"}
+        :url "https://svgwg.org/svg2-draft/paths.html#PathDataQuadraticBezierCommands"
+        :default-segment ["Q" 0 0 0 0]}
    "T" {:label [::shortcut-quadratic "Shortcut Quadratic Bézier Curve"]
-        :url "https://svgwg.org/svg2-draft/paths.html#PathDataQuadraticBezierCommands"}
+        :url "https://svgwg.org/svg2-draft/paths.html#PathDataQuadraticBezierCommands"
+        :default-segment ["T" 0 0]}
    "A" {:label [::elliptical-arc-curve "Elliptical Arc Curve"]
-        :url "https://svgwg.org/svg2-draft/paths.html#PathDataEllipticalArcCommands"}
+        :url "https://svgwg.org/svg2-draft/paths.html#PathDataEllipticalArcCommands"
+        :default-segment ["A" 0 0 0 0 0 0 0]}
    "Z" {:label [::close-path "Close Path"]
-        :url "https://svgwg.org/svg2-draft/paths.html#PathDataClosePathCommand"}})
+        :url "https://svgwg.org/svg2-draft/paths.html#PathDataClosePathCommand"
+        :default-segment ["Z"]}})
 
 (defn ->command
   [c]
@@ -88,6 +99,15 @@
                           (utils.path/segments->string)))
        (history.handlers/finalize timestamp [::convert-segment
                                              "Convert segment"]))))
+
+(rf/reg-event-db
+ ::add-segment
+ (fn [db [_ el-id command timestamp]]
+   (-> db
+       (element.handlers/update-attr
+        el-id :d
+        #(string/join " " (into [%] (:default-segment (->command command)))))
+       (history.handlers/finalize timestamp [::add-segment "Add segment"]))))
 
 (defn set-segment-value
   [e {:keys [d index field-index value]}]
@@ -131,8 +151,7 @@
                          :id input-id}]]))
 
 (defmulti segment-form (fn [segment _] (-> (first segment)
-                                           (string/lower-case)
-                                           (keyword))))
+                                           (string/upper-case))))
 
 (defn col-span
   []
@@ -147,31 +166,31 @@
   [segment ctx]
   (mapped-segment-forms segment ctx ["x" "y"]))
 
-(defmethod segment-form :h
+(defmethod segment-form "H"
   [segment ctx]
   [[segment-field ctx "x" 1 segment]
    [col-span]])
 
-(defmethod segment-form :v
+(defmethod segment-form "V"
   [segment ctx]
   [[segment-field ctx "y" 1 segment]
    [col-span]])
 
-(defmethod segment-form :z [_segment _ctx])
+(defmethod segment-form "Z" [_segment _ctx])
 
-(defmethod segment-form :c
+(defmethod segment-form "C"
   [segment ctx]
   (mapped-segment-forms segment ctx ["x1" "y1" "x2" "y2" "x" "y"]))
 
-(defmethod segment-form :s
+(defmethod segment-form "S"
   [segment ctx]
   (mapped-segment-forms segment ctx ["x2" "y2" "x" "y"]))
 
-(defmethod segment-form :q
+(defmethod segment-form "Q"
   [segment ctx]
   (mapped-segment-forms segment ctx ["x1" "y1" "x" "y"]))
 
-(defmethod segment-form :a
+(defmethod segment-form "A"
   [segment ctx]
   [[segment-field ctx "rx" 1 segment]
    [segment-field ctx "ry" 2 segment]
@@ -220,6 +239,30 @@
        (->> path-commands
             (map command-item)
             (into [:> Select/Viewport {:class "select-viewport"}]))]]]))
+
+(defn add-segment-dropdown
+  [el-id]
+  [:> DropdownMenu/Root
+   [:> DropdownMenu/Trigger
+    {:as-child true}
+    [:button.form-control-button.flex.items-center.justify-center.gap-2.h-11!
+     [views/icon "plus"]
+     (i18n.views/t [::add-segment "Add segment"])]]
+   [:> DropdownMenu/Portal
+    (->> path-commands
+         (map (fn [[command {:keys [label]}]]
+                [:> DropdownMenu/Item
+                 {:key command
+                  :class "menu-item dropdown-menu-item"
+                  :onSelect #(rf/dispatch [::add-segment el-id command
+                                           (.-timeStamp %)])}
+                 [:div.menu-item-indicator command]
+                 [:div (i18n.views/t label)]]))
+         (into [:> DropdownMenu/Content
+                {:class "menu-content rounded-sm"
+                 :on-key-down #(.stopPropagation %)
+                 :on-escape-key-down #(.stopPropagation %)}
+                [views/dropdownmenu-arrow]]))]])
 
 (defn segment-delete-button
   [el-id index]
@@ -283,7 +326,8 @@
                                        :segment segment
                                        :d v
                                        :selected-handles selected-handles}]))
-          (into [:div.flex.flex-col.gap-px]))]))
+          (into [:div.flex.flex-col.gap-px]))
+     [add-segment-dropdown id]]))
 
 (defn edit-form
   []
