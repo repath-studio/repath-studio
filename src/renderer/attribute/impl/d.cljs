@@ -150,8 +150,7 @@
                          :value v
                          :id input-id}]]))
 
-(defmulti segment-form (fn [segment _] (-> (first segment)
-                                           (string/upper-case))))
+(defmulti segment-form (fn [segment _] (utils.path/segment->command segment)))
 
 (defn col-span
   []
@@ -327,7 +326,8 @@
                                        :d v
                                        :selected-handles selected-handles}]))
           (into [:div.flex.flex-col.gap-px]))
-     [add-segment-dropdown id]]))
+     (when-not (utils.path/closed? segments)
+       [add-segment-dropdown id])]))
 
 (defn edit-form
   []

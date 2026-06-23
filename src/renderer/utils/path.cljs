@@ -120,6 +120,10 @@
       (.slice segments 0 (dec n))
       segments)))
 
+(defn closed?
+  [segments]
+  (= "Z" (some-> segments last segment->command)))
+
 (m/=> acc-endpoints [:-> PathSegments [:vector Vec2]])
 (defn acc-endpoints
   [segments]
