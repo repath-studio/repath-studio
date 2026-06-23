@@ -64,7 +64,7 @@
    [line start end
     :stroke "var(--primary)"]
    [line start end
-    :stroke "var(--foreground-default)"
+    :stroke "var(--foreground-muted)"
     :stroke-dasharray 4]])
 
 (m/=> arc [:-> Vec2 number? number? number? any?])

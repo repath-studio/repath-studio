@@ -52,7 +52,8 @@
                      :else "var(--accent-foreground)")
              :stroke (cond
                        active "var(--accent)"
-                       (not implied) "var(--foreground-muted)")}
+                       implied "var(--border)"
+                       :else "var(--foreground-muted)")}
       (when label [:title (i18n.views/t label)])]]))
 
 (m/=> selected-bbox [:-> BBox any?])
