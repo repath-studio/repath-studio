@@ -434,9 +434,10 @@
   :shortcut-quadratic "단축 2차 베지어 곡선"
   :elliptical-arc-curve "타원 호 곡선"
   :close-path "패스 닫기"
-  :remove-segment "Remove segment"
-  :convert-segment "Convert segment"
-  :open-command-specification "Open command specification"}
+  :remove-segment "세그먼트 제거"
+  :add-segment "세그먼트 추가"
+  :convert-segment "세그먼트 변환"
+  :open-command-specification "명령 사양 열기"}
 
  :renderer.attribute.impl.length
  {:increase "증가"
@@ -651,7 +652,7 @@
 
  :renderer.attribute.impl.points
  {:edit-points "점 편집"
-  :remove-point "Remove point"}
+  :remove-point "포인트 제거"}
 
  :renderer.frame.views
  {:main-canvas "메인 캔버스"}

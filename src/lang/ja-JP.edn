@@ -438,9 +438,10 @@
   :shortcut-quadratic "ショートカット2次ベジェ曲線"
   :elliptical-arc-curve "楕円弧曲線"
   :close-path "パスを閉じる"
-  :remove-segment "Remove segment"
-  :convert-segment "Convert segment"
-  :open-command-specification "Open command specification"}
+  :remove-segment "セグメントを削除"
+  :add-segment "セグメントを追加"
+  :convert-segment "セグメントを変換"
+  :open-command-specification "コマンド仕様を開く"}
 
  :renderer.attribute.impl.length
  {:increase "増加"
@@ -655,7 +656,7 @@
 
  :renderer.attribute.impl.points
  {:edit-points "ポイントを編集"
-  :remove-point "Remove point"}
+  :remove-point "ポイントを削除"}
 
  :renderer.frame.views
  {:main-canvas "メインキャンバス"}

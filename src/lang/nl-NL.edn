@@ -486,9 +486,10 @@
   :shortcut-quadratic "Snelkoppeling kwadratische Bézier curve"
   :elliptical-arc-curve "Elliptische boog curve"
   :close-path "Pad sluiten"
-  :remove-segment "Remove segment"
-  :convert-segment "Convert segment"
-  :open-command-specification "Open command specification"}
+  :remove-segment "Segment verwijderen"
+  :add-segment "Segment toevoegen"
+  :convert-segment "Segment converteren"
+  :open-command-specification "Opdrachtspecificatie openen"}
 
  :renderer.attribute.impl.length
  {:increase "Verhogen"
@@ -712,7 +713,7 @@
 
  :renderer.attribute.impl.points
  {:edit-points "Punten bewerken"
-  :remove-point "Remove point"}
+  :remove-point "Punt verwijderen"}
 
  :renderer.frame.views
  {:main-canvas "hoofdcanvas"}

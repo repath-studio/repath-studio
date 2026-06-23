@@ -467,6 +467,7 @@
   :elliptical-arc-curve "Elliptical Arc Curve"
   :close-path "Close Path"
   :remove-segment "Remove segment"
+  :add-segment "Add segment"
   :convert-segment "Convert segment"
   :open-command-specification "Open command specification"}
 

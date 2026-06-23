@@ -489,9 +489,10 @@
   :shortcut-quadratic "Quadratische Bézier-Verknüpfung"
   :elliptical-arc-curve "Elliptische Bogenkurve"
   :close-path "Pfad schließen"
-  :remove-segment "Remove segment"
-  :convert-segment "Convert segment"
-  :open-command-specification "Open command specification"}
+  :remove-segment "Segment entfernen"
+  :add-segment "Segment hinzufügen"
+  :convert-segment "Segment konvertieren"
+  :open-command-specification "Befehlsspezifikation öffnen"}
 
  :renderer.attribute.impl.length
  {:increase "Erhöhen"
@@ -716,7 +717,7 @@
 
  :renderer.attribute.impl.points
  {:edit-points "Punkte bearbeiten"
-  :remove-point "Remove point"}
+  :remove-point "Punkt entfernen"}
 
  :renderer.frame.views
  {:main-canvas "Hauptleinwand"}

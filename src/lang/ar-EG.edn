@@ -454,9 +454,10 @@
   :shortcut-quadratic "منحنى بيزيه التربيعي المختصر"
   :elliptical-arc-curve "منحنى القوس البيضاوي"
   :close-path "إغلاق المسار"
-  :remove-segment "Remove segment"
-  :convert-segment "Convert segment"
-  :open-command-specification "Open command specification"}
+  :remove-segment "إزالة مقطع"
+  :add-segment "إضافة مقطع"
+  :convert-segment "تحويل مقطع"
+  :open-command-specification "فتح مواصفات الأمر"}
 
  :renderer.attribute.impl.length
  {:increase "زيادة"
@@ -670,7 +671,7 @@
 
  :renderer.attribute.impl.points
  {:edit-points "تحرير النقاط"
-  :remove-point "Remove point"}
+  :remove-point "إزالة نقطة"}
 
  :renderer.frame.views
  {:main-canvas "اللوحة الرئيسية"}

@@ -473,9 +473,10 @@
   :shortcut-quadratic "Curva de Bézier quadrática de atalho"
   :elliptical-arc-curve "Curva de arco elíptico"
   :close-path "Fechar caminho"
-  :remove-segment "Remove segment"
-  :convert-segment "Convert segment"
-  :open-command-specification "Open command specification"}
+  :remove-segment "Remover segmento"
+  :add-segment "Adicionar segmento"
+  :convert-segment "Converter segmento"
+  :open-command-specification "Abrir especificação do comando"}
 
  :renderer.attribute.impl.length
  {:increase "Aumentar"
@@ -695,7 +696,7 @@
 
  :renderer.attribute.impl.points
  {:edit-points "Editar pontos"
-  :remove-point "Remove point"}
+  :remove-point "Remover ponto"}
 
  :renderer.frame.views
  {:main-canvas "tela principal"}

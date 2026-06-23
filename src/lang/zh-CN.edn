@@ -407,9 +407,10 @@
   :shortcut-quadratic "简写二次贝塞尔曲线"
   :elliptical-arc-curve "椭圆弧曲线"
   :close-path "闭合路径"
-  :remove-segment "Remove segment"
-  :convert-segment "Convert segment"
-  :open-command-specification "Open command specification"}
+  :remove-segment "删除段"
+  :add-segment "添加段"
+  :convert-segment "转换段"
+  :open-command-specification "打开命令规范"}
 
  :renderer.attribute.impl.length
  {:increase "增加"
@@ -616,7 +617,7 @@
 
  :renderer.attribute.impl.points
  {:edit-points "编辑点"
-  :remove-point "Remove point"}
+  :remove-point "删除点"}
 
  :renderer.frame.views
  {:main-canvas "主画布"}

@@ -467,9 +467,10 @@
   :shortcut-quadratic "Kısayol Kuadratik Bézier Eğrisi"
   :elliptical-arc-curve "Eliptik Yay Eğrisi"
   :close-path "Yolu Kapat"
-  :remove-segment "Remove segment"
-  :convert-segment "Convert segment"
-  :open-command-specification "Open command specification"}
+  :remove-segment "Segmenti kaldır"
+  :add-segment "Segment ekle"
+  :convert-segment "Segmenti dönüştür"
+  :open-command-specification "Komut belirtimini aç"}
 
  :renderer.attribute.impl.length
  {:increase "Artır"
@@ -690,7 +691,7 @@
 
  :renderer.attribute.impl.points
  {:edit-points "Noktaları düzenle"
-  :remove-point "Remove point"}
+  :remove-point "Noktasını kaldır"}
 
  :renderer.frame.views
  {:main-canvas "ana tuval"}

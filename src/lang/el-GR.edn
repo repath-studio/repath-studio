@@ -491,9 +491,10 @@
   :shortcut-quadratic "Συντομευμένη τετραγωνική καμπύλη Bézier"
   :elliptical-arc-curve "Ελλειπτική καμπύλη τόξου"
   :close-path "Κλείσιμο διαδρομής"
-  :remove-segment "Remove segment"
-  :convert-segment "Convert segment"
-  :open-command-specification "Open command specification"}
+  :remove-segment "Αφαίρεση τμήματος"
+  :add-segment "Προσθήκη τμήματος"
+  :convert-segment "Μετατροπή τμήματος"
+  :open-command-specification "Άνοιγμα προδιαγραφής εντολής"}
 
  :renderer.attribute.impl.length
  {:increase "Αύξηση"
@@ -719,7 +720,7 @@
 
  :renderer.attribute.impl.points
  {:edit-points "Επεξεργασία σημείων"
-  :remove-point "Remove point"}
+  :remove-point "Αφαίρεση σημείου"}
 
  :renderer.frame.views
  {:main-canvas "κύριος καμβάς"}

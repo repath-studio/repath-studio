@@ -480,9 +480,10 @@
   :shortcut-quadratic "Raccourci Bézier quadratique"
   :elliptical-arc-curve "Courbe d'arc elliptique"
   :close-path "Fermer le chemin"
-  :remove-segment "Remove segment"
-  :convert-segment "Convert segment"
-  :open-command-specification "Open command specification"}
+  :remove-segment "Supprimer le segment"
+  :add-segment "Ajouter un segment"
+  :convert-segment "Convertir le segment"
+  :open-command-specification "Ouvrir la spécification de commande"}
 
  :renderer.attribute.impl.length
  {:increase "Augmenter"
@@ -707,7 +708,7 @@
 
  :renderer.attribute.impl.points
  {:edit-points "Éditer les points"
-  :remove-point "Remove point"}
+  :remove-point "Supprimer le point"}
 
  :renderer.frame.views
  {:main-canvas "canevas principal"}
