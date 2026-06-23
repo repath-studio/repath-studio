@@ -38,7 +38,7 @@
    [:elements {:default {}
                :persist true} [:map-of ElementId Element]]
    [:centered {:optional true} boolean?]
-   [:attrs {:default {:fill "white"
+   [:attrs {:default {:fill "lightgray"
                       :stroke "black"}} [:map-of keyword? string?]]
    [:preview-label {:optional true} string?]
    [:file-handle {:optional true} JS_Object]])

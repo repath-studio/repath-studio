@@ -122,13 +122,13 @@
    (let [fill (rf/subscribe [::document.subs/fill])
          stroke (rf/subscribe [::document.subs/stroke])]
      (testing "default color values"
-       (is (= @fill "white"))
+       (is (= @fill "lightgray"))
        (is (= @stroke "black")))
 
      (testing "swap colors"
        (rf/dispatch [::document.events/swap-colors])
        (is (= @fill "black"))
-       (is (= @stroke "white")))
+       (is (= @stroke "lightgray")))
 
      (testing "set fill"
        (rf/dispatch [::document.events/set-attr :fill "red"])
