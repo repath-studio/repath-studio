@@ -240,7 +240,7 @@
             (into [:> Select/Viewport {:class "select-viewport"}]))]]]))
 
 (defn add-segment-dropdown
-  [el-id]
+  [el-id commands]
   [:> DropdownMenu/Root
    [:> DropdownMenu/Trigger
     {:as-child true}
@@ -248,7 +248,7 @@
      [views/icon "plus"]
      (i18n.views/t [::add-segment "Add segment"])]]
    [:> DropdownMenu/Portal
-    (->> path-commands
+    (->> commands
          (map (fn [[command {:keys [label]}]]
                 [:> DropdownMenu/Item
                  {:key command
@@ -327,7 +327,9 @@
                                        :selected-handles selected-handles}]))
           (into [:div.flex.flex-col.gap-px]))
      (when-not (utils.path/closed? segments)
-       [add-segment-dropdown id])]))
+       [add-segment-dropdown id (if (pos? (count segments))
+                                  (dissoc path-commands "M")
+                                  (select-keys path-commands ["M"]))])]))
 
 (defn edit-form
   []
