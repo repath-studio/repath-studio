@@ -306,11 +306,11 @@
   (let [selected-elements @(rf/subscribe [::element.subs/selected])
         selected-tags @(rf/subscribe [::element.subs/selected-tags])
         edit-attributes @(rf/subscribe [::element.subs/edit-attributes])
-        selected-locked? @(rf/subscribe [::element.subs/selected-locked?])
+        locked? @(rf/subscribe [::element.subs/every-selected-locked?])
         tool-state @(rf/subscribe [::tool.subs/state])
         tool-cached-state @(rf/subscribe [::tool.subs/cached-state])
         tag (first selected-tags)
-        locked? (or selected-locked?
+        locked? (or locked?
                     (not= tool-state :idle)
                     (and tool-cached-state (not= tool-cached-state :idle)))]
     (when-first [el selected-elements]

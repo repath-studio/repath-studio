@@ -206,6 +206,16 @@
           (doto (.slice segments) (aset index new-seg))
           segments)))))
 
+(m/=> break-apart [:-> PathSegments [:vector PathSegments]])
+(defn break-apart
+  [segments]
+  (reduce (fn [acc segment]
+            (if (= "M" (segment->command segment))
+              (conj acc [segment])
+              (update acc (dec (count acc)) conj segment)))
+          []
+          segments))
+
 (m/=> boolean-operation [:-> string? string? BooleanOperation string?])
 (defn boolean-operation
   [path-a path-b operation]
