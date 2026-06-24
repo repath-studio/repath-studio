@@ -888,6 +888,43 @@
                 :parent (-> selected-elements first :parent)
                 :attrs (merge attrs {:d new-path})})))))
 
+(m/=> combine [:-> App App])
+(defn combine
+  [db]
+  (let [selected-path-elements (->> (filter-selected-by-tag db :path)
+                                    (sort-by-index-path db))]
+    (if (> (count selected-path-elements) 1)
+      (-> (reduce (fn [db el] (delete db (:id el))) db selected-path-elements)
+          (add {:type :element
+                :tag :path
+                :parent (:parent (first selected-path-elements))
+                :attrs (merge (:attrs (first selected-path-elements))
+                              {:d (->> selected-path-elements
+                                       (map #(get-in % [:attrs :d]))
+                                       (string/join " "))})}))
+      db)))
+
+(m/=> break-apart [:-> App App])
+(defn break-apart
+  [db]
+  (let [selected-path-elements (->> (filter-selected-by-tag db :path)
+                                    (sort-by-index-path db))
+        db (-> (reduce (fn [db el]
+                         (delete db (:id el))) db selected-path-elements)
+               (deselect))]
+    (reduce (fn [db el]
+              (let [segments (utils.path/string->segments (-> el :attrs :d))
+                    broken-segments (utils.path/break-apart segments)]
+                (reduce (fn [db seg]
+                          (let [d (utils.path/segments->string seg)]
+                            (create db {:type :element
+                                        :tag :path
+                                        :selected true
+                                        :parent (:parent el)
+                                        :attrs (assoc (:attrs el) :d d)})))
+                        db broken-segments)))
+            db selected-path-elements)))
+
 (m/=> paste-in-place [:function
                       [:-> App App]
                       [:-> App Element App]])

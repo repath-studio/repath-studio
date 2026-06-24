@@ -69,7 +69,7 @@
  :-> (comp set (partial map :tag)))
 
 (rf/reg-sub
- ::has-selected-tag?
+ ::some-selected-tag?
  :<- [::selected-tags]
  :=> contains?)
 
@@ -79,7 +79,7 @@
  :-> (comp boolean seq))
 
 (rf/reg-sub
- ::selected-locked?
+ ::every-selected-locked?
  :<- [::selected]
  :-> (partial every? :locked))
 

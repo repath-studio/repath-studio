@@ -110,7 +110,9 @@
   :ungroup-selection "선택 그룹 해제"
   :cut-selection "선택 잘라내기"
   :trace-image "이미지 추적"
-  :toggle-handle-selection "Toggle handle selection"}
+  :toggle-handle-selection "Toggle handle selection"
+  :combine "결합"
+  :break-apart "분리"}
 
  :renderer.element.impl.animation.animate
  {:label "애니메이션"
@@ -732,6 +734,8 @@
   :boolean-intersect "교집합"
   :boolean-subtract "빼기"
   :boolean-divide "나누기"
+  :combine "결합"
+  :break-apart "분리"
   :raise "앞으로"
   :lower "뒤로"
   :raise-to-top "맨 앞으로"

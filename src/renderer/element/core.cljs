@@ -310,35 +310,54 @@
                :label [::path-simplify "Simplify"]
                :icon "bezier-curve"
                :event [::element.events/manipulate-path :simplify]
-               :enabled [::element.subs/has-selected-tag? :path]}])
+               :enabled [::element.subs/some-selected-tag? :path]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :path/smooth
                :label [::path-smooth "Smooth"]
                :icon "bezier-curve"
                :event [::element.events/manipulate-path :smooth]
-               :enabled [::element.subs/has-selected-tag? :path]}])
+               :enabled [::element.subs/some-selected-tag? :path]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :path/flatten
                :label [::path-flatten "Flatten"]
                :icon "bezier-curve"
                :event [::element.events/manipulate-path :flatten]
-               :enabled [::element.subs/has-selected-tag? :path]}])
+               :enabled [::element.subs/some-selected-tag? :path]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :path/reverse
                :label [::path-reverse "Reverse"]
                :icon "bezier-curve"
                :event [::element.events/manipulate-path :reverse]
-               :enabled [::element.subs/has-selected-tag? :path]}])
+               :enabled [::element.subs/some-selected-tag? :path]}])
+
+(rf/dispatch [::action.events/register-action
+              {:id :path/combine
+               :label [::combine "Combine"]
+               :icon "group"
+               :event [::element.events/combine]
+               :enabled [::element.subs/some-selected-tag? :path]
+               :shortcuts [{:keyCode (utils.key/codes "M")
+                            :ctrlKey true}]}])
+
+(rf/dispatch [::action.events/register-action
+              {:id :path/break-apart
+               :label [::break-apart "Break apart"]
+               :icon "ungroup"
+               :event [::element.events/break-apart]
+               :enabled [::element.subs/some-selected-tag? :path]
+               :shortcuts [{:keyCode (utils.key/codes "M")
+                            :ctrlKey true
+                            :shiftKey true}]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :image/trace
                :label [::image-trace "Trace"]
                :icon "image"
                :event [::element.events/trace]
-               :enabled [::element.subs/has-selected-tag? :image]}])
+               :enabled [::element.subs/some-selected-tag? :image]}])
 
 (rf/dispatch [::action.events/register-action-group
               {:id :object/index-operations
@@ -410,16 +429,18 @@
 (rf/dispatch [::action.events/register-action-group
               {:id :object/path-operations
                :label [::path "Path"]
-               :enabled [::element.subs/has-selected-tag? :path]
+               :enabled [::element.subs/some-selected-tag? :path]
                :actions [:path/simplify
                          :path/smooth
                          :path/flatten
-                         :path/reverse]}])
+                         :path/reverse
+                         :path/combine
+                         :path/break-apart]}])
 
 (rf/dispatch [::action.events/register-action-group
               {:id :object/image-operations
                :label [::image "Image"]
-               :enabled [::element.subs/has-selected-tag? :image]
+               :enabled [::element.subs/some-selected-tag? :image]
                :actions [:image/trace]}])
 
 (rf/dispatch [::action.events/register-action-group

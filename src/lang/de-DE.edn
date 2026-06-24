@@ -110,7 +110,9 @@
   :ungroup-selection "Auswahl gruppierung aufheben"
   :cut-selection "Auswahl ausschneiden"
   :trace-image "Bild nachzeichnen"
-  :toggle-handle-selection "Toggle handle selection"}
+  :toggle-handle-selection "Toggle handle selection"
+  :combine "Kombinieren"
+  :break-apart "Trennen"}
 
  :renderer.element.impl.animation.animate
  {:label "Animieren"
@@ -801,6 +803,8 @@
   :boolean-intersect "Schnittmenge"
   :boolean-subtract "Subtrahieren"
   :boolean-divide "Teilen"
+  :combine "Kombinieren"
+  :break-apart "Trennen"
   :raise "Nach vorne"
   :lower "Nach hinten"
   :raise-to-top "Ganz nach vorne"
