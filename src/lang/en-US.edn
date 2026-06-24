@@ -110,7 +110,9 @@
   :ungroup-selection "Ungroup selection"
   :cut-selection "Cut selection"
   :trace-image "Trace image"
-  :toggle-handle-selection "Toggle handle selection"}
+  :toggle-handle-selection "Toggle handle selection"
+  :combine "Combine"
+  :break-apart "Break apart"}
 
  :renderer.element.impl.animation.animate
  {:label "Animate"
@@ -766,6 +768,8 @@
   :boolean-intersect "Intersect"
   :boolean-subtract "Subtract"
   :boolean-divide "Divide"
+  :combine "Combine"
+  :break-apart "Break apart"
   :raise "Raise"
   :lower "Lower"
   :raise-to-top "Raise to top"

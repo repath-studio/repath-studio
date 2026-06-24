@@ -111,7 +111,9 @@
   :ungroup-selection "Separa selezione"
   :cut-selection "Taglia selezione"
   :trace-image "Traccia immagine"
-  :toggle-handle-selection "Toggle handle selection"}
+  :toggle-handle-selection "Toggle handle selection"
+  :combine "Combina"
+  :break-apart "Separa"}
 
  :renderer.element.impl.animation.animate
  {:label "Anima"
@@ -795,6 +797,8 @@
   :boolean-intersect "Interseca"
   :boolean-subtract "Sottrai"
   :boolean-divide "Dividi"
+  :combine "Combina"
+  :break-apart "Separa"
   :raise "Porta avanti"
   :lower "Porta dietro"
   :raise-to-top "Porta in primo piano"

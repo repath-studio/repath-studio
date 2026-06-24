@@ -110,7 +110,9 @@
   :ungroup-selection "Dela upp markeringsgrupp"
   :cut-selection "Klipp ut markering"
   :trace-image "Spåra bild"
-  :toggle-handle-selection "Toggle handle selection"}
+  :toggle-handle-selection "Toggle handle selection"
+  :combine "Kombinera"
+  :break-apart "Dela upp"}
 
  :renderer.element.impl.animation.animate
  {:label "Animera"
@@ -780,6 +782,8 @@
   :boolean-intersect "Skära"
   :boolean-subtract "Subtrahera"
   :boolean-divide "Dela"
+  :combine "Kombinera"
+  :break-apart "Dela upp"
   :raise "Lyft fram"
   :lower "Lägg bak"
   :raise-to-top "Lyft till toppen"

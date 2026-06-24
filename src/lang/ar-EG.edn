@@ -110,7 +110,9 @@
   :ungroup-selection "إلغاء تجميع التحديد"
   :cut-selection "قص التحديد"
   :trace-image "تتبع الصورة"
-  :toggle-handle-selection "Toggle handle selection"}
+  :toggle-handle-selection "Toggle handle selection"
+  :combine "دمج"
+  :break-apart "فصل"}
 
  :renderer.element.impl.animation.animate
  {:label "تحريك"
@@ -753,6 +755,8 @@
   :boolean-intersect "تقاطع"
   :boolean-subtract "طرح"
   :boolean-divide "قسمة"
+  :combine "دمج"
+  :break-apart "فصل"
   :raise "رفع"
   :lower "خفض"
   :raise-to-top "رفع إلى الأعلى"

@@ -110,7 +110,9 @@
   :ungroup-selection "Seçim grubunu çöz"
   :cut-selection "Seçimi kes"
   :trace-image "Resim izini sür"
-  :toggle-handle-selection "Toggle handle selection"}
+  :toggle-handle-selection "Toggle handle selection"
+  :combine "Kombine"
+  :break-apart "Parçalara Ayır"}
 
  :renderer.element.impl.animation.animate
  {:label "Animasyon"
@@ -774,6 +776,8 @@
   :boolean-intersect "Kesişim"
   :boolean-subtract "Çıkar"
   :boolean-divide "Böl"
+  :combine "Kombine"
+  :break-apart "Parçalara Ayır"
   :raise "Öne getir"
   :lower "Arkaya gönder"
   :raise-to-top "En öne getir"

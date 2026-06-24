@@ -110,7 +110,9 @@
   :ungroup-selection "Αποομαδοποίηση επιλογής"
   :cut-selection "Αποκοπή επιλογής"
   :trace-image "Ανίχνευση εικόνας"
-  :toggle-handle-selection "Toggle handle selection"}
+  :toggle-handle-selection "Toggle handle selection"
+  :combine "Συνδυασμός"
+  :break-apart "Διάσπαση"}
 
  :renderer.element.impl.animation.animate
  {:label "Κίνηση"
@@ -803,6 +805,8 @@
   :boolean-intersect "Τομή"
   :boolean-subtract "Αφαίρεση"
   :boolean-divide "Διαίρεση"
+  :combine "Συνδυασμός"
+  :break-apart "Διάσπαση"
   :raise "Ανέβασμα"
   :lower "Κατέβασμα"
   :raise-to-top "Μετακίνηση προς τα πάνω"

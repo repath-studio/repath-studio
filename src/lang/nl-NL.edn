@@ -110,7 +110,9 @@
   :ungroup-selection "Selectiegroepering opheffen"
   :cut-selection "Selectie knippen"
   :trace-image "Afbeelding traceren"
-  :toggle-handle-selection "Toggle handle selection"}
+  :toggle-handle-selection "Toggle handle selection"
+  :combine "Combineren"
+  :break-apart "Opsplitsen"}
 
  :renderer.element.impl.animation.animate
  {:label "Animeren"
@@ -796,6 +798,8 @@
   :boolean-intersect "Doorsnede"
   :boolean-subtract "Aftrekken"
   :boolean-divide "Verdelen"
+  :combine "Combineren"
+  :break-apart "Opsplitsen"
   :raise "Naar voren"
   :lower "Naar achteren"
   :raise-to-top "Naar voorgrond"

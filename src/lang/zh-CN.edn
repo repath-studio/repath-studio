@@ -109,7 +109,9 @@
   :ungroup-selection "选择取消成组"
   :cut-selection "剪切选择"
   :trace-image "描摹图像"
-  :toggle-handle-selection "Toggle handle selection"}
+  :toggle-handle-selection "Toggle handle selection"
+  :combine "组合"
+  :break-apart "拆分"}
 
  :renderer.element.impl.animation.animate
  {:label "动画"
@@ -698,6 +700,8 @@
   :boolean-intersect "相交"
   :boolean-subtract "差集"
   :boolean-divide "分割"
+  :combine "组合"
+  :break-apart "拆分"
   :raise "上移"
   :lower "下移"
   :raise-to-top "置于顶层"

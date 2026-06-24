@@ -111,7 +111,9 @@
   :ungroup-selection "Разгруппировать выделенное"
   :cut-selection "Вырезать выделенное"
   :trace-image "Трассировать изображение"
-  :toggle-handle-selection "Toggle handle selection"}
+  :toggle-handle-selection "Toggle handle selection"
+  :combine "Совместить"
+  :break-apart "Разбить"}
 
  :renderer.element.impl.animation.animate
  {:label "Анимировать"
@@ -779,6 +781,8 @@
   :boolean-intersect "Пересечение"
   :boolean-subtract "Вычесть"
   :boolean-divide "Разделить"
+  :combine "Совместить"
+  :break-apart "Разбить"
   :raise "Поднять"
   :lower "Опустить"
   :raise-to-top "Поднять на передний план"

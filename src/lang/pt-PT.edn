@@ -110,7 +110,9 @@
   :ungroup-selection "Desagrupar seleção"
   :cut-selection "Cortar seleção"
   :trace-image "Vetorizar imagem"
-  :toggle-handle-selection "Toggle handle selection"}
+  :toggle-handle-selection "Toggle handle selection"
+  :combine "Combinar"
+  :break-apart "Separar"}
 
  :renderer.element.impl.animation.animate
  {:label "Animar"
@@ -778,6 +780,8 @@
   :boolean-intersect "Intersetar"
   :boolean-subtract "Subtrair"
   :boolean-divide "Dividir"
+  :combine "Combinar"
+  :break-apart "Separar"
   :raise "Subir"
   :lower "Descer"
   :raise-to-top "Subir para frente"
