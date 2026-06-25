@@ -175,6 +175,7 @@
           (+ max-x offset-x)
           (+ max-y offset-y)])))))
 
+(m/=> propagate-bbox [:-> App ElementId App])
 (defn propagate-bbox
   [db id]
   (loop [db db
