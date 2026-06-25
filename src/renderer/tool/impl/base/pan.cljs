@@ -28,9 +28,11 @@
   []
   (i18n.views/t [::release-to-stop "Release to stop panning."]))
 
-(defmethod tool.hierarchy/on-pointer-up [::pan :idle]
+(defmethod tool.hierarchy/on-pointer-up [::pan :pan]
   [db _e]
-  (tool.handlers/set-cursor db "grab"))
+  (-> db
+      (tool.handlers/set-state :idle)
+      (tool.handlers/set-cursor "grab")))
 
 (defmethod tool.hierarchy/on-pointer-down [::pan :idle]
   [db _e]
