@@ -164,6 +164,7 @@
 
  :renderer.element.impl.shape.path
  {:label "Yol"
+  :end-point "bitiş noktası"
   :description "<path> SVG öğesi, bir şekli tanımlamak için kullanılan
                 genel öğedir. Tüm temel şekiller bir path öğesiyle
                 oluşturulabilir."}

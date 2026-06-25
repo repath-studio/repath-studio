@@ -166,6 +166,7 @@
 
  :renderer.element.impl.shape.path
  {:label "Pad"
+  :end-point "eindpunt"
   :description "Het SVG <path> element is het generieke element om een vorm te
                 definiëren. Alle basisvormen kunnen gemaakt worden met een path
                 element."}

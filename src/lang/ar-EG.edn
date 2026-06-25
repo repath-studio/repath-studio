@@ -161,6 +161,7 @@
 
  :renderer.element.impl.shape.path
  {:label "مسار"
+  :end-point "نقطة النهاية"
   :description "عنصر <path> في SVG هو العنصر العام لتعريف شكل. يمكن
                 إنشاء جميع الأشكال الأساسية باستخدام عنصر مسار."}
 

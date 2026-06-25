@@ -163,6 +163,7 @@
 
  :renderer.element.impl.shape.path
  {:label "Bana"
+  :end-point "slutpunkt"
   :description "SVG <path> elementet är det generiska elementet för att
                 definiera en form. Alla grundformer kan skapas med ett path
                 element."}

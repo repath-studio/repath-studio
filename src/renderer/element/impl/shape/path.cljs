@@ -363,3 +363,10 @@
 (defmethod element.hierarchy/path :path
   [el]
   (-> el :attrs :d))
+
+(defmethod element.hierarchy/snapping-points :path
+  [el]
+  (->> el :attrs :d
+       (utils.path/string->segments)
+       (utils.path/acc-endpoints)
+       (mapv #(with-meta % {:label [::end-point "end point"]}))))

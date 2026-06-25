@@ -161,6 +161,7 @@
 
  :renderer.element.impl.shape.path
  {:label "パス"
+  :end-point "終点"
   :description "<path> SVG要素は、形状を定義する汎用要素です。すべての基本形状は
                 パス要素で作成できます。"}
 

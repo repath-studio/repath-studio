@@ -155,6 +155,7 @@
 
  :renderer.element.impl.shape.path
  {:label "路径"
+  :end-point "端点"
   :description "SVG 元素 <path> 是定义形状的通用元素。所有基本形状都可以用路径元素
                 创建。"}
 
