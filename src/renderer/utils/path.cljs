@@ -211,8 +211,8 @@
   [segments]
   (reduce (fn [acc segment]
             (if (= "M" (segment->command segment))
-              (conj acc [segment])
-              (update acc (dec (count acc)) conj segment)))
+              (conj acc (array segment))
+              (do (.push (peek acc) segment) acc)))
           []
           segments))
 

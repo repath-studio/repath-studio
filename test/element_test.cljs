@@ -444,3 +444,24 @@
      (testing "bold weight"
        (rf/dispatch [::element.events/set-attr :font-family "Adwaita Mono"])
        (is (= @font-weights #{"700"}))))))
+
+(deftest combine-and-break-apart
+  (rf.test/run-test-sync
+   (rf/dispatch [::app.events/initialize])
+
+   (let [selected (rf/subscribe [::element.subs/selected])]
+     (rf/dispatch [::element.events/add {:tag :path
+                                         :attrs {:d "M0 0L 100 100"}}])
+     (rf/dispatch [::element.events/add {:tag :path
+                                         :attrs {:d "M100 0 L0 100"}}])
+
+     (rf/dispatch [::element.events/select-all])
+
+     (testing "combine"
+       (rf/dispatch [::element.events/combine])
+       (is (= (-> @selected first :attrs :d) "M0 0L100 100 M100 0L0 100")))
+
+     (testing "break apart"
+       (rf/dispatch [::element.events/break-apart])
+       (is (= (-> @selected first :attrs :d) "M 0 0 L 100 100"))
+       (is (= (-> @selected second :attrs :d) "M 100 0 L 0 100"))))))

@@ -293,3 +293,15 @@
          :font-size font-size
          :font-weight font-weight
          :bbox bbox}))))
+
+(m/=> breakable? [:-> Element boolean?])
+(defn breakable?
+  "Returns true if the element has a :d attribute with multiple 'M' commands."
+  [el]
+  (boolean (some-> el
+                   (get-in [:attrs :d])
+                   (string/trim)
+                   (rest)
+                   (str)
+                   (string/upper-case)
+                   (string/includes? "M"))))
