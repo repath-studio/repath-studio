@@ -144,7 +144,7 @@
                :shortcuts [{:keyCode (utils.key/codes "G")
                             :ctrlKey true
                             :shiftKey true}]
-               :enabled [::element.subs/some-selected?]}])
+               :enabled [::element.subs/some-selected-tag? :g]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :object/lock
