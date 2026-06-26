@@ -133,7 +133,8 @@
       (element.handlers/translate (event->offset e))
 
       (= k "Escape")
-      (history.handlers/reset-state))))
+      (-> (history.handlers/reset-state)
+          (element.handlers/clear-ignored)))))
 
 (defmethod tool.hierarchy/on-key-up [::transform/transform :idle]
   [db e]
