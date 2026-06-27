@@ -385,7 +385,8 @@
   :release-to-finalize "Αφήστε για να οριστικοποιήσετε το στοιχείο."
   :edge "άκρη"
   :elements "Στοιχεία"
-  :containers "Κοντέινερ"}
+  :containers "Κοντέινερ"
+  :select-stroke-width "Επιλογή πλάτους γραμμής"}
 
  :renderer.tool.impl.element.poly
  {:click-to-start "Κάντε κλικ για να ξεκινήσετε τη σχεδίαση."
@@ -583,7 +584,8 @@
 
  :renderer.tool.impl.base.transform.core
  {:label "Μετασχηματισμός"
-  :pivot-point "σημείο περιστροφής"}
+  :pivot-point "σημείο περιστροφής"
+  :lock-aspect-ratio "Κλείδωμα αναλογίας"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Πιέστε %1 για περιορισμό κατεύθυνσης. ή αφήστε %2 για

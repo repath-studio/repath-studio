@@ -33,7 +33,7 @@
   []
   (let [ratio-locked? @(rf/subscribe [::document.subs/attr :lock-ratio])]
     [views/radio-icon-button "lock" ratio-locked?
-     {:title (i18n.views/t [::lock-ratio "Lock aspect ratio"])
+     {:title (i18n.views/t [::lock-aspect-ratio "Lock aspect ratio"])
       :on-click #(rf/dispatch [::document.events/toggle-attr :lock-ratio])}]))
 
 (defmethod tool.hierarchy/on-deactivate ::transform

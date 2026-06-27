@@ -337,7 +337,8 @@
   :release-to-finalize "要素を確定するには離す。"
   :edge "エッジ"
   :elements "要素"
-  :containers "コンテナ"}
+  :containers "コンテナ"
+  :select-stroke-width "ストローク幅を選択"}
 
  :renderer.tool.impl.element.poly
  {:click-to-start "クリックして描画を開始。"
@@ -523,7 +524,8 @@
 
  :renderer.tool.impl.base.transform.core
  {:label "変形"
-  :pivot-point "ピボットポイント"}
+  :pivot-point "ピボットポイント"
+  :lock-aspect-ratio "アスペクト比を固定"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "%1を押しながら方向を制限。または%2を離して移動"]

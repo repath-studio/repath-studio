@@ -351,7 +351,8 @@
   :release-to-finalize "요소를 완료하려면 놓으세요."
   :edge "가장자리"
   :elements "요소"
-  :containers "컨테이너"}
+  :containers "컨테이너"
+  :select-stroke-width "획 너비 선택"}
 
  :renderer.tool.impl.element.poly
  {:click-to-start "클릭하여 그리기를 시작합니다."
@@ -519,7 +520,8 @@
 
  :renderer.tool.impl.base.transform.core
  {:label "변환"
-  :pivot-point "피벗 포인트"}
+  :pivot-point "피벗 포인트"
+  :lock-aspect-ratio "가로세로 비율 잠금"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "%1을 누르면 방향을 제한하거나 %2를 놓으면 이동합니다"]

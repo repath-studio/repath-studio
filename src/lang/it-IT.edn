@@ -398,7 +398,8 @@
   :release-to-finalize "Rilascia per finalizzare l'elemento."
   :edge "bordo"
   :elements "Elementi"
-  :containers "Contenitori"}
+  :containers "Contenitori"
+  :select-stroke-width "Seleziona larghezza tratto"}
 
  :renderer.tool.impl.element.poly
  {:click-to-start "Clicca per iniziare a disegnare."
@@ -574,7 +575,8 @@
 
  :renderer.tool.impl.base.transform.core
  {:label "Trasforma"
-  :pivot-point "punto di pivot"}
+  :pivot-point "punto di pivot"
+  :lock-aspect-ratio "Blocca proporzioni"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Tieni premuto %1 per limitare la direzione. o rilascia %2 per
