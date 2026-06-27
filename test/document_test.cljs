@@ -120,10 +120,12 @@
    (rf/dispatch [::app.events/initialize])
 
    (let [fill (rf/subscribe [::document.subs/attr :fill])
-         stroke (rf/subscribe [::document.subs/attr :stroke])]
+         stroke (rf/subscribe [::document.subs/attr :stroke])
+         stroke-width (rf/subscribe [::document.subs/attr :stroke-width])]
      (testing "default color values"
        (is (= @fill "lightgray"))
-       (is (= @stroke "black")))
+       (is (= @stroke "black"))
+       (is (= @stroke-width "1px")))
 
      (testing "swap colors"
        (rf/dispatch [::document.events/swap-colors])
