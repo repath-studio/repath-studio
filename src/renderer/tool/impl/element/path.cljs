@@ -66,17 +66,17 @@
 (m/=> create-el [:-> App App])
 (defn create-el
   [db]
-  (let [[x y] (->> (tool.handlers/snapped-offset db)
-                   (mapv utils.length/->fixed))
-        stroke (document.handlers/attr db :stroke)
-        fill (document.handlers/attr db :fill)]
+  (let [path (->> (tool.handlers/snapped-offset db)
+                  (mapv utils.length/->fixed)
+                  (into ["M"])
+                  (string/join " "))
+        attrs (-> (document.handlers/attrs db)
+                  (select-keys [:stroke :fill :stroke-width]))]
     (-> db
         (tool.handlers/set-state :create)
         (element.handlers/add {:type :element
                                :tag :path
-                               :attrs {:d (string/join " " ["M" x y])
-                                       :stroke stroke
-                                       :fill fill}}))))
+                               :attrs (assoc attrs :d path)}))))
 
 (defmethod tool.hierarchy/on-pointer-up [::path :idle]
   [db _e]

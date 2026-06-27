@@ -20,25 +20,23 @@
 (defn attributes
   [db]
   (let [[offset-x offset-y] (tool.handlers/snapped-offset db)
-        radius (pointer-delta db)]
-    {:x (utils.length/->fixed (- offset-x radius))
-     :y (utils.length/->fixed (- offset-y radius))
-     :size (utils.length/->fixed (* radius 2))}))
+        radius (pointer-delta db)
+        attrs (-> (document.handlers/attrs db)
+                  (select-keys [:stroke :fill :stroke-width]))]
+    (merge attrs {:x (utils.length/->fixed (- offset-x radius))
+                  :y (utils.length/->fixed (- offset-y radius))
+                  :size (utils.length/->fixed (* radius 2))})))
 
 (defmethod tool.hierarchy/on-drag-start [::blob :idle]
   [db _e]
-  (let [fill (document.handlers/attr db :fill)
-        stroke (document.handlers/attr db :stroke)
-        seed (rand-int 1000000)]
+  (let [seed (rand-int 1000000)]
     (-> (tool.handlers/set-state db :create)
         (element.handlers/add {:type :element
                                :tag :blob
                                :attrs (merge (attributes db)
                                              {:seed seed
                                               :extraPoints 8
-                                              :randomness 4
-                                              :fill fill
-                                              :stroke stroke})}))))
+                                              :randomness 4})}))))
 
 (defmethod tool.hierarchy/on-drag [::blob :create]
   [db _e]

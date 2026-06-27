@@ -4,12 +4,14 @@
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.app.subs :as-alias app.subs]
+   [renderer.document.events :as-alias document.events]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.db :refer [Element]]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
    [renderer.hierarchy :as hierarchy]
+   [renderer.i18n.views :as i18n.views]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
@@ -22,9 +24,17 @@
    [renderer.tool.views :as tool.views]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.length :as utils.length]
-   [renderer.utils.svg :as utils.svg]))
+   [renderer.utils.svg :as utils.svg]
+   [renderer.views :as views]))
 
 (hierarchy/derive! ::transform ::tool.hierarchy/tool)
+
+(defmethod tool.hierarchy/tool-options ::transform
+  []
+  (let [ratio-locked? @(rf/subscribe [::document.subs/attr :lock-ratio])]
+    [views/radio-icon-button "lock" ratio-locked?
+     {:title (i18n.views/t [::lock-ratio "Lock aspect ratio"])
+      :on-click #(rf/dispatch [::document.events/toggle-attr :lock-ratio])}]))
 
 (defmethod tool.hierarchy/on-deactivate ::transform
   [db]

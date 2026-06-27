@@ -119,8 +119,8 @@
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
 
-   (let [fill (rf/subscribe [::document.subs/fill])
-         stroke (rf/subscribe [::document.subs/stroke])]
+   (let [fill (rf/subscribe [::document.subs/attr :fill])
+         stroke (rf/subscribe [::document.subs/attr :stroke])]
      (testing "default color values"
        (is (= @fill "lightgray"))
        (is (= @stroke "black")))

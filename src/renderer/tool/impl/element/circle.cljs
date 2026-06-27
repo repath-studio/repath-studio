@@ -23,17 +23,15 @@
         position (tool.handlers/snapped-position db)
         radius (matrix/distance position offset)
         [cx cy] offset
-        fill (document.handlers/attr db :fill)
-        stroke (document.handlers/attr db :stroke)]
+        attrs (-> (document.handlers/attrs db)
+                  (select-keys [:stroke :fill :stroke-width]))]
     (-> db
         (tool.handlers/set-state :create)
         (element.handlers/add {:type :element
                                :tag :circle
-                               :attrs {:cx cx
-                                       :cy cy
-                                       :fill fill
-                                       :stroke stroke
-                                       :r radius}}))))
+                               :attrs (merge attrs {:cx cx
+                                                    :cy cy
+                                                    :r radius})}))))
 
 (defn update-el
   [db]
