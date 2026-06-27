@@ -352,7 +352,8 @@
   :release-to-finalize "أفلت لإنهاء العنصر."
   :edge "حافة"
   :elements "عناصر"
-  :containers "حاويات"}
+  :containers "حاويات"
+  :select-stroke-width "تحديد عرض الحد"}
 
  :renderer.tool.impl.element.poly
  {:click-to-start "انقر لبدء الرسم."
@@ -538,7 +539,8 @@
 
  :renderer.tool.impl.base.transform.core
  {:label "تحويل"
-  :pivot-point "نقطة الارتكاز"}
+  :pivot-point "نقطة الارتكاز"
+  :lock-aspect-ratio "قفل نسبة الأبعاد"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "اضغط %1 لتقييد الاتجاه. أو حرر %2 للتحريك"]

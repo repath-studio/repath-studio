@@ -389,7 +389,8 @@
   :release-to-finalize "Släpp för att slutföra elementet."
   :edge "kant"
   :elements "Element"
-  :containers "Behållare"}
+  :containers "Behållare"
+  :select-stroke-width "Välj linjebredd"}
 
  :renderer.tool.impl.element.poly
  {:click-to-start "Klicka för att börja rita."
@@ -562,7 +563,8 @@
 
  :renderer.tool.impl.base.transform.core
  {:label "Transformera"
-  :pivot-point "rotationspunkt"}
+  :pivot-point "rotationspunkt"
+  :lock-aspect-ratio "Lås bildförhållande"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Håll %1 för att begränsa riktning. eller släpp %2 för att

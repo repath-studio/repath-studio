@@ -224,7 +224,7 @@
      [:> Select/Trigger
       {:class "form-control-button flex gap-1 px-2!
                bg-transparent! hover:bg-overlay! text-inherit!"
-       :title (i18n.views/t [::convert-segment "Convert segment"])}
+       :aria-label (i18n.views/t [::convert-segment "Convert segment"])}
       [:div.absolute [:> Select/Value ""]]
       [:span.text-ellipsis.overflow-hidden (i18n.views/t label)]
       (when-not disabled?

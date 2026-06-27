@@ -7,7 +7,8 @@
    [renderer.db :refer [Vec2]]
    [renderer.document.db
     :as document.db
-    :refer [Document DocumentId DocumentTitle PersistedDocument RecentDocument]]
+    :refer [Document DocumentAttrs DocumentId DocumentTitle PersistedDocument
+            RecentDocument]]
    [renderer.element.db :refer [ElementId]]
    [renderer.element.handlers :as element.handlers]
    [renderer.frame.handlers :as frame.handlers]
@@ -177,15 +178,25 @@
     (expand-el db id)
     (collapse-el db id)))
 
+(m/=> attrs [:-> App DocumentAttrs])
+(defn attrs
+  [db]
+  (-> db active :attrs))
+
 (m/=> attr [:-> App keyword? string?])
 (defn attr
   [db k]
-  (get-in (active db) [:attrs k]))
+  (get (attrs db) k))
 
 (m/=> assoc-attr [:-> App keyword? string? App])
 (defn assoc-attr
   [db k v]
   (assoc-in db (path db :attrs k) v))
+
+(m/=> update-attr [:-> App keyword? ifn? [:* any?] App])
+(defn update-attr
+  [db k f & args]
+  (apply update-in db (path db :attrs k) f args))
 
 (m/=> update-saved-history-index [:function
                                   [:-> App App]

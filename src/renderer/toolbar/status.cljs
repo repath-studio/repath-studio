@@ -14,6 +14,8 @@
    [renderer.input.subs :as-alias input.subs]
    [renderer.snap.views :as snap.views]
    [renderer.timeline.views :as timeline.views]
+   [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.key :as utils.key]
    [renderer.utils.length :as utils.length]
    [renderer.views :as views]
@@ -152,8 +154,8 @@
        [views/popover-arrow]]]]))
 
 (defn color-selectors []
-  (let [fill @(rf/subscribe [::document.subs/fill])
-        stroke @(rf/subscribe [::document.subs/stroke])
+  (let [fill @(rf/subscribe [::document.subs/attr :fill])
+        stroke @(rf/subscribe [::document.subs/attr :stroke])
         get-hex #(:hex (js->clj % :keywordize-keys true))]
     [:div.flex
      {:class "gap-0.5"}
@@ -190,11 +192,17 @@
 
 (defn root []
   (let [md? @(rf/subscribe [::window.subs/md?])
-        zoom @(rf/subscribe [::document.subs/zoom])]
+        zoom @(rf/subscribe [::document.subs/zoom])
+        active-tool @(rf/subscribe [::tool.subs/cached-or-active])
+        sm? @(rf/subscribe [::window.subs/sm?])]
     [views/toolbar
      {:class "bg-primary relative justify-center md:justify-start py-2 md:py-1
               gap-2 md:gap-1"}
      [color-selectors]
+     (when (and sm? (get-method tool.hierarchy/tool-options active-tool))
+       [:<>
+        [:div.v-divider]
+        [tool.hierarchy/tool-options active-tool]])
      [:div.grow.hidden.md:block]
      (when md?
        [:<>

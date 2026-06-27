@@ -20,8 +20,8 @@
 
 (defn create-el
   [db]
-  (let [fill (document.handlers/attr db :fill)
-        stroke (document.handlers/attr db :stroke)
+  (let [attrs (-> (document.handlers/attrs db)
+                  (select-keys [:stroke :fill :stroke-width]))
         [offset-x offset-y] (tool.handlers/snapped-offset db)
         [x y] (tool.handlers/snapped-position db)
         [width height] (mapv (comp utils.length/->fixed abs)
@@ -34,12 +34,10 @@
         (tool.handlers/set-state :create)
         (element.handlers/add {:type :element
                                :tag :rect
-                               :attrs {:x x
-                                       :y y
-                                       :width width
-                                       :height height
-                                       :fill fill
-                                       :stroke stroke}}))))
+                               :attrs (merge attrs {:x x
+                                                    :y y
+                                                    :width width
+                                                    :height height})}))))
 
 (defn update-el
   [db e]
