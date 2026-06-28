@@ -727,7 +727,9 @@
  :renderer.app.core
  {:grid "Сетка"
   :help-bar "Панель справки"
-  :debug-info "Отладочная информация"}
+  :debug-info "Отладочная информация"
+  :guides "Направляющие"
+  :rulers "Линейки"}
 
  :renderer.dialog.core
  {:command-panel "Панель команд"

@@ -748,7 +748,9 @@
  :renderer.app.core
  {:grid "Raster"
   :help-bar "Hilfeleiste"
-  :debug-info "Debug-Informationen"}
+  :debug-info "Debug-Informationen"
+  :guides "Hilfslinien"
+  :rulers "Lineale"}
 
  :renderer.dialog.core
  {:command-panel "Befehlsfeld"

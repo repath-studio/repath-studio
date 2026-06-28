@@ -732,7 +732,9 @@
  :renderer.app.core
  {:grid "Cuadrícula"
   :help-bar "Barra de ayuda"
-  :debug-info "Información de depuración"}
+  :debug-info "Información de depuración"
+  :guides "Guías"
+  :rulers "Reglas"}
 
  :renderer.dialog.core
  {:command-panel "Panel de comandos"

@@ -742,7 +742,9 @@
  :renderer.app.core
  {:grid "Griglia"
   :help-bar "Barra aiuto"
-  :debug-info "Info debug"}
+  :debug-info "Info debug"
+  :guides "Guide"
+  :rulers "Righelli"}
 
  :renderer.dialog.core
  {:command-panel "Pannello comandi"

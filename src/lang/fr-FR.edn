@@ -739,7 +739,9 @@
  :renderer.app.core
  {:grid "Grille"
   :help-bar "Barre d'aide"
-  :debug-info "Informations de débogage"}
+  :debug-info "Informations de débogage"
+  :guides "Guides"
+  :rulers "Règles"}
 
  :renderer.dialog.core
  {:command-panel "Panneau de commandes"

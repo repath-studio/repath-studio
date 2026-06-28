@@ -713,7 +713,9 @@
  :renderer.app.core
  {:grid "Grid"
   :help-bar "Help bar"
-  :debug-info "Debug info"}
+  :debug-info "Debug info"
+  :guides "Guides"
+  :rulers "Rulers"}
 
  :renderer.dialog.core
  {:command-panel "Command panel"

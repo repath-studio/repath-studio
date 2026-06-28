@@ -700,7 +700,9 @@
  :renderer.app.core
  {:grid "الشبكة"
   :help-bar "شريط المساعدة"
-  :debug-info "معلومات التصحيح"}
+  :debug-info "معلومات التصحيح"
+  :guides "الأدلة"
+  :rulers "المساطر"}
 
  :renderer.dialog.core
  {:command-panel "لوحة الأوامر"

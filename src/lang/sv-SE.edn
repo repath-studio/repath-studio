@@ -727,7 +727,9 @@
  :renderer.app.core
  {:grid "Rutnät"
   :help-bar "Hjälpfält"
-  :debug-info "Felsökningsinformation"}
+  :debug-info "Felsökningsinformation"
+  :guides "Stödlinjer"
+  :rulers "Linjaler"}
 
  :renderer.dialog.core
  {:command-panel "Kommandopanel"

@@ -684,7 +684,9 @@
  :renderer.app.core
  {:grid "グリッド"
   :help-bar "ヘルプバー"
-  :debug-info "デバッグ情報"}
+  :debug-info "デバッグ情報"
+  :guides "ガイド"
+  :rulers "ルーラー"}
 
  :renderer.dialog.core
  {:command-panel "コマンドパネル"

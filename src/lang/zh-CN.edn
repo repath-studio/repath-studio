@@ -645,7 +645,9 @@
  :renderer.app.core
  {:grid "网格"
   :help-bar "帮助栏"
-  :debug-info "调试信息"}
+  :debug-info "调试信息"
+  :guides "参考线"
+  :rulers "标尺"}
 
  :renderer.dialog.core
  {:command-panel "命令面板"

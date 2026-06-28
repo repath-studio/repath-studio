@@ -680,7 +680,9 @@
  :renderer.app.core
  {:grid "격자"
   :help-bar "도움말 바"
-  :debug-info "디버그 정보"}
+  :debug-info "디버그 정보"
+  :guides "가이드"
+  :rulers "눈금자"}
 
  :renderer.dialog.core
  {:command-panel "명령 패널"

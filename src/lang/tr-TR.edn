@@ -721,7 +721,9 @@
  :renderer.app.core
  {:grid "Izgara"
   :help-bar "Yardım çubuğu"
-  :debug-info "Hata ayıklama bilgisi"}
+  :debug-info "Hata ayıklama bilgisi"
+  :guides "Kılavuzlar"
+  :rulers "Cetveller"}
 
  :renderer.dialog.core
  {:command-panel "Komut paneli"

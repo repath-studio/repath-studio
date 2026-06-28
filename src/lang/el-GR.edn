@@ -750,7 +750,9 @@
  :renderer.app.core
  {:grid "Πλέγμα"
   :help-bar "Μπάρα βοηθείας"
-  :debug-info "Πληροφορίες αποσφαλμάτωσης"}
+  :debug-info "Πληροφορίες αποσφαλμάτωσης"
+  :guides "Οδηγοί"
+  :rulers "Χάρακες"}
 
  :renderer.dialog.core
  {:command-panel "Πάνελ εντολών"

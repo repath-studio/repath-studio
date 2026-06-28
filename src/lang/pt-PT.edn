@@ -726,7 +726,9 @@
  :renderer.app.core
  {:grid "Grelha"
   :help-bar "Barra de ajuda"
-  :debug-info "Informação de depuração"}
+  :debug-info "Informação de depuração"
+  :guides "Guias"
+  :rulers "Réguas"}
 
  :renderer.dialog.core
  {:command-panel "Painel de comandos"
