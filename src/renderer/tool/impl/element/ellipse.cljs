@@ -19,8 +19,8 @@
 
 (defn create-el
   [db]
-  (let [fill (document.handlers/attr db :fill)
-        stroke (document.handlers/attr db :stroke)
+  (let [attrs (-> (document.handlers/attrs db)
+                  (select-keys [:stroke :fill :stroke-width]))
         [offset-x offset-y] (tool.handlers/snapped-offset db)
         [x y] (tool.handlers/snapped-position db)
         [rx ry] (->> [(abs (- x offset-x)) (abs (- y offset-y))]
@@ -29,12 +29,10 @@
         (tool.handlers/set-state :create)
         (element.handlers/add {:type :element
                                :tag :ellipse
-                               :attrs {:rx rx
-                                       :ry ry
-                                       :cx x
-                                       :cy y
-                                       :fill fill
-                                       :stroke stroke}}))))
+                               :attrs (merge attrs {:rx rx
+                                                    :ry ry
+                                                    :cx x
+                                                    :cy y})}))))
 
 (defn update-el
   [db e]

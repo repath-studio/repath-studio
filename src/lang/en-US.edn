@@ -381,7 +381,8 @@
   :release-to-finalize "Release to finalize the element."
   :edge "edge"
   :elements "Elements"
-  :containers "Containers"}
+  :containers "Containers"
+  :select-stroke-width "Select stroke width"}
 
  :renderer.tool.impl.element.poly
  {:click-to-start "Click to start drawing."
@@ -551,7 +552,8 @@
 
  :renderer.tool.impl.base.transform.core
  {:label "Transform"
-  :pivot-point "pivot point"}
+  :pivot-point "pivot point"
+  :lock-aspect-ratio "Lock aspect ratio"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Hold %1 to restrict direction. or release %2 to move"]

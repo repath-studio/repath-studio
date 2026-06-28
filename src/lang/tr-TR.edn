@@ -382,7 +382,8 @@
   :release-to-finalize "Öğeyi tamamlamak için bırakın."
   :edge "kenar"
   :elements "Öğeler"
-  :containers "Kapsayıcılar"}
+  :containers "Kapsayıcılar"
+  :select-stroke-width "Çizgi kalınlığı seçin"}
 
  :renderer.tool.impl.element.poly
  {:click-to-start "Çizmeye başlamak için tıklayın."
@@ -554,7 +555,8 @@
 
  :renderer.tool.impl.base.transform.core
  {:label "Dönüştür"
-  :pivot-point "pivot noktası"}
+  :pivot-point "pivot noktası"
+  :lock-aspect-ratio "En-boy oranını kilitle"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Yönü kısıtlamak için %1 tuşunu basılı tutun. veya taşımak için

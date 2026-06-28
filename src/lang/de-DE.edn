@@ -381,7 +381,8 @@
   :release-to-finalize "Loslassen, um das Element abzuschließen."
   :edge "Kante"
   :elements "Elemente"
-  :containers "Container"}
+  :containers "Container"
+  :select-stroke-width "Strichbreite auswählen"}
 
  :renderer.tool.impl.element.poly
  {:click-to-start "Klicken, um mit dem Zeichnen zu beginnen."
@@ -579,7 +580,8 @@
 
  :renderer.tool.impl.base.transform.core
  {:label "Transformieren"
-  :pivot-point "Drehpunkt"}
+  :pivot-point "Drehpunkt"
+  :lock-aspect-ratio "Seitenverhältnis sperren"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Halten Sie %1, um die Richtung zu beschränken. oder lassen Sie

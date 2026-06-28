@@ -307,7 +307,8 @@
   :release-to-finalize "松开以完成元素。"
   :edge "边缘"
   :elements "元素"
-  :containers "容器"}
+  :containers "容器"
+  :select-stroke-width "选择描边宽度"}
 
  :renderer.tool.impl.element.poly
  {:click-to-start "点击开始绘制。"
@@ -485,7 +486,8 @@
 
  :renderer.tool.impl.base.transform.core
  {:label "变换"
-  :pivot-point "旋转中心点"}
+  :pivot-point "旋转中心点"
+  :lock-aspect-ratio "锁定宽高比"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "按住 %1 限制方向。或释放 %2 进行移动"]

@@ -75,6 +75,12 @@
    (document.handlers/assoc-attr db k v)))
 
 (rf/reg-event-db
+ ::toggle-attr
+ [persist]
+ (fn [db [_ k]]
+   (document.handlers/update-attr db k not)))
+
+(rf/reg-event-db
  ::preview-attr
  (fn [db [_ k v]]
    (-> db

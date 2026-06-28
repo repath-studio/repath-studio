@@ -26,16 +26,15 @@
 
 (defmethod tool.hierarchy/on-pointer-up [::polygon :idle]
   [db _e]
-  (let [stroke (document.handlers/attr db :stroke)
-        fill (document.handlers/attr db :fill)
-        initial-point (tool.handlers/snapped-position db)]
+  (let [initial-point (tool.handlers/snapped-position db)
+        attrs (-> (document.handlers/attrs db)
+                  (select-keys [:stroke :fill :stroke-width])
+                  (assoc :points (string/join " " initial-point)))]
     (-> db
         (tool.handlers/set-state :create)
         (element.handlers/add {:type :element
                                :tag :polygon
-                               :attrs {:points (string/join " " initial-point)
-                                       :stroke stroke
-                                       :fill fill}}))))
+                               :attrs attrs}))))
 
 (rf/dispatch [::action.events/register-action
               {:id :tool/polygon
