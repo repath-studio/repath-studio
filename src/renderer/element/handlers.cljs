@@ -163,17 +163,26 @@
 (defn adjusted-bbox
   [db id]
   (loop [container (parent-container db id)
-         bbox (element.hierarchy/bbox (entity db id))]
+         bbox (if (= (:tag (entity db id)) :g)
+                (:bbox (entity db id))
+                (element.hierarchy/bbox (entity db id)))]
     (if-not (and container bbox)
       bbox
       (let [[offset-x offset-y _ _] (element.hierarchy/bbox container)
             [min-x min-y max-x max-y] bbox]
-        (recur
-         (parent-container db (:id container))
-         [(+ min-x offset-x)
-          (+ min-y offset-y)
-          (+ max-x offset-x)
-          (+ max-y offset-y)])))))
+        (recur (parent-container db (:id container))
+               [(+ min-x offset-x)
+                (+ min-y offset-y)
+                (+ max-x offset-x)
+                (+ max-y offset-y)])))))
+
+(defn group-bbox
+  [db id]
+  (let [children (children-ids db id)]
+    (when (seq children)
+      (->> children
+           (map (partial adjusted-bbox db))
+           (apply utils.bounds/union)))))
 
 (m/=> propagate-bbox [:-> App ElementId App])
 (defn propagate-bbox
@@ -183,9 +192,7 @@
     (if-let [parent-id (:parent (entity db current-id))]
       (let [parent-el (entity db parent-id)]
         (if (= (:tag parent-el) :g)
-          (let [children (children-ids db parent-id)
-                bbox (let [b (map (partial adjusted-bbox db) children)]
-                       (when (seq b) (apply utils.bounds/union b)))]
+          (let [bbox (group-bbox db parent-id)]
             (cond-> db
               bbox
               (-> (update-in (path db parent-id) assoc :bbox bbox)
@@ -202,8 +209,14 @@
                (let [b (map (partial adjusted-bbox db) children)]
                  (when (seq b) (apply utils.bounds/union b)))
                (adjusted-bbox db id))]
-    (if (or (not bbox) (utils.element/root? el))
+    (cond
+      (utils.element/root? el)
       db
+
+      (not bbox)
+      (update-in db (path db id) dissoc :bbox)
+
+      :else
       (-> (reduce refresh-bbox db children)
           (update-in (path db id) assoc :bbox bbox)
           (propagate-bbox id)))))
@@ -717,10 +730,18 @@
                                      [child-id (into [] (take 2 bb))])))
                            (into {}))]
     (-> (reduce (fn [db child-id]
-                  (if-let [child-origin (get child-origins child-id)]
-                    (update-el db child-id element.hierarchy/scale ratio
-                               (matrix/sub pivot-point child-origin))
-                    db))
+                  (let [child-origin (get child-origins child-id)
+                        {:keys [tag locked]} (entity db child-id)]
+                    (cond
+                      (and (= tag :g) (not locked))
+                      (scale-group db child-id ratio pivot-point ids-to-scale)
+
+                      child-origin
+                      (update-el db child-id element.hierarchy/scale ratio
+                                 (matrix/sub pivot-point child-origin))
+
+                      :else
+                      db)))
                 db children)
         (refresh-bbox id))))
 

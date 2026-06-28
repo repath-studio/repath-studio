@@ -99,6 +99,11 @@
  :-> utils.element/united-bbox)
 
 (rf/reg-sub
+ ::adjusted-bbox
+ (fn [db [_ id]]
+   (element.handlers/adjusted-bbox db id)))
+
+(rf/reg-sub
  ::area
  :<- [::selected]
  :-> utils.element/area)

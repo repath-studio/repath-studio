@@ -23,28 +23,28 @@
 
 (defmethod element.hierarchy/render :g
   [el]
-  (let [{:keys [attrs children bbox]} el
-        child-els @(rf/subscribe [::element.subs/filter-visible children])]
+  (let [{:keys [attrs children id]} el
+        child-els @(rf/subscribe [::element.subs/filter-visible children])
+        bbox @(rf/subscribe [::element.subs/adjusted-bbox id])]
     [:g (utils.element/style->map attrs)
      (for [child child-els]
        ^{:key (:id child)}
        [element.hierarchy/render child])
-     (when bbox
-       (let [ignored-ids @(rf/subscribe [::document.subs/ignored-ids])
-             ignored? (contains? ignored-ids (:id el))
-             [min-x min-y] bbox
-             [w h] (utils.bounds/->dimensions bbox)
-             pointer-handler (partial input.impl.pointer/handler! el)
-             handle-size @(rf/subscribe [::document.subs/handle-size])
-             stroke-width (max (:stroke-width attrs) handle-size)]
-         [:rect {:x min-x
-                 :y min-y
-                 :width w
-                 :height h
-                 :fill "transparent"
-                 :stroke "transparent"
-                 :stroke-width stroke-width
-                 :pointer-events (when ignored? "none")
-                 :on-pointer-up pointer-handler
-                 :on-pointer-down pointer-handler
-                 :on-pointer-move pointer-handler}]))]))
+     (let [ignored-ids @(rf/subscribe [::document.subs/ignored-ids])
+           ignored? (contains? ignored-ids (:id el))
+           [min-x min-y] bbox
+           [w h] (utils.bounds/->dimensions bbox)
+           pointer-handler (partial input.impl.pointer/handler! el)
+           handle-size @(rf/subscribe [::document.subs/handle-size])
+           stroke-width (max (:stroke-width attrs) handle-size)]
+       [:rect {:x min-x
+               :y min-y
+               :width w
+               :height h
+               :fill "transparent"
+               :stroke "transparent"
+               :stroke-width stroke-width
+               :pointer-events (when ignored? "none")
+               :on-pointer-up pointer-handler
+               :on-pointer-down pointer-handler
+               :on-pointer-move pointer-handler}])]))
