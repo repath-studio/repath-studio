@@ -74,7 +74,9 @@
   [el]
   (let [el-bbox (:bbox el)
         local-bbox (element.hierarchy/bbox el)]
-    (into [] (take 2) (matrix/sub el-bbox local-bbox))))
+    (->> (matrix/sub el-bbox local-bbox)
+         (take 2)
+         (into []))))
 
 (m/=> acc-snapping-points [:-> Element SnapOptions [:* Vec2]])
 (defn acc-snapping-points

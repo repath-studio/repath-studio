@@ -144,14 +144,14 @@
 
 (m/=> parent-offset [:-> App Vec2])
 (defn parent-offset
-  [db]
-  (or (some->> (selected-ids db)
-               (first)
-               (parent-container db)
-               (element.hierarchy/bbox)
-               (take 2)
-               (into []))
-      [0 0]))
+  ([db]
+   (parent-offset db (first (selected-ids db))))
+  ([db id]
+   (or (some->> (parent-container db id)
+                (element.hierarchy/bbox)
+                (take 2)
+                (into []))
+       [0 0])))
 
 (m/=> adjusted-point [:-> App Vec2 Vec2])
 (defn adjusted-point
@@ -163,9 +163,10 @@
 (defn adjusted-bbox
   [db id]
   (loop [container (parent-container db id)
-         bbox (if (= (:tag (entity db id)) :g)
-                (:bbox (entity db id))
-                (element.hierarchy/bbox (entity db id)))]
+         bbox (let [el (entity db id)]
+                (if (= (:tag el) :g)
+                  (:bbox el)
+                  (element.hierarchy/bbox el)))]
     (if-not (and container bbox)
       bbox
       (let [[offset-x offset-y _ _] (element.hierarchy/bbox container)
@@ -206,8 +207,7 @@
   (let [el (entity db id)
         children (children-ids db id)
         bbox (if (= (:tag el) :g)
-               (let [b (map (partial adjusted-bbox db) children)]
-                 (when (seq b) (apply utils.bounds/union b)))
+               (group-bbox db id)
                (adjusted-bbox db id))]
     (cond
       (utils.element/root? el)

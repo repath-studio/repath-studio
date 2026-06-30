@@ -99,9 +99,9 @@
  :-> utils.element/united-bbox)
 
 (rf/reg-sub
- ::adjusted-bbox
+ ::parent-offset
  (fn [db [_ id]]
-   (element.handlers/adjusted-bbox db id)))
+   (element.handlers/parent-offset db id)))
 
 (rf/reg-sub
  ::area
