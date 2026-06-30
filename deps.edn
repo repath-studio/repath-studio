@@ -26,4 +26,7 @@
   :format {:deps {dev.weavejester/cljfmt {:mvn/version "0.16.4"}}}
   :lint {:deps {clj-kondo/clj-kondo {:mvn/version "2026.05.25"}}}
   :outdated {:deps {com.github.liquidz/antq {:mvn/version "RELEASE"}}
-             :main-opts ["-m" "antq.core"]}}}
+             :main-opts ["-m" "antq.core"]}
+  :clj-watson {:deps {io.github.clj-holmes/clj-watson {:git/tag "v6.1.0"
+                                                       :git/sha "be98e4d"}}
+               :main-opts ["-m" "clj-watson.cli"]}}}
