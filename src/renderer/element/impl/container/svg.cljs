@@ -30,7 +30,7 @@
 
 (defmethod element.hierarchy/render :svg
   [el]
-  (let [attrs (:attrs el)
+  (let [{:keys [selected attrs]} el
         child-els @(rf/subscribe [::element.subs/filter-visible (:children el)])
         rect-attrs (select-keys attrs [:x :y :width :height])
         text-attrs (select-keys attrs [:x :y])
@@ -71,7 +71,8 @@
          :y 0
          :fill "white"
          :on-pointer-up pointer-handler
-         :on-pointer-down #(when (= (.-button %) 2)
+         :on-pointer-move #(when selected (pointer-handler %))
+         :on-pointer-down #(when (or selected (= (.-button %) 2))
                              (pointer-handler %))})]
       (for [el child-els]
         ^{:key (:id el)}
