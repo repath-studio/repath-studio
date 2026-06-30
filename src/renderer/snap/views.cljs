@@ -39,7 +39,9 @@
             [views/icon "chevron-up"]]]
           [:> DropdownMenu/Portal
            (->> (:actions (action.views/deref-action-group :snap/options))
-                (map views/dropdown-menu-item)
+                (map (comp views/dropdown-menu-item
+                           ;; TODO: Add icon for each option.
+                           #(dissoc % :icon)))
                 (into [:> DropdownMenu/Content
                        {:side "top"
                         :align "end"

@@ -138,7 +138,7 @@
 (defn right-controls
   []
   (let [fullscreen? @(rf/subscribe [::window.subs/fullscreen?])
-        theme-mode @(rf/subscribe [::theme.subs/computed-mode])
+        theme-mode @(rf/subscribe [::theme.subs/mode])
         mac? @(rf/subscribe [::app.subs/mac?])
         installable? @(rf/subscribe [::app.subs/installable?])
         md? @(rf/subscribe [::window.subs/md?])
