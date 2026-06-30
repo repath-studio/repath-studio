@@ -353,6 +353,9 @@
  {:label "SVG"
   :create-svg "SVGを作成"}
 
+ :renderer.tool.impl.extension.core
+ {:extensions "拡張機能"}
+
  :renderer.tool.impl.extension.blob
  {:label "ブロブ"
   :create-blob "ブロブを作成"}

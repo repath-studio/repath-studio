@@ -405,6 +405,9 @@
  {:label "Svg"
   :create-svg "Skapa svg"}
 
+ :renderer.tool.impl.extension.core
+ {:extensions "Tillägg"}
+
  :renderer.tool.impl.extension.blob
  {:label "Blob"
   :create-blob "Skapa blob"}

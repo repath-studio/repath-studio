@@ -185,7 +185,10 @@
      [:> DropdownMenu/ItemIndicator
       {:class "menu-item-indicator"}
       [icon "checkmark"]]
-     [:div [action.views/label action]]
+     [:div.flex.items-center.gap-2
+      (when (:icon action)
+        [icon (:icon action)])
+      [action.views/label action]]
      [shortcuts action]]
 
     :else
@@ -193,10 +196,10 @@
      {:class "menu-item dropdown-menu-item"
       :onSelect (action.views/dispatch action)
       :disabled (action.views/disabled? action)}
-     (when (:icon action)
-       [icon (:icon action)
-        {:class "menu-item-indicator"}])
-     [:div [action.views/label action]]
+     [:div.flex.items-center.gap-2
+      (when (:icon action)
+        [icon (:icon action)])
+      [action.views/label action]]
      [shortcuts action]]))
 
 (defn scroll-area

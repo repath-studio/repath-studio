@@ -398,6 +398,9 @@
  {:label "SVG"
   :create-svg "SVG oluştur"}
 
+ :renderer.tool.impl.extension.core
+ {:extensions "Uzantılar"}
+
  :renderer.tool.impl.extension.blob
  {:label "Blob"
   :create-blob "Blob oluştur"}

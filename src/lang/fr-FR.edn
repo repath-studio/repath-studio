@@ -391,6 +391,9 @@
  {:label "SVG"
   :create-svg "Créer un SVG"}
 
+ :renderer.tool.impl.extension.core
+ {:extensions "Extensions"}
+
  :renderer.tool.impl.extension.blob
  {:label "Blob"
   :create-blob "Créer un blob"}

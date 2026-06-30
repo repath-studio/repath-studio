@@ -367,6 +367,9 @@
  {:label "SVG"
   :create-svg "SVG 생성"}
 
+ :renderer.tool.impl.extension.core
+ {:extensions "확장"}
+
  :renderer.tool.impl.extension.blob
  {:label "블롭"
   :create-blob "블롭 생성"}
