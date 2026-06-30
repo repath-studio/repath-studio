@@ -159,14 +159,25 @@
   (->> (parent-offset db)
        (matrix/sub point)))
 
-(m/=> adjusted-bbox [:-> App ElementId [:maybe BBox]])
-(defn adjusted-bbox
+(m/=> local-bbox [:-> App ElementId [:maybe BBox]])
+(defn local-bbox
+  [db id]
+  (let [el (entity db id)]
+    (if (= (:tag el) :g)
+      (let [children (:children el)]
+        (when (seq children)
+          (->> (entities db children)
+               (map #(if (= (:tag %) :g)
+                       (local-bbox db (:id %))
+                       (element.hierarchy/bbox %)))
+               (apply utils.bounds/union))))
+      (element.hierarchy/bbox el))))
+
+(m/=> world-bbox [:-> App ElementId [:maybe BBox]])
+(defn world-bbox
   [db id]
   (loop [container (parent-container db id)
-         bbox (let [el (entity db id)]
-                (if (= (:tag el) :g)
-                  (:bbox el)
-                  (element.hierarchy/bbox el)))]
+         bbox (local-bbox db id)]
     (if-not (and container bbox)
       bbox
       (let [[offset-x offset-y _ _] (element.hierarchy/bbox container)
@@ -177,28 +188,24 @@
                 (+ max-x offset-x)
                 (+ max-y offset-y)])))))
 
-(defn group-bbox
-  [db id]
-  (let [children (children-ids db id)]
-    (when (seq children)
-      (->> children
-           (map (partial adjusted-bbox db))
-           (apply utils.bounds/union)))))
+(declare refresh-bbox)
 
 (m/=> propagate-bbox [:-> App ElementId App])
 (defn propagate-bbox
   [db id]
   (loop [db db
          current-id id]
-    (if-let [parent-id (:parent (entity db current-id))]
-      (let [parent-el (entity db parent-id)]
-        (if (= (:tag parent-el) :g)
-          (let [bbox (group-bbox db parent-id)]
-            (cond-> db
-              bbox
-              (-> (update-in (path db parent-id) assoc :bbox bbox)
-                  (recur parent-id))))
-          db))
+    (if-let [parent-el (parent db current-id)]
+      (-> (if (= (:tag parent-el) :g)
+            (let [bounds (->> (:children parent-el)
+                              (entities db)
+                              (keep :bbox)
+                              (apply utils.bounds/union))]
+              (if (seq bounds)
+                (update-in db (path db (:id parent-el)) assoc :bbox bounds)
+                (update-in db (path db (:id parent-el)) dissoc :bbox)))
+            db)
+          (recur (:id parent-el)))
       db)))
 
 (m/=> refresh-bbox [:-> App ElementId App])
@@ -206,15 +213,14 @@
   [db id]
   (let [el (entity db id)
         children (children-ids db id)
-        bbox (if (= (:tag el) :g)
-               (group-bbox db id)
-               (adjusted-bbox db id))]
+        bbox (world-bbox db id)]
     (cond
       (utils.element/root? el)
       db
 
       (not bbox)
-      (update-in db (path db id) dissoc :bbox)
+      (-> (update-in db (path db id) dissoc :bbox)
+          (propagate-bbox id))
 
       :else
       (-> (reduce refresh-bbox db children)
