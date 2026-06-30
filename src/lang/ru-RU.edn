@@ -380,6 +380,9 @@
  {:label "SVG"
   :create-svg "Создать SVG"}
 
+ :renderer.tool.impl.extension.core
+ {:extensions "Расширения"}
+
  :renderer.tool.impl.extension.blob
  {:label "Blob"
   :create-blob "Создать blob"}

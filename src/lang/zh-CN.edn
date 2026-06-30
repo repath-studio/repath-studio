@@ -323,6 +323,9 @@
  {:label "SVG"
   :create-svg "创建 SVG"}
 
+ :renderer.tool.impl.extension.core
+ {:extensions "扩展"}
+
  :renderer.tool.impl.extension.blob
  {:label "Blob"
   :create-blob "创建 blob"}

@@ -368,6 +368,9 @@
  {:label "SVG"
   :create-svg "إنشاء svg"}
 
+ :renderer.tool.impl.extension.core
+ {:extensions "امتدادات"}
+
  :renderer.tool.impl.extension.blob
  {:label "نقطة"
   :create-blob "إنشاء نقطة"}
