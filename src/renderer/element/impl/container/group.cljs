@@ -44,7 +44,7 @@
                :width w
                :height h
                :fill "transparent"
-               :stroke "red"
+               :stroke "transparent"
                :stroke-width stroke-width
                :pointer-events (when ignored? "none")
                :on-pointer-up pointer-handler
