@@ -98,6 +98,7 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :tools/elements
+               :icon "shapes"
                :label [::elements "Elements"]
                :actions [:tool/circle
                          :tool/ellipse

@@ -2,12 +2,16 @@
   "Custom element for https://blobs.dev/"
   (:require
    [clojure.core.matrix :as matrix]
+   [re-frame.core :as rf]
+   [renderer.action.events :as-alias action.events]
    [renderer.document.handlers :as document.handlers]
    [renderer.element.handlers :as element.handlers]
    [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
+   [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.length :as utils.length]))
 
 (hierarchy/derive! ::blob ::tool.hierarchy/element)
@@ -52,3 +56,10 @@
   (-> db
       (history.handlers/finalize (:timestamp e) [::create-blob "Create blob"])
       (tool.handlers/deactivate)))
+
+(rf/dispatch [::action.events/register-action
+              {:id :tool/blob
+               :label [::label "Blob"]
+               :icon "blob"
+               :event [::tool.events/activate ::blob]
+               :active [::tool.subs/active? ::blob]}])
