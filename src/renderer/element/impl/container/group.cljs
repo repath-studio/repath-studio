@@ -32,21 +32,22 @@
      (for [child child-els]
        ^{:key (:id child)}
        [element.hierarchy/render child])
-     (let [ignored-ids @(rf/subscribe [::document.subs/ignored-ids])
-           ignored? (contains? ignored-ids (:id el))
-           [min-x min-y] (matrix/sub (take 2 bbox) parent-offset)
-           [w h] (utils.bounds/->dimensions bbox)
-           pointer-handler (partial input.impl.pointer/handler! el)
-           handle-size @(rf/subscribe [::document.subs/handle-size])
-           stroke-width (max (:stroke-width attrs) handle-size)]
-       [:rect {:x min-x
-               :y min-y
-               :width w
-               :height h
-               :fill "transparent"
-               :stroke "transparent"
-               :stroke-width stroke-width
-               :pointer-events (when ignored? "none")
-               :on-pointer-up pointer-handler
-               :on-pointer-down pointer-handler
-               :on-pointer-move pointer-handler}])]))
+     (when bbox
+       (let [ignored-ids @(rf/subscribe [::document.subs/ignored-ids])
+             ignored? (contains? ignored-ids (:id el))
+             [min-x min-y] (matrix/sub (take 2 bbox) parent-offset)
+             [w h] (utils.bounds/->dimensions bbox)
+             pointer-handler (partial input.impl.pointer/handler! el)
+             handle-size @(rf/subscribe [::document.subs/handle-size])
+             stroke-width (max (:stroke-width attrs) handle-size)]
+         [:rect {:x min-x
+                 :y min-y
+                 :width w
+                 :height h
+                 :fill "transparent"
+                 :stroke "transparent"
+                 :stroke-width stroke-width
+                 :pointer-events (when ignored? "none")
+                 :on-pointer-up pointer-handler
+                 :on-pointer-down pointer-handler
+                 :on-pointer-move pointer-handler}]))]))
