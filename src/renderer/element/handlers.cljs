@@ -199,10 +199,10 @@
       (-> (if (= (:tag parent-el) :g)
             (let [bounds (->> (:children parent-el)
                               (entities db)
-                              (keep :bbox)
-                              (apply utils.bounds/union))]
+                              (keep :bbox))]
               (if (seq bounds)
-                (update-in db (path db (:id parent-el)) assoc :bbox bounds)
+                (->> (apply utils.bounds/union bounds)
+                     (update-in db (path db (:id parent-el)) assoc :bbox))
                 (update-in db (path db (:id parent-el)) dissoc :bbox)))
             db)
           (recur (:id parent-el)))
