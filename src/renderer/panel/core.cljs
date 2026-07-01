@@ -19,7 +19,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :panel/toggle-attributes
-               :label [::panel-properties "Properties"]
+               :label [::panel-attributes "Attributes"]
                :icon "properties"
                :event [::panel.events/toggle :attributes]
                :active [::panel.subs/visible? :attributes]

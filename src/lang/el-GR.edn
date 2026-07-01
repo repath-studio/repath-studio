@@ -872,7 +872,7 @@
  :renderer.panel.core
  {:panels "Πάνελ"
   :panel-element-tree "Δέντρο στοιχείων"
-  :panel-properties "Ιδιότητες"
+  :panel-attributes "Χαρακτηριστικά"
   :panel-xml-view "Προβολή XML"
   :panel-history-tree "Δέντρο ιστορικού"
   :panel-shell-history "Ιστορικό γραμμής εντολών"

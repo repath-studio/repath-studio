@@ -848,7 +848,7 @@
  :renderer.panel.core
  {:panels "Панели"
   :panel-element-tree "Дерево элементов"
-  :panel-properties "Свойства"
+  :panel-attributes "Атрибуты"
   :panel-xml-view "XML вид"
   :panel-history-tree "Дерево истории"
   :panel-shell-history "История консоли"

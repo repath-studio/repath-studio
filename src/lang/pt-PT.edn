@@ -847,7 +847,7 @@
  :renderer.panel.core
  {:panels "Painéis"
   :panel-element-tree "Árvore de elementos"
-  :panel-properties "Propriedades"
+  :panel-attributes "Atributos"
   :panel-xml-view "Vista XML"
   :panel-history-tree "Árvore de histórico"
   :panel-shell-history "Histórico da consola"

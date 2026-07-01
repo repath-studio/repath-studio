@@ -806,7 +806,7 @@
  :renderer.panel.core
  {:panels "パネル"
   :panel-element-tree "要素ツリー"
-  :panel-properties "プロパティ"
+  :panel-attributes "属性"
   :panel-xml-view "XML表示"
   :panel-history-tree "履歴ツリー"
   :panel-shell-history "シェル履歴"

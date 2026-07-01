@@ -835,7 +835,7 @@
  :renderer.panel.core
  {:panels "Panels"
   :panel-element-tree "Element tree"
-  :panel-properties "Properties"
+  :panel-attributes "Attributes"
   :panel-xml-view "XML view"
   :panel-history-tree "History tree"
   :panel-shell-history "Shell history"
