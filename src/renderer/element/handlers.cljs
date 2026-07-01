@@ -18,7 +18,7 @@
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
-   [renderer.utils.extra :refer [partial-right]]
+   [renderer.utils.extra :refer [rpartial]]
    [renderer.utils.path :as utils.path]
    [renderer.utils.vec :as utils.vec]))
 
@@ -252,13 +252,11 @@
                        [:-> App ifn? [:* any?] App]])
 (defn update-selected
   ([db f]
-   (reduce (fn [db id] (update-el db id f)) db (selected-ids db)))
+   (reduce (rpartial update-el f) db (selected-ids db)))
   ([db f arg]
-   (reduce (fn [db id] (update-el db id f arg)) db (selected-ids db)))
+   (reduce (rpartial update-el f arg) db (selected-ids db)))
   ([db f arg & more]
-   (reduce (fn [db id] (apply update-el db id f arg more))
-           db
-           (selected-ids db))))
+   (reduce (apply rpartial update-el f arg more) db (selected-ids db))))
 
 (m/=> siblings-selected? [:-> App [:maybe boolean?]])
 (defn siblings-selected?
@@ -384,7 +382,7 @@
                   [:-> App ElementId keyword? any? App]])
 (defn assoc-prop
   ([db k v]
-   (reduce (partial-right assoc-prop k v) db (selected-non-virtual-ids db)))
+   (reduce (rpartial assoc-prop k v) db (selected-non-virtual-ids db)))
   ([db id k v]
    (if (string/blank? v)
      (update-in db (path db id) dissoc k)
@@ -395,7 +393,7 @@
                    [:-> App ElementId keyword? App]])
 (defn dissoc-attr
   ([db k]
-   (reduce (partial-right dissoc-attr k) db (selected-ids db)))
+   (reduce (rpartial dissoc-attr k) db (selected-ids db)))
   ([db id k]
    (cond-> db
      (not (locked? db id))
@@ -407,7 +405,7 @@
                   [:-> App ElementId keyword? string? App]])
 (defn assoc-attr
   ([db k v]
-   (reduce (partial-right assoc-attr k v) db (selected-ids db)))
+   (reduce (rpartial assoc-attr k v) db (selected-ids db)))
   ([db id k v]
    (cond-> db
      (not (locked? db id))
@@ -419,7 +417,7 @@
                 [:-> App ElementId keyword? any? App]])
 (defn set-attr
   ([db k v]
-   (reduce (partial-right set-attr k v) db (selected-ids db)))
+   (reduce (rpartial set-attr k v) db (selected-ids db)))
   ([db id k v]
    (if (and (not (locked? db id))
             (utils.element/supported-attr? (entity db id) k))
@@ -639,7 +637,7 @@
                     [:-> App ElementId ifn? App]])
 (defn update-index
   ([db f]
-   (reduce (partial-right update-index f) db (selected-sorted-ids db)))
+   (reduce (rpartial update-index f) db (selected-sorted-ids db)))
   ([db id f]
    (let [all-siblings (siblings db id)
          non-virtual-siblings (filterv #(not (virtual? db %)) all-siblings)
@@ -661,7 +659,7 @@
                   [:-> App ElementId ElementId int? App]])
 (defn set-parent
   ([db parent-id]
-   (reduce (partial-right set-parent parent-id) db (selected-sorted-ids db)))
+   (reduce (rpartial set-parent parent-id) db (selected-sorted-ids db)))
   ([db id parent-id]
    (let [sibling-els (:children (entity db parent-id))
          last-index (count sibling-els)]
@@ -693,11 +691,11 @@
 (defn translate
   "Moves elements by a given offset."
   ([db offset]
-   (reduce (partial-right translate offset) db (top-ancestor-ids db)))
+   (reduce (rpartial translate offset) db (top-ancestor-ids db)))
   ([db id offset]
    (let [{:keys [tag children locked]} (entity db id)]
      (if (and (= tag :g) (not locked))
-       (-> (reduce (partial-right translate offset) db children)
+       (-> (reduce (rpartial translate offset) db children)
            (refresh-bbox id))
        (update-el db id element.hierarchy/translate offset)))))
 
@@ -707,7 +705,7 @@
 (defn place
   "Positions elements to a given global position."
   ([db position]
-   (reduce (partial-right place position) db (top-ancestor-ids db)))
+   (reduce (rpartial place position) db (top-ancestor-ids db)))
   ([db id position]
    (let [el (entity db id)
          center (utils.bounds/center (element.hierarchy/bbox el))
@@ -781,7 +779,7 @@
              [:-> App ElementId Direction App]])
 (defn align
   ([db direction]
-   (reduce (partial-right align direction) db (selected-ids db)))
+   (reduce (rpartial align direction) db (selected-ids db)))
   ([db id direction]
    (let [el-bbox (:bbox (entity db id))
          center (utils.bounds/center el-bbox)
@@ -973,7 +971,7 @@
 (defn paste
   ([db]
    (let [parent-el (hovered-svg db)]
-     (reduce (partial-right paste parent-el) (deselect db)
+     (reduce (rpartial paste parent-el) (deselect db)
              (-> db :clipboard :elements))))
   ([db el parent-el]
    (let [center (utils.bounds/center (-> db :clipboard :bbox))
@@ -1010,7 +1008,7 @@
   ([db tag]
    (animate db tag {}))
   ([db tag attrs]
-   (reduce (partial-right animate tag attrs) (deselect db) (selected-ids db)))
+   (reduce (rpartial animate tag attrs) (deselect db) (selected-ids db)))
   ([db id tag attrs]
    (reduce select (add db {:tag tag
                            :attrs attrs
@@ -1054,7 +1052,7 @@
    (let [db (add db {:tag :g
                      :parent (:id (parent db))})
          group-id (-> db selected-ids first)]
-     (-> (reduce (partial-right set-parent group-id) db ids)
+     (-> (reduce (rpartial set-parent group-id) db ids)
          (refresh-bbox group-id)))))
 
 (m/=> ungroup [:function
@@ -1086,7 +1084,7 @@
                        [:-> App ElementId PathManipulation App]])
 (defn manipulate-path
   ([db action]
-   (reduce (partial-right manipulate-path action) db (selected-ids db)))
+   (reduce (rpartial manipulate-path action) db (selected-ids db)))
   ([db id action]
    (cond-> db
      (= (:tag (entity db id)) :path)

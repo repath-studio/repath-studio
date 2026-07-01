@@ -9,6 +9,7 @@
    [renderer.frame.db :refer [DomRect Viewbox FocusType]]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
+   [renderer.utils.extra :refer [rpartial]]
    [renderer.utils.math :as utils.math]))
 
 (m/=> viewbox [:function
@@ -33,11 +34,11 @@
 
 (m/=> pan-by [:function
               [:-> App Vec2 App]
-              [:-> App Vec2 DocumentId App]])
+              [:-> App DocumentId Vec2 App]])
 (defn pan-by
   ([db offset]
    (pan-by db offset (:active-document db)))
-  ([db offset id]
+  ([db id offset]
    (let [zoom (get-in db [:documents id :zoom])]
      (update-in db [:documents id :pan] matrix/add (matrix/div offset zoom)))))
 
@@ -49,7 +50,7 @@
         offset (matrix/div [(:width delta-rect) (:height delta-rect)] 2)]
     (if-not (-> db :window :focused)
       db
-      (reduce (fn [db id] (pan-by db offset id)) db document-tabs))))
+      (reduce (rpartial pan-by offset) db document-tabs))))
 
 (m/=> zoom-at-position [:-> App number? Vec2 App])
 (defn zoom-at-position

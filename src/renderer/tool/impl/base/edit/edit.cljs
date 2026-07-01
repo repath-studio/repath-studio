@@ -10,6 +10,7 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.edit.core :as-alias edit]
+   [renderer.utils.extra :refer [rpartial]]
    [renderer.views :as views]))
 
 (defmethod tool.hierarchy/help [::edit/edit :edit]
@@ -39,7 +40,7 @@
         offset (matrix/add (tool.handlers/pointer-delta db)
                            (snap.handlers/nearest-delta db))]
     (->> (element.handlers/selected db)
-         (reduce (fn [db el] (update-element db el offset lock?)) db))))
+         (reduce (rpartial update-element offset lock?) db))))
 
 (defmethod tool.hierarchy/on-drag-end [::edit/edit :edit]
   [db e]

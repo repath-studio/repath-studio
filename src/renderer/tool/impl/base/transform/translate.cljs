@@ -15,7 +15,7 @@
    [renderer.tool.impl.base.transform.select :as transform.select]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
-   [renderer.utils.extra :refer [partial-right]]
+   [renderer.utils.extra :refer [rpartial]]
    [renderer.views :as views]))
 
 (defmethod tool.hierarchy/help [::transform/transform :translate]
@@ -85,9 +85,9 @@
                  :horizontal [0 offset-y]
                  offset)]
     (->> (element.handlers/top-ancestor-ids db)
-         (reduce (partial-right translate-el {:offset offset
-                                              :hovered-svg hovered-svg
-                                              :auto-parent auto-parent?}) db))))
+         (reduce (rpartial translate-el {:offset offset
+                                         :hovered-svg hovered-svg
+                                         :auto-parent auto-parent?}) db))))
 
 (defmethod tool.hierarchy/on-drag [::transform/transform :translate]
   [db e]

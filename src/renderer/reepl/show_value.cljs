@@ -1,7 +1,7 @@
 (ns renderer.reepl.show-value
   (:require
    [cljs.pprint :as pprint]
-   [renderer.utils.extra :refer [partial-right]]))
+   [renderer.utils.extra :refer [rpartial]]))
 
 (defn pprint-str
   [v]
@@ -19,7 +19,7 @@
     (if (empty? shower-list)
       (throw (js/Error. (str "No shower for value " v)))
       (let [res (->> showers
-                     (partial-right show-value-)
+                     (rpartial show-value-)
                      ((first shower-list) v config))]
         (if res
           [:div.inline-flex res]

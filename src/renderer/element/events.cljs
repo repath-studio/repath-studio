@@ -14,7 +14,7 @@
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
-   [renderer.utils.extra :refer [partial-right]]))
+   [renderer.utils.extra :refer [rpartial]]))
 
 (rf/reg-event-db
  ::select
@@ -29,7 +29,7 @@
  ::select-ids
  [(finalize [::select-elements "Select elements"])]
  (fn [db [_ ids]]
-   (-> (partial-right element.handlers/assoc-prop :selected true)
+   (-> (rpartial element.handlers/assoc-prop :selected true)
        (reduce (element.handlers/deselect db) ids))))
 
 (rf/reg-event-db
@@ -72,7 +72,7 @@
  ::update-attr
  [(finalize (fn [[_ k]] [[::update "Update %1"] [(name k)]]))]
  (fn [db [_ k f & more]]
-   (-> (apply partial-right element.handlers/update-attr k f more)
+   (-> (apply rpartial element.handlers/update-attr k f more)
        (reduce db (element.handlers/selected-ids db)))))
 
 (rf/reg-event-db
