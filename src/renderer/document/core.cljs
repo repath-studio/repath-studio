@@ -18,14 +18,6 @@
                             :ctrlKey true}]}])
 
 (rf/dispatch [::action.events/register-action
-              {:id :document/new
-               :label [::new "New"]
-               :icon "file"
-               :event [::document.events/new]
-               :shortcuts [{:keyCode (utils.key/codes "N")
-                            :ctrlKey true}]}])
-
-(rf/dispatch [::action.events/register-action
               {:id :document/open
                :label [::open "Open…"]
                :icon "folder"
