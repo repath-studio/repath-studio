@@ -110,7 +110,9 @@
   :ungroup-selection "Seçim grubunu çöz"
   :cut-selection "Seçimi kes"
   :trace-image "Resim izini sür"
-  :toggle-handle-selection "Toggle handle selection"}
+  :toggle-handle-selection "Toggle handle selection"
+  :combine "Kombine"
+  :break-apart "Parçalara Ayır"}
 
  :renderer.element.impl.animation.animate
  {:label "Animasyon"
@@ -162,6 +164,7 @@
 
  :renderer.element.impl.shape.path
  {:label "Yol"
+  :end-point "bitiş noktası"
   :description "<path> SVG öğesi, bir şekli tanımlamak için kullanılan
                 genel öğedir. Tüm temel şekiller bir path öğesiyle
                 oluşturulabilir."}
@@ -379,7 +382,8 @@
   :release-to-finalize "Öğeyi tamamlamak için bırakın."
   :edge "kenar"
   :elements "Öğeler"
-  :containers "Kapsayıcılar"}
+  :containers "Kapsayıcılar"
+  :select-stroke-width "Çizgi kalınlığı seçin"}
 
  :renderer.tool.impl.element.poly
  {:click-to-start "Çizmeye başlamak için tıklayın."
@@ -393,6 +397,9 @@
  :renderer.tool.impl.element.svg
  {:label "SVG"
   :create-svg "SVG oluştur"}
+
+ :renderer.tool.impl.extension.core
+ {:extensions "Uzantılar"}
 
  :renderer.tool.impl.extension.blob
  {:label "Blob"
@@ -467,9 +474,10 @@
   :shortcut-quadratic "Kısayol Kuadratik Bézier Eğrisi"
   :elliptical-arc-curve "Eliptik Yay Eğrisi"
   :close-path "Yolu Kapat"
-  :remove-segment "Remove segment"
-  :convert-segment "Convert segment"
-  :open-command-specification "Open command specification"}
+  :remove-segment "Segmenti kaldır"
+  :add-segment "Segment ekle"
+  :convert-segment "Segmenti dönüştür"
+  :open-command-specification "Komut belirtimini aç"}
 
  :renderer.attribute.impl.length
  {:increase "Artır"
@@ -550,7 +558,8 @@
 
  :renderer.tool.impl.base.transform.core
  {:label "Dönüştür"
-  :pivot-point "pivot noktası"}
+  :pivot-point "pivot noktası"
+  :lock-aspect-ratio "En-boy oranını kilitle"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Yönü kısıtlamak için %1 tuşunu basılı tutun. veya taşımak için
@@ -690,7 +699,7 @@
 
  :renderer.attribute.impl.points
  {:edit-points "Noktaları düzenle"
-  :remove-point "Remove point"}
+  :remove-point "Noktasını kaldır"}
 
  :renderer.frame.views
  {:main-canvas "ana tuval"}
@@ -715,7 +724,9 @@
  :renderer.app.core
  {:grid "Izgara"
   :help-bar "Yardım çubuğu"
-  :debug-info "Hata ayıklama bilgisi"}
+  :debug-info "Hata ayıklama bilgisi"
+  :guides "Kılavuzlar"
+  :rulers "Cetveller"}
 
  :renderer.dialog.core
  {:command-panel "Komut paneli"
@@ -773,6 +784,8 @@
   :boolean-intersect "Kesişim"
   :boolean-subtract "Çıkar"
   :boolean-divide "Böl"
+  :combine "Kombine"
+  :break-apart "Parçalara Ayır"
   :raise "Öne getir"
   :lower "Arkaya gönder"
   :raise-to-top "En öne getir"
@@ -828,9 +841,9 @@
   :help "Yardım"}
 
  :renderer.panel.core
- {:panel "Panel"
+ {:panels "Paneller"
   :panel-element-tree "Öğe ağacı"
-  :panel-properties "Özellikler"
+  :panel-attributes "Özellikler"
   :panel-xml-view "XML görünümü"
   :panel-history-tree "Geçmiş ağacı"
   :panel-shell-history "Kabuk geçmişi"

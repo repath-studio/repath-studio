@@ -4,6 +4,7 @@
    [malli.core :as m]
    [renderer.app.db :refer [App]]
    [renderer.db :refer [BBox Vec2]]
+   [renderer.document.handlers :as document.handlers]
    [renderer.element.handlers :as element.handlers]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
@@ -131,7 +132,8 @@
   [db e]
   (or (:ctrl-key e)
       (input.handlers/multi-touch? db)
-      (element.handlers/ratio-locked? db)))
+      (element.handlers/ratio-locked? db)
+      (document.handlers/attr db :lock-ratio)))
 
 (defmethod tool.hierarchy/on-drag [::transform/transform :scale]
   [db e]

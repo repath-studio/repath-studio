@@ -14,7 +14,8 @@
    [renderer.input.impl.pointer :as input.impl.pointer]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.element :as utils.element]
-   [renderer.utils.length :as utils.length]))
+   [renderer.utils.length :as utils.length]
+   [renderer.utils.path :as utils.path]))
 
 (hierarchy/derive! :brush ::element.hierarchy/renderable)
 
@@ -26,7 +27,7 @@
                                 perfect-freehand."]
    :url "https://github.com/steveruizok/perfect-freehand"
    :attrs [:points
-           :stroke
+           :fill
            :opacity
            :size
            :thinning
@@ -123,9 +124,7 @@
                    :on-pointer-up pointer-handler
                    :on-pointer-down pointer-handler
                    :on-pointer-move pointer-handler}
-                  (-> attrs
-                      (select-keys [:id :class :opacity])
-                      (assoc :fill (:stroke attrs))))]))
+                  (select-keys attrs [:id :class :opacity :fill]))]))
 
 (defn points->vec
   [points]
@@ -178,22 +177,23 @@
   [el]
   (let [options (select-keys (:attrs el) option-keys)]
     (-> el :attrs :points
-        (points->path options))))
+        (points->path options)
+        (utils.path/manipulate nil))))
 
 (defmethod element.hierarchy/handles :brush
   [el]
-  (->> el :attrs :points
-       (points->vec)
-       (map-indexed (fn [index point]
-                      (let [point (mapv utils.length/unit->px (take 2 point))]
-                        {:id (keyword (str index))
-                         :type :handle
-                         :label [::brush-point "brush point"]
-                         :action :edit
-                         :parent (:id el)
-                         :position (matrix/add (utils.element/offset el)
-                                               point)})))
-       (into [])))
+  (let [offset (utils.element/offset el)]
+    (->> el :attrs :points
+         (points->vec)
+         (map-indexed (fn [index point]
+                        (let [point (mapv utils.length/unit->px (take 2 point))]
+                          {:id (keyword (str index))
+                           :type :handle
+                           :label [::brush-point "brush point"]
+                           :action :edit
+                           :parent (:id el)
+                           :position (matrix/add offset point)})))
+         (into []))))
 
 (defmethod element.hierarchy/handle-drag :brush
   [el offset handle lock?]

@@ -110,7 +110,9 @@
   :ungroup-selection "Selectiegroepering opheffen"
   :cut-selection "Selectie knippen"
   :trace-image "Afbeelding traceren"
-  :toggle-handle-selection "Toggle handle selection"}
+  :toggle-handle-selection "Toggle handle selection"
+  :combine "Combineren"
+  :break-apart "Opsplitsen"}
 
  :renderer.element.impl.animation.animate
  {:label "Animeren"
@@ -164,6 +166,7 @@
 
  :renderer.element.impl.shape.path
  {:label "Pad"
+  :end-point "eindpunt"
   :description "Het SVG <path> element is het generieke element om een vorm te
                 definiëren. Alle basisvormen kunnen gemaakt worden met een path
                 element."}
@@ -397,7 +400,8 @@
   :release-to-finalize "Loslaten om het element te voltooien."
   :edge "rand"
   :elements "Elementen"
-  :containers "Containers"}
+  :containers "Containers"
+  :select-stroke-width "Lijnbreedte selecteren"}
 
  :renderer.tool.impl.element.poly
  {:click-to-start "Klik om te beginnen met tekenen."
@@ -411,6 +415,9 @@
  :renderer.tool.impl.element.svg
  {:label "Svg"
   :create-svg "Svg maken"}
+
+ :renderer.tool.impl.extension.core
+ {:extensions "Extensies"}
 
  :renderer.tool.impl.extension.blob
  {:label "Blob"
@@ -486,9 +493,10 @@
   :shortcut-quadratic "Snelkoppeling kwadratische Bézier curve"
   :elliptical-arc-curve "Elliptische boog curve"
   :close-path "Pad sluiten"
-  :remove-segment "Remove segment"
-  :convert-segment "Convert segment"
-  :open-command-specification "Open command specification"}
+  :remove-segment "Segment verwijderen"
+  :add-segment "Segment toevoegen"
+  :convert-segment "Segment converteren"
+  :open-command-specification "Opdrachtspecificatie openen"}
 
  :renderer.attribute.impl.length
  {:increase "Verhogen"
@@ -572,7 +580,8 @@
 
  :renderer.tool.impl.base.transform.core
  {:label "Transformeren"
-  :pivot-point "draaipunt"}
+  :pivot-point "draaipunt"
+  :lock-aspect-ratio "Beeldverhouding vergrendelen"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Houd %1 ingedrukt om richting te beperken. of laat %2 los om
@@ -712,7 +721,7 @@
 
  :renderer.attribute.impl.points
  {:edit-points "Punten bewerken"
-  :remove-point "Remove point"}
+  :remove-point "Punt verwijderen"}
 
  :renderer.frame.views
  {:main-canvas "hoofdcanvas"}
@@ -737,7 +746,9 @@
  :renderer.app.core
  {:grid "Raster"
   :help-bar "Helpbalk"
-  :debug-info "Debug-informatie"}
+  :debug-info "Debug-informatie"
+  :guides "Hulplijnen"
+  :rulers "Linealen"}
 
  :renderer.dialog.core
  {:command-panel "Commandopaneel"
@@ -795,6 +806,8 @@
   :boolean-intersect "Doorsnede"
   :boolean-subtract "Aftrekken"
   :boolean-divide "Verdelen"
+  :combine "Combineren"
+  :break-apart "Opsplitsen"
   :raise "Naar voren"
   :lower "Naar achteren"
   :raise-to-top "Naar voorgrond"
@@ -850,9 +863,9 @@
   :help "Help"}
 
  :renderer.panel.core
- {:panel "Paneel"
+ {:panels "Panelen"
   :panel-element-tree "Elementenboom"
-  :panel-properties "Eigenschappen"
+  :panel-attributes "Attributen"
   :panel-xml-view "XML-weergave"
   :panel-history-tree "Geschiedenisboom"
   :panel-shell-history "Shell-geschiedenis"

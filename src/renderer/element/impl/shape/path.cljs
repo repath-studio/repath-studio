@@ -67,7 +67,7 @@
 
 (defn render-arms
   [{:keys [endpoints segments offset]} index segment]
-  (let [prev-ep (some-> (get endpoints (dec index)) (matrix/add offset))
+  (let [prev-ep (some-> endpoints (get (dec index)) (matrix/add offset))
         cp0 (some-> segment
                     (->px-point :start-control-point)
                     (matrix/add offset))
@@ -84,12 +84,12 @@
       "S"
       [:<>
        (when-let [implied-cp1 (some-> (aget segments (dec index))
-                                      utils.path/outgoing-cp
+                                      (utils.path/outgoing-cp)
                                       (matrix/add offset))]
          [utils.svg/arm prev-ep implied-cp1])
        [utils.svg/arm cp0 ep]]
 
-      `"Q"
+      "Q"
       [:<>
        (when prev-ep [utils.svg/arm prev-ep cp0])
        [utils.svg/arm cp0 ep]]
@@ -329,15 +329,33 @@
         selected-indices (->> (:selected-handles el)
                               (keep namespace)
                               (map js/parseInt)
-                              (remove zero?)
                               (into #{}))
+        endpoints (utils.path/acc-endpoints segments)
+        first-remaining-idx (->> (range (count segments))
+                                 (remove selected-indices)
+                                 (first))
         updated-segments (->> segments
                               (keep-indexed (fn [index segment]
                                               (when-not (contains?
                                                          selected-indices
                                                          index)
                                                 segment)))
-                              (into []))]
+                              (into-array))
+        updated-segments (if (and (seq updated-segments)
+                                  first-remaining-idx
+                                  (not= "M" (utils.path/segment->command
+                                             (aget updated-segments 0))))
+                           (let [[ex ey] (get endpoints first-remaining-idx)
+                                 second-cmd (utils.path/segment->command
+                                             (aget updated-segments 1))
+                                 resolved (case second-cmd
+                                            "S" (utils.path/convert-segment
+                                                 updated-segments 1 "C")
+                                            "T" (utils.path/convert-segment
+                                                 updated-segments 1 "Q")
+                                            updated-segments)]
+                             (doto resolved (aset 0 #js ["M" ex ey])))
+                           updated-segments)]
     (-> el
         (assoc :selected-handles #{})
         (assoc-in [:attrs :d] (utils.path/segments->string updated-segments)))))
@@ -345,3 +363,11 @@
 (defmethod element.hierarchy/path :path
   [el]
   (-> el :attrs :d))
+
+(defmethod element.hierarchy/snapping-points :path
+  [el]
+  (some->> el :attrs :d
+           (utils.path/string->segments)
+           (utils.path/acc-endpoints)
+           (keep #(with-meta % {:label [::end-point "end point"]}))
+           (into [])))

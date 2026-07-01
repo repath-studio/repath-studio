@@ -94,14 +94,9 @@
  :-> :attrs)
 
 (rf/reg-sub
- ::fill
+ ::attr
  :<- [::attrs]
- :-> :fill)
-
-(rf/reg-sub
- ::stroke
- :<- [::attrs]
- :-> :stroke)
+ :=> get)
 
 (rf/reg-sub
  ::pan

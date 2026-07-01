@@ -18,6 +18,8 @@
 
 (def DocumentTitle [:string {:min 1}])
 
+(def DocumentAttrs [:map-of keyword? any?])
+
 (def Document
   [:map {:closed true}
    [:id {:optional true
@@ -38,8 +40,9 @@
    [:elements {:default {}
                :persist true} [:map-of ElementId Element]]
    [:centered {:optional true} boolean?]
-   [:attrs {:default {:fill "white"
-                      :stroke "black"}} [:map-of keyword? string?]]
+   [:attrs {:default {:fill "lightgray"
+                      :stroke "black"
+                      :stroke-width "1px"}} DocumentAttrs]
    [:preview-label {:optional true} string?]
    [:file-handle {:optional true} JS_Object]])
 

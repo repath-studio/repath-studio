@@ -5,30 +5,7 @@
    [malli.core :as m]
    [renderer.app.db :refer [SystemFonts]]
    [renderer.db :refer [JS_Array JS_Object JS_Promise]]
-   [renderer.element.db :refer [Element]]
-   [renderer.utils.attribute :as utils.attribute]
-   [renderer.utils.bounds :as utils.bounds]
-   [renderer.utils.dom :as utils.dom]
-   [renderer.utils.element :as utils.element]))
-
-(m/=> get-computed-styles [:-> Element [:maybe map?]])
-(defn get-computed-styles
-  [{:keys [content]
-    :as el}]
-  (when-let [svg (utils.dom/get-canvas-element)]
-    (let [dom-el (utils.element/->dom-element el)]
-      (.appendChild svg dom-el)
-      (set! (.-innerHTML dom-el) (if (empty? content) "\u00a0" content))
-      (let [computed-style (.getComputedStyle js/window dom-el nil)
-            font-style (.getPropertyValue computed-style "font-style")
-            font-size (.getPropertyValue computed-style "font-size")
-            font-weight (.getPropertyValue computed-style "font-weight")
-            bbox (utils.bounds/dom-el->bbox dom-el)]
-        (.remove dom-el)
-        {:font-style font-style
-         :font-size font-size
-         :font-weight font-weight
-         :bbox bbox}))))
+   [renderer.utils.attribute :as utils.attribute]))
 
 (m/=> font-data->path-data! [:-> JS_Object string? map? JS_Promise])
 (defn font-data->path-data!

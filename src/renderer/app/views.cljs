@@ -112,8 +112,9 @@
               (:tag (first selected))
               :default)]
     [:div.flex.flex-col.h-full.bg-secondary.grow.overflow-hidden.gap-px
-     [views/scroll-area
-      (tool.hierarchy/attributes-panel [tool tag])]
+     (when (seq selected)
+       [views/scroll-area
+        (tool.hierarchy/attributes-panel [tool tag])])
      [:div.bg-primary.grow.flex]]))
 
 (defn guides-locked-toggle
@@ -298,55 +299,39 @@
 
 (defn bottom-bar
   []
-  (let [some-selected? @(rf/subscribe [::element.subs/some-selected?])
-        mac? @(rf/subscribe [::app.subs/mac?])]
-    [:div.flex.justify-evenly.p-2.gap-1.rtl:flex-row-reverse
+  [:div.flex.justify-evenly.p-2.gap-1.rtl:flex-row-reverse
 
-     [views/drawer
-      {:icon "tree"
-       :label [::tree "Tree"]
-       :direction "left"
-       :content-class (when mac? "pt-8")}
-      [tree.views/root]]
+   [views/drawer
+    {:icon "tree"
+     :label [::tree "Tree"]}
+    [tree.views/root]]
 
-     [views/drawer
-      {:icon "code"
-       :label [::xml "XML"]
-       :direction "left"
-       :content-class (when mac? "pt-8")}
-      [views/scroll-area
-       [:div.py-3
-        [xml-panel]]]]
+   [views/drawer
+    {:icon "code"
+     :label [::xml "XML"]}
+    [views/scroll-area
+     [:div.py-3 [xml-panel]]]]
 
-     [:span.v-divider]
+   [views/drawer
+    {:icon "animation"
+     :label [::timeline "Timeline"]}
+    [timeline.views/root]]
 
-     [views/drawer
-      {:icon "animation"
-       :label [::timeline "Timeline"]
-       :direction "bottom"}
-      [timeline.views/root]]
+   [views/drawer
+    {:icon "shell"
+     :label [::shell "Shell"]}
+    [:div.flex.flex-col.flex-1
+     [repl.views/root]]]
 
-     [views/drawer
-      {:icon "shell"
-       :label [::shell "Shell"]
-       :direction "bottom"}
-      [:div.flex.flex-col.flex-1
-       [repl.views/root]]]
+   [views/drawer
+    {:icon "history"
+     :label [::history "History"]}
+    [history.views/root]]
 
-     [:span.v-divider]
-
-     [views/drawer
-      {:icon "history"
-       :label [::history "History"]
-       :direction "right"}
-      [history.views/root]]
-
-     [views/drawer
-      {:icon "properties"
-       :label [::attributes "Attributes"]
-       :direction "right"
-       :disabled (not some-selected?)}
-      [attributes-panel]]]))
+   [views/drawer
+    {:icon "attributes"
+     :label [::attributes "Attributes"]}
+    [attributes-panel]]])
 
 (defn center-panel
   []
@@ -408,7 +393,7 @@
             :minSize 227
             :groupResizeBehavior "preserve-pixel-size"}
            [:div.flex.flex-col.overflow-hidden.h-full
-            [document.views/actions]
+            [document.views/document-actions]
             [tree.views/root]]]
           [panel.views/separator]])
        [panel.views/panel

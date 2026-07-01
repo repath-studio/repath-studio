@@ -110,7 +110,9 @@
   :ungroup-selection "Desagrupar seleção"
   :cut-selection "Cortar seleção"
   :trace-image "Vetorizar imagem"
-  :toggle-handle-selection "Toggle handle selection"}
+  :toggle-handle-selection "Toggle handle selection"
+  :combine "Combinar"
+  :break-apart "Separar"}
 
  :renderer.element.impl.animation.animate
  {:label "Animar"
@@ -162,6 +164,7 @@
 
  :renderer.element.impl.shape.path
  {:label "Caminho"
+  :end-point "ponto final"
   :description "O elemento SVG <path> é o elemento genérico para definir uma
                 forma. Todas as formas básicas podem ser criadas com um elemento
                 path."}
@@ -364,7 +367,8 @@
   :release-to-finalize "Solte para finalizar o elemento."
   :edge "borda"
   :elements "Elementos"
-  :containers "Contêineres"}
+  :containers "Contêineres"
+  :select-stroke-width "Selecionar largura do traço"}
 
  :renderer.tool.impl.element.poly
  {:click-to-start "Clique para começar a desenhar."
@@ -378,6 +382,9 @@
  :renderer.tool.impl.element.svg
  {:label "SVG"
   :create-svg "Criar SVG"}
+
+ :renderer.tool.impl.extension.core
+ {:extensions "Extensões"}
 
  :renderer.tool.impl.extension.blob
  {:label "Blob"
@@ -473,9 +480,10 @@
   :shortcut-quadratic "Curva de Bézier quadrática de atalho"
   :elliptical-arc-curve "Curva de arco elíptico"
   :close-path "Fechar caminho"
-  :remove-segment "Remove segment"
-  :convert-segment "Convert segment"
-  :open-command-specification "Open command specification"}
+  :remove-segment "Remover segmento"
+  :add-segment "Adicionar segmento"
+  :convert-segment "Converter segmento"
+  :open-command-specification "Abrir especificação do comando"}
 
  :renderer.attribute.impl.length
  {:increase "Aumentar"
@@ -556,7 +564,8 @@
 
  :renderer.tool.impl.base.transform.core
  {:label "Transformar"
-  :pivot-point "ponto de pivô"}
+  :pivot-point "ponto de pivô"
+  :lock-aspect-ratio "Bloquear proporção"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Mantenha %1 para restringir direção. ou solte %2 para mover"]
@@ -695,7 +704,7 @@
 
  :renderer.attribute.impl.points
  {:edit-points "Editar pontos"
-  :remove-point "Remove point"}
+  :remove-point "Remover ponto"}
 
  :renderer.frame.views
  {:main-canvas "tela principal"}
@@ -720,7 +729,9 @@
  :renderer.app.core
  {:grid "Grelha"
   :help-bar "Barra de ajuda"
-  :debug-info "Informação de depuração"}
+  :debug-info "Informação de depuração"
+  :guides "Guias"
+  :rulers "Réguas"}
 
  :renderer.dialog.core
  {:command-panel "Painel de comandos"
@@ -777,6 +788,8 @@
   :boolean-intersect "Intersetar"
   :boolean-subtract "Subtrair"
   :boolean-divide "Dividir"
+  :combine "Combinar"
+  :break-apart "Separar"
   :raise "Subir"
   :lower "Descer"
   :raise-to-top "Subir para frente"
@@ -832,9 +845,9 @@
   :help "Ajuda"}
 
  :renderer.panel.core
- {:panel "Painel"
+ {:panels "Painéis"
   :panel-element-tree "Árvore de elementos"
-  :panel-properties "Propriedades"
+  :panel-attributes "Atributos"
   :panel-xml-view "Vista XML"
   :panel-history-tree "Árvore de histórico"
   :panel-shell-history "Histórico da consola"

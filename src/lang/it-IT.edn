@@ -111,7 +111,9 @@
   :ungroup-selection "Separa selezione"
   :cut-selection "Taglia selezione"
   :trace-image "Traccia immagine"
-  :toggle-handle-selection "Toggle handle selection"}
+  :toggle-handle-selection "Toggle handle selection"
+  :combine "Combina"
+  :break-apart "Separa"}
 
  :renderer.element.impl.animation.animate
  {:label "Anima"
@@ -163,6 +165,7 @@
 
  :renderer.element.impl.shape.path
  {:label "Tracciato"
+  :end-point "punto finale"
   :description "L'elemento SVG <path> è l'elemento generico per definire una
                 forma. Tutte le forme di base possono essere create con un
                 elemento path."}
@@ -395,7 +398,8 @@
   :release-to-finalize "Rilascia per finalizzare l'elemento."
   :edge "bordo"
   :elements "Elementi"
-  :containers "Contenitori"}
+  :containers "Contenitori"
+  :select-stroke-width "Seleziona larghezza tratto"}
 
  :renderer.tool.impl.element.poly
  {:click-to-start "Clicca per iniziare a disegnare."
@@ -409,6 +413,9 @@
  :renderer.tool.impl.element.svg
  {:label "Svg"
   :create-svg "Crea svg"}
+
+ :renderer.tool.impl.extension.core
+ {:extensions "Estensioni"}
 
  :renderer.tool.impl.extension.blob
  {:label "Blob"
@@ -484,9 +491,10 @@
   :shortcut-quadratic "Curva di Bézier quadratica scorciatoia"
   :elliptical-arc-curve "Curva ad arco ellittico"
   :close-path "Chiudi tracciato"
-  :remove-segment "Remove segment"
-  :convert-segment "Convert segment"
-  :open-command-specification "Open command specification"}
+  :remove-segment "Rimuovi segmento"
+  :add-segment "Aggiungi segmento"
+  :convert-segment "Converti segmento"
+  :open-command-specification "Apri specifica del comando"}
 
  :renderer.attribute.impl.length
  {:increase "Aumenta"
@@ -570,7 +578,8 @@
 
  :renderer.tool.impl.base.transform.core
  {:label "Trasforma"
-  :pivot-point "punto di pivot"}
+  :pivot-point "punto di pivot"
+  :lock-aspect-ratio "Blocca proporzioni"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Tieni premuto %1 per limitare la direzione. o rilascia %2 per
@@ -711,7 +720,7 @@
 
  :renderer.attribute.impl.points
  {:edit-points "Modifica punti"
-  :remove-point "Remove point"}
+  :remove-point "Rimuovi punto"}
 
  :renderer.frame.views
  {:main-canvas "tela principale"}
@@ -736,7 +745,9 @@
  :renderer.app.core
  {:grid "Griglia"
   :help-bar "Barra aiuto"
-  :debug-info "Info debug"}
+  :debug-info "Info debug"
+  :guides "Guide"
+  :rulers "Righelli"}
 
  :renderer.dialog.core
  {:command-panel "Pannello comandi"
@@ -794,6 +805,8 @@
   :boolean-intersect "Interseca"
   :boolean-subtract "Sottrai"
   :boolean-divide "Dividi"
+  :combine "Combina"
+  :break-apart "Separa"
   :raise "Porta avanti"
   :lower "Porta dietro"
   :raise-to-top "Porta in primo piano"
@@ -849,9 +862,9 @@
   :help "Aiuto"}
 
  :renderer.panel.core
- {:panel "Pannello"
+ {:panels "Pannelli"
   :panel-element-tree "Albero elementi"
-  :panel-properties "Proprietà"
+  :panel-attributes "Attributi"
   :panel-xml-view "Vista XML"
   :panel-history-tree "Albero cronologia"
   :panel-shell-history "Cronologia shell"

@@ -243,6 +243,18 @@
        (element.handlers/boolean-operation operation))))
 
 (rf/reg-event-db
+ ::combine
+ [(finalize [::combine "Combine"])]
+ (fn [db _]
+   (element.handlers/combine db)))
+
+(rf/reg-event-db
+ ::break-apart
+ [(finalize [::break-apart "Break apart"])]
+ (fn [db _]
+   (element.handlers/break-apart db)))
+
+(rf/reg-event-db
  ::add
  [(finalize (fn [[_ el]] [[::create "Create %1"] [(name (:tag el))]]))]
  (fn [db [_ el]]

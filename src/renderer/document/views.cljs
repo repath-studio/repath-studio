@@ -17,7 +17,8 @@
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]))
 
-(defn actions []
+(defn document-actions
+  []
   (let [undos @(rf/subscribe [::history.subs/undos])
         redos @(rf/subscribe [::history.subs/redos])
         md? @(rf/subscribe [::window.subs/md?])
@@ -149,7 +150,8 @@
                 {:class "menu-content context-menu-content"
                  :on-escape-key-down #(.stopPropagation %)}]))]])
 
-(defn documents-dropdown-button []
+(defn documents-dropdown-button
+  []
   (let [documents @(rf/subscribe [::document.subs/entities])
         md? @(rf/subscribe [::window.subs/md?])
         document-count (count documents)]
@@ -190,7 +192,28 @@
                [views/dropdownmenu-arrow]]
               (map views/dropdown-menu-item)))]]))
 
-(defn mobile-tabs []
+(defn panels-dropdown-button
+  []
+  (let [{:keys [actions label]} (action.views/deref-action-group :view/panels)]
+    [:> DropdownMenu/Root
+     [:> DropdownMenu/Trigger
+      {:as-child true}
+      [:button.button.flex.items-center.justify-center.px-2.font-mono.rounded
+       {:title (i18n.views/t label)}
+       [views/icon "panels"]]]
+     [:> DropdownMenu/Portal
+      (->> actions
+           (map views/dropdown-menu-item)
+           (into [:> DropdownMenu/Content
+                  {:side "bottom"
+                   :align "start"
+                   :class "menu-content rounded-sm"
+                   :on-key-down #(.stopPropagation %)
+                   :on-escape-key-down #(.stopPropagation %)}
+                  [views/dropdownmenu-arrow]]))]]))
+
+(defn mobile-tabs
+  []
   (let [documents @(rf/subscribe [::document.subs/entities])
         active-id @(rf/subscribe [::document.subs/active-id])]
     [:div.flex.overflow-hidden.gap-px
@@ -200,22 +223,24 @@
         [documents-dropdown-button]])
      [tab active-id]]))
 
-(defn tab-bar []
+(defn tab-bar
+  []
   (let [tabs @(rf/subscribe [::document.subs/tabs])
         md? @(rf/subscribe [::window.subs/md?])
         tree-visible @(rf/subscribe [::panel.subs/visible? :tree])]
     [:div.flex.justify-between.gap-px.overflow-hidden
      [:div.flex.flex-1.overflow-hidden.gap-px
       (when (and md? (not tree-visible))
-        [actions])
+        [document-actions])
       (if md?
         (for [document-id tabs]
           ^{:key document-id}
           [tab document-id])
         [mobile-tabs])
       (when-not md?
-        [actions])
-      [:div.drag.flex-1]]
-
-     (when md?
-       [views/toolbar [documents-dropdown-button]])]))
+        [document-actions])
+      (when md?
+        [views/toolbar [documents-dropdown-button]])
+      [:div.drag.flex-1]
+      (when md?
+        [views/toolbar [panels-dropdown-button]])]]))

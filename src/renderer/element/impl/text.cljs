@@ -141,7 +141,7 @@
   [el]
   (let [{:keys [attrs content]} el
         {:keys [x y font-family]} attrs
-        computed-styles (utils.font/get-computed-styles el)
+        computed-styles (utils.element/get-computed-styles el)
         {:keys [font-size font-style font-weight]} computed-styles
         [x y font-size] (mapv utils.length/unit->px [x y font-size])
         props {:x x
@@ -160,7 +160,3 @@
       (-> (utils.font/default-font-path font-style font-weight)
           (js/fetch)
           (.then #(utils.font/font-data->path-data! % content props))))))
-
-(defmethod element.hierarchy/bbox :text
-  [el]
-  (:bbox (utils.font/get-computed-styles el)))

@@ -110,7 +110,9 @@
   :ungroup-selection "選択のグループ化を解除"
   :cut-selection "選択を切り取り"
   :trace-image "画像をトレース"
-  :toggle-handle-selection "Toggle handle selection"}
+  :toggle-handle-selection "Toggle handle selection"
+  :combine "複合"
+  :break-apart "分割"}
 
  :renderer.element.impl.animation.animate
  {:label "アニメーション"
@@ -159,6 +161,7 @@
 
  :renderer.element.impl.shape.path
  {:label "パス"
+  :end-point "終点"
   :description "<path> SVG要素は、形状を定義する汎用要素です。すべての基本形状は
                 パス要素で作成できます。"}
 
@@ -334,7 +337,8 @@
   :release-to-finalize "要素を確定するには離す。"
   :edge "エッジ"
   :elements "要素"
-  :containers "コンテナ"}
+  :containers "コンテナ"
+  :select-stroke-width "ストローク幅を選択"}
 
  :renderer.tool.impl.element.poly
  {:click-to-start "クリックして描画を開始。"
@@ -348,6 +352,9 @@
  :renderer.tool.impl.element.svg
  {:label "SVG"
   :create-svg "SVGを作成"}
+
+ :renderer.tool.impl.extension.core
+ {:extensions "拡張機能"}
 
  :renderer.tool.impl.extension.blob
  {:label "ブロブ"
@@ -438,9 +445,10 @@
   :shortcut-quadratic "ショートカット2次ベジェ曲線"
   :elliptical-arc-curve "楕円弧曲線"
   :close-path "パスを閉じる"
-  :remove-segment "Remove segment"
-  :convert-segment "Convert segment"
-  :open-command-specification "Open command specification"}
+  :remove-segment "セグメントを削除"
+  :add-segment "セグメントを追加"
+  :convert-segment "セグメントを変換"
+  :open-command-specification "コマンド仕様を開く"}
 
  :renderer.attribute.impl.length
  {:increase "増加"
@@ -519,7 +527,8 @@
 
  :renderer.tool.impl.base.transform.core
  {:label "変形"
-  :pivot-point "ピボットポイント"}
+  :pivot-point "ピボットポイント"
+  :lock-aspect-ratio "アスペクト比を固定"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "%1を押しながら方向を制限。または%2を離して移動"]
@@ -655,7 +664,7 @@
 
  :renderer.attribute.impl.points
  {:edit-points "ポイントを編集"
-  :remove-point "Remove point"}
+  :remove-point "ポイントを削除"}
 
  :renderer.frame.views
  {:main-canvas "メインキャンバス"}
@@ -678,7 +687,9 @@
  :renderer.app.core
  {:grid "グリッド"
   :help-bar "ヘルプバー"
-  :debug-info "デバッグ情報"}
+  :debug-info "デバッグ情報"
+  :guides "ガイド"
+  :rulers "ルーラー"}
 
  :renderer.dialog.core
  {:command-panel "コマンドパネル"
@@ -736,6 +747,8 @@
   :boolean-intersect "交差"
   :boolean-subtract "減算"
   :boolean-divide "分割"
+  :combine "複合"
+  :break-apart "分割"
   :raise "前面へ"
   :lower "背面へ"
   :raise-to-top "最前面へ"
@@ -791,9 +804,9 @@
   :help "ヘルプ"}
 
  :renderer.panel.core
- {:panel "パネル"
+ {:panels "パネル"
   :panel-element-tree "要素ツリー"
-  :panel-properties "プロパティ"
+  :panel-attributes "属性"
   :panel-xml-view "XML表示"
   :panel-history-tree "履歴ツリー"
   :panel-shell-history "シェル履歴"

@@ -110,7 +110,9 @@
   :ungroup-selection "Αποομαδοποίηση επιλογής"
   :cut-selection "Αποκοπή επιλογής"
   :trace-image "Ανίχνευση εικόνας"
-  :toggle-handle-selection "Toggle handle selection"}
+  :toggle-handle-selection "Toggle handle selection"
+  :combine "Συνδυασμός"
+  :break-apart "Διάσπαση"}
 
  :renderer.element.impl.animation.animate
  {:label "Κίνηση"
@@ -163,6 +165,7 @@
 
  :renderer.element.impl.shape.path
  {:label "Μονοπάτι"
+  :end-point "Σημείο τέλους"
   :description "Το στοιχείο <path> στο SVG είναι το γενικό στοιχείο για τον
                 ορισμό ενός σχήματος. Όλα τα βασικά σχήματα μπορούν να
                 δημιουργηθούν χρησιμοποιώντας ένα path στοιχείο"}
@@ -382,7 +385,8 @@
   :release-to-finalize "Αφήστε για να οριστικοποιήσετε το στοιχείο."
   :edge "άκρη"
   :elements "Στοιχεία"
-  :containers "Κοντέινερ"}
+  :containers "Κοντέινερ"
+  :select-stroke-width "Επιλογή πλάτους γραμμής"}
 
  :renderer.tool.impl.element.poly
  {:click-to-start "Κάντε κλικ για να ξεκινήσετε τη σχεδίαση."
@@ -396,6 +400,9 @@
  :renderer.tool.impl.element.svg
  {:label "Svg"
   :create-svg "Δημιουργία svg"}
+
+ :renderer.tool.impl.extension.core
+ {:extensions "Επεκτάσεις"}
 
  :renderer.tool.impl.extension.blob
  {:label "Blob"
@@ -491,9 +498,10 @@
   :shortcut-quadratic "Συντομευμένη τετραγωνική καμπύλη Bézier"
   :elliptical-arc-curve "Ελλειπτική καμπύλη τόξου"
   :close-path "Κλείσιμο διαδρομής"
-  :remove-segment "Remove segment"
-  :convert-segment "Convert segment"
-  :open-command-specification "Open command specification"}
+  :remove-segment "Αφαίρεση τμήματος"
+  :add-segment "Προσθήκη τμήματος"
+  :convert-segment "Μετατροπή τμήματος"
+  :open-command-specification "Άνοιγμα προδιαγραφής εντολής"}
 
  :renderer.attribute.impl.length
  {:increase "Αύξηση"
@@ -579,7 +587,8 @@
 
  :renderer.tool.impl.base.transform.core
  {:label "Μετασχηματισμός"
-  :pivot-point "σημείο περιστροφής"}
+  :pivot-point "σημείο περιστροφής"
+  :lock-aspect-ratio "Κλείδωμα αναλογίας"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Πιέστε %1 για περιορισμό κατεύθυνσης. ή αφήστε %2 για
@@ -719,7 +728,7 @@
 
  :renderer.attribute.impl.points
  {:edit-points "Επεξεργασία σημείων"
-  :remove-point "Remove point"}
+  :remove-point "Αφαίρεση σημείου"}
 
  :renderer.frame.views
  {:main-canvas "κύριος καμβάς"}
@@ -744,7 +753,9 @@
  :renderer.app.core
  {:grid "Πλέγμα"
   :help-bar "Μπάρα βοηθείας"
-  :debug-info "Πληροφορίες αποσφαλμάτωσης"}
+  :debug-info "Πληροφορίες αποσφαλμάτωσης"
+  :guides "Οδηγοί"
+  :rulers "Χάρακες"}
 
  :renderer.dialog.core
  {:command-panel "Πάνελ εντολών"
@@ -802,6 +813,8 @@
   :boolean-intersect "Τομή"
   :boolean-subtract "Αφαίρεση"
   :boolean-divide "Διαίρεση"
+  :combine "Συνδυασμός"
+  :break-apart "Διάσπαση"
   :raise "Ανέβασμα"
   :lower "Κατέβασμα"
   :raise-to-top "Μετακίνηση προς τα πάνω"
@@ -857,9 +870,9 @@
   :help "Βοήθεια"}
 
  :renderer.panel.core
- {:panel "Πάνελ"
+ {:panels "Πάνελ"
   :panel-element-tree "Δέντρο στοιχείων"
-  :panel-properties "Ιδιότητες"
+  :panel-attributes "Χαρακτηριστικά"
   :panel-xml-view "Προβολή XML"
   :panel-history-tree "Δέντρο ιστορικού"
   :panel-shell-history "Ιστορικό γραμμής εντολών"

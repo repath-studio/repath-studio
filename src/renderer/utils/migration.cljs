@@ -62,4 +62,15 @@
                         (update-keys el #(if (= :bounds %) :bbox %)))))]
 
    [[0 4 10] (fn [document]
-               (dissoc document :save))]])
+               (dissoc document :save))]
+
+   [[0 4 17] (fn [document]
+               (update document :elements update-vals
+                       (fn [el]
+                         (cond-> el
+                           (= (:tag el) :brush)
+                           (update :attrs (fn [attrs]
+                                            (update-keys attrs
+                                                         #(if (= :stroke %)
+                                                            :fill
+                                                            %))))))))]])

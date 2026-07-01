@@ -18,6 +18,7 @@
 (defmulti snapping-elements dispatch :hierarchy hierarchy/hierarchy)
 (defmulti on-delete dispatch :hierarchy hierarchy/hierarchy)
 (defmulti help (fn [tool state] [tool state]) :hierarchy hierarchy/hierarchy)
+(defmulti tool-options identity :hierarchy hierarchy/hierarchy)
 (defmulti render identity :hierarchy hierarchy/hierarchy)
 (defmulti attributes-panel identity :hierarchy hierarchy/hierarchy)
 (defmulti on-deactivate :tool :hierarchy hierarchy/hierarchy)

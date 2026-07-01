@@ -22,16 +22,16 @@
   [db]
   (let [[offset-x offset-y] (tool.handlers/snapped-offset db)
         [x y] (tool.handlers/snapped-position db)
-        stroke (document.handlers/attr db :stroke)]
+        attrs (-> (document.handlers/attrs db)
+                  (select-keys [:stroke :stroke-width]))]
     (-> db
         (tool.handlers/set-state :create)
         (element.handlers/add {:type :element
                                :tag :line
-                               :attrs {:x1 offset-x
-                                       :y1 offset-y
-                                       :x2 x
-                                       :y2 y
-                                       :stroke stroke}}))))
+                               :attrs (merge attrs {:x1 offset-x
+                                                    :y1 offset-y
+                                                    :x2 x
+                                                    :y2 y})}))))
 
 (defn update-el
   [db e]

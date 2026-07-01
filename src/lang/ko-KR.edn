@@ -110,7 +110,9 @@
   :ungroup-selection "선택 그룹 해제"
   :cut-selection "선택 잘라내기"
   :trace-image "이미지 추적"
-  :toggle-handle-selection "Toggle handle selection"}
+  :toggle-handle-selection "Toggle handle selection"
+  :combine "결합"
+  :break-apart "분리"}
 
  :renderer.element.impl.animation.animate
  {:label "애니메이션"
@@ -159,6 +161,7 @@
 
  :renderer.element.impl.shape.path
  {:label "패스"
+  :end-point "끝점"
   :description "<path> SVG 요소는 모양을 정의하는 일반적인 요소입니다.
                 모든 기본 모양은 path 요소로 만들 수 있습니다."}
 
@@ -348,7 +351,8 @@
   :release-to-finalize "요소를 완료하려면 놓으세요."
   :edge "가장자리"
   :elements "요소"
-  :containers "컨테이너"}
+  :containers "컨테이너"
+  :select-stroke-width "획 너비 선택"}
 
  :renderer.tool.impl.element.poly
  {:click-to-start "클릭하여 그리기를 시작합니다."
@@ -362,6 +366,9 @@
  :renderer.tool.impl.element.svg
  {:label "SVG"
   :create-svg "SVG 생성"}
+
+ :renderer.tool.impl.extension.core
+ {:extensions "확장"}
 
  :renderer.tool.impl.extension.blob
  {:label "블롭"
@@ -434,9 +441,10 @@
   :shortcut-quadratic "단축 2차 베지어 곡선"
   :elliptical-arc-curve "타원 호 곡선"
   :close-path "패스 닫기"
-  :remove-segment "Remove segment"
-  :convert-segment "Convert segment"
-  :open-command-specification "Open command specification"}
+  :remove-segment "세그먼트 제거"
+  :add-segment "세그먼트 추가"
+  :convert-segment "세그먼트 변환"
+  :open-command-specification "명령 사양 열기"}
 
  :renderer.attribute.impl.length
  {:increase "증가"
@@ -515,7 +523,8 @@
 
  :renderer.tool.impl.base.transform.core
  {:label "변환"
-  :pivot-point "피벗 포인트"}
+  :pivot-point "피벗 포인트"
+  :lock-aspect-ratio "가로세로 비율 잠금"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "%1을 누르면 방향을 제한하거나 %2를 놓으면 이동합니다"]
@@ -651,7 +660,7 @@
 
  :renderer.attribute.impl.points
  {:edit-points "점 편집"
-  :remove-point "Remove point"}
+  :remove-point "포인트 제거"}
 
  :renderer.frame.views
  {:main-canvas "메인 캔버스"}
@@ -674,7 +683,9 @@
  :renderer.app.core
  {:grid "격자"
   :help-bar "도움말 바"
-  :debug-info "디버그 정보"}
+  :debug-info "디버그 정보"
+  :guides "가이드"
+  :rulers "눈금자"}
 
  :renderer.dialog.core
  {:command-panel "명령 패널"
@@ -731,6 +742,8 @@
   :boolean-intersect "교집합"
   :boolean-subtract "빼기"
   :boolean-divide "나누기"
+  :combine "결합"
+  :break-apart "분리"
   :raise "앞으로"
   :lower "뒤로"
   :raise-to-top "맨 앞으로"
@@ -786,9 +799,9 @@
   :help "도움말"}
 
  :renderer.panel.core
- {:panel "패널"
+ {:panels "패널"
   :panel-element-tree "요소 트리"
-  :panel-properties "속성"
+  :panel-attributes "속성"
   :panel-xml-view "XML 보기"
   :panel-history-tree "기록 트리"
   :panel-shell-history "쉘 기록"

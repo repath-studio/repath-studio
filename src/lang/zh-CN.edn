@@ -109,7 +109,9 @@
   :ungroup-selection "选择取消成组"
   :cut-selection "剪切选择"
   :trace-image "描摹图像"
-  :toggle-handle-selection "Toggle handle selection"}
+  :toggle-handle-selection "Toggle handle selection"
+  :combine "组合"
+  :break-apart "拆分"}
 
  :renderer.element.impl.animation.animate
  {:label "动画"
@@ -153,6 +155,7 @@
 
  :renderer.element.impl.shape.path
  {:label "路径"
+  :end-point "端点"
   :description "SVG 元素 <path> 是定义形状的通用元素。所有基本形状都可以用路径元素
                 创建。"}
 
@@ -304,7 +307,8 @@
   :release-to-finalize "松开以完成元素。"
   :edge "边缘"
   :elements "元素"
-  :containers "容器"}
+  :containers "容器"
+  :select-stroke-width "选择描边宽度"}
 
  :renderer.tool.impl.element.poly
  {:click-to-start "点击开始绘制。"
@@ -318,6 +322,9 @@
  :renderer.tool.impl.element.svg
  {:label "SVG"
   :create-svg "创建 SVG"}
+
+ :renderer.tool.impl.extension.core
+ {:extensions "扩展"}
 
  :renderer.tool.impl.extension.blob
  {:label "Blob"
@@ -407,9 +414,10 @@
   :shortcut-quadratic "简写二次贝塞尔曲线"
   :elliptical-arc-curve "椭圆弧曲线"
   :close-path "闭合路径"
-  :remove-segment "Remove segment"
-  :convert-segment "Convert segment"
-  :open-command-specification "Open command specification"}
+  :remove-segment "删除段"
+  :add-segment "添加段"
+  :convert-segment "转换段"
+  :open-command-specification "打开命令规范"}
 
  :renderer.attribute.impl.length
  {:increase "增加"
@@ -481,7 +489,8 @@
 
  :renderer.tool.impl.base.transform.core
  {:label "变换"
-  :pivot-point "旋转中心点"}
+  :pivot-point "旋转中心点"
+  :lock-aspect-ratio "锁定宽高比"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "按住 %1 限制方向。或释放 %2 进行移动"]
@@ -616,7 +625,7 @@
 
  :renderer.attribute.impl.points
  {:edit-points "编辑点"
-  :remove-point "Remove point"}
+  :remove-point "删除点"}
 
  :renderer.frame.views
  {:main-canvas "主画布"}
@@ -639,7 +648,9 @@
  :renderer.app.core
  {:grid "网格"
   :help-bar "帮助栏"
-  :debug-info "调试信息"}
+  :debug-info "调试信息"
+  :guides "参考线"
+  :rulers "标尺"}
 
  :renderer.dialog.core
  {:command-panel "命令面板"
@@ -697,6 +708,8 @@
   :boolean-intersect "相交"
   :boolean-subtract "差集"
   :boolean-divide "分割"
+  :combine "组合"
+  :break-apart "拆分"
   :raise "上移"
   :lower "下移"
   :raise-to-top "置于顶层"
@@ -752,9 +765,9 @@
   :help "帮助"}
 
  :renderer.panel.core
- {:panel "面板"
+ {:panels "面板"
   :panel-element-tree "元素树"
-  :panel-properties "属性"
+  :panel-attributes "属性"
   :panel-xml-view "XML 视图"
   :panel-history-tree "历史树"
   :panel-shell-history "终端历史"

@@ -75,8 +75,11 @@
         selected-els (element.handlers/selected db)
         auto-parent? (and (contains? #{:translate :clone} (:state db))
                           (seq selected-els)
+                          (empty? (rest selected-els))
                           (not (utils.element/top-level? (first selected-els)))
-                          (empty? (rest selected-els)))
+                          (->> selected-els first :id
+                               (element.handlers/parent db)
+                               (utils.element/container?)))
         offset (case axis
                  :vertical [offset-x 0]
                  :horizontal [0 offset-y]

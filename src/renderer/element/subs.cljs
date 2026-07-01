@@ -69,7 +69,7 @@
  :-> (comp set (partial map :tag)))
 
 (rf/reg-sub
- ::has-selected-tag?
+ ::some-selected-tag?
  :<- [::selected-tags]
  :=> contains?)
 
@@ -79,7 +79,7 @@
  :-> (comp boolean seq))
 
 (rf/reg-sub
- ::selected-locked?
+ ::every-selected-locked?
  :<- [::selected]
  :-> (partial every? :locked))
 
@@ -97,6 +97,11 @@
  ::bbox
  :<- [::selected]
  :-> utils.element/united-bbox)
+
+(rf/reg-sub
+ ::local-bbox
+ (fn [db [_ id]]
+   (element.handlers/local-bbox db id)))
 
 (rf/reg-sub
  ::area

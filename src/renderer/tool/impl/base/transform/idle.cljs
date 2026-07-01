@@ -64,11 +64,13 @@
 
 (defmethod tool.hierarchy/on-double-click [::transform/transform :idle]
   [db e]
-  (let [{{:keys [tag id]} :element} e]
+  (let [{{:keys [timestamp tag id]} :element} e]
     (if (= tag :g)
       (-> db
           (element.handlers/ignore id)
-          (element.handlers/deselect id))
+          (element.handlers/deselect id)
+          (history.handlers/finalize timestamp
+                                     [::deselect-element "Deselect element"]))
       (cond-> db
         (not= :canvas tag)
         (tool.handlers/edit)))))
@@ -131,7 +133,8 @@
       (element.handlers/translate (event->offset e))
 
       (= k "Escape")
-      (history.handlers/reset-state))))
+      (-> (history.handlers/reset-state)
+          (element.handlers/clear-ignored)))))
 
 (defmethod tool.hierarchy/on-key-up [::transform/transform :idle]
   [db e]

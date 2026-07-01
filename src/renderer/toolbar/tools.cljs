@@ -48,12 +48,13 @@
            (into [:div {:class "flex justify-center md:gap-1 gap-0.5"}])))
 
 (defn dropdown-button
-  [{:keys [label actions]}]
-  (let [active-tool @(rf/subscribe [::tool.subs/active])
+  [group]
+  (let [{:keys [label actions icon]} group
+        active-tool @(rf/subscribe [::tool.subs/active])
         cached-tool @(rf/subscribe [::tool.subs/cached])
         active-action (tool-action actions active-tool)
         cached-action (tool-action actions cached-tool)
-        top-tool (or active-action cached-action (first actions))]
+        top-tool (or active-action cached-action)]
     (if (second actions)
       [:> DropdownMenu/Root
        [:> DropdownMenu/Trigger
@@ -69,7 +70,7 @@
                      (when active-action
                        "bg-accent text-accent-foreground! hover:bg-accent-light
                         aria-expanded:bg-accent-light active:bg-accent-light")]}
-            [views/icon (:icon top-tool)]
+            [views/icon (or (:icon top-tool) icon (:icon (first actions)))]
             [views/icon "chevron-down"]]]
           [:> Tooltip/Portal
            [:> Tooltip/Content
@@ -82,7 +83,7 @@
 
        [:> DropdownMenu/Portal
         (->> actions
-             (map (comp views/dropdown-menu-item #(dissoc % :active)))
+             (map views/dropdown-menu-item)
              (into [:> DropdownMenu/Content
                     {:side "bottom"
                      :align "middle"
@@ -90,14 +91,15 @@
                      :on-key-down #(.stopPropagation %)
                      :on-escape-key-down #(.stopPropagation %)}
                     [views/dropdownmenu-arrow]]))]]
-      [button top-tool true])))
+      [button (first actions) true])))
 
 (def action-groups
   [:tools/transform
    :tools/containers
    :tools/elements
    :tools/draw
-   :tools/misc])
+   :tools/misc
+   :tools/extensions])
 
 (defn root
   []

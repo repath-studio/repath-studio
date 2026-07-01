@@ -27,7 +27,8 @@
       :simplify (.simplify path)
       :smooth (.smooth path)
       :flatten (.flatten path)
-      :reverse (.reverse path))
+      :reverse (.reverse path)
+      path)
     (get-d path)))
 
 (m/=> point-indices [:-> [:maybe string?] PathPointType [:maybe Vec2]])
@@ -86,17 +87,18 @@
     (segment-point segment :end-point)))
 
 (m/=> outgoing-cp [:-> [:maybe PathSegment] [:maybe Vec2]])
+(m/=> outgoing-cp [:-> [:maybe PathSegment] [:maybe Vec2]])
 (defn outgoing-cp
   "Returns the outgoing control point.
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/d#cubic_b%C3%A9zier_curve"
   [segment]
   (let [command (segment->command segment)]
-    (when (contains? #{"C" "S"} command)
+    (when (contains? #{"C" "S" "Q"} command)
       (let [[ex ey] (segment-point segment :end-point)
             cp (if (= command "C") :end-control-point :start-control-point)
-            [cp2x cp2y] (segment-point segment cp)]
-        [(- (* 2 ex) cp2x)
-         (- (* 2 ey) cp2y)]))))
+            [cp2-x cp2-y] (segment-point segment cp)]
+        [(- (* 2 ex) cp2-x)
+         (- (* 2 ey) cp2-y)]))))
 
 (m/=> string->segments [:-> [:maybe string?] [:maybe PathSegments]])
 (defn string->segments
@@ -118,6 +120,10 @@
       (.slice segments 0 (dec n))
       segments)))
 
+(defn closed?
+  [segments]
+  (= "Z" (some-> segments last segment->command)))
+
 (m/=> acc-endpoints [:-> PathSegments [:vector Vec2]])
 (defn acc-endpoints
   [segments]
@@ -129,8 +135,8 @@
 (m/=> c->s-segment [:-> PathSegment PathSegment])
 (defn c->s-segment
   [segment]
-  (let [[_ _cp1x _cp1y cp2x cp2y x y] segment]
-    #js ["S" cp2x cp2y x y]))
+  (let [[_ _cp1-x _cp1-y cp2-x cp2-y x y] segment]
+    #js ["S" cp2-x cp2-y x y]))
 
 (m/=> line->q-segment [:-> PathSegment Vec2 PathSegment])
 (defn line->q-segment
@@ -148,11 +154,11 @@
   [segment prev-ep]
   (let [[_ qcp-x qcp-y x y] segment
         [prev-x prev-y] prev-ep
-        cp1x (+ prev-x (* (/ 2.0 3.0) (- qcp-x prev-x)))
-        cp1y (+ prev-y (* (/ 2.0 3.0) (- qcp-y prev-y)))
-        cp2x (+ x (* (/ 2.0 3.0) (- qcp-x x)))
-        cp2y (+ y (* (/ 2.0 3.0) (- qcp-y y)))]
-    #js ["C" cp1x cp1y cp2x cp2y x y]))
+        cp1-x (+ prev-x (* (/ 2.0 3.0) (- qcp-x prev-x)))
+        cp1-y (+ prev-y (* (/ 2.0 3.0) (- qcp-y prev-y)))
+        cp2-x (+ x (* (/ 2.0 3.0) (- qcp-x x)))
+        cp2-y (+ y (* (/ 2.0 3.0) (- qcp-y y)))]
+    #js ["C" cp1-x cp1-y cp2-x cp2-y x y]))
 
 (defn- segment-for-command
   [segment prev-segment prev-ep command]
@@ -169,12 +175,14 @@
                      (/ (+ (aget segment 2) (aget segment 4)) 2)
                      ex ey]
             "S" #js ["Q" (aget segment 1) (aget segment 2) ex ey]
+            "T" (let [[cp-x cp-y] (or (outgoing-cp prev-segment) prev-ep)]
+                  #js ["Q" cp-x cp-y ex ey])
             #js ["Q" (/ (+ prev-x ex) 2) (/ (+ prev-y ey) 2) ex ey])
       "C" (case current
             "Q" (q->c-segment segment prev-ep)
-            "S" (let [[_ cp2x cp2y] segment
-                      [cp1x cp1y] (or (outgoing-cp prev-segment) prev-ep)]
-                  #js ["C" cp1x cp1y cp2x cp2y ex ey])
+            "S" (let [[_ cp2-x cp2-y] segment
+                      [cp1-x cp1-y] (or (outgoing-cp prev-segment) prev-ep)]
+                  #js ["C" cp1-x cp1-y cp2-x cp2-y ex ey])
             (-> #js ["L" ex ey]
                 (line->q-segment prev-ep)
                 (q->c-segment prev-ep)))
@@ -197,6 +205,16 @@
         (if new-seg
           (doto (.slice segments) (aset index new-seg))
           segments)))))
+
+(m/=> break-apart [:-> PathSegments [:vector PathSegments]])
+(defn break-apart
+  [segments]
+  (reduce (fn [acc segment]
+            (if (= "M" (segment->command segment))
+              (conj acc (array segment))
+              (do (.push (peek acc) segment) acc)))
+          []
+          segments))
 
 (m/=> boolean-operation [:-> string? string? BooleanOperation string?])
 (defn boolean-operation

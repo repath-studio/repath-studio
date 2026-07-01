@@ -119,16 +119,18 @@
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
 
-   (let [fill (rf/subscribe [::document.subs/fill])
-         stroke (rf/subscribe [::document.subs/stroke])]
+   (let [fill (rf/subscribe [::document.subs/attr :fill])
+         stroke (rf/subscribe [::document.subs/attr :stroke])
+         stroke-width (rf/subscribe [::document.subs/attr :stroke-width])]
      (testing "default color values"
-       (is (= @fill "white"))
-       (is (= @stroke "black")))
+       (is (= @fill "lightgray"))
+       (is (= @stroke "black"))
+       (is (= @stroke-width "1px")))
 
      (testing "swap colors"
        (rf/dispatch [::document.events/swap-colors])
        (is (= @fill "black"))
-       (is (= @stroke "white")))
+       (is (= @stroke "lightgray")))
 
      (testing "set fill"
        (rf/dispatch [::document.events/set-attr :fill "red"])

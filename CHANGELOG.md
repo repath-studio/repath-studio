@@ -1,8 +1,39 @@
 # Changelog
 
 All notable user facing changes to this project will be documented in this file.
-
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+
+## 0.4.16 (2026-06-19)
+
+**Added**
+
+- Length rounding on transform
+- Line numbers on codemirror
+- Scale effect on handle hover
+- Text hover cursor on edit mode
+
+**Changed**
+
+- Centroid enhancements [#146](https://github.com/repath-studio/repath-studio/pull/146)
+- Improve path editing performance [#147](https://github.com/repath-studio/repath-studio/pull/147)
+- Enhance element to path conversions [#148](https://github.com/repath-studio/repath-studio/pull/148)
+- Enhance path segment conversions [#149](https://github.com/repath-studio/repath-studio/pull/149)
+- Make length units case insensitive
+- Rounded handles are not filter out on select
+- Enhance about dialog
+- Deactivate pencil and brush tool after draw
+- Various group handling enhancements
+
+**Fixed**
+
+- Rectangle clamp radius to size
+- Codemirror scroll and update issues
+- Handle selected state
+- Double movement of selected path segment controls
+- Quadratic curve controls movement
+- Translating quadratic controls on endpoint multiselect
+- Remove segment button color on light mode
+- Line-to segment creation of path tool
 
 ## 0.4.15 (2026-06-02)
 

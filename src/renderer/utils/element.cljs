@@ -17,6 +17,7 @@
    [renderer.snap.db :refer [SnapOptions]]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.bounds :as utils.bounds]
+   [renderer.utils.dom :as utils.dom]
    [renderer.utils.map :as utils.map]))
 
 (m/=> root? [:-> Element boolean?])
@@ -73,7 +74,9 @@
   [el]
   (let [el-bbox (:bbox el)
         local-bbox (element.hierarchy/bbox el)]
-    (into [] (take 2) (matrix/sub el-bbox local-bbox))))
+    (->> (matrix/sub el-bbox local-bbox)
+         (take 2)
+         (into []))))
 
 (m/=> acc-snapping-points [:-> Element SnapOptions [:* Vec2]])
 (defn acc-snapping-points
@@ -273,3 +276,34 @@
   (m/decode PersistedElement
             el
             m.transform/strip-extra-keys-transformer))
+
+(m/=> get-computed-styles [:-> Element [:maybe map?]])
+(defn get-computed-styles
+  [{:keys [content]
+    :as el}]
+  (when-let [svg (utils.dom/get-canvas-element)]
+    (let [dom-el (->dom-element el)]
+      (.appendChild svg dom-el)
+      (set! (.-innerHTML dom-el) (if (empty? content) "\u00a0" content))
+      (let [computed-style (.getComputedStyle js/window dom-el nil)
+            font-style (.getPropertyValue computed-style "font-style")
+            font-size (.getPropertyValue computed-style "font-size")
+            font-weight (.getPropertyValue computed-style "font-weight")
+            bbox (utils.bounds/dom-el->bbox dom-el)]
+        (.remove dom-el)
+        {:font-style font-style
+         :font-size font-size
+         :font-weight font-weight
+         :bbox bbox}))))
+
+(m/=> breakable? [:-> Element boolean?])
+(defn breakable?
+  "Returns true if the element has a :d attribute with multiple 'M' commands."
+  [el]
+  (boolean (some-> el
+                   (get-in [:attrs :d])
+                   (string/trim)
+                   (rest)
+                   (str)
+                   (string/upper-case)
+                   (string/includes? "M"))))
