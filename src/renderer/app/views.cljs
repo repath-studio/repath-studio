@@ -328,7 +328,7 @@
     [history.views/root]]
 
    [views/drawer
-    {:icon "properties"
+    {:icon "attributes"
      :label [::attributes "Attributes"]}
     [attributes-panel]]])
 
