@@ -910,4 +910,7 @@
  {:misc "Διάφορα"}
 
  :renderer.utils.element
- {:centroid "κεντροειδές"}}
+ {:centroid "κεντροειδές"}
+
+ :renderer.reepl.core
+ {:focus-shell "Εστίαση στο τερματικό"}}

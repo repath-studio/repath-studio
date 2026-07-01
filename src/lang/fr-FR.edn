@@ -899,4 +899,7 @@
  {:misc "Divers"}
 
  :renderer.utils.element
- {:centroid "centroïde"}}
+ {:centroid "centroïde"}
+
+ :renderer.reepl.core
+ {:focus-shell "Focaliser la console"}}

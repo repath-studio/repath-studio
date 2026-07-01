@@ -887,4 +887,7 @@
  {:misc "Miscallaneous"}
 
  :renderer.utils.element
- {:centroid "centroid"}}
+ {:centroid "centroid"}
+
+ :renderer.reepl.core
+ {:focus-shell "Fokusera terminal"}}

@@ -8,7 +8,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :reepl/focus
-               :label [::focus-shell-input "Focus shell input"]
+               :label [::focus-shell "Focus shell"]
                :icon "shell"
                :event [::reepl.events/focus]
                :shortcuts [{:keyCode (utils.key/codes "SLASH")}]}])

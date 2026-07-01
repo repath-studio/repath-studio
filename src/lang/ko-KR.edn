@@ -839,4 +839,7 @@
  {:misc "Miscallaneous"}
 
  :renderer.utils.element
- {:centroid "무게중심"}}
+ {:centroid "무게중심"}
+
+ :renderer.reepl.core
+ {:focus-shell "셸에 포커스"}}

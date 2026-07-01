@@ -881,4 +881,7 @@
  {:misc "Miscallaneous"}
 
  :renderer.utils.element
- {:centroid "ağırlık merkezi"}}
+ {:centroid "ağırlık merkezi"}
+
+ :renderer.reepl.core
+ {:focus-shell "Shell'e odaklan"}}

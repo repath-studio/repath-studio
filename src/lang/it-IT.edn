@@ -902,4 +902,7 @@
  {:misc "Miscallaneous"}
 
  :renderer.utils.element
- {:centroid "centroide"}}
+ {:centroid "centroide"}
+
+ :renderer.reepl.core
+ {:focus-shell "Porta il focus alla shell"}}
