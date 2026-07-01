@@ -19,8 +19,8 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :panel/toggle-attributes
-               :label [::panel-properties "Properties"]
-               :icon "properties"
+               :label [::panel-attributes "Attributes"]
+               :icon "attributes"
                :event [::panel.events/toggle :attributes]
                :active [::panel.subs/visible? :attributes]
                :available [::window.subs/md?]
@@ -62,8 +62,9 @@
                :active [::panel.subs/visible? :timeline]}])
 
 (rf/dispatch [::action.events/register-action-group
-              {:id :view/panel
-               :label [::panel "Panel"]
+              {:id :view/panels
+               :icon "panels"
+               :label [::panels "Panels"]
                :actions [:panel/toggle-tree
                          :panel/toggle-xml
                          :panel/toggle-timeline

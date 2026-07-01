@@ -862,9 +862,9 @@
   :help "Aiuto"}
 
  :renderer.panel.core
- {:panel "Pannello"
+ {:panels "Pannelli"
   :panel-element-tree "Albero elementi"
-  :panel-properties "Proprietà"
+  :panel-attributes "Attributi"
   :panel-xml-view "Vista XML"
   :panel-history-tree "Albero cronologia"
   :panel-shell-history "Cronologia shell"

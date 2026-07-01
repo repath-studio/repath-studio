@@ -799,9 +799,9 @@
   :help "도움말"}
 
  :renderer.panel.core
- {:panel "패널"
+ {:panels "패널"
   :panel-element-tree "요소 트리"
-  :panel-properties "속성"
+  :panel-attributes "속성"
   :panel-xml-view "XML 보기"
   :panel-history-tree "기록 트리"
   :panel-shell-history "쉘 기록"

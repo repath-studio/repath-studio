@@ -859,9 +859,9 @@
   :help "Aide"}
 
  :renderer.panel.core
- {:panel "Panneau"
+ {:panels "Panneaux"
   :panel-element-tree "Arbre des éléments"
-  :panel-properties "Propriétés"
+  :panel-attributes "Attributs"
   :panel-xml-view "Vue XML"
   :panel-history-tree "Arbre d'historique"
   :panel-shell-history "Historique du terminal"

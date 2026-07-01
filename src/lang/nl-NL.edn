@@ -863,9 +863,9 @@
   :help "Help"}
 
  :renderer.panel.core
- {:panel "Paneel"
+ {:panels "Panelen"
   :panel-element-tree "Elementenboom"
-  :panel-properties "Eigenschappen"
+  :panel-attributes "Attributen"
   :panel-xml-view "XML-weergave"
   :panel-history-tree "Geschiedenisboom"
   :panel-shell-history "Shell-geschiedenis"

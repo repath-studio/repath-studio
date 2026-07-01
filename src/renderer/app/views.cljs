@@ -112,8 +112,9 @@
               (:tag (first selected))
               :default)]
     [:div.flex.flex-col.h-full.bg-secondary.grow.overflow-hidden.gap-px
-     [views/scroll-area
-      (tool.hierarchy/attributes-panel [tool tag])]
+     (when (seq selected)
+       [views/scroll-area
+        (tool.hierarchy/attributes-panel [tool tag])])
      [:div.bg-primary.grow.flex]]))
 
 (defn guides-locked-toggle
@@ -328,7 +329,7 @@
     [history.views/root]]
 
    [views/drawer
-    {:icon "properties"
+    {:icon "attributes"
      :label [::attributes "Attributes"]}
     [attributes-panel]]])
 
@@ -392,7 +393,7 @@
             :minSize 227
             :groupResizeBehavior "preserve-pixel-size"}
            [:div.flex.flex-col.overflow-hidden.h-full
-            [document.views/actions]
+            [document.views/document-actions]
             [tree.views/root]]]
           [panel.views/separator]])
        [panel.views/panel

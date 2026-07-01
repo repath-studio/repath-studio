@@ -765,9 +765,9 @@
   :help "帮助"}
 
  :renderer.panel.core
- {:panel "面板"
+ {:panels "面板"
   :panel-element-tree "元素树"
-  :panel-properties "属性"
+  :panel-attributes "属性"
   :panel-xml-view "XML 视图"
   :panel-history-tree "历史树"
   :panel-shell-history "终端历史"
