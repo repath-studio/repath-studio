@@ -298,53 +298,39 @@
 
 (defn bottom-bar
   []
-  (let [some-selected? @(rf/subscribe [::element.subs/some-selected?])
-        mac? @(rf/subscribe [::app.subs/mac?])]
+  (let [some-selected? @(rf/subscribe [::element.subs/some-selected?])]
     [:div.flex.justify-evenly.p-2.gap-1.rtl:flex-row-reverse
 
      [views/drawer
       {:icon "tree"
-       :label [::tree "Tree"]
-       :direction "left"
-       :content-class (when mac? "pt-8")}
+       :label [::tree "Tree"]}
       [tree.views/root]]
 
      [views/drawer
       {:icon "code"
-       :label [::xml "XML"]
-       :direction "left"
-       :content-class (when mac? "pt-8")}
+       :label [::xml "XML"]}
       [views/scroll-area
-       [:div.py-3
-        [xml-panel]]]]
-
-     [:span.v-divider]
+       [:div.py-3 [xml-panel]]]]
 
      [views/drawer
       {:icon "animation"
-       :label [::timeline "Timeline"]
-       :direction "bottom"}
+       :label [::timeline "Timeline"]}
       [timeline.views/root]]
 
      [views/drawer
       {:icon "shell"
-       :label [::shell "Shell"]
-       :direction "bottom"}
+       :label [::shell "Shell"]}
       [:div.flex.flex-col.flex-1
        [repl.views/root]]]
 
-     [:span.v-divider]
-
      [views/drawer
       {:icon "history"
-       :label [::history "History"]
-       :direction "right"}
+       :label [::history "History"]}
       [history.views/root]]
 
      [views/drawer
       {:icon "properties"
        :label [::attributes "Attributes"]
-       :direction "right"
        :disabled (not some-selected?)}
       [attributes-panel]]]))
 
