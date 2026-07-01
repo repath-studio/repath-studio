@@ -191,8 +191,7 @@
         {:class "w-1/2 h-1/2 bottom-1/4 right-1/4"}]]]]))
 
 (defn root []
-  (let [md? @(rf/subscribe [::window.subs/md?])
-        zoom @(rf/subscribe [::document.subs/zoom])
+  (let [zoom @(rf/subscribe [::document.subs/zoom])
         active-tool @(rf/subscribe [::tool.subs/cached-or-active])
         sm? @(rf/subscribe [::window.subs/sm?])]
     [views/toolbar
@@ -204,17 +203,6 @@
         [:div.v-divider]
         [tool.hierarchy/tool-options active-tool]])
      [:div.grow.hidden.md:block]
-     (when md?
-       [:<>
-        (->> [:panel/toggle-tree
-              :panel/toggle-xml
-              :panel/toggle-timeline
-              :panel/toggle-history
-              :panel/toggle-attributes]
-             (map action.views/deref-action)
-             (map radio-button)
-             (into [:<>]))
-        [:div.v-divider]])
      (->> [:view/toggle-grid
            :view/toggle-rulers]
           (map action.views/deref-action)

@@ -62,8 +62,9 @@
                :active [::panel.subs/visible? :timeline]}])
 
 (rf/dispatch [::action.events/register-action-group
-              {:id :view/panel
-               :label [::panel "Panel"]
+              {:id :view/panels
+               :icon "panels"
+               :label [::panels "Panels"]
                :actions [:panel/toggle-tree
                          :panel/toggle-xml
                          :panel/toggle-timeline

@@ -127,7 +127,7 @@
              :view/toggle-debug-info
              {:type :separator
               :available [::window.subs/md?]}
-             (action.views/deref-action-group :view/panel)
+             (action.views/deref-action-group :view/panels)
              {:type :separator
               :available [::app.subs/not-mobile?]}
              :view/toggle-fullscreen]})

@@ -392,7 +392,7 @@
             :minSize 227
             :groupResizeBehavior "preserve-pixel-size"}
            [:div.flex.flex-col.overflow-hidden.h-full
-            [document.views/actions]
+            [document.views/document-actions]
             [tree.views/root]]]
           [panel.views/separator]])
        [panel.views/panel
