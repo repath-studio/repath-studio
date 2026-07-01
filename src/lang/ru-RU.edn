@@ -846,7 +846,7 @@
   :help "Справка"}
 
  :renderer.panel.core
- {:panel "Панель"
+ {:panels "Панели"
   :panel-element-tree "Дерево элементов"
   :panel-properties "Свойства"
   :panel-xml-view "XML вид"

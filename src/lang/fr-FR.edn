@@ -859,7 +859,7 @@
   :help "Aide"}
 
  :renderer.panel.core
- {:panel "Panneau"
+ {:panels "Panneaux"
   :panel-element-tree "Arbre des éléments"
   :panel-properties "Propriétés"
   :panel-xml-view "Vue XML"

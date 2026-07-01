@@ -820,7 +820,7 @@
   :help "مساعدة"}
 
  :renderer.panel.core
- {:panel "لوحة"
+ {:panels "لوحات"
   :panel-element-tree "شجرة العناصر"
   :panel-properties "الخصائص"
   :panel-xml-view "عرض XML"

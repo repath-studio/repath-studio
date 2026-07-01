@@ -833,7 +833,7 @@
   :help "Help"}
 
  :renderer.panel.core
- {:panel "Panel"
+ {:panels "Panels"
   :panel-element-tree "Element tree"
   :panel-properties "Properties"
   :panel-xml-view "XML view"

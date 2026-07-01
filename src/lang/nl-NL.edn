@@ -863,7 +863,7 @@
   :help "Help"}
 
  :renderer.panel.core
- {:panel "Paneel"
+ {:panels "Panelen"
   :panel-element-tree "Elementenboom"
   :panel-properties "Eigenschappen"
   :panel-xml-view "XML-weergave"

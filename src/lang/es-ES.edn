@@ -852,7 +852,7 @@
   :help "Ayuda"}
 
  :renderer.panel.core
- {:panel "Panel"
+ {:panels "Paneles"
   :panel-element-tree "Árbol de elementos"
   :panel-properties "Propiedades"
   :panel-xml-view "Vista XML"

@@ -847,7 +847,7 @@
   :help "Hjälp"}
 
  :renderer.panel.core
- {:panel "Panel"
+ {:panels "Paneler"
   :panel-element-tree "Elementträd"
   :panel-properties "Egenskaper"
   :panel-xml-view "XML-vy"

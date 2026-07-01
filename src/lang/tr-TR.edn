@@ -841,7 +841,7 @@
   :help "Yardım"}
 
  :renderer.panel.core
- {:panel "Panel"
+ {:panels "Paneller"
   :panel-element-tree "Öğe ağacı"
   :panel-properties "Özellikler"
   :panel-xml-view "XML görünümü"

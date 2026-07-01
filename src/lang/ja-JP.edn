@@ -804,7 +804,7 @@
   :help "ヘルプ"}
 
  :renderer.panel.core
- {:panel "パネル"
+ {:panels "パネル"
   :panel-element-tree "要素ツリー"
   :panel-properties "プロパティ"
   :panel-xml-view "XML表示"

@@ -870,7 +870,7 @@
   :help "Βοήθεια"}
 
  :renderer.panel.core
- {:panel "Πάνελ"
+ {:panels "Πάνελ"
   :panel-element-tree "Δέντρο στοιχείων"
   :panel-properties "Ιδιότητες"
   :panel-xml-view "Προβολή XML"
