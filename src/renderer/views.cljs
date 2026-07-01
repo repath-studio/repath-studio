@@ -366,9 +366,8 @@
                            var(--tw-shadow-color, rgb(0 0 0 / 0.1)),
                            0 -4px 6px -4px
                            var(--tw-shadow-color, rgb(0 0 0 / 0.1))"}}
-     [:div.mx-auto.my-3.w-12.rounded-full.bg-overlay
-      {:class "h-1.5"
-       :aria-hidden true}]
+     [:> Drawer.Handle
+      {:class "mx-auto my-3! w-12! h-1.5! rounded-full bg-overlay!"}]
      [:> Drawer.Title
       {:class "sr-only"}
       (i18n.views/t (:label attrs))]
