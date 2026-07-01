@@ -17,6 +17,7 @@
    [renderer.i18n.events :as-alias i18n.events]
    [renderer.input.events :as-alias input.events]
    [renderer.input.impl.keyboard :as impl.keyboard]
+   [renderer.reepl.effects :as-alias repl.effects]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.theme.effects :as-alias theme.effects]
    [renderer.theme.events :as-alias theme.events]
@@ -139,6 +140,7 @@
                [::effects/ipc-send ["initialized"]]
                [::theme.effects/add-listener [::theme.events/set-native-mode]]
                [::app.effects/setup-paper]
+               [::repl.effects/init]
                ;; The status bar needs to be updated later for some reason.
                [:dispatch [::theme.events/update-mobile-status-bar]]
                [::action.effects/update-keydown-rules

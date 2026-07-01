@@ -11,7 +11,8 @@
    ["react" :as react]
    [clojure.edn :as edn]
    [clojure.string :as string]
-   [reagent.core :as reagent]))
+   [reagent.core :as reagent]
+   [renderer.utils.dom :as utils.dom]))
 
 ;; TODO: can we avoid the global state modification here?
 #_(js/CodeMirror.registerHelper
@@ -288,6 +289,9 @@
                                    (should-go-down source inst))
                           (.preventDefault evt)
                           (on-down)))
+                   ;; escape
+                   27 (some-> (.-activeElement js/document)
+                              (.blur))
                    :none)))
           (when on-cm-init
             (on-cm-init inst))))
@@ -304,6 +308,7 @@
       (fn [_ _ _]
         @value-atom
         [:div {:ref ref
+               :id utils.dom/shell-input-id
                :style style}])})))
 
 (defn colored-text

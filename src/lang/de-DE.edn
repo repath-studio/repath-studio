@@ -908,4 +908,7 @@
  {:misc "Verschiedenes"}
 
  :renderer.utils.element
- {:centroid "Schwerpunkt"}}
+ {:centroid "Schwerpunkt"}
+
+ :renderer.reepl.core
+ {:focus-shell "Shell fokussieren"}}

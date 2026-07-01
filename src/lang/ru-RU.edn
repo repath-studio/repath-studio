@@ -886,4 +886,7 @@
  {:misc "Miscallaneous"}
 
  :renderer.utils.element
- {:centroid "центроид"}}
+ {:centroid "центроид"}
+
+ :renderer.reepl.core
+ {:focus-shell "Фокус на консоли"}}

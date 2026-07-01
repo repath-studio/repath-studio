@@ -860,4 +860,7 @@
  {:misc "متنوع"}
 
  :renderer.utils.element
- {:centroid "مركز ثقل"}}
+ {:centroid "مركز ثقل"}
+
+ :renderer.reepl.core
+ {:focus-shell "تركيز الطرفية"}}

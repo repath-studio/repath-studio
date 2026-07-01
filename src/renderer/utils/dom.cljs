@@ -5,6 +5,7 @@
 
 (def canvas-id "canvas")
 (def frame-id "frame")
+(def shell-input-id "shell-input")
 
 (defn get-frame-document
   []

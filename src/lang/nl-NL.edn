@@ -903,4 +903,7 @@
  {:misc "Miscallaneous"}
 
  :renderer.utils.element
- {:centroid "centroïde"}}
+ {:centroid "centroïde"}
+
+ :renderer.reepl.core
+ {:focus-shell "Focus op shell"}}

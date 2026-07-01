@@ -805,4 +805,7 @@
  {:misc "Miscallaneous"}
 
  :renderer.utils.element
- {:centroid "质心"}}
+ {:centroid "质心"}
+
+ :renderer.reepl.core
+ {:focus-shell "聚焦 Shell"}}

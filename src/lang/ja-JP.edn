@@ -844,4 +844,7 @@
  {:misc "Miscallaneous"}
 
  :renderer.utils.element
- {:centroid "重心"}}
+ {:centroid "重心"}
+
+ :renderer.reepl.core
+ {:focus-shell "シェルにフォーカス"}}
