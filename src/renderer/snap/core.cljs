@@ -15,28 +15,28 @@
 (rf/dispatch [::action.events/register-action
               {:id :snap/toggle-centers
                :label [::centers "Centers"]
-               :icon "magnet"
+               :icon "center"
                :event [::snap.events/toggle-option :centers]
                :active [::snap.subs/option-enabled? :centers]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :snap/toggle-midpoints
                :label [::midpoints "Midpoints"]
-               :icon "magnet"
+               :icon "midpoint"
                :event [::snap.events/toggle-option :midpoints]
                :active [::snap.subs/option-enabled? :midpoints]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :snap/toggle-corners
                :label [::corners "Corners"]
-               :icon "magnet"
+               :icon "corner"
                :event [::snap.events/toggle-option :corners]
                :active [::snap.subs/option-enabled? :corners]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :snap/toggle-nodes
                :label [::nodes "Nodes"]
-               :icon "magnet"
+               :icon "polyline"
                :event [::snap.events/toggle-option :nodes]
                :active [::snap.subs/option-enabled? :nodes]}])
 

@@ -179,7 +179,8 @@
     [:> DropdownMenu/CheckboxItem
      {:class "menu-checkbox-item inset"
       :on-click #(.stopPropagation %)
-      :on-select (action.views/dispatch action)
+      :on-select #(do (.preventDefault %)
+                      ((action.views/dispatch action) %))
       :checked (action.views/checked? action)
       :disabled (action.views/disabled? action)}
      [:> DropdownMenu/ItemIndicator
