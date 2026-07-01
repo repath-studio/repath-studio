@@ -1,3 +1,14 @@
 (ns renderer.reepl.core
   (:require
-   [renderer.reepl.effects]))
+   [re-frame.core :as rf]
+   [renderer.action.events :as-alias action.events]
+   [renderer.reepl.effects]
+   [renderer.reepl.events :as reepl.events]
+   [renderer.utils.key :as utils.key]))
+
+(rf/dispatch [::action.events/register-action
+              {:id :reepl/focus
+               :label [::focus-shell-input "Focus shell input"]
+               :icon "shell"
+               :event [::reepl.events/focus]
+               :shortcuts [{:keyCode (utils.key/codes "SLASH")}]}])
