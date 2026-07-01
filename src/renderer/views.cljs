@@ -345,17 +345,15 @@
       message]]]])
 
 (defn drawer
-  [{:keys [label disabled]
-    :as attrs} & children]
+  [attrs & children]
   [:> Drawer.Root
    {:direction "bottom"
     :modal false}
    [:> Drawer.Trigger
     {:class "button p-1 rounded h-auto flex flex-col flex-1 text-2xs gap-1
-             overflow-hidden items-center"
-     :disabled disabled}
+             overflow-hidden items-center"}
     [icon (:icon attrs)]
-    [:span.truncate.w-full (i18n.views/t label)]]
+    [:span.truncate.w-full (i18n.views/t (:label attrs))]]
    [:> Drawer.Portal
     [:> Drawer.Content
      {:class "inset-0 fixed z-0 outline-none bg-primary flex shadow-lg
@@ -372,5 +370,5 @@
        :aria-hidden true}]
      [:> Drawer.Title
       {:class "sr-only"}
-      (i18n.views/t label)]
+      (i18n.views/t (:label attrs))]
      (into [:div.flex.flex-1.overflow-hidden.w-full] children)]]])
