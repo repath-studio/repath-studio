@@ -112,8 +112,9 @@
               (:tag (first selected))
               :default)]
     [:div.flex.flex-col.h-full.bg-secondary.grow.overflow-hidden.gap-px
-     [views/scroll-area
-      (tool.hierarchy/attributes-panel [tool tag])]
+     (when (seq selected)
+       [views/scroll-area
+        (tool.hierarchy/attributes-panel [tool tag])])
      [:div.bg-primary.grow.flex]]))
 
 (defn guides-locked-toggle
