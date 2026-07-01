@@ -19,7 +19,7 @@
    :label [::label "Group"]
    :description [::description "The <g> SVG element is a container used to group
                                 other SVG elements."]
-   :attrs [:transform]})
+   :attrs []})
 
 (defmethod element.hierarchy/render :g
   [el]
