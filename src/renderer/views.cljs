@@ -348,6 +348,7 @@
   [attrs & children]
   [:> Drawer.Root
    {:direction "bottom"
+    :handleOnly true
     :modal false}
    [:> Drawer.Trigger
     {:class "button p-1 rounded h-auto flex flex-col flex-1 text-2xs gap-1
