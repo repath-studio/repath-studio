@@ -141,7 +141,8 @@
 (defn normalize-attr-key
   [props k]
   (cond-> k
-    (not (supported-attr? props k))
+    ;; Remove the attrs to check only against the element's defaults.
+    (not (supported-attr? (dissoc props :attrs) k))
     utils.attribute/->camel-case-memo))
 
 (m/=> normalize-attrs [:-> map? map?])
