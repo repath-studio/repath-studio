@@ -37,7 +37,7 @@
               [:-> App DocumentId Vec2 App]])
 (defn pan-by
   ([db offset]
-   (pan-by db offset (:active-document db)))
+   (pan-by db (:active-document db) offset))
   ([db id offset]
    (let [zoom (get-in db [:documents id :zoom])]
      (update-in db [:documents id :pan] matrix/add (matrix/div offset zoom)))))
