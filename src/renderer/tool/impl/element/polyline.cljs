@@ -39,6 +39,6 @@
 (rf/dispatch [::action.events/register-action
               {:id :tool/polyline
                :label [::label "Polyline"]
-               :icon "polyline"
+               :icon "polyline-tool"
                :event [::tool.events/activate ::polyline]
                :active [::tool.subs/active? ::polyline]}])

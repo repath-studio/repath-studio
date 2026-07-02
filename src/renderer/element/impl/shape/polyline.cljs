@@ -9,7 +9,7 @@
 
 (defmethod element.hierarchy/properties :polyline
   []
-  {:icon "polyline"
+  {:icon "polyline-tool"
    :label [::label "Polyline"]
    :description [::description
                  "The <polyline> SVG element is an SVG basic shape that

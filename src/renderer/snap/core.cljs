@@ -36,7 +36,7 @@
 (rf/dispatch [::action.events/register-action
               {:id :snap/toggle-nodes
                :label [::nodes "Nodes"]
-               :icon "polyline"
+               :icon "polyline-tool"
                :event [::snap.events/toggle-option :nodes]
                :active [::snap.subs/option-enabled? :nodes]}])
 
