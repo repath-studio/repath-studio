@@ -218,37 +218,31 @@
         [caniusethis {:tag tag
                       :attr k}]])]))
 
-(defn label
-  [k base? active?]
-  [:div.flex.items-center.overflow-hidden
-   [:label.form-element.w-28.truncate.flex-1.rtl:text-left!.py-0!.h-full!
-    {:for (name k)
-     :dir "ltr"
-     :class ["leading-[27px]"
-             (when active? "bg-overlay!")
-             (when-not base? "text-foreground-muted! cursor-default!")]}
-    k]])
-
 (defn attr-label
   [tag k]
   (let [clicked-element @(rf/subscribe [::app.subs/clicked-element])
         base-attr? (utils.element/base-attr? tag k)
-        active (and (= (:type clicked-element) :handle)
-                    (= (:id clicked-element) k))]
-    (if base-attr?
-      [:> HoverCard/Root
-       [:> HoverCard/Trigger
-        {:as-child true}
-        (label k true active)]
-       [:> HoverCard/Portal
-        [:> HoverCard/Content
-         {:side "left"
-          :class "popover-content"
-          :align "start"
-          :on-escape-key-down #(.stopPropagation %)}
-         [attr-card-content tag k]
-         [views/hovercard-arrow]]]]
-      [label k false active])))
+        active? (and (= (:type clicked-element) :handle)
+                     (= (:id clicked-element) k))]
+    [:> HoverCard/Root
+     [:> HoverCard/Trigger
+      {:as-child true}
+      [:div.flex.items-center.overflow-hidden
+       [:label.form-element.w-28.truncate.flex-1.rtl:text-left!.py-0!.h-full!
+        {:for (name k)
+         :dir "ltr"
+         :class ["leading-[27px]"
+                 (when active? "bg-overlay!")
+                 (when-not base-attr? "text-foreground-muted!")]}
+        k]]]
+     [:> HoverCard/Portal
+      [:> HoverCard/Content
+       {:side "left"
+        :class "popover-content"
+        :align "start"
+        :on-escape-key-down #(.stopPropagation %)}
+       [attr-card-content tag k]
+       [views/hovercard-arrow]]]]))
 
 (defn row
   [k v locked? tag]
