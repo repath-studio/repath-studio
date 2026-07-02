@@ -12,7 +12,7 @@
    [renderer.db :refer [BBox Vec2 JS_Element]]
    [renderer.element.db
     :as element.db
-    :refer [Element ElementAttrs PersistedElement]]
+    :refer [Element ElementAttrs ElementTag PersistedElement]]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.snap.db :refer [SnapOptions]]
    [renderer.utils.attribute :as utils.attribute]
@@ -137,12 +137,18 @@
   [props k]
   (-> props attributes k boolean))
 
+(m/=> base-attr? [:-> ElementTag keyword? boolean?])
+(defn base-attr?
+  [tag k]
+  (-> (utils.attribute/defaults-memo tag)
+      (get k)
+      (boolean)))
+
 (m/=> normalize-attr-key [:-> map? keyword? keyword?])
 (defn normalize-attr-key
   [props k]
   (cond-> k
-    ;; Remove the attrs to check only against the element's defaults.
-    (not (supported-attr? (dissoc props :attrs) k))
+    (not (base-attr? (:tag props) k))
     utils.attribute/->camel-case-memo))
 
 (m/=> normalize-attrs [:-> map? map?])

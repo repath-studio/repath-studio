@@ -14,6 +14,7 @@
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.attribute :as utils.attribute]
+   [renderer.utils.element :as utils.element]
    [renderer.utils.key :as utils.key]
    [renderer.views :as views]))
 
@@ -217,28 +218,37 @@
         [caniusethis {:tag tag
                       :attr k}]])]))
 
+(defn label
+  [k base? active?]
+  [:div.flex.items-center.overflow-hidden
+   [:label.form-element.w-28.truncate.flex-1.rtl:text-left!.py-0!.h-full!
+    {:for (name k)
+     :dir "ltr"
+     :class ["leading-[27px]"
+             (when active? "bg-overlay!")
+             (when-not base? "text-foreground-muted! cursor-default!")]}
+    k]])
+
 (defn attr-label
   [tag k]
   (let [clicked-element @(rf/subscribe [::app.subs/clicked-element])
+        base-attr? (utils.element/base-attr? tag k)
         active (and (= (:type clicked-element) :handle)
-                    (= (:key clicked-element) key))]
-    [:> HoverCard/Root
-     [:> HoverCard/Trigger
-      {:as-child true}
-      [:div.flex.items-center.overflow-hidden
-       [:label.form-element.w-28.truncate.flex-1.rtl:text-left!.py-0!.h-full!
-        {:for (name k)
-         :dir "ltr"
-         :class ["leading-[27px]" (when active "text-foreground-hovered")]}
-        k]]]
-     [:> HoverCard/Portal
-      [:> HoverCard/Content
-       {:side "left"
-        :class "popover-content"
-        :align "start"
-        :on-escape-key-down #(.stopPropagation %)}
-       [attr-card-content tag k]
-       [views/hovercard-arrow]]]]))
+                    (= (:id clicked-element) k))]
+    (if base-attr?
+      [:> HoverCard/Root
+       [:> HoverCard/Trigger
+        {:as-child true}
+        (label k true active)]
+       [:> HoverCard/Portal
+        [:> HoverCard/Content
+         {:side "left"
+          :class "popover-content"
+          :align "start"
+          :on-escape-key-down #(.stopPropagation %)}
+         [attr-card-content tag k]
+         [views/hovercard-arrow]]]]
+      [label k false active])))
 
 (defn row
   [k v locked? tag]
