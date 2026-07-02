@@ -112,7 +112,7 @@
   [el]
   (let [props (properties el)]
     (->> (attributes el)
-         (sort-by (fn [[id _]] (-> props :attrs (.indexOf id)))))))
+         (sort-by (fn [[id _]] (some-> props :attrs (.indexOf id)))))))
 
 (m/=> common-attributes [:-> [:sequential Element] ElementAttrs])
 (defn common-attributes
