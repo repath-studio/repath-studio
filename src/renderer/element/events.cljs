@@ -233,11 +233,11 @@
  ::finalize-boolean-operation
  [(finalize (fn [[_ operation]]
               [(case operation
-                 :unite [::element.core/unite]
-                 :intersect [::element.core/intersect]
-                 :subtract [::element.core/subtract]
-                 :exclude [::element.core/exclude]
-                 :divide [::element.core/divide])]))]
+                 :unite [::element.core/boolean-unite]
+                 :intersect [::element.core/boolean-intersect]
+                 :subtract [::element.core/boolean-subtract]
+                 :exclude [::element.core/boolean-exclude]
+                 :divide [::element.core/boolean-divide])]))]
  (fn [db [_ operation elements]]
    (-> (reduce element.handlers/swap db elements)
        (element.handlers/boolean-operation operation))))
