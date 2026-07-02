@@ -668,8 +668,9 @@
    (let [el (entity db id)]
      (cond-> db
        (and el
-            (not= id parent-id)
             (not (locked? db id))
+            (not= id parent-id)
+            (not= (:parent (entity db id)) parent-id)
             (not (contains? (descendant-ids db id) parent-id)))
        (-> (update-prop (:parent el) :children #(vec (remove #{id} %)))
            (update-prop parent-id :children utils.vec/add index id)
