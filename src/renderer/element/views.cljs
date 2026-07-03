@@ -13,17 +13,15 @@
   [el]
   (let [{:keys [attrs tag content]} el
         pointer-handler (partial input.impl.pointer/handler! el)
-        handle-size @(rf/subscribe [::document.subs/handle-size])
-        stroke-width (max (:stroke-width attrs) handle-size)]
-    [tag
-     (merge (dissoc attrs :style)
-            {:on-pointer-up pointer-handler
-             :on-pointer-down pointer-handler
-             :on-pointer-move pointer-handler
-             :shape-rendering "optimizeSpeed"
-             :fill "transparent"
-             :stroke "transparent"
-             :stroke-width stroke-width})
+        handle-size @(rf/subscribe [::document.subs/handle-size])]
+    [tag (merge (dissoc attrs :style)
+                {:on-pointer-up pointer-handler
+                 :on-pointer-down pointer-handler
+                 :on-pointer-move pointer-handler
+                 :shape-rendering "optimizeSpeed"
+                 :fill "transparent"
+                 :stroke "transparent"
+                 :stroke-width handle-size})
      content]))
 
 (defn render-to-dom
