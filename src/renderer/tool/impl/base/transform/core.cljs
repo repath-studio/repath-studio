@@ -1,5 +1,6 @@
 (ns renderer.tool.impl.base.transform.core
   (:require
+   ["@radix-ui/react-tooltip" :as Tooltip]
    [malli.core :as m]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
@@ -29,6 +30,23 @@
 
 (hierarchy/derive! ::transform ::tool.hierarchy/tool)
 
+(defn radio-button
+  [{:keys [icon active? label event]}]
+  [:> Tooltip/Root
+   [:> Tooltip/Trigger
+    {:as-child true}
+    [:span
+     [views/radio-icon-button icon active?
+      {:aria-label (i18n.views/t label)
+       :on-click #(rf/dispatch event)}]]]
+   [:> Tooltip/Portal
+    [:> Tooltip/Content
+     {:class "tooltip-content"
+      :sideOffset 5
+      :side "top"
+      :on-escape-key-down #(.stopPropagation %)}
+     (i18n.views/t label)]]])
+
 (defmethod tool.hierarchy/tool-options ::transform
   []
   (let [ratio-locked? @(rf/subscribe [::document.subs/attr :lock-ratio])
@@ -36,27 +54,24 @@
         scale-in-place? @(rf/subscribe [::document.subs/attr :scale-in-place])
         select-intersecting? @(rf/subscribe [::document.subs/attr
                                              :select-intersecting])]
-    [:<>
-     [views/radio-icon-button "aspect-ratio" ratio-locked?
-      {:title (i18n.views/t [::lock-aspect-ratio "Lock aspect ratio"])
-       :on-click #(rf/dispatch [::document.events/toggle-attr
-                                :lock-ratio])}]
-
-     [views/radio-icon-button "scale-children" scale-children?
-      {:title (i18n.views/t [::scale-children "Scale children"])
-       :on-click #(rf/dispatch [::document.events/toggle-attr
-                                :scale-children])}]
-
-     [views/radio-icon-button "in-place" scale-in-place?
-      {:title (i18n.views/t [::scale-in-place "Scale in place"])
-       :on-click #(rf/dispatch [::document.events/toggle-attr
-                                :scale-in-place])}]
-
-     [views/radio-icon-button "intersect" select-intersecting?
-      {:title (i18n.views/t [::select-intersecting-elements
-                             "Select intersecting elements"])
-       :on-click #(rf/dispatch [::document.events/toggle-attr
-                                :select-intersecting])}]]))
+    (->> [{:icon "aspect-ratio"
+           :active? ratio-locked?
+           :label [::lock-aspect-ratio "Lock aspect ratio"]
+           :event [::document.events/toggle-attr :lock-ratio]}
+          {:icon "scale-children"
+           :active? scale-children?
+           :label [::scale-children "Scale children"]
+           :event [::document.events/toggle-attr :scale-children]}
+          {:icon "in-place"
+           :active? scale-in-place?
+           :label [::scale-in-place "Scale in place"]
+           :event [::document.events/toggle-attr :scale-in-place]}
+          {:icon "intersect"
+           :active? select-intersecting?
+           :label [::select-intersecting "Select intersecting elements"]
+           :event [::document.events/toggle-attr :select-intersecting]}]
+         (map radio-button)
+         (into [:<>]))))
 
 (defmethod tool.hierarchy/on-deactivate ::transform
   [db]
