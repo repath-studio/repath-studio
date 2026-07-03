@@ -2,6 +2,7 @@
   (:require
    [malli.core :as m]
    [renderer.app.db :refer [App]]
+   [renderer.document.handlers :as document.handlers]
    [renderer.element.db :refer [Element]]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
@@ -52,7 +53,9 @@
 (defn reduce-by-area
   [db e f]
   (let [{:keys [alt-key]} e
-        intersecting? (or alt-key (input.handlers/multi-touch? db))]
+        select-intersecting (document.handlers/attr db :select-intersecting)
+        multi-touch? (input.handlers/multi-touch? db)
+        intersecting? (or alt-key select-intersecting multi-touch?)]
     (transduce (comp (element.handlers/visible)
                      (filter (partial hovered? db intersecting?))
                      (map :id))

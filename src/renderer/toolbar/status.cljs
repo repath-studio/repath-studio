@@ -2,7 +2,6 @@
   (:require
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
    ["@radix-ui/react-popover" :as Popover]
-   ["@radix-ui/react-tooltip" :as Tooltip]
    ["@repath-studio/react-color" :refer [ChromePicker PhotoshopPicker]]
    [re-frame.core :as rf]
    [renderer.action.views :as action.views]
@@ -111,27 +110,6 @@
 
    [zoom-menu]])
 
-(defn radio-button
-  [{:keys [icon class]
-    :as action}]
-  [:> Tooltip/Root
-   [:> Tooltip/Trigger
-    {:as-child true}
-    [:span
-     [views/radio-icon-button icon (action.views/checked? action)
-      {:class class
-       :aria-label (action.views/label action)
-       :on-click (action.views/dispatch action)}]]]
-   [:> Tooltip/Portal
-    [:> Tooltip/Content
-     {:class "tooltip-content"
-      :sideOffset 5
-      :side "top"
-      :on-escape-key-down #(.stopPropagation %)}
-     [:div.flex.gap-2.items-center
-      [action.views/label action]
-      [views/shortcuts action]]]]])
-
 (defn color-picker
   [props & children]
   (let [sm? @(rf/subscribe [::window.subs/sm?])]
@@ -205,8 +183,8 @@
      [:div.grow.hidden.md:block]
      (->> [:view/toggle-grid
            :view/toggle-rulers]
-          (map action.views/deref-action)
-          (map radio-button)
+          (map (comp views/tooltip-action-icon-button
+                     action.views/deref-action))
           (into [:<>]))
      [snap.views/root]
      [zoom-button-group zoom]

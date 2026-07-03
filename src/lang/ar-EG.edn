@@ -543,7 +543,10 @@
  :renderer.tool.impl.base.transform.core
  {:label "تحويل"
   :pivot-point "نقطة الارتكاز"
-  :lock-aspect-ratio "قفل نسبة الأبعاد"}
+  :lock-aspect-ratio "قفل نسبة الأبعاد"
+  :scale-children "تحجيم العناصر الفرعية"
+  :scale-in-place "تحجيم في المكان"
+  :select-intersecting "تحديد العناصر المتقاطعة"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "اضغط %1 لتقييد الاتجاه. أو حرر %2 للتحريك"]

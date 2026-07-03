@@ -581,7 +581,10 @@
  :renderer.tool.impl.base.transform.core
  {:label "Transformeren"
   :pivot-point "draaipunt"
-  :lock-aspect-ratio "Beeldverhouding vergrendelen"}
+  :lock-aspect-ratio "Beeldverhouding vergrendelen"
+  :scale-children "Kinderen schalen"
+  :scale-in-place "Schalen op locatie"
+  :select-intersecting "Snijdende elementen selecteren"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Houd %1 ingedrukt om richting te beperken. of laat %2 los om

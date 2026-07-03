@@ -1,39 +1,13 @@
 (ns renderer.toolbar.views
   (:require
-   ["@radix-ui/react-tooltip" :as Tooltip]
-   [renderer.action.views :as action.views]
+   [renderer.utils.extra :refer [rpartial]]
    [renderer.views :as views]))
-
-(defn button
-  [action]
-  [:> Tooltip/Root
-   [:> Tooltip/Trigger
-    {:as-child true}
-    [:span
-     [views/action-icon-button action]]]
-   [:> Tooltip/Portal
-    [:> Tooltip/Content
-     {:class "tooltip-content"
-      :side "left"
-      :sideOffset 5
-      :on-escape-key-down #(.stopPropagation %)}
-     [:div.flex.gap-2.items-center
-      [action.views/label action]
-      [views/shortcuts action]]]]])
-
-(defn button-group
-  [action-group]
-  (->> action-group
-       action.views/deref-action-group
-       :actions
-       (map button)
-       (into [:<>])))
 
 (defn action-toolbar
   [{:keys [actions orientation]} & more]
   (let [vertical? (= orientation :vertical)]
     (->> actions
-         (map button-group)
+         (map (rpartial views/action-button-group :side "left"))
          (interpose [:span {:class (if vertical? "h-divider" "v-divider")}])
          (into [:<>])
          (conj more)

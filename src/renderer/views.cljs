@@ -10,6 +10,7 @@
    ["@radix-ui/react-select" :as Select]
    ["@radix-ui/react-slider" :as Slider]
    ["@radix-ui/react-switch" :as Switch]
+   ["@radix-ui/react-tooltip" :as Tooltip]
    ["codemirror" :as codemirror]
    ["codemirror/addon/display/placeholder.js"]
    ["codemirror/addon/hint/css-hint.js"]
@@ -24,6 +25,7 @@
    [renderer.action.views :as action.views]
    [renderer.i18n.views :as i18n.views]
    [renderer.icon.views :as icon.views]
+   [renderer.utils.extra :refer [rpartial]]
    [renderer.utils.key :as utils.key]))
 
 (defn merge-with-class
@@ -124,7 +126,7 @@
           (:altKey shortcut)
           (conj "Alt")
 
-          :always
+          (:keyCode shortcut)
           (conj (utils.key/code->key (:keyCode shortcut))))))
 
 (defn shortcuts
@@ -142,6 +144,37 @@
   [icon-button icon-name
    (merge-with-class {:class ["active:overlay" (when active "accent")]}
                      props)])
+
+(defn tooltip-action-icon-button
+  [action & {:as content-props}]
+  [:> Tooltip/Root
+   [:> Tooltip/Trigger
+    {:as-child true}
+    [:span
+     (if (:active action)
+       [radio-icon-button (:icon action) (action.views/checked? action)
+        {:class (:class action)
+         :aria-label (action.views/label action)
+         :on-click (action.views/dispatch action)}]
+       [action-icon-button action])]]
+   [:> Tooltip/Portal
+    [:> Tooltip/Content
+     (merge {:class "tooltip-content pointer-events-none"
+             :sideOffset 5
+             :side "top"
+             :on-escape-key-down #(.stopPropagation %)}
+            content-props)
+     [:div.flex.gap-2.items-center
+      [action.views/label action]
+      [shortcuts action]]]]])
+
+(defn action-button-group
+  [action-group & {:as content-props}]
+  (->> action-group
+       action.views/deref-action-group
+       :actions
+       (map (rpartial tooltip-action-icon-button content-props))
+       (into [:<>])))
 
 (defn context-menu-item
   [action]
