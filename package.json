@@ -173,5 +173,12 @@
   "overrides": {
     "react": "19.2.7",
     "react-dom": "19.2.7"
+  },
+  "allowScripts": {
+    "@parcel/watcher@2.5.1": true,
+    "@sentry/capacitor@4.2.0": true,
+    "@sentry/cli@3.6.0": true,
+    "electron-winstaller@5.4.0": true,
+    "puppeteer@25.2.1": true
   }
 }
