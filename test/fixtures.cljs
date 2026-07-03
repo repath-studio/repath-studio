@@ -11,6 +11,7 @@
    [renderer.error.effects :as-alias error.effects]
    [renderer.i18n.effects :as-alias i18n.effects]
    [renderer.input.events :as-alias input.events]
+   [renderer.reepl.effects :as-alias reepl.effects]
    [renderer.theme.effects :as-alias theme.effects]
    [renderer.utils.element :as utils.element]
    [renderer.window.effects :as-alias window.effects]))
@@ -201,4 +202,8 @@
 
 (rf/reg-event-db
  ::input.events/keyboard
+ (fn [_]))
+
+(rf/reg-fx
+ ::reepl.effects/init
  (fn [_]))
