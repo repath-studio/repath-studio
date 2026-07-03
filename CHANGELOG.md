@@ -1,6 +1,6 @@
 # Changelog
 
-All notable user facing changes to this project will be documented in this file.
+All notable user facing changes to this project will be documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## 0.4.16 (2026-06-19)
