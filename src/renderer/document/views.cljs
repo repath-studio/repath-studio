@@ -14,6 +14,7 @@
    [renderer.i18n.views :as i18n.views]
    [renderer.panel.subs :as-alias panel.subs]
    [renderer.utils.dom :as utils.dom]
+   [renderer.utils.extra :refer [rpartial]]
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]))
 
@@ -22,18 +23,16 @@
   (let [undos @(rf/subscribe [::history.subs/undos])
         redos @(rf/subscribe [::history.subs/redos])
         md? @(rf/subscribe [::window.subs/md?])
-        new-action (action.views/deref-action :document/new)
-        open-action (action.views/deref-action :document/open)
-        save-action (action.views/deref-action :document/save)
-        download-action (action.views/deref-action :document/download)
         undo-action (action.views/deref-action :history/undo)
         redo-action (action.views/deref-action :history/redo)]
     [views/toolbar
 
-     (->> [new-action
-           open-action
-           (or save-action download-action)]
-          (map #(views/action-icon-button % :title (action.views/label %)))
+     (->> [:document/new
+           :document/open
+           :document/save
+           :document/download]
+          (keep action.views/deref-action)
+          (keep (rpartial views/tooltip-action-icon-button :side "bottom"))
           (into [:<>]))
 
      [:span.v-divider]
