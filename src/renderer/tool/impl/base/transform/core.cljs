@@ -52,7 +52,7 @@
        :on-click #(rf/dispatch [::document.events/toggle-attr
                                 :scale-in-place])}]
 
-     [views/radio-icon-button "divide" select-intersecting?
+     [views/radio-icon-button "intersect" select-intersecting?
       {:title (i18n.views/t [::select-intersecting-elements
                              "Select intersecting elements"])
        :on-click #(rf/dispatch [::document.events/toggle-attr
