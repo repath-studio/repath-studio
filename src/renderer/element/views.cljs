@@ -10,9 +10,8 @@
 (defn ghost-element
   "Renders a ghost element on top of the actual element to ensure that the user
    can interact with it."
-  [el]
+  [el pointer-handler]
   (let [{:keys [attrs tag content]} el
-        pointer-handler (partial input.impl.pointer/handler! el)
         handle-size @(rf/subscribe [::document.subs/handle-size])]
     [tag (merge (dissoc attrs :style)
                 {:on-pointer-up pointer-handler
@@ -50,16 +49,20 @@
       :reagent-render
       (fn
         [el child-els idle]
-        (let [{:keys [attrs tag title content]} el]
+        (let [{:keys [attrs tag title content]} el
+              pointer-handler (partial input.impl.pointer/handler! el)]
           [:<>
            [tag (-> attrs
                     (dissoc :style)
                     (assoc :shape-rendering "geometricPrecision"
-                           :ref ref))
+                           :ref ref
+                           :on-pointer-up pointer-handler
+                           :on-pointer-down pointer-handler
+                           :on-pointer-move pointer-handler))
             (when title [:title title])
             content
             (for [child child-els]
               ^{:key (:id child)}
               [element.hierarchy/render child])]
 
-           (when idle [ghost-element el])]))})))
+           (when idle [ghost-element el pointer-handler])]))})))
