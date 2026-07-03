@@ -240,6 +240,10 @@
                       js-cm-opts)))]
 
           (reset! cm inst)
+          (.on inst "blur"
+               (fn []
+                 (reset! complete-atom nil)))
+
           (.on inst "change"
                (fn []
                  (let [value (.getValue inst)]
@@ -250,7 +254,10 @@
                (fn [inst evt]
                  (.stopPropagation evt)
                  (if (cancel-keys (.-keyCode evt))
-                   (reset! complete-atom nil)
+                   (if @complete-atom
+                     (reset! complete-atom nil)
+                     (some-> (.-activeElement js/document)
+                             (.blur)))
                    (if (cmp-show (.-keyCode evt))
                      (swap! complete-atom assoc :show-all false)
                      (when-not (cmp-ignore (.-keyCode evt))
@@ -289,9 +296,7 @@
                                    (should-go-down source inst))
                           (.preventDefault evt)
                           (on-down)))
-                   ;; escape
-                   27 (some-> (.-activeElement js/document)
-                              (.blur))
+
                    :none)))
           (when on-cm-init
             (on-cm-init inst))))
