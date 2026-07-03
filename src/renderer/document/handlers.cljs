@@ -9,11 +9,15 @@
     :as document.db
     :refer [Document DocumentAttrs DocumentId DocumentTitle PersistedDocument
             RecentDocument]]
+   [renderer.document.migrations :as document.migrations]
    [renderer.element.db :refer [ElementId]]
    [renderer.element.handlers :as element.handlers]
    [renderer.frame.handlers :as frame.handlers]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.db :refer [HandleId]]
+   [renderer.utils.compatibility
+    :as utils.compatibility
+    :refer [SemanticVersion]]
    [renderer.utils.element :as utils.element]
    [renderer.utils.vec :as utils.vec]))
 
@@ -259,3 +263,16 @@
   (->> (:recent db)
        (filter #(not (open? db (:id %))))
        (reverse)))
+
+(m/=> migrate [:function
+               [:-> map? map?]
+               [:-> map? [:tuple SemanticVersion ifn?] map?]])
+(defn migrate
+  ([document]
+   (reduce migrate document document.migrations/migrations))
+  ([document [version f]]
+   (let [current-version (utils.compatibility/version->vec (:version document))]
+     (cond-> document
+       (:or (not (:version document))
+            (utils.compatibility/requires-migration? current-version version))
+       f))))
