@@ -755,8 +755,10 @@
   [db ratio pivot-point recursive]
   (let [ratio (mapv #(if (or (infinite? %) (js/isNaN %)) 1 %) ratio)
         top-ids (top-ancestor-ids db)
-        ids-to-scale (cond-> (selected-ids db)
-                       recursive (set/union (descendant-ids db)))
+        ids-to-scale (cond->> (selected-ids db)
+                       recursive (set/union (descendant-ids db))
+                       :always (remove #(-> (entity db %)
+                                            (utils.element/top-level?))))
         origins (->> ids-to-scale
                      (keep (fn [id]
                              (when-let [bb (:bbox (entity db id))]
