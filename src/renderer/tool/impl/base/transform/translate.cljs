@@ -35,7 +35,7 @@
   [db id hovered-svg container-el]
   (cond-> db
     :always
-    (element.handlers/set-parent (:id hovered-svg))
+    (element.handlers/set-parent id (:id hovered-svg))
 
     (:bbox container-el)
     (element.handlers/translate id (start-point container-el))
@@ -47,15 +47,14 @@
 (defn translate-el
   [db id {:keys [offset hovered-svg auto-parent]}]
   (let [el (element.handlers/entity db id)
-        container-el (element.handlers/parent-container db id)
-        parent-el (element.handlers/parent db id)]
+        container-el (element.handlers/parent-container db id)]
     (cond-> db
       :always
       (element.handlers/translate id offset)
 
       (and auto-parent
-           (not= (:id parent-el) (:id hovered-svg))
-           (not (utils.element/svg? el)))
+           (not (utils.element/svg? el))
+           (not (utils.element/top-level? el)))
       (swap-parent id hovered-svg container-el))))
 
 (m/=> direction [:-> Vec2 Orientation])
@@ -72,19 +71,19 @@
   (let [[offset-x offset-y] offset
         axis (when lock-direction? (direction offset))
         hovered-svg (element.handlers/hovered-svg db)
-        selected-els (element.handlers/selected db)
+        top-ancestor-ids (element.handlers/top-ancestor-ids db)
+        parent-ids (element.handlers/parent-ids db)
+        parent-el (element.handlers/entity db (first parent-ids))
         auto-parent? (and (contains? #{:translate :clone} (:state db))
-                          (seq selected-els)
-                          (empty? (rest selected-els))
-                          (not (utils.element/top-level? (first selected-els)))
-                          (->> selected-els first :id
-                               (element.handlers/parent db)
-                               (utils.element/container?)))
+                          (not= (:id parent-el) (:id hovered-svg))
+                          (not (next parent-ids))
+                          (not= (:id parent-el) (:id hovered-svg))
+                          (utils.element/container? parent-el))
         offset (case axis
                  :vertical [offset-x 0]
                  :horizontal [0 offset-y]
                  offset)]
-    (->> (element.handlers/top-ancestor-ids db)
+    (->> top-ancestor-ids
          (reduce (rpartial translate-el {:offset offset
                                          :hovered-svg hovered-svg
                                          :auto-parent auto-parent?}) db))))
