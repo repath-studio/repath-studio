@@ -31,10 +31,32 @@
 
 (defmethod tool.hierarchy/tool-options ::transform
   []
-  (let [ratio-locked? @(rf/subscribe [::document.subs/attr :lock-ratio])]
-    [views/radio-icon-button "aspect-ratio" ratio-locked?
-     {:title (i18n.views/t [::lock-aspect-ratio "Lock aspect ratio"])
-      :on-click #(rf/dispatch [::document.events/toggle-attr :lock-ratio])}]))
+  (let [ratio-locked? @(rf/subscribe [::document.subs/attr :lock-ratio])
+        scale-children? @(rf/subscribe [::document.subs/attr :scale-children])
+        scale-in-place? @(rf/subscribe [::document.subs/attr :scale-in-place])
+        select-intersecting? @(rf/subscribe [::document.subs/attr
+                                             :select-intersecting])]
+    [:<>
+     [views/radio-icon-button "aspect-ratio" ratio-locked?
+      {:title (i18n.views/t [::lock-aspect-ratio "Lock aspect ratio"])
+       :on-click #(rf/dispatch [::document.events/toggle-attr
+                                :lock-ratio])}]
+
+     [views/radio-icon-button "scale-children" scale-children?
+      {:title (i18n.views/t [::scale-children "Scale children"])
+       :on-click #(rf/dispatch [::document.events/toggle-attr
+                                :scale-children])}]
+
+     [views/radio-icon-button "in-place" scale-in-place?
+      {:title (i18n.views/t [::scale-in-place "Scale in place"])
+       :on-click #(rf/dispatch [::document.events/toggle-attr
+                                :scale-in-place])}]
+
+     [views/radio-icon-button "divide" select-intersecting?
+      {:title (i18n.views/t [::select-intersecting-elements
+                             "Select intersecting elements"])
+       :on-click #(rf/dispatch [::document.events/toggle-attr
+                                :select-intersecting])}]]))
 
 (defmethod tool.hierarchy/on-deactivate ::transform
   [db]
