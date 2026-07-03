@@ -140,14 +140,16 @@
   (let [{:keys [shift-key alt-key]} e
         delta (tool.handlers/pointer-delta db)
         selected-elements (element.handlers/selected db)
-        locked? (every? :locked selected-elements)]
+        locked? (every? :locked selected-elements)
+        scale-in-place? (document.handlers/attr db :scale-in-place)
+        scale-children? (document.handlers/attr db :scale-children)]
     (-> db
         (history.handlers/reset-state)
         (tool.handlers/set-cursor (if locked? "not-allowed" "default"))
         (scale (matrix/add delta (snap.handlers/nearest-delta db))
                {:ratio-locked (ratio-locked? db e)
-                :in-place shift-key
-                :recursive alt-key}))))
+                :in-place (or shift-key scale-in-place?)
+                :recursive (or alt-key scale-children?)}))))
 
 (defmethod tool.hierarchy/on-drag-end [::transform/transform :scale]
   [db e]

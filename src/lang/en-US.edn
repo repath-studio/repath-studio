@@ -556,7 +556,10 @@
  :renderer.tool.impl.base.transform.core
  {:label "Transform"
   :pivot-point "pivot point"
-  :lock-aspect-ratio "Lock aspect ratio"}
+  :lock-aspect-ratio "Lock aspect ratio"
+  :scale-children "Scale children"
+  :scale-in-place "Scale in place"
+  :select-intersecting "Select intersecting elements"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Hold %1 to restrict direction. or release %2 to move"]
