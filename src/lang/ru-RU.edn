@@ -563,7 +563,10 @@
  :renderer.tool.impl.base.transform.core
  {:label "Трансформация"
   :pivot-point "точка поворота"
-  :lock-aspect-ratio "Заблокировать соотношение сторон"}
+  :lock-aspect-ratio "Заблокировать соотношение сторон"
+  :scale-children "Масштабировать дочерние элементы"
+  :scale-in-place "Масштабировать на месте"
+  :select-intersecting "Выбрать пересекающиеся элементы"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Удерживайте %1 для ограничения направления. или отпустите %2

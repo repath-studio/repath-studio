@@ -528,7 +528,10 @@
  :renderer.tool.impl.base.transform.core
  {:label "変形"
   :pivot-point "ピボットポイント"
-  :lock-aspect-ratio "アスペクト比を固定"}
+  :lock-aspect-ratio "アスペクト比を固定"
+  :scale-children "子要素をスケール"
+  :scale-in-place "その場でスケール"
+  :select-intersecting "交差する要素を選択"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "%1を押しながら方向を制限。または%2を離して移動"]
