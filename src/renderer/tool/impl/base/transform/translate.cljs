@@ -77,7 +77,6 @@
         auto-parent? (and (contains? #{:translate :clone} (:state db))
                           (not= (:id parent-el) (:id hovered-svg))
                           (not (next parent-ids))
-                          (not= (:id parent-el) (:id hovered-svg))
                           (utils.element/container? parent-el))
         offset (case axis
                  :vertical [offset-x 0]
