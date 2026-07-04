@@ -87,7 +87,6 @@
     (segment-point segment :end-point)))
 
 (m/=> outgoing-cp [:-> [:maybe PathSegment] [:maybe Vec2]])
-(m/=> outgoing-cp [:-> [:maybe PathSegment] [:maybe Vec2]])
 (defn outgoing-cp
   "Returns the outgoing control point.
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/d#cubic_b%C3%A9zier_curve"
