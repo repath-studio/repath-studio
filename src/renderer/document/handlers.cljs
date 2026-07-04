@@ -271,8 +271,8 @@
   ([document]
    (reduce migrate document document.migrations/migrations))
   ([document [version f]]
-   (let [current-version (utils.compatibility/version->vec (:version document))]
-     (cond-> document
-       (or (not (:version document))
-           (utils.compatibility/requires-migration? current-version version))
-       f))))
+   (cond-> document
+     (or (not (:version document))
+         (-> (utils.compatibility/version->vec (:version document))
+             (utils.compatibility/requires-migration? version)))
+     f)))
