@@ -273,6 +273,6 @@
   ([document [version f]]
    (let [current-version (utils.compatibility/version->vec (:version document))]
      (cond-> document
-       (:or (not (:version document))
-            (utils.compatibility/requires-migration? current-version version))
+       (or (not (:version document))
+           (utils.compatibility/requires-migration? current-version version))
        f))))
