@@ -292,7 +292,7 @@
                     [:-> App ElementId [:sequential ElementId]]])
 (defn ancestor-ids
   ([db]
-   (reduce #(concat %1 (ancestor-ids db %2)) [] (selected-ids db)))
+   (reduce #(into %1 (ancestor-ids db %2)) [] (selected-ids db)))
   ([db id]
    (loop [parent-id (:parent (entity db id))
           ids []]
