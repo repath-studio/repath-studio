@@ -615,7 +615,11 @@
 
  :renderer.tool.impl.draw.brush
  {:label "Pincel"
-  :draw-brush "Desenhar com pincel"}
+  :draw-brush "Pincelar"
+  :brush-size "Tamanho do pincel"
+  :drag-to-draw [:div "Clique e arraste para pincelar."]
+  :hold-ctrl-to-adjust-size [:div "Segure %1 para ajustar o tamanho do
+                                   pincel."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Caneta"

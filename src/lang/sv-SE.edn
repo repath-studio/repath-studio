@@ -618,7 +618,11 @@
 
  :renderer.tool.impl.draw.brush
  {:label "Pensel"
-  :draw-brush "Rita pensel"}
+  :draw-brush "Pensla"
+  :brush-size "Penselstorlek"
+  :drag-to-draw [:div "Klicka och dra för att pensla."]
+  :hold-ctrl-to-adjust-size [:div "Håll %1 intryckt för att justera
+                                   penselstorlek."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Penna"

@@ -604,7 +604,10 @@
 
  :renderer.tool.impl.draw.brush
  {:label "Brush"
-  :draw-brush "Draw brush"}
+  :draw-brush "Brush"
+  :brush-size "Brush size"
+  :drag-to-draw [:div "Click and drag to brush."]
+  :hold-ctrl-to-adjust-size [:div "Hold %1 to adjust the brush size."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Pen"

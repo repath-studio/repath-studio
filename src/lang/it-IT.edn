@@ -632,7 +632,11 @@
 
  :renderer.tool.impl.draw.brush
  {:label "Pennello"
-  :draw-brush "Disegna pennello"}
+  :draw-brush "Pennellare"
+  :brush-size "Dimensione del pennello"
+  :drag-to-draw [:div "Fai clic e trascina per pennellare."]
+  :hold-ctrl-to-adjust-size [:div "Tieni premuto %1 per regolare la dimensione
+                                   del pennello."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Penna"

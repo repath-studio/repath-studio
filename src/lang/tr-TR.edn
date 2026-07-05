@@ -611,7 +611,11 @@
 
  :renderer.tool.impl.draw.brush
  {:label "Fırça"
-  :draw-brush "Fırça çiz"}
+  :draw-brush "Fırçala"
+  :brush-size "Fırça boyutu"
+  :drag-to-draw [:div "Fırçalamak için tıklayın ve sürükleyin."]
+  :hold-ctrl-to-adjust-size [:div "Fırça boyutunu ayarlamak için %1 tuşunu
+                                   basılı tutun."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Kalem"

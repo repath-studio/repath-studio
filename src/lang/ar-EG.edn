@@ -591,7 +591,10 @@
 
  :renderer.tool.impl.draw.brush
  {:label "فرشاة"
-  :draw-brush "رسم بالفرشاة"}
+  :draw-brush "رسم بالفرشاة"
+  :brush-size "حجم الفرشاة"
+  :drag-to-draw [:div "انقر واسحب للرسم بالفرشاة."]
+  :hold-ctrl-to-adjust-size [:div "اضغط مع الاستمرار على %1 لضبط حجم الفرشاة."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "قلم"
