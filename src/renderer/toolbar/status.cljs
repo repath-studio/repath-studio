@@ -139,7 +139,7 @@
      {:class "gap-0.5"}
      [color-picker
       {:color fill
-       :on-change-complete #(rf/dispatch [::element.events/set-attr :fill
+       :on-change-complete #(rf/dispatch [::document.events/set-attr :fill
                                           (get-hex %)])
        :on-change #(rf/dispatch [::document.events/preview-attr :fill
                                  (get-hex %)])}
@@ -156,7 +156,7 @@
 
      [color-picker
       {:color stroke
-       :on-change-complete #(rf/dispatch [::element.events/set-attr
+       :on-change-complete #(rf/dispatch [::document.events/set-attr
                                           :stroke
                                           (get-hex %)])
        :on-change #(rf/dispatch [::document.events/preview-attr
