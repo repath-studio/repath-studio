@@ -63,11 +63,11 @@
 (m/=> contained-point? [:-> BBox Vec2 boolean?])
 (defn contained-point?
   "Tests whether the provided bounding box contains a point."
-  [[min-x min-y max-x b-max-y] [x y]]
+  [[min-x min-y max-x max-y] [x y]]
   (and (<= min-x x)
        (<= min-y y)
        (>= max-x x)
-       (>= b-max-y y)))
+       (>= max-y y)))
 
 (m/=> ->snapping-points [:-> BBox SnapOptions [:* Vec2]])
 (defn ->snapping-points
