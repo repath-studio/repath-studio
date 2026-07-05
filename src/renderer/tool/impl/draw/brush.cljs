@@ -7,16 +7,20 @@
    [reagent.core :as reagent]
    [renderer.action.events :as-alias action.events]
    [renderer.app.handlers :as app.handlers]
+   [renderer.document.events :as-alias document.events]
    [renderer.document.handlers :as document.handlers]
+   [renderer.document.subs :as-alias document.subs]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
+   [renderer.i18n.views :as i18n.views]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
-   [renderer.utils.key :as utils.key]))
+   [renderer.utils.key :as utils.key]
+   [renderer.views :as views]))
 
 (hierarchy/derive! ::brush ::tool.hierarchy/draw)
 
@@ -27,12 +31,30 @@
  (fn [value]
    (reset! brush value)))
 
+(defmethod tool.hierarchy/tool-options ::brush
+  []
+  (let [brush-size @(rf/subscribe [::document.subs/attr :brush-size])]
+    [:div.flex.items-center.gap-2
+     [:span
+      brush-size]
+     [views/slider
+      {:min 1
+       :max 100
+       :step 1
+       :title (i18n.views/t [::brush-size "Brush Size"])
+       :value [brush-size]
+       :class "w-32"
+       :on-value-change (fn [[v]]
+                          (rf/dispatch [::document.events/set-attr
+                                        :brush-size v]))}]]))
+
 (defmethod tool.hierarchy/on-pointer-move [::brush :idle]
   [db e]
-  (let [[x y] (:adjusted-pointer-pos db)
+  (let [brush-size (document.handlers/attr db :brush-size)
+        [x y] (:adjusted-pointer-pos db)
         pressure (:pressure e)
         pressure (if (zero? pressure) 1 pressure)
-        r (* (/ 16 2) pressure)
+        r (* (/ brush-size 2) pressure)
         fill (document.handlers/attr db :fill)]
     (app.handlers/add-fx db [::set-brush {:type :element
                                           :tag :circle
@@ -43,7 +65,8 @@
 
 (defmethod tool.hierarchy/on-drag-start [::brush :idle]
   [db e]
-  (let [point (string/join " " (conj (:adjusted-pointer-pos db) (:pressure e)))
+  (let [brush-size (document.handlers/attr db :brush-size)
+        point (string/join " " (conj (:adjusted-pointer-pos db) (:pressure e)))
         fill (document.handlers/attr db :fill)]
     (-> db
         (tool.handlers/set-state :create)
@@ -51,7 +74,7 @@
                                :tag :brush
                                :attrs {:points point
                                        :fill fill
-                                       :size 16
+                                       :size brush-size
                                        :thinning 0.5
                                        :smoothing 0.5
                                        :streamline 0.5}}))))
