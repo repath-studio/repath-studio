@@ -34,8 +34,7 @@
                :icon "aspect-ratio"
                :event [::document.events/toggle-attr :lock-ratio]
                :active [::document.subs/attr :lock-ratio]
-               :enabled [::tool.subs/active? ::transform]
-               :shortcuts [{:ctrlKey true}]}])
+               :enabled [::tool.subs/active? ::transform]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :transform/toggle-scale-children
@@ -43,8 +42,7 @@
                :icon "scale-children"
                :event [::document.events/toggle-attr :scale-children]
                :active [::document.subs/attr :scale-children]
-               :enabled [::tool.subs/active? ::transform]
-               :shortcuts [{:altKey true}]}])
+               :enabled [::tool.subs/active? ::transform]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :transform/toggle-scale-in-place
@@ -52,8 +50,7 @@
                :icon "in-place"
                :event [::document.events/toggle-attr :scale-in-place]
                :active [::document.subs/attr :scale-in-place]
-               :enabled [::tool.subs/active? ::transform]
-               :shortcuts [{:shiftKey true}]}])
+               :enabled [::tool.subs/active? ::transform]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :transform/toggle-select-intersecting
@@ -61,8 +58,7 @@
                :icon "intersect"
                :event [::document.events/toggle-attr :select-intersecting]
                :active [::document.subs/attr :select-intersecting]
-               :enabled [::tool.subs/active? ::transform]
-               :shortcuts [{:altKey true}]}])
+               :enabled [::tool.subs/active? ::transform]}])
 
 (rf/dispatch [::action.events/register-action-group
               {:id :transform/options
