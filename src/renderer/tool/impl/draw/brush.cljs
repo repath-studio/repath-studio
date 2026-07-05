@@ -51,8 +51,9 @@
 (defmethod tool.hierarchy/help [::brush :idle]
   []
   [:<>
-   (i18n.views/t [::idle-draw [:div "Click and drag to draw."]])
-   (i18n.views/t [::idle-hold [:div "Hold %1 to adjust brush size."]]
+   (i18n.views/t [::drag-to-draw [:div "Click and drag to brush."]])
+   (i18n.views/t [::hold-ctrl-to-adjust-size
+                  [:div "Hold %1 to adjust the brush size."]]
                  [[views/kbd "Ctrl"]])])
 
 (defmethod tool.hierarchy/tool-options ::brush
@@ -65,7 +66,7 @@
       {:min min-size
        :max max-size
        :step 1
-       :title (i18n.views/t [::brush-size "Brush Size"])
+       :title (i18n.views/t [::brush-size "Brush size"])
        :value [brush-size]
        :class "w-32"
        :on-value-change (fn [[v]]
@@ -135,7 +136,7 @@
 (defmethod tool.hierarchy/on-drag-end [::brush :create]
   [db e]
   (-> db
-      (history.handlers/finalize (:timestamp e) [::draw-brush "Draw brush"])
+      (history.handlers/finalize (:timestamp e) [::draw-brush "Brush"])
       (tool.handlers/deactivate)))
 
 (defmethod tool.hierarchy/render ::brush
