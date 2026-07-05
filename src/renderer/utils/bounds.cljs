@@ -53,7 +53,7 @@
 
 (m/=> contained? [:-> BBox BBox boolean?])
 (defn contained?
-  "Tests whether `bounds-a` fully contain `bounds-b`."
+  "Tests whether `bounds-a` is fully contained by `bounds-b`."
   [[a-min-x a-min-y a-max-x a-max-y] [b-min-x b-min-y b-max-x b-max-y]]
   (and (> a-min-x b-min-x)
        (> a-min-y b-min-y)
