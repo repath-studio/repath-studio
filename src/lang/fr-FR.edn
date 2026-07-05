@@ -627,7 +627,11 @@
 
  :renderer.tool.impl.draw.brush
  {:label "Pinceau"
-  :draw-brush "Dessiner au pinceau"}
+  :draw-brush "Brosser"
+  :brush-size "Taille du pinceau"
+  :drag-to-draw [:div "Cliquez et faites glisser pour brosser."]
+  :hold-ctrl-to-adjust-size [:div "Maintenez %1 pour ajuster la taille du
+                                   pinceau."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Stylo"

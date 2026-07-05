@@ -636,7 +636,11 @@
 
  :renderer.tool.impl.draw.brush
  {:label "Pinsel"
-  :draw-brush "Mit Pinsel zeichnen"}
+  :draw-brush "Pinseln"
+  :brush-size "Pinselgröße"
+  :drag-to-draw [:div "Klicken und ziehen zum Pinseln."]
+  :hold-ctrl-to-adjust-size [:div "Halten Sie %1 gedrückt, um die Pinselgröße
+                                   anzupassen."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Stift"

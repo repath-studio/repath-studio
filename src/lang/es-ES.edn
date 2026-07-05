@@ -620,7 +620,11 @@
 
  :renderer.tool.impl.draw.brush
  {:label "Pincel"
-  :draw-brush "Dibujar con pincel"}
+  :draw-brush "Pincelar"
+  :brush-size "Tamaño del pincel"
+  :drag-to-draw [:div "Haz clic y arrastra para pincelar."]
+  :hold-ctrl-to-adjust-size [:div "Mantén %1 para ajustar el tamaño del
+                                   pincel."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Pluma"

@@ -537,7 +537,10 @@
 
  :renderer.tool.impl.draw.brush
  {:label "画笔"
-  :draw-brush "画笔绘制"}
+  :draw-brush "用画笔绘制"
+  :brush-size "画笔大小"
+  :drag-to-draw [:div "单击并拖动以使用画笔。"]
+  :hold-ctrl-to-adjust-size [:div "按住 %1 调整画笔大小。"]}
 
  :renderer.tool.impl.draw.pencil
  {:label "钢笔"

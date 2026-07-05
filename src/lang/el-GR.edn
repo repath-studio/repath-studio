@@ -640,7 +640,11 @@
 
  :renderer.tool.impl.draw.brush
  {:label "Πινέλο"
-  :draw-brush "Πινέλο σχεδίασης"}
+  :draw-brush "Βούρτσισμα"
+  :brush-size "Μέγεθος πινέλου"
+  :drag-to-draw [:div "Κάντε κλικ και σύρετε για να πινελίσετε."]
+  :hold-ctrl-to-adjust-size [:div "Κρατήστε %1 για να ρυθμίσετε το μέγεθος του
+                                   πινέλου."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Στυλό"

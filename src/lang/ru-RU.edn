@@ -616,7 +616,11 @@
 
  :renderer.tool.impl.draw.brush
  {:label "Кисть"
-  :draw-brush "Рисовать кистью"}
+  :draw-brush "Рисовать кистью"
+  :brush-size "Размер кисти"
+  :drag-to-draw [:div "Нажмите и перетащите для рисования кистью."]
+  :hold-ctrl-to-adjust-size [:div "Удерживайте %1, чтобы изменить размер
+                                   кисти."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Перо"

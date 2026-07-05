@@ -70,6 +70,7 @@
 
 (rf/reg-event-db
  ::set-attr
+ [persist]
  (fn [db [_ k v]]
    (document.handlers/assoc-attr db k v)))
 
@@ -82,9 +83,7 @@
 (rf/reg-event-db
  ::preview-attr
  (fn [db [_ k v]]
-   (-> db
-       (document.handlers/assoc-attr k v)
-       (element.handlers/set-attr k v))))
+   (document.handlers/assoc-attr db k v)))
 
 (rf/reg-event-fx
  ::close

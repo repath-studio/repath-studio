@@ -576,7 +576,10 @@
 
  :renderer.tool.impl.draw.brush
  {:label "ブラシ"
-  :draw-brush "ブラシで描画"}
+  :draw-brush "ブラシで描く"
+  :brush-size "ブラシサイズ"
+  :drag-to-draw [:div "クリックしてドラッグしてブラシをかけます。"]
+  :hold-ctrl-to-adjust-size [:div "%1 を押しながらブラシサイズを調整します。"]}
 
  :renderer.tool.impl.draw.pencil
  {:label "ペン"

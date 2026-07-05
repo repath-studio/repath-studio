@@ -633,7 +633,11 @@
 
  :renderer.tool.impl.draw.brush
  {:label "Penseel"
-  :draw-brush "Penseel tekenen"}
+  :draw-brush "Penselen"
+  :brush-size "Penseelgrootte"
+  :drag-to-draw [:div "Klik en sleep om te penselen."]
+  :hold-ctrl-to-adjust-size [:div "Houd %1 ingedrukt om de penseelgrootte aan
+                                   te passen."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Pen"
