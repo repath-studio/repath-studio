@@ -7,7 +7,6 @@
    [renderer.action.views :as action.views]
    [renderer.document.events :as-alias document.events]
    [renderer.document.subs :as-alias document.subs]
-   [renderer.element.events :as-alias element.events]
    [renderer.frame.events :as-alias frame.events]
    [renderer.i18n.views :as i18n.views]
    [renderer.input.subs :as-alias input.subs]
