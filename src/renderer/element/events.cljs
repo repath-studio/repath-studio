@@ -133,7 +133,7 @@
  ::lower-to-bottom
  [(finalize [::lower-selection-bottom "Lower selection to bottom"])]
  (fn [db _]
-   (element.handlers/update-index db #(identity 0))))
+   (element.handlers/update-index db (constantly 0))))
 
 (rf/reg-event-db
  ::align
