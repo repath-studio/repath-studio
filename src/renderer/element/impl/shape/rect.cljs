@@ -45,7 +45,8 @@
     (cond-> el
       :always
       (-> (attribute.hierarchy/update-attr :width (partial update-size x-ratio))
-          (attribute.hierarchy/update-attr :height (partial update-size y-ratio))
+          (attribute.hierarchy/update-attr :height (partial update-size
+                                                            y-ratio))
           (element.hierarchy/translate offset))
 
       rx
