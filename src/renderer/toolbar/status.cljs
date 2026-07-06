@@ -174,11 +174,12 @@
     [views/toolbar
      {:class "bg-primary relative justify-center md:justify-start py-2 md:py-1
               gap-2 md:gap-1"}
-     [color-selectors]
-     (when (and sm? (get-method tool.hierarchy/tool-options active-tool))
-       [:<>
-        [:div.v-divider]
-        [tool.hierarchy/tool-options active-tool]])
+     (->> [[color-selectors]
+           (when (and sm? (get-method tool.hierarchy/tool-options active-tool))
+             [tool.hierarchy/tool-options active-tool])]
+          (remove nil?)
+          (interpose [:div.v-divider])
+          (into [:<>]))
      [:div.grow.hidden.md:block]
      (->> [:view/toggle-grid
            :view/toggle-rulers]
