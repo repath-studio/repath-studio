@@ -59,5 +59,4 @@
                :icon "eye-dropper"
                :event [::tool.events/activate ::eye-dropper]
                :active [::tool.subs/active? ::eye-dropper]
-               :available [::app.subs/supported-feature? :eye-dropper]
-               :shortcuts [{:keyCode (utils.key/codes "D")}]}])
+               :available [::app.subs/supported-feature? :eye-dropper]}])
