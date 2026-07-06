@@ -35,7 +35,7 @@
 
 (m/=> normalize-angle [:-> number? number?])
 (defn normalize-angle
-  "Normalizes an angle to be in range [0-360). Angles outside this range will
+  "Normalizes an angle to be in range [0-2PI). Angles outside this range will
    be normalized to be the equivalent angle with that range."
   [angle]
   (mod angle (* 2 Math/PI)))

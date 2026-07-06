@@ -581,7 +581,10 @@
  :renderer.tool.impl.base.transform.core
  {:label "Transformeren"
   :pivot-point "draaipunt"
-  :lock-aspect-ratio "Beeldverhouding vergrendelen"}
+  :lock-aspect-ratio "Beeldverhouding vergrendelen"
+  :scale-children "Kinderen schalen"
+  :scale-in-place "Schalen op locatie"
+  :select-intersecting "Snijdende elementen selecteren"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Houd %1 ingedrukt om richting te beperken. of laat %2 los om
@@ -630,7 +633,11 @@
 
  :renderer.tool.impl.draw.brush
  {:label "Penseel"
-  :draw-brush "Penseel tekenen"}
+  :draw-brush "Penselen"
+  :brush-size "Penseelgrootte"
+  :drag-to-draw [:div "Klik en sleep om te penselen."]
+  :hold-ctrl-to-adjust-size [:div "Houd %1 ingedrukt om de penseelgrootte aan
+                                   te passen."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Pen"

@@ -8,7 +8,7 @@
 
 (def Shortcut
   [:map {:closed true}
-   [:keyCode number?]
+   [:keyCode {:optional true} number?]
    [:ctrlKey {:optional true} boolean?]
    [:shiftKey {:optional true} boolean?]
    [:altKey {:optional true} boolean?]])

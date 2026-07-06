@@ -11,7 +11,6 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
    [renderer.hierarchy :as hierarchy]
-   [renderer.i18n.views :as i18n.views]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
@@ -29,12 +28,50 @@
 
 (hierarchy/derive! ::transform ::tool.hierarchy/tool)
 
+(rf/dispatch [::action.events/register-action
+              {:id :transform/toggle-aspect-ratio-lock
+               :label [::lock-aspect-ratio "Lock aspect ratio"]
+               :icon "aspect-ratio"
+               :event [::document.events/toggle-attr :lock-ratio]
+               :active [::document.subs/attr :lock-ratio]
+               :enabled [::tool.subs/active? ::transform]}])
+
+(rf/dispatch [::action.events/register-action
+              {:id :transform/toggle-scale-children
+               :label [::scale-children "Scale children"]
+               :icon "scale-children"
+               :event [::document.events/toggle-attr :scale-children]
+               :active [::document.subs/attr :scale-children]
+               :enabled [::tool.subs/active? ::transform]}])
+
+(rf/dispatch [::action.events/register-action
+              {:id :transform/toggle-scale-in-place
+               :label [::scale-in-place "Scale in place"]
+               :icon "in-place"
+               :event [::document.events/toggle-attr :scale-in-place]
+               :active [::document.subs/attr :scale-in-place]
+               :enabled [::tool.subs/active? ::transform]}])
+
+(rf/dispatch [::action.events/register-action
+              {:id :transform/toggle-select-intersecting
+               :label [::select-intersecting "Select intersecting elements"]
+               :icon "intersect"
+               :event [::document.events/toggle-attr :select-intersecting]
+               :active [::document.subs/attr :select-intersecting]
+               :enabled [::tool.subs/active? ::transform]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :transform/options
+               :label [::transform-options "Transform options"]
+               :enabled [::tool.subs/active? ::transform]
+               :actions [:transform/toggle-aspect-ratio-lock
+                         :transform/toggle-scale-children
+                         :transform/toggle-scale-in-place
+                         :transform/toggle-select-intersecting]}])
+
 (defmethod tool.hierarchy/tool-options ::transform
   []
-  (let [ratio-locked? @(rf/subscribe [::document.subs/attr :lock-ratio])]
-    [views/radio-icon-button "aspect-ratio" ratio-locked?
-     {:title (i18n.views/t [::lock-aspect-ratio "Lock aspect ratio"])
-      :on-click #(rf/dispatch [::document.events/toggle-attr :lock-ratio])}]))
+  [views/action-button-group :transform/options])
 
 (defmethod tool.hierarchy/on-deactivate ::transform
   [db]

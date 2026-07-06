@@ -58,6 +58,7 @@
                       renderer.document.db document.db
                       renderer.document.events document.events
                       renderer.document.handlers document.handlers
+                      renderer.document.migrations document.migrations
                       renderer.document.subs document.subs
                       renderer.document.views document.views
                       renderer.element.db element.db
@@ -130,7 +131,6 @@
                       renderer.utils.length utils.length
                       renderer.utils.map utils.map
                       renderer.utils.math utils.math
-                      renderer.utils.migration utils.migration
                       renderer.utils.path utils.path
                       renderer.utils.platform utils.platform
                       renderer.utils.svg utils.svg

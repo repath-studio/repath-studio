@@ -42,7 +42,8 @@
    [:centered {:optional true} boolean?]
    [:attrs {:default {:fill "lightgray"
                       :stroke "black"
-                      :stroke-width "1px"}} DocumentAttrs]
+                      :stroke-width "1px"
+                      :brush-size 16}} DocumentAttrs]
    [:preview-label {:optional true} string?]
    [:file-handle {:optional true} JS_Object]])
 

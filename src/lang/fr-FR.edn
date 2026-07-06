@@ -574,7 +574,10 @@
  :renderer.tool.impl.base.transform.core
  {:label "Transformer"
   :pivot-point "point de pivot"
-  :lock-aspect-ratio "Verrouiller les proportions"}
+  :lock-aspect-ratio "Verrouiller les proportions"
+  :scale-children "Mettre à l'échelle les enfants"
+  :scale-in-place "Mettre à l'échelle sur place"
+  :select-intersecting "Sélectionner les éléments qui se croisent"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Maintenez %1 pour restreindre la direction. ou relâchez %2 pour
@@ -624,7 +627,11 @@
 
  :renderer.tool.impl.draw.brush
  {:label "Pinceau"
-  :draw-brush "Dessiner au pinceau"}
+  :draw-brush "Brosser"
+  :brush-size "Taille du pinceau"
+  :drag-to-draw [:div "Cliquez et faites glisser pour brosser."]
+  :hold-ctrl-to-adjust-size [:div "Maintenez %1 pour ajuster la taille du
+                                   pinceau."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Stylo"

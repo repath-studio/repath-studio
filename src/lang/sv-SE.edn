@@ -567,7 +567,10 @@
  :renderer.tool.impl.base.transform.core
  {:label "Transformera"
   :pivot-point "rotationspunkt"
-  :lock-aspect-ratio "Lås bildförhållande"}
+  :lock-aspect-ratio "Lås bildförhållande"
+  :scale-children "Skala barn"
+  :scale-in-place "Skala på plats"
+  :select-intersecting "Välj korsande element"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Håll %1 för att begränsa riktning. eller släpp %2 för att
@@ -615,7 +618,11 @@
 
  :renderer.tool.impl.draw.brush
  {:label "Pensel"
-  :draw-brush "Rita pensel"}
+  :draw-brush "Pensla"
+  :brush-size "Penselstorlek"
+  :drag-to-draw [:div "Klicka och dra för att pensla."]
+  :hold-ctrl-to-adjust-size [:div "Håll %1 intryckt för att justera
+                                   penselstorlek."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Penna"

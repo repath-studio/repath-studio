@@ -21,7 +21,6 @@
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.handlers :as i18n.handlers]
    [renderer.utils.bounds :as utils.bounds]
-   [renderer.utils.compatibility :as utils.compatibility]
    [renderer.utils.element :as utils.element]
    [renderer.utils.vec :as utils.vec]))
 
@@ -71,6 +70,7 @@
 
 (rf/reg-event-db
  ::set-attr
+ [persist]
  (fn [db [_ k v]]
    (document.handlers/assoc-attr db k v)))
 
@@ -83,9 +83,7 @@
 (rf/reg-event-db
  ::preview-attr
  (fn [db [_ k v]]
-   (-> db
-       (document.handlers/assoc-attr k v)
-       (element.handlers/set-attr k v))))
+   (document.handlers/assoc-attr db k v)))
 
 (rf/reg-event-fx
  ::close
@@ -301,7 +299,7 @@
  [(rf/inject-cofx ::effects/guid)
   (rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now guid]} [_ document]]
-   (let [migrated-document (utils.compatibility/migrate-document document)
+   (let [migrated-document (document.handlers/migrate document)
          is-migrated (not= document migrated-document)
          document (merge document.db/default {:id guid} migrated-document)
          {:keys [id file-handle]} document]

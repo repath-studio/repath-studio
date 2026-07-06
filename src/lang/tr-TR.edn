@@ -559,7 +559,10 @@
  :renderer.tool.impl.base.transform.core
  {:label "Dönüştür"
   :pivot-point "pivot noktası"
-  :lock-aspect-ratio "En-boy oranını kilitle"}
+  :lock-aspect-ratio "En-boy oranını kilitle"
+  :scale-children "Alt öğeleri ölçeklendir"
+  :scale-in-place "Yerinde ölçeklendir"
+  :select-intersecting "Kesişen öğeleri seç"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Yönü kısıtlamak için %1 tuşunu basılı tutun. veya taşımak için
@@ -608,7 +611,11 @@
 
  :renderer.tool.impl.draw.brush
  {:label "Fırça"
-  :draw-brush "Fırça çiz"}
+  :draw-brush "Fırçala"
+  :brush-size "Fırça boyutu"
+  :drag-to-draw [:div "Fırçalamak için tıklayın ve sürükleyin."]
+  :hold-ctrl-to-adjust-size [:div "Fırça boyutunu ayarlamak için %1 tuşunu
+                                   basılı tutun."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Kalem"

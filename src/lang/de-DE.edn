@@ -584,7 +584,10 @@
  :renderer.tool.impl.base.transform.core
  {:label "Transformieren"
   :pivot-point "Drehpunkt"
-  :lock-aspect-ratio "Seitenverhältnis sperren"}
+  :lock-aspect-ratio "Seitenverhältnis sperren"
+  :scale-children "Kinder skalieren"
+  :scale-in-place "An Ort und Stelle skalieren"
+  :select-intersecting "Sich überschneidende Elemente auswählen"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Halten Sie %1, um die Richtung zu beschränken. oder lassen Sie
@@ -633,7 +636,11 @@
 
  :renderer.tool.impl.draw.brush
  {:label "Pinsel"
-  :draw-brush "Mit Pinsel zeichnen"}
+  :draw-brush "Pinseln"
+  :brush-size "Pinselgröße"
+  :drag-to-draw [:div "Klicken und ziehen zum Pinseln."]
+  :hold-ctrl-to-adjust-size [:div "Halten Sie %1 gedrückt, um die Pinselgröße
+                                   anzupassen."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Stift"

@@ -292,7 +292,7 @@
                     [:-> App ElementId [:sequential ElementId]]])
 (defn ancestor-ids
   ([db]
-   (reduce #(concat %1 (ancestor-ids db %2)) [] (selected-ids db)))
+   (reduce #(into %1 (ancestor-ids db %2)) [] (selected-ids db)))
   ([db id]
    (loop [parent-id (:parent (entity db id))
           ids []]
@@ -756,9 +756,7 @@
   (let [ratio (mapv #(if (or (infinite? %) (js/isNaN %)) 1 %) ratio)
         top-ids (top-ancestor-ids db)
         ids-to-scale (cond->> (selected-ids db)
-                       recursive (set/union (descendant-ids db))
-                       :always (remove #(-> (entity db %)
-                                            (utils.element/top-level?))))
+                       recursive (set/union (descendant-ids db)))
         origins (->> ids-to-scale
                      (keep (fn [id]
                              (when-let [bb (:bbox (entity db id))]
@@ -773,7 +771,10 @@
                   (scale-group db id ratio pivot-point ids-to-scale)
 
                   pivot
-                  (update-el db id element.hierarchy/scale ratio pivot))))
+                  (update-el db id element.hierarchy/scale ratio pivot)
+
+                  :else
+                  db)))
             db
             ids-to-scale)))
 

@@ -556,7 +556,10 @@
  :renderer.tool.impl.base.transform.core
  {:label "Transform"
   :pivot-point "pivot point"
-  :lock-aspect-ratio "Lock aspect ratio"}
+  :lock-aspect-ratio "Lock aspect ratio"
+  :scale-children "Scale children"
+  :scale-in-place "Scale in place"
+  :select-intersecting "Select intersecting elements"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Hold %1 to restrict direction. or release %2 to move"]
@@ -601,7 +604,10 @@
 
  :renderer.tool.impl.draw.brush
  {:label "Brush"
-  :draw-brush "Draw brush"}
+  :draw-brush "Brush"
+  :brush-size "Brush size"
+  :drag-to-draw [:div "Click and drag to brush."]
+  :hold-ctrl-to-adjust-size [:div "Hold %1 to adjust the brush size."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Pen"

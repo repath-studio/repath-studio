@@ -524,7 +524,10 @@
  :renderer.tool.impl.base.transform.core
  {:label "변환"
   :pivot-point "피벗 포인트"
-  :lock-aspect-ratio "가로세로 비율 잠금"}
+  :lock-aspect-ratio "가로세로 비율 잠금"
+  :scale-children "자식 크기 조정"
+  :scale-in-place "제자리에서 크기 조정"
+  :select-intersecting "교차하는 요소 선택"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "%1을 누르면 방향을 제한하거나 %2를 놓으면 이동합니다"]
@@ -569,7 +572,10 @@
 
  :renderer.tool.impl.draw.brush
  {:label "브러시"
-  :draw-brush "브러시 그리기"}
+  :draw-brush "브러시로 그리기"
+  :brush-size "브러시 크기"
+  :drag-to-draw [:div "클릭하고 드래그하여 브러시를 사용하세요."]
+  :hold-ctrl-to-adjust-size [:div "%1 을 누른 채로 브러시 크기를 조정하세요."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "펜"
