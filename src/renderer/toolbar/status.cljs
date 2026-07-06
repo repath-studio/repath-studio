@@ -19,7 +19,8 @@
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]))
 
-(defn coordinates []
+(defn coordinates
+  []
   (let [[x y] @(rf/subscribe [::input.subs/adjusted-pointer-pos])]
     [:div.flex-col.font-mono.leading-tight.hidden.mx-1
      {:class "xl:flex"
@@ -30,7 +31,8 @@
      [:div.flex.justify-between
       [:span.mr-1 "Y:"] [:span (utils.length/->fixed y 2 false)]]]))
 
-(defn zoom-menu []
+(defn zoom-menu
+  []
   [:> DropdownMenu/Root
    [:> DropdownMenu/Trigger
     {:title (i18n.views/t [::select-zoom "Select zoom level"])
@@ -130,7 +132,8 @@
           [:> ChromePicker props])]
        [views/popover-arrow]]]]))
 
-(defn color-selectors []
+(defn color-selectors
+  []
   (let [fill @(rf/subscribe [::document.subs/attr :fill])
         stroke @(rf/subscribe [::document.subs/attr :stroke])
         get-hex #(:hex (js->clj % :keywordize-keys true))]
@@ -167,7 +170,8 @@
        [:div.bg-primary.absolute.border.border-border.rounded-xs
         {:class "w-1/2 h-1/2 bottom-1/4 right-1/4"}]]]]))
 
-(defn root []
+(defn root
+  []
   (let [zoom @(rf/subscribe [::document.subs/zoom])
         active-tool @(rf/subscribe [::tool.subs/cached-or-active])
         sm? @(rf/subscribe [::window.subs/sm?])]
@@ -176,7 +180,8 @@
               gap-2 md:gap-1"}
      (->> [[color-selectors]
            (when (and sm? (get-method tool.hierarchy/tool-options active-tool))
-             [tool.hierarchy/tool-options active-tool])]
+             (when-let [options (tool.hierarchy/tool-options active-tool)]
+               options))]
           (remove nil?)
           (interpose [:div.v-divider])
           (into [:<>]))
