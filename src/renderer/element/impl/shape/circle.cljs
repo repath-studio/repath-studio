@@ -7,6 +7,7 @@
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
+   [renderer.tool.impl.element.core :as-alias element.core]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
@@ -115,7 +116,7 @@
   [el]
   (let [{{:keys [cx cy r]} :attrs} el
         [cx cy r] (mapv utils.length/unit->px [cx cy r])]
-    (mapv #(with-meta % {:label [::circle-edge "circle edge"]})
+    (mapv #(with-meta % {:label [::element.core/edge "edge"]})
           [[(- cx r) cy]
            [(+ cx r) cy]
            [cx (- cy r)]

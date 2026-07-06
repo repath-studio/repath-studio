@@ -7,6 +7,7 @@
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
+   [renderer.tool.impl.element.core :as-alias element.core]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
@@ -143,7 +144,7 @@
         rx (or rx ry)
         ry (or ry rx)
         [cx cy rx ry] (mapv utils.length/unit->px [cx cy rx ry])]
-    (mapv #(with-meta % {:label [::ellipe-edge "ellipse edge"]})
+    (mapv #(with-meta % {:label [::element.core/edge "edge"]})
           [[(- cx rx) cy]
            [(+ cx rx) cy]
            [cx (- cy ry)]
