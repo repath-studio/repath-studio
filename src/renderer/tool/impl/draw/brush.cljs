@@ -89,7 +89,7 @@
   (let [brush-size (document.handlers/attr db :brush-size)
         point (string/join " " (conj (:adjusted-pointer-pos db) (:pressure e)))
         fill (document.handlers/attr db :fill)]
-    (if (:shift e)
+    (if (:shift-key e)
       (assoc db :last-origin (:pointer-pos e))
       (-> db
           (tool.handlers/set-state :create)
@@ -105,7 +105,7 @@
 (defmethod tool.hierarchy/on-drag [::brush :idle]
   [db e]
   (cond-> db
-    (:shift e)
+    (:shift-key e)
     (-> (document.handlers/update-attr
          :brush-size
          (fn [size]
