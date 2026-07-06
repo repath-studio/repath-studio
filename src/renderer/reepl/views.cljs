@@ -120,8 +120,8 @@
         [fn-name signature doc] (filter seq (string/split-lines s))]
     [:div.bg-primary.drop-shadow.p-4.absolute.bottom-full.flex.flex-col.gap-4
      [:div.font-semibold fn-name]
-     [codemirror/colored-text signature codemirror-theme]
-     [:div doc]]))
+     (when signature [codemirror/colored-text signature codemirror-theme])
+     (when doc [:div doc])]))
 
 (defn completion-list
   [docs {:keys [pos words active show-all]} set-active]
