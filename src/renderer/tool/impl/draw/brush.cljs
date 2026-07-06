@@ -15,7 +15,6 @@
    [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
-   [renderer.input.handlers :as input.handlers]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
@@ -54,7 +53,7 @@
    (i18n.views/t [::drag-to-draw [:div "Click and drag to brush."]])
    (i18n.views/t [::hold-ctrl-to-adjust-size
                   [:div "Hold %1 to adjust the brush size."]]
-                 [[views/kbd "Ctrl"]])])
+                 [[views/kbd "⇧"]])])
 
 (defmethod tool.hierarchy/tool-options ::brush
   []
@@ -85,17 +84,12 @@
                                                   :r (/ brush-size 2)
                                                   :fill fill}}])))
 
-(defn adjust-size?
-  [db e]
-  (or (:ctrl-key e)
-      (input.handlers/multi-touch? db)))
-
 (defmethod tool.hierarchy/on-drag-start [::brush :idle]
   [db e]
   (let [brush-size (document.handlers/attr db :brush-size)
         point (string/join " " (conj (:adjusted-pointer-pos db) (:pressure e)))
         fill (document.handlers/attr db :fill)]
-    (if (adjust-size? db e)
+    (if (:shift e)
       (assoc db :last-origin (:pointer-pos e))
       (-> db
           (tool.handlers/set-state :create)
@@ -111,7 +105,7 @@
 (defmethod tool.hierarchy/on-drag [::brush :idle]
   [db e]
   (cond-> db
-    (adjust-size? db e)
+    (:shift e)
     (-> (document.handlers/update-attr
          :brush-size
          (fn [size]
