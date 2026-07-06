@@ -531,7 +531,8 @@
   :lock-aspect-ratio "アスペクト比を固定"
   :scale-children "子要素をスケール"
   :scale-in-place "その場でスケール"
-  :select-intersecting "交差する要素を選択"}
+  :select-intersecting "交差する要素を選択"
+  :transform-options "変形オプション"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "%1を押しながら方向を制限。または%2を離して移動"]
@@ -582,8 +583,10 @@
   :hold-ctrl-to-adjust-size [:div "%1 を押しながらブラシサイズを調整します。"]}
 
  :renderer.tool.impl.draw.pencil
- {:label "ペン"
-  :draw-line "線を描画"}
+ {:label "鉛筆"
+  :draw-line "線を描画"
+  :smooth "スムーズ"
+  :pen-options "鉛筆オプション"}
 
  :renderer.tool.impl.draw.core
  {:click-and-drag "クリックしてドラッグして描画。"

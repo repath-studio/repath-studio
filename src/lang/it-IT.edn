@@ -582,7 +582,8 @@
   :lock-aspect-ratio "Blocca proporzioni"
   :scale-children "Scala gli elementi figli"
   :scale-in-place "Scala sul posto"
-  :select-intersecting "Seleziona elementi intersecanti"}
+  :select-intersecting "Seleziona elementi intersecanti"
+  :transform-options "Opzioni di trasformazione"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Tieni premuto %1 per limitare la direzione. o rilascia %2 per
@@ -639,8 +640,10 @@
                                    del pennello."]}
 
  :renderer.tool.impl.draw.pencil
- {:label "Penna"
-  :draw-line "Disegna linea"}
+ {:label "Matita"
+  :draw-line "Disegna linea"
+  :smooth "Leviga"
+  :pen-options "Opzioni matita"}
 
  :renderer.tool.impl.draw.core
  {:click-and-drag "Clicca e trascina per disegnare."

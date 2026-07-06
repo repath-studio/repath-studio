@@ -527,7 +527,8 @@
   :lock-aspect-ratio "가로세로 비율 잠금"
   :scale-children "자식 크기 조정"
   :scale-in-place "제자리에서 크기 조정"
-  :select-intersecting "교차하는 요소 선택"}
+  :select-intersecting "교차하는 요소 선택"
+  :transform-options "변환 옵션"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "%1을 누르면 방향을 제한하거나 %2를 놓으면 이동합니다"]
@@ -578,8 +579,10 @@
   :hold-ctrl-to-adjust-size [:div "%1 을 누른 채로 브러시 크기를 조정하세요."]}
 
  :renderer.tool.impl.draw.pencil
- {:label "펜"
-  :draw-line "선 그리기"}
+ {:label "연필"
+  :draw-line "선 그리기"
+  :smooth "부드럽게"
+  :pen-options "연필 옵션"}
 
  :renderer.tool.impl.draw.core
  {:click-and-drag "클릭하고 드래그하여 그립니다."
