@@ -6,6 +6,7 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
    [renderer.input.handlers :as input.handlers]
+   [renderer.tool.impl.element.core :as-alias element.core]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]))
 
@@ -78,12 +79,12 @@
   (let [{{:keys [width height]} :attrs} el]
     (apply * (map utils.length/unit->px [width height]))))
 
-#_(defmethod hierarchy/snapping-points ::element.hierarchy/box
-    [el]
-    (let [{{:keys [x y width height]} :attrs} el
-          [x y w h] (mapv utils.length/unit->px [x y width height])]
-      (mapv #(with-meta % {:label [::box-corner "box corner"]})
-            [[x y]
-             [(+ x w) y]
-             [(+ x w) (+ y h)]
-             [x (+ y h)]])))
+(defmethod element.hierarchy/snapping-points ::element.hierarchy/box
+  [el]
+  (let [{{:keys [x y width height]} :attrs} el
+        [x y w h] (mapv utils.length/unit->px [x y width height])]
+    (mapv #(with-meta % {:label [::element.core/edge "edge"]})
+          [[x y]
+           [(+ x w) y]
+           [(+ x w) (+ y h)]
+           [x (+ y h)]])))

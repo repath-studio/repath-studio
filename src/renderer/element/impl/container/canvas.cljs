@@ -106,11 +106,11 @@
      (when grid?
        [ruler.views/grid])
 
-     (when (and snap? (not= state :select))
-       [snap-info])
-
      (when-not read-only?
-       [tool.hierarchy/render active-tool])]))
+       [tool.hierarchy/render active-tool])
+
+     (when (and snap? (not= state :select))
+       [snap-info])]))
 
 (defmethod element.hierarchy/render-to-string :canvas
   [el]

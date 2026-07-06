@@ -34,15 +34,19 @@
 (defmethod element.hierarchy/scale :rect
   [el ratio pivot-point]
   (let [[x-ratio y-ratio] ratio
-        {{:keys [width height rx ry]} :attrs} el
-        [w h] (mapv utils.length/unit->px [width height])
+        {{:keys [width height rx ry stroke-width]} :attrs} el
+        [w h stroke-width] (->> [width height stroke-width]
+                                (mapv utils.length/unit->px))
         [offset-x offset-y] (utils.element/scale-offset ratio pivot-point)
-        offset [(+ offset-x (min 0 (* w x-ratio)))
-                (+ offset-y (min 0 (* h y-ratio)))]]
+        update-size (fn [ratio size]
+                      (- (* (+ size stroke-width) (abs ratio)) stroke-width))
+        offset [(+ offset-x (min 0 (* (+ w stroke-width) x-ratio)))
+                (+ offset-y (min 0 (* (+ h stroke-width) y-ratio)))]]
     (cond-> el
       :always
-      (-> (attribute.hierarchy/update-attr :width #(abs (* % x-ratio)))
-          (attribute.hierarchy/update-attr :height #(abs (* % y-ratio)))
+      (-> (attribute.hierarchy/update-attr :width (partial update-size x-ratio))
+          (attribute.hierarchy/update-attr :height (partial update-size
+                                                            y-ratio))
           (element.hierarchy/translate offset))
 
       rx
@@ -105,33 +109,36 @@
 
 (defmethod element.hierarchy/handles :rect
   [el]
-  (let [[min-x min-y max-x max-y] (:bbox el)
-        {{:keys [rx ry]} :attrs} el
-        [rx ry] (mapv utils.length/unit->px [rx ry])]
+  (let [{{:keys [x y width height rx ry]} :attrs} el
+        [x y width height rx ry] (->> [x y width height rx ry]
+                                      (mapv utils.length/unit->px))
+        offset (utils.element/offset el)
+        [x y] (matrix/add [x y] offset)
+        max-x (+ x width)]
     [{:type :handle
       :action :edit
       :parent (:id el)
-      :position [min-x min-y]
+      :position [x y]
       :id :position
       :label [::position-handle "position handle"]}
      {:type :handle
       :action :edit
       :parent (:id el)
-      :position [max-x max-y]
+      :position [max-x (+ y height)]
       :id :size
       :label [::size-handle "size handle"]}
      {:type :handle
       :action :edit
       :rounded true
       :parent (:id el)
-      :position [(- max-x rx) min-y]
+      :position [(- max-x rx) y]
       :id :rx
       :label [::rx-handle "x radius handle"]}
      {:type :handle
       :action :edit
       :rounded true
       :parent (:id el)
-      :position [max-x (+ min-y ry)]
+      :position [max-x (+ y ry)]
       :id :ry
       :label [::ry-handle "y radius handle"]}]))
 
@@ -162,3 +169,11 @@
       :always (conj "z")
       :always (->> (map #(cond-> % (number? %) utils.length/->fixed))
                    (string/join " ")))))
+
+(defmethod element.hierarchy/bbox :rect
+  [el]
+  (let [{{:keys [x y width height stroke-width]} :attrs} el
+        [x y width height stroke-width] (->> [x y width height stroke-width]
+                                             (mapv utils.length/unit->px))
+        padding (/ stroke-width 2)]
+    [(- x padding) (- y padding) (+ x width padding) (+ y height padding)]))
