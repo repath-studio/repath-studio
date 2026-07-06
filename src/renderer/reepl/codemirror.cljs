@@ -318,15 +318,19 @@
 
 (defn colored-text
   [_text _theme]
-  (let [ref (react/createRef)]
+  (let [ref (react/createRef)
+        colorize #(when-let [dom-el (.-current ref)]
+                    ((aget codemirror "colorize") #js[dom-el] "clojure")
+                    ;; Hacky way to remove the theme class added by CodeMirror's
+                    ;; colorize
+                    ;; https://codemirror.net/addon/runmode/colorize.js
+                    (-> dom-el .-classList (.remove "cm-s-default")))]
     (reagent/create-class
      {:component-did-mount
-      (fn [_this]
-        (let [dom-el (.-current ref)]
-          ((aget codemirror "colorize") #js[dom-el] "clojure")
-          ;; Hacky way to remove the theme class added by CodeMirror's colorize
-          ;; https://codemirror.net/addon/runmode/colorize.js
-          (-> dom-el .-classList (.remove "cm-s-default"))))
+      (fn [_this] (colorize))
+
+      :component-did-update
+      (fn [_this _old-argv] (colorize))
 
       :reagent-render
       (fn [text theme]
