@@ -15,6 +15,8 @@
 
 (hierarchy/derive! ::svg ::tool.hierarchy/element)
 
+(defmethod tool.hierarchy/tool-options ::svg [])
+
 (defn attributes
   [db]
   (let [[offset-x offset-y] (tool.handlers/snapped-offset db)
