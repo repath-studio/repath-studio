@@ -566,7 +566,8 @@
   :lock-aspect-ratio "Заблокировать соотношение сторон"
   :scale-children "Масштабировать дочерние элементы"
   :scale-in-place "Масштабировать на месте"
-  :select-intersecting "Выбрать пересекающиеся элементы"}
+  :select-intersecting "Выбрать пересекающиеся элементы"
+  :transform-options "Параметры трансформации"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Удерживайте %1 для ограничения направления. или отпустите %2
@@ -623,8 +624,10 @@
                                    кисти."]}
 
  :renderer.tool.impl.draw.pencil
- {:label "Перо"
-  :draw-line "Рисовать линию"}
+ {:label "Карандаш"
+  :draw-line "Рисовать линию"
+  :smooth "Сглаживание"
+  :pen-options "Параметры карандаша"}
 
  :renderer.tool.impl.draw.core
  {:click-and-drag "Щёлкните и перетащите для рисования."

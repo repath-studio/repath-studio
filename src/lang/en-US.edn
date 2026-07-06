@@ -559,7 +559,8 @@
   :lock-aspect-ratio "Lock aspect ratio"
   :scale-children "Scale children"
   :scale-in-place "Scale in place"
-  :select-intersecting "Select intersecting elements"}
+  :select-intersecting "Select intersecting elements"
+  :transform-options "Transform options"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Hold %1 to restrict direction. or release %2 to move"]
@@ -610,8 +611,10 @@
   :hold-ctrl-to-adjust-size [:div "Hold %1 to adjust the brush size."]}
 
  :renderer.tool.impl.draw.pencil
- {:label "Pen"
-  :draw-line "Draw line"}
+ {:label "Pencil"
+  :draw-line "Draw line"
+  :smooth "Smooth"
+  :pen-options "Pencil options"}
 
  :renderer.tool.impl.draw.core
  {:click-and-drag "Click and drag to draw."

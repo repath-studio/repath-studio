@@ -28,6 +28,7 @@
 
 (def min-size 1)
 (def max-size 100)
+(def default-size 16)
 
 (rf/reg-fx
  ::set-brush
@@ -44,7 +45,7 @@
 
 (defn update-brush-size
   [db]
-  (let [brush-size (document.handlers/attr db :brush-size)]
+  (let [brush-size (document.handlers/attr db ::size)]
     (app.handlers/add-fx db [::set-brush-size brush-size])))
 
 (defmethod tool.hierarchy/help [::brush :idle]
@@ -57,7 +58,8 @@
 
 (defmethod tool.hierarchy/tool-options ::brush
   []
-  (let [brush-size @(rf/subscribe [::document.subs/attr :brush-size])]
+  (let [brush-size (or @(rf/subscribe [::document.subs/attr ::size])
+                       default-size)]
     [:div.flex.items-center.gap-2
      [:span
       brush-size]
@@ -70,23 +72,23 @@
        :class "w-32"
        :on-value-change (fn [[v]]
                           (rf/dispatch [::document.events/set-attr
-                                        :brush-size v]))}]]))
+                                        ::size v]))}]]))
 
 (defmethod tool.hierarchy/on-pointer-move [::brush :idle]
   [db _e]
-  (let [brush-size (document.handlers/attr db :brush-size)
+  (let [size (document.handlers/attr db ::size)
         [x y] (:adjusted-pointer-pos db)
         fill (document.handlers/attr db :fill)]
     (app.handlers/add-fx db [::set-brush {:type :element
                                           :tag :circle
                                           :attrs {:cx x
                                                   :cy y
-                                                  :r (/ brush-size 2)
+                                                  :r (/ size 2)
                                                   :fill fill}}])))
 
 (defmethod tool.hierarchy/on-drag-start [::brush :idle]
   [db e]
-  (let [brush-size (document.handlers/attr db :brush-size)
+  (let [brush-size (or (document.handlers/attr db ::brush-size) default-size)
         point (string/join " " (conj (:adjusted-pointer-pos db) (:pressure e)))
         fill (document.handlers/attr db :fill)]
     (if (:shift-key e)
@@ -107,7 +109,7 @@
   (cond-> db
     (:shift-key e)
     (-> (document.handlers/update-attr
-         :brush-size
+         ::size
          (fn [size]
            (let [{:keys [last-origin]} db
                  [delta-x delta-y] (matrix/sub (:pointer-pos e) last-origin)

@@ -584,7 +584,8 @@
   :lock-aspect-ratio "Beeldverhouding vergrendelen"
   :scale-children "Kinderen schalen"
   :scale-in-place "Schalen op locatie"
-  :select-intersecting "Snijdende elementen selecteren"}
+  :select-intersecting "Snijdende elementen selecteren"
+  :transform-options "Transformatieopties"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Houd %1 ingedrukt om richting te beperken. of laat %2 los om
@@ -640,8 +641,10 @@
                                    te passen."]}
 
  :renderer.tool.impl.draw.pencil
- {:label "Pen"
-  :draw-line "Lijn tekenen"}
+ {:label "Potlood"
+  :draw-line "Lijn tekenen"
+  :smooth "Vloeiend"
+  :pen-options "Potlood opties"}
 
  :renderer.tool.impl.draw.core
  {:click-and-drag "Klik en sleep om te tekenen."

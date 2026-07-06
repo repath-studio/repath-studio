@@ -568,7 +568,8 @@
   :lock-aspect-ratio "Bloquear proporção"
   :scale-children "Escalar filhos"
   :scale-in-place "Escalar no lugar"
-  :select-intersecting "Selecionar elementos intersectados"}
+  :select-intersecting "Selecionar elementos intersectados"
+  :transform-options "Opções de transformação"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Mantenha %1 para restringir direção. ou solte %2 para mover"]
@@ -622,8 +623,10 @@
                                    pincel."]}
 
  :renderer.tool.impl.draw.pencil
- {:label "Caneta"
-  :draw-line "Desenhar linha"}
+ {:label "Lápis"
+  :draw-line "Desenhar linha"
+  :smooth "Suavizar"
+  :pen-options "Opções de lápis"}
 
  :renderer.tool.impl.draw.core
  {:click-and-drag "Clique e arraste para desenhar."

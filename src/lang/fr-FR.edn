@@ -577,7 +577,8 @@
   :lock-aspect-ratio "Verrouiller les proportions"
   :scale-children "Mettre à l'échelle les enfants"
   :scale-in-place "Mettre à l'échelle sur place"
-  :select-intersecting "Sélectionner les éléments qui se croisent"}
+  :select-intersecting "Sélectionner les éléments qui se croisent"
+  :transform-options "Options de transformation"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Maintenez %1 pour restreindre la direction. ou relâchez %2 pour
@@ -634,8 +635,10 @@
                                    pinceau."]}
 
  :renderer.tool.impl.draw.pencil
- {:label "Stylo"
-  :draw-line "Dessiner une ligne"}
+ {:label "Crayon"
+  :draw-line "Dessiner une ligne"
+  :smooth "Lisser"
+  :pen-options "Options du crayon"}
 
  :renderer.tool.impl.draw.core
  {:click-and-drag "Cliquez et faites glisser pour dessiner."

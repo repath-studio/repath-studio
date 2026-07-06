@@ -562,7 +562,8 @@
   :lock-aspect-ratio "En-boy oranını kilitle"
   :scale-children "Alt öğeleri ölçeklendir"
   :scale-in-place "Yerinde ölçeklendir"
-  :select-intersecting "Kesişen öğeleri seç"}
+  :select-intersecting "Kesişen öğeleri seç"
+  :transform-options "Dönüştürme seçenekleri"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Yönü kısıtlamak için %1 tuşunu basılı tutun. veya taşımak için
@@ -618,8 +619,10 @@
                                    basılı tutun."]}
 
  :renderer.tool.impl.draw.pencil
- {:label "Kalem"
-  :draw-line "Çizgi çiz"}
+ {:label "Kurşunkalem"
+  :draw-line "Çizgi çiz"
+  :smooth "Yumuşat"
+  :pen-options "Kalem seçenekleri"}
 
  :renderer.tool.impl.draw.core
  {:click-and-drag "Çizmek için tıklayın ve sürükleyin."

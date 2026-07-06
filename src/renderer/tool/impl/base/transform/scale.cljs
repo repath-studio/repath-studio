@@ -133,7 +133,7 @@
   (or (:ctrl-key e)
       (input.handlers/multi-touch? db)
       (element.handlers/ratio-locked? db)
-      (document.handlers/attr db :lock-ratio)))
+      (document.handlers/attr db ::ratio-locked)))
 
 (defmethod tool.hierarchy/on-drag [::transform/transform :scale]
   [db e]
@@ -141,15 +141,15 @@
         delta (tool.handlers/pointer-delta db)
         selected-elements (element.handlers/selected db)
         locked? (every? :locked selected-elements)
-        scale-in-place? (document.handlers/attr db :scale-in-place)
-        scale-children? (document.handlers/attr db :scale-children)]
+        in-place? (document.handlers/attr db ::in-place)
+        recursive? (document.handlers/attr db ::recursive)]
     (-> db
         (history.handlers/reset-state)
         (tool.handlers/set-cursor (if locked? "not-allowed" "default"))
         (scale (matrix/add delta (snap.handlers/nearest-delta db))
                {:ratio-locked (ratio-locked? db e)
-                :in-place (or shift-key scale-in-place?)
-                :recursive (or alt-key scale-children?)}))))
+                :in-place (or shift-key in-place?)
+                :recursive (or alt-key recursive?)}))))
 
 (defmethod tool.hierarchy/on-drag-end [::transform/transform :scale]
   [db e]

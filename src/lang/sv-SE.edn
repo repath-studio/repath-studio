@@ -570,7 +570,8 @@
   :lock-aspect-ratio "Lås bildförhållande"
   :scale-children "Skala barn"
   :scale-in-place "Skala på plats"
-  :select-intersecting "Välj korsande element"}
+  :select-intersecting "Välj korsande element"
+  :transform-options "Transformeringsalternativ"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Håll %1 för att begränsa riktning. eller släpp %2 för att
@@ -625,8 +626,10 @@
                                    penselstorlek."]}
 
  :renderer.tool.impl.draw.pencil
- {:label "Penna"
-  :draw-line "Rita linje"}
+ {:label "Blyertspenna"
+  :draw-line "Rita linje"
+  :smooth "Utjämna"
+  :pen-options "Pennalternativ"}
 
  :renderer.tool.impl.draw.core
  {:click-and-drag "Klicka och dra för att rita."
