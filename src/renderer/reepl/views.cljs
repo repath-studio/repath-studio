@@ -108,7 +108,7 @@
   [text selected active set-active]
   [:div.p-1.bg-secondary.text-nowrap
    {:ref #(when selected (rf/dispatch [::events/scroll-into-view %]))
-    :on-click set-active
+    :on-pointer-enter set-active
     :class (when selected (if active
                             "bg-accent! text-accent-foreground!"
                             "bg-primary!"))}
@@ -120,20 +120,18 @@
         [fn-name signature doc] (filter seq (string/split-lines s))]
     [:div.bg-primary.drop-shadow.p-4.absolute.bottom-full.flex.flex-col.gap-4
      [:div.font-semibold fn-name]
-     [codemirror/colored-text signature codemirror-theme]
-     [:div doc]]))
+     (when signature [codemirror/colored-text signature codemirror-theme])
+     (when doc [:div doc])]))
 
 (defn completion-list
   [docs {:keys [pos words active show-all]} set-active]
-  (let [items (map-indexed
-               #(vector completion-item
-                        (get %2 2)
-                        (= %1 pos)
-                        active
-                        (partial set-active %1)) words)]
-    [:div.absolute.bottom-full.left-0.w-full.text-xs.mb-px
+  (let [items (map-indexed #(vector completion-item
+                                    (get %2 2)
+                                    (= %1 pos)
+                                    active
+                                    (partial set-active %1)) words)]
+    [:div#completion-list.absolute.bottom-full.left-0.w-full.text-xs.mb-px
      (when docs
-
        [function-docs docs])
      (into
       [:div.overflow-hidden.flex
@@ -221,9 +219,7 @@
       [completion-list
        @docs
        @complete-atom
-       ;; TODO: this should also replace the text....
-       identity
-       #_(swap! complete-atom assoc :pos % :active true)]
+       #(swap! complete-atom assoc :pos % :active true)]
       (let [_items @items] ; TODO: This needs to be removed
         [repl-input
          (reepl.subs/current-text state)

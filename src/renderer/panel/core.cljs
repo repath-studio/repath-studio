@@ -51,7 +51,9 @@
                :icon "shell"
                :event [::panel.events/toggle :repl-history]
                :available [::window.subs/md?]
-               :active [::panel.subs/visible? :repl-history]}])
+               :active [::panel.subs/visible? :repl-history]
+               :shortcuts [{:keyCode (utils.key/codes "SLASH")
+                            :ctrlKey true}]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :panel/toggle-timeline

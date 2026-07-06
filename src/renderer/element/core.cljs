@@ -61,8 +61,7 @@
                :label [::duplicate "Duplicate"]
                :icon "copy"
                :event [::element.events/duplicate]
-               :shortcuts [{:keyCode (utils.key/codes "D")
-                            :ctrlKey true}]
+               :shortcuts [{:keyCode (utils.key/codes "D")}]
                :enabled [::element.subs/some-selected?]}])
 
 (rf/dispatch [::action.events/register-action
@@ -280,7 +279,7 @@
                :label [::boolean-divide "Divide"]
                :icon "divide"
                :event [::element.events/boolean-operation :divide]
-               :shortcuts [{:keyCode (utils.key/codes "SLASH")
+               :shortcuts [{:keyCode (utils.key/codes "D")
                             :ctrlKey true}]
                :enabled [::element.subs/multiple-selected?]}])
 

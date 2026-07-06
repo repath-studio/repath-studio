@@ -240,6 +240,10 @@
                       js-cm-opts)))]
 
           (reset! cm inst)
+          (.on inst "blur"
+               (fn []
+                 (reset! complete-atom nil)))
+
           (.on inst "change"
                (fn []
                  (let [value (.getValue inst)]
@@ -250,7 +254,10 @@
                (fn [inst evt]
                  (.stopPropagation evt)
                  (if (cancel-keys (.-keyCode evt))
-                   (reset! complete-atom nil)
+                   (if @complete-atom
+                     (reset! complete-atom nil)
+                     (some-> (.-activeElement js/document)
+                             (.blur)))
                    (if (cmp-show (.-keyCode evt))
                      (swap! complete-atom assoc :show-all false)
                      (when-not (cmp-ignore (.-keyCode evt))
@@ -289,9 +296,7 @@
                                    (should-go-down source inst))
                           (.preventDefault evt)
                           (on-down)))
-                   ;; escape
-                   27 (some-> (.-activeElement js/document)
-                              (.blur))
+
                    :none)))
           (when on-cm-init
             (on-cm-init inst))))
@@ -313,15 +318,19 @@
 
 (defn colored-text
   [_text _theme]
-  (let [ref (react/createRef)]
+  (let [ref (react/createRef)
+        colorize #(when-let [dom-el (.-current ref)]
+                    ((aget codemirror "colorize") #js[dom-el] "clojure")
+                    ;; Hacky way to remove the theme class added by CodeMirror's
+                    ;; colorize
+                    ;; https://codemirror.net/addon/runmode/colorize.js
+                    (-> dom-el .-classList (.remove "cm-s-default")))]
     (reagent/create-class
      {:component-did-mount
-      (fn [_this]
-        (let [dom-el (.-current ref)]
-          ((aget codemirror "colorize") #js[dom-el] "clojure")
-          ;; Hacky way to remove the theme class added by CodeMirror's colorize
-          ;; https://codemirror.net/addon/runmode/colorize.js
-          (-> dom-el .-classList (.remove "cm-s-default"))))
+      (fn [_this] (colorize))
+
+      :component-did-update
+      (fn [_this _old-argv] (colorize))
 
       :reagent-render
       (fn [text theme]
