@@ -19,8 +19,7 @@
                        (Math/pow 10))
         normalized (/ raw-step magnitude)]
     (* magnitude (condp >= normalized
-                   1.5 1
-                   3.5 2
+                   2 1
                    7 5
                    10))))
 
