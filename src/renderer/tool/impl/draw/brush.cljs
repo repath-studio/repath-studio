@@ -58,17 +58,16 @@
 
 (defmethod tool.hierarchy/tool-options ::brush
   []
-  (let [brush-size (or @(rf/subscribe [::document.subs/attr ::size])
-                       default-size)]
+  (let [size (or @(rf/subscribe [::document.subs/attr ::size]) default-size)]
     [:div.flex.items-center.gap-2
      [:span
-      brush-size]
+      size]
      [views/slider
       {:min min-size
        :max max-size
        :step 1
        :title (i18n.views/t [::brush-size "Brush size"])
-       :value [brush-size]
+       :value [size]
        :class "w-32"
        :on-value-change (fn [[v]]
                           (rf/dispatch [::document.events/set-attr
@@ -76,7 +75,7 @@
 
 (defmethod tool.hierarchy/on-pointer-move [::brush :idle]
   [db _e]
-  (let [size (document.handlers/attr db ::size)
+  (let [size (or (document.handlers/attr db ::size) default-size)
         [x y] (:adjusted-pointer-pos db)
         fill (document.handlers/attr db :fill)]
     (app.handlers/add-fx db [::set-brush {:type :element
@@ -88,7 +87,7 @@
 
 (defmethod tool.hierarchy/on-drag-start [::brush :idle]
   [db e]
-  (let [brush-size (or (document.handlers/attr db ::brush-size) default-size)
+  (let [brush-size (or (document.handlers/attr db ::size) default-size)
         point (string/join " " (conj (:adjusted-pointer-pos db) (:pressure e)))
         fill (document.handlers/attr db :fill)]
     (if (:shift-key e)
