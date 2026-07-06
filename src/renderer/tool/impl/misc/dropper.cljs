@@ -15,8 +15,7 @@
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
-   [renderer.tool.subs :as-alias tool.subs]
-   [renderer.utils.key :as utils.key]))
+   [renderer.tool.subs :as-alias tool.subs]))
 
 (hierarchy/derive! ::eye-dropper ::tool.hierarchy/tool)
 
