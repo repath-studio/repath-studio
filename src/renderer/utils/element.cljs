@@ -18,6 +18,7 @@
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.dom :as utils.dom]
+   [renderer.utils.length :as utils.length]
    [renderer.utils.map :as utils.map]))
 
 (m/=> root? [:-> Element boolean?])
@@ -185,7 +186,7 @@
     :as el}]
   (let [{:keys [d stroke stroke-width stroke-linecap stroke-linejoin]} attrs
         paper-path (Path. d)
-        el-offset (or stroke-width 1)
+        el-offset (or (utils.length/unit->px stroke-width) 1)
         stroke-path (PaperOffset.offsetStroke
                      paper-path
                      (/ el-offset 2)
