@@ -546,7 +546,8 @@
   :lock-aspect-ratio "قفل نسبة الأبعاد"
   :scale-children "تحجيم العناصر الفرعية"
   :scale-in-place "تحجيم في المكان"
-  :select-intersecting "تحديد العناصر المتقاطعة"}
+  :select-intersecting "تحديد العناصر المتقاطعة"
+  :transform-options "خيارات التحويل"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "اضغط %1 لتقييد الاتجاه. أو حرر %2 للتحريك"]
@@ -597,8 +598,10 @@
   :hold-ctrl-to-adjust-size [:div "اضغط مع الاستمرار على %1 لضبط حجم الفرشاة."]}
 
  :renderer.tool.impl.draw.pencil
- {:label "قلم"
-  :draw-line "رسم خط"}
+ {:label "قلم رصاص"
+  :draw-line "رسم خط"
+  :smooth "تنعيم"
+  :pen-options "خيارات القلم الرصاص"}
 
  :renderer.tool.impl.draw.core
  {:click-and-drag "انقر واسحب للرسم."

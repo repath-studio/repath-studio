@@ -13,6 +13,8 @@
 
 (hierarchy/derive! ::text ::tool.hierarchy/element)
 
+(defmethod tool.hierarchy/tool-options ::text [])
+
 (defmethod tool.hierarchy/help [::text :idle]
   []
   (i18n.views/t [::help "Click to start typing."]))

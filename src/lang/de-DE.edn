@@ -587,7 +587,8 @@
   :lock-aspect-ratio "Seitenverhältnis sperren"
   :scale-children "Kinder skalieren"
   :scale-in-place "An Ort und Stelle skalieren"
-  :select-intersecting "Sich überschneidende Elemente auswählen"}
+  :select-intersecting "Sich überschneidende Elemente auswählen"
+  :transform-options "Transformationsoptionen"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Halten Sie %1, um die Richtung zu beschränken. oder lassen Sie
@@ -643,8 +644,10 @@
                                    anzupassen."]}
 
  :renderer.tool.impl.draw.pencil
- {:label "Stift"
-  :draw-line "Linie zeichnen"}
+ {:label "Bleistift"
+  :draw-line "Linie zeichnen"
+  :smooth "Glätten"
+  :pen-options "Bleistift-Optionen"}
 
  :renderer.tool.impl.draw.core
  {:click-and-drag "Klicken und ziehen zum Zeichnen."

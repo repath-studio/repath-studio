@@ -493,7 +493,8 @@
   :lock-aspect-ratio "锁定宽高比"
   :scale-children "缩放子元素"
   :scale-in-place "原位缩放"
-  :select-intersecting "选择相交元素"}
+  :select-intersecting "选择相交元素"
+  :transform-options "变换选项"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "按住 %1 限制方向。或释放 %2 进行移动"]
@@ -543,8 +544,10 @@
   :hold-ctrl-to-adjust-size [:div "按住 %1 调整画笔大小。"]}
 
  :renderer.tool.impl.draw.pencil
- {:label "钢笔"
-  :draw-line "绘制线条"}
+ {:label "铅笔"
+  :draw-line "绘制线条"
+  :smooth "平滑"
+  :pen-options "铅笔选项"}
 
  :renderer.tool.impl.draw.core
  {:click-and-drag "点击并拖动进行绘制。"

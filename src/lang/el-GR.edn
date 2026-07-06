@@ -591,7 +591,8 @@
   :lock-aspect-ratio "Κλείδωμα αναλογίας"
   :scale-children "Κλιμάκωση παιδιών"
   :scale-in-place "Κλιμάκωση επί τόπου"
-  :select-intersecting "Επιλογή τεμνόμενων στοιχείων"}
+  :select-intersecting "Επιλογή τεμνόμενων στοιχείων"
+  :transform-options "Επιλογές μετασχηματισμού"}
 
  :renderer.tool.impl.base.transform.clone
  {:clone [:div "Πιέστε %1 για περιορισμό κατεύθυνσης. ή αφήστε %2 για
@@ -647,8 +648,10 @@
                                    πινέλου."]}
 
  :renderer.tool.impl.draw.pencil
- {:label "Στυλό"
-  :draw-line "Σχεδίαση γραμμής"}
+ {:label "Μολύβι"
+  :draw-line "Σχεδίαση γραμμής"
+  :smooth "Εξομάλυνση"
+  :pen-options "Επιλογές μολυβιού"}
 
  :renderer.tool.impl.draw.core
  {:click-and-drag "Κάντε κλικ και σύρετε για να σχεδιάσετε."

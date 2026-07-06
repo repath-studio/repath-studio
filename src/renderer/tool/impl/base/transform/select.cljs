@@ -53,9 +53,9 @@
 (defn reduce-by-area
   [db e f]
   (let [{:keys [alt-key]} e
-        select-intersecting (document.handlers/attr db :select-intersecting)
+        intersecting? (document.handlers/attr db ::intersecting)
         multi-touch? (input.handlers/multi-touch? db)
-        intersecting? (or alt-key select-intersecting multi-touch?)]
+        intersecting? (or alt-key intersecting? multi-touch?)]
     (transduce (comp (element.handlers/visible)
                      (filter (partial hovered? db intersecting?))
                      (map :id))

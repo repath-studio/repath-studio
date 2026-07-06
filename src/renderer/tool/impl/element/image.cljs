@@ -18,6 +18,8 @@
 
 (hierarchy/derive! ::image ::tool.hierarchy/element)
 
+(defmethod tool.hierarchy/tool-options ::image [])
+
 (defmethod tool.hierarchy/on-drag-end [::image :idle]
   [db e]
   (tool.hierarchy/on-pointer-up db e))
