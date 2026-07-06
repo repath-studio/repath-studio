@@ -17,7 +17,8 @@
    [renderer.tool.impl.base.transform.clone]
    [renderer.tool.impl.base.transform.edit]
    [renderer.tool.impl.base.transform.idle]
-   [renderer.tool.impl.base.transform.scale]
+   [renderer.tool.impl.base.transform.scale :as transform.scale]
+   [renderer.tool.impl.base.transform.select :as transform.select]
    [renderer.tool.impl.base.transform.translate]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.tool.views :as tool.views]
@@ -32,32 +33,35 @@
               {:id :transform/toggle-aspect-ratio-lock
                :label [::lock-aspect-ratio "Lock aspect ratio"]
                :icon "aspect-ratio"
-               :event [::document.events/toggle-attr :lock-ratio]
-               :active [::document.subs/attr :lock-ratio]
+               :event [::document.events/toggle-attr
+                       ::transform.scale/ratio-locked]
+               :active [::document.subs/attr ::transform.scale/ratio-locked]
                :enabled [::tool.subs/active? ::transform]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :transform/toggle-scale-children
                :label [::scale-children "Scale children"]
                :icon "scale-children"
-               :event [::document.events/toggle-attr :scale-children]
-               :active [::document.subs/attr :scale-children]
+               :event [::document.events/toggle-attr
+                       ::transform.scale/recursive]
+               :active [::document.subs/attr ::transform.scale/recursive]
                :enabled [::tool.subs/active? ::transform]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :transform/toggle-scale-in-place
                :label [::scale-in-place "Scale in place"]
                :icon "in-place"
-               :event [::document.events/toggle-attr :scale-in-place]
-               :active [::document.subs/attr :scale-in-place]
+               :event [::document.events/toggle-attr ::transform.scale/in-place]
+               :active [::document.subs/attr ::transform.scale/in-place]
                :enabled [::tool.subs/active? ::transform]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :transform/toggle-select-intersecting
                :label [::select-intersecting "Select intersecting elements"]
                :icon "intersect"
-               :event [::document.events/toggle-attr :select-intersecting]
-               :active [::document.subs/attr :select-intersecting]
+               :event [::document.events/toggle-attr
+                       ::transform.select/intersecting]
+               :active [::document.subs/attr ::transform.select/intersecting]
                :enabled [::tool.subs/active? ::transform]}])
 
 (rf/dispatch [::action.events/register-action-group
