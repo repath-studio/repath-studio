@@ -38,22 +38,28 @@
 (defmethod element.hierarchy/scale :ellipse
   [el ratio pivot-point]
   (let [[x y] ratio
+        {{:keys [stroke-width]} :attrs} el
+        padding (/ (utils.length/unit->px stroke-width) 2)
         dimensions (-> el element.hierarchy/bbox utils.bounds/->dimensions)
+        update-size (fn [ratio size]
+                      (- (* (+ size padding) (abs ratio)) padding))
         pivot-point (->> (matrix/div dimensions 2)
                          (matrix/sub pivot-point))
         offset (utils.element/scale-offset ratio pivot-point)]
     (-> el
-        (attribute.hierarchy/update-attr :rx #(abs (* % x)))
-        (attribute.hierarchy/update-attr :ry #(abs (* % y)))
+        (attribute.hierarchy/update-attr :rx (partial update-size x))
+        (attribute.hierarchy/update-attr :ry (partial update-size y))
         (element.hierarchy/translate offset))))
 
 (defmethod element.hierarchy/bbox :ellipse
   [el]
-  (let [{{:keys [cx cy rx ry]} :attrs} el
+  (let [{{:keys [cx cy rx ry stroke-width]} :attrs} el
         rx (or rx ry)
         ry (or ry rx)
-        [cx cy rx ry] (map utils.length/unit->px [cx cy rx ry])]
-    [(- cx rx) (- cy ry) (+ cx rx) (+ cy ry)]))
+        [cx cy rx ry stroke-width] (->> [cx cy rx ry stroke-width]
+                                        (map utils.length/unit->px))
+        padding (/ stroke-width 2)]
+    [(- cx rx padding) (- cy ry padding) (+ cx rx padding) (+ cy ry padding)]))
 
 (defmethod element.hierarchy/path :ellipse
   [el]
@@ -89,9 +95,10 @@
 
 (defmethod element.hierarchy/handles :ellipse
   [el]
-  (let [bbox (:bbox el)
-        [cx cy] (utils.bounds/center bbox)
-        [rx ry] (matrix/div (utils.bounds/->dimensions bbox) 2)]
+  (let [{{:keys [cx cy rx ry]} :attrs} el
+        [cx cy rx ry] (mapv utils.length/unit->px [cx cy rx ry])
+        offset (utils.element/offset el)
+        [cx cy] (matrix/add [cx cy] offset)]
     [{:type :handle
       :action :edit
       :parent (:id el)
@@ -109,9 +116,10 @@
 
 (defmethod element.hierarchy/render-edit :ellipse
   [el]
-  (let [bbox (:bbox el)
-        [cx cy] (utils.bounds/center bbox)
-        [rx ry] (matrix/div (utils.bounds/->dimensions bbox) 2)
+  (let [{{:keys [cx cy rx ry]} :attrs} el
+        [cx cy rx ry] (mapv utils.length/unit->px [cx cy rx ry])
+        offset (utils.element/offset el)
+        [cx cy] (matrix/add [cx cy] offset)
         line-end-x (+ cx rx)
         line-end-y (- cy ry)]
     [:g ::edit-handles
@@ -128,3 +136,15 @@
 
      [utils.svg/label (utils.length/->fixed ry 2 false) {:x cx
                                                          :y (- cy (/ ry 2))}]]))
+
+(defmethod element.hierarchy/snapping-points :ellipse
+  [el]
+  (let [{{:keys [cx cy rx ry]} :attrs} el
+        rx (or rx ry)
+        ry (or ry rx)
+        [cx cy rx ry] (mapv utils.length/unit->px [cx cy rx ry])]
+    (mapv #(with-meta % {:label [::ellipe-edge "ellipse edge"]})
+          [[(- cx rx) cy]
+           [(+ cx rx) cy]
+           [cx (- cy ry)]
+           [cx (+ cy ry)]])))
