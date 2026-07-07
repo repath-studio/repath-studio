@@ -7,6 +7,8 @@
    [re-frame.core :as rf]
    [renderer.action.views :as action.views]
    [renderer.app.events :as-alias app.events]
+   [renderer.app.home-view :as app.home-view]
+   [renderer.app.status-view :as app.status-view]
    [renderer.app.subs :as-alias app.subs]
    [renderer.dialog.views :as dialog.views]
    [renderer.document.subs :as-alias document.subs]
@@ -15,7 +17,6 @@
    [renderer.frame.subs :as-alias frame.subs]
    [renderer.frame.views :as frame.views]
    [renderer.history.views :as history.views]
-   [renderer.home.views :as home.views]
    [renderer.i18n.subs :as-alias i18n.subs]
    [renderer.i18n.views :as i18n.views]
    [renderer.input.subs :as-alias input.subs]
@@ -30,10 +31,9 @@
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.misc.guide :as-alias tool.impl.misc.guide]
    [renderer.tool.subs :as-alias tool.subs]
-   [renderer.toolbar.status :as toolbar.status]
-   [renderer.toolbar.tools :as toolbar.tools]
-   [renderer.toolbar.views :as toolbar.views]
+   [renderer.tool.views :as tool.views]
    [renderer.tree.views :as tree.views]
+   [renderer.utils.extra :refer [rpartial]]
    [renderer.utils.length :as utils.length]
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]
@@ -180,6 +180,16 @@
                  :on-escape-key-down #(.stopPropagation %)}
                 [views/dropdownmenu-arrow]]))]])
 
+(defn action-toolbar
+  [actions & more]
+  (->> actions
+       (map (rpartial views/action-button-group :side "left"))
+       (interpose [:span {:class "h-divider"}])
+       (into [:<>])
+       (conj more)
+       (into [views/toolbar
+              {:class "flex-col px-2 md:px-1 gap-2 md:gap-1"}])))
+
 (defn frame-panel
   []
   (let [rulers? @(rf/subscribe [::app.subs/rulers?])
@@ -189,7 +199,7 @@
         bg-class (if active? "bg-accent" "bg-primary")]
     [:div.flex.flex-col.flex-1.h-full.gap-px.overflow-hidden
      [:div
-      [toolbar.tools/root]
+      [tool.views/toolbar]
       (when rulers?
         [:div.flex.gap-px
          [:div
@@ -210,11 +220,10 @@
        [frame]
        (when-not md?
          [:div.bg-primary.flex.items-center
-          [toolbar.views/action-toolbar
-           {:orientation :vertical
-            :actions [:object/index-operations
-                      :object/horizontal-alignment
-                      :object/vertical-alignment]}
+          [action-toolbar
+           [:object/index-operations
+            :object/horizontal-alignment
+            :object/vertical-alignment]
            [:span.h-divider]
            [context-dropdown-button]]])]]]))
 
@@ -294,7 +303,7 @@
          [timeline.views/root]
          [panel.views/close-button :timeline]]])
      [panel.views/separator]
-     [toolbar.status/root]
+     [app.status-view/root]
      (when md? [repl.views/root])]))
 
 (defn bottom-bar
@@ -368,12 +377,11 @@
            [attributes-panel]]])]
       (when md?
         [:div.bg-primary.flex
-         [toolbar.views/action-toolbar
-          {:orientation :vertical
-           :actions [:object/index-operations
-                     :object/horizontal-alignment
-                     :object/vertical-alignment
-                     :object/boolean-operations]}]])]]))
+         [action-toolbar
+          [:object/index-operations
+           :object/horizontal-alignment
+           :object/vertical-alignment
+           :object/boolean-operations]]])]]))
 
 (defn main-panel-group
   []
@@ -421,7 +429,7 @@
            [:div])
          (if documents?
            [main-panel-group]
-           [home.views/root recent-documents])
+           [app.home-view/root recent-documents])
          [:div]]
         [dialog.views/root]
         [views/toaster theme]]])))

@@ -1,4 +1,4 @@
-(ns renderer.toolbar.status
+(ns renderer.app.status-view
   (:require
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
    ["@radix-ui/react-popover" :as Popover]

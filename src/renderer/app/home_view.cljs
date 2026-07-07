@@ -1,4 +1,4 @@
-(ns renderer.home.views
+(ns renderer.app.home-view
   (:require
    ["@radix-ui/react-select" :as Select]
    ["path-browserify" :as path-browserify]

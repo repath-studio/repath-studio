@@ -59,12 +59,12 @@
    [icon icon-name]])
 
 (defn action-icon-button
-  [action & {:as attrs}]
+  [action & {:as props}]
   [icon-button (:icon action)
    (merge {:disabled (action.views/disabled? action)
            :aria-label (action.views/label action)
            :on-click (action.views/dispatch action)}
-          attrs)])
+          props)])
 
 (defn action-button
   [action-id & {:as props}]
@@ -294,7 +294,7 @@
           (str (+ 4 off) "px"))))
 
 (defn cm-editor
-  [value {:keys [attrs options on-init on-blur]}]
+  [value {:keys [props options on-init on-blur]}]
   (let [cm (reagent/atom nil)
         ref (react/createRef)]
     (reagent/create-class
@@ -324,7 +324,7 @@
 
       :reagent-render
       (fn []
-        [:div (merge {:ref ref} attrs)])})))
+        [:div (merge {:ref ref} props)])})))
 
 (defn toaster
   [theme]
@@ -378,15 +378,15 @@
       message]]]])
 
 (defn drawer
-  [attrs & children]
+  [props & children]
   [:> Drawer.Root
    {:direction "bottom"
     :modal false}
    [:> Drawer.Trigger
     {:class "button p-1 rounded h-auto flex flex-col flex-1 text-2xs gap-1
              overflow-hidden items-center"}
-    [icon (:icon attrs)]
-    [:span.truncate.w-full (i18n.views/t (:label attrs))]]
+    [icon (:icon props)]
+    [:span.truncate.w-full (i18n.views/t (:label props))]]
    [:> Drawer.Portal
     [:> Drawer.Content
      {:class "inset-0 fixed z-0 outline-none bg-primary flex shadow-lg
@@ -402,5 +402,5 @@
       {:class "mx-auto my-3! w-12! h-1.5! rounded-full bg-overlay!"}]
      [:> Drawer.Title
       {:class "sr-only"}
-      (i18n.views/t (:label attrs))]
+      (i18n.views/t (:label props))]
      (into [:div.flex.flex-1.overflow-hidden.w-full] children)]]])

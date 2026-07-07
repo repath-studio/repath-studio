@@ -16,7 +16,7 @@
      [views/cm-editor
       (str v)
       {:on-blur #(rf/dispatch [::element.events/set-attr k %])
-       :attrs {:id (name k)}
+       :props {:id (name k)}
        :options {:mode "css"
                  :placeholder (when-not v "multiple")
                  :readOnly disabled
