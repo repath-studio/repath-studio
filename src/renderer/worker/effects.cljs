@@ -14,9 +14,12 @@
                            (rf/dispatch [::worker.events/message
                                          id
                                          on-success
-                                         data])))
+                                         data])
+                           (.terminate worker)))
 
      (.addEventListener worker "error"
-                        #(rf/dispatch [::worker.events/message id on-error %]))
+                        #(do
+                           (rf/dispatch [::worker.events/message id on-error %])
+                           (.terminate worker)))
 
      (.postMessage worker (clj->js data)))))
