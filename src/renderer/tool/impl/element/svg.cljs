@@ -1,11 +1,13 @@
 (ns renderer.tool.impl.element.svg
   "https://www.w3.org/TR/SVG/struct.html#SVGElement"
   (:require
+   [clojure.core.matrix :as matrix]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.element.handlers :as element.handlers]
    [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
+   [renderer.input.handlers :as input.handlers]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
@@ -17,37 +19,83 @@
 
 (defmethod tool.hierarchy/tool-options ::svg [])
 
-(defn attributes
+(defn create-el
   [db]
   (let [[offset-x offset-y] (tool.handlers/snapped-offset db)
         [x y] (tool.handlers/snapped-position db)
-        width (abs (- x offset-x))
-        height (abs (- y offset-y))]
-    {:x (utils.length/->fixed (cond-> offset-x (< x offset-x) (- width)))
-     :y (utils.length/->fixed (cond-> offset-y (< y offset-y) (- height)))
-     :width (utils.length/->fixed width)
-     :height (utils.length/->fixed height)}))
+        [width height] (mapv (comp utils.length/->fixed abs)
+                             [(- x offset-x) (- y offset-y)])
+        origin [(cond-> offset-x (< x offset-x) (- width))
+                (cond-> offset-y (< y offset-y) (- height))]
+        [x y] (mapv utils.length/->fixed origin)]
+    (-> db
+        (assoc :last-origin origin)
+        (tool.handlers/set-state :create)
+        (element.handlers/add {:type :element
+                               :tag :svg
+                               :attrs {:x x
+                                       :y y
+                                       :width width
+                                       :height height}}))))
+
+(defn update-el
+  [db e]
+  (let [pointer-pos (tool.handlers/snapped-position db)
+        parent-offset (element.handlers/parent-offset db)
+        position (matrix/sub pointer-pos parent-offset)
+        origin (matrix/sub (:last-origin db) parent-offset)
+        position (cond->> position
+                   (input.handlers/snap-to-angle? db e)
+                   (input.handlers/snap-angle origin))
+        size (matrix/sub position origin)
+        [w h] (mapv (comp utils.length/->fixed abs) size)
+        new-x (cond-> (first origin)
+                (neg? (first size))
+                (+ (first size)))
+        new-y (cond-> (second origin)
+                (neg? (second size))
+                (+ (second size)))
+        [new-x new-y] (mapv utils.length/->fixed [new-x new-y])]
+    (element.handlers/update-selected db #(-> %
+                                              (assoc-in [:attrs :x] new-x)
+                                              (assoc-in [:attrs :y] new-y)
+                                              (assoc-in [:attrs :width] w)
+                                              (assoc-in [:attrs :height] h)))))
+
+(defn finalize
+  [db e]
+  (-> db
+      (history.handlers/finalize (:timestamp e)
+                                 [::create-svg "Create SVG"])
+      (tool.handlers/deactivate)))
 
 (defmethod tool.hierarchy/on-drag-start [::svg :idle]
   [db _e]
-  (-> db
-      (tool.handlers/set-state :create)
-      (element.handlers/add {:tag :svg
-                             :type :element
-                             :attrs (attributes db)})))
+  (create-el db))
+
+(defmethod tool.hierarchy/on-pointer-up [::svg :idle]
+  [db _e]
+  (create-el db))
 
 (defmethod tool.hierarchy/on-drag [::svg :create]
-  [db _e]
-  (let [attrs (attributes db)
-        assoc-attr (fn [el [k v]] (assoc-in el [:attrs k] (str v)))]
-    (element.handlers/update-selected db #(reduce assoc-attr % attrs))))
+  [db e]
+  (update-el db e))
+
+(defmethod tool.hierarchy/on-pointer-down [::svg :create]
+  [db e]
+  (update-el db e))
+
+(defmethod tool.hierarchy/on-pointer-move [::svg :create]
+  [db e]
+  (update-el db e))
 
 (defmethod tool.hierarchy/on-drag-end [::svg :create]
   [db e]
-  (-> db
-      (history.handlers/finalize (:timestamp e) [::create-svg "Create SVG"])
-      (tool.handlers/deactivate)))
+  (finalize db e))
 
+(defmethod tool.hierarchy/on-pointer-up [::svg :create]
+  [db e]
+  (finalize db e))
 (rf/dispatch [::action.events/register-action
               {:id :tool/svg
                :label [::label "Svg"]

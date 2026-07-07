@@ -14,6 +14,8 @@
    [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
+   [renderer.input.db :refer [PointerEvent]]
+   [renderer.input.handlers :as input.handlers]
    [renderer.input.subs :as-alias input.subs]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
@@ -39,13 +41,22 @@
    [:div (i18n.views/t [::double-click-to-end
                         "Double or right click to finalize the path."])]])
 
-(m/=> adjusted-pointer-position [:-> App Vec2])
+(m/=> adjusted-pointer-position [:-> App PointerEvent Vec2])
 (defn adjusted-pointer-position
-  [db]
-  (->> (tool.handlers/snapped-position db)
-       (element.handlers/adjusted-point db)))
+  [db e]
+  (cond->> (tool.handlers/snapped-position db)
+    :always
+    (element.handlers/adjusted-point db)
 
-(m/=> adjusted-pointer-position [:-> App Vec2])
+    (input.handlers/snap-to-angle? db e)
+    (input.handlers/snap-angle (->> (element.handlers/selected db)
+                                    first :attrs :d
+                                    (utils.path/string->segments)
+                                    (take-last 2)
+                                    (apply utils.path/abs-endpoint)
+                                    (mapv utils.length/unit->px)))))
+
+(m/=> adjusted-pointer-offset [:-> App Vec2])
 (defn adjusted-pointer-offset
   [db]
   (->> (tool.handlers/snapped-offset db)
@@ -87,8 +98,8 @@
   (create-el db))
 
 (defmethod tool.hierarchy/on-pointer-move [::path :create]
-  [db _e]
-  (let [[x y] (->> (adjusted-pointer-position db)
+  [db e]
+  (let [[x y] (->> (adjusted-pointer-position db e)
                    (mapv utils.length/->fixed))]
     (update-path
      db
@@ -106,8 +117,8 @@
             (utils.path/segments->string))))))
 
 (defmethod tool.hierarchy/on-pointer-up [::path :create]
-  [db _e]
-  (let [[x y] (->> (adjusted-pointer-position db)
+  [db e]
+  (let [[x y] (->> (adjusted-pointer-position db e)
                    (mapv utils.length/->fixed))]
     (update-path db (fn [d]
                       (let [segments (utils.path/string->segments d)
@@ -119,7 +130,8 @@
 (defmethod tool.hierarchy/on-drag [::path :create]
   [db _e]
   (let [anchor (adjusted-pointer-offset db)
-        drag-pos (adjusted-pointer-position db)
+        drag-pos (->> (tool.handlers/snapped-position db)
+                      (element.handlers/adjusted-point db))
         [cp2-x cp2-y] (->> (matrix/sub (matrix/mul anchor 2) drag-pos)
                            (mapv utils.length/->fixed))]
     (update-path db #(let [segments (utils.path/string->segments %)]

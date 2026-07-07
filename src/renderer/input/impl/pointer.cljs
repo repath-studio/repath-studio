@@ -5,7 +5,7 @@
    [re-frame.core :as rf]
    [renderer.app.db :refer [App]]
    [renderer.app.handlers :as app.handlers]
-   [renderer.db :refer [JS_Object Vec2]]
+   [renderer.db :refer [JS_Object]]
    [renderer.effects :as-alias effects]
    [renderer.element.db :refer [Element]]
    [renderer.frame.handlers :as frame.handlers]
@@ -139,16 +139,6 @@
                   (contains? active-pointers pointer-id)
                   (significant-drag? db e)))))
 
-(m/=> adjusted-pointer-pos [:-> App PointerEvent Vec2])
-(defn adjusted-pointer-pos
-  [db e]
-  (let [{:keys [adjusted-pointer-offset]} db
-        {:keys [pointer-pos]} e]
-    (cond->> (input.handlers/adjusted-pos db pointer-pos)
-      (and (:pointer-offset db)
-           (input.handlers/snap-to-angle? db e))
-      (input.handlers/snap-angle adjusted-pointer-offset))))
-
 (defmethod input.hierarchy/pointer "pointermove"
   [db e]
   (let [{:keys [drag-pointer]} db
@@ -162,7 +152,9 @@
 
         (or (drag-pointer? db e) (not drag-pointer))
         (assoc :pointer-pos pointer-pos
-               :adjusted-pointer-pos (adjusted-pointer-pos db e))))))
+               :adjusted-pointer-pos (input.handlers/adjusted-pos
+                                      db
+                                      pointer-pos))))))
 
 (defmethod input.hierarchy/pointer "pointerdown"
   [db e]
@@ -178,7 +170,7 @@
       (or (= button :middle)
           (and (= button :left) (empty? active-pointers)))
       (assoc :pointer-pos pointer-pos
-             :adjusted-pointer-pos (adjusted-pointer-pos db e)
+             :adjusted-pointer-pos (input.handlers/adjusted-pos db pointer-pos)
              :pointer-offset pointer-pos
              :adjusted-pointer-offset (input.handlers/adjusted-pos db
                                                                    pointer-pos))

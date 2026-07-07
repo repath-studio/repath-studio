@@ -9,6 +9,7 @@
    [renderer.element.handlers :as element.handlers]
    [renderer.hierarchy :as hierarchy]
    [renderer.i18n.views :as i18n.views]
+   [renderer.input.handlers :as input.handlers]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
@@ -52,9 +53,12 @@
   (tool.handlers/set-state db :idle))
 
 (defmethod tool.hierarchy/on-drag [::measure :create]
-  [db _e]
+  [db e]
   (let [offset (tool.handlers/snapped-offset db)
         position (tool.handlers/snapped-position db)
+        position (cond->> position
+                   (input.handlers/snap-to-angle? db e)
+                   (input.handlers/snap-angle offset))
         [adjacent opposite] (matrix/sub offset position)
         hypotenuse (Math/hypot adjacent opposite)]
     (app.handlers/add-fx db [::set-measure-attrs {:x1 (first offset)
