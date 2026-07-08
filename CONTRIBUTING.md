@@ -80,7 +80,7 @@ the registrations multiple times.
 
 ## Spec
 
-You can use the [schema explorer](/schema-explorer/) to examine the app schemas
+You can use the [schema explorer](/schema-explorer) to examine the app schemas
 and their relationships.
 
 We use [malli](https://github.com/metosin/malli) to describe the shape of our
