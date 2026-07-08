@@ -24,9 +24,25 @@
 (defonce measure-attrs (reagent/atom nil))
 
 (rf/reg-fx
- ::set-measure-attrs
- (fn [value]
-   (reset! measure-attrs value)))
+ ::create-measure
+ (fn [start-pos]
+   (reset! measure-attrs {:x1 (first start-pos)
+                          :y1 (second start-pos)})))
+
+(rf/reg-fx
+ ::update-measure-end-point
+ (fn [[end-pos snap-to-angle?]]
+   (let [start-pos [(:x1 @measure-attrs) (:y1 @measure-attrs)]
+         end-pos (cond->> end-pos
+                   snap-to-angle?
+                   (input.handlers/snap-angle start-pos))
+         [adjacent opposite] (matrix/sub start-pos end-pos)
+         hypotenuse (Math/hypot adjacent opposite)]
+     (swap! measure-attrs
+            assoc
+            :x2 (first end-pos)
+            :y2 (second end-pos)
+            :hypotenuse hypotenuse))))
 
 (defmethod tool.hierarchy/help [::measure :idle]
   []
@@ -46,7 +62,21 @@
 
 (defmethod tool.hierarchy/on-drag-start [::measure :idle]
   [db _e]
-  (tool.handlers/set-state db :create))
+  (-> db
+      (tool.handlers/set-state :create)
+      (app.handlers/add-fx [::create-measure
+                            (tool.handlers/snapped-position db)])))
+
+(defmethod tool.hierarchy/on-pointer-up [::measure :idle]
+  [db _e]
+  (-> db
+      (tool.handlers/set-state :create)
+      (app.handlers/add-fx [::create-measure
+                            (tool.handlers/snapped-position db)])))
+
+(defmethod tool.hierarchy/on-pointer-up [::measure :create]
+  [db _e]
+  (tool.handlers/set-state db :idle))
 
 (defmethod tool.hierarchy/on-drag-end [::measure :create]
   [db _e]
@@ -54,22 +84,19 @@
 
 (defmethod tool.hierarchy/on-drag [::measure :create]
   [db e]
-  (let [offset (tool.handlers/snapped-offset db)
-        position (tool.handlers/snapped-position db)
-        position (cond->> position
-                   (input.handlers/snap-to-angle? db e)
-                   (input.handlers/snap-angle offset))
-        [adjacent opposite] (matrix/sub offset position)
-        hypotenuse (Math/hypot adjacent opposite)]
-    (app.handlers/add-fx db [::set-measure-attrs {:x1 (first offset)
-                                                  :y1 (second offset)
-                                                  :x2 (first position)
-                                                  :y2 (second position)
-                                                  :hypotenuse hypotenuse}])))
+  (app.handlers/add-fx db [::update-measure-end-point
+                           [(tool.handlers/snapped-position db)
+                            (input.handlers/snap-to-angle? db e)]]))
+
+(defmethod tool.hierarchy/on-pointer-move [::measure :create]
+  [db e]
+  (app.handlers/add-fx db [::update-measure-end-point
+                           [(tool.handlers/snapped-position db)
+                            (input.handlers/snap-to-angle? db e)]]))
 
 (defmethod tool.hierarchy/render ::measure
   []
-  (when @measure-attrs
+  (when (and @measure-attrs (:hypotenuse @measure-attrs))
     (let [handle-size @(rf/subscribe [::document.subs/handle-size])
           {:keys [x1 x2 y1 y2 hypotenuse]} @measure-attrs
           [x1 y1 x2 y2] (map utils.length/unit->px [x1 y1 x2 y2])
