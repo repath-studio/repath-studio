@@ -19,7 +19,7 @@
       (.exportSVG)
       (.getAttribute "d")))
 
-(m/=> manipulate [:-> string? PathManipulation string?])
+(m/=> manipulate [:-> string? [:maybe PathManipulation] string?])
 (defn manipulate
   [path manipulation]
   (let [path (Path. path)]

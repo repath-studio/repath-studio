@@ -235,7 +235,7 @@
                           (render-arms props index segment))))
          (into [:g]))))
 
-(m/=> translate-point [:-> PathSegments number? Vec2 PathPointType PathSegment])
+(m/=> translate-point [:-> number? Vec2 PathPointType PathSegments PathSegment])
 (defn translate-point
   [index delta point-type segments]
   (let [segment (aget segments index)
