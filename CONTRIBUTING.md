@@ -80,8 +80,8 @@ the registrations multiple times.
 
 ## Spec
 
-You can use the [schema explorer](/schema-explorer/index.html) to examine the app schemas
-and their relationships.
+You can use the [schema explorer](https://repath.studio/schema-explorer/) to
+examine the app schemas and their relationships.
 
 We use [malli](https://github.com/metosin/malli) to describe the shape of our
 app db and selectively validate incoming data (e.g. file loading). We also use
