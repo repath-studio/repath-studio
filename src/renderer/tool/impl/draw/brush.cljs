@@ -41,7 +41,7 @@
    (reset! brush {:type :element
                   :tag :circle
                   :attrs (assoc (:attrs @brush)
-                                :r (/ value 2))})))
+                                :r (str (/ value 2)))})))
 
 (defn update-brush-size
   [db]
@@ -80,9 +80,9 @@
         fill (document.handlers/attr db :fill)]
     (app.handlers/add-fx db [::set-brush {:type :element
                                           :tag :circle
-                                          :attrs {:cx x
-                                                  :cy y
-                                                  :r (/ size 2)
+                                          :attrs {:cx (str x)
+                                                  :cy (str y)
+                                                  :r (str (/ size 2))
                                                   :fill fill}}])))
 
 (defmethod tool.hierarchy/on-drag-start [::brush :idle]

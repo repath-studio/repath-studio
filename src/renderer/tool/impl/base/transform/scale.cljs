@@ -130,10 +130,10 @@
 (m/=> ratio-locked? [:-> App any? boolean?])
 (defn ratio-locked?
   [db e]
-  (or (:ctrl-key e)
-      (input.handlers/multi-touch? db)
-      (element.handlers/ratio-locked? db)
-      (document.handlers/attr db ::ratio-locked)))
+  (boolean (or (:ctrl-key e)
+               (input.handlers/multi-touch? db)
+               (element.handlers/ratio-locked? db)
+               (document.handlers/attr db ::ratio-locked))))
 
 (defmethod tool.hierarchy/on-drag [::transform/transform :scale]
   [db e]
@@ -141,8 +141,8 @@
         delta (tool.handlers/pointer-delta db)
         selected-elements (element.handlers/selected db)
         locked? (every? :locked selected-elements)
-        in-place? (document.handlers/attr db ::in-place)
-        recursive? (document.handlers/attr db ::recursive)]
+        in-place? (boolean (document.handlers/attr db ::in-place))
+        recursive? (boolean (document.handlers/attr db ::recursive))]
     (-> db
         (history.handlers/reset-state)
         (tool.handlers/set-cursor (if locked? "not-allowed" "default"))

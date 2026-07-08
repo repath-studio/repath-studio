@@ -187,12 +187,12 @@
   [db]
   (-> db active :attrs))
 
-(m/=> attr [:-> App keyword? string?])
+(m/=> attr [:-> App keyword? any?])
 (defn attr
   [db k]
   (get (attrs db) k))
 
-(m/=> assoc-attr [:-> App keyword? string? App])
+(m/=> assoc-attr [:-> App keyword? any? App])
 (defn assoc-attr
   [db k v]
   (assoc-in db (path db :attrs k) v))
@@ -245,11 +245,11 @@
        (some #(= id (:id %)))
        (boolean)))
 
-(m/=> saved-ids [:-> App sequential?])
+(m/=> saved-ids [:-> App [:vector DocumentId]])
 (defn saved-ids
   [db]
   (->> (:document-tabs db)
-       (filter (partial saved? db))))
+       (filterv (partial saved? db))))
 
 (m/=> ->save-format [:-> PersistedDocument string?])
 (defn ->save-format
