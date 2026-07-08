@@ -118,7 +118,8 @@ on your browser:
 
 - `http://localhost:8080` - The web application
 - `http://localhost:8081` - The test runner
-- `http://localhost:8082` - The components portfolio
+- `http://localhost:8082` - The schema explorer
+- `http://localhost:8083` - The components portfolio
 
 If you want to open the electron app, execute the following on a different
 terminal.

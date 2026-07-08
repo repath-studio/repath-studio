@@ -10,7 +10,8 @@
 
  :dev-http {8080 "resources/public"
             8081 "target/browser-test"
-            8082 ["portfolio/resources/public"
+            8082 "schema-explorer"
+            8083 ["portfolio/resources/public"
                   "resources/public/css"
                   "resources/public/"
                   "classpath:public"]}
@@ -27,7 +28,8 @@
 
   :renderer {:target :browser
              :output-dir "resources/public/js"
-             :build-hooks [(build.icon-generator/hook!)]
+             :build-hooks [(build.icon-generator/hook!)
+                           (build.schema-graph-generator/hook!)]
              :compiler-options {:optimizations :simple
                                 :output-wrapper false
                                 :pseudo-names true

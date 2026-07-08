@@ -4,7 +4,7 @@
   [:enum :dark :light])
 
 (def ThemeMode
-  (conj NativeMode :system))
+  [:enum :dark :light :system])
 
 (def Theme
   [:map {:closed true}
