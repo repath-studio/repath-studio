@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Repath Studio — Schema Graph</title>
+  <meta name="description" content="Visualize the relationships between schemas.">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f8f8f8;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    header {
+      background: #fff;
+      padding: 8px 14px;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
+    }
+
+    h1 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+      white-space: nowrap;
+    }
+
+    #search {
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 5px 10px;
+      font-size: 13px;
+      width: 180px;
+      outline: none;
+    }
+
+    #search:focus {
+      border-color: #4a90d9;
+      box-shadow: 0 0 0 2px rgba(74, 144, 217, .2);
+    }
+
+    button {
+      background: #f2f2f2;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 5px 12px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #e5e5e5;
+    }
+
+    #stats {
+      margin-left: auto;
+      font-size: 12px;
+      color: #999;
+      white-space: nowrap;
+    }
+
+    #hint {
+      font-size: 11px;
+      color: #bbb;
+      white-space: nowrap;
+    }
+
+    #graph {
+      flex: 1;
+      overflow: hidden;
+      background: #fff;
+      cursor: grab;
+    }
+
+    #graph:active {
+      cursor: grabbing;
+    }
+
+    #graph svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .node {
+      transition: opacity .15s;
+      cursor: pointer;
+    }
+
+    .edge {
+      transition: opacity .15s;
+      pointer-events: none;
+    }
+
+    .dimmed {
+      opacity: .06;
+    }
+
+    .selected>polygon,
+    .selected>ellipse,
+    .selected>rect {
+      stroke: #4a90d9 !important;
+      stroke-width: 2.5px;
+    }
+
+    .selected>text {
+      fill: #1a60b0 !important;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Repath Studio — Schema Graph</h1>
+    <input id="search" type="search" placeholder="Filter schemas…" autocomplete="off">
+    <button id="btn-fit">Fit</button>
+    <button id="btn-reset">Reset</button>
+    <span id="stats"></span>
+    <span id="hint">click a node to show connections</span>
+  </header>
+  <div id="graph">
+    <p id="loading" style="padding:20px;color:#999">Loading schema graph…</p>
+  </div>
+
+  <script src="https://unpkg.com/@hpcc-js/wasm@1/dist/index.min.js" type="javascript/worker"></script>
+  <script src="https://unpkg.com/d3@7/dist/d3.min.js"></script>
+  <script src="https://unpkg.com/d3-graphviz@4/build/d3-graphviz.min.js"></script>
+  <script>
+    fetch("./graph.dot")
+      .then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.text(); })
+      .then(dot => {
+        document.getElementById("loading")?.remove();
+        const gz = d3.select("#graph")
+          .graphviz()
+          .zoom(true)
+          .fit(true)
+          .on("renderEnd", function () { onRendered(gz); })
+          .renderDot(dot);
+      })
+      .catch(err => {
+        const el = document.getElementById("loading") || document.getElementById("graph");
+        el.textContent = "Error loading graph.dot: " + err.message;
+      });
+
+    function title(el) {
+      return el.querySelector("title")?.textContent?.trim() ?? "";
+    }
+
+    function clearHighlight() {
+      document.querySelectorAll("#graph .node, #graph .edge")
+        .forEach(el => el.classList.remove("dimmed", "selected"));
+    }
+
+    function highlightNode(name) {
+      const edges = [...document.querySelectorAll("#graph .edge")];
+      const connected = new Set([name]);
+      edges.forEach(e => {
+        const [src, tgt] = title(e).split("->").map(s => s.trim());
+        if (src === name) connected.add(tgt);
+        if (tgt === name) connected.add(src);
+      });
+      document.querySelectorAll("#graph .node").forEach(n => {
+        const t = title(n);
+        n.classList.toggle("dimmed", !connected.has(t));
+        n.classList.toggle("selected", t === name);
+      });
+      edges.forEach(e => {
+        const [src, tgt] = title(e).split("->").map(s => s.trim());
+        e.classList.toggle("dimmed", !(connected.has(src) && connected.has(tgt)));
+      });
+    }
+
+    function onRendered(gz) {
+      const nodes = document.querySelectorAll("#graph .node");
+      document.getElementById("stats").textContent = nodes.length + " schemas";
+
+      nodes.forEach(n => {
+        n.addEventListener("click", e => {
+          e.stopPropagation();
+          const already = n.classList.contains("selected");
+          clearHighlight();
+          if (!already) highlightNode(title(n));
+        });
+      });
+
+      document.getElementById("graph").addEventListener("click", () => {
+        clearHighlight();
+        document.getElementById("search").value = "";
+      });
+
+      if (!onRendered.listenersAttached) {
+        onRendered.listenersAttached = true;
+
+        document.getElementById("search").addEventListener("input", function () {
+          const q = this.value.trim().toLowerCase();
+          if (!q) { clearHighlight(); return; }
+          const matching = new Set();
+          document.querySelectorAll("#graph .node").forEach(n => {
+            if (title(n).toLowerCase().includes(q)) matching.add(title(n));
+          });
+          document.querySelectorAll("#graph .node").forEach(n => {
+            const t = title(n);
+            n.classList.toggle("dimmed", !matching.has(t));
+            n.classList.toggle("selected", matching.has(t));
+          });
+          document.querySelectorAll("#graph .edge").forEach(e => {
+            const [src, tgt] = title(e).split("->").map(s => s.trim());
+            e.classList.toggle("dimmed", !(matching.has(src) || matching.has(tgt)));
+          });
+        });
+
+        document.getElementById("btn-fit").addEventListener("click",
+          () => gz.resetZoom(d3.transition().duration(400)));
+        document.getElementById("btn-reset").addEventListener("click", () => {
+          clearHighlight();
+          document.getElementById("search").value = "";
+          gz.resetZoom(d3.transition().duration(400));
+        });
+      }
+    }
+  </script>
+</body>
+
+</html>

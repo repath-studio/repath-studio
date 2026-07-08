@@ -80,9 +80,13 @@ the registrations multiple times.
 
 ## Spec
 
+You can use the [schema explorer](/schema-explorer/) to examine the app schemas
+and their relationships.
+
 We use [malli](https://github.com/metosin/malli) to describe the shape of our
 app db and selectively validate incoming data (e.g. file loading). We also use
-this spec to generate default values. Full db validation is enabled on dev mode.
+this spec to generate default values. Full db validation can be enabled on dev
+mode.
 
 [Function schemas](https://github.com/metosin/malli/blob/master/docs/function-schemas.md#defn-schemas)
 are selectively applied to pure and critical namespaces, such as utils and
