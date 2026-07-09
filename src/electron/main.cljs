@@ -135,6 +135,8 @@
            (fn []
              (.show ^js @main-window)
              (.manage win-state ^js @main-window)
+             ;; Fixes a bug on linux that blocks unmaximize after load.
+             (.restore ^js @main-window)
              (.initialize log)))
 
     (.on ^js @main-window "ready-to-show" #(on-ready-to-show @main-window))
