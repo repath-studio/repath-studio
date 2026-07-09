@@ -222,6 +222,7 @@
   [tag k]
   (let [clicked-element @(rf/subscribe [::app.subs/clicked-element])
         base-attr? (utils.element/base-attr? tag k)
+        hovered? @(rf/subscribe [::element.subs/hovered? k])
         active? (and (= (:type clicked-element) :handle)
                      (= (:id clicked-element) k))]
     [:> HoverCard/Root
@@ -232,7 +233,8 @@
         {:for (name k)
          :dir "ltr"
          :class ["leading-[27px]"
-                 (when active? "bg-overlay!")
+                 (cond active? "bg-accent! text-accent-foreground!"
+                       hovered? "bg-overlay!")
                  (when-not base-attr? "text-foreground-muted!")]}
         k]]]
      [:> HoverCard/Portal
