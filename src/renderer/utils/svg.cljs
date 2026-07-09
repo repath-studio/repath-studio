@@ -52,7 +52,7 @@
         line-bg-attrs {:stroke "var(--accent-foreground)"
                        :stroke-width 3
                        :stroke-opacity ".5"}]
-    [:g
+    [:g {:pointer-events "none"}
      [line start-a end-a line-bg-attrs]
      [line start-b end-b line-bg-attrs]
      [line start-a end-a]
@@ -60,7 +60,7 @@
 
 (defn arm
   [start end]
-  [:g
+  [:g {:pointer-events "none"}
    [line start end
     :stroke "var(--primary)"]
    [line start end
@@ -82,7 +82,7 @@
         attrs {:d d
                :fill "transparent"
                :stroke-width (/ 1 zoom)}]
-    [:g
+    [:g {:pointer-events "none"}
      [:path (merge {:stroke "var(--accent-foreground)"} attrs)]
      [:path (merge {:stroke "var(--accent)"
                     :stroke-dasharray (/ 5 zoom)} attrs)]]))
@@ -99,7 +99,7 @@
         bg-attrs {:stroke "var(--accent-foreground)"
                   :stroke-opacity ".5"
                   :stroke-width 3}]
-    [:g {:style {:pointer-events "none"}}
+    [:g {:pointer-events "none"}
      [line [x1 y1] [x2 y2] bg-attrs]
      [line [x2 y1] [x1 y2] bg-attrs]
      [line [x1 y1] [x2 y2]]
@@ -117,7 +117,7 @@
         padding (/ 8 zoom)
         stroke-width (/ 1 zoom)
         label-height (+ font-size padding)]
-    [:g
+    [:g {:pointer-events "none"}
      [:rect {:ref rect-ref
              :y (- y (/ label-height 2))
              :fill "var(--accent)"
