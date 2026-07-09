@@ -49,6 +49,7 @@
   (let [layout (useDefaultLayout #js {:id id})]
     (into [:> Group
            (merge {:defaultLayout (.-defaultLayout layout)
-                   :onLayoutChange (.-onLayoutChange layout)}
+                   :onLayoutChange (.-onLayoutChange layout)
+                   :onlySaveAfterUserInteractions true}
                   props)]
           children)))
