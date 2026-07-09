@@ -123,7 +123,6 @@
                   :icon (resource-path "/public/img/icon.png")
                   :frame false
                   :show false
-                  :transparent true
                   :webPreferences
                   #js {:sandbox false
                        :preload (.join path js/__dirname "preload.js")}}))
