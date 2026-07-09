@@ -43,10 +43,12 @@
       [])))
 
 (def malli-tags
-  #{:map :map-of :enum :tuple :or :and :maybe :not :vector :set :sequential
-    :fn :ref :schema :multi :any :nil :string :int :double :boolean :keyword
-    :qualified-keyword :symbol :uuid :inst :pos-int :neg-int :nat-int
-    :+ :* :? :cat :alt :catn :altn :repeat})
+  "https://github.com/metosin/malli#built-in-schemas"
+  #{:> :>= :< :<= := :not= :any :some :nil :string :int :double
+    :boolean :keyword :qualified-keyword :symbol :qualified-symbol :uuid
+    :+ :* :? :repeat :cat :alt :catn :altn :and :or :orn :not :map
+    :map-of :vector :sequential :set :enum :maybe :tuple :multi :re
+    :fn :ref :=> :-> :function :schema :merge :union :select-keys})
 
 (defn schema-form?
   "True if form looks like a malli schema (tagged vector or predicate symbol)."
