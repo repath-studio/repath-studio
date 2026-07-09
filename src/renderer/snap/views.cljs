@@ -21,7 +21,7 @@
     (reagent/with-let [open (reagent/atom false)]
       [:button.button.rounded-sm.items-center.gap-1.md:flex.justify-items-center
        {:title (action.views/label toggle-snap-action)
-        :class ["active:bg-overlay"
+        :class ["active:bg-overlay shrink-0"
                 (when md? "px-1")
                 (when @active? "accent")
                 (when @open "bg-overlay!")]

@@ -5,6 +5,7 @@
    ["@repath-studio/react-color" :refer [ChromePicker PhotoshopPicker]]
    [re-frame.core :as rf]
    [renderer.action.views :as action.views]
+   [renderer.app.subs :as-alias app.subs]
    [renderer.document.events :as-alias document.events]
    [renderer.document.subs :as-alias document.subs]
    [renderer.frame.events :as-alias frame.events]
@@ -170,10 +171,19 @@
        [:div.bg-primary.absolute.border.border-border.rounded-xs
         {:class "w-1/2 h-1/2 bottom-1/4 right-1/4"}]]]]))
 
+(defn help
+  [message]
+  [:div.overflow-hidden.text-xs.flex.flex-wrap.px-2.max-h-8
+   {:aria-live "polite"}
+   message])
+
 (defn root
   []
   (let [zoom @(rf/subscribe [::document.subs/zoom])
         active-tool @(rf/subscribe [::tool.subs/cached-or-active])
+        help-message @(rf/subscribe [::tool.subs/help])
+        help-bar @(rf/subscribe [::app.subs/help-bar])
+        xl? @(rf/subscribe [::window.subs/xl?])
         sm? @(rf/subscribe [::window.subs/sm?])]
     [views/toolbar
      {:class "bg-primary relative justify-center md:justify-start py-2 md:py-1
@@ -181,7 +191,9 @@
      (->> [[color-selectors]
            (when (and sm? (get-method tool.hierarchy/tool-options active-tool))
              (when-let [options (tool.hierarchy/tool-options active-tool)]
-               options))]
+               options))
+           (when (and help-bar (seq help-message) xl?)
+             [help help-message])]
           (remove nil?)
           (interpose [:div.v-divider])
           (into [:<>]))
