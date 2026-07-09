@@ -121,6 +121,7 @@
                   (into [:> ContextMenu/Content
                          {:class "menu-content context-menu-content"
                           :on-close-auto-focus #(.preventDefault %)
+                          :on-key-down #(.stopPropagation %)
                           :on-escape-key-down #(.stopPropagation %)
                           :style {:margin-left (str x "px")
                                   :margin-top (str y "px")}}]))]]]))})))

@@ -147,6 +147,7 @@
          (map views/context-menu-item)
          (into [:> ContextMenu/Content
                 {:class "menu-content context-menu-content"
+                 :on-key-down #(.stopPropagation %)
                  :on-escape-key-down #(.stopPropagation %)}]))]])
 
 (defn documents-dropdown-button
