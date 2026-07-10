@@ -23,8 +23,8 @@
 (defn coordinates
   []
   (let [[x y] @(rf/subscribe [::input.subs/adjusted-pointer-pos])]
-    [:div.flex-col.font-mono.leading-tight.hidden.mx-1
-     {:class "xl:flex"
+    [:div.flex-col.font-mono.leading-tight.hidden.mx-1.hidden
+     {:class "@3xl/toolbar:flex"
       :style {:min-width "90px"}
       :dir "ltr"}
      [:div.flex.justify-between
@@ -105,7 +105,7 @@
        views/action-icon-button)
 
    [:div.flex.hidden.items-center
-    {:class "xl:flex"
+    {:class "@7xl/toolbar:flex"
      :dir "ltr"}
     [zoom-input zoom]
     [:div.px-2.flex.items-center.font-mono "%"]]
@@ -173,8 +173,9 @@
 
 (defn help
   [message]
-  [:div.overflow-hidden.text-xs.flex.flex-wrap.px-2.max-h-8
-   {:aria-live "polite"}
+  [:div.overflow-hidden.text-xs.flex-wrap.px-2.max-h-8.hidden
+   {:class "@5xl/toolbar:flex"
+    :aria-live "polite"}
    message])
 
 (defn root
@@ -182,20 +183,19 @@
   (let [zoom @(rf/subscribe [::document.subs/zoom])
         active-tool @(rf/subscribe [::tool.subs/cached-or-active])
         help-message @(rf/subscribe [::tool.subs/help])
-        help-bar @(rf/subscribe [::app.subs/help-bar])
-        xl? @(rf/subscribe [::window.subs/xl?])
-        sm? @(rf/subscribe [::window.subs/sm?])]
+        help-bar @(rf/subscribe [::app.subs/help-bar])]
     [views/toolbar
      {:class "bg-primary relative justify-center md:justify-start py-2 md:py-1
-              gap-2 md:gap-1"}
+              gap-2 md:gap-1 @container/toolbar overflow-hidden"}
      (->> [[color-selectors]
-           (when (and sm? (get-method tool.hierarchy/tool-options active-tool))
+           (when (get-method tool.hierarchy/tool-options active-tool)
              (when-let [options (tool.hierarchy/tool-options active-tool)]
-               options))
-           (when (and help-bar (seq help-message) xl?)
+               [:div.hidden {:class "@lg/toolbar:flex"}
+                options]))
+           (when (and help-bar (seq help-message))
              [help help-message])]
           (remove nil?)
-          (interpose [:div.v-divider])
+          (interpose [:div.v-divider.hidden {:class "@5xl/toolbar:flex"}])
           (into [:<>]))
      [:div.grow.hidden.md:block]
      (->> [:view/toggle-grid
