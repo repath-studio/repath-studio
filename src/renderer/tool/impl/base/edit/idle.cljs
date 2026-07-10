@@ -10,10 +10,8 @@
 
 (defmethod tool.hierarchy/help [::edit/edit :idle]
   []
-  [:<>
-   (i18n.views/t [::help-idle-drag "Drag a handle to modify your shape."])
-   (i18n.views/t [::help-idle-click
-                  "Click on an element to change selection"])])
+  (i18n.views/t [::help-idle "Drag a handle to modify your shape.
+                              Click on an element to change selection."]))
 
 (defmethod tool.hierarchy/on-pointer-down [::edit/edit :idle]
   [db e]

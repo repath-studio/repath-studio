@@ -173,8 +173,8 @@
 
 (defn help
   [message]
-  [:div.overflow-hidden.text-xs.flex-wrap.px-2.max-h-8.hidden
-   {:class "@5xl/toolbar:flex"
+  [:div.text-xs.px-2.max-h-8.truncate.hidden.overflow-hidden
+   {:class "@5xl/toolbar:flex [&>*]:truncate"
     :aria-live "polite"}
    message])
 

@@ -342,8 +342,8 @@
 
  :renderer.tool.impl.element.poly
  {:click-to-start "クリックして描画を開始。"
-  :add-points "クリックしてポイントを追加。"
-  :finalize-shape "右クリックまたはダブルクリックして形状を確定。"}
+  :help-create "クリックしてポイントを追加。
+                右クリックまたはダブルクリックして形状を確定。"}
 
  :renderer.tool.impl.element.rect
  {:label "矩形"
@@ -388,8 +388,8 @@
 
  :renderer.tool.impl.element.path
  {:click-to-start "最初のポイントを追加するにはクリック。"
-  :click-to-add "セグメントを追加するにはクリック、曲線を追加するにはクリックしてドラッグ。"
-  :double-click-to-end "パスを確定するにはダブルクリックまたは右クリック。"
+  :help-create "セグメントを追加するにはクリック、曲線を追加するにはクリックしてドラッグ。
+                パスを確定するにはダブルクリックまたは右クリック。"
   :create-path "パスを作成"
   :label "パス"}
 
@@ -512,8 +512,7 @@
   :label "編集"}
 
  :renderer.tool.impl.base.edit.idle
- {:help-idle-drag [:div "ハンドルをドラッグして形状を変更。"]
-  :help-idle-click [:div "要素をクリックして選択を変更"]}
+ {:help-idle [:div "ハンドルをドラッグして形状を変更。要素をクリックして選択を変更。"]}
 
  :renderer.tool.impl.base.edit.select
  {:select-element "要素を選択"}
@@ -549,8 +548,8 @@
   :modify-selection "選択を変更"}
 
  :renderer.tool.impl.base.transform.idle
- {:idle-click [:div "クリックして要素を選択するか、ドラッグして範囲選択。 "]
-  :idle-hold [:div "%1を押しながら選択に要素を追加または削除。"]
+ {:help-idle [:div "クリックして要素を選択するか、ドラッグして範囲選択。
+                    %1を押しながら選択に要素を追加または削除。"]
   :select-element "要素を選択"
   :deselect-element "要素の選択を解除"}
 
@@ -570,8 +569,8 @@
 
  :renderer.tool.impl.base.zoom
  {:label "ズーム"
-  :zoom-in [:div "クリックするか範囲を選択してズームイン。"]
-  :zoom-out [:div "%1を押しながらズームアウト。"]
+  :help-idle [:div "クリックするか範囲を選択してズームイン。
+                    %1を押しながらズームアウト。"]
   :release-to-focus "エリアにフォーカスするには離す。"
   :tool-zoom "ズーム"}
 
@@ -579,8 +578,8 @@
  {:label "ブラシ"
   :draw-brush "ブラシで描く"
   :brush-size "ブラシサイズ"
-  :drag-to-draw [:div "クリックしてドラッグしてブラシをかけます。"]
-  :hold-ctrl-to-adjust-size [:div "%1 を押しながらブラシサイズを調整します。"]}
+  :help-idle [:div "クリックしてドラッグしてブラシをかけます。
+                    %1 を押しながらブラシサイズを調整します。"]}
 
  :renderer.tool.impl.draw.pencil
  {:label "鉛筆"

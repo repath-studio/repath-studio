@@ -357,8 +357,8 @@
 
  :renderer.tool.impl.element.poly
  {:click-to-start "انقر لبدء الرسم."
-  :add-points "انقر لإضافة المزيد من النقاط."
-  :finalize-shape "انقر بالزر الأيمن أو انقر مرتين لإنهاء الشكل."}
+  :help-create "انقر لإضافة المزيد من النقاط.
+                انقر بالزر الأيمن أو انقر مرتين لإنهاء الشكل."}
 
  :renderer.tool.impl.element.rect
  {:label "مستطيل"
@@ -403,8 +403,8 @@
 
  :renderer.tool.impl.element.path
  {:click-to-start "انقر لإضافة النقطة الأولى."
-  :click-to-add "انقر لإضافة مقطع، أو انقر واسحب لإضافة منحنى."
-  :double-click-to-end "انقر مرتين أو انقر بالزر الأيمن لإنهاء المسار."
+  :help-create "انقر لإضافة مقطع، أو انقر واسحب لإضافة منحنى.
+                انقر مرتين أو انقر بالزر الأيمن لإنهاء المسار."
   :create-path "إنشاء مسار"
   :label "مسار"}
 
@@ -527,8 +527,7 @@
   :label "تحرير"}
 
  :renderer.tool.impl.base.edit.idle
- {:help-idle-drag [:div "اسحب مقبضاً لتعديل شكلك."]
-  :help-idle-click [:div "انقر على عنصر لتغيير التحديد"]}
+ {:help-idle [:div "اسحب مقبضاً لتعديل شكلك .انقر على عنصر لتغيير التحديد."]}
 
  :renderer.tool.impl.base.edit.select
  {:select-element "تحديد عنصر"}
@@ -564,8 +563,8 @@
   :modify-selection "تعديل التحديد"}
 
  :renderer.tool.impl.base.transform.idle
- {:idle-click [:div "انقر لتحديد عنصر أو اسحب للتحديد بالمنطقة. "]
-  :idle-hold [:div "اضغط %1 لإضافة أو إزالة عناصر إلى التحديد."]
+ {:help-idle [:div "انقر لتحديد عنصر أو اسحب للتحديد بالمنطقة.
+                    اضغط %1 لإضافة أو إزالة عناصر إلى التحديد."]
   :select-element "تحديد عنصر"
   :deselect-element "إلغاء تحديد عنصر"}
 
@@ -585,8 +584,7 @@
 
  :renderer.tool.impl.base.zoom
  {:label "تكبير"
-  :zoom-in [:div "انقر أو حدد منطقة للتكبير."]
-  :zoom-out [:div "اضغط %1 للتصغير."]
+  :help-idle [:div "انقر أو حدد منطقة للتكبير .اضغط %1 للتصغير."]
   :release-to-focus "أفلت للتركيز على المنطقة."
   :tool-zoom "تكبير"}
 
@@ -594,8 +592,8 @@
  {:label "فرشاة"
   :draw-brush "رسم بالفرشاة"
   :brush-size "حجم الفرشاة"
-  :drag-to-draw [:div "انقر واسحب للرسم بالفرشاة."]
-  :hold-ctrl-to-adjust-size [:div "اضغط مع الاستمرار على %1 لضبط حجم الفرشاة."]}
+  :help-idle [:div "انقر واسحب للرسم بالفرشاة.
+                    اضغط مع الاستمرار على %1 لضبط حجم الفرشاة."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "قلم رصاص"

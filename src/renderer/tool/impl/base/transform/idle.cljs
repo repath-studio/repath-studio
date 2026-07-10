@@ -31,13 +31,10 @@
 
 (defmethod tool.hierarchy/help [::transform/transform :idle]
   []
-  [:<>
-   (i18n.views/t [::idle-click
-                  [:div "Click to select an element or drag to select by
-                         area."]])
-   (i18n.views/t [::idle-hold
-                  [:div "Hold %1 to add or remove elements to selection."]]
-                 [[views/kbd "⇧"]])])
+  (i18n.views/t [::help-idle
+                 [:div "Click to select an element or drag to select by area.
+                        Hold %1 to add or remove elements to selection."]]
+                [[views/kbd "⇧"]]))
 
 (defmethod tool.hierarchy/on-pointer-down [::transform/transform :idle]
   [db e]

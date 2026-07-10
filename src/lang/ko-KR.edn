@@ -330,8 +330,8 @@
 
  :renderer.tool.impl.element.path
  {:click-to-start "첫 번째 점을 추가하려면 클릭합니다."
-  :click-to-add "세그먼트를 추가하려면 클릭하고, 곡선을 추가하려면 클릭하고 드래그합니다."
-  :double-click-to-end "더블 클릭 또는 오른쪽 클릭으로 패스를 완료합니다."
+  :help-create "세그먼트를 추가하려면 클릭하고, 곡선을 추가하려면 클릭하고 드래그합니다.
+                더블 클릭 또는 오른쪽 클릭으로 패스를 완료합니다."
   :create-path "패스 생성"
   :label "패스"}
 
@@ -356,8 +356,8 @@
 
  :renderer.tool.impl.element.poly
  {:click-to-start "클릭하여 그리기를 시작합니다."
-  :add-points "클릭하여 더 많은 점을 추가합니다."
-  :finalize-shape "오른쪽 클릭 또는 더블 클릭하여 모양을 완료합니다."}
+  :help-create "클릭하여 더 많은 점을 추가합니다.
+                오른쪽 클릭 또는 더블 클릭하여 모양을 완료합니다."}
 
  :renderer.tool.impl.element.rect
  {:label "사각형"
@@ -508,8 +508,7 @@
   :label "편집"}
 
  :renderer.tool.impl.base.edit.idle
- {:help-idle-drag [:div "핸들을 드래그하여 모양을 수정합니다."]
-  :help-idle-click [:div "요소를 클릭하여 선택을 변경합니다"]}
+ {:help-idle [:div "핸들을 드래그하여 모양을 수정합니다. 요소를 클릭하여 선택을 변경합니다."]}
 
  :renderer.tool.impl.base.edit.select
  {:select-element "요소 선택"}
@@ -545,8 +544,8 @@
   :modify-selection "선택 수정"}
 
  :renderer.tool.impl.base.transform.idle
- {:idle-click [:div "클릭하여 요소를 선택하거나 드래그하여 영역으로 선택합니다. "]
-  :idle-hold [:div "%1을 누르면 선택에 요소를 추가하거나 제거합니다."]
+ {:help-idle [:div "클릭하여 요소를 선택하거나 드래그하여 영역으로 선택합니다.
+                    %1을 누르면 선택에 요소를 추가하거나 제거합니다."]
   :select-element "요소 선택"
   :deselect-element "요소 선택 해제"}
 
@@ -566,8 +565,7 @@
 
  :renderer.tool.impl.base.zoom
  {:label "확대/축소"
-  :zoom-in [:div "클릭하거나 영역을 선택하여 확대합니다."]
-  :zoom-out [:div "%1을 누르면 축소합니다."]
+  :help-idle [:div "클릭하거나 영역을 선택하여 확대합니다. %1을 누르면 축소합니다."]
   :release-to-focus "영역에 집중하려면 놓으세요."
   :tool-zoom "줌"}
 
@@ -575,8 +573,8 @@
  {:label "브러시"
   :draw-brush "브러시로 그리기"
   :brush-size "브러시 크기"
-  :drag-to-draw [:div "클릭하고 드래그하여 브러시를 사용하세요."]
-  :hold-ctrl-to-adjust-size [:div "%1 을 누른 채로 브러시 크기를 조정하세요."]}
+  :help-idle [:div "클릭하고 드래그하여 브러시를 사용하세요.
+                    %1 을 누른 채로 브러시 크기를 조정하세요."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "연필"

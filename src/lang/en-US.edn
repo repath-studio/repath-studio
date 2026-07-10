@@ -360,8 +360,8 @@
 
  :renderer.tool.impl.element.path
  {:click-to-start "Click to add the first point."
-  :click-to-add "Click to add a segment, or click and drag to add a curve."
-  :double-click-to-end "Double or right click to finalize the path."
+  :help-create "Click to add a segment, or click and drag to add a curve.
+                Double or right click to finalize the path."
   :create-path "Create path"
   :label "Path"}
 
@@ -386,8 +386,8 @@
 
  :renderer.tool.impl.element.poly
  {:click-to-start "Click to start drawing."
-  :add-points "Click to add more points."
-  :finalize-shape "Right click or double click to finalize the shape."}
+  :help-create "Click to add more points.
+                Right click or double click to finalize the shape."}
 
  :renderer.tool.impl.element.rect
  {:label "Rectangle"
@@ -540,8 +540,8 @@
   :label "Edit"}
 
  :renderer.tool.impl.base.edit.idle
- {:help-idle-drag [:div "Drag a handle to modify your shape."]
-  :help-idle-click [:div "Click on an element to change selection"]}
+ {:help-idle [:div "Drag a handle to modify your shape.
+                    Click on an element to change selection."]}
 
  :renderer.tool.impl.base.edit.select
  {:select-element "Select element"}
@@ -577,8 +577,8 @@
   :modify-selection "Modify selection"}
 
  :renderer.tool.impl.base.transform.idle
- {:idle-click [:div "Click to select an element or drag to select by area. "]
-  :idle-hold [:div "Hold %1 to add or remove elements to selection."]
+ {:help-idle [:div "Click to select an element or drag to select by area.
+                    Hold %1 to add or remove elements to selection."]
   :select-element "Select element"
   :deselect-element "Deselect element"}
 
@@ -598,8 +598,8 @@
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
-  :zoom-in [:div "Click or select an area to zoom in."]
-  :zoom-out [:div "Hold %1 to zoom out."]
+  :help-idle [:div "Click or select an area to zoom in.
+                    Hold %1 to zoom out."]
   :release-to-focus "Release to focus on the area."
   :tool-zoom "Zoom"}
 
@@ -607,8 +607,8 @@
  {:label "Brush"
   :draw-brush "Brush"
   :brush-size "Brush size"
-  :drag-to-draw [:div "Click and drag to brush."]
-  :hold-ctrl-to-adjust-size [:div "Hold %1 to adjust the brush size."]}
+  :help-idle [:div "Click and drag to brush.
+                    Hold %1 to adjust the brush size."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Pencil"

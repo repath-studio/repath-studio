@@ -378,9 +378,9 @@
 
  :renderer.tool.impl.element.path
  {:click-to-start "Klik om het eerste punt toe te voegen."
-  :click-to-add "Klik om een segment toe te voegen, of klik en sleep om een
-                 curve toe te voegen."
-  :double-click-to-end "Dubbelklikken of rechtsklikken om het pad te voltooien."
+  :help-create "Klik om een segment toe te voegen, of klik en sleep om een
+                curve toe te voegen. Dubbelklikken of rechtsklikken om het pad
+                te voltooien."
   :create-path "Pad maken"
   :label "Pad"}
 
@@ -405,8 +405,8 @@
 
  :renderer.tool.impl.element.poly
  {:click-to-start "Klik om te beginnen met tekenen."
-  :add-points "Klik om meer punten toe te voegen."
-  :finalize-shape "Rechtsklikken of dubbelklikken om de vorm te voltooien."}
+  :help-create "Klik om meer punten toe te voegen.
+                Rechtsklikken of dubbelklikken om de vorm te voltooien."}
 
  :renderer.tool.impl.element.rect
  {:label "Rechthoek"
@@ -565,8 +565,8 @@
   :label "Bewerken"}
 
  :renderer.tool.impl.base.edit.idle
- {:help-idle-drag [:div "Sleep een handvat om uw vorm te wijzigen."]
-  :help-idle-click [:div "Klik op een element om selectie te wijzigen"]}
+ {:help-idle [:div "Sleep een handvat om uw vorm te wijzigen.
+                    Klik op een element om selectie te wijzigen."]}
 
  :renderer.tool.impl.base.edit.select
  {:select-element "Selecteer element"}
@@ -603,10 +603,9 @@
   :modify-selection "Selectie wijzigen"}
 
  :renderer.tool.impl.base.transform.idle
- {:idle-click [:div "Klik om een element te selecteren of sleep om te
-                     selecteren per gebied. "]
-  :idle-hold [:div "Houd %1 ingedrukt om elementen toe te voegen aan of te
-                    verwijderen uit selectie."]
+ {:help-idle [:div "Klik om een element te selecteren of sleep om te selecteren
+                    per gebied. Houd %1 ingedrukt om elementen toe te voegen aan
+                    of te verwijderen uit selectie."]
   :select-element "Element selecteren"
   :deselect-element "Element deselecteren"}
 
@@ -627,8 +626,8 @@
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
-  :zoom-in [:div "Klik of selecteer een gebied om in te zoomen."]
-  :zoom-out [:div "Houd %1 ingedrukt om uit te zoomen."]
+  :help-idle [:div "Klik of selecteer een gebied om in te zoomen.
+                    Houd %1 ingedrukt om uit te zoomen."]
   :release-to-focus "Loslaten om op het gebied te focussen."
   :tool-zoom "Zoomen"}
 
@@ -636,9 +635,8 @@
  {:label "Penseel"
   :draw-brush "Penselen"
   :brush-size "Penseelgrootte"
-  :drag-to-draw [:div "Klik en sleep om te penselen."]
-  :hold-ctrl-to-adjust-size [:div "Houd %1 ingedrukt om de penseelgrootte aan
-                                   te passen."]}
+  :help-idle [:div "Klik en sleep om te penselen.
+                    Houd %1 ingedrukt om de penseelgrootte aan te passen."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Potlood"

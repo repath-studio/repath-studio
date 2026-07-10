@@ -312,8 +312,7 @@
 
  :renderer.tool.impl.element.poly
  {:click-to-start "点击开始绘制。"
-  :add-points "点击添加更多点。"
-  :finalize-shape "右键单击或双击以完成形状。"}
+  :help-create "点击添加更多点。右键单击或双击以完成形状。"}
 
  :renderer.tool.impl.element.rect
  {:label "矩形"
@@ -358,8 +357,7 @@
 
  :renderer.tool.impl.element.path
  {:click-to-start "点击添加第一个点。"
-  :click-to-add "点击添加线段，或点击并拖动以添加曲线。"
-  :double-click-to-end "双击或右键单击以完成路径。"
+  :help-create "点击添加线段，或点击并拖动以添加曲线。双击或右键单击以完成路径。"
   :create-path "创建路径"
   :label "路径"}
 
@@ -474,8 +472,7 @@
   :label "编辑"}
 
  :renderer.tool.impl.base.edit.idle
- {:help-idle-drag [:div "拖动控制柄修改您的形状。"]
-  :help-idle-click [:div "点击元素更改选择"]}
+ {:help-idle [:div "拖动控制柄修改您的形状。点击元素更改选择。"]}
 
  :renderer.tool.impl.base.edit.select
  {:select-element "选择元素"}
@@ -510,8 +507,7 @@
   :modify-selection "修改选择"}
 
  :renderer.tool.impl.base.transform.idle
- {:idle-click [:div "点击选择元素或拖动按区域选择。"]
-  :idle-hold [:div "按住 %1 向选择中添加或移除元素。"]
+ {:help-idle [:div "点击选择元素或拖动按区域选择。按住 %1 向选择中添加或移除元素。"]
   :select-element "选择元素"
   :deselect-element "取消选择元素"}
 
@@ -531,8 +527,7 @@
 
  :renderer.tool.impl.base.zoom
  {:label "缩放"
-  :zoom-in [:div "点击或选择区域进行放大。"]
-  :zoom-out [:div "按住 %1 进行缩小。"]
+  :help-idle [:div "点击或选择区域进行放大。按住 %1 进行缩小。"]
   :release-to-focus "松开以聚焦该区域。"
   :tool-zoom "缩放"}
 
@@ -540,8 +535,7 @@
  {:label "画笔"
   :draw-brush "用画笔绘制"
   :brush-size "画笔大小"
-  :drag-to-draw [:div "单击并拖动以使用画笔。"]
-  :hold-ctrl-to-adjust-size [:div "按住 %1 调整画笔大小。"]}
+  :help-idle [:div "单击并拖动以使用画笔。按住 %1 调整画笔大小。"]}
 
  :renderer.tool.impl.draw.pencil
  {:label "铅笔"

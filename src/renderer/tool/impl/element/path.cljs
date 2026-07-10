@@ -34,12 +34,9 @@
 
 (defmethod tool.hierarchy/help [::path :create]
   []
-  [:<>
-   [:div (i18n.views/t [::click-to-add
-                        "Click to add a segment, or click and drag to add a
-                         curve."])]
-   [:div (i18n.views/t [::double-click-to-end
-                        "Double or right click to finalize the path."])]])
+  (i18n.views/t [::help-create
+                 "Click to add a segment, or click and drag to add a curve.
+                  Double or right click to finalize the path."]))
 
 (m/=> adjusted-pointer-position [:-> App PointerEvent Vec2])
 (defn adjusted-pointer-position

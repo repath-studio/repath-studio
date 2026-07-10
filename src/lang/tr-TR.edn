@@ -360,9 +360,9 @@
 
  :renderer.tool.impl.element.path
  {:click-to-start "İlk noktayı eklemek için tıklayın."
-  :click-to-add "Bir bölüm eklemek için tıklayın veya bir eğri eklemek için
-                 tıklayıp sürükleyin."
-  :double-click-to-end "Yolu sonlandırmak için çift tıklayın veya sağ tıklayın."
+  :help-create "Bir bölüm eklemek için tıklayın veya bir eğri eklemek için
+                tıklayıp sürükleyin. Yolu sonlandırmak için çift tıklayın veya
+                sağ tıklayın."
   :create-path "Yol oluştur"
   :label "Yol"}
 
@@ -387,8 +387,8 @@
 
  :renderer.tool.impl.element.poly
  {:click-to-start "Çizmeye başlamak için tıklayın."
-  :add-points "Daha fazla nokta eklemek için tıklayın."
-  :finalize-shape "Şekli sonlandırmak için sağ tıklayın veya çift tıklayın."}
+  :help-create "Daha fazla nokta eklemek için tıklayın.
+                Şekli sonlandırmak için sağ tıklayın veya çift tıklayın."}
 
  :renderer.tool.impl.element.rect
  {:label "Dikdörtgen"
@@ -543,8 +543,8 @@
   :label "Düzenle"}
 
  :renderer.tool.impl.base.edit.idle
- {:help-idle-drag [:div "Şeklinizi değiştirmek için bir tutamacı sürükleyin."]
-  :help-idle-click [:div "Seçimi değiştirmek için bir öğeye tıklayın"]}
+ {:help-idle [:div "Şeklinizi değiştirmek için bir tutamacı sürükleyin.
+                    Seçimi değiştirmek için bir öğeye tıklayın."]}
 
  :renderer.tool.impl.base.edit.select
  {:select-element "Eleman seç"}
@@ -581,10 +581,9 @@
   :modify-selection "Seçimi değiştir"}
 
  :renderer.tool.impl.base.transform.idle
- {:idle-click [:div "Bir öğe seçmek için tıklayın veya alanla seçmek için
-                     sürükleyin."]
-  :idle-hold [:div "Seçime öğe eklemek veya çıkarmak için %1 tuşunu basılı
-                    tutun."]
+ {:help-idle [:div "Bir öğe seçmek için tıklayın veya alanla seçmek için
+                    sürükleyin. Seçime öğe eklemek veya çıkarmak için %1 tuşunu
+                    basılı tutun."]
   :select-element "Öğe seç"
   :deselect-element "Öğe seçimini kaldır"}
 
@@ -605,8 +604,8 @@
 
  :renderer.tool.impl.base.zoom
  {:label "Yakınlaştır"
-  :zoom-in [:div "Yakınlaştırmak için tıklayın veya bir alan seçin."]
-  :zoom-out [:div "Uzaklaştırmak için %1 tuşunu basılı tutun."]
+  :help-idle [:div "Yakınlaştırmak için tıklayın veya bir alan seçin.
+                    Uzaklaştırmak için %1 tuşunu basılı tutun."]
   :release-to-focus "Alana odaklanmak için bırakın."
   :tool-zoom "Yakınlaştır"}
 
@@ -614,9 +613,8 @@
  {:label "Fırça"
   :draw-brush "Fırçala"
   :brush-size "Fırça boyutu"
-  :drag-to-draw [:div "Fırçalamak için tıklayın ve sürükleyin."]
-  :hold-ctrl-to-adjust-size [:div "Fırça boyutunu ayarlamak için %1 tuşunu
-                                   basılı tutun."]}
+  :help-idle [:div "Fırçalamak için tıklayın ve sürükleyin.
+                    Fırça boyutunu ayarlamak için %1 tuşunu basılı tutun."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Kurşunkalem"

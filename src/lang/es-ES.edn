@@ -375,8 +375,8 @@
 
  :renderer.tool.impl.element.poly
  {:click-to-start "Haga clic para empezar a dibujar."
-  :add-points "Haga clic para agregar más puntos."
-  :finalize-shape "Clic derecho o doble clic para finalizar la forma."}
+  :help-create "Haga clic para agregar más puntos.
+                Clic derecho o doble clic para finalizar la forma."}
 
  :renderer.tool.impl.element.rect
  {:label "Rectángulo"
@@ -421,9 +421,9 @@
 
  :renderer.tool.impl.element.path
  {:click-to-start "Haga clic para añadir el primer punto."
-  :click-to-add "Haga clic para añadir un segmento, o haga clic y arrastre
-                 para añadir una curva."
-  :double-click-to-end "Doble clic o clic derecho para finalizar el trazado."
+  :help-create "Haga clic para añadir un segmento, o haga clic y arrastre
+                para añadir una curva. Doble clic o clic derecho para finalizar
+                el trazado."
   :create-path "Crear trazado"
   :label "Trazado"}
 
@@ -552,8 +552,8 @@
   :label "Editar"}
 
  :renderer.tool.impl.base.edit.idle
- {:help-idle-drag [:div "Arrastre un asa para modificar su forma."]
-  :help-idle-click [:div "Haga clic en un elemento para cambiar la selección"]}
+ {:help-idle [:div "Arrastre un asa para modificar su forma.
+                    Haga clic en un elemento para cambiar la selección."]}
 
  :renderer.tool.impl.base.edit.select
  {:select-element "Seleccionar elemento"}
@@ -590,10 +590,9 @@
   :modify-selection "Modificar selección"}
 
  :renderer.tool.impl.base.transform.idle
- {:idle-click [:div "Haga clic para seleccionar un elemento o arrastre para
-                     seleccionar por área. "]
-  :idle-hold [:div "Mantenga %1 para agregar o quitar elementos de la
-                    selección."]
+ {:help-idle [:div "Haga clic para seleccionar un elemento o arrastre para
+                    seleccionar por área. Mantenga %1 para agregar o quitar
+                    elementos de la selección."]
   :select-element "Seleccionar elemento"
   :deselect-element "Deseleccionar elemento"}
 
@@ -614,8 +613,8 @@
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
-  :zoom-in [:div "Haga clic o seleccione un área para acercar."]
-  :zoom-out [:div "Mantenga %1 para alejar."]
+  :help-idle [:div "Haga clic o seleccione un área para acercar.
+                    Mantenga %1 para alejar."]
   :release-to-focus "Suelte para centrarse en el área."
   :tool-zoom "Zoom"}
 
@@ -623,9 +622,8 @@
  {:label "Pincel"
   :draw-brush "Pincelar"
   :brush-size "Tamaño del pincel"
-  :drag-to-draw [:div "Haz clic y arrastra para pincelar."]
-  :hold-ctrl-to-adjust-size [:div "Mantén %1 para ajustar el tamaño del
-                                   pincel."]}
+  :help-idle [:div "Haz clic y arrastra para pincelar.
+                    Mantén %1 para ajustar el tamaño del pincel."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Lápiz"

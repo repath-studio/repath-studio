@@ -386,9 +386,8 @@
 
  :renderer.tool.impl.element.poly
  {:click-to-start "Klicken, um mit dem Zeichnen zu beginnen."
-  :add-points "Klicken, um weitere Punkte hinzuzufügen."
-  :finalize-shape "Rechtsklicken oder doppelklicken, um die Form zu
-                   finalisieren."}
+  :help-create "Klicken, um weitere Punkte hinzuzufügen.
+                Rechtsklicken oder doppelklicken, um die Form zu finalisieren."}
 
  :renderer.tool.impl.element.rect
  {:label "Rechteck"
@@ -434,10 +433,9 @@
 
  :renderer.tool.impl.element.path
  {:click-to-start "Klicken, um den ersten Punkt hinzuzufügen."
-  :click-to-add "Klicken, um ein Segment hinzuzufügen, oder klicken und ziehen,
-                 um eine Kurve hinzuzufügen."
-  :double-click-to-end "Doppelklicken oder rechtsklicken, um den Pfad zu
-                        finalisieren."
+  :help-create "Klicken, um ein Segment hinzuzufügen, oder klicken und ziehen,
+                um eine Kurve hinzuzufügen. Doppelklicken oder rechtsklicken, um
+                den Pfad zu finalisieren."
   :create-path "Pfad erstellen"
   :label "Pfad"}
 
@@ -567,9 +565,8 @@
   :label "Bearbeiten"}
 
  :renderer.tool.impl.base.edit.idle
- {:help-idle-drag [:div "Ziehen Sie einen Griff, um Ihre Form zu ändern."]
-  :help-idle-click [:div "Klicken Sie auf ein Element, um die Auswahl zu
-                          ändern"]}
+ {:help-idle [:div "Ziehen Sie einen Griff, um Ihre Form zu ändern.
+                    Klicken Sie auf ein Element, um die Auswahl zu ändern."]}
 
  :renderer.tool.impl.base.edit.select
  {:select-element "Element auswählen"}
@@ -606,10 +603,9 @@
   :modify-selection "Auswahl ändern"}
 
  :renderer.tool.impl.base.transform.idle
- {:idle-click [:div "Klicken, um ein Element auszuwählen oder ziehen, um nach
-                     Bereich auszuwählen. "]
-  :idle-hold [:div "Halten Sie %1, um Elemente zur Auswahl hinzuzufügen oder zu
-                    entfernen."]
+ {:help-idle [:div "Klicken, um ein Element auszuwählen oder ziehen, um nach
+                    Bereich auszuwählen. Halten Sie %1, um Elemente zur Auswahl
+                    hinzuzufügen oder zu entfernen."]
   :select-element "Element auswählen"
   :deselect-element "Element abwählen"}
 
@@ -630,8 +626,8 @@
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
-  :zoom-in [:div "Klicken oder einen Bereich auswählen, um zu vergrößern."]
-  :zoom-out [:div "Halten Sie %1, um zu verkleinern."]
+  :help-idle [:div "Klicken oder einen Bereich auswählen, um zu vergrößern.
+                    Halten Sie %1, um zu verkleinern."]
   :release-to-focus "Loslassen, um auf den Bereich zu fokussieren."
   :tool-zoom "Zoomen"}
 
@@ -639,9 +635,8 @@
  {:label "Pinsel"
   :draw-brush "Pinseln"
   :brush-size "Pinselgröße"
-  :drag-to-draw [:div "Klicken und ziehen zum Pinseln."]
-  :hold-ctrl-to-adjust-size [:div "Halten Sie %1 gedrückt, um die Pinselgröße
-                                   anzupassen."]}
+  :help-idle [:div "Klicken und ziehen zum Pinseln.
+                    Halten Sie %1 gedrückt, um die Pinselgröße anzupassen."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Bleistift"

@@ -367,9 +367,9 @@
 
  :renderer.tool.impl.element.path
  {:click-to-start "Klicka för att lägga till den första punkten."
-  :click-to-add "Klicka för att lägga till ett segment, eller klicka och dra
-                 för att lägga till en kurva."
-  :double-click-to-end "Dubbelklicka eller högerklicka för att slutföra banan."
+  :help-create "Klicka för att lägga till ett segment, eller klicka och dra
+                för att lägga till en kurva. Dubbelklicka eller högerklicka för
+                att slutföra banan."
   :create-path "Skapa bana"
   :label "Bana"}
 
@@ -394,8 +394,8 @@
 
  :renderer.tool.impl.element.poly
  {:click-to-start "Klicka för att börja rita."
-  :add-points "Klicka för att lägga till fler punkter."
-  :finalize-shape "Högerklicka eller dubbelklicka för att slutföra formen."}
+  :help-create "Klicka för att lägga till fler punkter.
+                Högerklicka eller dubbelklicka för att slutföra formen."}
 
  :renderer.tool.impl.element.rect
  {:label "Rektangel"
@@ -551,8 +551,8 @@
   :label "Redigera"}
 
  :renderer.tool.impl.base.edit.idle
- {:help-idle-drag [:div "Dra ett handtag för att ändra din form."]
-  :help-idle-click [:div "Klicka på ett element för att ändra markering"]}
+ {:help-idle [:div "Dra ett handtag för att ändra din form.
+                    Klicka på ett element för att ändra markering."]}
 
  :renderer.tool.impl.base.edit.select
  {:select-element "Välj element"}
@@ -589,10 +589,9 @@
   :modify-selection "Ändra markering"}
 
  :renderer.tool.impl.base.transform.idle
- {:idle-click [:div "Klicka för att markera ett element eller dra för att
-                     markera per område. "]
-  :idle-hold [:div "Håll %1 för att lägga till eller ta bort element från
-                    markering."]
+ {:help-idle [:div "Klicka för att markera ett element eller dra för att markera
+                    per område. Håll %1 för att lägga till eller ta bort element
+                    från markering."]
   :select-element "Markera element"
   :deselect-element "Avmarkera element"}
 
@@ -612,8 +611,8 @@
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
-  :zoom-in [:div "Klicka eller markera ett område för att zooma in."]
-  :zoom-out [:div "Håll %1 för att zooma ut."]
+  :help-idle [:div "Klicka eller markera ett område för att zooma in.
+                    Håll %1 för att zooma ut."]
   :release-to-focus "Släpp för att fokusera på området."
   :tool-zoom "Zooma"}
 
@@ -621,9 +620,8 @@
  {:label "Pensel"
   :draw-brush "Pensla"
   :brush-size "Penselstorlek"
-  :drag-to-draw [:div "Klicka och dra för att pensla."]
-  :hold-ctrl-to-adjust-size [:div "Håll %1 intryckt för att justera
-                                   penselstorlek."]}
+  :help-idle [:div "Klicka och dra för att pensla.
+                    Håll %1 intryckt för att justera penselstorlek."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Blyertspenna"

@@ -28,9 +28,9 @@
 
 (defmethod tool.hierarchy/help [::zoom :idle]
   []
-  [:<>
-   (i18n.views/t [::zoom-in "Click or select an area to zoom in."])
-   (i18n.views/t [::zoom-out "Hold %1 to zoom out."] [[views/kbd "⇧"]])])
+  (i18n.views/t [::help-idle "Click or select an area to zoom in.
+                              Hold %1 to zoom out."]
+                [[views/kbd "⇧"]]))
 
 (defmethod tool.hierarchy/help [::zoom :select]
   []

@@ -19,11 +19,9 @@
 
 (defmethod tool.hierarchy/help [::tool.hierarchy/poly :create]
   []
-  [:<>
-   [:div (i18n.views/t [::add-points "Click to add more points."])]
-   [:div (i18n.views/t [::finalize-shape
-                        "Right click or double click to finalize the
-                         shape."])]])
+  (i18n.views/t [::help-create
+                 "Click to add more points.
+                  Right click or double click to finalize the shape."]))
 
 (defn update-points
   [db f]

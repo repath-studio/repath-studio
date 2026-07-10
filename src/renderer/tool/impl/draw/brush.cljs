@@ -50,11 +50,9 @@
 
 (defmethod tool.hierarchy/help [::brush :idle]
   []
-  [:<>
-   (i18n.views/t [::drag-to-draw [:div "Click and drag to brush."]])
-   (i18n.views/t [::hold-ctrl-to-adjust-size
-                  [:div "Hold %1 to adjust the brush size."]]
-                 [[views/kbd "⇧"]])])
+  (i18n.views/t [::help-idle [:div "Click and drag to brush.
+                                    Hold %1 to adjust the brush size."]]
+                [[views/kbd "⇧"]]))
 
 (defmethod tool.hierarchy/tool-options ::brush
   []
