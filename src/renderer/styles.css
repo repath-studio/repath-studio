@@ -49,8 +49,40 @@
 
 @import './utilities.css';
 @import './overrides.css';
-@import './theme/default.css';
-@import './theme/styles.css';
+
+@theme {
+  --text-2xs: 0.625rem;
+  --text-2xs--line-height: 0.75rem;
+
+  --transition-property-fill: fill;
+
+  --inset-shadow: inset 1px 1px 3px 0 rgb(0 0 0 / 0.1);
+
+  --font-sans: var(--sans);
+  --font-mono: var(--mono);
+
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+
+  --color-border: var(--border);
+
+  --color-overlay: var(--overlay);
+
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-foreground: var(--foreground-default);
+  --color-foreground-disabled: var(--foreground-disabled);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-foreground-hovered: var(--foreground-hovered);
+
+  --color-error: var(--error);
+  --color-warning: var(--warning);
+  --color-success: var(--success);
+
+  --color-backdrop: var(--backdrop);
+}
 
 ::-webkit-scrollbar,
 ::-webkit-scrollbar-thumb,
@@ -60,8 +92,6 @@
 }
 
 body {
-  @apply m-0 text-foreground relative bg-secondary select-none font-sans h-full!
-  overflow-hidden touch-none;
   font-size: var(--font-size);
 }
 

@@ -5,7 +5,8 @@
 
 (ui/start!
  {:config
-  {:css-paths ["/styles.css"]
+  {:css-paths ["/styles.css"
+               "/default-theme.css"]
    :background/options [{:id :light-mode
                          :title "Light mode"
                          :value {:background/background-color "#eee"

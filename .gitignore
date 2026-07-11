@@ -8,7 +8,8 @@
 .idea
 
 /resources/public/js/
-/resources/public/css/
+/resources/public/css/files/
+/resources/public/css/styles.css
 /resources/public/src/
 /resources/*.js
 /resources/*.js.map
