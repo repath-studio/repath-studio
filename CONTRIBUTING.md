@@ -59,7 +59,6 @@ module\
 ├── effects.cljs    -> effect handlers
 ├── hierarchy.cljs  -> multimethods and hierarchies
 ├── migrations.cljs -> data migrations
-├── styles.css      -> styles
 └── README.md       -> documentation
 ```
 
