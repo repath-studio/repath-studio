@@ -71,16 +71,16 @@
 (rf/reg-event-fx
  ::toggle-maximized
  (fn [_ _]
-   {::effects/ipc-send ["window-toggle-maximized"]}))
+   {::effects/ipc-send ["toggle-maximized"]}))
 
 (rf/reg-event-fx
  ::toggle-fullscreen
  (fn [{:keys [db]} _]
    (if (app.handlers/desktop? db)
-     {::effects/ipc-send ["window-toggle-fullscreen"]}
+     {::effects/ipc-send ["toggle-fullscreen"]}
      {::window.effects/toggle-fullscreen nil})))
 
 (rf/reg-event-fx
  ::minimize
  (fn [_ _]
-   {::effects/ipc-send ["window-minimize"]}))
+   {::effects/ipc-send ["minimize"]}))

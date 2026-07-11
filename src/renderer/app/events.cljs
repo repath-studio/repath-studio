@@ -36,12 +36,12 @@
                                            [::app.effects/persist])))))))
 
 (def ipc-listeners
-  (->> [["window-maximized" [::window.events/set-maximized true]]
-        ["window-unmaximized" [::window.events/set-maximized false]]
-        ["window-entered-fullscreen" [::window.events/set-fullscreen true]]
-        ["window-leaved-fullscreen" [::window.events/set-fullscreen false]]
-        ["window-minimized" [::window.events/set-minimized true]]
-        ["window-restored" [::window.events/set-minimized false]]]
+  (->> [["maximized" [::window.events/set-maximized true]]
+        ["unmaximized" [::window.events/set-maximized false]]
+        ["entered-fullscreen" [::window.events/set-fullscreen true]]
+        ["leaved-fullscreen" [::window.events/set-fullscreen false]]
+        ["minimized" [::window.events/set-minimized true]]
+        ["restored" [::window.events/set-minimized false]]]
        (mapv (partial vector ::effects/ipc-on))))
 
 (defn- json->clj

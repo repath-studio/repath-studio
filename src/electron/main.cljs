@@ -51,13 +51,12 @@
      ["relaunch" #(doto app (.relaunch) (.exit))]
      ["open-remote-url" open-external]
      ["open-directory" #(.showItemInFolder shell %)]
-     ["window-minimize" #(.minimize ^js @main-window)]
-     ["window-toggle-fullscreen" #(.setFullScreen ^js @main-window
-                                                  (not (.isFullScreen
-                                                        ^js @main-window)))]
-     ["window-toggle-maximized" #(if (.isMaximized ^js @main-window)
-                                   (.unmaximize ^js @main-window)
-                                   (.maximize ^js @main-window))]]]
+     ["minimize" #(.minimize ^js @main-window)]
+     ["toggle-fullscreen" #(let [v (.isFullScreen ^js @main-window)]
+                             (.setFullScreen ^js @main-window (not v)))]
+     ["toggle-maximized" #(if (.isMaximized ^js @main-window)
+                            (.unmaximize ^js @main-window)
+                            (.maximize ^js @main-window))]]]
     (.on ipcMain e #(f %2))))
 
 (defn register-ipc-handle-events []
@@ -72,12 +71,12 @@
 (defn register-window-events []
   (doseq
    [[window-event renderer-event]
-    [["maximize" "window-maximized"]
-     ["unmaximize" "window-unmaximized"]
-     ["enter-full-screen" "window-entered-fullscreen"]
-     ["leave-full-screen" "window-leaved-fullscreen"]
-     ["minimize" "window-minimized"]
-     ["restore" "window-restored"]]]
+    [["maximize" "maximized"]
+     ["unmaximize" "unmaximized"]
+     ["enter-full-screen" "entered-fullscreen"]
+     ["leave-full-screen" "leaved-fullscreen"]
+     ["minimize" "minimized"]
+     ["restore" "restored"]]]
     (.on ^js @main-window window-event #(send-to-renderer renderer-event))))
 
 (defn register-web-contents-events []
@@ -97,11 +96,11 @@
 (defn on-ready-to-show
   [^js window]
   (send-to-renderer (if (.isMaximized window)
-                      "window-maximized"
-                      "window-unmaximized"))
+                      "maximized"
+                      "unmaximized"))
   (send-to-renderer (if (.isFullScreen window)
-                      "window-entered-fullscreen"
-                      "window-leaved-fullscreen")))
+                      "entered-fullscreen"
+                      "leaved-fullscreen")))
 
 (defn resource-path
   [s]
