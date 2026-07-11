@@ -51,8 +51,8 @@
   [id saved]
   [:button.button.button-size-small.invisible.relative.shrink-0.bg-inherit.group
    {:key id
-    :class "hover:[&_.dot-icon]:hidden focus:[&_.dot-icon]:hidden rounded-xs
-            flex items-center justify-center"
+    :class ["hover:[&_.dot-icon]:hidden focus:[&_.dot-icon]:hidden rounded-xs"
+            "flex items-center justify-center"]
     :title (i18n.views/t [::close-doc "Close document"])
     :on-click (fn [e]
                 (.stopPropagation e)
@@ -60,9 +60,9 @@
    [views/icon "times"]
    (when-not saved
      [views/icon "dot"
-      {:class "absolute top-0.5 left-0.5 bg-inherit items-center
-               text-foreground-muted invisible md:visible group-hover:invisible
-               group-focus:invisible group-active:invisible"}])])
+      {:class ["absolute top-0.5 left-0.5 bg-inherit items-center md:visible"
+               "text-foreground-muted invisible group-hover:invisible"
+               "group-focus:invisible group-active:invisible"]}])])
 
 (defn context-menu
   [id]
@@ -102,9 +102,9 @@
 
 (defn tab-button-classes
   [active? saved?]
-  ["flex items-center h-full relative text-left px-2 py-0 overflow-hidden
-    hover:[&_button]:visible outline-default hover:text-foreground
-    outline-inset"
+  ["flex items-center h-full relative text-left px-2 py-0 overflow-hidden"
+   "hover:[&_button]:visible outline-default hover:text-foreground"
+   "outline-inset"
    (if active?
      "bg-primary text-foreground [&_button]:visible"
      "bg-secondary text-foreground-muted")

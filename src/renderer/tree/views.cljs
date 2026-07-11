@@ -30,9 +30,9 @@
      (if state
        active-icon
        inactive-icon)
-     {:class ["text-inherit! bg-transparent! outline-inset!
-               group-hover:opacity-100 focus:opacity-100 outline-inherit
-               button-size-small rounded-xs m-0"
+     {:class ["text-inherit! bg-transparent! outline-inset!"
+              "group-hover:opacity-100 focus:opacity-100 outline-inherit"
+              "button-size-small rounded-xs m-0"
               (when (not state) "opacity-30 md:opacity-0")]
       :title (i18n.views/t title)
       :on-double-click #(.stopPropagation %)
@@ -137,8 +137,8 @@
   [views/icon-button
    (if collapsed "chevron-right" "chevron-down")
    {:title (if collapsed "expand" "collapse")
-    :class "bg-transparent! text-inherit! rtl:scale-x-[-1] outline-inset! m-0
-            outline-inherit button-size-small rounded-xs"
+    :class ["bg-transparent! text-inherit! rtl:scale-x-[-1] outline-inset! m-0"
+            "outline-inherit button-size-small rounded-xs"]
     :on-double-click #(.stopPropagation %)
     :on-click #(do (.stopPropagation %)
                    (rf/dispatch [::document.events/toggle-el-collapsed id]))}])
@@ -252,8 +252,10 @@
     [:div.flex.flex-1.bg-primary.h-full.overflow-hidden
      ;; When the tree is hovered, ignore the hovered class of the elements,
      ;; if the element itself is not also hovered.
-     {:class (str "hover:**:[&." tree.effects/item-class "]:not-hover:bg-inherit
-                 focus-visible:outline-default focus-visible:outline-inset")
+     {:class [(str "hover:**:[&."
+                   tree.effects/item-class
+                   "]:not-hover:bg-inherit")
+              "focus-visible:outline-default focus-visible:outline-inset"]
       :on-click #(rf/dispatch [::element.events/deselect-all])
       :tab-index 0
       :ref ref

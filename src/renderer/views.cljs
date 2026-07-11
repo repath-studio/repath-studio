@@ -47,14 +47,14 @@
 
 (defn kbd
   [k]
-  [:span {:class "p-1 text-2xs bg-overlay rounded-sm font-bold uppercase
-                  text-foreground-muted"} k])
+  [:span {:class ["p-1 text-2xs bg-overlay rounded-sm font-bold uppercase"
+                  "text-foreground-muted"]} k])
 
 (defn icon-button
   [icon-name props]
   [:button
-   (merge-with-class {:class "button flex justify-center rounded-sm
-                              items-center"}
+   (merge-with-class {:class ["button flex justify-center rounded-sm"
+                              "items-center"]}
                      props)
    [icon icon-name]])
 
@@ -87,14 +87,14 @@
     label]
    [:> Switch/Root
     (merge-with-class
-     {:class "bg-overlay relative rounded-full w-10 h-6
-              data-[state=checked]:bg-accent data-disabled:opacity-50"
+     {:class ["bg-overlay relative rounded-full w-10 h-6"
+              "data-[state=checked]:bg-accent data-disabled:opacity-50"]
       :dir "ltr"}
      props)
     [:> Switch/Thumb
-     {:class "block bg-primary rounded-full shadow-sm w-5 h-5
-              will-change-transform transition-transform translate-x-0.5
-              data-[state=checked]:translate-x-[18px]"}]]])
+     {:class ["block bg-primary rounded-full shadow-sm w-5 h-5"
+              "will-change-transform transition-transform translate-x-0.5"
+              "data-[state=checked]:translate-x-[18px]"]}]]])
 
 (defn slider
   [props]
@@ -105,9 +105,9 @@
     props)
    [:> Slider/Track {:class "relative h-1 bg-secondary flex-1"}
     [:> Slider/Range {:class "absolute h-full bg-foreground-muted"}]]
-   [:> Slider/Thumb {:class "flex shadow-sm h-5 w-2 rounded-xs
-                             bg-foreground-hovered
-                             data-disabled:bg-foreground-muted"
+   [:> Slider/Thumb {:class ["flex shadow-sm h-5 w-2 rounded-xs"
+                             "bg-foreground-hovered"
+                             "data-disabled:bg-foreground-muted"]
                      :aria-label (i18n.views/t [::resize-thumb
                                                 "Resize panel thumb"])}]])
 
@@ -353,19 +353,19 @@
 
 (defn button-group
   [& children]
-  (into [:div {:class "flex *:rounded-sm *:border *:border-border
-                       *:outline-inset
-                       [&>*:not(:first-child)]:rounded-l-none
-                       [&>*:not(:last-child)]:border-r-0
-                       [&>*:not(:last-child)]:rounded-r-none
+  (into [:div {:class ["flex *:rounded-sm *:border *:border-border"
+                       "*:outline-inset"
+                       "[&>*:not(:first-child)]:rounded-l-none"
+                       "[&>*:not(:last-child)]:border-r-0"
+                       "[&>*:not(:last-child)]:rounded-r-none"
 
-                       rtl:[&>*:first-child]:rounded-r-sm!
-                       rtl:[&>*:first-child]:border-r!
-                       rtl:[&>*:last-child]:rounded-l-sm!
+                       "rtl:[&>*:first-child]:rounded-r-sm!"
+                       "rtl:[&>*:first-child]:border-r!"
+                       "rtl:[&>*:last-child]:rounded-l-sm!"
 
-                       rtl:[&>*:not(:last-child)]:rounded-l-none
-                       rtl:[&>*:not(:first-child)]:border-r-0
-                       rtl:[&>*:not(:first-child)]:rounded-r-none"}]
+                       "rtl:[&>*:not(:last-child)]:rounded-l-none"
+                       "rtl:[&>*:not(:first-child)]:border-r-0"
+                       "rtl:[&>*:not(:first-child)]:rounded-r-none"]}]
         children))
 
 (defn drawer
@@ -374,15 +374,15 @@
    {:direction "bottom"
     :modal false}
    [:> Drawer.Trigger
-    {:class "button p-1 rounded h-auto flex flex-col flex-1 text-2xs gap-1
-             overflow-hidden items-center"}
+    {:class ["button p-1 rounded h-auto flex flex-col flex-1 text-2xs gap-1"
+             "overflow-hidden items-center"]}
     [icon (:icon props)]
     [:span.truncate.w-full (i18n.views/t (:label props))]]
    [:> Drawer.Portal
     [:> Drawer.Content
-     {:class "inset-0 fixed z-0 outline-none bg-primary flex shadow-lg
-              flex-col items-center top-auto px-safe pb-safe rounded-t-xl
-              h-[30dvh] overflow-hidden"
+     {:class ["inset-0 fixed z-0 outline-none bg-primary flex shadow-lg"
+              "flex-col items-center top-auto px-safe pb-safe rounded-t-xl"
+              "h-[30dvh] overflow-hidden"]
       :style {:margin "0 - env(safe-area-inset-right)
                        0 - env(safe-area-inset-left)"
               :box-shadow "0 -10px 15px -3px

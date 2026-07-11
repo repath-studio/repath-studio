@@ -91,8 +91,8 @@
                 (action.views/disabled? action))
     [:> Command/CommandItem
      {:on-select #(rf/dispatch [::dialog.events/close event])
-      :class "flex p-2 rounded-md items-center justify-between
-              data-[selected=true]:bg-overlay"}
+      :class ["flex p-2 rounded-md items-center justify-between"
+              "data-[selected=true]:bg-overlay"]}
      [:div.flex.items-center.gap-2
       [:div.w-7.h-7.rounded.line-height-6.flex.justify-center.items-center
        {:class (when icon "bg-overlay")}

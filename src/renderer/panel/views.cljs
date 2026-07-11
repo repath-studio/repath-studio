@@ -10,30 +10,30 @@
 
 (defn separator []
   [:> Separator
-   {:class "relative after:block after:absolute after:z-1
-            after:transition-colors after:duration-300 after:delay-100
-            focus:after:delay-0
-            aria-[orientation=horizontal]:h-px
-            aria-[orientation=horizontal]:after:w-full
-            aria-[orientation=horizontal]:after:h-1
-            aria-[orientation=horizontal]:after:top-[-50%]
-            aria-[orientation=vertical]:w-px
-            aria-[orientation=vertical]:after:h-full
-            aria-[orientation=vertical]:after:w-1
-            aria-[orientation=vertical]:after:left-[-50%]
-            data-[separator=active]:after:bg-accent!
-            data-[separator=hover]:after:bg-accent!
-            data-[separator=hover]:after:delay-300
-            data-[separator=focus]:hover:after:bg-accent
-            focus-visible:outline-hidden
-            focus-visible:after:bg-border focus-visible:after:delay-0"}])
+   {:class ["relative after:block after:absolute after:z-1"
+            "after:transition-colors after:duration-300 after:delay-100"
+            "focus:after:delay-0"
+            "aria- [orientation=horizontal] :h-px"
+            "aria-[orientation=horizontal]:after:w-full"
+            "aria- [orientation=horizontal] :after:h-1"
+            "aria-[orientation=horizontal]:after:top-[-50%]"
+            "aria- [orientation=vertical] :w-px"
+            "aria-[orientation=vertical]:after:h-full"
+            "aria- [orientation=vertical] :after:w-1"
+            "aria-[orientation=vertical]:after:left-[-50%]"
+            "data- [separator=active] :after:bg-accent!"
+            "data-[separator=hover]:after:bg-accent!"
+            "data- [separator=hover] :after:delay-300"
+            "data-[separator=focus]:hover:after:bg-accent"
+            "focus-visible:outline-hidden"
+            "focus-visible:after:bg-border focus-visible:after:delay-0"]}])
 
 (defn close-button
   [id]
   [views/icon-button "window-close"
    {:title (i18n.views/t [::close-panel "Close panel"])
-    :class "panel-close-button absolute z-1 top-2 right-2 rtl:right-auto
-            rtl:left-2 bg-transparent! invisible button-size-small"
+    :class ["panel-close-button absolute z-1 top-2 right-2 rtl:right-auto"
+            "rtl:left-2 bg-transparent! invisible button-size-small"]
     :on-click #(rf/dispatch [::panel.events/toggle id])}])
 
 (defc panel

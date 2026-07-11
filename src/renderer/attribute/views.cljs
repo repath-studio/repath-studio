@@ -111,8 +111,8 @@
             :on-key-down #(utils.key/down-handler % v update-handler k v)})]
    (when-not (or (empty? (str v)) disabled)
      [:button.form-control-button.bg-primary!.absolute!.right-0.p1.invisible
-      {:class "hover:bg-transparent rtl:right-auto rtl:left-0
-               group-hover:visible"
+      {:class ["hover:bg-transparent rtl:right-auto rtl:left-0"
+               "group-hover:visible"]
        :on-click #(rf/dispatch [::element.events/remove-attr k])}
       [views/icon "times"]])])
 

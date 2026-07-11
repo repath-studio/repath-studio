@@ -102,8 +102,8 @@
   [s]
   [:div.drag.grow.items-center
    {:dir "ltr"
-    :class "pointer-events-none truncate lg:absolute lg:justify-center px-1
-            lg:left-1/2 lg:-translate-x-1/2 lg:flex"}
+    :class ["pointer-events-none truncate lg:absolute lg:justify-center px-1"
+            "lg:left-1/2 lg:-translate-x-1/2 lg:flex"]}
    s])
 
 (defn language-select
@@ -112,8 +112,8 @@
     [dropdown
      [:button.button
       {:title (i18n.views/t (:label action-group))
-       :class "flex gap-1 items-center px-3 uppercase bg-primary font-mono
-               outline-inset"}
+       :class ["flex gap-1 items-center px-3 uppercase bg-primary font-mono"
+               "outline-inset"]}
       code]
      (->> (:actions action-group)
           (mapv (partial language-item system-code)))]))

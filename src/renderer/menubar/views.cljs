@@ -211,13 +211,13 @@
     [:> Menubar/Menu
      {:value (name id)}
      [:> Menubar/Trigger
-      {:class ["button-size py-1 md:min-h-auto md:px-3 xl:py-1.5 flex
-                outline-none select-none items-center justify-center
-                data-[state=open]:bg-overlay leading-none
-                hover:bg-overlay hover:text-foreground-hovered
-                focus:bg-overlay focus:text-foreground-hovered
-                disabled:text-foreground-disabled rounded-sm
-                disabled:pointer-events-none"
+      {:class ["button-size py-1 md:min-h-auto md:px-3 xl:py-1.5 flex"
+               "outline-none select-none items-center justify-center"
+               "data-[state=open]:bg-overlay leading-none"
+               "hover:bg-overlay hover:text-foreground-hovered"
+               "focus:bg-overlay focus:text-foreground-hovered"
+               "disabled:text-foreground-disabled rounded-sm"
+               "disabled:pointer-events-none"
                (when desktop? "min-h-auto")]
        :disabled (action.views/disabled? action)}
       [:span
@@ -227,8 +227,8 @@
            [views/icon "menu" {:aria-label (i18n.views/t [::menu "Menu"])}])]]
      [:> Menubar/Portal
       (into [:> Menubar/Content
-             {:class (when actions "menu-content min-w-[45dvw]!
-                                    sm:min-w-[200px]! max-w-[45dvw]")
+             {:class (when actions ["menu-content min-w-[45dvw]!"
+                                    "sm:min-w-[200px]! max-w-[45dvw]"])
               :align "start"
               :side-offset 4
               :loop true
