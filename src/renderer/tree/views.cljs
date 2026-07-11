@@ -250,9 +250,9 @@
   [root-children elements]
   (let [ref (react/createRef)]
     [:div.flex.flex-1.bg-primary.h-full.overflow-hidden
-     ;; When the tree is hovered, ignore the hovered class of the elements,
-     ;; if the element itself is not also hovered.
-     {:class [(str "hover:**:[&."
+     {:class [;; When the tree is hovered, ignore the hovered class of the
+              ;; elements, if the element itself is not also hovered.
+              (str "hover:**:[&."
                    tree.effects/item-class
                    "]:not-hover:bg-inherit")
               "focus-visible:outline-default focus-visible:outline-inset"]
