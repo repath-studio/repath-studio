@@ -146,7 +146,9 @@
      {:open (boolean active-dialog)
       :on-open-change #(rf/dispatch [::dialog.events/close])}
      [:> Dialog/Portal
-      [:> Dialog/Overlay {:class "backdrop"}]
+      [:> Dialog/Overlay
+       {:class ["fixed inset-0 flex items-center justify-center bg-backdrop"
+                "animate-in fade-in"]}]
       [:> Dialog/Content
        (views/merge-with-class
         {:class "fixed bg-primary rounded-lg overflow-hidden shadow-xl border

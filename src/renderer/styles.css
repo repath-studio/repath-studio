@@ -160,16 +160,6 @@ label {
   placeholder:text-foreground-disabled text-xs!;
 }
 
-.button-link {
-  @apply text-foreground-hovered inline-block text-left text-wrap break-all
-  hover:cursor-pointer hover:underline outline-default;
-}
-
-.backdrop {
-  @apply fixed inset-0 flex items-center justify-center bg-backdrop
-  animate-in fade-in;
-}
-
 @keyframes rotationBreak {
   0% {
     transform: rotate(0);

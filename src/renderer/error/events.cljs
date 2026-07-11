@@ -21,7 +21,7 @@
                      from our \"%1\" menu."]
                 [:p "For more information, please read our %2."]]]
               [[:strong (i18n.handlers/t db [::menubar.views/help "Help"])]
-               [:a.button-link.underline
+               [:a.underline.hover:text-foreground-hovered
                 {:href "https://repath.studio/policies/privacy/"
                  :target "_blank"}
                 (i18n.handlers/t db [::privacy-policy "privacy policy"])]])

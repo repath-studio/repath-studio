@@ -55,12 +55,21 @@
            :class "menu-item px-2!"}
           [:> Select/ItemText (str "A" k)]])]]]]])
 
+(defn button-link
+  [props & more]
+  (into [:button
+         (views/merge-with-class
+          {:class ["text-lg text-foreground-hovered outline-default break-all"
+                   "text-left text-wrap hover:cursor-pointer hover:underline"]}
+          props)]
+        more))
+
 (defn recent-document
   [{:keys [path title]
     :as recent}]
   [:div.flex.items-center.gap-x-2.flex-wrap
    [views/icon "folder"]
-   [:button.button-link.text-lg
+   [button-link
     {:on-click #(rf/dispatch [::document.events/open-recent recent])}
     (or title (.basename path-browserify path))]
    (when path
@@ -70,7 +79,7 @@
   [action]
   [:div.flex.items-center.gap-3.flex-wrap
    [views/icon (:icon action)]
-   [:button.button-link.text-lg
+   [button-link
     {:on-click (action.views/dispatch action)}
     [action.views/label action]]
    [views/shortcuts action]])
