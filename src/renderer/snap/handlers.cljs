@@ -98,10 +98,9 @@
 (m/=> nearest-delta [:-> App Vec2])
 (defn nearest-delta
   [db]
-  (if (:nearest-neighbor db)
-    (let [{:keys [point base-point]} (:nearest-neighbor db)]
-      (matrix/sub point base-point))
-    [0 0]))
+  (or (when-let [{:keys [point base-point]} (:nearest-neighbor db)]
+        (matrix/sub point base-point))
+      [0 0]))
 
 (m/=> snap-with [:-> App ifn? [:* any?] App])
 (defn snap-with
