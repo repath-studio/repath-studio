@@ -32,6 +32,6 @@
 (rf/reg-event-fx
  ::close
  (fn [{:keys [db]} [_ on-close]]
-   (cond-> {:db (update db :dialogs pop)}
+   (cond-> {:db (update db :dialogs (comp vec butlast))}
      on-close
      (assoc :dispatch on-close))))
