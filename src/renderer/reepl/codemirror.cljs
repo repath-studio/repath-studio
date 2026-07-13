@@ -8,6 +8,7 @@
    ["codemirror/addon/runmode/runmode.js"]
    ["codemirror/mode/clojure/clojure.js"]
    ["codemirror/mode/javascript/javascript.js"]
+   ["codemirror/mode/python/python.js"]
    ["react" :as react]
    [clojure.edn :as edn]
    [clojure.string :as string]

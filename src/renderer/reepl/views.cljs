@@ -56,6 +56,7 @@
      [:div.self-start.h-full.flex.items-center.gap-1
       [mode-button :cljs]
       [mode-button :js]
+      [mode-button :python]
       (when @(rf/subscribe [::window.subs/md?])
         [:div.self-start.flex
          [views/icon-button
@@ -240,17 +241,22 @@
         debug-info (rf/subscribe [::app.subs/debug-info])
         codemirror-theme @(rf/subscribe [::theme.subs/codemirror])]
     [repl
-     :execute #(reepl.replumb/run-repl (if (= @repl-mode :cljs)
-                                         %1
-                                         (str "(js/eval \"" %1 "\")"))
-                                       {:verbose @debug-info} %2)
+     :execute #(reepl.replumb/run-repl
+                (case @repl-mode
+                  :cljs %
+                  :js (str "(js/eval \"" % "\")")
+                  :python (str "(js/pyodide.runPython \"" % "\")"))
+                {:verbose @debug-info} %2)
      :complete-word (fn [text] (reepl.replumb/process-apropos @repl-mode text))
      :get-docs reepl.replumb/process-doc
      :state state
      :show-value-opts
      {:showers [show-devtools/show-devtools
                 (partial show-function/show-fn-with-docs maybe-fn-docs)]}
-     :js-cm-opts {:mode (if (= @repl-mode :cljs) "clojure" "javascript")
+     :js-cm-opts {:mode (case @repl-mode
+                          :cljs "clojure"
+                          :js "javascript"
+                          :python "python")
                   :keyMap "default"
                   :showCursorWhenSelecting true
                   :theme codemirror-theme}]))
