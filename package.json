@@ -95,7 +95,6 @@
     "@fontsource/noto-sans": "5.2.10",
     "@fontsource/noto-sans-mono": "5.2.10",
     "@mdn/browser-compat-data": "8.0.6",
-    "@pyscript/core": "0.7.31",
     "@radix-ui/react-context-menu": "2.3.3",
     "@radix-ui/react-dialog": "1.1.19",
     "@radix-ui/react-direction": "1.1.2",
