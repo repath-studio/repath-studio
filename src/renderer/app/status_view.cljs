@@ -188,10 +188,9 @@
      {:class "bg-primary relative justify-center md:justify-start py-2 md:py-1
               gap-2 md:gap-1 @container/toolbar overflow-hidden"}
      (->> [[color-selectors]
-           (when (get-method tool.hierarchy/tool-options active-tool)
-             (when-let [options (tool.hierarchy/tool-options active-tool)]
-               [:div.hidden {:class "@lg/toolbar:flex"}
-                options]))
+           (when-let [options (tool.hierarchy/tool-options active-tool)]
+             [:div.hidden {:class "@lg/toolbar:flex"}
+              options])
            (when (and help-bar (seq help-message))
              [help help-message])]
           (remove nil?)

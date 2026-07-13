@@ -151,9 +151,9 @@
                 "animate-in fade-in"]}]
       [:> Dialog/Content
        (views/merge-with-class
-        {:class "fixed bg-primary rounded-lg overflow-hidden shadow-xl border
-                 border-border left-1/2 top-1/2 w-125 max-w-9/10 -translate-1/2
-                 animate-in zoom-in-95 p-6 m-safe"
+        {:class ["fixed bg-primary rounded-lg overflow-hidden shadow-xl border"
+                 "border-border left-1/2 top-1/2 w-125 max-w-9/10"
+                 "-translate-1/2 animate-in zoom-in-95 p-6 m-safe"]
          :on-key-down #(.stopPropagation %)}
         attrs)
        (when title
