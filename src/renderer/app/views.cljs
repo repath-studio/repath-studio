@@ -23,8 +23,8 @@
    [renderer.menubar.views :as menubar.views]
    [renderer.panel.subs :as-alias panel.subs]
    [renderer.panel.views :as panel.views]
-   [renderer.reepl.views :as repl.views]
    [renderer.ruler.views :as ruler.views]
+   [renderer.shell.views :as shell.views]
    [renderer.snap.subs :as-alias snap.subs]
    [renderer.theme.subs :as-alias theme.subs]
    [renderer.timeline.views :as timeline.views]
@@ -299,7 +299,7 @@
          [panel.views/close-button :timeline]]])
      [panel.views/separator]
      [app.status-view/root]
-     (when md? [repl.views/root])]))
+     (when md? [shell.views/root])]))
 
 (defn bottom-bar
   []
@@ -325,7 +325,7 @@
     {:icon "shell"
      :label [::shell "Shell"]}
     [:div.flex.flex-col.flex-1
-     [repl.views/root]]]
+     [shell.views/root]]]
 
    [views/drawer
     {:icon "history"

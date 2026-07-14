@@ -1,4 +1,4 @@
-(ns renderer.reepl.show-value
+(ns renderer.shell.reepl.show-value
   (:require
    [cljs.pprint :as pprint]
    [renderer.utils.extra :refer [rpartial]]))

@@ -1,12 +1,12 @@
-(ns renderer.reepl.db
+(ns renderer.shell.db
   (:require
    [renderer.db :refer [LoadingState]]
    [renderer.hierarchy :as hierarchy]
-   [renderer.reepl.hierarchy :as reepl.hierarchy]))
+   [renderer.shell.hierarchy :as shell.hierarchy]))
 
 (defn shell-language?
   [k]
-  (contains? (descendants @hierarchy/hierarchy ::reepl.hierarchy/language) k))
+  (contains? (descendants @hierarchy/hierarchy ::shell.hierarchy/language) k))
 
 (def ShellLanguage
   [:fn {:error/fn (fn [{:keys [value]} _]

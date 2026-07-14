@@ -26,7 +26,7 @@
   :show "보이기"
   :hide "숨기기"}
 
- :renderer.reepl.views
+ :renderer.shell.views
  {:hide-command-output "명령 출력 숨기기"
   :show-command-output "명령 출력 보이기"}
 
@@ -848,5 +848,5 @@
  :renderer.utils.element
  {:centroid "무게중심"}
 
- :renderer.reepl.core
+ :renderer.shell.core
  {:focus-shell "셸에 포커스"}}

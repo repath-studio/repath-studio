@@ -11,7 +11,7 @@
    [renderer.error.effects :as-alias error.effects]
    [renderer.i18n.effects :as-alias i18n.effects]
    [renderer.input.events :as-alias input.events]
-   [renderer.reepl.events :as-alias reepl.events]
+   [renderer.shell.events :as-alias shell.events]
    [renderer.theme.effects :as-alias theme.effects]
    [renderer.utils.element :as utils.element]
    [renderer.window.effects :as-alias window.effects]))
@@ -205,5 +205,5 @@
  (fn [_]))
 
 (rf/reg-event-db
- ::reepl.events/init
+ ::shell.events/init
  (fn [_]))

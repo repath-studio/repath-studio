@@ -1,12 +1,12 @@
-(ns renderer.reepl.impl.python
+(ns renderer.shell.impl.python
   (:require
    [goog.html.legacyconversions :refer [trustedResourceUrlFromString]]
    [goog.net.jsloader :refer [safeLoad]]
    [re-frame.core :as rf]
    [renderer.hierarchy :as hierarchy]
-   [renderer.reepl.hierarchy :as reepl.hierarchy]))
+   [renderer.shell.hierarchy :as shell.hierarchy]))
 
-(hierarchy/derive! :py ::reepl.hierarchy/language)
+(hierarchy/derive! :py ::shell.hierarchy/language)
 
 (defn load-pyodide
   []
@@ -18,18 +18,18 @@
                (print "")
                (print "You can create or modify shapes using the command line.")
                (print "Type `js.help()` to see a list of commands.")
-               (rf/dispatch [:renderer.reepl.events/language-load-success])))
+               (rf/dispatch [:renderer.shell.events/language-load-success])))
       (.catch (fn [error]
-                (rf/dispatch [:renderer.reepl.events/language-load-error
+                (rf/dispatch [:renderer.shell.events/language-load-error
                               error])))))
 
-(defmethod reepl.hierarchy/init :py
+(defmethod shell.hierarchy/init :py
   []
   (let [loader (-> "/pyodide/pyodide.js"
                    (trustedResourceUrlFromString)
                    (safeLoad))]
     (.addCallback ^goog.net.jsloader loader load-pyodide)))
 
-(defmethod reepl.hierarchy/evaluate :py
+(defmethod shell.hierarchy/evaluate :py
   [_language s]
   (str "(js/pyodide.runPython \"" s "\")"))

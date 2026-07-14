@@ -1,4 +1,4 @@
-(ns renderer.reepl.hierarchy
+(ns renderer.shell.hierarchy
   (:require
    [renderer.hierarchy :as hierarchy]))
 

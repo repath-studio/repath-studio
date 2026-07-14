@@ -18,7 +18,7 @@
    [renderer.input.db :refer [PointerEvent PointerId]]
    [renderer.menubar.db :refer [Menubar]]
    [renderer.panel.db :as panel.db :refer [Panel PanelId]]
-   [renderer.reepl.db :refer [Shell]]
+   [renderer.shell.db :refer [Shell]]
    [renderer.snap.db :refer [Snap NearestNeighbor]]
    [renderer.theme.db :refer [Theme]]
    [renderer.timeline.db :refer [Timeline]]

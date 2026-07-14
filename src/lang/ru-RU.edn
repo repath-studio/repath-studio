@@ -26,7 +26,7 @@
   :show "Показать"
   :hide "Скрыть"}
 
- :renderer.reepl.views
+ :renderer.shell.views
  {:hide-command-output "Скрыть вывод команд"
   :show-command-output "Показать вывод команд"}
 
@@ -895,5 +895,5 @@
  :renderer.utils.element
  {:centroid "центроид"}
 
- :renderer.reepl.core
+ :renderer.shell.core
  {:focus-shell "Фокус на консоли"}}

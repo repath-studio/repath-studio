@@ -1,4 +1,4 @@
-(ns renderer.reepl.handlers)
+(ns renderer.shell.reepl.handlers)
 
 (defn clear-items
   [db]

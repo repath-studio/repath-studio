@@ -1,4 +1,4 @@
-(ns renderer.reepl.views
+(ns renderer.shell.views
   (:require
    [clojure.string :as string]
    [re-frame.core :as rf]
@@ -8,15 +8,15 @@
    [renderer.panel.events :as-alias panel.events]
    [renderer.panel.subs :as-alias panel.subs]
    [renderer.panel.views :as panel.views]
-   [renderer.reepl.codemirror :as codemirror]
-   [renderer.reepl.events :as-alias reepl.events]
-   [renderer.reepl.handlers :as reepl.handlers]
-   [renderer.reepl.hierarchy :as reepl.hierarchy]
-   [renderer.reepl.replumb :as reepl.replumb]
-   [renderer.reepl.show-devtools :as show-devtools]
-   [renderer.reepl.show-function :as show-function]
-   [renderer.reepl.show-value :refer [show-value]]
-   [renderer.reepl.subs :as-alias reepl.subs]
+   [renderer.shell.events :as-alias reepl.events]
+   [renderer.shell.hierarchy :as shell.hierarchy]
+   [renderer.shell.reepl.codemirror :as codemirror]
+   [renderer.shell.reepl.handlers :as reepl.handlers]
+   [renderer.shell.reepl.replumb :as reepl.replumb]
+   [renderer.shell.reepl.show-devtools :as show-devtools]
+   [renderer.shell.reepl.show-function :as show-function]
+   [renderer.shell.reepl.show-value :refer [show-value]]
+   [renderer.shell.subs :as-alias shell.subs]
    [renderer.theme.subs :as-alias theme.subs]
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]
@@ -45,7 +45,7 @@
 
 (defn mode-button
   [language]
-  (let [active-language @(rf/subscribe [::reepl.subs/active-language])
+  (let [active-language @(rf/subscribe [::shell.subs/active-language])
         active (= active-language language)]
     [:button.button.rounded.px-1.leading-none.text-2xs.min-h-5
      {:class [(when active "accent")]
@@ -186,7 +186,8 @@
              show-value-opts
              js-cm-opts
              on-cm-init]}]
-  (reagent/with-let [state (or state (reagent/atom initial-state))
+  (reagent/with-let [state (or state
+                               (reagent/atom initial-state))
                      {:keys [add-input
                              add-result
                              go-up
@@ -195,7 +196,7 @@
                              set-text
                              add-log]} (reepl.handlers/make-handlers state)
                      items (get-items state)
-                     status (rf/subscribe [::reepl.subs/active-language-status])
+                     status (rf/subscribe [::shell.subs/active-language-status])
                      complete-atom (reagent/atom nil)
                      docs (reaction
                            (when-let [state @complete-atom]
@@ -259,12 +260,12 @@
 
 (defn root
   []
-  (let [active-language (rf/subscribe [::reepl.subs/active-language])
-        verbose? (rf/subscribe [::reepl.subs/verbose?])
+  (let [active-language (rf/subscribe [::shell.subs/active-language])
+        verbose? (rf/subscribe [::shell.subs/verbose?])
         codemirror-theme @(rf/subscribe [::theme.subs/codemirror])]
     [repl
      :execute #(reepl.replumb/run-repl
-                (reepl.hierarchy/evaluate @active-language %)
+                (shell.hierarchy/evaluate @active-language %)
                 {:verbose @verbose?} %2)
      :complete-word #(reepl.replumb/process-apropos @active-language %)
      :get-docs reepl.replumb/process-doc

@@ -17,7 +17,7 @@
    [renderer.i18n.events :as-alias i18n.events]
    [renderer.input.events :as-alias input.events]
    [renderer.input.impl.keyboard :as impl.keyboard]
-   [renderer.reepl.events :as-alias reepl.events]
+   [renderer.shell.events :as-alias reepl.events]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.theme.effects :as-alias theme.effects]
    [renderer.theme.events :as-alias theme.events]

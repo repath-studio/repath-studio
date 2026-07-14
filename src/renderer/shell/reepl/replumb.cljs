@@ -1,4 +1,4 @@
-(ns renderer.reepl.replumb
+(ns renderer.shell.reepl.replumb
   (:require
    #_[shadow.cljs.bootstrap.browser :as bootstrap]
    [cljs.js]

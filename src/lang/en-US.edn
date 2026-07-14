@@ -26,7 +26,7 @@
   :show "Show"
   :hide "Hide"}
 
- :renderer.reepl.views
+ :renderer.shell.views
  {:hide-command-output "Hide command output"
   :show-command-output "Show command output"}
 
@@ -884,5 +884,5 @@
  :renderer.utils.element
  {:centroid "centroid"}
 
- :renderer.reepl.core
+ :renderer.shell.core
  {:focus-shell "Focus shell"}}

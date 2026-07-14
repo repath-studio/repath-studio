@@ -27,7 +27,7 @@
    [renderer.icon.subs]
    [renderer.panel.events]
    [renderer.panel.subs]
-   [renderer.reepl.impl.core]
+   [renderer.shell.impl.core]
    [renderer.snap.events]
    [renderer.theme.events]
    [renderer.theme.subs]

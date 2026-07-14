@@ -1,8 +1,8 @@
-(ns renderer.reepl.effects
+(ns renderer.shell.effects
   (:require
    [re-frame.core :as rf]
-   [renderer.reepl.hierarchy :as reepl.hierarchy]
-   [renderer.reepl.replumb :as replumb]
+   [renderer.shell.hierarchy :as shell.hierarchy]
+   [renderer.shell.reepl.replumb :as replumb]
    [renderer.utils.dom :as utils.dom]
    [replumb.repl :as replumb.repl]
    [shadow.cljs.bootstrap.browser :as bootstrap]))
@@ -19,7 +19,7 @@
 (rf/reg-fx
  ::init-language
  (fn [language]
-   (reepl.hierarchy/init language)))
+   (shell.hierarchy/init language)))
 
 (rf/reg-fx
  ::focus

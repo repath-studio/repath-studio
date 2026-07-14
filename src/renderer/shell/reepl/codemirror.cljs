@@ -1,4 +1,4 @@
-(ns renderer.reepl.codemirror
+(ns renderer.shell.reepl.codemirror
   (:require
    ["codemirror" :as codemirror]
    ["codemirror/addon/edit/closebrackets.js"]

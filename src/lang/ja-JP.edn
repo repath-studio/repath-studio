@@ -26,7 +26,7 @@
   :show "表示"
   :hide "非表示"}
 
- :renderer.reepl.views
+ :renderer.shell.views
  {:hide-command-output "コマンド出力を非表示"
   :show-command-output "コマンド出力を表示"}
 
@@ -854,5 +854,5 @@
  :renderer.utils.element
  {:centroid "重心"}
 
- :renderer.reepl.core
+ :renderer.shell.core
  {:focus-shell "シェルにフォーカス"}}

@@ -26,7 +26,7 @@
   :show "Anzeigen"
   :hide "Verbergen"}
 
- :renderer.reepl.views
+ :renderer.shell.views
  {:hide-command-output "Befehlsausgabe verbergen"
   :show-command-output "Befehlsausgabe anzeigen"}
 
@@ -915,5 +915,5 @@
  :renderer.utils.element
  {:centroid "Schwerpunkt"}
 
- :renderer.reepl.core
+ :renderer.shell.core
  {:focus-shell "Shell fokussieren"}}

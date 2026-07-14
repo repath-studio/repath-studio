@@ -26,7 +26,7 @@
   :show "Tonen"
   :hide "Verbergen"}
 
- :renderer.reepl.views
+ :renderer.shell.views
  {:hide-command-output "Commando-uitvoer verbergen"
   :show-command-output "Commando-uitvoer tonen"}
 
@@ -913,5 +913,5 @@
  :renderer.utils.element
  {:centroid "centroïde"}
 
- :renderer.reepl.core
+ :renderer.shell.core
  {:focus-shell "Focus op shell"}}

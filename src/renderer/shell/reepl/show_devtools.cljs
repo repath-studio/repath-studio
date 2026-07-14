@@ -1,4 +1,4 @@
-(ns renderer.reepl.show-devtools
+(ns renderer.shell.reepl.show-devtools
   (:require
    [clojure.string :as string]
    [devtools.formatters.core :as devtools.formatters]

@@ -26,7 +26,7 @@
   :show "显示"
   :hide "隐藏"}
 
- :renderer.reepl.views
+ :renderer.shell.views
  {:hide-command-output "隐藏命令输出"
   :show-command-output "显示命令输出"}
 
@@ -810,5 +810,5 @@
  :renderer.utils.element
  {:centroid "质心"}
 
- :renderer.reepl.core
+ :renderer.shell.core
  {:focus-shell "聚焦 Shell"}}
