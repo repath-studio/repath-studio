@@ -74,7 +74,7 @@
      [:div.self-start.h-full.flex.items-center.gap-1
       [mode-button :cljs]
       [mode-button :js]
-      [mode-button :py]
+      [mode-button :python]
       (when @(rf/subscribe [::window.subs/md?])
         [:div.self-start.flex
          [views/icon-button
@@ -273,10 +273,7 @@
      :show-value-opts
      {:showers [show-devtools/show-devtools
                 (partial show-function/show-fn-with-docs maybe-fn-docs)]}
-     :js-cm-opts {:mode (case @active-language
-                          :cljs "clojure"
-                          :js "javascript"
-                          :py "python")
+     :js-cm-opts {:mode (shell.hierarchy/codemirror-mode @active-language)
                   :keyMap "default"
                   :showCursorWhenSelecting true
                   :theme codemirror-theme}]))

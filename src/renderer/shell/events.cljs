@@ -17,12 +17,13 @@
       ::shell.effects/init nil
       ::shell.effects/init-language active-language})))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  ::language-load-success
  [persist]
- (fn [db _]
+ (fn [{:keys [db]} _]
    (let [active-language (get-in db [:shell :active-language])]
-     (assoc-in db [:shell :language-status active-language] :success))))
+     {:db (assoc-in db [:shell :language-status active-language] :success)
+      ::shell.effects/welcome active-language})))
 
 (rf/reg-event-fx
  ::language-load-error

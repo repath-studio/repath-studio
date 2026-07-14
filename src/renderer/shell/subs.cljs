@@ -22,6 +22,11 @@
  :-> :language-status)
 
 (rf/reg-sub
+ ::active-language?
+ :<- [::active-language]
+ :=> =)
+
+(rf/reg-sub
  ::active-language-status
  :<- [::language-status]
  :<- [::active-language]

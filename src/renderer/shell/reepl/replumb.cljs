@@ -293,7 +293,7 @@ cljs.js/*load-fn*
   [mode text]
   (case mode
     :js (js-completion mode text)
-    :py (js-completion mode text)
+    :python (js-completion mode text)
     :cljs (if (zero? (.indexOf text "js/"))
             (js-completion mode (.slice text 3))
             (cljs-completion text))))

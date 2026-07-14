@@ -22,6 +22,14 @@
    (shell.hierarchy/init language)))
 
 (rf/reg-fx
+ ::welcome
+ (fn [language]
+   (print "Welcome to your " (name language) " REPL!")
+   (print "You can create or modify shapes using the command line.")
+   (print "")
+   (shell.hierarchy/help language)))
+
+(rf/reg-fx
  ::focus
  (fn []
    (some-> (.getElementById js/document utils.dom/shell-input-id)
