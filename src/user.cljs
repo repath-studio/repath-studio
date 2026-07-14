@@ -393,11 +393,6 @@
     (print (:name (meta x)) " - " (:doc (meta x))))
   "")
 
-;; Expose all commands to global namespace.
-;; We might have to redeclare those functions for each language.
-(doseq [command (vals (ns-publics 'user))]
-  (aset js/window (:name (meta command)) (.call ^js (.-val command))))
-
 (def ^:export version config/version)
 
 (comment

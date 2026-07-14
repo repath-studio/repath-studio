@@ -5,6 +5,7 @@
    [renderer.reepl.effects]
    [renderer.reepl.events :as reepl.events]
    [renderer.reepl.impl.core]
+   [renderer.reepl.subs]
    [renderer.utils.key :as utils.key]))
 
 (rf/dispatch [::action.events/register-action

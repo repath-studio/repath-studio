@@ -3,21 +3,20 @@
    [clojure.string :as string]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
-   [renderer.app.events :as-alias app.events]
-   [renderer.app.subs :as-alias app.subs]
    [renderer.events :as-alias events]
    [renderer.i18n.views :as i18n.views]
    [renderer.panel.events :as-alias panel.events]
    [renderer.panel.subs :as-alias panel.subs]
    [renderer.panel.views :as panel.views]
    [renderer.reepl.codemirror :as codemirror]
-   [renderer.reepl.db :as db]
+   [renderer.reepl.events :as-alias reepl.events]
    [renderer.reepl.handlers :as reepl.handlers]
+   [renderer.reepl.hierarchy :as reepl.hierarchy]
    [renderer.reepl.replumb :as reepl.replumb]
    [renderer.reepl.show-devtools :as show-devtools]
    [renderer.reepl.show-function :as show-function]
    [renderer.reepl.show-value :refer [show-value]]
-   [renderer.reepl.subs :as reepl.subs]
+   [renderer.reepl.subs :as-alias reepl.subs]
    [renderer.theme.subs :as-alias theme.subs]
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]
@@ -25,14 +24,33 @@
   (:require-macros
    [reagent.ratom :refer [reaction]]))
 
+(def initial-state
+  {:items []
+   :hist-pos 0
+   :history [""]})
+
+(defn get-items
+  [db]
+  (reaction (:items @db)))
+
+(defn current-text
+  [db]
+  (let [idx (reaction (:hist-pos @db))
+        history (reaction (:history @db))]
+    (reaction (let [history @history
+                    pos (- (count history) @idx 1)]
+                {:pos pos
+                 :count (count history)
+                 :text (get history pos)}))))
+
 (defn mode-button
-  [mode]
-  (let [repl-mode @(rf/subscribe [::app.subs/repl-mode])
-        active (= repl-mode mode)]
+  [language]
+  (let [active-language @(rf/subscribe [::reepl.subs/active-language])
+        active (= active-language language)]
     [:button.button.rounded.px-1.leading-none.text-2xs.min-h-5
      {:class [(when active "accent")]
-      :on-click #(rf/dispatch [::app.events/set-repl-mode mode])}
-     mode]))
+      :on-click #(rf/dispatch [::reepl.events/activate-language language])}
+     language]))
 
 (defn repl-input
   [state submit cm-opts]
@@ -56,7 +74,7 @@
      [:div.self-start.h-full.flex.items-center.gap-1
       [mode-button :cljs]
       [mode-button :js]
-      [mode-button :python]
+      [mode-button :py]
       (when @(rf/subscribe [::window.subs/md?])
         [:div.self-start.flex
          [views/icon-button
@@ -168,7 +186,7 @@
              show-value-opts
              js-cm-opts
              on-cm-init]}]
-  (reagent/with-let [state (or state (reagent/atom db/initial-state))
+  (reagent/with-let [state (or state (reagent/atom initial-state))
                      {:keys [add-input
                              add-result
                              go-up
@@ -176,7 +194,8 @@
                              clear-items
                              set-text
                              add-log]} (reepl.handlers/make-handlers state)
-                     items (reepl.subs/items state)
+                     items (get-items state)
+                     status (rf/subscribe [::reepl.subs/active-language-status])
                      complete-atom (reagent/atom nil)
                      docs (reaction
                            (when-let [state @complete-atom]
@@ -222,41 +241,41 @@
        @complete-atom
        #(swap! complete-atom assoc :pos % :active true)]
       (let [_items @items] ; TODO: This needs to be removed
-        [repl-input
-         (reepl.subs/current-text state)
-         submit
-         {:complete-word complete-word
-          :on-up go-up
-          :on-down go-down
-          :complete-atom complete-atom
-          :on-change set-text
-          :js-cm-opts js-cm-opts
-          :on-cm-init on-cm-init}])]]))
+        (if (= @status :success)
+          [repl-input
+           (current-text state)
+           submit
+           {:complete-word complete-word
+            :on-up go-up
+            :on-down go-down
+            :complete-atom complete-atom
+            :on-change set-text
+            :js-cm-opts js-cm-opts
+            :on-cm-init on-cm-init}]
+          [:div.flex.items-center.p-1.5.items-center
+           "Loading language..."]))]]))
 
-(defonce state (reagent/atom db/initial-state))
+(defonce state (reagent/atom initial-state))
 
 (defn root
   []
-  (let [repl-mode (rf/subscribe [::app.subs/repl-mode])
-        debug-info (rf/subscribe [::app.subs/debug-info])
+  (let [active-language (rf/subscribe [::reepl.subs/active-language])
+        verbose? (rf/subscribe [::reepl.subs/verbose?])
         codemirror-theme @(rf/subscribe [::theme.subs/codemirror])]
     [repl
      :execute #(reepl.replumb/run-repl
-                (case @repl-mode
-                  :cljs %
-                  :js (str "(js/eval \"" % "\")")
-                  :python (str "(js/pyodide.runPython \"" % "\")"))
-                {:verbose @debug-info} %2)
-     :complete-word (fn [text] (reepl.replumb/process-apropos @repl-mode text))
+                (reepl.hierarchy/evaluate @active-language %)
+                {:verbose @verbose?} %2)
+     :complete-word #(reepl.replumb/process-apropos @active-language %)
      :get-docs reepl.replumb/process-doc
      :state state
      :show-value-opts
      {:showers [show-devtools/show-devtools
                 (partial show-function/show-fn-with-docs maybe-fn-docs)]}
-     :js-cm-opts {:mode (case @repl-mode
+     :js-cm-opts {:mode (case @active-language
                           :cljs "clojure"
                           :js "javascript"
-                          :python "python")
+                          :py "python")
                   :keyMap "default"
                   :showCursorWhenSelecting true
                   :theme codemirror-theme}]))

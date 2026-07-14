@@ -153,12 +153,6 @@
    (assoc db :system-fonts fonts)))
 
 (rf/reg-event-db
- ::set-repl-mode
- [persist]
- (fn [db [_ mode]]
-   (assoc db :repl-mode mode)))
-
-(rf/reg-event-db
  ::toggle-debug-info
  [persist]
  (fn [db [_]]

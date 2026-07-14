@@ -1,17 +1,29 @@
 (ns renderer.reepl.subs
-  (:require-macros
-   [reagent.ratom :refer [reaction]]))
+  (:require
+   [re-frame.core :as rf]))
 
-(defn items
-  [db]
-  (reaction (:items @db)))
+(rf/reg-sub
+ ::shell
+ :-> :shell)
 
-(defn current-text
-  [db]
-  (let [idx (reaction (:hist-pos @db))
-        history (reaction (:history @db))]
-    (reaction (let [history @history
-                    pos (- (count history) @idx 1)]
-                {:pos pos
-                 :count (count history)
-                 :text (get history pos)}))))
+(rf/reg-sub
+ ::verbose?
+ :<- [::shell]
+ :-> :verbose)
+
+(rf/reg-sub
+ ::active-language
+ :<- [::shell]
+ :-> :active-language)
+
+(rf/reg-sub
+ ::language-status
+ :<- [::shell]
+ :-> :language-status)
+
+(rf/reg-sub
+ ::active-language-status
+ :<- [::language-status]
+ :<- [::active-language]
+ (fn [[language-status active-language] _]
+   (get language-status active-language)))

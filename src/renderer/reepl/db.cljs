@@ -1,6 +1,20 @@
-(ns renderer.reepl.db)
+(ns renderer.reepl.db
+  (:require
+   [renderer.db :refer [LoadingState]]
+   [renderer.hierarchy :as hierarchy]
+   [renderer.reepl.hierarchy :as reepl.hierarchy]))
 
-(def initial-state
-  {:items []
-   :hist-pos 0
-   :history [""]})
+(defn shell-language?
+  [k]
+  (contains? (descendants @hierarchy/hierarchy ::reepl.hierarchy/language) k))
+
+(def ShellLanguage
+  [:fn {:error/fn (fn [{:keys [value]} _]
+                    (str value ", is not a supported language"))}
+   shell-language?])
+
+(def Shell
+  [:map {:closed true}
+   [:verbose {:default false} boolean?]
+   [:language-status {:default {}} [:map-of ShellLanguage LoadingState]]
+   [:active-language {:default :cljs} ShellLanguage]])
