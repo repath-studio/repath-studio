@@ -162,6 +162,7 @@
         :aria-label (i18n.views/t [::select "Select %1"] [(name k)])}
        [:> Select/Value ""]
        [:> Select/Icon
+        {:class "flex"}
         [views/icon "chevron-down"]]]
       [:> Select/Portal
        [:> Select/Content

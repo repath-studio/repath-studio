@@ -180,7 +180,7 @@ label {
 
 .form-control-button {
   @apply button bg-primary text-foreground-muted p-1 outline-inset
-  min-h-6.75! min-w-6.75!;
+  min-h-6.75! min-w-6.75! justify-items-center;
 }
 
 .form-element {
