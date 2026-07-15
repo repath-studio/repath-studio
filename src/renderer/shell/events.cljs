@@ -2,7 +2,8 @@
   (:require
    [re-frame.core :as rf]
    [renderer.app.events :as-alias app.events :refer [persist]]
-   [renderer.shell.effects :as-alias shell.effects]))
+   [renderer.shell.effects :as-alias shell.effects]
+   [renderer.shell.handlers :as shell.handlers]))
 
 (rf/reg-event-fx
  ::focus
@@ -12,8 +13,10 @@
 (rf/reg-event-fx
  ::init
  (fn [{:keys [db]} _]
-   (let [active-language (get-in db [:shell :active-language])]
-     {:db (assoc-in db [:shell :language-status] {active-language :loading})
+   (let [active-language (shell.handlers/active-language db)]
+     {:db (-> db
+              (shell.handlers/reset-language-statuses)
+              (shell.handlers/set-language-status active-language :loading))
       ::shell.effects/init nil
       ::shell.effects/init-language [active-language
                                      {:on-success [::language-load-success]
@@ -23,7 +26,7 @@
  ::language-load-success
  [persist]
  (fn [{:keys [db]} [_ language]]
-   {:db (assoc-in db [:shell :language-status language] :success)
+   {:db (shell.handlers/set-language-status db language :success)
     ::shell.effects/welcome language}))
 
 (rf/reg-event-fx
@@ -31,15 +34,15 @@
  [persist]
  (fn [{:keys [db]} [_ language error]]
    {:db (-> db
-            (assoc-in [:shell :language-status language] :error)
-            (assoc-in [:shell :active-language] :cljs))
+            (shell.handlers/set-language-status language :error)
+            (shell.handlers/activate-language :cljs))
     :dispatch [::app.events/toast-error error]}))
 
 (rf/reg-event-fx
  ::activate-language
  (fn [{:keys [db]} [_ language]]
-   (let [status (get-in db [:shell :language-status language])]
-     (cond-> {:db (assoc-in db [:shell :active-language] language)}
+   (let [status (shell.handlers/language-status db language)]
+     (cond-> {:db (shell.handlers/activate-language db language)}
        (not= status :success)
        (assoc ::shell.effects/init-language
               [language

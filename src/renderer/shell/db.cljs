@@ -8,13 +8,17 @@
   [k]
   (contains? (descendants @hierarchy/hierarchy ::shell.hierarchy/language) k))
 
-(def ShellLanguage
+(def ShellLanguageId
   [:fn {:error/fn (fn [{:keys [value]} _]
                     (str value ", is not a supported language"))}
    shell-language?])
 
+(def ShellLanguage
+  [:map {:closed true}
+   [:status {:optional true} LoadingState]])
+
 (def Shell
   [:map {:closed true}
    [:verbose {:default false} boolean?]
-   [:language-status {:default {}} [:map-of ShellLanguage LoadingState]]
-   [:active-language {:default :cljs} ShellLanguage]])
+   [:languages {:default {}} [:map-of ShellLanguageId ShellLanguage]]
+   [:active-language {:default :cljs} keyword?]])

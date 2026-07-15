@@ -196,7 +196,7 @@
                              set-text
                              add-log]} (reepl.handlers/make-handlers state)
                      items (get-items state)
-                     status (rf/subscribe [::shell.subs/active-language-status])
+                     status (rf/subscribe [::shell.subs/language-status])
                      complete-atom (reagent/atom nil)
                      docs (reaction
                            (when-let [state @complete-atom]
@@ -260,20 +260,20 @@
 
 (defn root
   []
-  (let [active-language (rf/subscribe [::shell.subs/active-language])
+  (let [language (rf/subscribe [::shell.subs/active-language])
         verbose? (rf/subscribe [::shell.subs/verbose?])
         codemirror-theme @(rf/subscribe [::theme.subs/codemirror])]
     [repl
-     :execute #(reepl.replumb/run-repl
-                (shell.hierarchy/evaluate @active-language %)
-                {:verbose @verbose?} %2)
-     :complete-word #(reepl.replumb/process-apropos @active-language %)
+     :execute #(reepl.replumb/run-repl (shell.hierarchy/evaluate @language %)
+                                       {:verbose @verbose?}
+                                       %2)
+     :complete-word #(reepl.replumb/process-apropos @language %)
      :get-docs reepl.replumb/process-doc
      :state state
      :show-value-opts
      {:showers [show-devtools/show-devtools
                 (partial show-function/show-fn-with-docs maybe-fn-docs)]}
-     :js-cm-opts {:mode (shell.hierarchy/codemirror-mode @active-language)
+     :js-cm-opts {:mode (shell.hierarchy/codemirror-mode @language)
                   :keyMap "default"
                   :showCursorWhenSelecting true
                   :theme codemirror-theme}]))

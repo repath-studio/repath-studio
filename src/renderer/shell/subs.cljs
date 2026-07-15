@@ -17,17 +17,22 @@
  :-> :active-language)
 
 (rf/reg-sub
- ::language-status
- :<- [::shell]
- :-> :language-status)
-
-(rf/reg-sub
  ::active-language?
  :<- [::active-language]
  :=> =)
 
 (rf/reg-sub
- ::active-language-status
- :<- [::language-status]
+ ::languages
+ :<- [::shell]
+ :-> :languages)
+
+(rf/reg-sub
+ ::language
+ :<- [::languages]
  :<- [::active-language]
  :-> (partial apply get))
+
+(rf/reg-sub
+ ::language-status
+ :<- [::language]
+ :-> :status)

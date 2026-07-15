@@ -1,5 +1,6 @@
 (ns renderer.shell.impl.clojurescript
   (:require
+   ["codemirror/mode/clojure/clojure.js"]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.hierarchy :as hierarchy]
@@ -29,6 +30,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :shell-language/clojurescript
+               :icon "clojurescript"
                :label [::label "ClojureScript"]
                :event [::shell.events/activate-language :cljs]
                :active [::shell.subs/active-language? :cljs]}])

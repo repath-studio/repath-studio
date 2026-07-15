@@ -1,5 +1,6 @@
 (ns renderer.shell.impl.javascript
   (:require
+   ["codemirror/mode/javascript/javascript.js"]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.hierarchy :as hierarchy]
@@ -11,6 +12,7 @@
 
 (defmethod shell.hierarchy/init :js
   [language {:keys [on-success]}]
+  ;; Expose all user functions to global namespace.
   (doseq [command (vals (ns-publics 'user))]
     (aset js/window (:name (meta command)) (.call ^js (.-val command))))
 
@@ -30,6 +32,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :shell-language/javascript
+               :icon "javascript"
                :label [::label "JavaScript"]
                :event [::shell.events/activate-language :js]
                :active [::shell.subs/active-language? :js]}])

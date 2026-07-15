@@ -1,5 +1,6 @@
 (ns renderer.shell.impl.python
   (:require
+   ["codemirror/mode/python/python.js"]
    [goog.html.legacyconversions :refer [trustedResourceUrlFromString]]
    [goog.net.jsloader :refer [safeLoad]]
    [re-frame.core :as rf]
@@ -50,6 +51,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :shell-language/python
+               :icon "python"
                :label [::label "Python"]
                :event [::shell.events/activate-language :python]
                :active [::shell.subs/active-language? :python]}])
