@@ -299,7 +299,10 @@
          [panel.views/close-button :timeline]]])
      [panel.views/separator]
      [app.status-view/root]
-     (when md? [shell.views/root])]))
+     (when md?
+       [:<>
+        [panel.views/separator]
+        [shell.views/root]])]))
 
 (defn bottom-bar
   []

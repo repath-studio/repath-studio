@@ -45,7 +45,7 @@
                  :text (get history pos)}))))
 
 (defn language-dropdown-button
-  []
+  [enabled?]
   (let [active-language @(rf/subscribe [::shell.subs/active-language])
         action-group (action.views/deref-action-group :shell/languages)
         {:keys [actions label]} action-group]
@@ -53,7 +53,8 @@
      [:> DropdownMenu/Trigger
       {:as-child true}
       [:button.form-control-button.font-mono.px-2!
-       {:title (i18n.views/t label)}
+       {:title (i18n.views/t label)
+        :disabled (not enabled?)}
        (string/upper-case (name active-language))]]
      [:> DropdownMenu/Portal
       (->> actions
@@ -84,14 +85,14 @@
       (if loaded?
         (replumb/get-prompt)
         [:span.text-foreground-disabled
-         (i18n.views/t "Loading language...")])]
+         (i18n.views/t [::loading-language "Loading language..."])])]
      ^{:key (str (hash (:js-cm-opts cm-opts)))}
      [codemirror/code-mirror
       (reaction (:text @state))
       (merge {:on-eval submit
               :readOnly (not loaded?)} cm-opts)]
      [:div.self-start.h-full.flex.items-center.gap-px
-      [language-dropdown-button]
+      [language-dropdown-button loaded?]
       (when @(rf/subscribe [::window.subs/md?])
         [:div.self-start.flex
          [:button.form-control-button
@@ -238,17 +239,15 @@
     [:<>
      (when (and @(rf/subscribe [::panel.subs/visible? :repl-history])
                 @(rf/subscribe [::window.subs/md?]))
-       [:<>
-        [panel.views/separator]
-        [panel.views/panel
-         {:id :repl-history
-          :class "relative"
-          :minSize 100
-          :defaultSize 300}
-         [repl-items @items (assoc show-value-opts
-                                   :set-text set-text
-                                   :theme (:theme js-cm-opts))]
-         [panel.views/close-button :repl-history]]])
+       [panel.views/panel
+        {:id :repl-history
+         :class "relative"
+         :minSize 100
+         :defaultSize 300}
+        [repl-items @items (assoc show-value-opts
+                                  :set-text set-text
+                                  :theme (:theme js-cm-opts))]
+        [panel.views/close-button :repl-history]])
 
      (when-not @(rf/subscribe [::window.subs/md?])
        [repl-items @items (assoc show-value-opts
