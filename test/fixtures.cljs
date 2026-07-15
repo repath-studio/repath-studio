@@ -11,7 +11,7 @@
    [renderer.error.effects :as-alias error.effects]
    [renderer.i18n.effects :as-alias i18n.effects]
    [renderer.input.events :as-alias input.events]
-   [renderer.shell.events :as-alias shell.events]
+   [renderer.shell.effects :as-alias shell.effects]
    [renderer.theme.effects :as-alias theme.effects]
    [renderer.utils.element :as utils.element]
    [renderer.window.effects :as-alias window.effects]))
@@ -200,10 +200,23 @@
  ::action.effects/update-keydown-rules
  (fn [_]))
 
-(rf/reg-event-db
- ::input.events/keyboard
+(rf/reg-fx
+ ::shell.effects/focus
+ (fn [_]))
+
+(rf/reg-fx
+ ::shell.effects/init
+ (fn [_]))
+
+(rf/reg-fx
+ ::shell.effects/init-language
+ (fn [[language params]]
+   (rf/dispatch (conj (:on-success params) language))))
+
+(rf/reg-fx
+ ::shell.effects/welcome
  (fn [_]))
 
 (rf/reg-event-db
- ::shell.events/init
+ ::input.events/keyboard
  (fn [_]))

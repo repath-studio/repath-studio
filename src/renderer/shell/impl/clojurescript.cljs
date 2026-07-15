@@ -10,8 +10,8 @@
 (hierarchy/derive! :cljs ::shell.hierarchy/language)
 
 (defmethod shell.hierarchy/init :cljs
-  [_language]
-  (rf/dispatch [:renderer.shell.events/language-load-success]))
+  [language {:keys [on-success]}]
+  (rf/dispatch (conj on-success language)))
 
 (defmethod shell.hierarchy/help :cljs
   [_language]

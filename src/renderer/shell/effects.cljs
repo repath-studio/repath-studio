@@ -18,8 +18,8 @@
 
 (rf/reg-fx
  ::init-language
- (fn [language]
-   (shell.hierarchy/init language)))
+ (fn [[language params]]
+   (shell.hierarchy/init language params)))
 
 (rf/reg-fx
  ::welcome

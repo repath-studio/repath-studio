@@ -2,7 +2,7 @@
   (:require
    [re-frame.core :as rf]
    [renderer.app.events :as-alias app.events :refer [persist]]
-   [renderer.shell.effects :as shell.effects]))
+   [renderer.shell.effects :as-alias shell.effects]))
 
 (rf/reg-event-fx
  ::focus
@@ -15,25 +15,25 @@
    (let [active-language (get-in db [:shell :active-language])]
      {:db (assoc-in db [:shell :language-status] {active-language :loading})
       ::shell.effects/init nil
-      ::shell.effects/init-language active-language})))
+      ::shell.effects/init-language [active-language
+                                     {:on-success [::language-load-success]
+                                      :on-error [::language-load-error]}]})))
 
 (rf/reg-event-fx
  ::language-load-success
  [persist]
- (fn [{:keys [db]} _]
-   (let [active-language (get-in db [:shell :active-language])]
-     {:db (assoc-in db [:shell :language-status active-language] :success)
-      ::shell.effects/welcome active-language})))
+ (fn [{:keys [db]} [_ language]]
+   {:db (assoc-in db [:shell :language-status language] :success)
+    ::shell.effects/welcome language}))
 
 (rf/reg-event-fx
  ::language-load-error
  [persist]
- (fn [{:keys [db]} [_ error]]
-   (let [active-language (get-in db [:shell :active-language])]
-     {:db (-> db
-              (assoc-in [:shell :language-status active-language] :error)
-              (assoc-in [:shell :active-language] :cljs))
-      :dispatch [::app.events/toast-error error]})))
+ (fn [{:keys [db]} [_ language error]]
+   {:db (-> db
+            (assoc-in [:shell :language-status language] :error)
+            (assoc-in [:shell :active-language] :cljs))
+    :dispatch [::app.events/toast-error error]}))
 
 (rf/reg-event-fx
  ::activate-language
@@ -41,4 +41,7 @@
    (let [status (get-in db [:shell :language-status language])]
      (cond-> {:db (assoc-in db [:shell :active-language] language)}
        (not= status :success)
-       (assoc ::shell.effects/init-language language)))))
+       (assoc ::shell.effects/init-language
+              [language
+               {:on-success [::language-load-success]
+                :on-error [::language-load-error]}])))))

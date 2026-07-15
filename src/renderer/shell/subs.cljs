@@ -30,5 +30,4 @@
  ::active-language-status
  :<- [::language-status]
  :<- [::active-language]
- (fn [[language-status active-language] _]
-   (get language-status active-language)))
+ :-> (partial apply get))

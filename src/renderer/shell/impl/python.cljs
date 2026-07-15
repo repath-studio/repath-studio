@@ -12,7 +12,7 @@
 (hierarchy/derive! :python ::shell.hierarchy/language)
 
 (defn load-pyodide
-  [_language]
+  [language {:keys [on-success on-error]}]
   (-> (js/loadPyodide)
       (.then (fn [^js pyodide]
                (aset js/window "pyodide" pyodide)
@@ -23,17 +23,16 @@
                        (str (:name (meta command)))
                        (.-val command)))
 
-               (rf/dispatch [:renderer.shell.events/language-load-success])))
+               (rf/dispatch (conj on-success language))))
       (.catch (fn [error]
-                (rf/dispatch [:renderer.shell.events/language-load-error
-                              error])))))
+                (rf/dispatch (conj on-error language error))))))
 
 (defmethod shell.hierarchy/init :python
-  [_language]
+  [language params]
   (let [loader (-> "/pyodide/pyodide.js"
                    (trustedResourceUrlFromString)
                    (safeLoad))]
-    (.addCallback ^goog.net.jsloader loader load-pyodide)))
+    (.addCallback ^goog.net.jsloader loader #(load-pyodide language params))))
 
 (defmethod shell.hierarchy/help :python
   [_language]

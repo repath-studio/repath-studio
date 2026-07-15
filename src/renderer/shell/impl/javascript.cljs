@@ -10,11 +10,11 @@
 (hierarchy/derive! :js ::shell.hierarchy/language)
 
 (defmethod shell.hierarchy/init :js
-  [_language]
+  [language {:keys [on-success]}]
   (doseq [command (vals (ns-publics 'user))]
     (aset js/window (:name (meta command)) (.call ^js (.-val command))))
 
-  (rf/dispatch [:renderer.shell.events/language-load-success]))
+  (rf/dispatch (conj on-success language)))
 
 (defmethod shell.hierarchy/help :js
   [_language]
