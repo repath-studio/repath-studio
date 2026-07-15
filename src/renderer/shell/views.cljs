@@ -1,14 +1,15 @@
 (ns renderer.shell.views
   (:require
+   ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
    [clojure.string :as string]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
+   [renderer.action.views :as action.views]
    [renderer.events :as-alias events]
    [renderer.i18n.views :as i18n.views]
    [renderer.panel.events :as-alias panel.events]
    [renderer.panel.subs :as-alias panel.subs]
    [renderer.panel.views :as panel.views]
-   [renderer.shell.events :as-alias reepl.events]
    [renderer.shell.hierarchy :as shell.hierarchy]
    [renderer.shell.reepl.codemirror :as codemirror]
    [renderer.shell.reepl.handlers :as reepl.handlers]
@@ -43,14 +44,27 @@
                  :count (count history)
                  :text (get history pos)}))))
 
-(defn mode-button
-  [language]
+(defn language-dropdown-button
+  []
   (let [active-language @(rf/subscribe [::shell.subs/active-language])
-        active (= active-language language)]
-    [:button.button.rounded.px-1.leading-none.text-2xs.min-h-5
-     {:class [(when active "accent")]
-      :on-click #(rf/dispatch [::reepl.events/activate-language language])}
-     language]))
+        action-group (action.views/deref-action-group :shell/languages)
+        {:keys [actions label]} action-group]
+    [:> DropdownMenu/Root
+     [:> DropdownMenu/Trigger
+      {:as-child true}
+      [:button.form-control-button.font-mono.px-2!
+       {:title (i18n.views/t label)}
+       (string/upper-case (name active-language))]]
+     [:> DropdownMenu/Portal
+      (->> actions
+           (map views/dropdown-menu-item)
+           (into [:> DropdownMenu/Content
+                  {:side "top"
+                   :align "end"
+                   :class "menu-content rounded-sm"
+                   :on-key-down #(.stopPropagation %)
+                   :on-escape-key-down #(.stopPropagation %)}
+                  [views/dropdownmenu-arrow]]))]]))
 
 (defn repl-input
   [state submit cm-opts]
@@ -62,30 +76,32 @@
                        :complete-word
                        :on-change]))]}
   (let [{:keys [_pos _count _text]} @state
-        repl-history? @(rf/subscribe [::panel.subs/visible? :repl-history])]
-    [:div.flex.p-1.5.items-center
-     [:div.flex.text-xs.self-start
+        repl-history? @(rf/subscribe [::panel.subs/visible? :repl-history])
+        loaded? @(rf/subscribe [::shell.subs/language-loaded?])]
+    [:div.flex.items-center
+     [:div.flex.text-xs.self-start.p-1.5
       {:class "m-0.5"}
-      (replumb/get-prompt)]
+      (if loaded?
+        (replumb/get-prompt)
+        [:span.text-foreground-disabled
+         (i18n.views/t "Loading language...")])]
      ^{:key (str (hash (:js-cm-opts cm-opts)))}
      [codemirror/code-mirror
       (reaction (:text @state))
-      (merge {:on-eval submit} cm-opts)]
-     [:div.self-start.h-full.flex.items-center.gap-1
-      [mode-button :cljs]
-      [mode-button :js]
-      [mode-button :python]
+      (merge {:on-eval submit
+              :readOnly (not loaded?)} cm-opts)]
+     [:div.self-start.h-full.flex.items-center.gap-px
+      [language-dropdown-button]
       (when @(rf/subscribe [::window.subs/md?])
         [:div.self-start.flex
-         [views/icon-button
-          (if repl-history? "chevron-down" "chevron-up")
-          {:class "min-h-5"
-           :title (i18n.views/t
+         [:button.form-control-button
+          {:title (i18n.views/t
                    (if repl-history?
                      [::hide-command-output "Hide command output"]
                      [::show-command-output "Show command output"]))
            :on-click #(rf/dispatch [::panel.events/toggle
-                                    :repl-history])}]])]]))
+                                    :repl-history])}
+          [views/icon (if repl-history? "chevron-down" "chevron-up")]]])]]))
 
 (defmulti item (fn [i _opts] (:type i)))
 
@@ -116,12 +132,17 @@
 
 (defn repl-items
   [items opts]
-  [:div.flex-1.border-b.border-border.h-full.overflow-hidden.flex
-   [views/scroll-area
-    {:ref #(rf/dispatch [::events/scroll-to-bottom %])}
-    (->> items
-         (map (fn [i] [:div.font-mono.p-1.flex.text-xs.min-h-4 [item i opts]]))
-         (into [:div.p-1 {:dir "ltr"}]))]])
+  (let [loaded? @(rf/subscribe [::shell.subs/language-loaded?])]
+    [:div.flex-1.border-b.border-border.h-full.overflow-hidden.flex
+     (if loaded?
+       [views/scroll-area
+        {:ref #(rf/dispatch [::events/scroll-to-bottom %])}
+        (->> items
+             (map (fn [i]
+                    [:div.font-mono.p-1.flex.text-xs.min-h-4 [item i opts]]))
+             (into [:div.p-1 {:dir "ltr"}]))]
+       [:div.flex.items-center.justify-center.h-full.w-full
+        [views/loading-indicator]])]))
 
 (defn completion-item
   [text selected active set-active]
@@ -196,7 +217,6 @@
                              set-text
                              add-log]} (reepl.handlers/make-handlers state)
                      items (get-items state)
-                     status (rf/subscribe [::shell.subs/language-status])
                      complete-atom (reagent/atom nil)
                      docs (reaction
                            (when-let [state @complete-atom]
@@ -242,19 +262,16 @@
        @complete-atom
        #(swap! complete-atom assoc :pos % :active true)]
       (let [_items @items] ; TODO: This needs to be removed
-        (if (= @status :success)
-          [repl-input
-           (current-text state)
-           submit
-           {:complete-word complete-word
-            :on-up go-up
-            :on-down go-down
-            :complete-atom complete-atom
-            :on-change set-text
-            :js-cm-opts js-cm-opts
-            :on-cm-init on-cm-init}]
-          [:div.flex.items-center.p-1.5.items-center
-           "Loading language..."]))]]))
+        [repl-input
+         (current-text state)
+         submit
+         {:complete-word complete-word
+          :on-up go-up
+          :on-down go-down
+          :complete-atom complete-atom
+          :on-change set-text
+          :js-cm-opts js-cm-opts
+          :on-cm-init on-cm-init}])]]))
 
 (defonce state (reagent/atom initial-state))
 

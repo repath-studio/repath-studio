@@ -8,7 +8,7 @@
 (defmulti completion identity :hierarchy hierarchy/hierarchy)
 (defmulti codemirror-mode identity :hierarchy hierarchy/hierarchy)
 
-(defmethod init :default [_language])
+(defmethod init :default [_language _params])
 (defmethod help :default [_language])
 (defmethod evaluate :default [_language _s])
 (defmethod completion :default [_language _s])

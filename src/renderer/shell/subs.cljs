@@ -36,3 +36,9 @@
  ::language-status
  :<- [::language]
  :-> :status)
+
+(rf/reg-sub
+ ::language-loaded?
+ :<- [::language-status]
+ :-> (partial = :success))
+
