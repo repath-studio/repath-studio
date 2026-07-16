@@ -235,13 +235,13 @@ cljs.js/*load-fn*
                 (js-attrs proto))))))
 
 (defn js-completion
-  [mode text]
+  [text prefix]
   (let [parts (vec (.split text "."))
         completion (or (last parts) "")
         possibles (js-attrs (reduce aget js/window (butlast parts)))
         prefix #(->> (conj (vec (butlast parts)) %)
                      (string/join ".")
-                     (str (when (= mode :cljs) "js/")))]
+                     (str prefix))]
     (->> possibles
          (filter #(not= -1 (.indexOf % completion)))
          (sort (partial compare-completion text))
@@ -288,15 +288,6 @@ cljs.js/*load-fn*
           (map
            #(vector % (str %) (str %))
            (filter matches? names))))))
-
-(defn process-apropos
-  [mode text]
-  (case mode
-    :js (js-completion mode text)
-    :python (js-completion mode text)
-    :cljs (if (zero? (.indexOf text "js/"))
-            (js-completion mode (.slice text 3))
-            (cljs-completion text))))
 
 (defn get-forms
   [m]

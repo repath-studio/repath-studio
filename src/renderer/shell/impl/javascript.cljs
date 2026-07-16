@@ -6,6 +6,7 @@
    [renderer.hierarchy :as hierarchy]
    [renderer.shell.events :as-alias shell.events]
    [renderer.shell.hierarchy :as shell.hierarchy]
+   [renderer.shell.reepl.replumb :as shell.utils.completion]
    [renderer.shell.subs :as-alias shell.subs]))
 
 (hierarchy/derive! :js ::shell.hierarchy/language)
@@ -29,6 +30,10 @@
 (defmethod shell.hierarchy/codemirror-mode :js
   [_language]
   "javascript")
+
+(defmethod shell.hierarchy/completion :js
+  [_language s]
+  (shell.utils.completion/js-completion s ""))
 
 (rf/dispatch [::action.events/register-action
               {:id :shell-language/javascript

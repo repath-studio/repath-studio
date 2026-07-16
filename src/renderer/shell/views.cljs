@@ -283,7 +283,7 @@
      :execute #(reepl.replumb/run-repl (shell.hierarchy/evaluate @language %)
                                        {:verbose @verbose?}
                                        %2)
-     :complete-word #(reepl.replumb/process-apropos @language %)
+     :complete-word #(shell.hierarchy/completion @language %)
      :get-docs reepl.replumb/process-doc
      :state state
      :show-value-opts

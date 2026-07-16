@@ -8,6 +8,7 @@
    [renderer.hierarchy :as hierarchy]
    [renderer.shell.events :as-alias shell.events]
    [renderer.shell.hierarchy :as shell.hierarchy]
+   [renderer.shell.reepl.replumb :as shell.reepl.replumb]
    [renderer.shell.subs :as-alias shell.subs]))
 
 (hierarchy/derive! :python ::shell.hierarchy/language)
@@ -48,6 +49,11 @@
 (defmethod shell.hierarchy/codemirror-mode :python
   [_language]
   "python")
+
+(defmethod shell.hierarchy/completion :python
+  [_language s]
+  (when (zero? (.indexOf s "js."))
+    (shell.reepl.replumb/js-completion (.slice s 3) "js.")))
 
 (rf/dispatch [::action.events/register-action
               {:id :shell-language/python
