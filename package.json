@@ -10,7 +10,7 @@
     "upgrade": "npx npm-check-updates -u -x 'codemirror @xzdarcy/react-timeline-editor' && npm install && npm upgrade",
     "fonts:sans": "npx shx cp -r node_modules/@fontsource/noto-sans/files/. resources/public/css/files",
     "fonts:mono": "npx shx cp -r node_modules/@fontsource/noto-sans-mono/files/. resources/public/css/files",
-    "pyodide": "npx shx cp -r node_modules/pyodide/ resources/public/pyodide",
+    "pyodide": "npx shx cp -r node_modules/pyodide/. resources/public/pyodide",
     "electron-deps": "npx electron-builder install-app-deps",
     "postinstall": "npx npm-run-all --parallel electron-deps fonts:sans fonts:mono pyodide",
     "tailwindcss:build": "npx @tailwindcss/cli -i ./src/renderer/styles.css -o ./resources/public/css/styles.css --minify",
