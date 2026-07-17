@@ -39,45 +39,6 @@
           :no-pr-str-on-value true}))
 cljs.js/*load-fn*
 
-#_(defn find-last-expr-pos [text]
-    ;; parse #js {} correctly
-    (binding [cljs.tools.reader/*data-readers* tags/*cljs-data-readers*]
-      (let [rr (string-push-back-reader text)
-            ;; get a unique js object as a sigil
-            eof (js-obj)
-            read #(cljs.tools.reader/read {:eof eof} rr)]
-        (loop [last-pos 0 second-pos 0 last-form nil _second-form nil]
-          (let [form (read)
-                new-pos (.-s-pos (.-rdr ^js rr))]
-            (if (identical? eof form)
-              second-pos;; second-form]
-              (recur new-pos last-pos form last-form)))))))
-
-#_(defn make-last-expr-set-val [text js-name]
-    (let [last-pos (find-last-expr-pos text)]
-      ;; (js/console.log last-pos text)
-      (when-not (= last-pos 0)
-        (str
-         (.slice text 0 last-pos)
-         "(aset js/window \"" js-name "\" "
-         (.slice text last-pos)
-         ")"))))
-
-#_(defn jsc-run [source cb]
-    (cljs.js/eval-str repl/st
-                      source
-                      'stuff
-                      {:eval cljs.js/js-eval
-                       :ns (repl/current-ns)
-                       :load (partial bootstrap/load repl/st)
-                       :context :statement
-                       :def-emits-var true}
-                      (fn [result]
-                        (swap! repl/app-env assoc :current-ns (:ns result))
-                        (if (contains? result :error)
-                          (cb false (:error result))
-                          (cb true (aget js/window "last_repl_value"))))))
-
 (defn get-first-form
   [text]
   ;; parse #js {} correctly
@@ -95,58 +56,17 @@ cljs.js/*load-fn*
         source (.slice text 0 pos)
         remainder (.trim (.slice text pos))
         has-more? (seq remainder)]
-    ;; (js/console.log [text form pos source remainder has-more?])
     (replumb/read-eval-call
      opts
      #(let [success? (replumb/success? %)
             result (replumb/unwrap-result %)]
-        ;; (js/console.log "evaled" [success? result has-more?])
         (if-not success?
-          (cb success? result)
+          (when cb (cb success? result))
           ;; TODO: should I log the result if it's not the end?
           (if has-more?
             (run-repl-multi remainder opts cb)
-            (cb success? result))))
+            (when cb (cb success? result)))))
      source)))
-
-;; Trying to get expressions + statements to play well together
-;; TODO: is this a better way? The `do' stuff seems to work alright ... although
-;; it won't work if there are other `ns' statements inside there...
-#_(defn run-repl-experimental* \
- [text opts cb]
-    (let [fixed (make-last-expr-set-val text "last_repl_value")]
-      (if fixed
-        (jsc-run fixed cb)
-        (replumb/read-eval-call
-         opts #(cb (replumb/success? %) (replumb/unwrap-result %)) text))))
-
-#_(defn fix-ns-do
-    [text]
-    ;; parse #js {} correctly
-    (binding [cljs.tools.reader/*data-readers* tags/*cljs-data-readers*]
-      (let [rr (string-push-back-reader text)
-            form (cljs.tools.reader/read rr)
-            is-ns (and (sequential? form)
-                       (= 'ns (first form)))
-            ;; TODO: this is a bit dependent on tools.reader internals...
-            s-pos (.-s-pos (.-rdr ^js rr))]
-        ;; (js/console.log is-ns form s-pos)
-        (if-not is-ns
-          (str "(do " text ")")
-          (str
-           (.slice text 0 s-pos)
-           "(do "
-           (.slice text s-pos)
-           ")")))))
-
-#_(defn run-repl*
-    [text opts cb]
-    (replumb/read-eval-call
-     opts
-     #(cb
-       (replumb/success? %)
-       (replumb/unwrap-result %))
-     (fix-ns-do text)))
 
 (defn run-repl
   ([text cb] (run-repl-multi text replumb-opts cb))

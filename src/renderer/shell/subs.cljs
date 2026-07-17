@@ -33,6 +33,16 @@
  :-> (partial apply get))
 
 (rf/reg-sub
+ ::items
+ :<- [::language]
+ :-> :items)
+
+(rf/reg-sub
+ ::history-pos
+ :<- [::language]
+ :-> :history-pos)
+
+(rf/reg-sub
  ::language-status
  :<- [::language]
  :-> :status)
@@ -42,3 +52,11 @@
  :<- [::language-status]
  :-> (partial = :success))
 
+(rf/reg-sub
+ ::current-text
+ :<- [::language]
+ :<- [::history-pos]
+ :-> (fn [[language hist-pos] _]
+       (let [history (:history language)
+             pos (- (count history) hist-pos 1)]
+         (get history pos))))

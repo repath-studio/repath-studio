@@ -12,8 +12,8 @@
 (hierarchy/derive! :cljs ::shell.hierarchy/language)
 
 (defmethod shell.hierarchy/init :cljs
-  [language {:keys [on-success]}]
-  (rf/dispatch (conj on-success language)))
+  [_language {:keys [on-success]}]
+  (rf/dispatch on-success))
 
 (defmethod shell.hierarchy/help :cljs
   [_language]

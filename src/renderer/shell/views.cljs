@@ -10,9 +10,9 @@
    [renderer.panel.events :as-alias panel.events]
    [renderer.panel.subs :as-alias panel.subs]
    [renderer.panel.views :as panel.views]
+   [renderer.shell.events :as-alias shell.events]
    [renderer.shell.hierarchy :as shell.hierarchy]
    [renderer.shell.reepl.codemirror :as codemirror]
-   [renderer.shell.reepl.handlers :as reepl.handlers]
    [renderer.shell.reepl.replumb :as reepl.replumb]
    [renderer.shell.reepl.show-devtools :as show-devtools]
    [renderer.shell.reepl.show-function :as show-function]
@@ -25,25 +25,6 @@
   (:require-macros
    [reagent.ratom :refer [reaction]]))
 
-(def initial-state
-  {:items []
-   :hist-pos 0
-   :history [""]})
-
-(defn get-items
-  [db]
-  (reaction (:items @db)))
-
-(defn current-text
-  [db]
-  (let [idx (reaction (:hist-pos @db))
-        history (reaction (:history @db))]
-    (reaction (let [history @history
-                    pos (- (count history) @idx 1)]
-                {:pos pos
-                 :count (count history)
-                 :text (get history pos)}))))
-
 (defn language-dropdown-button
   [enabled?]
   (let [active-language @(rf/subscribe [::shell.subs/active-language])
@@ -52,7 +33,7 @@
     [:> DropdownMenu/Root
      [:> DropdownMenu/Trigger
       {:as-child true}
-      [:button.form-control-button.font-mono.px-2!
+      [:button.form-control-button.font-mono.px-2!.bg-transparent!
        {:title (i18n.views/t label)
         :disabled (not enabled?)}
        (string/upper-case (name active-language))]]
@@ -68,49 +49,41 @@
                   [views/dropdownmenu-arrow]]))]]))
 
 (defn repl-input
-  [state submit cm-opts]
-  {:pre [(every? (comp not nil?)
-                 (map cm-opts
-                      [:on-up
-                       :on-down
-                       :complete-atom
-                       :complete-word
-                       :on-change]))]}
-  (let [{:keys [_pos _count _text]} @state
-        repl-history? @(rf/subscribe [::panel.subs/visible? :repl-history])
-        loaded? @(rf/subscribe [::shell.subs/language-loaded?])]
+  [cm-opts]
+  (let [repl-history? @(rf/subscribe [::panel.subs/visible? :repl-history])
+        loaded? @(rf/subscribe [::shell.subs/language-loaded?])
+        current-text @(rf/subscribe [::shell.subs/current-text])]
     [:div.flex.items-center
-     [:div.flex.text-xs.self-start.p-1.5
-      {:class "m-0.5"}
-      (if loaded?
-        (replumb/get-prompt)
-        [:span.text-foreground-disabled
-         (i18n.views/t [::loading-language "Loading language..."])])]
-     ^{:key (str (hash (:js-cm-opts cm-opts)))}
-     [codemirror/code-mirror
-      (reaction (:text @state))
-      (merge {:on-eval submit
-              :readOnly (not loaded?)} cm-opts)]
-     [:div.self-start.h-full.flex.items-center.gap-px
+     [:div.flex.self-start.p-1.5.flex-1
+      [:div.flex.text-xs.self-start
+       {:class "p-0.5"}
+       (if loaded?
+         (string/trim (replumb/get-prompt))
+         [:span.text-foreground-disabled
+          (i18n.views/t [::loading-language "Loading language..."])])]
+      ^{:key (str (hash (:js-cm-opts cm-opts)))}
+      [:div.flex-1
+       {:class "p-0.5"}
+       (when loaded? [codemirror/code-mirror current-text cm-opts])]]
+     [:div.self-start.h-full.flex.items-center
       [language-dropdown-button loaded?]
       (when @(rf/subscribe [::window.subs/md?])
         [:div.self-start.flex
-         [:button.form-control-button
+         [:button.form-control-button.bg-transparent!
           {:title (i18n.views/t
                    (if repl-history?
                      [::hide-command-output "Hide command output"]
                      [::show-command-output "Show command output"]))
-           :on-click #(rf/dispatch [::panel.events/toggle
-                                    :repl-history])}
+           :on-click #(rf/dispatch [::panel.events/toggle :repl-history])}
           [views/icon (if repl-history? "chevron-down" "chevron-up")]]])]]))
 
 (defmulti item (fn [i _opts] (:type i)))
 
 (defmethod item :input
-  [{:keys [_num text theme]} opts]
+  [{:keys [_num text theme]} _opts]
   [:div.text-foreground-disabled.font-bold "=>"]
   [:div.flex-1.cursor-pointer.break-words
-   {:on-click #((:set-text opts) text)}
+   {:on-click #(rf/dispatch [::shell.events/set-text text])}
    [codemirror/colored-text text theme]])
 
 (defmethod item :log
@@ -131,9 +104,22 @@
   [{:keys [value]} opts]
   [:div.flex-1.break-words [show-value value nil opts]])
 
+(defn maybe-fn-docs
+  [f]
+  (let [doc (reepl.replumb/doc-from-sym f)]
+    (when (:forms doc)
+      (with-out-str
+        (reepl.replumb/print-doc doc)))))
+
 (defn repl-items
-  [items opts]
-  (let [loaded? @(rf/subscribe [::shell.subs/language-loaded?])]
+  []
+  (let [loaded? @(rf/subscribe [::shell.subs/language-loaded?])
+        items @(rf/subscribe [::shell.subs/items])
+        codemirror-theme @(rf/subscribe [::theme.subs/codemirror])
+        opts {:theme codemirror-theme
+              :showers [show-devtools/show-devtools
+                        (partial show-function/show-fn-with-docs
+                                 maybe-fn-docs)]}]
     [:div.flex-1.border-b.border-border.h-full.overflow-hidden.flex
      (if loaded?
        [views/scroll-area
@@ -179,13 +165,6 @@
        {:class (when show-all "flex-wrap")}]
       items)]))
 
-(defn maybe-fn-docs
-  [f]
-  (let [doc (reepl.replumb/doc-from-sym f)]
-    (when (:forms doc)
-      (with-out-str
-        (reepl.replumb/print-doc doc)))))
-
 (defn set-print!
   [log]
   (set! cljs.core/*print-newline* false)
@@ -200,96 +179,49 @@
             (log (first args))
             (log args)))))
 
-(defn repl
-  [& {:keys [execute
-             complete-word
-             get-docs
-             state
-             show-value-opts
-             js-cm-opts
-             on-cm-init]}]
-  (reagent/with-let [state (or state
-                               (reagent/atom initial-state))
-                     {:keys [add-input
-                             add-result
-                             go-up
-                             go-down
-                             clear-items
-                             set-text
-                             add-log]} (reepl.handlers/make-handlers state)
-                     items (get-items state)
-                     complete-atom (reagent/atom nil)
-                     docs (reaction
-                           (when-let [state @complete-atom]
-                             (let [{:keys [pos words]} state
-                                   sym (first (get words pos))]
-                               (when (symbol? sym)
-                                 (get-docs sym)))))
-                     submit (fn [text]
-                              (if (= "clear" (.trim text))
-                                (do
-                                  (clear-items)
-                                  (set-text ""))
-                                (when (pos? (count (.trim text)))
-                                  (set-text text)
-                                  (add-input text)
-                                  (execute text #(add-result (not %1) %2)))))]
-
-    (set-print! add-log)
-    [:<>
-     (when (and @(rf/subscribe [::panel.subs/visible? :repl-history])
-                @(rf/subscribe [::window.subs/md?]))
-       [panel.views/panel
-        {:id :repl-history
-         :class "relative"
-         :minSize 100
-         :defaultSize 300}
-        [repl-items @items (assoc show-value-opts
-                                  :set-text set-text
-                                  :theme (:theme js-cm-opts))]
-        [panel.views/close-button :repl-history]])
-
-     (when-not @(rf/subscribe [::window.subs/md?])
-       [repl-items @items (assoc show-value-opts
-                                 :set-text set-text
-                                 :theme (:theme js-cm-opts))])
-
-     [:div.relative.whitespace-pre-wrap.font-mono.w-full
-      {:dir "ltr"}
-      [completion-list
-       @docs
-       @complete-atom
-       #(swap! complete-atom assoc :pos % :active true)]
-      (let [_items @items] ; TODO: This needs to be removed
-        [repl-input
-         (current-text state)
-         submit
-         {:complete-word complete-word
-          :on-up go-up
-          :on-down go-down
-          :complete-atom complete-atom
-          :on-change set-text
-          :js-cm-opts js-cm-opts
-          :on-cm-init on-cm-init}])]]))
-
-(defonce state (reagent/atom initial-state))
-
 (defn root
   []
-  (let [language (rf/subscribe [::shell.subs/active-language])
-        verbose? (rf/subscribe [::shell.subs/verbose?])
-        codemirror-theme @(rf/subscribe [::theme.subs/codemirror])]
-    [repl
-     :execute #(reepl.replumb/run-repl (shell.hierarchy/evaluate @language %)
-                                       {:verbose @verbose?}
-                                       %2)
-     :complete-word #(shell.hierarchy/completion @language %)
-     :get-docs reepl.replumb/process-doc
-     :state state
-     :show-value-opts
-     {:showers [show-devtools/show-devtools
-                (partial show-function/show-fn-with-docs maybe-fn-docs)]}
-     :js-cm-opts {:mode (shell.hierarchy/codemirror-mode @language)
-                  :keyMap "default"
-                  :showCursorWhenSelecting true
-                  :theme codemirror-theme}]))
+  (let [language @(rf/subscribe [::shell.subs/active-language])
+        codemirror-theme @(rf/subscribe [::theme.subs/codemirror])
+        repl-history? @(rf/subscribe [::panel.subs/visible? :repl-history])
+        md? @(rf/subscribe [::window.subs/md?])]
+    (reagent/with-let [complete-atom (reagent/atom nil)
+                       docs (reaction
+                             (when-let [state @complete-atom]
+                               (let [{:keys [pos words]} state
+                                     sym (first (get words pos))]
+                                 (when (symbol? sym)
+                                   (reepl.replumb/process-doc sym)))))]
+
+      (set-print! #(rf/dispatch [::shell.events/add-item {:type :log
+                                                          :value %}]))
+      [:<>
+       (when (and repl-history? md?)
+         [panel.views/panel
+          {:id :repl-history
+           :class "relative"
+           :minSize 100
+           :defaultSize 300}
+          [repl-items]
+          [panel.views/close-button :repl-history]])
+
+       (when-not md? [repl-items])
+
+       [:div.relative.whitespace-pre-wrap.font-mono.w-full
+        {:dir "ltr"}
+        [completion-list
+         @docs
+         @complete-atom
+         #(swap! complete-atom assoc :pos % :active true)]
+        [repl-input
+         {:on-eval #(rf/dispatch [::shell.events/execute %])
+          :complete-word #(shell.hierarchy/completion language %)
+          :on-up #(rf/dispatch [::shell.events/go-up])
+          :on-down #(rf/dispatch [::shell.events/go-down])
+          :complete-atom complete-atom
+          :on-change #(rf/dispatch [::shell.events/set-text %])
+          :js-cm-opts {:mode (shell.hierarchy/codemirror-mode language)
+                       :keyMap "default"
+                       :showCursorWhenSelecting true
+                       :theme codemirror-theme}
+          :on-cm-init #()}]]])))

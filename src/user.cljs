@@ -12,7 +12,13 @@
    [renderer.history.events :as-alias history.events]
    [renderer.i18n.events :as-alias i18n.events]
    [renderer.icon.events :as-alias icon.events]
+   [renderer.shell.events :as-alias shell.events]
    [renderer.window.events :as-alias window.events]))
+
+(defn ^:export clear
+  "Clears the shell history."
+  []
+  (rf/dispatch-sync [::shell.events/clear-items]))
 
 (defn ^:export translate
   "Moves the selected elements."
@@ -22,7 +28,7 @@
    (translate [x y])))
 
 (defn ^:export place
-  "Moves the selected elements."
+  "Places the selected elements to a specific position."
   ([pos]
    (rf/dispatch-sync [::element.events/place pos]))
   ([x y]
@@ -156,6 +162,8 @@
   "Returns the application database."
   []
   @rf.db/app-db)
+
+(-> (db) :shell :languages :js :hist-pos)
 
 (defn ^:export document
   "Returns the active document."

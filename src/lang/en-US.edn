@@ -885,4 +885,7 @@
  {:centroid "centroid"}
 
  :renderer.shell.core
- {:focus-shell "Focus shell"}}
+ {:focus-shell "Focus shell"}
+ 
+ :renderer.shell.impl.core
+ {:shell-languages "Shell languages"}}

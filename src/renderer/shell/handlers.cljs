@@ -3,30 +3,79 @@
    [malli.core :as m]
    [renderer.app.db :refer [App]]
    [renderer.db :refer [LoadingState]]
-   [renderer.shell.db :refer [ShellLanguageId]]))
+   [renderer.shell.db :refer [ShellHistory ShellItem ShellLanguageId]]
+   [renderer.utils.math :as utils.math]))
 
 (m/=> active-language [:-> App ShellLanguageId])
 (defn active-language
   [db]
   (get-in db [:shell :active-language]))
 
-(m/=> activate-language [:-> App ShellLanguageId App])
-(defn activate-language
-  [db language]
-  (assoc-in db [:shell :active-language] language))
+(m/=> set-language [:-> App ShellLanguageId App])
+(defn set-language
+  [db lang]
+  (assoc-in db [:shell :active-language] lang))
 
 (m/=> language-status [:-> App ShellLanguageId [:maybe LoadingState]])
 (defn language-status
-  [db language]
-  (get-in db [:shell :languages language :status]))
+  [db lang]
+  (get-in db [:shell :languages lang :status]))
 
-(m/=> set-language-status [:-> App ShellLanguageId LoadingState App])
+(m/=> set-language-status [:-> App LoadingState App])
 (defn set-language-status
-  [db language status]
-  (assoc-in db [:shell :languages language :status] status))
+  [db status]
+  (assoc-in db [:shell :languages (active-language db) :status] status))
 
 (m/=> reset-language-statuses [:-> App App])
 (defn reset-language-statuses
   [db]
   (->> (keys (-> db :shell :languages))
        (reduce #(update-in %1 [:shell :languages %2] dissoc :status) db)))
+
+(m/=> history [:-> App ShellHistory])
+(defn history
+  [db]
+  (get-in db [:shell :languages (active-language db) :history]))
+
+(m/=> reset-history-position [:-> App App])
+(defn reset-history-position
+  [db]
+  (assoc-in db [:shell :languages (active-language db) :hist-pos] 0))
+
+(m/=> add-history [:-> App string? App])
+(defn add-history
+  [db text]
+  (update-in db [:shell :languages (active-language db) :history] conj text))
+
+(m/=> clear-items [:-> App App])
+(defn clear-items
+  [db]
+  (assoc-in db [:shell :languages (active-language db) :items] []))
+
+(m/=> add-item [:-> App ShellItem App])
+(defn add-item
+  [db item]
+  (update-in db [:shell :languages (active-language db) :items] conj item))
+
+(m/=> set-text [:-> App string? App])
+(defn set-text
+  [db text]
+  (let [lang (active-language db)
+        hist (history db)
+        pos (get-in db [:shell :languages lang :hist-pos])
+        idx (- (count hist) pos 1)]
+    (-> db
+        (assoc-in [:shell :languages lang :hist-pos] 0)
+        (assoc-in [:shell :languages lang :history]
+                  (if (zero? pos)
+                    (assoc hist idx text)
+                    (if (= "" (last hist))
+                      (assoc hist (dec (count hist)) text)
+                      (conj hist text)))))))
+
+(m/=> update-history-position [:-> App ifn? App])
+(defn update-history-position
+  [db f]
+  (let [max-pos (-> db history count dec)]
+    (update-in db [:shell :languages (active-language db) :hist-pos]
+               (comp #(utils.math/clamp % 0 max-pos) f))))

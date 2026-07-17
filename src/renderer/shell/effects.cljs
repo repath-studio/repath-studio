@@ -2,7 +2,7 @@
   (:require
    [re-frame.core :as rf]
    [renderer.shell.hierarchy :as shell.hierarchy]
-   [renderer.shell.reepl.replumb :as replumb]
+   [renderer.shell.reepl.replumb :as shell.reepl.replumb]
    [renderer.utils.dom :as utils.dom]
    [replumb.repl :as replumb.repl]
    [shadow.cljs.bootstrap.browser :as bootstrap]))
@@ -14,7 +14,7 @@
    (bootstrap/init replumb.repl/st
                    {:path "js/bootstrap"
                     :load-on-init '[user]}
-                   #(replumb/run-repl "(in-ns 'user)" identity))))
+                   #(shell.reepl.replumb/run-repl "(in-ns 'user)" nil))))
 
 (rf/reg-fx
  ::init-language
@@ -36,3 +36,13 @@
            (.getElementsByTagName "textarea")
            (first)
            (.focus))))
+
+(rf/reg-fx
+ ::execute
+ (fn [{:keys [text language verbose event]}]
+   (shell.reepl.replumb/run-repl (shell.hierarchy/evaluate language text)
+                                 {:verbose verbose}
+                                 #(rf/dispatch (conj event {:type (if %1
+                                                                    :output
+                                                                    :error)
+                                                            :value %2})))))

@@ -196,7 +196,7 @@
   :on-cm-init (fn [cm] -> nil)
     called with the CodeMirror instance, for whatever extra fiddling you want to
     do."
-  [value-atom options]
+  [value options]
   (let [cm (atom nil)
         ref (react/createRef)
         options (merge default-opts options)
@@ -231,7 +231,6 @@
                        :theme "tomorrow-night-eighties"
                        :autofocus false
                        :extraKeys #js {"Shift-Enter" "newlineAndIndent"}
-                       :value @value-atom
                        :autoCloseBrackets true
                        :mode "clojure"
                        :screenReaderLabel "REPL"}
@@ -244,9 +243,8 @@
 
           (.on inst "change"
                (fn []
-                 (let [value (.getValue inst)]
-                   (when-not (= value @value-atom)
-                     (on-change value)))))
+                 (when-not (= value (.getValue inst))
+                   (on-change value))))
 
           (.on inst "keyup"
                (fn [inst evt]
@@ -301,15 +299,14 @@
 
       :component-did-update
       (fn [_this _old-argv]
-        (when-not (= @value-atom (.getValue @cm))
-          (.setValue @cm @value-atom)
+        (when-not (= value (.getValue @cm))
+          (.setValue @cm value)
           (let [last-line (.lastLine @cm)
                 last-ch (count (.getLine @cm last-line))]
             (.setCursor @cm last-line last-ch))))
 
       :reagent-render
-      (fn [_ _ _]
-        @value-atom
+      (fn [_text _options]
         [:div {:ref ref
                :id utils.dom/shell-input-id
                :style style}])})))
@@ -319,9 +316,8 @@
   (let [ref (react/createRef)
         colorize #(when-let [dom-el (.-current ref)]
                     ((aget codemirror "colorize") #js[dom-el] "clojure")
-                    ;; Hacky way to remove the theme class added by CodeMirror's
-                    ;; colorize
-                    ;; https://codemirror.net/addon/runmode/colorize.js
+                    ;; Hacky way to remove the theme class added by CodeMirror
+                    ;; https://codemirror.net/5/addon/runmode/colorize.js
                     (-> dom-el .-classList (.remove "cm-s-default")))]
     (reagent/create-class
      {:component-did-mount
