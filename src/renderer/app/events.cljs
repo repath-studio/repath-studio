@@ -17,7 +17,7 @@
    [renderer.i18n.events :as-alias i18n.events]
    [renderer.input.events :as-alias input.events]
    [renderer.input.impl.keyboard :as impl.keyboard]
-   [renderer.shell.events :as-alias reepl.events]
+   [renderer.shell.events :as-alias shell.events]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.theme.effects :as-alias theme.effects]
    [renderer.theme.events :as-alias theme.events]
@@ -132,7 +132,7 @@
                [:dispatch [::theme.events/update-meta-color]]
                [:dispatch [::window.events/update-width]]
                [:dispatch [::i18n.events/set-lang-attrs]]
-               [:dispatch [::reepl.events/init]]
+               [:dispatch [::shell.events/init]]
                [:dispatch [::set-loading false]]
                [::app.effects/hide-splash-screen]
                ;; We flush to render once so we can get the canvas size.

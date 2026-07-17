@@ -96,6 +96,7 @@
                       renderer.shell.hierarchy shell.hierarchy
                       renderer.shell.handlers shell.handlers
                       renderer.shell.subs shell.subs
+                      renderer.shell.events shell.events
                       renderer.shell.views shell.views
                       renderer.shell.effects shell.effects
                       renderer.shell.db shell.db

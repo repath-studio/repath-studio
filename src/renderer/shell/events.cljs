@@ -17,9 +17,9 @@
    (let [lang (shell.handlers/active-language db)]
      {:db (-> db
               (shell.handlers/reset-language-statuses)
-              (shell.handlers/set-language-status :loading)
               (update-in [:shell :languages lang]
-                         #(merge shell.db/default-lang %)))
+                         #(merge shell.db/default-lang %))
+              (shell.handlers/set-language-status :loading))
       ::shell.effects/init nil
       ::shell.effects/init-language [lang
                                      {:on-success [::language-load-success]

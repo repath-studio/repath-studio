@@ -32,7 +32,7 @@
   (->> (keys (-> db :shell :languages))
        (reduce #(update-in %1 [:shell :languages %2] dissoc :status) db)))
 
-(m/=> history [:-> App ShellHistory])
+(m/=> history [:-> App [:maybe ShellHistory]])
 (defn history
   [db]
   (get-in db [:shell :languages (active-language db) :history]))
