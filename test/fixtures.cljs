@@ -210,11 +210,15 @@
 
 (rf/reg-fx
  ::shell.effects/init-language
- (fn [[language params]]
-   (rf/dispatch (conj (:on-success params) language))))
+ (fn [[_language params]]
+   (rf/dispatch (:on-success params))))
 
 (rf/reg-fx
  ::shell.effects/welcome
+ (fn [_]))
+
+(rf/reg-fx
+ ::shell.effects/execute
  (fn [_]))
 
 (rf/reg-event-db

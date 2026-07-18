@@ -20,28 +20,30 @@
 
 (def ShellItem
   [:multi {:dispatch :type}
-   [:error
-    [:map {:closed true}
-     [:type [:= :error]]
-     [:value [:map {:closed true}
-              [:via [:map {:closed true}
-                     [:type any?]
-                     [:message any?]
-                     [:data any?]
-                     [:at any?]]]
-              [:trace any?]
-              [:cause any?]
-              [:data any?]
-              [:phase any?]]]]]
    [:input
     [:map {:closed true}
      [:type [:= :input]]
-     [:num {:optional true} int?]
+     [:current-ns any?]
+     [:num int?]
      [:value string?]]]
    [:output
     [:map {:closed true}
      [:type [:= :output]]
-     [:value string?]]]])
+     [:value string?]]]
+   [:error
+    [:map {:closed true}
+     [:type [:= :error]]
+     [:value [:map
+              [:via {:optional true}
+               [:vector [:map {:optional true}
+                         [:type {:optional true} any?]
+                         [:message {:optional true} any?]
+                         [:data {:optional true} any?]
+                         [:at {:optional true} any?]]]]
+              [:trace {:optional true} any?]
+              [:cause {:optional true} any?]
+              [:data {:optional true} any?]
+              [:phase {:optional true} any?]]]]]])
 
 (def ShellHistory
   [:vector string?])
