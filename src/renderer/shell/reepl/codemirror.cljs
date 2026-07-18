@@ -42,37 +42,35 @@
   (try (boolean (edn/read-string source))
        (catch js/Error _err false)))
 
-(def default-opts
-  {:should-go-up
-   (fn [_source inst]
-     (let [pos (.getCursor inst)]
-       (= 0 (.-line pos))))
+(defn should-go-up?
+  [_source inst]
+  (let [pos (.getCursor inst)]
+    (= 0 (.-line pos))))
 
-   :should-go-down
-   (fn [_source inst]
-     (let [pos (.getCursor inst)
-           last-line (.lastLine inst)]
-       (= last-line (.-line pos))))
+(defn should-go-down?
+  [_source inst]
+  (let [pos (.getCursor inst)
+        last-line (.lastLine inst)]
+    (= last-line (.-line pos))))
 
-   ;; TODO: if the cursor is inside a list, and the function doesn't have enough
-   ;; arguments yet, then return false
-   ;; e.g. (map |) <- map needs at least one argument.
-   :should-eval
-   (fn [source inst evt]
-     (if (.-shiftKey evt)
-       false
-       (if (.-metaKey evt)
-         true
-         (let [lines (.lineCount inst)
-               in-place (or (= 1 lines)
-                            (let [pos (.getCursor inst)
-                                  last-line (dec lines)]
-                              (and
-                               (= last-line (.-line pos))
-                               (= (.-ch pos)
-                                  (count (.getLine inst last-line))))))]
-           (and in-place
-                (valid-cljs? source))))))})
+(defn in-place?
+  [inst]
+  (let [lines (.lineCount inst)]
+    (or (= 1 lines)
+        (let [pos (.getCursor inst)
+              last-line (dec lines)]
+          (and
+           (= last-line (.-line pos))
+           (= (.-ch pos)
+              (count (.getLine inst last-line))))))))
+
+(defn should-eval?
+  [source inst evt]
+  (cond
+    (.-shiftKey evt) false
+    (.-metaKey evt) true
+    :else (and (in-place? inst)
+               (valid-cljs? source))))
 
 (defn cm-current-word
   "Find the current 'word' according to CodeMirror's `wordChars' list"
@@ -174,9 +172,7 @@
 (defn code-mirror
   "Create a code-mirror editor that knows a fair amount about being a repl."
   [value options]
-  (let [options (merge default-opts options)
-        {:keys [on-eval on-up on-down complete-atom complete-word should-go-up
-                should-go-down should-eval cm-options]} options]
+  (let [{:keys [on-eval on-up on-down complete-atom complete-word]} options]
     [views/cm-editor
      value
      {:props {:id utils.dom/shell-input-id
@@ -189,7 +185,7 @@
                        :showCursorWhenSelecting true
                        :mode "clojure"
                        :screenReaderLabel "REPL"}
-                      cm-options)
+                      (:cm-options options))
       :on-blur #(reset! complete-atom nil)
       :on-keyup (fn [inst evt]
                   (.stopPropagation evt)
@@ -219,19 +215,19 @@
                                evt)
                       ;; enter
                       13 (let [source (.getValue inst)]
-                           (when (should-eval source inst evt)
+                           (when (should-eval? source inst evt)
                              (.preventDefault evt)
                              (on-eval source)))
                       ;; up
                       38 (let [source (.getValue inst)]
                            (when (and (not (.-shiftKey evt))
-                                      (should-go-up source inst))
+                                      (should-go-up? source inst))
                              (.preventDefault evt)
                              (on-up)))
                       ;; down
                       40 (let [source (.getValue inst)]
                            (when (and (not (.-shiftKey evt))
-                                      (should-go-down source inst))
+                                      (should-go-down? source inst))
                              (.preventDefault evt)
                              (on-down)))
 
