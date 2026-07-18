@@ -7,9 +7,25 @@
    [replumb.repl :as replumb.repl]
    [shadow.cljs.bootstrap.browser :as bootstrap]))
 
+(defn set-print!
+  [log]
+  (set! cljs.core/*print-newline* false)
+  (set-print-err-fn!
+   (fn [& args]
+     (if (= 1 (count args))
+       (log (first args))
+       (log args))))
+  (set-print-fn!
+   (fn [& args]
+     (if (= 1 (count args))
+       (log (first args))
+       (log args)))))
+
 (rf/reg-fx
  ::init
- (fn []
+ (fn [event]
+   (set-print! #(rf/dispatch (conj event :output %)))
+
    ;; https://code.thheller.com/blog/shadow-cljs/2017/10/14/bootstrap-support.html
    (bootstrap/init replumb.repl/st
                    {:path "js/bootstrap"

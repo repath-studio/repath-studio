@@ -40,7 +40,7 @@
      [:value string?]]]
    [:output
     [:map {:closed true}
-     [:type [:= :input]]
+     [:type [:= :output]]
      [:value string?]]]])
 
 (def ShellHistory

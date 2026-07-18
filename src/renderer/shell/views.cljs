@@ -61,10 +61,11 @@
          (string/trim (replumb/get-prompt))
          [:span.text-foreground-disabled
           (i18n.views/t [::loading-language "Loading language..."])])]
-      ^{:key (str (hash (:js-cm-opts cm-opts)))}
       [:div.flex-1
        {:class "p-0.5"}
-       (when loaded? [codemirror/code-mirror current-text cm-opts])]]
+       (when loaded?
+         ^{:key (str (hash (:js-cm-opts cm-opts)))}
+         [codemirror/code-mirror current-text cm-opts])]]
      [:div.self-start.h-full.flex.items-center
       [language-dropdown-button loaded?]
       (when @(rf/subscribe [::window.subs/md?])
@@ -159,20 +160,6 @@
        {:class (when show-all "flex-wrap")}]
       items)]))
 
-(defn set-print!
-  [log]
-  (set! cljs.core/*print-newline* false)
-  (set! cljs.core/*print-err-fn*
-        (fn [& args]
-          (if (= 1 (count args))
-            (log (first args))
-            (log args))))
-  (set! cljs.core/*print-fn*
-        (fn [& args]
-          (if (= 1 (count args))
-            (log (first args))
-            (log args)))))
-
 (defn root
   []
   (let [language @(rf/subscribe [::shell.subs/active-language])
@@ -186,8 +173,6 @@
                                      sym (first (get words pos))]
                                  (when (symbol? sym)
                                    (reepl.replumb/process-doc sym)))))]
-
-      (set-print! #(rf/dispatch [::shell.events/add-item :output %]))
       [:<>
        (when (and repl-history? md?)
          [panel.views/panel
@@ -212,9 +197,5 @@
           :on-up #(rf/dispatch [::shell.events/go-up])
           :on-down #(rf/dispatch [::shell.events/go-down])
           :complete-atom complete-atom
-          :on-change #(rf/dispatch [::shell.events/set-text %])
-          :js-cm-opts {:mode (shell.hierarchy/codemirror-mode language)
-                       :keyMap "default"
-                       :showCursorWhenSelecting true
-                       :theme codemirror-theme}
-          :on-cm-init #()}]]])))
+          :cm-options {:mode (shell.hierarchy/codemirror-mode language)
+                       :theme codemirror-theme}}]]])))

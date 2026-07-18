@@ -70,7 +70,7 @@
         pos (get-in db [:shell :languages lang :hist-pos])
         idx (- (count hist) pos 1)]
     (-> db
-        (assoc-in [:shell :languages lang :hist-pos] 0)
+        (reset-history-position)
         (assoc-in [:shell :languages lang :history]
                   (if (zero? pos)
                     (assoc hist idx text)

@@ -294,7 +294,7 @@
           (str (+ 4 off) "px"))))
 
 (defn cm-editor
-  [value {:keys [props options on-init on-blur]}]
+  [value {:keys [props options on-init on-blur on-keyup on-keydown]}]
   (let [cm (reagent/atom nil)
         ref (react/createRef)]
     (reagent/create-class
@@ -305,8 +305,10 @@
           (reset! cm (codemirror dom-el options))
           (.setValue @cm value)
           (.on @cm "renderLine" cm-render-line)
-          (.on @cm "keydown" (fn [_editor evt] (.stopPropagation evt)))
-          (.on @cm "keyup" (fn [_editor evt] (.stopPropagation evt)))
+          (.on @cm "keydown" (or on-keydown
+                                 (fn [_editor evt] (.stopPropagation evt))))
+          (.on @cm "keyup" (or on-keyup
+                               (fn [_editor evt] (.stopPropagation evt))))
           (.refresh @cm)
           (when on-blur (.on @cm "blur" #(on-blur (.getValue %))))
           (when on-init (on-init @cm))))

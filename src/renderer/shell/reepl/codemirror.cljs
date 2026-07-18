@@ -10,7 +10,8 @@
    [clojure.edn :as edn]
    [clojure.string :as string]
    [reagent.core :as reagent]
-   [renderer.utils.dom :as utils.dom]))
+   [renderer.utils.dom :as utils.dom]
+   [renderer.views :as views]))
 
 ;; TODO: can we avoid the global state modification here?
 #_(js/CodeMirror.registerHelper
@@ -42,10 +43,7 @@
        (catch js/Error _err false)))
 
 (def default-opts
-  {:style {:height "auto"
-           :flex 1}
-
-   :should-go-up
+  {:should-go-up
    (fn [_source inst]
      (let [pos (.getCursor inst)]
        (= 0 (.-line pos))))
@@ -169,147 +167,75 @@
                       :ch (+ (count text)
                              (.-ch from))}))))
 
-;; TODO: refactor this to be smaller
+(def cancel-keys #{13 27})
+(def cmp-ignore #{9 16 17 18 91 93})
+(def cmp-show #{17 18 91 93})
+
 (defn code-mirror
-  "Create a code-mirror editor that knows a fair amount about being a good
-  repl. The parameters:
-
-  value-atom (reagent atom)
-    when this changes, the editor will update to reflect it.
-
-  options (TODO: finish documenting)
-
-  :style (reagent style map)
-    will be applied to the container element
-
-  :on-change (fn [text] -> nil)
-  :on-eval (fn [text] -> nil)
-  :on-up (fn [] -> nil)
-  :on-down (fn [] -> nil)
-  :should-go-up
-  :should-go-down
-  :should-eval
-
-  :js-cm-opts
-    options passed into the CodeMirror constructor
-
-  :on-cm-init (fn [cm] -> nil)
-    called with the CodeMirror instance, for whatever extra fiddling you want to
-    do."
+  "Create a code-mirror editor that knows a fair amount about being a repl."
   [value options]
-  (let [cm (atom nil)
-        ref (react/createRef)
-        options (merge default-opts options)
-        {:keys [style
-                on-change
-                on-eval
-                on-up
-                on-down
-                complete-atom
-                complete-word
-                should-go-up
-                should-go-down
-                should-eval
-                js-cm-opts
-                on-cm-init]} options]
-    (reagent/create-class
-     {:component-did-mount
-      (fn [_this]
-        (let [dom-el (.-current ref)
-              ;; On Escape, should we revert to the pre-completion-text?
-              cancel-keys #{13 27}
-              cmp-ignore #{9 16 17 18 91 93}
-              cmp-show #{17 18 91 93}
-              inst (codemirror
-                    dom-el
-                    (clj->js
-                     (merge
-                      {:lineNumbers false
-                       :viewportMargin js/Infinity
-                       :matchBrackets true
-                       :lineWrapping true
-                       :theme "tomorrow-night-eighties"
-                       :autofocus false
+  (let [options (merge default-opts options)
+        {:keys [on-eval on-up on-down complete-atom complete-word should-go-up
+                should-go-down should-eval cm-options]} options]
+    [views/cm-editor
+     value
+     {:props {:id utils.dom/shell-input-id
+              :style {:height "auto"
+                      :flex 1}}
+      :options (merge {:viewportMargin js/Infinity
                        :extraKeys #js {"Shift-Enter" "newlineAndIndent"}
-                       :autoCloseBrackets true
+                       :value value
+                       :keyMap "default"
+                       :showCursorWhenSelecting true
                        :mode "clojure"
                        :screenReaderLabel "REPL"}
-                      js-cm-opts)))]
+                      cm-options)
+      :on-blur #(reset! complete-atom nil)
+      :on-keyup (fn [inst evt]
+                  (.stopPropagation evt)
+                  (if (cancel-keys (.-keyCode evt))
+                    (if @complete-atom
+                      (reset! complete-atom nil)
+                      (some-> (.-activeElement js/document)
+                              (.blur)))
+                    (if (cmp-show (.-keyCode evt))
+                      (swap! complete-atom assoc :show-all false)
+                      (when-not (cmp-ignore (.-keyCode evt))
+                        (reset! complete-atom
+                                (repl-hint complete-word inst nil))))))
+      :on-keydown (fn [inst evt]
+                    (.stopPropagation evt)
+                    (case (.-keyCode evt)
+                      (17 18 91 93)
+                      (swap! complete-atom assoc :show-all true)
+                      ;; tab
+                      ;; TODO: do I ever want to use TAB normally?
+                      ;; Maybe if there are no completions...
+                      ;; Then I'd move this into cycle-completions?
+                      9 (swap! complete-atom
+                               cycle-completions
+                               (.-shiftKey evt)
+                               inst
+                               evt)
+                      ;; enter
+                      13 (let [source (.getValue inst)]
+                           (when (should-eval source inst evt)
+                             (.preventDefault evt)
+                             (on-eval source)))
+                      ;; up
+                      38 (let [source (.getValue inst)]
+                           (when (and (not (.-shiftKey evt))
+                                      (should-go-up source inst))
+                             (.preventDefault evt)
+                             (on-up)))
+                      ;; down
+                      40 (let [source (.getValue inst)]
+                           (when (and (not (.-shiftKey evt))
+                                      (should-go-down source inst))
+                             (.preventDefault evt)
+                             (on-down)))
 
-          (reset! cm inst)
-          (.on inst "blur"
-               (fn []
-                 (reset! complete-atom nil)))
-
-          (.on inst "change"
-               (fn []
-                 (when-not (= value (.getValue inst))
-                   (on-change value))))
-
-          (.on inst "keyup"
-               (fn [inst evt]
-                 (.stopPropagation evt)
-                 (if (cancel-keys (.-keyCode evt))
-                   (if @complete-atom
-                     (reset! complete-atom nil)
-                     (some-> (.-activeElement js/document)
-                             (.blur)))
-                   (if (cmp-show (.-keyCode evt))
-                     (swap! complete-atom assoc :show-all false)
-                     (when-not (cmp-ignore (.-keyCode evt))
-                       (reset! complete-atom
-                               (repl-hint complete-word inst nil)))))))
-
-          (.on inst "keydown"
-               (fn [inst evt]
-                 (.stopPropagation evt)
-                 (case (.-keyCode evt)
-                   (17 18 91 93)
-                   (swap! complete-atom assoc :show-all true)
-                   ;; tab
-                   ;; TODO: do I ever want to use TAB normally?
-                   ;; Maybe if there are no completions...
-                   ;; Then I'd move this into cycle-completions?
-                   9 (swap! complete-atom
-                            cycle-completions
-                            (.-shiftKey evt)
-                            inst
-                            evt)
-                   ;; enter
-                   13 (let [source (.getValue inst)]
-                        (when (should-eval source inst evt)
-                          (.preventDefault evt)
-                          (on-eval source)))
-                   ;; up
-                   38 (let [source (.getValue inst)]
-                        (when (and (not (.-shiftKey evt))
-                                   (should-go-up source inst))
-                          (.preventDefault evt)
-                          (on-up)))
-                   ;; down
-                   40 (let [source (.getValue inst)]
-                        (when (and (not (.-shiftKey evt))
-                                   (should-go-down source inst))
-                          (.preventDefault evt)
-                          (on-down)))
-
-                   :none)))
-          (when on-cm-init
-            (on-cm-init inst))))
-
-      :component-did-update
-      (fn [_this _old-argv]
-        (when-not (= value (.getValue @cm))
-          (.setValue @cm value)
-          (let [last-line (.lastLine @cm)
-                last-ch (count (.getLine @cm last-line))]
-            (.setCursor @cm last-line last-ch))))
-
-      :reagent-render
-      (fn [_text _options]
-        [:div {:ref ref
-               :id utils.dom/shell-input-id
-               :style style}])})))
+                      :none))}]))
 
 (defn colored-text
   [_text _theme]

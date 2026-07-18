@@ -21,7 +21,7 @@
               (update-in [:shell :languages lang]
                          #(merge shell.db/default-lang %))
               (shell.handlers/set-language-status :loading))
-      ::shell.effects/init nil
+      ::shell.effects/init [::add-item]
       ::shell.effects/init-language [lang
                                      {:on-success [::language-load-success]
                                       :on-error [::language-load-error]}]})))
@@ -68,7 +68,6 @@
  ::add-item
  [persist]
  (fn [db [_ item-type value]]
-   (js/console.log value)
    (shell.handlers/add-item db {:type item-type
                                 :value value})))
 
