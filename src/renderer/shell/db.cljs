@@ -16,14 +16,32 @@
    shell-language?])
 
 (def ShellItemType
-  [:enum :input :output :log :error])
+  [:enum :input :output :error])
 
 (def ShellItem
-  [:map {:closed true}
-   [:type ShellItemType]
-   [:text {:optional true} string?]
-   [:num {:optional true} int?]
-   [:value {:optional true} any?]])
+  [:multi {:dispatch :type}
+   [:error
+    [:map {:closed true}
+     [:type [:= :error]]
+     [:value [:map {:closed true}
+              [:via [:map {:closed true}
+                     [:type any?]
+                     [:message any?]
+                     [:data any?]
+                     [:at any?]]]
+              [:trace any?]
+              [:cause any?]
+              [:data any?]
+              [:phase any?]]]]]
+   [:input
+    [:map {:closed true}
+     [:type [:= :input]]
+     [:num {:optional true} int?]
+     [:value string?]]]
+   [:output
+    [:map {:closed true}
+     [:type [:= :input]]
+     [:value string?]]]])
 
 (def ShellHistory
   [:vector string?])

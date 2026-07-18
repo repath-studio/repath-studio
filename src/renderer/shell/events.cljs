@@ -4,7 +4,8 @@
    [renderer.app.events :as-alias app.events :refer [persist]]
    [renderer.shell.db :as shell.db]
    [renderer.shell.effects :as-alias shell.effects]
-   [renderer.shell.handlers :as shell.handlers]))
+   [renderer.shell.handlers :as shell.handlers]
+   [replumb.repl :as repl]))
 
 (rf/reg-event-fx
  ::focus
@@ -66,8 +67,10 @@
 (rf/reg-event-db
  ::add-item
  [persist]
- (fn [db [_ item]]
-   (shell.handlers/add-item db item)))
+ (fn [db [_ item-type value]]
+   (js/console.log value)
+   (shell.handlers/add-item db {:type item-type
+                                :value value})))
 
 (rf/reg-event-db
  ::go-up
@@ -95,12 +98,13 @@
             (shell.handlers/update-history-position dec)
             (shell.handlers/set-text text)
             (shell.handlers/reset-history-position)
-            (shell.handlers/add-history "")
+            (shell.handlers/add-to-history "")
             (shell.handlers/add-item {:type :input
-                                      :text text
+                                      :value text
+                                      :current-ns (repl/current-ns)
                                       :num (-> (shell.handlers/history db)
                                                count)}))
     ::shell.effects/execute {:text text
                              :language (shell.handlers/active-language db)
-                             :verbose (-> db :shell :verbose?)
+                             :verbose (shell.handlers/verbose? db)
                              :event [::add-item]}}))

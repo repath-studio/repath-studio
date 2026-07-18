@@ -18,7 +18,7 @@
   (-> (js/loadPyodide)
       (.then (fn [^js pyodide]
                (aset js/window "pyodide" pyodide)
-               (.runPython pyodide "import sys, js")
+               (.runPython pyodide "import js")
 
                (doseq [command (vals (ns-publics 'user))]
                  (.set pyodide.globals

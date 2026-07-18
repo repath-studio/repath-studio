@@ -61,11 +61,11 @@ cljs.js/*load-fn*
      #(let [success? (replumb/success? %)
             result (replumb/unwrap-result %)]
         (if-not success?
-          (when cb (cb success? result))
+          (when cb (cb :error (cljs.core/Throwable->map result)))
           ;; TODO: should I log the result if it's not the end?
           (if has-more?
             (run-repl-multi remainder opts cb)
-            (when cb (cb success? result)))))
+            (when cb (cb :output result)))))
      source)))
 
 (defn run-repl

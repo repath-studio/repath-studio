@@ -32,6 +32,11 @@
   (->> (keys (-> db :shell :languages))
        (reduce #(update-in %1 [:shell :languages %2] dissoc :status) db)))
 
+(m/=> verbose? [:-> App boolean?])
+(defn verbose?
+  [db]
+  (get-in db [:shell :verbose]))
+
 (m/=> history [:-> App [:maybe ShellHistory]])
 (defn history
   [db]
@@ -42,8 +47,8 @@
   [db]
   (assoc-in db [:shell :languages (active-language db) :hist-pos] 0))
 
-(m/=> add-history [:-> App string? App])
-(defn add-history
+(m/=> add-to-history [:-> App string? App])
+(defn add-to-history
   [db text]
   (update-in db [:shell :languages (active-language db) :history] conj text))
 

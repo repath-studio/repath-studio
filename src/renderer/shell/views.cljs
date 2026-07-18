@@ -80,29 +80,23 @@
 (defmulti item (fn [i _opts] (:type i)))
 
 (defmethod item :input
-  [{:keys [_num text theme]} _opts]
-  [:div.text-foreground-disabled.font-bold "=>"]
-  [:div.flex-1.cursor-pointer.break-words
-   {:on-click #(rf/dispatch [::shell.events/set-text text])}
-   [codemirror/colored-text text theme]])
-
-(defmethod item :log
-  [{:keys [value]} opts]
-  [show-value value nil opts])
+  [{:keys [current-ns value]} {:keys [theme]}]
+  [:div.flex.gap-2
+   [:div.text-foreground-disabled.font-bold (str current-ns "=>")]
+   [:div.flex-1.cursor-pointer.break-words
+    {:on-click #(rf/dispatch [::shell.events/set-text value])}
+    [codemirror/colored-text value theme]]])
 
 (defmethod item :error
   [{:keys [value]} _opts]
-  (let [message (.-message value)
-        underlying (.-cause value)]
-    [:span.text-error
-     message
-     (when underlying
-       ;; TODO: also show stack?
-       [:span.ml-2 (.-message underlying)])]))
+  [:div.text-error.gap-1
+   "ERROR: "
+   [:span.select-text (:cause value)]])
 
 (defmethod item :output
   [{:keys [value]} opts]
-  [:div.flex-1.break-words [show-value value nil opts]])
+  [:div.flex-1.break-words.select-text
+   [show-value value nil opts]])
 
 (defn maybe-fn-docs
   [f]
@@ -193,8 +187,7 @@
                                  (when (symbol? sym)
                                    (reepl.replumb/process-doc sym)))))]
 
-      (set-print! #(rf/dispatch [::shell.events/add-item {:type :log
-                                                          :value %}]))
+      (set-print! #(rf/dispatch [::shell.events/add-item :output %]))
       [:<>
        (when (and repl-history? md?)
          [panel.views/panel

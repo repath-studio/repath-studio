@@ -42,7 +42,4 @@
  (fn [{:keys [text language verbose event]}]
    (shell.reepl.replumb/run-repl (shell.hierarchy/evaluate language text)
                                  {:verbose verbose}
-                                 #(rf/dispatch (conj event {:type (if %1
-                                                                    :output
-                                                                    :error)
-                                                            :value %2})))))
+                                 #(rf/dispatch (conj event %1 %2)))))
