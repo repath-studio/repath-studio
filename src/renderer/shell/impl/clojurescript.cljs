@@ -17,17 +17,17 @@
 
 (defmethod shell.hierarchy/help :cljs
   [_language]
-  (print "Global javascript objects and functions are accessible using the js"
-         "namespace (e.g. `js/document`).")
-  (print "Type `(help)` to see a list of commands."))
+  (println "Global javascript objects and functions are accessible using the js"
+           "namespace (e.g. `js/document`).")
+  (println "Type `(help)` to see a list of commands."))
 
 (defmethod shell.hierarchy/evaluate :cljs
   [_language s]
   s)
 
-(defmethod shell.hierarchy/codemirror-mode :cljs
+(defmethod shell.hierarchy/codemirror-options :cljs
   [_language]
-  "clojure")
+  {:mode "clojure"})
 
 (defmethod shell.hierarchy/completion :cljs
   [_language s]

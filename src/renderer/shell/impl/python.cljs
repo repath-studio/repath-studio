@@ -38,17 +38,18 @@
 
 (defmethod shell.hierarchy/help :python
   [_language]
-  (print "The JavaScript scope can be accessed from Python using the js module."
-         "For example, you can access the document object using `js.document`.")
-  (print "Type `js.help()` to see a list of commands."))
+  (println "The JavaScript scope can be accessed from Python using the js"
+           "module. For example, you can access the document object using"
+           "`js.document`.")
+  (println "Type `js.help()` to see a list of commands."))
 
 (defmethod shell.hierarchy/evaluate :python
   [_language s]
   (str "(js/pyodide.runPython \"" s "\")"))
 
-(defmethod shell.hierarchy/codemirror-mode :python
+(defmethod shell.hierarchy/codemirror-options :python
   [_language]
-  "python")
+  {:mode "python"})
 
 (defmethod shell.hierarchy/completion :python
   [_language s]

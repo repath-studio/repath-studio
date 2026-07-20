@@ -7,19 +7,18 @@
    [replumb.repl :as replumb.repl]
    [shadow.cljs.bootstrap.browser :as bootstrap]))
 
+(defn print-fn
+  [log]
+  (fn [& args]
+    (if (= 1 (count args))
+      (log (first args))
+      (log args))))
+
 (defn set-print!
   [log]
   (set! cljs.core/*print-newline* false)
-  (set-print-err-fn!
-   (fn [& args]
-     (if (= 1 (count args))
-       (log (first args))
-       (log args))))
-  (set-print-fn!
-   (fn [& args]
-     (if (= 1 (count args))
-       (log (first args))
-       (log args)))))
+  (set-print-err-fn! (print-fn log))
+  (set-print-fn! (print-fn log)))
 
 (rf/reg-fx
  ::init
@@ -40,9 +39,9 @@
 (rf/reg-fx
  ::welcome
  (fn [language]
-   (print "Welcome to your " (name language) " REPL!")
-   (print "You can create or modify shapes using the command line.")
-   (print "")
+   (println "Welcome to your " (name language) " REPL!")
+   (println "You can create or modify shapes using the command line.")
+   (println)
    (shell.hierarchy/help language)))
 
 (rf/reg-fx

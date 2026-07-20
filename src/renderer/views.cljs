@@ -294,7 +294,7 @@
           (str (+ 4 off) "px"))))
 
 (defn cm-editor
-  [value {:keys [props options on-init on-blur on-keyup on-keydown]}]
+  [value {:keys [props options on-init on-blur on-change on-keyup on-keydown]}]
   (let [cm (reagent/atom nil)
         ref (react/createRef)]
     (reagent/create-class
@@ -311,7 +311,8 @@
                                (fn [_editor evt] (.stopPropagation evt))))
           (.refresh @cm)
           (when on-blur (.on @cm "blur" #(on-blur (.getValue %))))
-          (when on-init (on-init @cm))))
+          (when on-init (on-init @cm))
+          (when on-change (.on @cm "change" #(on-change (.getValue %))))))
 
       :component-will-unmount
       #(when @cm (reset! cm nil))
@@ -320,7 +321,11 @@
       (fn [this _]
         (let [value (second (reagent/argv this))
               options (:options (last (reagent/argv this)))]
-          (.setValue @cm value)
+          (when (and @cm (not= (.getValue @cm) value))
+            (.setValue @cm value)
+            (let [last-line (.lastLine @cm)
+                  last-ch (count (.getLine @cm last-line))]
+              (.setCursor @cm last-line last-ch)))
           (doseq [[k v] options]
             (.setOption @cm (name k) v))))
 

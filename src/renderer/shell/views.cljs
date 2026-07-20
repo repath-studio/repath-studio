@@ -49,7 +49,7 @@
                   [views/dropdownmenu-arrow]]))]]))
 
 (defn repl-input
-  [cm-opts]
+  [options]
   (let [repl-history? @(rf/subscribe [::panel.subs/visible? :repl-history])
         loaded? @(rf/subscribe [::shell.subs/language-loaded?])
         current-text @(rf/subscribe [::shell.subs/current-text])]
@@ -64,8 +64,7 @@
       [:div.flex-1
        {:class "p-0.5"}
        (when loaded?
-         ^{:key (str (hash (:js-cm-opts cm-opts)))}
-         [codemirror/code-mirror current-text cm-opts])]]
+         [codemirror/code-mirror current-text options])]]
      [:div.self-start.h-full.flex.items-center
       [language-dropdown-button loaded?]
       (when @(rf/subscribe [::window.subs/md?])
@@ -91,8 +90,7 @@
 (defmethod item :error
   [{:keys [value]} _opts]
   [:div.text-error.gap-1
-   "ERROR: "
-   [:span.select-text (:cause value)]])
+   "ERROR: " [:span.select-text (:cause value)]])
 
 (defmethod item :output
   [{:keys [value]} opts]
@@ -162,7 +160,7 @@
 
 (defn root
   []
-  (let [language @(rf/subscribe [::shell.subs/active-language])
+  (let [lang @(rf/subscribe [::shell.subs/active-language])
         codemirror-theme @(rf/subscribe [::theme.subs/codemirror])
         repl-history? @(rf/subscribe [::panel.subs/visible? :repl-history])
         md? @(rf/subscribe [::window.subs/md?])]
@@ -193,9 +191,10 @@
          #(swap! complete-atom assoc :pos % :active true)]
         [repl-input
          {:on-eval #(rf/dispatch [::shell.events/execute %])
-          :complete-word #(shell.hierarchy/completion language %)
+          :on-change #(rf/dispatch [::shell.events/set-text %])
+          :complete-word #(shell.hierarchy/completion lang %)
           :on-up #(rf/dispatch [::shell.events/go-up])
           :on-down #(rf/dispatch [::shell.events/go-down])
           :complete-atom complete-atom
-          :cm-options {:mode (shell.hierarchy/codemirror-mode language)
-                       :theme codemirror-theme}}]]])))
+          :cm-options (merge {:theme codemirror-theme}
+                             (shell.hierarchy/codemirror-options lang))}]]])))

@@ -163,8 +163,6 @@
   []
   @rf.db/app-db)
 
-(-> (db) :shell :languages :js :hist-pos)
-
 (defn ^:export document
   "Returns the active document."
   []

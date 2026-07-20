@@ -45,7 +45,7 @@
 (m/=> reset-history-position [:-> App App])
 (defn reset-history-position
   [db]
-  (assoc-in db [:shell :languages (active-language db) :hist-pos] 0))
+  (assoc-in db [:shell :languages (active-language db) :history-pos] 0))
 
 (m/=> add-to-history [:-> App string? App])
 (defn add-to-history
@@ -67,7 +67,7 @@
   [db text]
   (let [lang (active-language db)
         hist (history db)
-        pos (get-in db [:shell :languages lang :hist-pos])
+        pos (get-in db [:shell :languages lang :history-pos])
         idx (- (count hist) pos 1)]
     (-> db
         (reset-history-position)
@@ -82,5 +82,5 @@
 (defn update-history-position
   [db f]
   (let [max-pos (-> db history count dec)]
-    (update-in db [:shell :languages (active-language db) :hist-pos]
+    (update-in db [:shell :languages (active-language db) :history-pos]
                (comp #(utils.math/clamp % 0 max-pos) f))))

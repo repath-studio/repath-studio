@@ -15,9 +15,6 @@
                     (str value ", is not a supported language"))}
    shell-language?])
 
-(def ShellItemType
-  [:enum :input :output :error])
-
 (def ShellItem
   [:multi {:dispatch :type}
    [:input
@@ -48,11 +45,14 @@
 (def ShellHistory
   [:vector string?])
 
+(def ShellHistoryPosition
+  [:or pos-int? zero?])
+
 (def ShellLanguage
   [:map {:closed true}
    [:status {:optional true} LoadingState]
    [:history {:default [""]} ShellHistory]
-   [:hist-pos {:default 0} int?]
+   [:history-pos {:default 0} ShellHistoryPosition]
    [:items {:default []} [:vector ShellItem]]])
 
 (def Shell

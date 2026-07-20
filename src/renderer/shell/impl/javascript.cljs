@@ -21,15 +21,15 @@
 
 (defmethod shell.hierarchy/help :js
   [_language]
-  (print "Type `help()` to see a list of commands."))
+  (println "Type `help()` to see a list of commands."))
 
 (defmethod shell.hierarchy/evaluate :js
   [_language s]
   (str "(js/eval \"" s "\")"))
 
-(defmethod shell.hierarchy/codemirror-mode :js
+(defmethod shell.hierarchy/codemirror-options :js
   [_language]
-  "javascript")
+  {:mode "javascript"})
 
 (defmethod shell.hierarchy/completion :js
   [_language s]

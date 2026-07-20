@@ -183,8 +183,7 @@
                        :value value
                        :keyMap "default"
                        :showCursorWhenSelecting true
-                       :mode "clojure"
-                       :screenReaderLabel "REPL"}
+                       :screenReaderLabel "Shell"}
                       (:cm-options options))
       :on-blur #(reset! complete-atom nil)
       :on-keyup (fn [inst evt]
@@ -205,9 +204,6 @@
                       (17 18 91 93)
                       (swap! complete-atom assoc :show-all true)
                       ;; tab
-                      ;; TODO: do I ever want to use TAB normally?
-                      ;; Maybe if there are no completions...
-                      ;; Then I'd move this into cycle-completions?
                       9 (swap! complete-atom
                                cycle-completions
                                (.-shiftKey evt)

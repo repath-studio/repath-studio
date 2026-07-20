@@ -33,6 +33,11 @@
  :-> :items)
 
 (rf/reg-sub
+ ::history
+ :<- [::language]
+ :-> :history)
+
+(rf/reg-sub
  ::history-pos
  :<- [::language]
  :-> :history-pos)
@@ -49,9 +54,8 @@
 
 (rf/reg-sub
  ::current-text
- :<- [::language]
+ :<- [::history]
  :<- [::history-pos]
- :-> (fn [[language hist-pos] _]
-       (let [history (:history language)
-             pos (- (count history) hist-pos 1)]
+ :-> (fn [[history history-pos] _]
+       (let [pos (dec (- (count history) history-pos))]
          (get history pos))))
