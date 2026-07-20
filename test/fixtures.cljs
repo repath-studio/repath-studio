@@ -206,7 +206,7 @@
 
 (rf/reg-fx
  ::shell.effects/init
- (fn [params]
+ (fn [[_event params]]
    (rf/dispatch (:on-success params))))
 
 (rf/reg-fx
