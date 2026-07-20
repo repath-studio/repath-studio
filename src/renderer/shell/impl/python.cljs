@@ -1,6 +1,7 @@
 (ns renderer.shell.impl.python
   (:require
    ["codemirror/mode/python/python.js"]
+   [camel-snake-kebab.core :as camel-snake-kebab]
    [goog.html.legacyconversions :refer [trustedResourceUrlFromString]]
    [goog.net.jsloader :refer [safeLoad]]
    [re-frame.core :as rf]
@@ -9,7 +10,8 @@
    [renderer.shell.events :as-alias shell.events]
    [renderer.shell.hierarchy :as shell.hierarchy]
    [renderer.shell.reepl.replumb :as shell.reepl.replumb]
-   [renderer.shell.subs :as-alias shell.subs]))
+   [renderer.shell.subs :as-alias shell.subs]
+   [user :as user]))
 
 (hierarchy/derive! :python ::shell.hierarchy/language)
 
@@ -21,15 +23,20 @@
 
                ;; Expose all user functions to global namespace.
                (doseq [command (vals (ns-publics 'user))]
-                 (let [fn-val @command
-                       wrapper (fn [& args]
-                                 (apply fn-val (map #(if (fn? (.-toJs ^js %))
-                                                       (.toJs ^js %)
-                                                       %)
-                                                    args)))]
-                   (.set pyodide.globals
-                         (str (:name (meta command)))
-                         wrapper)))
+                 (try (let [fn-val @command
+                            wrapper (fn [& args]
+                                      (apply fn-val
+                                             (map #(if (fn? (.-toJs ^js %))
+                                                     (.toJs ^js %)
+                                                     %)
+                                                  args)))]
+                        (.set pyodide.globals
+                              (-> (:name (meta command))
+                                  (camel-snake-kebab/->snake_case_string))
+                              wrapper))
+                      (catch :default e
+                        (js/console.error "Error exposing function to Pyodide:"
+                                          e))))
 
                (-> (.runPythonAsync pyodide "import js")
                    (.then #(rf/dispatch on-success)))))
@@ -42,6 +49,11 @@
   (let [loader (-> "/pyodide/pyodide.js"
                    (trustedResourceUrlFromString)
                    (safeLoad))]
+    (set! user/help (fn []
+                      (doseq [x (sort-by str (vals (ns-publics 'user)))]
+                        (print (camel-snake-kebab/->snake_case_string
+                                (:name (meta x))) " - " (:doc (meta x))))))
+
     (.addCallback ^goog.net.jsloader loader #(load-pyodide params))))
 
 (defmethod shell.hierarchy/help :python

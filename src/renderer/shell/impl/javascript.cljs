@@ -1,21 +1,30 @@
 (ns renderer.shell.impl.javascript
   (:require
    ["codemirror/mode/javascript/javascript.js"]
+   [camel-snake-kebab.core :as camel-snake-kebab]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.hierarchy :as hierarchy]
    [renderer.shell.events :as-alias shell.events]
    [renderer.shell.hierarchy :as shell.hierarchy]
    [renderer.shell.reepl.replumb :as shell.utils.completion]
-   [renderer.shell.subs :as-alias shell.subs]))
+   [renderer.shell.subs :as-alias shell.subs]
+   [user :as user]))
 
 (hierarchy/derive! :js ::shell.hierarchy/language)
 
 (defmethod shell.hierarchy/init :js
   [{:keys [on-success]}]
+  (set! user/help (fn []
+                    (doseq [x (sort-by str (vals (ns-publics 'user)))]
+                      (print (camel-snake-kebab/->camelCaseString
+                              (:name (meta x))) " - " (:doc (meta x))))))
+
   ;; Expose all user functions to global namespace.
   (doseq [command (vals (ns-publics 'user))]
-    (aset js/window (:name (meta command)) (.call ^js (.-val command))))
+    (aset js/window
+          (camel-snake-kebab/->camelCaseString (:name (meta command)))
+          (.call ^js (.-val command))))
 
   (rf/dispatch on-success))
 

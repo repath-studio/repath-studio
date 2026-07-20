@@ -213,12 +213,12 @@
   []
   (rf/dispatch [::element.events/deselect-all]))
 
-(defn ^:export ->path
+(defn ^:export element-to-path
   "Converts the selected elements to paths."
   []
   (rf/dispatch [::element.events/->path]))
 
-(defn ^:export stroke->path
+(defn ^:export stroke-to-path
   "Converts the selected elements' stroke to paths."
   []
   (rf/dispatch [::element.events/stroke->path]))
@@ -333,7 +333,7 @@
   [id]
   (rf/dispatch [::icon.events/deregister-icon id]))
 
-(defn ^:export register-a11y-filter
+(defn ^:export register-accessibility-filter
   "Registers an accessibility filter."
   [a11y-filter]
   (if (a11y.db/valid-filter? a11y-filter)
@@ -342,7 +342,7 @@
       (throw (ex-info (str "Invalid a11y filter: " error)
                       {:a11y-filter a11y-filter})))))
 
-(defn ^:export deregister-a11y-filter
+(defn ^:export deregister-accessibility-filter
   "Deregisters an accessibility filter."
   [id]
   (rf/dispatch [::a11y.events/deregister-filter id]))
@@ -424,7 +424,10 @@
   (doseq [x (sort-by str (vals (ns-publics 'user)))]
     (print (:name (meta x)) " - " (:doc (meta x)))))
 
-(def ^:export version config/version)
+(defn ^:export version
+  "The application version."
+  []
+  config/version)
 
 (comment
   (dotimes [x 25]
