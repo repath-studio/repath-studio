@@ -83,8 +83,7 @@
   "Creates a new element."
   [el]
   (if (element.db/valid? (update el :attrs update-vals #(when % (str %))))
-    (do (print el)
-        (rf/dispatch [::element.events/add el]))
+    (rf/dispatch [::element.events/add el])
     (let [error (-> el element.db/explain m.error/humanize)]
       (throw (ex-info (str "Invalid element: " error) {:element el})))))
 
@@ -156,7 +155,7 @@
 (defn ^:export set-attr
   "Sets the attribute of the selected elements."
   [k v]
-  (rf/dispatch [::element.events/set-attr k v]))
+  (rf/dispatch [::element.events/set-attr (keyword k) v]))
 
 (defn ^:export set-fill
   "Sets the fill color of the editor."
@@ -457,12 +456,12 @@
 
   (set-translation "en-US" :renderer.menubar.views.file "New File")
 
-  (register-a11y-filter {:id :blur-x3
-                         :tag :feGaussianBlur
-                         :label [[:a11y-filter/blur-x3 "blur-x3"]]
-                         :attrs {:in "SourceGraphic"
-                                 :type "matrix"
-                                 :stdDeviation "3"}})
+  (register-accessibility-filter {:id :blur-x3
+                                  :tag :feGaussianBlur
+                                  :label [[:a11y-filter/blur-x3 "blur-x3"]]
+                                  :attrs {:in "SourceGraphic"
+                                          :type "matrix"
+                                          :stdDeviation "3"}})
 
   (add-action-to-group :object/index-operations :object/lock)
 
