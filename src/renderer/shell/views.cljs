@@ -49,8 +49,10 @@
                   [views/dropdownmenu-arrow]]))]]))
 
 (defn repl-input
-  [options]
-  (let [repl-history? @(rf/subscribe [::panel.subs/visible? :repl-history])
+  [complete-atom]
+  (let [lang @(rf/subscribe [::shell.subs/active-language])
+        codemirror-theme @(rf/subscribe [::theme.subs/codemirror])
+        repl-history? @(rf/subscribe [::panel.subs/visible? :repl-history])
         loaded? @(rf/subscribe [::shell.subs/language-loaded?])
         current-text @(rf/subscribe [::shell.subs/current-text])]
     [:div.flex.items-center
@@ -64,7 +66,15 @@
       [:div.flex-1
        {:class "p-0.5"}
        (when loaded?
-         [codemirror/code-mirror current-text options])]]
+         [codemirror/code-mirror current-text
+          {:on-eval #(rf/dispatch [::shell.events/execute %])
+           :on-change #(rf/dispatch [::shell.events/set-text %])
+           :complete-word #(shell.hierarchy/completion lang %)
+           :on-up #(rf/dispatch [::shell.events/go-up])
+           :on-down #(rf/dispatch [::shell.events/go-down])
+           :complete-atom complete-atom
+           :cm-options (merge {:theme codemirror-theme}
+                              (shell.hierarchy/codemirror-options lang))}])]]
      [:div.self-start.h-full.flex.items-center
       [language-dropdown-button loaded?]
       (when @(rf/subscribe [::window.subs/md?])
@@ -160,9 +170,7 @@
 
 (defn root
   []
-  (let [lang @(rf/subscribe [::shell.subs/active-language])
-        codemirror-theme @(rf/subscribe [::theme.subs/codemirror])
-        repl-history? @(rf/subscribe [::panel.subs/visible? :repl-history])
+  (let [repl-history? @(rf/subscribe [::panel.subs/visible? :repl-history])
         md? @(rf/subscribe [::window.subs/md?])]
     (reagent/with-let [complete-atom (reagent/atom nil)
                        docs (reaction
@@ -172,16 +180,16 @@
                                  (when (symbol? sym)
                                    (reepl.replumb/process-doc sym)))))]
       [:<>
-       (when (and repl-history? md?)
-         [panel.views/panel
-          {:id :repl-history
-           :class "relative"
-           :minSize 100
-           :defaultSize 300}
-          [repl-items]
-          [panel.views/close-button :repl-history]])
-
-       (when-not md? [repl-items])
+       (if md?
+         (when repl-history?
+           [panel.views/panel
+            {:id :repl-history
+             :class "relative"
+             :minSize 100
+             :defaultSize 300}
+            [repl-items]
+            [panel.views/close-button :repl-history]])
+         [repl-items])
 
        [:div.relative.whitespace-pre-wrap.font-mono.w-full
         {:dir "ltr"}
@@ -189,12 +197,4 @@
          @docs
          @complete-atom
          #(swap! complete-atom assoc :pos % :active true)]
-        [repl-input
-         {:on-eval #(rf/dispatch [::shell.events/execute %])
-          :on-change #(rf/dispatch [::shell.events/set-text %])
-          :complete-word #(shell.hierarchy/completion lang %)
-          :on-up #(rf/dispatch [::shell.events/go-up])
-          :on-down #(rf/dispatch [::shell.events/go-down])
-          :complete-atom complete-atom
-          :cm-options (merge {:theme codemirror-theme}
-                             (shell.hierarchy/codemirror-options lang))}]]])))
+        [repl-input complete-atom]]])))

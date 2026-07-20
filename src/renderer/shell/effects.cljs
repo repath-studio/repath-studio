@@ -22,19 +22,22 @@
 
 (rf/reg-fx
  ::init
- (fn [event]
+ (fn [[event params]]
    (set-print! #(rf/dispatch (conj event :output %)))
 
    ;; https://code.thheller.com/blog/shadow-cljs/2017/10/14/bootstrap-support.html
    (bootstrap/init replumb.repl/st
                    {:path "js/bootstrap"
                     :load-on-init '[user]}
-                   #(shell.reepl.replumb/run-repl "(in-ns 'user)" nil))))
+                   #(shell.reepl.replumb/run-repl "(in-ns 'user)"
+                                                  (fn []
+                                                    (shell.hierarchy/init
+                                                     params))))))
 
 (rf/reg-fx
  ::init-language
- (fn [[language params]]
-   (shell.hierarchy/init language params)))
+ (fn [params]
+   (shell.hierarchy/init params)))
 
 (rf/reg-fx
  ::welcome

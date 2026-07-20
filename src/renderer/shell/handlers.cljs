@@ -57,6 +57,22 @@
   [db]
   (assoc-in db [:shell :languages (active-language db) :items] []))
 
+(m/=> serialize-items [:-> App App])
+(defn serialize-items
+  "Remove all :output items from the shell history.
+   TODO: Find a way to serialize the value."
+  [db]
+  (update-in db [:shell :languages]
+             (fn [langs]
+               (reduce-kv (fn [acc lang data]
+                            (assoc acc lang
+                                   (update data :items
+                                           (fn [items]
+                                             (filterv #(not= :output (:type %))
+                                                      items)))))
+                          {}
+                          langs))))
+
 (m/=> add-item [:-> App ShellItem App])
 (defn add-item
   [db item]

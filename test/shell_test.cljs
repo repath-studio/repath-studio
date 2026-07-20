@@ -8,8 +8,8 @@
    [renderer.shell.subs :as-alias shell.subs]))
 
 (deftest shell-language-switching
-  (rf.test/run-test-sync
-   (rf/dispatch [::app.events/initialize])
+  (rf.test/run-test-async
+   (rf/dispatch-sync [::app.events/initialize])
 
    (let [active-language (rf/subscribe [::shell.subs/active-language])]
 
@@ -19,5 +19,8 @@
      (testing "activate javascript"
        (rf/dispatch [::shell.events/activate-language :js])
 
-       (is (= @active-language :js))))))
+       (rf.test/wait-for
+        [::shell.events/language-load-success]
+
+        (is (= @active-language :js)))))))
 

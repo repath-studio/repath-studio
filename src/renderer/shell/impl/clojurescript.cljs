@@ -12,7 +12,7 @@
 (hierarchy/derive! :cljs ::shell.hierarchy/language)
 
 (defmethod shell.hierarchy/init :cljs
-  [_language {:keys [on-success]}]
+  [{:keys [on-success]}]
   (rf/dispatch on-success))
 
 (defmethod shell.hierarchy/help :cljs

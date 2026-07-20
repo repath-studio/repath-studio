@@ -21,10 +21,9 @@
               (update-in [:shell :languages lang]
                          #(merge shell.db/default-lang %))
               (shell.handlers/set-language-status :loading))
-      ::shell.effects/init [::add-item]
-      ::shell.effects/init-language [lang
-                                     {:on-success [::language-load-success]
-                                      :on-error [::language-load-error]}]})))
+      ::shell.effects/init [::add-item {:language lang
+                                        :on-success [::language-load-success]
+                                        :on-error [::language-load-error]}]})))
 
 (rf/reg-event-fx
  ::language-load-success
@@ -55,8 +54,9 @@
 
        (not= status :success)
        (assoc ::shell.effects/init-language
-              [lang {:on-success [::language-load-success]
-                     :on-error [::language-load-error]}])))))
+              {:language lang
+               :on-success [::language-load-success]
+               :on-error [::language-load-error]})))))
 
 (rf/reg-event-db
  ::clear-items

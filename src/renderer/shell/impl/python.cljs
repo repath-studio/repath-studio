@@ -14,27 +14,29 @@
 (hierarchy/derive! :python ::shell.hierarchy/language)
 
 (defn load-pyodide
-  [_language {:keys [on-success on-error]}]
+  [{:keys [on-success on-error]}]
   (-> (js/loadPyodide)
       (.then (fn [^js pyodide]
                (aset js/window "pyodide" pyodide)
-               (.runPython pyodide "import js")
 
+               ;; Expose all user functions to global namespace.
                (doseq [command (vals (ns-publics 'user))]
                  (.set pyodide.globals
                        (str (:name (meta command)))
-                       (.-val command)))
+                       (.call ^js (.-val command))))
 
-               (rf/dispatch on-success)))
+               (-> (.runPythonAsync pyodide "import js")
+                   (.then #(rf/dispatch on-success)))))
+
       (.catch (fn [error]
                 (rf/dispatch (conj on-error error))))))
 
 (defmethod shell.hierarchy/init :python
-  [language params]
+  [params]
   (let [loader (-> "/pyodide/pyodide.js"
                    (trustedResourceUrlFromString)
                    (safeLoad))]
-    (.addCallback ^goog.net.jsloader loader #(load-pyodide language params))))
+    (.addCallback ^goog.net.jsloader loader #(load-pyodide params))))
 
 (defmethod shell.hierarchy/help :python
   [_language]

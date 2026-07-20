@@ -26,7 +26,7 @@
    [:output
     [:map {:closed true}
      [:type [:= :output]]
-     [:value string?]]]
+     [:value any?]]]
    [:error
     [:map {:closed true}
      [:type [:= :error]]

@@ -86,7 +86,7 @@ digraph {
   "ShellItem$Error$Value" [label="{ShellItem$Error$Value|:via [:vector \"ShellItem$Error$Value$Via\"]\l:trace any?\l:cause any?\l:data any?\l:phase any?\l}", fillcolor="#e6caab"]
   "ShellItem$Error$Value$Via" [label="{ShellItem$Error$Value$Via|:type any?\l:message any?\l:data any?\l:at any?\l}", fillcolor="#e6caab"]
   "ShellItem$Input" [label="{ShellItem$Input|:type [:= :input]\l:current-ns any?\l:num int?\l:value string?\l}", fillcolor="#e6caab"]
-  "ShellItem$Output" [label="{ShellItem$Output|:type [:= :output]\l:value string?\l}", fillcolor="#e6caab"]
+  "ShellItem$Output" [label="{ShellItem$Output|:type [:= :output]\l:value any?\l}", fillcolor="#e6caab"]
   "ShellLanguage" [label="{ShellLanguage|:status [:ref \"LoadingState\"]\l:history [:ref \"ShellHistory\"]\l:history-pos [:ref \"ShellHistoryPosition\"]\l:items [:vector [:ref \"ShellItem\"]]\l}", fillcolor="#fff0cd"]
   "ShellLanguageId" [label="{ShellLanguageId|:any\l}", fillcolor="#fff0cd"]
   "Shortcut" [label="{Shortcut|:keyCode number?\l:ctrlKey boolean?\l:shiftKey boolean?\l:altKey boolean?\l}", fillcolor="#fff0cd"]

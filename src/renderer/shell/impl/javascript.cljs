@@ -12,7 +12,7 @@
 (hierarchy/derive! :js ::shell.hierarchy/language)
 
 (defmethod shell.hierarchy/init :js
-  [_language {:keys [on-success]}]
+  [{:keys [on-success]}]
   ;; Expose all user functions to global namespace.
   (doseq [command (vals (ns-publics 'user))]
     (aset js/window (:name (meta command)) (.call ^js (.-val command))))
