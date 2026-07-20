@@ -90,12 +90,12 @@
 (defmulti item (fn [i _opts] (:type i)))
 
 (defmethod item :input
-  [{:keys [current-ns value]} {:keys [theme]}]
+  [{{:keys [current-ns text]} :value} {:keys [theme]}]
   [:div.flex.gap-2
    [:div.text-foreground-disabled.font-bold (str current-ns "=>")]
    [:div.flex-1.cursor-pointer.break-words
-    {:on-click #(rf/dispatch [::shell.events/set-text value])}
-    [codemirror/colored-text value theme]]])
+    {:on-click #(rf/dispatch [::shell.events/set-text text])}
+    [codemirror/colored-text text theme]]])
 
 (defmethod item :error
   [{:keys [value]} _opts]

@@ -100,10 +100,11 @@
             (shell.handlers/reset-history-position)
             (shell.handlers/add-to-history "")
             (shell.handlers/add-item {:type :input
-                                      :value text
-                                      :current-ns (repl/current-ns)
-                                      :num (-> (shell.handlers/history db)
-                                               count)}))
+                                      :value {:text text
+                                              :current-ns (repl/current-ns)
+                                              :num (-> db
+                                                       shell.handlers/history
+                                                       count)}}))
     ::shell.effects/execute {:text text
                              :language (shell.handlers/active-language db)
                              :verbose (shell.handlers/verbose? db)

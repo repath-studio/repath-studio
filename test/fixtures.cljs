@@ -206,7 +206,8 @@
 
 (rf/reg-fx
  ::shell.effects/init
- (fn [_]))
+ (fn [params]
+   (rf/dispatch (:on-success params))))
 
 (rf/reg-fx
  ::shell.effects/init-language

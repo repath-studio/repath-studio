@@ -20,9 +20,10 @@
    [:input
     [:map {:closed true}
      [:type [:= :input]]
-     [:current-ns any?]
-     [:num int?]
-     [:value string?]]]
+     [:value [:map {:closed true}
+              [:current-ns any?]
+              [:num int?]
+              [:text string?]]]]]
    [:output
     [:map {:closed true}
      [:type [:= :output]]
@@ -30,7 +31,7 @@
    [:error
     [:map {:closed true}
      [:type [:= :error]]
-     [:value [:map
+     [:value [:map {:closed true}
               [:via {:optional true}
                [:vector [:map {:optional true}
                          [:type {:optional true} any?]
