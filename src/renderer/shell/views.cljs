@@ -168,17 +168,21 @@
        {:class (when show-all "flex-wrap")}]
       items)]))
 
+(defn docs-reaction
+  [complete-atom]
+  (reaction
+   (when-let [state @complete-atom]
+     (let [{:keys [pos words]} state
+           sym (first (get words pos))]
+       (when (symbol? sym)
+         (reepl.replumb/process-doc sym))))))
+
 (defn root
   []
   (let [repl-history? @(rf/subscribe [::panel.subs/visible? :repl-history])
         md? @(rf/subscribe [::window.subs/md?])]
     (reagent/with-let [complete-atom (reagent/atom nil)
-                       docs (reaction
-                             (when-let [state @complete-atom]
-                               (let [{:keys [pos words]} state
-                                     sym (first (get words pos))]
-                                 (when (symbol? sym)
-                                   (reepl.replumb/process-doc sym)))))]
+                       docs (docs-reaction complete-atom)]
       [:<>
        (if md?
          (when repl-history?
