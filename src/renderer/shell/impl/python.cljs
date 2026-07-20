@@ -21,9 +21,15 @@
 
                ;; Expose all user functions to global namespace.
                (doseq [command (vals (ns-publics 'user))]
-                 (.set pyodide.globals
-                       (str (:name (meta command)))
-                       (.call ^js (.-val command))))
+                 (let [fn-val @command
+                       wrapper (fn [& args]
+                                 (apply fn-val (map #(if (fn? (.-toJs ^js %))
+                                                       (.toJs ^js %)
+                                                       %)
+                                                    args)))]
+                   (.set pyodide.globals
+                         (str (:name (meta command)))
+                         wrapper)))
 
                (-> (.runPythonAsync pyodide "import js")
                    (.then #(rf/dispatch on-success)))))
@@ -43,7 +49,7 @@
   (println "The JavaScript scope can be accessed from Python using the js"
            "module. For example, you can access the document object using"
            "`js.document`.")
-  (println "Type `js.help()` to see a list of commands."))
+  (println "Type `help()` to see a list of commands."))
 
 (defmethod shell.hierarchy/evaluate :python
   [_language s]
