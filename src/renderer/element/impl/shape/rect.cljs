@@ -26,7 +26,6 @@
                   The rectangles may have their corners rounded."]
    :attrs [:stroke-width
            :opacity
-           :fill
            :stroke
            :stroke-dasharray
            :stroke-linejoin]})

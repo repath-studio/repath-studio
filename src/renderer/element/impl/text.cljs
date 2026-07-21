@@ -38,9 +38,9 @@
            :font-size
            :font-weight
            :font-style
-           :fill
            :stroke
            :stroke-width
+           :stroke-dasharray
            :opacity]})
 
 (defmethod element.hierarchy/translate :text

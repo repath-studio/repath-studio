@@ -16,7 +16,6 @@
                   of a set of connected straight line segments. The last
                   point is connected to the first point."]
    :attrs [:stroke-width
-           :fill
            :stroke
            :stroke-linejoin
            :stroke-linecap

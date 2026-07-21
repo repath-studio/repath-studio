@@ -26,7 +26,6 @@
                   y radius."]
    :attrs [:stroke-width
            :opacity
-           :fill
            :stroke
            :stroke-dasharray]})
 

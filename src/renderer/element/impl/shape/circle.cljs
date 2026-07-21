@@ -26,7 +26,6 @@
    :ratio-locked true
    :attrs [:stroke-width
            :opacity
-           :fill
            :stroke
            :stroke-dasharray]})
 
