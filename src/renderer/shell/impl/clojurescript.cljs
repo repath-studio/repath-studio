@@ -36,7 +36,7 @@
   [_language]
   {:mode "clojure"})
 
-(defmethod shell.hierarchy/completion :cljs
+(defmethod shell.hierarchy/completions :cljs
   [_language s]
   (if (zero? (.indexOf s "js/"))
     (shell.reepl.replumb/js-completion (.slice s 3) "js/")

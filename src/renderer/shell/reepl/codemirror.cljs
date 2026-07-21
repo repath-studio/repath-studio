@@ -1,6 +1,5 @@
 (ns renderer.shell.reepl.codemirror
   (:require
-   [clojure.edn :as edn]
    [clojure.string :as string]))
 
 ;; TODO: can we avoid the global state modification here?

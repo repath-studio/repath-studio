@@ -56,7 +56,7 @@
   [_language]
   {:mode "javascript"})
 
-(defmethod shell.hierarchy/completion :js
+(defmethod shell.hierarchy/completions :js
   [_language s]
   (shell.utils.completion/js-completion s ""))
 

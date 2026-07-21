@@ -80,7 +80,7 @@
   [_language]
   {:mode "python"})
 
-(defmethod shell.hierarchy/completion :python
+(defmethod shell.hierarchy/completions :python
   [_language s]
   (when (zero? (.indexOf s "js."))
     (shell.reepl.replumb/js-completion (.slice s 3) "js.")))

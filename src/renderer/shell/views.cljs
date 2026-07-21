@@ -117,7 +117,7 @@
          [code-mirror current-text
           {:on-eval #(rf/dispatch [::shell.events/execute %])
            :on-change #(rf/dispatch [::shell.events/set-text %])
-           :complete-word #(shell.hierarchy/completion lang %)
+           :complete-word #(shell.hierarchy/completions lang %)
            :on-up #(rf/dispatch [::shell.events/go-up])
            :on-down #(rf/dispatch [::shell.events/go-down])
            :complete-atom complete-atom
