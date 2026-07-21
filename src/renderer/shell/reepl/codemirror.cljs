@@ -27,11 +27,6 @@
      :end #js {:line lno
                :ch (+ cno (count forward))}}))
 
-(defn valid-cljs?
-  [source]
-  (try (boolean (edn/read-string source))
-       (catch js/Error _err false)))
-
 (defn should-go-up?
   [_source inst]
   (let [pos (.getCursor inst)]
@@ -55,12 +50,11 @@
               (count (.getLine inst last-line))))))))
 
 (defn should-eval?
-  [source inst evt]
+  [inst evt]
   (cond
     (.-shiftKey evt) false
     (.-metaKey evt) true
-    :else (and (in-place? inst)
-               (valid-cljs? source))))
+    :else (in-place? inst)))
 
 (defn cm-current-word
   "Find the current 'word' according to CodeMirror's `wordChars' list"
@@ -186,7 +180,7 @@
                evt)
       ;; enter
       13 (let [source (.getValue inst)]
-           (when (should-eval? source inst evt)
+           (when (should-eval? inst evt)
              (.preventDefault evt)
              (on-eval source)))
       ;; up
