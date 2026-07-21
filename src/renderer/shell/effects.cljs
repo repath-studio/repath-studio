@@ -45,7 +45,7 @@
    (println "Welcome to your " (name language) " REPL!")
    (println "You can create or modify shapes using the command line.")
    (println)
-   (shell.hierarchy/help language)))
+   (shell.hierarchy/welcome language)))
 
 (rf/reg-fx
  ::focus

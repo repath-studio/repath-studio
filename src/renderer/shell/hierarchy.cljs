@@ -3,6 +3,7 @@
    [renderer.hierarchy :as hierarchy]))
 
 (defmulti init :language :hierarchy hierarchy/hierarchy)
+(defmulti welcome identity :hierarchy hierarchy/hierarchy)
 (defmulti help identity :hierarchy hierarchy/hierarchy)
 (defmulti evaluate identity :hierarchy hierarchy/hierarchy)
 (defmulti show-error identity :hierarchy hierarchy/hierarchy)
@@ -11,7 +12,8 @@
 (defmulti codemirror-options identity :hierarchy hierarchy/hierarchy)
 
 (defmethod init :default [_params])
-(defmethod help :default [_language])
+(defmethod welcome :default [_language])
+(defmethod help :default [_language _command])
 (defmethod evaluate :default [_language _s])
 (defmethod show-error :default [_language _error])
 (defmethod completion :default [_language _s])

@@ -7,7 +7,8 @@
    [renderer.shell.events :as-alias shell.events]
    [renderer.shell.hierarchy :as shell.hierarchy]
    [renderer.shell.reepl.replumb :as shell.reepl.replumb]
-   [renderer.shell.subs :as-alias shell.subs]))
+   [renderer.shell.subs :as-alias shell.subs]
+   [user]))
 
 (hierarchy/derive! :cljs ::shell.hierarchy/language)
 
@@ -16,6 +17,12 @@
   (rf/dispatch on-success))
 
 (defmethod shell.hierarchy/help :cljs
+  [_language command]
+  (if-let [f (get (ns-publics 'user) (symbol command))]
+    (print (:name (meta f)) " - " (:doc (meta f)))
+    (println "Command not found:" command)))
+
+(defmethod shell.hierarchy/welcome :cljs
   [_language]
   (println "Global javascript objects and functions are accessible using the js"
            "namespace (e.g. `js/document`).")
@@ -39,10 +46,6 @@
   [_language s]
   (when (symbol? s)
     (shell.reepl.replumb/process-doc s)))
-
-(defmethod shell.hierarchy/show-error :cljs
-  [_language v]
-  (str "Error: " (:cause v)))
 
 (rf/dispatch [::action.events/register-action
               {:id :shell-language/clojurescript

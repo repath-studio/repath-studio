@@ -19,6 +19,7 @@
    [renderer.icon.db :as icon.db]
    [renderer.icon.events :as-alias icon.events]
    [renderer.shell.events :as-alias shell.events]
+   [renderer.shell.hierarchy :as shell.hierarchy]
    [renderer.window.events :as-alias window.events]))
 
 (defn ^:export clear
@@ -431,9 +432,8 @@
    (doseq [x (sort-by str (vals (ns-publics 'user)))]
      (help (:name (meta x)))))
   ([command]
-   (if-let [f (get (ns-publics 'user) (symbol command))]
-     (print (:name (meta f)) " - " (:doc (meta f)))
-     (println "Command not found:" command))))
+   (let [lang (-> (db) :shell :active-language)]
+     (shell.hierarchy/help lang command))))
 
 (defn ^:export version
   "The application version."

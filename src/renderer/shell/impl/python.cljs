@@ -12,20 +12,9 @@
    [renderer.shell.hierarchy :as shell.hierarchy]
    [renderer.shell.reepl.replumb :as shell.reepl.replumb]
    [renderer.shell.subs :as-alias shell.subs]
-   [user :as user]))
+   [user]))
 
 (hierarchy/derive! :python ::shell.hierarchy/language)
-
-(defn help
-  ([]
-   (doseq [x (sort-by str (vals (ns-publics 'user)))]
-     (help (:name (meta x)))))
-  ([command]
-   (if-let [f (get (ns-publics 'user) (symbol command))]
-     (print (camel-snake-kebab/->snake_case_string (:name (meta f)))
-            " - "
-            (:doc (meta f)))
-     (println "Command not found:" command))))
 
 (defn expose-command-to-global-namespace
   [pyodide command]
@@ -51,8 +40,6 @@
                (doseq [command (vals (ns-publics 'user))]
                  (expose-command-to-global-namespace pyodide command))
 
-               (set! user/help help)
-
                (-> (.runPythonAsync pyodide "import js")
                    (.then #(rf/dispatch on-success)))))
 
@@ -67,6 +54,14 @@
     (.addCallback ^goog.net.jsloader loader #(load-pyodide params))))
 
 (defmethod shell.hierarchy/help :python
+  [_language command]
+  (if-let [f (get (ns-publics 'user) (symbol command))]
+    (print (camel-snake-kebab/->snake_case_string (:name (meta f)))
+           " - "
+           (:doc (meta f)))
+    (println "Command not found:" command)))
+
+(defmethod shell.hierarchy/welcome :python
   [_language]
   (println "The JavaScript scope can be accessed from Python using the js"
            "module. For example, you can access the document object using"

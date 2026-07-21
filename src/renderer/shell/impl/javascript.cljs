@@ -10,20 +10,9 @@
    [renderer.shell.hierarchy :as shell.hierarchy]
    [renderer.shell.reepl.replumb :as shell.utils.completion]
    [renderer.shell.subs :as-alias shell.subs]
-   [user :as user]))
+   [user]))
 
 (hierarchy/derive! :js ::shell.hierarchy/language)
-
-(defn help
-  ([]
-   (doseq [x (sort-by str (vals (ns-publics 'user)))]
-     (help (:name (meta x)))))
-  ([command]
-   (if-let [f (get (ns-publics 'user) (symbol command))]
-     (print (camel-snake-kebab/->camelCaseString (:name (meta f)))
-            " - "
-            (:doc (meta f)))
-     (println "Command not found:" command))))
 
 (defn expose-command-to-global-namespace
   [command]
@@ -41,11 +30,17 @@
   (doseq [command (vals (ns-publics 'user))]
     (expose-command-to-global-namespace command))
 
-  (set! user/help help)
-
   (rf/dispatch on-success))
 
 (defmethod shell.hierarchy/help :js
+  [_language command]
+  (if-let [f (get (ns-publics 'user) (symbol command))]
+    (print (camel-snake-kebab/->camelCaseString (:name (meta f)))
+           " - "
+           (:doc (meta f)))
+    (println "Command not found:" command)))
+
+(defmethod shell.hierarchy/welcome :js
   [_language]
   (println "Type `help()` to see a list of commands."))
 
