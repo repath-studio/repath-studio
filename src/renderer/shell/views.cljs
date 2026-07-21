@@ -147,11 +147,12 @@
 
 (defmethod item :error
   [{:keys [value]} _opts]
-  (js/console.log (clj->js value))
-  [:div.text-error.gap-1
+  [:div.text-error.select-text
+   (when-let [error-type (:type (last (:via value)))]
+     (str (name (keyword error-type)) ": "))
    (->> (string/split (str (:cause value)) "\n")
         (interpose [:br])
-        (into [:span.select-text]))])
+        (into [:span]))])
 
 (defmethod item :output
   [{:keys [value]} opts]
