@@ -419,9 +419,13 @@
 
 (defn ^:export help
   "Lists the available functions."
-  []
-  (doseq [x (sort-by str (vals (ns-publics 'user)))]
-    (print (:name (meta x)) " - " (:doc (meta x)))))
+  ([]
+   (doseq [x (sort-by str (vals (ns-publics 'user)))]
+     (help (:name (meta x)))))
+  ([command]
+   (if-let [f (get (ns-publics 'user) (symbol command))]
+     (print (:name (meta f)) " - " (:doc (meta f)))
+     (println "Command not found:" command))))
 
 (defn ^:export version
   "The application version."

@@ -15,6 +15,17 @@
 
 (hierarchy/derive! :python ::shell.hierarchy/language)
 
+(defn help
+  ([]
+   (doseq [x (sort-by str (vals (ns-publics 'user)))]
+     (help (:name (meta x)))))
+  ([command]
+   (if-let [f (get (ns-publics 'user) (symbol command))]
+     (print (camel-snake-kebab/->snake_case_string (:name (meta f)))
+            " - "
+            (:doc (meta f)))
+     (println "Command not found:" command))))
+
 (defn expose-command-to-global-namespace
   [pyodide command]
   (try (let [fn-val @command
@@ -39,6 +50,8 @@
                (doseq [command (vals (ns-publics 'user))]
                  (expose-command-to-global-namespace pyodide command))
 
+               (set! user/help help)
+
                (-> (.runPythonAsync pyodide "import js")
                    (.then #(rf/dispatch on-success)))))
 
@@ -50,11 +63,6 @@
   (let [loader (-> "/pyodide/pyodide.js"
                    (trustedResourceUrlFromString)
                    (safeLoad))]
-    (set! user/help (fn []
-                      (doseq [x (sort-by str (vals (ns-publics 'user)))]
-                        (print (camel-snake-kebab/->snake_case_string
-                                (:name (meta x))) " - " (:doc (meta x))))))
-
     (.addCallback ^goog.net.jsloader loader #(load-pyodide params))))
 
 (defmethod shell.hierarchy/help :python

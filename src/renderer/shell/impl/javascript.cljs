@@ -13,18 +13,26 @@
 
 (hierarchy/derive! :js ::shell.hierarchy/language)
 
+(defn help
+  ([]
+   (doseq [x (sort-by str (vals (ns-publics 'user)))]
+     (help (:name (meta x)))))
+  ([command]
+   (if-let [f (get (ns-publics 'user) (symbol command))]
+     (print (camel-snake-kebab/->camelCaseString (:name (meta f)))
+            " - "
+            (:doc (meta f)))
+     (println "Command not found:" command))))
+
 (defmethod shell.hierarchy/init :js
   [{:keys [on-success]}]
-  (set! user/help (fn []
-                    (doseq [x (sort-by str (vals (ns-publics 'user)))]
-                      (print (camel-snake-kebab/->camelCaseString
-                              (:name (meta x))) " - " (:doc (meta x))))))
-
   ;; Expose all user functions to global namespace.
   (doseq [command (vals (ns-publics 'user))]
     (aset js/window
           (camel-snake-kebab/->camelCaseString (:name (meta command)))
           (.call ^js (.-val command))))
+
+  (set! user/help help)
 
   (rf/dispatch on-success))
 
