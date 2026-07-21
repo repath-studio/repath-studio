@@ -2,6 +2,7 @@
   (:require
    ["codemirror/mode/javascript/javascript.js"]
    [camel-snake-kebab.core :as camel-snake-kebab]
+   [clojure.string :as string]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.hierarchy :as hierarchy]
@@ -24,13 +25,21 @@
             (:doc (meta f)))
      (println "Command not found:" command))))
 
+(defn expose-command-to-global-namespace
+  [command]
+  (let [fn-val @command
+        wrapper (fn [& args]
+                  (apply fn-val (map #(js->clj % :keywordize-keys true)
+                                     args)))]
+    (aset js/window
+          (camel-snake-kebab/->camelCaseString (:name (meta command)))
+          wrapper)))
+
 (defmethod shell.hierarchy/init :js
   [{:keys [on-success]}]
   ;; Expose all user functions to global namespace.
   (doseq [command (vals (ns-publics 'user))]
-    (aset js/window
-          (camel-snake-kebab/->camelCaseString (:name (meta command)))
-          (.call ^js (.-val command))))
+    (expose-command-to-global-namespace command))
 
   (set! user/help help)
 
@@ -42,7 +51,11 @@
 
 (defmethod shell.hierarchy/evaluate :js
   [_language s]
-  (str "(js/eval \"" s "\")"))
+  (str "(js/eval \""
+       (-> s
+           (string/replace "\\" "\\\\")
+           (string/replace "\"" "\\\""))
+       "\")"))
 
 (defmethod shell.hierarchy/codemirror-options :js
   [_language]

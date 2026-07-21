@@ -356,18 +356,21 @@
   [language]
   (if (i18n.db/valid-language? language)
     (rf/dispatch [::i18n.events/register-language language])
-    (let [error (-> language i18n.db/explain-language m.error/humanize)]
-      (throw (ex-info (str "Invalid language: " error) {:language language})))))
+    (let [error (-> language
+                    i18n.db/explain-language
+                    m.error/humanize)]
+      (throw (ex-info (str "Invalid language: " error)
+                      {:language language})))))
 
 (defn ^:export set-translation
   "Sets a translation for a language."
   [lang-id k v]
-  (rf/dispatch [::i18n.events/set-translation lang-id k v]))
+  (rf/dispatch [::i18n.events/set-translation lang-id (keyword k) v]))
 
 (defn ^:export deregister-language
   "Deregisters a language."
   [id]
-  (rf/dispatch [::i18n.events/deregister-language id]))
+  (rf/dispatch [::i18n.events/deregister-language (keyword id)]))
 
 (defn ^:export actions
   "Returns the registered actions."
@@ -395,10 +398,13 @@
 (defn ^:export register-action-group
   "Registers an action group."
   [action-group]
-  (if (action.db/valid-action-group? group)
+  (if (action.db/valid-action-group? action-group)
     (rf/dispatch [::action.events/register-action-group action-group])
-    (let [error (-> group action.db/explain-action-group m.error/humanize)]
-      (throw (ex-info (str "Invalid action group: " error) {:group group})))))
+    (let [error (-> action-group
+                    action.db/explain-action-group
+                    m.error/humanize)]
+      (throw (ex-info (str "Invalid action group: " error)
+                      {:group action-group})))))
 
 (defn ^:export deregister-action-group
   "Deregisters an action group."
@@ -408,14 +414,16 @@
 (defn ^:export add-action-to-group
   "Adds an action to an action group."
   [group-id action-id]
-  (rf/dispatch [::action.events/add-action-to-group group-id action-id]))
+  (rf/dispatch [::action.events/add-action-to-group
+                (keyword group-id)
+                (keyword action-id)]))
 
 (defn ^:export remove-action-from-group
   "Removes an action from an action group."
   [group-id action-id]
   (rf/dispatch [::action.events/remove-action-from-group
-                group-id
-                action-id]))
+                (keyword group-id)
+                (keyword action-id)]))
 
 (defn ^:export help
   "Lists the available functions."

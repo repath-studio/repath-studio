@@ -2,6 +2,7 @@
   (:require
    ["codemirror/mode/python/python.js"]
    [camel-snake-kebab.core :as camel-snake-kebab]
+   [clojure.string :as string]
    [goog.html.legacyconversions :refer [trustedResourceUrlFromString]]
    [goog.net.jsloader :refer [safeLoad]]
    [re-frame.core :as rf]
@@ -28,17 +29,17 @@
 
 (defn expose-command-to-global-namespace
   [pyodide command]
-  (try (let [fn-val @command
-             wrapper (fn [& args]
-                       (apply fn-val (map #(if (fn? (.-toJs ^js %))
-                                             (.toJs ^js %)
-                                             %) args)))]
-         (.set pyodide.globals
-               (-> (:name (meta command))
-                   (camel-snake-kebab/->snake_case_string))
-               wrapper))
-       (catch :default e
-         (js/console.error "Error exposing function to Pyodide:" e))))
+  (let [fn-val @command
+        wrapper (fn [& args]
+                  (apply fn-val (map #(-> (if (fn? (.-toJs ^js %))
+                                            (.toJs ^js %)
+                                            %)
+                                          (js->clj :keywordize-keys true))
+                                     args)))]
+    (.set pyodide.globals
+          (-> (:name (meta command))
+              (camel-snake-kebab/->snake_case_string))
+          wrapper)))
 
 (defn load-pyodide
   [{:keys [on-success on-error]}]
@@ -74,7 +75,11 @@
 
 (defmethod shell.hierarchy/evaluate :python
   [_language s]
-  (str "(js/pyodide.runPython \"" s "\")"))
+  (str "(js/pyodide.runPython \""
+       (-> s
+           (string/replace "\\" "\\\\")
+           (string/replace "\"" "\\\""))
+       "\")"))
 
 (defmethod shell.hierarchy/codemirror-options :python
   [_language]
