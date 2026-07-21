@@ -118,4 +118,4 @@
     ::shell.effects/execute {:text text
                              :language (shell.handlers/active-language db)
                              :verbose (shell.handlers/verbose? db)
-                             :event [::add-item]}}))
+                             :callback-event [::add-item]}}))

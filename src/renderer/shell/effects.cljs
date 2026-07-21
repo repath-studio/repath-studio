@@ -57,7 +57,7 @@
 
 (rf/reg-fx
  ::execute
- (fn [{:keys [text language verbose event]}]
+ (fn [{:keys [text language verbose callback-event]}]
    (shell.reepl.replumb/run-repl (shell.hierarchy/evaluate language text)
                                  {:verbose verbose}
-                                 #(rf/dispatch (conj event %1 %2)))))
+                                 #(rf/dispatch (conj callback-event %1 %2)))))
