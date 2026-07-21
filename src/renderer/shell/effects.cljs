@@ -58,6 +58,11 @@
 (rf/reg-fx
  ::execute
  (fn [{:keys [text language verbose callback-event]}]
-   (shell.reepl.replumb/run-repl (shell.hierarchy/evaluate language text)
-                                 {:verbose verbose}
-                                 #(rf/dispatch (conj callback-event %1 %2)))))
+   (try (shell.reepl.replumb/run-repl (shell.hierarchy/evaluate language text)
+                                      {:verbose verbose}
+                                      (fn [item-type result]
+                                        (rf/dispatch (conj callback-event
+                                                           item-type
+                                                           result))))
+        (catch :default e (rf/dispatch (->> (cljs.core/Throwable->map e)
+                                            (conj callback-event :error)))))))

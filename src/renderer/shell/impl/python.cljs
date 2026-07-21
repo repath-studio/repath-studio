@@ -90,6 +90,13 @@
   (when (zero? (.indexOf s "js."))
     (shell.reepl.replumb/js-completion (.slice s 3) "js.")))
 
+(defmethod shell.hierarchy/show-error :python
+  [_language v]
+  (-> (:cause v)
+      (str)
+      (string/split "\n")
+      (last)))
+
 (rf/dispatch [::action.events/register-action
               {:id :shell-language/python
                :icon "python"

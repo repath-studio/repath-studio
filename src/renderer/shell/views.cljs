@@ -146,13 +146,9 @@
     [color-highlighted-text text theme]]])
 
 (defmethod item :error
-  [{:keys [value]} _opts]
+  [{:keys [value]} opts]
   [:div.text-error.select-text
-   (when-let [error-type (:type (last (:via value)))]
-     (str (name (keyword error-type)) ": "))
-   (->> (string/split (str (:cause value)) "\n")
-        (interpose [:br])
-        (into [:span]))])
+   (shell.hierarchy/show-error (:language opts) value)])
 
 (defmethod item :output
   [{:keys [value]} opts]
@@ -171,7 +167,9 @@
   (let [loaded? @(rf/subscribe [::shell.subs/language-loaded?])
         items @(rf/subscribe [::shell.subs/items])
         codemirror-theme @(rf/subscribe [::theme.subs/codemirror])
+        lang @(rf/subscribe [::shell.subs/active-language])
         opts {:theme codemirror-theme
+              :language lang
               :showers [show-devtools/show-devtools
                         (partial show-function/show-fn-with-docs
                                  maybe-fn-docs)]}]

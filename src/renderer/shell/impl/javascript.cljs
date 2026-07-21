@@ -65,6 +65,12 @@
   [_language s]
   (shell.utils.completion/js-completion s ""))
 
+(defmethod shell.hierarchy/show-error :js
+  [_language v]
+  (str (when-let [error-type (:type (last (:via v)))]
+         (str (name (keyword error-type)) ": "))
+       (:cause v)))
+
 (rf/dispatch [::action.events/register-action
               {:id :shell-language/javascript
                :icon "javascript"

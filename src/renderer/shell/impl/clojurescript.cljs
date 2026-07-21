@@ -40,6 +40,10 @@
   (when (symbol? s)
     (shell.reepl.replumb/process-doc s)))
 
+(defmethod shell.hierarchy/show-error :cljs
+  [_language v]
+  (str "Error: " (:cause v)))
+
 (rf/dispatch [::action.events/register-action
               {:id :shell-language/clojurescript
                :icon "clojurescript"
