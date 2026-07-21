@@ -22,7 +22,7 @@
    [renderer.window.events :as-alias window.events]))
 
 (defn ^:export clear
-  "Clears the shell history."
+  "Clears the shell output."
   []
   (rf/dispatch [::shell.events/clear-items]))
 
