@@ -35,6 +35,11 @@
     (shell.reepl.replumb/js-completion (.slice s 3) "js/")
     (shell.reepl.replumb/cljs-completion s)))
 
+(defmethod shell.hierarchy/docs :cljs
+  [_language s]
+  (when (symbol? s)
+    (shell.reepl.replumb/process-doc s)))
+
 (rf/dispatch [::action.events/register-action
               {:id :shell-language/clojurescript
                :icon "clojurescript"

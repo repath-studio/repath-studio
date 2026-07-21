@@ -169,20 +169,20 @@
       items)]))
 
 (defn docs-reaction
-  [complete-atom]
+  [lang complete-atom]
   (reaction
    (when-let [state @complete-atom]
      (let [{:keys [pos words]} state
            sym (first (get words pos))]
-       (when (symbol? sym)
-         (reepl.replumb/process-doc sym))))))
+       (shell.hierarchy/docs lang sym)))))
 
 (defn root
   []
   (let [repl-history? @(rf/subscribe [::panel.subs/visible? :repl-history])
-        md? @(rf/subscribe [::window.subs/md?])]
+        md? @(rf/subscribe [::window.subs/md?])
+        lang @(rf/subscribe [::shell.subs/active-language])]
     (reagent/with-let [complete-atom (reagent/atom nil)
-                       docs (docs-reaction complete-atom)]
+                       docs (docs-reaction lang complete-atom)]
       [:<>
        (if md?
          (when repl-history?
