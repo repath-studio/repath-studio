@@ -123,9 +123,7 @@
         [false 0])
       [true (dec current)])
     (if (>= current (dec n))
-      (if initial-active
-        [true 0]
-        [false 0])
+      [initial-active 0]
       [true (inc current)])))
 
 (defn cycle-completions
@@ -169,65 +167,71 @@
 (def cmp-ignore #{9 16 17 18 91 93})
 (def cmp-show #{17 18 91 93})
 
+(defn on-keyup-handler
+  [options inst evt]
+  (let [{:keys [complete-atom complete-word]} options]
+    (.stopPropagation evt)
+    (if (cancel-keys (.-keyCode evt))
+      (if @complete-atom
+        (reset! complete-atom nil)
+        (some-> (.-activeElement js/document)
+                (.blur)))
+      (if (cmp-show (.-keyCode evt))
+        (swap! complete-atom assoc :show-all false)
+        (when-not (cmp-ignore (.-keyCode evt))
+          (reset! complete-atom (repl-hint complete-word inst nil)))))))
+
+(defn on-keydown-handler
+  [options inst evt]
+  (let [{:keys [complete-atom on-eval on-up on-down]} options]
+    (.stopPropagation evt)
+    (case (.-keyCode evt)
+      (17 18 91 93)
+      (swap! complete-atom assoc :show-all true)
+      ;; tab
+      9 (swap! complete-atom
+               cycle-completions
+               (.-shiftKey evt)
+               inst
+               evt)
+      ;; enter
+      13 (let [source (.getValue inst)]
+           (when (should-eval? source inst evt)
+             (.preventDefault evt)
+             (on-eval source)))
+      ;; up
+      38 (let [source (.getValue inst)]
+           (when (and (not (.-shiftKey evt))
+                      (should-go-up? source inst))
+             (.preventDefault evt)
+             (on-up)))
+      ;; down
+      40 (let [source (.getValue inst)]
+           (when (and (not (.-shiftKey evt))
+                      (should-go-down? source inst))
+             (.preventDefault evt)
+             (on-down)))
+
+      :none)))
+
 (defn code-mirror
   "Create a code-mirror editor that knows a fair amount about being a repl."
   [value options]
-  (let [{:keys [on-eval on-up on-down complete-atom complete-word]} options]
-    [views/cm-editor
-     value
-     {:props {:id utils.dom/shell-input-id
-              :style {:height "auto"
-                      :flex 1}}
-      :options (merge {:viewportMargin js/Infinity
-                       :extraKeys #js {"Shift-Enter" "newlineAndIndent"}
-                       :value value
-                       :keyMap "default"
-                       :showCursorWhenSelecting true
-                       :screenReaderLabel "Shell"}
-                      (:cm-options options))
-      :on-blur #(reset! complete-atom nil)
-      :on-keyup (fn [inst evt]
-                  (.stopPropagation evt)
-                  (if (cancel-keys (.-keyCode evt))
-                    (if @complete-atom
-                      (reset! complete-atom nil)
-                      (some-> (.-activeElement js/document)
-                              (.blur)))
-                    (if (cmp-show (.-keyCode evt))
-                      (swap! complete-atom assoc :show-all false)
-                      (when-not (cmp-ignore (.-keyCode evt))
-                        (reset! complete-atom
-                                (repl-hint complete-word inst nil))))))
-      :on-keydown (fn [inst evt]
-                    (.stopPropagation evt)
-                    (case (.-keyCode evt)
-                      (17 18 91 93)
-                      (swap! complete-atom assoc :show-all true)
-                      ;; tab
-                      9 (swap! complete-atom
-                               cycle-completions
-                               (.-shiftKey evt)
-                               inst
-                               evt)
-                      ;; enter
-                      13 (let [source (.getValue inst)]
-                           (when (should-eval? source inst evt)
-                             (.preventDefault evt)
-                             (on-eval source)))
-                      ;; up
-                      38 (let [source (.getValue inst)]
-                           (when (and (not (.-shiftKey evt))
-                                      (should-go-up? source inst))
-                             (.preventDefault evt)
-                             (on-up)))
-                      ;; down
-                      40 (let [source (.getValue inst)]
-                           (when (and (not (.-shiftKey evt))
-                                      (should-go-down? source inst))
-                             (.preventDefault evt)
-                             (on-down)))
-
-                      :none))}]))
+  [views/cm-editor
+   value
+   {:props {:id utils.dom/shell-input-id
+            :style {:height "auto"
+                    :flex 1}}
+    :options (merge {:viewportMargin js/Infinity
+                     :extraKeys #js {"Shift-Enter" "newlineAndIndent"}
+                     :value value
+                     :keyMap "default"
+                     :showCursorWhenSelecting true
+                     :screenReaderLabel "Shell"}
+                    (:cm-options options))
+    :on-blur #(reset! (:complete-atom options) nil)
+    :on-keyup (partial on-keyup-handler options)
+    :on-keydown (partial on-keydown-handler options)}])
 
 (defn colored-text
   [_text _theme]
