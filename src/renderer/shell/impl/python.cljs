@@ -15,6 +15,20 @@
 
 (hierarchy/derive! :python ::shell.hierarchy/language)
 
+(defn expose-command-to-global-namespace
+  [pyodide command]
+  (try (let [fn-val @command
+             wrapper (fn [& args]
+                       (apply fn-val (map #(if (fn? (.-toJs ^js %))
+                                             (.toJs ^js %)
+                                             %) args)))]
+         (.set pyodide.globals
+               (-> (:name (meta command))
+                   (camel-snake-kebab/->snake_case_string))
+               wrapper))
+       (catch :default e
+         (js/console.error "Error exposing function to Pyodide:" e))))
+
 (defn load-pyodide
   [{:keys [on-success on-error]}]
   (-> (js/loadPyodide)
@@ -23,20 +37,7 @@
 
                ;; Expose all user functions to global namespace.
                (doseq [command (vals (ns-publics 'user))]
-                 (try (let [fn-val @command
-                            wrapper (fn [& args]
-                                      (apply fn-val
-                                             (map #(if (fn? (.-toJs ^js %))
-                                                     (.toJs ^js %)
-                                                     %)
-                                                  args)))]
-                        (.set pyodide.globals
-                              (-> (:name (meta command))
-                                  (camel-snake-kebab/->snake_case_string))
-                              wrapper))
-                      (catch :default e
-                        (js/console.error "Error exposing function to Pyodide:"
-                                          e))))
+                 (expose-command-to-global-namespace pyodide command))
 
                (-> (.runPythonAsync pyodide "import js")
                    (.then #(rf/dispatch on-success)))))

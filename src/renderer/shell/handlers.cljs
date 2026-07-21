@@ -59,8 +59,7 @@
 
 (m/=> serialize-items [:-> App App])
 (defn serialize-items
-  "Remove all :output items from the shell history.
-   TODO: Find a way to serialize the value."
+  "Removes all :output items from the shell history."
   [db]
   (update-in db [:shell :languages]
              (fn [langs]
