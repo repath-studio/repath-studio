@@ -11,10 +11,20 @@
   (rf.test/run-test-async
    (rf/dispatch-sync [::app.events/initialize])
 
-   (let [active-language (rf/subscribe [::shell.subs/active-language])]
+   (let [active-language (rf/subscribe [::shell.subs/active-language])
+         history (rf/subscribe [::shell.subs/history])]
 
      (testing "initial"
-       (is (= @active-language :cljs)))
+       (is (= @active-language :cljs))
+       (is (= @history [])))
+
+     (testing "clear"
+       (rf/dispatch [::shell.events/execute "(clear)"])
+
+       (rf.test/wait-for
+        [::shell.events/add-item]
+
+        (is (= @history ["(clear)"]))))
 
      (testing "activate javascript"
        (rf/dispatch [::shell.events/activate-language :js])
