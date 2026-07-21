@@ -1,6 +1,7 @@
 (ns renderer.shell.events
   (:require
    [re-frame.core :as rf]
+   [renderer.app.effects :as-alias app.effects]
    [renderer.app.events :as-alias app.events :refer [persist]]
    [renderer.shell.db :as shell.db]
    [renderer.shell.effects :as-alias shell.effects]
@@ -65,12 +66,21 @@
  (fn [db _]
    (shell.handlers/clear-items db)))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  ::add-item
  [persist]
- (fn [db [_ item-type value]]
-   (shell.handlers/add-item db {:type item-type
-                                :value value})))
+ (fn [{:keys [db]} [_ item-type value]]
+   (cond-> {}
+     value
+     (assoc :db (shell.handlers/add-item db {:type item-type
+                                             :value value}))
+
+     (and value
+          (= item-type :error)
+          (not (get-in db [:panels :repl-history :visible])))
+     (assoc ::app.effects/toast [:error
+                                 "Error evaluating expression"
+                                 {:description (:cause value)}]))))
 
 (rf/reg-event-db
  ::go-up

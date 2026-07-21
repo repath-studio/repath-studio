@@ -76,9 +76,7 @@
 (m/=> add-item [:-> App ShellItem App])
 (defn add-item
   [db item]
-  (cond-> db
-    (:value item)
-    (update-in [:shell :languages (active-language db) :items] conj item)))
+  (update-in db [:shell :languages (active-language db) :items] conj item))
 
 (m/=> set-text [:-> App string? App])
 (defn set-text
