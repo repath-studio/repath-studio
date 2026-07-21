@@ -1,6 +1,13 @@
 (ns renderer.shell.views
   (:require
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
+   ["codemirror" :as codemirror]
+   ["codemirror/addon/edit/closebrackets.js"]
+   ["codemirror/addon/edit/matchbrackets.js"]
+   ["codemirror/addon/hint/show-hint.js"]
+   ["codemirror/addon/runmode/colorize.js"]
+   ["codemirror/addon/runmode/runmode.js"]
+   ["react" :as react]
    [clojure.string :as string]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
@@ -12,18 +19,41 @@
    [renderer.panel.views :as panel.views]
    [renderer.shell.events :as-alias shell.events]
    [renderer.shell.hierarchy :as shell.hierarchy]
-   [renderer.shell.reepl.codemirror :as codemirror]
+   [renderer.shell.reepl.codemirror :as shell.reepl.codemirror]
    [renderer.shell.reepl.replumb :as reepl.replumb]
    [renderer.shell.reepl.show-devtools :as show-devtools]
    [renderer.shell.reepl.show-function :as show-function]
    [renderer.shell.reepl.show-value :refer [show-value]]
    [renderer.shell.subs :as-alias shell.subs]
    [renderer.theme.subs :as-alias theme.subs]
+   [renderer.utils.dom :as utils.dom]
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]
    [replumb.core :as replumb])
   (:require-macros
    [reagent.ratom :refer [reaction]]))
+
+(defn color-highlighted-text
+  [_text _theme]
+  (let [ref (react/createRef)
+        colorize #(when-let [dom-el (.-current ref)]
+                    ((aget codemirror "colorize") #js[dom-el] "clojure")
+                    ;; Hacky way to remove the theme class added by CodeMirror
+                    ;; https://codemirror.net/5/addon/runmode/colorize.js
+                    (-> dom-el .-classList (.remove "cm-s-default")))]
+    (reagent/create-class
+     {:component-did-mount
+      (fn [_this] (colorize))
+
+      :component-did-update
+      (fn [_this _old-argv] (colorize))
+
+      :reagent-render
+      (fn [text theme]
+        [:pre.p-0.m-0
+         {:class (str "cm-s-" theme)
+          :ref ref}
+         text])})))
 
 (defn language-dropdown-button
   [enabled?]
@@ -48,6 +78,24 @@
                    :on-escape-key-down #(.stopPropagation %)}
                   [views/dropdownmenu-arrow]]))]]))
 
+(defn code-mirror
+  [value options]
+  [views/cm-editor
+   value
+   {:props {:id utils.dom/shell-input-id
+            :style {:height "auto"
+                    :flex 1}}
+    :options (merge {:viewportMargin js/Infinity
+                     :extraKeys #js {"Shift-Enter" "newlineAndIndent"}
+                     :value value
+                     :keyMap "default"
+                     :showCursorWhenSelecting true
+                     :screenReaderLabel "Shell"}
+                    (:cm-options options))
+    :on-blur #(reset! (:complete-atom options) nil)
+    :on-keyup (partial shell.reepl.codemirror/on-keyup-handler options)
+    :on-keydown (partial shell.reepl.codemirror/on-keydown-handler options)}])
+
 (defn repl-input
   [complete-atom]
   (let [lang @(rf/subscribe [::shell.subs/active-language])
@@ -66,7 +114,7 @@
       [:div.flex-1
        {:class "p-0.5"}
        (when loaded?
-         [codemirror/code-mirror current-text
+         [code-mirror current-text
           {:on-eval #(rf/dispatch [::shell.events/execute %])
            :on-change #(rf/dispatch [::shell.events/set-text %])
            :complete-word #(shell.hierarchy/completion lang %)
@@ -95,12 +143,15 @@
    [:div.text-foreground-disabled.font-bold (str current-ns "=>")]
    [:div.flex-1.cursor-pointer.break-words
     {:on-click #(rf/dispatch [::shell.events/set-text text])}
-    [codemirror/colored-text text theme]]])
+    [color-highlighted-text text theme]]])
 
 (defmethod item :error
   [{:keys [value]} _opts]
+  (js/console.log (clj->js value))
   [:div.text-error.gap-1
-   "ERROR: " [:span.select-text (:cause value)]])
+   (->> (string/split (str (:cause value)) "\n")
+        (interpose [:br])
+        (into [:span.select-text]))])
 
 (defmethod item :output
   [{:keys [value]} opts]
@@ -150,7 +201,7 @@
         [fn-name signature doc] (filter seq (string/split-lines s))]
     [:div.bg-primary.drop-shadow.p-4.absolute.bottom-full.flex.flex-col.gap-4
      [:div.font-semibold fn-name]
-     (when signature [codemirror/colored-text signature codemirror-theme])
+     (when signature [color-highlighted-text signature codemirror-theme])
      (when doc [:div doc])]))
 
 (defn completion-list

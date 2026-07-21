@@ -1,17 +1,7 @@
 (ns renderer.shell.reepl.codemirror
   (:require
-   ["codemirror" :as codemirror]
-   ["codemirror/addon/edit/closebrackets.js"]
-   ["codemirror/addon/edit/matchbrackets.js"]
-   ["codemirror/addon/hint/show-hint.js"]
-   ["codemirror/addon/runmode/colorize.js"]
-   ["codemirror/addon/runmode/runmode.js"]
-   ["react" :as react]
    [clojure.edn :as edn]
-   [clojure.string :as string]
-   [reagent.core :as reagent]
-   [renderer.utils.dom :as utils.dom]
-   [renderer.views :as views]))
+   [clojure.string :as string]))
 
 ;; TODO: can we avoid the global state modification here?
 #_(js/CodeMirror.registerHelper
@@ -214,43 +204,5 @@
 
       :none)))
 
-(defn code-mirror
-  "Create a code-mirror editor that knows a fair amount about being a repl."
-  [value options]
-  [views/cm-editor
-   value
-   {:props {:id utils.dom/shell-input-id
-            :style {:height "auto"
-                    :flex 1}}
-    :options (merge {:viewportMargin js/Infinity
-                     :extraKeys #js {"Shift-Enter" "newlineAndIndent"}
-                     :value value
-                     :keyMap "default"
-                     :showCursorWhenSelecting true
-                     :screenReaderLabel "Shell"}
-                    (:cm-options options))
-    :on-blur #(reset! (:complete-atom options) nil)
-    :on-keyup (partial on-keyup-handler options)
-    :on-keydown (partial on-keydown-handler options)}])
 
-(defn colored-text
-  [_text _theme]
-  (let [ref (react/createRef)
-        colorize #(when-let [dom-el (.-current ref)]
-                    ((aget codemirror "colorize") #js[dom-el] "clojure")
-                    ;; Hacky way to remove the theme class added by CodeMirror
-                    ;; https://codemirror.net/5/addon/runmode/colorize.js
-                    (-> dom-el .-classList (.remove "cm-s-default")))]
-    (reagent/create-class
-     {:component-did-mount
-      (fn [_this] (colorize))
 
-      :component-did-update
-      (fn [_this _old-argv] (colorize))
-
-      :reagent-render
-      (fn [text theme]
-        [:pre.p-0.m-0
-         {:class (str "cm-s-" theme)
-          :ref ref}
-         text])})))
