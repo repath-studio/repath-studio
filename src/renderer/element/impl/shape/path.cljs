@@ -27,8 +27,8 @@
                   shape. All the basic shapes can be created with a path
                   element."]
    :attrs [:stroke-width
-           :fill
            :stroke
+           :stroke-dasharray
            :stroke-linejoin
            :stroke-linecap
            :opacity]})

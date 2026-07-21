@@ -17,7 +17,6 @@
                   a polyline is used to create open shapes as the last point
                   doesn't have to be connected to the first point."]
    :attrs [:stroke-width
-           :fill
            :stroke
            :stroke-linejoin
            :stroke-linecap
