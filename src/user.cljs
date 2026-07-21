@@ -426,7 +426,7 @@
                 (keyword action-id)]))
 
 (defn ^:export help
-  "Lists the available functions."
+  "Lists the available functions or returns help for a specific command."
   ([]
    (doseq [x (sort-by str (vals (ns-publics 'user)))]
      (help (:name (meta x)))))
