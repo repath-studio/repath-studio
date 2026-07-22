@@ -1,5 +1,6 @@
 (ns renderer.shell.effects
   (:require
+   [clojure.string :as string]
    [re-frame.core :as rf]
    [renderer.shell.hierarchy :as shell.hierarchy]
    [renderer.shell.reepl.replumb :as shell.reepl.replumb]
@@ -42,7 +43,7 @@
 (rf/reg-fx
  ::welcome
  (fn [language]
-   (println "Welcome to your " (name language) " REPL!")
+   (println "Welcome to your " (string/upper-case (name language)) " shell!")
    (println "You can create or modify shapes using the command line.")
    (println)
    (shell.hierarchy/welcome language)))
