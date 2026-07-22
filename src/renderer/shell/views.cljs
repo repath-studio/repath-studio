@@ -80,8 +80,7 @@
 
 (defn code-mirror
   [value options]
-  [views/cm-editor
-   value
+  [views/cm-editor value
    {:props {:id utils.dom/shell-input-id
             :style {:height "auto"
                     :flex 1}}

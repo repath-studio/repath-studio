@@ -146,7 +146,6 @@
                       :ch (+ (count text)
                              (.-ch from))}))))
 
-(def cancel-keys #{13 27})
 (def cmp-ignore #{9 16 17 18 91 93})
 (def cmp-show #{17 18 91 93})
 
@@ -155,11 +154,14 @@
   (let [{:keys [complete-atom complete-word]} options]
     (.stopPropagation evt)
     (cond
-      (cancel-keys (.-keyCode evt))
+      (= 27 (.-keyCode evt))
       (if @complete-atom
         (reset! complete-atom nil)
         (some-> (.-activeElement js/document)
                 (.blur)))
+
+      (= 13 (.-keyCode evt))
+      (reset! complete-atom nil)
 
       (cmp-show (.-keyCode evt))
       (swap! complete-atom assoc :show-all false)
