@@ -113,6 +113,7 @@
       [:div.flex-1
        {:class "p-0.5"}
        (when loaded?
+         ^{:key lang}
          [code-mirror current-text
           {:on-eval #(rf/dispatch [::shell.events/execute %])
            :on-change #(rf/dispatch [::shell.events/set-text %])
@@ -226,20 +227,20 @@
       items)]))
 
 (defn docs-reaction
-  [lang complete-atom]
+  [complete-atom]
   (reaction
-   (when-let [state @complete-atom]
-     (let [{:keys [pos words]} state
-           sym (first (get words pos))]
-       (shell.hierarchy/docs lang sym)))))
+   (let [lang @(rf/subscribe [::shell.subs/active-language])]
+     (when-let [state @complete-atom]
+       (let [{:keys [pos words]} state
+             sym (first (get words pos))]
+         (shell.hierarchy/docs lang sym))))))
 
 (defn root
   []
   (let [repl-history? @(rf/subscribe [::panel.subs/visible? :repl-history])
-        md? @(rf/subscribe [::window.subs/md?])
-        lang @(rf/subscribe [::shell.subs/active-language])]
+        md? @(rf/subscribe [::window.subs/md?])]
     (reagent/with-let [complete-atom (reagent/atom nil)
-                       docs (docs-reaction lang complete-atom)]
+                       docs (docs-reaction complete-atom)]
       [:<>
        (if md?
          (when repl-history?
