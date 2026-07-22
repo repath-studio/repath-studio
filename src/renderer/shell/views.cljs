@@ -87,12 +87,12 @@
                     :flex 1}}
     :options (merge {:viewportMargin js/Infinity
                      :extraKeys #js {"Shift-Enter" "newlineAndIndent"}
-                     :value value
                      :keyMap "default"
                      :showCursorWhenSelecting true
                      :screenReaderLabel "Shell"}
                     (:cm-options options))
     :on-blur #(reset! (:complete-atom options) nil)
+    :on-change (:on-change options)
     :on-keyup (partial shell.reepl.codemirror/on-keyup-handler options)
     :on-keydown (partial shell.reepl.codemirror/on-keydown-handler options)}])
 
