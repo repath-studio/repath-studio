@@ -154,15 +154,18 @@
   [options inst evt]
   (let [{:keys [complete-atom complete-word]} options]
     (.stopPropagation evt)
-    (if (cancel-keys (.-keyCode evt))
+    (cond
+      (cancel-keys (.-keyCode evt))
       (if @complete-atom
         (reset! complete-atom nil)
         (some-> (.-activeElement js/document)
                 (.blur)))
-      (if (cmp-show (.-keyCode evt))
-        (swap! complete-atom assoc :show-all false)
-        (when-not (cmp-ignore (.-keyCode evt))
-          (reset! complete-atom (repl-hint complete-word inst nil)))))))
+
+      (cmp-show (.-keyCode evt))
+      (swap! complete-atom assoc :show-all false)
+
+      (not (cmp-ignore (.-keyCode evt)))
+      (reset! complete-atom (repl-hint complete-word inst nil)))))
 
 (defn on-keydown-handler
   [options inst evt]

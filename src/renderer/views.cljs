@@ -320,7 +320,7 @@
           (when on-change (.on @cm "change" #(on-change (.getValue %))))))
 
       :component-will-unmount
-      #(when @cm (reset! cm nil))
+      #(reset! cm nil)
 
       :component-did-update
       (fn [this _]
