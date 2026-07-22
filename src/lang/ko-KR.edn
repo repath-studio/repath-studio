@@ -843,10 +843,12 @@
  {:transform "변형"}
 
  :renderer.tool.impl.misc.core
- {:misc "Miscallaneous"}
+ {:misc "기타"}
 
  :renderer.utils.element
  {:centroid "무게중심"}
 
  :renderer.shell.core
- {:focus-shell "셸에 포커스"}}
+ {:focus-shell "셸에 포커스"
+  :clear-output "입력 지우기"
+  :verbose "상세"}}

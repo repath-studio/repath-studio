@@ -920,4 +920,6 @@
  {:centroid "κεντροειδές"}
 
  :renderer.shell.core
- {:focus-shell "Εστίαση στο τερματικό"}}
+ {:focus-shell "Εστίαση στο τερματικό"
+  :clear-output "Εκκαθάριση εξόδου"
+  :verbose "Λεπτομερής"}}

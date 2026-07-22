@@ -908,10 +908,12 @@
  {:transform "Transformeren"}
 
  :renderer.tool.impl.misc.core
- {:misc "Miscallaneous"}
+ {:misc "Overig"}
 
  :renderer.utils.element
  {:centroid "centroïde"}
 
  :renderer.shell.core
- {:focus-shell "Focus op shell"}}
+ {:focus-shell "Focus op shell"
+  :clear-output "Uitvoer wissen"
+  :verbose "Uitgebreid"}}

@@ -849,10 +849,12 @@
  {:transform "変形"}
 
  :renderer.tool.impl.misc.core
- {:misc "Miscallaneous"}
+ {:misc "その他"}
 
  :renderer.utils.element
  {:centroid "重心"}
 
  :renderer.shell.core
- {:focus-shell "シェルにフォーカス"}}
+ {:focus-shell "シェルにフォーカス"
+  :clear-output "出力をクリア"
+  :verbose "詳細"}}

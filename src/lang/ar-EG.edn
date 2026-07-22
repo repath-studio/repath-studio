@@ -870,4 +870,6 @@
  {:centroid "مركز ثقل"}
 
  :renderer.shell.core
- {:focus-shell "تركيز الطرفية"}}
+ {:focus-shell "تركيز الطرفية"
+  :clear-output "مسح المخرجات"
+  :verbose "مطوّل"}}

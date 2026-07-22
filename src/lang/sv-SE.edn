@@ -892,10 +892,12 @@
  {:transform "Transformera"}
 
  :renderer.tool.impl.misc.core
- {:misc "Miscallaneous"}
+ {:misc "Övrigt"}
 
  :renderer.utils.element
  {:centroid "centroid"}
 
  :renderer.shell.core
- {:focus-shell "Fokusera terminal"}}
+ {:focus-shell "Fokusera terminal"
+  :clear-output "Rensa utdata"
+  :verbose "Utförlig"}}

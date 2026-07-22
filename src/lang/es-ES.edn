@@ -903,4 +903,6 @@
  {:centroid "centroide"}
 
  :renderer.shell.core
- {:focus-shell "Enfocar consola"}}
+ {:focus-shell "Enfocar consola"
+  :clear-output "Limpiar salida"
+  :verbose "Detallado"}}

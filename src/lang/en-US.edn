@@ -879,13 +879,15 @@
  {:transform "Transform"}
 
  :renderer.tool.impl.misc.core
- {:misc "Miscallaneous"}
+ {:misc "Miscellaneous"}
 
  :renderer.utils.element
  {:centroid "centroid"}
 
  :renderer.shell.core
- {:focus-shell "Focus shell"}
+ {:focus-shell "Focus shell"
+  :clear-output "Clear output"
+  :verbose "Verbose"}
  
  :renderer.shell.impl.core
  {:shell-languages "Shell languages"}}

@@ -910,4 +910,6 @@
  {:centroid "centroïde"}
 
  :renderer.shell.core
- {:focus-shell "Focaliser la console"}}
+ {:focus-shell "Focaliser la console"
+  :clear-output "Effacer la sortie"
+  :verbose "Verbeux"}}

@@ -890,10 +890,12 @@
  {:transform "Трансформация"}
 
  :renderer.tool.impl.misc.core
- {:misc "Miscallaneous"}
+ {:misc "Разное"}
 
  :renderer.utils.element
  {:centroid "центроид"}
 
  :renderer.shell.core
- {:focus-shell "Фокус на консоли"}}
+ {:focus-shell "Фокус на консоли"
+  :clear-output "Очистить вывод"
+  :verbose "Подробно"}}

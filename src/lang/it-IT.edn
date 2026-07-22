@@ -907,10 +907,12 @@
  {:transform "Trasforma"}
 
  :renderer.tool.impl.misc.core
- {:misc "Miscallaneous"}
+ {:misc "Varie"}
 
  :renderer.utils.element
  {:centroid "centroide"}
 
  :renderer.shell.core
- {:focus-shell "Porta il focus alla shell"}}
+ {:focus-shell "Porta il focus alla shell"
+  :clear-output "Cancella output"
+  :verbose "Dettagliato"}}

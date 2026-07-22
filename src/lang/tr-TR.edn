@@ -886,10 +886,12 @@
  {:transform "Dönüştür"}
 
  :renderer.tool.impl.misc.core
- {:misc "Miscallaneous"}
+ {:misc "Çeşitli"}
 
  :renderer.utils.element
  {:centroid "ağırlık merkezi"}
 
  :renderer.shell.core
- {:focus-shell "Shell'e odaklan"}}
+ {:focus-shell "Shell'e odaklan"
+  :clear-output "Çıktıyı temizle"
+  :verbose "Ayrıntılı"}}

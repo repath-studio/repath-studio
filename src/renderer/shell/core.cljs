@@ -24,7 +24,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :shell/toggle-verbose
-               :label [::verbose-output "Verbose output"]
+               :label [::verbose "Verbose"]
                :icon "eye"
                :event [::shell.events/toggle-verbose]
                :active [::shell.subs/verbose?]}])

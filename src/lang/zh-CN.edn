@@ -805,10 +805,12 @@
  {:transform "变形"}
 
  :renderer.tool.impl.misc.core
- {:misc "Miscallaneous"}
+ {:misc "杂项"}
 
  :renderer.utils.element
  {:centroid "质心"}
 
  :renderer.shell.core
- {:focus-shell "聚焦 Shell"}}
+ {:focus-shell "聚焦 Shell"
+  :clear-output "清除输出"
+  :verbose "详细"}}

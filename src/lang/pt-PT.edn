@@ -889,10 +889,12 @@
  {:transform "Transformar"}
 
  :renderer.tool.impl.misc.core
- {:misc "Miscallaneous"}
+ {:misc "Variado"}
 
  :renderer.utils.element
  {:centroid "centroide"}
 
  :renderer.shell.core
- {:focus-shell "Focar na shell"}}
+ {:focus-shell "Focar na shell"
+  :clear-output "Limpar saída"
+  :verbose "Detalhado"}}

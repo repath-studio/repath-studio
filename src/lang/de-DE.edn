@@ -916,4 +916,6 @@
  {:centroid "Schwerpunkt"}
 
  :renderer.shell.core
- {:focus-shell "Shell fokussieren"}}
+ {:focus-shell "Shell fokussieren"
+  :clear-output "Ausgabe löschen"
+  :verbose "Ausführlich"}}
