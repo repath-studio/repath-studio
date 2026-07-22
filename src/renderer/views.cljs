@@ -60,21 +60,12 @@
 
 (defn action-icon-button
   [action & {:as props}]
-  [icon-button (:icon action)
-   (merge {:disabled (action.views/disabled? action)
-           :aria-label (action.views/label action)
-           :on-click (action.views/dispatch action)}
-          props)])
-
-(defn action-button
-  [action-id & {:as props}]
-  (when-let [action (action.views/deref-action action-id)]
-    [:button
-     (merge-with-class {:class "button"
-                        :disabled (action.views/disabled? action)
-                        :on-click (action.views/dispatch action)}
-                       props)
-     [action.views/label action]]))
+  (when-let [action (cond-> action (keyword? action) action.views/deref-action)]
+    [icon-button (:icon action)
+     (merge {:disabled (action.views/disabled? action)
+             :title (action.views/label action)
+             :on-click (action.views/dispatch action)}
+            props)]))
 
 (defn loading-indicator []
   [icon "spinner" {:class "animate-spin"}])
@@ -147,26 +138,29 @@
 
 (defn tooltip-action-icon-button
   [action & {:as content-props}]
-  [:> Tooltip/Root
-   [:> Tooltip/Trigger
-    {:as-child true}
-    [:span
-     (if (:active action)
-       [radio-icon-button (:icon action) (action.views/checked? action)
-        {:class (:class action)
-         :aria-label (action.views/label action)
-         :on-click (action.views/dispatch action)}]
-       [action-icon-button action])]]
-   [:> Tooltip/Portal
-    [:> Tooltip/Content
-     (merge {:class "tooltip-content pointer-events-none"
-             :sideOffset 5
-             :side "top"
-             :on-escape-key-down #(.stopPropagation %)}
-            content-props)
-     [:div.flex.gap-2.items-center
-      [action.views/label action]
-      [shortcuts action]]]]])
+  (when-let [action (cond-> action (keyword? action) action.views/deref-action)]
+    [:> Tooltip/Root
+     [:> Tooltip/Trigger
+      {:as-child true}
+      [:span
+       (if (:active action)
+         [radio-icon-button (:icon action) (action.views/checked? action)
+          {:class (:class action)
+           :aria-label (action.views/label action)
+           :on-click (action.views/dispatch action)}]
+         [action-icon-button action
+          {:aria-label (action.views/label action)
+           :title nil}])]]
+     [:> Tooltip/Portal
+      [:> Tooltip/Content
+       (merge {:class "tooltip-content pointer-events-none"
+               :sideOffset 5
+               :side "top"
+               :on-escape-key-down #(.stopPropagation %)}
+              content-props)
+       [:div.flex.gap-2.items-center
+        [action.views/label action]
+        [shortcuts action]]]]]))
 
 (defn action-button-group
   [action-group & {:as content-props}]
@@ -387,17 +381,18 @@
     [:span.truncate.w-full (i18n.views/t (:label props))]]
    [:> Drawer.Portal
     [:> Drawer.Content
-     {:class ["inset-0 fixed z-0 outline-none bg-primary flex shadow-lg"
+     {:class ["inset-0 fixed z-0 outline-none bg-secondary flex shadow-lg"
               "flex-col items-center top-auto px-safe pb-safe rounded-t-xl"
-              "h-[30dvh] overflow-hidden"]
+              "h-[30dvh] overflow-hidden gap-px"]
       :style {:margin "0 - env(safe-area-inset-right)
                        0 - env(safe-area-inset-left)"
               :box-shadow "0 -10px 15px -3px
                            var(--tw-shadow-color, rgb(0 0 0 / 0.1)),
                            0 -4px 6px -4px
                            var(--tw-shadow-color, rgb(0 0 0 / 0.1))"}}
-     [:> Drawer.Handle
-      {:class "mx-auto my-3! w-12! h-1.5! rounded-full bg-overlay!"}]
+     [:div.bg-primary.w-full
+      [:> Drawer.Handle
+       {:class "mx-auto my-3! w-12! h-1.5! rounded-full bg-overlay!"}]]
      [:> Drawer.Title
       {:class "sr-only"}
       (i18n.views/t (:label props))]

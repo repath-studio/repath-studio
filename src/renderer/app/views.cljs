@@ -250,11 +250,14 @@
            :class "relative"
            :defaultSize 300
            :minSize 100}
-          [:div.flex.bg-primary.overflow-hidden.h-full
-           [views/scroll-area
-            [:div.flex.py-3
-             [xml-panel]]]]
-          [panel.views/close-button :xml]]
+          [:div.flex.flex-col.overflow-hidden.h-full.gap-px
+           [views/toolbar
+            {:class "bg-primary"}
+            [:div.flex-1]
+            [panel.views/close-button :xml]]
+           [:div.flex.flex-1.overflow-hidden.h-full
+            [views/scroll-area
+             [:div.flex [xml-panel]]]]]]
          [panel.views/separator]])
 
       [panel.views/panel
@@ -270,9 +273,8 @@
            :class "relative"
            :defaultSize 300
            :minSize 100}
-          [:div.bg-primary.h-full
-           [history.views/root]]
-          [panel.views/close-button :history]]])]]))
+          [:div.h-full
+           [history.views/root]]]])]]))
 
 (defn editor
   []
@@ -295,8 +297,7 @@
           :class "relative"
           :minSize 100
           :defaultSize 300}
-         [timeline.views/root]
-         [panel.views/close-button :timeline]]])
+         [timeline.views/root]]])
      [panel.views/separator]
      [app.status-view/root]
      (when md?
@@ -317,7 +318,7 @@
     {:icon "code"
      :label [::xml "XML"]}
     [views/scroll-area
-     [:div.py-3 [xml-panel]]]]
+     [xml-panel]]]
 
    [views/drawer
     {:icon "animation"

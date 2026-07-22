@@ -32,8 +32,6 @@
   [id]
   [views/icon-button "window-close"
    {:title (i18n.views/t [::close-panel "Close panel"])
-    :class ["panel-close-button absolute z-1 top-2 right-2 rtl:right-auto"
-            "rtl:left-2 bg-transparent! button-size-small"]
     :on-click #(rf/dispatch [::panel.events/toggle id])}])
 
 (defc panel
