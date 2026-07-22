@@ -177,7 +177,7 @@
     [:div.flex-1.h-full.overflow-hidden.flex.flex-col
      [views/toolbar
       [views/action-icon-button :shell/clear-output]
-      [views/action-switch :shell/toggle-verbose-output]
+      [views/action-switch :shell/toggle-verbose]
       [:div.grow]
       [:div.flex-1]
       (when md? [panel.views/close-button :repl-history])]

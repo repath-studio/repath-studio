@@ -23,7 +23,7 @@
                :enabled [::shell.subs/some-items?]}])
 
 (rf/dispatch [::action.events/register-action
-              {:id :shell/toggle-verbose-output
+              {:id :shell/toggle-verbose
                :label [::verbose-output "Verbose output"]
                :icon "eye"
                :event [::shell.events/toggle-verbose]
