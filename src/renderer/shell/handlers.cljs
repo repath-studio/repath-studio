@@ -72,6 +72,11 @@
                           {}
                           langs))))
 
+(m/=> set-verbose [:-> App boolean? App])
+(defn set-verbose
+  [db state]
+  (assoc-in db [:shell :verbose] state))
+
 (m/=> add-item [:-> App ShellItem App])
 (defn add-item
   [db item]

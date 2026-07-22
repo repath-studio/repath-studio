@@ -1,6 +1,5 @@
 (ns renderer.shell.reepl.replumb
   (:require
-   #_[shadow.cljs.bootstrap.browser :as bootstrap]
    [cljs.js]
    [cljs.tagged-literals :as tags]
    [cljs.tools.reader]

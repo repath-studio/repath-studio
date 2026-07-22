@@ -66,6 +66,12 @@
  (fn [db _]
    (shell.handlers/clear-items db)))
 
+(rf/reg-event-db
+ ::set-verbose
+ [persist]
+ (fn [db [_ state]]
+   (shell.handlers/set-verbose db state)))
+
 (rf/reg-event-fx
  ::add-item
  [persist]

@@ -168,21 +168,36 @@
         items @(rf/subscribe [::shell.subs/items])
         codemirror-theme @(rf/subscribe [::theme.subs/codemirror])
         lang @(rf/subscribe [::shell.subs/active-language])
+        verbose? @(rf/subscribe [::shell.subs/verbose?])
         opts {:theme codemirror-theme
               :language lang
               :showers [show-devtools/show-devtools
                         (partial show-function/show-fn-with-docs
                                  maybe-fn-docs)]}]
-    [:div.flex-1.border-b.border-border.h-full.overflow-hidden.flex
-     (if loaded?
-       [views/scroll-area
-        {:ref #(rf/dispatch [::events/scroll-to-bottom %])}
-        (->> items
-             (map (fn [i]
-                    [:div.font-mono.p-1.flex.text-xs.min-h-4 [item i opts]]))
-             (into [:div.p-1 {:dir "ltr"}]))]
-       [:div.flex.items-center.justify-center.h-full.w-full
-        [views/loading-indicator]])]))
+    [:div.flex-1.border-b.border-border.h-full.overflow-hidden.flex.flex-col
+     [:div.border-b.border-border.p-2.flex.gap-2.items-center
+      [views/icon-button
+       "delete"
+       {:title (i18n.views/t [::clear "Clear"])
+        :class "button-size-small bg-transparent!"
+        :on-click #(rf/dispatch [::shell.events/clear-items])}]
+      [views/switch
+       (i18n.views/t [::verbose-output "Verbose output"])
+       {:id "verbose"
+        :default-checked verbose?
+        :on-checked-change #(rf/dispatch [::shell.events/set-verbose %])}]
+
+      [panel.views/close-button :repl-history]]
+     [:div.flex.flex-1.h-full.overflow-hidden
+      (if loaded?
+        [views/scroll-area
+         {:ref #(rf/dispatch [::events/scroll-to-bottom %])}
+         (->> items
+              (map (fn [i]
+                     [:div.font-mono.p-1.flex.text-xs.min-h-4 [item i opts]]))
+              (into [:div.p-1 {:dir "ltr"}]))]
+        [:div.flex.items-center.justify-center.h-full.w-full
+         [views/loading-indicator]])]]))
 
 (defn completion-item
   [text selected active set-active]
@@ -241,8 +256,7 @@
              :class "relative"
              :minSize 100
              :defaultSize 300}
-            [repl-items]
-            [panel.views/close-button :repl-history]])
+            [repl-items]])
          [repl-items])
 
        [:div.relative.whitespace-pre-wrap.font-mono.w-full

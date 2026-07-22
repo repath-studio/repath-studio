@@ -7,6 +7,11 @@
  :-> :shell)
 
 (rf/reg-sub
+ ::verbose?
+ :<- [::shell]
+ :-> :verbose)
+
+(rf/reg-sub
  ::active-language
  :<- [::shell]
  :-> :active-language)
