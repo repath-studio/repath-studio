@@ -60,7 +60,7 @@
 
 (defn action-icon-button
   [action & {:as props}]
-  (when-let [action (cond-> action (keyword? action) action.views/deref-action)]
+  (when-let [action (action.views/deref-action action)]
     [icon-button (:icon action)
      (merge {:disabled (action.views/disabled? action)
              :title (action.views/label action)
@@ -86,6 +86,17 @@
      {:class ["block bg-primary rounded-full shadow-sm w-5 h-5"
               "will-change-transform transition-transform translate-x-0.5"
               "data-[state=checked]:translate-x-[18px]"]}]]])
+
+(defn action-switch
+  [action & {:as props}]
+  (when-let [action (action.views/deref-action action)]
+    [switch (action.views/label action)
+     (merge-with-class
+      {:id (:id action)
+       :checked (action.views/checked? action)
+       :disabled (action.views/disabled? action)
+       :on-checked-change (action.views/dispatch action)}
+      props)]))
 
 (defn slider
   [props]
@@ -138,7 +149,7 @@
 
 (defn tooltip-action-icon-button
   [action & {:as content-props}]
-  (when-let [action (cond-> action (keyword? action) action.views/deref-action)]
+  (when-let [action (action.views/deref-action action)]
     [:> Tooltip/Root
      [:> Tooltip/Trigger
       {:as-child true}

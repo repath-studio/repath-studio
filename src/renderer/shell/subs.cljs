@@ -38,6 +38,11 @@
  :-> :items)
 
 (rf/reg-sub
+ ::some-items?
+ :<- [::items]
+ :-> (comp boolean seq))
+
+(rf/reg-sub
  ::history
  :<- [::language]
  :-> :history)

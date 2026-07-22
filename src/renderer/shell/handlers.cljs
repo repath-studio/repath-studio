@@ -73,9 +73,9 @@
                           langs))))
 
 (m/=> set-verbose [:-> App boolean? App])
-(defn set-verbose
-  [db state]
-  (assoc-in db [:shell :verbose] state))
+(defn toggle-verbose
+  [db]
+  (update-in db [:shell :verbose] not))
 
 (m/=> add-item [:-> App ShellItem App])
 (defn add-item

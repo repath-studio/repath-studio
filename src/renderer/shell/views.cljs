@@ -168,7 +168,6 @@
         items @(rf/subscribe [::shell.subs/items])
         codemirror-theme @(rf/subscribe [::theme.subs/codemirror])
         lang @(rf/subscribe [::shell.subs/active-language])
-        verbose? @(rf/subscribe [::shell.subs/verbose?])
         md? @(rf/subscribe [::window.subs/md?])
         opts {:theme codemirror-theme
               :language lang
@@ -177,15 +176,9 @@
                                  maybe-fn-docs)]}]
     [:div.flex-1.h-full.overflow-hidden.flex.flex-col
      [views/toolbar
-      [views/icon-button
-       "delete"
-       {:title (i18n.views/t [::clear-output-history "Clear output history"])
-        :on-click #(rf/dispatch [::shell.events/clear-items])}]
-      [views/switch
-       (i18n.views/t [::verbose-output "Verbose output"])
-       {:id "verbose"
-        :default-checked verbose?
-        :on-checked-change #(rf/dispatch [::shell.events/set-verbose %])}]
+      [views/action-icon-button :shell/clear-output]
+      [views/action-switch :shell/toggle-verbose-output]
+      [:div.grow]
       [:div.flex-1]
       (when md? [panel.views/close-button :repl-history])]
      [:div.flex.flex-1.h-full.overflow-hidden.border-b.border-t.border-border
