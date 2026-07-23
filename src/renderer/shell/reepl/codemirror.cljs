@@ -109,6 +109,14 @@
       [initial-active 0]
       [true (inc current)])))
 
+(defn should-cycle?
+  [{:keys [words initial-text]
+    :as state}]
+  (and state
+       (or (< 1 (count words))
+           (and (< 0 (count words))
+                (not= initial-text (get (first words) 2))))))
+
 (defn cycle-completions
   "Cycle through completions, changing the codemirror text accordingly. Returns
   a new state map.
@@ -125,9 +133,7 @@
   [{:keys [num pos active from to words initial-text]
     :as state}
    go-back? cm evt]
-  (when (and state (or (< 1 (count words))
-                       (and (< 0 (count words))
-                            (not= initial-text (get (first words) 2)))))
+  (when (should-cycle? state)
     (.preventDefault evt)
     (let [initial-active (= initial-text (get (first words) 2))
           [active pos] (if active
