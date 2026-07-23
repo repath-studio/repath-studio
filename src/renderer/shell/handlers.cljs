@@ -65,6 +65,12 @@
   [db]
   (assoc-in db [:shell :languages (active-language db) :items] []))
 
+(m/=> serializable-item? [:-> ShellItem boolean?])
+(defn serializable-item?
+  [item]
+  (or (not= (:type item) :output)
+      (string? (:value item))))
+
 (m/=> serialize-items [:-> App App])
 (defn serialize-items
   "Removes all :output items from the shell output history."
@@ -75,7 +81,7 @@
                             (assoc acc lang
                                    (update data :items
                                            (fn [items]
-                                             (filterv #(not= :output (:type %))
+                                             (filterv serializable-item?
                                                       items)))))
                           {}
                           langs))))
