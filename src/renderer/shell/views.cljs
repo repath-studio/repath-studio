@@ -257,5 +257,7 @@
         [completion-list
          @docs
          @complete-atom
-         #(swap! complete-atom assoc :pos % :active true)]
+         #(do (swap! complete-atom assoc :pos % :active true)
+              (rf/dispatch [::shell.events/set-text
+                            (get-in @complete-atom [:words % 1])]))]
         [repl-input complete-atom]]])))
