@@ -18,9 +18,8 @@
  (fn [{:keys [db]} _]
    (let [lang (shell.handlers/active-language db)]
      {:db (-> db
+              (shell.handlers/init-language)
               (shell.handlers/reset-language-statuses)
-              (update-in [:shell :languages lang]
-                         #(merge shell.db/default-lang %))
               (shell.handlers/set-language-status :loading))
       ::shell.effects/init [[::add-item]
                             {:language lang
@@ -32,7 +31,9 @@
  [persist]
  (fn [{:keys [db]} _]
    (let [lang (shell.handlers/active-language db)]
-     (cond-> {:db (shell.handlers/set-language-status db :success)}
+     (cond-> {:db (-> db
+                      (shell.handlers/init-language)
+                      (shell.handlers/set-language-status :success))}
        (empty? (get-in db [:shell :languages lang :items]))
        (assoc ::shell.effects/welcome lang)))))
 

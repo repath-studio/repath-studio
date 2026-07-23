@@ -3,7 +3,9 @@
    [malli.core :as m]
    [renderer.app.db :refer [App]]
    [renderer.db :refer [LoadingState]]
-   [renderer.shell.db :refer [ShellHistory ShellItem ShellLanguageId]]
+   [renderer.shell.db
+    :as shell.db
+    :refer [ShellHistory ShellItem ShellLanguageId]]
    [renderer.utils.math :as utils.math]))
 
 (m/=> active-language [:-> App ShellLanguageId])
@@ -15,6 +17,12 @@
 (defn set-language
   [db lang]
   (assoc-in db [:shell :active-language] lang))
+
+(m/=> init-language [:-> App App])
+(defn init-language
+  [db]
+  (update-in db [:shell :languages (active-language db)]
+             #(merge shell.db/default-lang %)))
 
 (m/=> language-status [:-> App ShellLanguageId [:maybe LoadingState]])
 (defn language-status
