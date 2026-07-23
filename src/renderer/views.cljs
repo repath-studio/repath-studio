@@ -301,7 +301,8 @@
 (defn cm-editor
   [value {:keys [props options on-init on-blur on-change on-keyup on-keydown]}]
   (let [cm (reagent/atom nil)
-        ref (react/createRef)]
+        ref (react/createRef)
+        updating? (atom false)]
     (reagent/create-class
      {:component-did-mount
       (fn [_this]
@@ -317,7 +318,8 @@
           (.refresh @cm)
           (when on-blur (.on @cm "blur" #(on-blur (.getValue %))))
           (when on-init (on-init @cm))
-          (when on-change (.on @cm "change" #(on-change (.getValue %))))))
+          (when on-change (.on @cm "change" #(when-not @updating?
+                                               (on-change (.getValue %)))))))
 
       :component-will-unmount
       #(reset! cm nil)
@@ -327,7 +329,9 @@
         (let [value (second (reagent/argv this))
               options (:options (last (reagent/argv this)))]
           (when (and @cm (not= (.getValue @cm) value))
+            (reset! updating? true)
             (.setValue @cm value)
+            (reset! updating? false)
             (let [last-line (.lastLine @cm)
                   last-ch (count (.getLine @cm last-line))]
               (.setCursor @cm last-line last-ch)))
