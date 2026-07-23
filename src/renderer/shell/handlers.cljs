@@ -8,6 +8,8 @@
     :refer [ShellHistory ShellItem ShellLanguageId]]
    [renderer.utils.math :as utils.math]))
 
+(def max-items 50)
+
 (m/=> active-language [:-> App ShellLanguageId])
 (defn active-language
   [db]
@@ -58,7 +60,10 @@
 (m/=> add-to-history [:-> App string? App])
 (defn add-to-history
   [db text]
-  (update-in db [:shell :languages (active-language db) :history] conj text))
+  (update-in db [:shell :languages (active-language db) :history]
+             #(->> (conj % text)
+                   (take-last max-items)
+                   (vec))))
 
 (m/=> clear-items [:-> App App])
 (defn clear-items
@@ -94,7 +99,10 @@
 (m/=> add-item [:-> App ShellItem App])
 (defn add-item
   [db item]
-  (update-in db [:shell :languages (active-language db) :items] conj item))
+  (update-in db [:shell :languages (active-language db) :items]
+             #(->> (conj % item)
+                   (take-last max-items)
+                   (vec))))
 
 (m/=> set-text [:-> App string? App])
 (defn set-text
