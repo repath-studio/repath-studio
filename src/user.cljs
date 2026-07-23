@@ -55,7 +55,7 @@
   [color]
   (rf/dispatch [::element.events/set-attr :fill color]))
 
-(defn ^:export delete
+(defn ^:export del
   "Deletes the selected elements."
   []
   (rf/dispatch [::element.events/delete]))
