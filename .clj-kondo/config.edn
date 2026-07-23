@@ -93,6 +93,13 @@
                       renderer.ruler.handlers ruler.handlers
                       renderer.ruler.subs ruler.subs
                       renderer.ruler.views ruler.views
+                      renderer.shell.hierarchy shell.hierarchy
+                      renderer.shell.handlers shell.handlers
+                      renderer.shell.subs shell.subs
+                      renderer.shell.events shell.events
+                      renderer.shell.views shell.views
+                      renderer.shell.effects shell.effects
+                      renderer.shell.db shell.db
                       renderer.snap.db snap.db
                       renderer.snap.events snap.events
                       renderer.snap.handlers snap.handlers

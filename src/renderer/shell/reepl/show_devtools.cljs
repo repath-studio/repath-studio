@@ -1,4 +1,4 @@
-(ns renderer.reepl.show-devtools
+(ns renderer.shell.reepl.show-devtools
   (:require
    [clojure.string :as string]
    [devtools.formatters.core :as devtools.formatters]
@@ -40,8 +40,8 @@
            (show-el (devtools.formatters/body-api-call v config)
                     show-value))]))))
 
-;; see https://docs.google.com/document/d/1FTascZXT9cxfetuPRT2eXPQKXui4nWFivUnS_335T3U/preview
 (defn show-devtools
+  "https://docs.google.com/document/d/1FTascZXT9cxfetuPRT2eXPQKXui4nWFivUnS_335T3U/preview"
   [v config show-value]
   (when-not (var? v)
     (let [header (try (devtools.formatters/header-api-call v config)

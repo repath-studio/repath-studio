@@ -47,7 +47,7 @@ Main structure
 
 We are trying to split our code under renderer into relatively independent
 modules, following [re-frame's app structure suggestions](https://day8.github.io/re-frame/App-Structure/)
-with some minor additions.
+with some additions.
 
 ```text
 module\
@@ -63,12 +63,53 @@ module\
 └── README.md       -> documentation
 ```
 
-## Re-frame recommendations
+### Core ns
 
-Avoid chaining events to create new ones. Always prefer composing pure functions
-that directly transform the db. That is the whole purpose of `handlers`
-namespace. Most functions under `handlers` take the db as their first argument,
-so they can be easily composed using the thread-first macro `->`.
+Core requires the rest of the namaspaces (subs, events, etc). We also register
+the corresponding actions and action groups.
+
+### Db ns
+
+Db defines the [malli](https://github.com/metosin/malli) schemas of the module,
+and the corresponding [validators](https://github.com/metosin/malli#validation),
+[explainers](https://github.com/metosin/malli#humanized-error-messages), and
+[transformers](https://github.com/metosin/malli#value-transformation).
+
+### Events db
+
+Registers our re-frame events. Most events use functions from handlers to
+transform our db.
+
+### Subs db
+
+Registers our re-frame subscriptions. This ns is usually very thin.
+
+### Handlers ns
+
+Handlers contain pure functions that directly transform the db, or return a
+value based on the db. Most functions under `handlers` take the db as their
+first argument, so they can be easily composed using the thread-first macro `->`.
+Functions without input args usually return a [transducer](https://clojure.org/reference/transducers).
+If none of the above is true, the function probably belongs to a different
+namespace.
+
+### Effects ns
+
+Registers all re-frame effects. Although we could use the events ns for this, we
+prefer isung dedicated ns to isolate all side effects and make stabing easier on
+tests.
+
+### Hierarchy ns
+
+Hierarchy defines the required multimethods in order to allow extending the app
+on the fly, based on a dispatch value. In a way, it is our plugin interface.
+When the hierarchy ns is available for a module, the `impl` directory contains
+the build-in `defmethod` implementations for the multimethods.
+
+## General re-frame recommendations
+
+Avoid chaining events to create new ones. Always prefer composing transformation
+functions. That is the whole purpose of `handlers` namespace.
 
 Use interceptors sparingly. Although they look (and probably are) ingenious, it
 is hard to write and reason with them. Doing things explicitly, is usually

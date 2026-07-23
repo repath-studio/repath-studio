@@ -27,6 +27,9 @@
    [renderer.icon.subs]
    [renderer.panel.events]
    [renderer.panel.subs]
+   [renderer.shell.events]
+   [renderer.shell.impl.core]
+   [renderer.shell.subs]
    [renderer.snap.events]
    [renderer.theme.events]
    [renderer.theme.subs]
@@ -46,4 +49,7 @@
   (rf/reg-global-interceptor app.events/schema-validator))
 
 (instrument!)
+
+;; We need to initialize the app state at before running tests, otherwise 
+;; some of the tests will fail because of the way we extend the app.
 (rf/dispatch-sync [::app.events/initialize])

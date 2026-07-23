@@ -26,7 +26,7 @@
   :show "Mostra"
   :hide "Nascondi"}
 
- :renderer.reepl.views
+ :renderer.shell.views
  {:hide-command-output "Nascondi output comando"
   :show-command-output "Mostra output comando"}
 
@@ -907,10 +907,12 @@
  {:transform "Trasforma"}
 
  :renderer.tool.impl.misc.core
- {:misc "Miscallaneous"}
+ {:misc "Varie"}
 
  :renderer.utils.element
  {:centroid "centroide"}
 
- :renderer.reepl.core
- {:focus-shell "Porta il focus alla shell"}}
+ :renderer.shell.core
+ {:focus-shell "Porta il focus alla shell"
+  :clear-output "Cancella output"
+  :verbose "Dettagliato"}}

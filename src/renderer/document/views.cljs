@@ -31,7 +31,6 @@
            :document/open
            :document/save
            :document/download]
-          (keep action.views/deref-action)
           (keep (rpartial views/tooltip-action-icon-button :side "bottom"))
           (into [:<>]))
 

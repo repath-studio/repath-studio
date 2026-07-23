@@ -26,7 +26,7 @@
   :show "Показать"
   :hide "Скрыть"}
 
- :renderer.reepl.views
+ :renderer.shell.views
  {:hide-command-output "Скрыть вывод команд"
   :show-command-output "Показать вывод команд"}
 
@@ -890,10 +890,12 @@
  {:transform "Трансформация"}
 
  :renderer.tool.impl.misc.core
- {:misc "Miscallaneous"}
+ {:misc "Разное"}
 
  :renderer.utils.element
  {:centroid "центроид"}
 
- :renderer.reepl.core
- {:focus-shell "Фокус на консоли"}}
+ :renderer.shell.core
+ {:focus-shell "Фокус на консоли"
+  :clear-output "Очистить вывод"
+  :verbose "Подробно"}}

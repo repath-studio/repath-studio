@@ -26,7 +26,7 @@
   :show "Göster"
   :hide "Gizle"}
 
- :renderer.reepl.views
+ :renderer.shell.views
  {:hide-command-output "Komut çıktısını gizle"
   :show-command-output "Komut çıktısını göster"}
 
@@ -886,10 +886,12 @@
  {:transform "Dönüştür"}
 
  :renderer.tool.impl.misc.core
- {:misc "Miscallaneous"}
+ {:misc "Çeşitli"}
 
  :renderer.utils.element
  {:centroid "ağırlık merkezi"}
 
- :renderer.reepl.core
- {:focus-shell "Shell'e odaklan"}}
+ :renderer.shell.core
+ {:focus-shell "Shell'e odaklan"
+  :clear-output "Çıktıyı temizle"
+  :verbose "Ayrıntılı"}}

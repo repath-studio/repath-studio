@@ -199,8 +199,7 @@
      [:div.grow.hidden.md:block]
      (->> [:view/toggle-grid
            :view/toggle-rulers]
-          (map (comp views/tooltip-action-icon-button
-                     action.views/deref-action))
+          (keep views/tooltip-action-icon-button)
           (into [:<>]))
      [snap.views/root]
      [zoom-button-group zoom]

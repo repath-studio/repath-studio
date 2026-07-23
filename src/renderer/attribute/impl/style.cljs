@@ -11,8 +11,9 @@
 (defmethod attribute.hierarchy/form-element [::element.hierarchy/element :style]
   [_ k v {:keys [disabled]}]
   (let [codemirror-theme @(rf/subscribe [::theme.subs/codemirror])]
-    [:div.w-full.bg-primary.px-2.py-1
-     {:class (when disabled "*:[&.CodeMirror]:opacity-50")}
+    [:div.w-full.bg-primary.px-2
+     {:class [(when disabled "*:[&.CodeMirror]:opacity-50")
+              "py-1.5"]}
      [views/cm-editor
       (str v)
       {:on-blur #(rf/dispatch [::element.events/set-attr k %])

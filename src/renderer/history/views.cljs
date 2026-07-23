@@ -10,7 +10,9 @@
    [renderer.history.handlers :as history.handlers]
    [renderer.history.subs :as-alias history.subs]
    [renderer.i18n.views :as i18n.views]
-   [renderer.views :as views]))
+   [renderer.panel.views :as panel.views]
+   [renderer.views :as views]
+   [renderer.window.subs :as-alias window.subs]))
 
 (defn select-option
   [{:keys [index explanation]}]
@@ -131,7 +133,7 @@
   []
   (let [start-color (history.handlers/age-ratio->color 0)
         end-color (history.handlers/age-ratio->color 1)]
-    [:div.flex.flex-col
+    [:div.flex.flex-col.p-2.bg-primary
      [:div.flex.justify-between.text-2xs.text-foreground-muted
       [:div.flex.gap-1
        [:div.h-5.w-px {:style {:background start-color}}]
@@ -147,18 +149,21 @@
 
 (defn root
   []
-  (let [ref (react/createRef)]
-    [:div.flex.flex-col.h-full.p-2.gap-2.w-full
-     [:div.flex-1
+  (let [ref (react/createRef)
+        md? @(rf/subscribe [::window.subs/md?])]
+    [:div.flex.flex-col.h-full.gap-px.w-full
+     [views/toolbar
+      {:class "bg-primary"}
+      [views/action-icon-button :history/clear]
+      [views/icon-button
+       "focus"
+       {:title (i18n.views/t [::center-view "Center view"])
+        :on-click #(rf/dispatch [::history.events/tree-view-updated
+                                 0.5 (center ref)])}]
+      [:div.flex-1]
+      (when md? [panel.views/close-button :history])]
+     [:div.flex-1.bg-primary
       {:ref ref
        :on-pointer-move #(.stopPropagation %)}
       [tree ref]]
-
-     [:div.flex.gap-2.flex-col
-      [legend]
-      [views/button-group
-       [:button.button.flex-1
-        {:on-click #(rf/dispatch [::history.events/tree-view-updated
-                                  0.5 (center ref)])}
-        (i18n.views/t [::center-view "Center view"])]
-       [views/action-button :history/clear {:class "flex-1"}]]]]))
+     [legend]]))

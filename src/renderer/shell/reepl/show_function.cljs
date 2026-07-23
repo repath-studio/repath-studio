@@ -1,4 +1,4 @@
-(ns renderer.reepl.show-function
+(ns renderer.shell.reepl.show-function
   (:require
    [clojure.string :as string]))
 

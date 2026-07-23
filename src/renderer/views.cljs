@@ -60,21 +60,12 @@
 
 (defn action-icon-button
   [action & {:as props}]
-  [icon-button (:icon action)
-   (merge {:disabled (action.views/disabled? action)
-           :aria-label (action.views/label action)
-           :on-click (action.views/dispatch action)}
-          props)])
-
-(defn action-button
-  [action-id & {:as props}]
-  (when-let [action (action.views/deref-action action-id)]
-    [:button
-     (merge-with-class {:class "button"
-                        :disabled (action.views/disabled? action)
-                        :on-click (action.views/dispatch action)}
-                       props)
-     [action.views/label action]]))
+  (when-let [action (action.views/deref-action action)]
+    [icon-button (:icon action)
+     (merge {:disabled (action.views/disabled? action)
+             :title (action.views/label action)
+             :on-click (action.views/dispatch action)}
+            props)]))
 
 (defn loading-indicator []
   [icon "spinner" {:class "animate-spin"}])
@@ -95,6 +86,17 @@
      {:class ["block bg-primary rounded-full shadow-sm w-5 h-5"
               "will-change-transform transition-transform translate-x-0.5"
               "data-[state=checked]:translate-x-[18px]"]}]]])
+
+(defn action-switch
+  [action & {:as props}]
+  (when-let [action (action.views/deref-action action)]
+    [switch (action.views/label action)
+     (merge-with-class
+      {:id (:id action)
+       :checked (action.views/checked? action)
+       :disabled (action.views/disabled? action)
+       :on-checked-change (action.views/dispatch action)}
+      props)]))
 
 (defn slider
   [props]
@@ -147,26 +149,29 @@
 
 (defn tooltip-action-icon-button
   [action & {:as content-props}]
-  [:> Tooltip/Root
-   [:> Tooltip/Trigger
-    {:as-child true}
-    [:span
-     (if (:active action)
-       [radio-icon-button (:icon action) (action.views/checked? action)
-        {:class (:class action)
-         :aria-label (action.views/label action)
-         :on-click (action.views/dispatch action)}]
-       [action-icon-button action])]]
-   [:> Tooltip/Portal
-    [:> Tooltip/Content
-     (merge {:class "tooltip-content pointer-events-none"
-             :sideOffset 5
-             :side "top"
-             :on-escape-key-down #(.stopPropagation %)}
-            content-props)
-     [:div.flex.gap-2.items-center
-      [action.views/label action]
-      [shortcuts action]]]]])
+  (when-let [action (action.views/deref-action action)]
+    [:> Tooltip/Root
+     [:> Tooltip/Trigger
+      {:as-child true}
+      [:span
+       (if (:active action)
+         [radio-icon-button (:icon action) (action.views/checked? action)
+          {:class (:class action)
+           :aria-label (action.views/label action)
+           :on-click (action.views/dispatch action)}]
+         [action-icon-button action
+          {:aria-label (action.views/label action)
+           :title nil}])]]
+     [:> Tooltip/Portal
+      [:> Tooltip/Content
+       (merge {:class "tooltip-content pointer-events-none"
+               :sideOffset 5
+               :side "top"
+               :on-escape-key-down #(.stopPropagation %)}
+              content-props)
+       [:div.flex.gap-2.items-center
+        [action.views/label action]
+        [shortcuts action]]]]]))
 
 (defn action-button-group
   [action-group & {:as content-props}]
@@ -294,9 +299,10 @@
           (str (+ 4 off) "px"))))
 
 (defn cm-editor
-  [value {:keys [props options on-init on-blur]}]
+  [value {:keys [props options on-init on-blur on-change on-keyup on-keydown]}]
   (let [cm (reagent/atom nil)
-        ref (react/createRef)]
+        ref (react/createRef)
+        updating? (atom false)]
     (reagent/create-class
      {:component-did-mount
       (fn [_this]
@@ -305,20 +311,30 @@
           (reset! cm (codemirror dom-el options))
           (.setValue @cm value)
           (.on @cm "renderLine" cm-render-line)
-          (.on @cm "keydown" (fn [_editor evt] (.stopPropagation evt)))
-          (.on @cm "keyup" (fn [_editor evt] (.stopPropagation evt)))
+          (.on @cm "keydown" (or on-keydown
+                                 (fn [_editor evt] (.stopPropagation evt))))
+          (.on @cm "keyup" (or on-keyup
+                               (fn [_editor evt] (.stopPropagation evt))))
           (.refresh @cm)
           (when on-blur (.on @cm "blur" #(on-blur (.getValue %))))
-          (when on-init (on-init @cm))))
+          (when on-init (on-init @cm))
+          (when on-change (.on @cm "change" #(when-not @updating?
+                                               (on-change (.getValue %)))))))
 
       :component-will-unmount
-      #(when @cm (reset! cm nil))
+      #(reset! cm nil)
 
       :component-did-update
       (fn [this _]
         (let [value (second (reagent/argv this))
               options (:options (last (reagent/argv this)))]
-          (.setValue @cm value)
+          (when (and @cm (not= (.getValue @cm) value))
+            (reset! updating? true)
+            (.setValue @cm value)
+            (reset! updating? false)
+            (let [last-line (.lastLine @cm)
+                  last-ch (count (.getLine @cm last-line))]
+              (.setCursor @cm last-line last-ch)))
           (doseq [[k v] options]
             (.setOption @cm (name k) v))))
 
@@ -380,17 +396,18 @@
     [:span.truncate.w-full (i18n.views/t (:label props))]]
    [:> Drawer.Portal
     [:> Drawer.Content
-     {:class ["inset-0 fixed z-0 outline-none bg-primary flex shadow-lg"
+     {:class ["inset-0 fixed z-0 outline-none bg-secondary flex shadow-lg"
               "flex-col items-center top-auto px-safe pb-safe rounded-t-xl"
-              "h-[30dvh] overflow-hidden"]
+              "h-[30dvh] overflow-hidden gap-px"]
       :style {:margin "0 - env(safe-area-inset-right)
                        0 - env(safe-area-inset-left)"
               :box-shadow "0 -10px 15px -3px
                            var(--tw-shadow-color, rgb(0 0 0 / 0.1)),
                            0 -4px 6px -4px
                            var(--tw-shadow-color, rgb(0 0 0 / 0.1))"}}
-     [:> Drawer.Handle
-      {:class "mx-auto my-3! w-12! h-1.5! rounded-full bg-overlay!"}]
+     [:div.bg-primary.w-full
+      [:> Drawer.Handle
+       {:class "mx-auto my-3! w-12! h-1.5! rounded-full bg-overlay!"}]]
      [:> Drawer.Title
       {:class "sr-only"}
       (i18n.views/t (:label props))]

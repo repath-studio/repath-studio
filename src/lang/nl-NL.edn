@@ -26,7 +26,7 @@
   :show "Tonen"
   :hide "Verbergen"}
 
- :renderer.reepl.views
+ :renderer.shell.views
  {:hide-command-output "Commando-uitvoer verbergen"
   :show-command-output "Commando-uitvoer tonen"}
 
@@ -908,10 +908,12 @@
  {:transform "Transformeren"}
 
  :renderer.tool.impl.misc.core
- {:misc "Miscallaneous"}
+ {:misc "Overig"}
 
  :renderer.utils.element
  {:centroid "centroïde"}
 
- :renderer.reepl.core
- {:focus-shell "Focus op shell"}}
+ :renderer.shell.core
+ {:focus-shell "Focus op shell"
+  :clear-output "Uitvoer wissen"
+  :verbose "Uitgebreid"}}

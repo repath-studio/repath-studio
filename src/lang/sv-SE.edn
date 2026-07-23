@@ -26,7 +26,7 @@
   :show "Visa"
   :hide "Dölj"}
 
- :renderer.reepl.views
+ :renderer.shell.views
  {:hide-command-output "Dölj kommandoutdata"
   :show-command-output "Visa kommandoutdata"}
 
@@ -892,10 +892,12 @@
  {:transform "Transformera"}
 
  :renderer.tool.impl.misc.core
- {:misc "Miscallaneous"}
+ {:misc "Övrigt"}
 
  :renderer.utils.element
  {:centroid "centroid"}
 
- :renderer.reepl.core
- {:focus-shell "Fokusera terminal"}}
+ :renderer.shell.core
+ {:focus-shell "Fokusera terminal"
+  :clear-output "Rensa utdata"
+  :verbose "Utförlig"}}
