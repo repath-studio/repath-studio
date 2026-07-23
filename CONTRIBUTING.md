@@ -1,8 +1,9 @@
 # Contributing
 
-Thank you for your interest in actively participating in the project's development!
+Thank you for your interest in participating in the project's development!
 Please read the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md)
-and the [Contributor License Agreement](CLA.md) first.
+and the [Contributor License Agreement](CLA.md) first. If you plan to use LLMs
+to contribute, make sure you also read our AI and LLM policy.
 
 The project is written in [ClojureScript](https://clojurescript.org/) - a
 compiler for [Clojure](https://clojure.org/) that targets JavaScript, and is
