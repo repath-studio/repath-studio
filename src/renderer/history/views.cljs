@@ -162,7 +162,7 @@
                                  0.5 (center ref)])}]
       [:div.flex-1]
       (when md? [panel.views/close-button :history])]
-     [:div.flex-1.bg-primary
+     [:div.flex-1
       {:ref ref
        :on-pointer-move #(.stopPropagation %)}
       [tree ref]]

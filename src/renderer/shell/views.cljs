@@ -176,12 +176,13 @@
                                  maybe-fn-docs)]}]
     [:div.flex-1.h-full.overflow-hidden.flex.flex-col
      [views/toolbar
+      {:class "bg-primary"}
       [views/action-icon-button :shell/clear-output]
       [views/action-switch :shell/toggle-verbose]
       [:div.grow]
       [:div.flex-1]
       (when md? [panel.views/close-button :repl-history])]
-     [:div.flex.flex-1.h-full.overflow-hidden.border-b.border-t.border-border
+     [:div.flex.flex-1.h-full.overflow-hidden.border-b..border-border
       (if loaded?
         [views/scroll-area
          {:ref #(rf/dispatch [::events/scroll-to-bottom %])}
