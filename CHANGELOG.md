@@ -3,6 +3,63 @@
 All notable user facing changes to this project will be documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 0.4.17 (2026-07-24)
+
+**Added**
+
+- Python support and more shell related enhancements [#165](https://github.com/repath-studio/repath-studio/pull/165)
+- Combine and break apart path operations [#151](https://github.com/repath-studio/repath-studio/pull/151)
+- Active tool options [#153](https://github.com/repath-studio/repath-studio/pull/153)
+- Extensions on tools toolbar [#154](https://github.com/repath-studio/repath-studio/pull/154)
+- Focus shell action with keyboard shortcut [#143](https://github.com/repath-studio/repath-studio/pull/143)
+- Transform tool options [#159](https://github.com/repath-studio/repath-studio/pull/159)
+- Brush size tool option and adjust size on shift down [#161](https://github.com/repath-studio/repath-studio/pull/161)
+- Smooth pencil option [#162](https://github.com/repath-studio/repath-studio/pull/162)
+- Schema explorer [#164](https://github.com/repath-studio/repath-studio/pull/164)
+- Dropdown that adds paths segments on edit
+- Path element snapping points
+- Icons for all snap options
+
+**Removed**
+
+- Default shortcut for eye-dropper
+- Transform attribute from group element defaults
+- Disabled state from mobile bottom bar
+
+**Changed**
+
+- Mobile drawer enhancements [#155](https://github.com/repath-studio/repath-studio/pull/155)
+- Move panel toggles from bottom bar to a dropdown [#156](https://github.com/repath-studio/repath-studio/pull/156)
+- Various shell enhancements [158](https://github.com/repath-studio/repath-studio/pull/158)
+- Take stroke width into account when calculating bounding boxes [#163](https://github.com/repath-studio/repath-studio/pull/163)
+- Allow removing the first move-to path command
+- Brush to path returns an easier to manipulate path
+- Use fill instead of stroke for brush elements
+- Change the default fill from white to lightgray
+- Enhance arm and handle colors on path editing
+- Mouse over cursor of command specification button
+- Clear ignored elements on escape
+- Enhance ungroup disabled state
+- Restrict mobile drawer dragging on handle
+- Mute non default attributes and highlight label of active attributes
+- Allow swapping parent of multiple selected elements on translate
+- Move help text to status bar
+- Enable electron rounded corners on linux
+
+**Fixed**
+
+- Color picker width
+- Pan on pointer up action
+- Group bounds, childless groups, nested groups and more
+- Recurring scale
+- Dropping an element on the same parent on tree
+- Normalization of existing attributes
+- Scaling selections that include guides
+- Stroke width of ghost elements
+- Stroke to path when stroke stroke-width is set
+- Window resize regression on linux
+- Dialog close event error
+
 ## 0.4.16 (2026-06-19)
 
 **Added**
