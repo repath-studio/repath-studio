@@ -1,10 +1,11 @@
 # AI and LLM policy
 
-The purpose of this document is to gradually boundaries about the use of LLMs,
-in order to avoid licensing conflicts and low effort contributions. We also want
-to be transparent about the way we use those tools, and about the way we expect
-others to do so when they contribute to this project. Keep in mind that those
-tools evolve rapidly, so we might have to frequently update this policy.
+The purpose of this document is to gradually set boundaries about the use of
+LLMs, in order to avoid licensing conflicts and low effort contributions. We
+also want to be transparent about the way we use those tools, and about the way
+we expect others to do so when they contribute to this project. Keep in mind
+that those tools evolve rapidly, so we might have to frequently update this
+policy.
 
 ## Logos, icons, and other assets
 
