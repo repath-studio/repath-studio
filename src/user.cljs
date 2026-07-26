@@ -1,22 +1,17 @@
 (ns user
   (:require
+   #_[malli.error :as m.error]
    [clojure.math]
    [clojure.string :as string]
    [config :as config]
-   [malli.error :as m.error]
    [re-frame.core :as rf]
    [re-frame.db :as rf.db]
-   [renderer.a11y.db :as a11y.db]
    [renderer.a11y.events :as-alias a11y.events]
-   [renderer.action.db :as action.db]
    [renderer.action.events :as-alias action.events]
    [renderer.document.events :as-alias document.events]
-   [renderer.element.db :as element.db]
    [renderer.element.events :as-alias element.events]
    [renderer.history.events :as-alias history.events]
-   [renderer.i18n.db :as i18n.db]
    [renderer.i18n.events :as-alias i18n.events]
-   [renderer.icon.db :as icon.db]
    [renderer.icon.events :as-alias icon.events]
    [renderer.shell.events :as-alias shell.events]
    [renderer.shell.hierarchy :as shell.hierarchy]
@@ -83,10 +78,7 @@
 (defn ^:export create
   "Creates a new element."
   [el]
-  (if (element.db/valid? (update el :attrs update-vals #(when % (str %))))
-    (rf/dispatch [::element.events/add el])
-    (let [error (-> el element.db/explain m.error/humanize)]
-      (throw (ex-info (str "Invalid element: " error) {:element el})))))
+  (rf/dispatch [::element.events/add el]))
 
 (defn ^:export circle
   "Creates a circle."
@@ -323,10 +315,7 @@
 (defn ^:export register-icon
   "Registers an icon."
   [icon]
-  (if (icon.db/valid-icon? icon)
-    (rf/dispatch [::icon.events/register-icon icon])
-    (let [error (-> icon icon.db/explain-icon m.error/humanize)]
-      (throw (ex-info (str "Invalid icon: " error) {:icon icon})))))
+  (rf/dispatch [::icon.events/register-icon icon]))
 
 (defn ^:export deregister-icon
   "Deregisters an icon."
@@ -336,11 +325,7 @@
 (defn ^:export register-accessibility-filter
   "Registers an accessibility filter."
   [a11y-filter]
-  (if (a11y.db/valid-filter? a11y-filter)
-    (rf/dispatch [::a11y.events/register-filter a11y-filter])
-    (let [error (-> a11y-filter a11y.db/explain-filter m.error/humanize)]
-      (throw (ex-info (str "Invalid a11y filter: " error)
-                      {:a11y-filter a11y-filter})))))
+  (rf/dispatch [::a11y.events/register-filter a11y-filter]))
 
 (defn ^:export deregister-accessibility-filter
   "Deregisters an accessibility filter."
@@ -355,13 +340,7 @@
 (defn ^:export register-language
   "Registers a language."
   [language]
-  (if (i18n.db/valid-language? language)
-    (rf/dispatch [::i18n.events/register-language language])
-    (let [error (-> language
-                    i18n.db/explain-language
-                    m.error/humanize)]
-      (throw (ex-info (str "Invalid language: " error)
-                      {:language language})))))
+  (rf/dispatch [::i18n.events/register-language language]))
 
 (defn ^:export set-translation
   "Sets a translation for a language."
@@ -381,10 +360,7 @@
 (defn ^:export register-action
   "Registers an action."
   [action]
-  (if (action.db/valid-action? action)
-    (rf/dispatch [::action.events/register-action action])
-    (let [error (-> action action.db/explain-action m.error/humanize)]
-      (throw (ex-info (str "Invalid action: " error) {:action action})))))
+  (rf/dispatch [::action.events/register-action action]))
 
 (defn ^:export deregister-action
   "Deregisters an action."
@@ -399,13 +375,7 @@
 (defn ^:export register-action-group
   "Registers an action group."
   [action-group]
-  (if (action.db/valid-action-group? action-group)
-    (rf/dispatch [::action.events/register-action-group action-group])
-    (let [error (-> action-group
-                    action.db/explain-action-group
-                    m.error/humanize)]
-      (throw (ex-info (str "Invalid action group: " error)
-                      {:group action-group})))))
+  (rf/dispatch [::action.events/register-action-group action-group]))
 
 (defn ^:export deregister-action-group
   "Deregisters an action group."

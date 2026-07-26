@@ -1,7 +1,10 @@
 (ns renderer.action.handlers
   (:require
    [malli.core :as m]
-   [renderer.action.db :refer [Action ActionGroup ActionGroupId ActionId]]
+   [malli.error :as m.error]
+   [renderer.action.db
+    :as action.db
+    :refer [Action ActionGroup ActionGroupId ActionId]]
    [renderer.app.db :refer [App]]))
 
 (m/=> entities [:-> App [:vector Action]])
@@ -12,6 +15,9 @@
 (m/=> register-action [:-> App Action App])
 (defn register-action
   [db action]
+  (when-not (action.db/valid-action? action)
+    (let [error (-> action action.db/explain-action m.error/humanize)]
+      (throw (ex-info (str "Invalid action: " error) {:action action}))))
   (assoc-in db [:actions (:id action)] action))
 
 (m/=> deregister-action [:-> App ActionId App])
@@ -22,6 +28,9 @@
 (m/=> register-action-group [:-> App ActionGroup App])
 (defn register-action-group
   [db group]
+  (when-not (action.db/valid-action-group? group)
+    (let [error (-> group action.db/explain-action-group m.error/humanize)]
+      (throw (ex-info (str "Invalid action group: " error) {:group group}))))
   (assoc-in db [:action-groups (:id group)] group))
 
 (m/=> deregister-action-group [:-> App ActionGroupId App])
