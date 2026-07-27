@@ -33,6 +33,10 @@ also read the [testing guide of re-frame](https://github.com/day8/re-frame/blob/
 In general, we dispatch events, and then test the result of subscriptions.
 We don't test view functions for now.
 
+When a new module is introduced, we need to add the corresponding tests, unless
+the module does not register any subs, and the events only cause side effects
+without modifying the db.
+
 ## CI/CD
 
 The test are automatically run on pull requests, and every time we push changes
