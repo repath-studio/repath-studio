@@ -62,19 +62,22 @@
        (is (not @active-document))))))
 
 (deftest save
-  (rf.test/run-test-sync
-   (rf/dispatch [::app.events/initialize])
+  (rf.test/run-test-async
+   (rf/dispatch-sync [::app.events/initialize])
 
-   (let [active-document (rf/subscribe [::document.subs/active])
+   (let [active (rf/subscribe [::document.subs/active])
          saved? (rf/subscribe [::document.subs/active-saved?])]
      (testing "default state"
        (is (not @saved?)))
 
      (testing "save"
-       (rf/dispatch [::document.events/saved false {:id (:id @active-document)
-                                                    :title "File-1"}])
-       (is @saved?)
-       (is @(rf/subscribe [::document.subs/saved? (:id @active-document)]))))))
+       (rf/dispatch [::document.events/save-as])
+
+       (rf.test/wait-for
+        [::document.events/saved false]
+
+        (is @saved?)
+        (is @(rf/subscribe [::document.subs/saved? (:id @active)])))))))
 
 (deftest load
   (rf.test/run-test-sync

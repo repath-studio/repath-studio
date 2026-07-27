@@ -197,6 +197,13 @@
  (fn [_]))
 
 (rf/reg-fx
+ ::effects/file-save
+ (fn [params]
+   (rf/dispatch (conj (:on-success params)
+                      (-> ((:formatter params) #js {:name "document.rps"})
+                          (dissoc :file-handle))))))
+
+(rf/reg-fx
  ::action.effects/update-keydown-rules
  (fn [_]))
 
