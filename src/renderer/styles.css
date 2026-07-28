@@ -1,10 +1,6 @@
 @import 'tailwindcss';
 @import "tw-animate-css";
 
-@import 'codemirror/lib/codemirror.css';
-@import 'codemirror/addon/hint/show-hint.css';
-@import 'codemirror/theme/tomorrow-night-eighties.css';
-
 @import "@fontsource/noto-sans/100.css";
 @import "@fontsource/noto-sans/200.css";
 @import "@fontsource/noto-sans/300.css";

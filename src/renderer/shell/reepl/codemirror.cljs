@@ -27,26 +27,32 @@
                :ch (+ cno (count forward))}}))
 
 (defn should-go-up?
-  [_source inst]
-  (let [pos (.getCursor inst)]
-    (= 0 (.-line pos))))
+  [_source ^js inst]
+  (let [pos (.. inst -state -selection -main -head)
+        line (.lineAt (.. inst -state -doc) pos)]
+    (zero? line)))
 
 (defn should-go-down?
-  [_source inst]
-  (let [pos (.getCursor inst)
-        last-line (.lastLine inst)]
-    (= last-line (.-line pos))))
+  [_source ^js inst]
+  (let [pos (.. inst -state -selection -main -head)
+        line (.lineAt (.. inst -state -doc) pos)
+        last-line (.. inst -state -doc -lines)]
+    (= last-line line)))
 
 (defn in-place?
-  [inst]
-  (let [lines (.lineCount inst)]
+  [^js inst]
+  (let [lines (.. inst -state -doc -lines)]
     (or (= 1 lines)
-        (let [pos (.getCursor inst)
+        (let [pos (.. inst -state -selection -main -head)
+              line (.lineAt (.. inst -state -doc) pos)
               last-line (dec lines)]
           (and
-           (= last-line (.-line pos))
+           (= last-line line)
            (= (.-ch pos)
-              (count (.getLine inst last-line))))))))
+              (-> (.. inst -state -doc)
+                  (.line line)
+                  (.text)
+                  (count))))))))
 
 (defn should-eval?
   [inst evt]
@@ -57,20 +63,20 @@
 
 (defn cm-current-word
   "Find the current 'word' according to CodeMirror's `wordChars' list"
-  [cm]
-  (let [pos (.getCursor cm)
-        lno (.-line pos)
+  [^js cm]
+  (let [pos (.. cm -state -selection -main -head)
+        lno (.-number (.lineAt (.. cm -state -doc) pos))
         cno (.-ch pos)
-        line (.getLine cm lno)]
+        line (.line (.. cm -state -doc) lno)]
     ;; findWordAt doesn't work w/ clojure-parinfer mode
     ;; (.findWordAt cm back)
-    (word-in-line line lno cno)))
+    #_(word-in-line line lno cno)))
 
 (defn repl-hint
   "Get a new completion state."
-  [complete-word cm _options]
+  [complete-word ^js cm _options]
   (let [result (cm-current-word cm)
-        text (.getRange cm
+        text (.sliceDoc (.-state cm)
                         (:start result)
                         (:end result))
         words (when-not (empty? text)
@@ -144,7 +150,9 @@
                  initial-text)]
       ;; TODO: don't replaceRange here, instead watch the state atom and react
       ;; to that.
-      (.replaceRange cm text from to)
+      (.dispatch cm #js {:changes #js {:from from
+                                       :to to
+                                       :insert text}})
       (assoc state
              :pos pos
              :active active
@@ -189,18 +197,18 @@
                inst
                evt)
       ;; enter
-      13 (let [source (.getValue inst)]
+      13 (let [source (.. inst -state -doc toString)]
            (when (should-eval? inst evt)
              (.preventDefault evt)
              (on-eval source)))
       ;; up
-      38 (let [source (.getValue inst)]
+      38 (let [source (.. inst -state -doc toString)]
            (when (and (not (.-shiftKey evt))
                       (should-go-up? source inst))
              (.preventDefault evt)
              (on-up)))
       ;; down
-      40 (let [source (.getValue inst)]
+      40 (let [source (.. inst -state -doc toString)]
            (when (and (not (.-shiftKey evt))
                       (should-go-down? source inst))
              (.preventDefault evt)

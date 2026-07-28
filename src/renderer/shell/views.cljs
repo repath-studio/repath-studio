@@ -1,12 +1,7 @@
 (ns renderer.shell.views
   (:require
+   ["@codemirror/view" :refer [EditorView]]
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
-   ["codemirror" :as codemirror]
-   ["codemirror/addon/edit/closebrackets.js"]
-   ["codemirror/addon/edit/matchbrackets.js"]
-   ["codemirror/addon/hint/show-hint.js"]
-   ["codemirror/addon/runmode/colorize.js"]
-   ["codemirror/addon/runmode/runmode.js"]
    ["react" :as react]
    [clojure.string :as string]
    [re-frame.core :as rf]
@@ -33,27 +28,27 @@
   (:require-macros
    [reagent.ratom :refer [reaction]]))
 
-(defn color-highlighted-text
-  [_text _theme]
-  (let [ref (react/createRef)
-        colorize #(when-let [dom-el (.-current ref)]
-                    ((aget codemirror "colorize") #js[dom-el] "clojure")
-                    ;; Hacky way to remove the theme class added by CodeMirror
-                    ;; https://codemirror.net/5/addon/runmode/colorize.js
-                    (-> dom-el .-classList (.remove "cm-s-default")))]
-    (reagent/create-class
-     {:component-did-mount
-      (fn [_this] (colorize))
+#_(defn color-highlighted-text
+    [_text _theme-mode]
+    (let [ref (react/createRef)
+          colorize #(when-let [dom-el (.-current ref)]
+                      ((aget codemirror "colorize") #js[dom-el] "clojure")
+                      ;; Hacky way to remove the theme class added by CodeMirror
+                      ;; https://codemirror.net/5/addon/runmode/colorize.js
+                      (-> dom-el .-classList (.remove "cm-s-default")))]
+      (reagent/create-class
+       {:component-did-mount
+        (fn [_this] (colorize))
 
-      :component-did-update
-      (fn [_this _old-argv] (colorize))
+        :component-did-update
+        (fn [_this _old-argv] (colorize))
 
-      :reagent-render
-      (fn [text theme]
-        [:pre.p-0.m-0
-         {:class (str "cm-s-" theme)
-          :ref ref}
-         text])})))
+        :reagent-render
+        (fn [text theme]
+          [:pre.p-0.m-0
+           {:class (str "cm-s-" theme)
+            :ref ref}
+           text])})))
 
 (defn language-dropdown-button
   [enabled?]
@@ -84,12 +79,12 @@
    {:props {:id utils.dom/shell-input-id
             :style {:height "auto"
                     :flex 1}}
-    :options (merge {:viewportMargin js/Infinity
-                     :extraKeys #js {"Shift-Enter" "newlineAndIndent"}
-                     :keyMap "default"
-                     :showCursorWhenSelecting true
-                     :screenReaderLabel "Shell"}
-                    (:cm-options options))
+    :extensions (conj [(EditorView.contentAttributes.of #js {:aria-label "Shell"})]
+                      (:extensions options))
+    :options {:viewportMargin js/Infinity
+              :extraKeys #js {"Shift-Enter" "newlineAndIndent"}
+              :keyMap "default"
+              :showCursorWhenSelecting true}
     :on-blur #(reset! (:complete-atom options) nil)
     :on-change (:on-change options)
     :on-keyup (partial shell.reepl.codemirror/on-keyup-handler options)
@@ -98,31 +93,31 @@
 (defn repl-input
   [complete-atom]
   (let [lang @(rf/subscribe [::shell.subs/active-language])
-        codemirror-theme @(rf/subscribe [::theme.subs/codemirror])
+        theme-mode @(rf/subscribe [::theme.subs/computed-mode])
         repl-history? @(rf/subscribe [::panel.subs/visible? :repl-history])
         loaded? @(rf/subscribe [::shell.subs/language-loaded?])
         current-text @(rf/subscribe [::shell.subs/current-text])]
     [:div.flex.items-center
-     [:div.flex.self-start.p-1.5.flex-1
+     [:div.flex.self-start.flex-1
       [:div.flex.text-xs.self-start
-       {:class "p-0.5"}
+       {:class "p-1.5"}
        (if loaded?
          (string/trim (replumb/get-prompt))
          [:span.text-foreground-disabled
           (i18n.views/t [::loading-language "Loading language..."])])]
       [:div.flex-1
-       {:class "p-0.5"}
+
        (when loaded?
          ^{:key lang}
          [code-mirror current-text
-          {:on-eval #(rf/dispatch [::shell.events/execute %])
-           :on-change #(rf/dispatch [::shell.events/set-text %])
-           :complete-word #(shell.hierarchy/completions lang %)
-           :on-up #(rf/dispatch [::shell.events/go-up])
-           :on-down #(rf/dispatch [::shell.events/go-down])
-           :complete-atom complete-atom
-           :cm-options (merge {:theme codemirror-theme}
-                              (shell.hierarchy/codemirror-options lang))}])]]
+          (merge {:theme-mode theme-mode
+                  :on-eval #(rf/dispatch [::shell.events/execute %])
+                  :on-change #(rf/dispatch [::shell.events/set-text %])
+                  :complete-word #(shell.hierarchy/completions lang %)
+                  :on-up #(rf/dispatch [::shell.events/go-up])
+                  :on-down #(rf/dispatch [::shell.events/go-down])
+                  :complete-atom complete-atom}
+                 (shell.hierarchy/codemirror-options lang))])]]
      [:div.self-start.h-full.flex.items-center
       [language-dropdown-button loaded?]
       (when @(rf/subscribe [::window.subs/md?])
@@ -138,12 +133,13 @@
 (defmulti item (fn [i _opts] (:type i)))
 
 (defmethod item :input
-  [{{:keys [current-ns text]} :value} {:keys [theme]}]
+  [{{:keys [current-ns text]} :value} {:keys [theme-mode]}]
   [:div.flex.gap-2
    [:div.text-foreground-disabled.font-bold (str current-ns "=>")]
    [:div.flex-1.cursor-pointer.break-words
     {:on-click #(rf/dispatch [::shell.events/set-text text])}
-    [color-highlighted-text text theme]]])
+    text
+    #_[color-highlighted-text text theme-mode]]])
 
 (defmethod item :error
   [{:keys [value]} opts]
@@ -166,10 +162,10 @@
   []
   (let [loaded? @(rf/subscribe [::shell.subs/language-loaded?])
         items @(rf/subscribe [::shell.subs/items])
-        codemirror-theme @(rf/subscribe [::theme.subs/codemirror])
+        theme-mode @(rf/subscribe [::theme.subs/computed-mode])
         lang @(rf/subscribe [::shell.subs/active-language])
         md? @(rf/subscribe [::window.subs/md?])
-        opts {:theme codemirror-theme
+        opts {:theme-mode theme-mode
               :language lang
               :showers [show-devtools/show-devtools
                         (partial show-function/show-fn-with-docs
@@ -205,11 +201,12 @@
 
 (defn function-docs
   [s]
-  (let [codemirror-theme @(rf/subscribe [::theme.subs/codemirror])
+  (let [theme-mode (rf/subscribe [::theme.subs/computed-mode])
         [fn-name signature doc] (filter seq (string/split-lines s))]
     [:div.bg-primary.drop-shadow.p-4.absolute.bottom-full.flex.flex-col.gap-4
      [:div.font-semibold fn-name]
-     (when signature [color-highlighted-text signature codemirror-theme])
+     (when signature signature
+           #_[color-highlighted-text signature theme-mode])
      (when doc [:div doc])]))
 
 (defn completion-list

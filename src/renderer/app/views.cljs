@@ -1,5 +1,8 @@
 (ns renderer.app.views
   (:require
+   ["@codemirror/lang-xml" :refer [xml]]
+   ["@codemirror/state" :refer [EditorState]]
+   ["@codemirror/view" :refer [lineNumbers EditorView]]
    ["@radix-ui/react-direction" :as Direction]
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
    ["@radix-ui/react-tooltip" :as Tooltip]
@@ -224,14 +227,16 @@
 
 (defn xml-panel
   []
-  (let [xml @(rf/subscribe [::element.subs/xml])
-        codemirror-theme @(rf/subscribe [::theme.subs/codemirror])]
-    [views/cm-editor xml
-     {:options {:mode "text/xml"
-                :readOnly true
-                :lineNumbers true
-                :screenReaderLabel "XML"
-                :theme codemirror-theme}}]))
+  (let [text @(rf/subscribe [::element.subs/xml])
+        theme-mode @(rf/subscribe [::theme.subs/computed-mode])]
+    [views/cm-editor text
+     {:theme-mode theme-mode
+      :extensions [(xml)
+                   (lineNumbers)
+                   (EditorState.readOnly.of true)
+                   (EditorView.editable.of false)
+                   (EditorView.contentAttributes.of #js {:tabindex "0"
+                                                         :aria-label "XML"})]}]))
 
 (defn center-top-group
   []

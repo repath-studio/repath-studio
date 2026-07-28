@@ -75,54 +75,6 @@
   @apply p-2 text-foreground-muted uppercase font-bold text-2xs;
 }
 
-/* codemirror */
-
-.CodeMirror-selected {
-  @apply bg-overlay!;
-}
-
-.CodeMirror-cursor {
-  border-left: 1px solid var(--foreground-default) !important;
-  height: 16px !important;
-}
-
-.CodeMirror-matchingbracket {
-  @apply bg-overlay!;
-  text-decoration: none !important;
-}
-
-.CodeMirror-wrap {
-  @apply p-0 text-xs;
-
-  pre {
-    word-break: break-word !important;
-  }
-}
-
-.CodeMirror-gutters {
-  @apply bg-primary! border-0!;
-}
-
-.CodeMirror-placeholder {
-  @apply text-foreground-disabled! font-sans!;
-}
-
-.CodeMirror {
-  @apply font-mono h-auto z-0 bg-transparent!;
-}
-
-.CodeMirror-sizer {
-  min-height: initial !important;
-}
-
-.CodeMirror-lines {
-  @apply p-0;
-}
-
-.CodeMirror-scroll {
-  @apply overflow-hidden!;
-}
-
 /* react-timeline-editor */
 
 .timeline-editor {
