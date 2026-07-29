@@ -8,6 +8,7 @@
    [renderer.element.events :as-alias element.events]
    [renderer.i18n.views :as i18n.views]
    [renderer.panel.subs :as-alias panel.subs]
+   [renderer.panel.views :as panel.views]
    [renderer.timeline.events :as-alias timeline.events]
    [renderer.timeline.subs :as-alias timeline.subs]
    [renderer.views :as views]
@@ -98,7 +99,8 @@
         replay? @(rf/subscribe [::timeline.subs/replay?])
         end @(rf/subscribe [::timeline.subs/end])
         speed @(rf/subscribe [::timeline.subs/speed])
-        sm? @(rf/subscribe [::window.subs/sm?])]
+        sm? @(rf/subscribe [::window.subs/sm?])
+        md? @(rf/subscribe [::window.subs/md?])]
     [views/toolbar
      {:class "bg-primary"}
      [views/icon-button "go-to-start"
@@ -124,7 +126,9 @@
      (when sm?
        [:<>
         [:span.v-divider]
-        [snap-controls]])]))
+        [snap-controls]])
+     [:div.flex-1]
+     (when md? [panel.views/close-button :timeline])]))
 
 (defn register-listeners
   [timeline-ref]
@@ -194,6 +198,6 @@
 
       :reagent-render
       (fn []
-        [:div.flex-col.h-full.w-full.overflow-hidden
+        [:div.flex.flex-col.h-full.w-full.overflow-hidden.gap-px
          [toolbar timeline-ref]
          [timeline timeline-ref]])})))

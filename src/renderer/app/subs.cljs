@@ -36,10 +36,6 @@
  :-> :clicked-element)
 
 (rf/reg-sub
- ::repl-mode
- :-> :repl-mode)
-
-(rf/reg-sub
  ::platform
  :-> :platform)
 

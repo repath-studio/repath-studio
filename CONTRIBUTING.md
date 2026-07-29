@@ -1,8 +1,9 @@
 # Contributing
 
-Thank you for your interest in actively participating in the project's development!
+Thank you for your interest in participating in the project's development!
 Please read the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md)
-and the [Contributor License Agreement](CLA.md) first.
+and the [Contributor License Agreement](CLA.md) first. If you plan to use LLMs
+to contribute, make sure you also read our AI and LLM policy.
 
 The project is written in [ClojureScript](https://clojurescript.org/) - a
 compiler for [Clojure](https://clojure.org/) that targets JavaScript, and is
@@ -46,7 +47,7 @@ Main structure
 
 We are trying to split our code under renderer into relatively independent
 modules, following [re-frame's app structure suggestions](https://day8.github.io/re-frame/App-Structure/)
-with some minor additions.
+with some additions.
 
 ```text
 module\
@@ -62,12 +63,53 @@ module\
 └── README.md       -> documentation
 ```
 
-## Re-frame recommendations
+### Core ns
 
-Avoid chaining events to create new ones. Always prefer composing pure functions
-that directly transform the db. That is the whole purpose of `handlers`
-namespace. Most functions under `handlers` take the db as their first argument,
-so they can be easily composed using the thread-first macro `->`.
+Core requires the rest of the namaspaces (subs, events, etc). We also register
+the corresponding actions and action groups.
+
+### Db ns
+
+Db defines the [malli](https://github.com/metosin/malli) schemas of the module,
+and the corresponding [validators](https://github.com/metosin/malli#validation),
+[explainers](https://github.com/metosin/malli#humanized-error-messages), and
+[transformers](https://github.com/metosin/malli#value-transformation).
+
+### Events db
+
+Registers our re-frame events. Most events use functions from handlers to
+transform our db.
+
+### Subs db
+
+Registers our re-frame subscriptions. This ns is usually very thin.
+
+### Handlers ns
+
+Handlers contain pure functions that directly transform the db, or return a
+value based on the db. Most functions under `handlers` take the db as their
+first argument, so they can be easily composed using the thread-first macro `->`.
+Functions without input args usually return a [transducer](https://clojure.org/reference/transducers).
+If none of the above is true, the function probably belongs to a different
+namespace.
+
+### Effects ns
+
+Registers all re-frame effects. Although we could use the events ns for this, we
+prefer isung dedicated ns to isolate all side effects and make stabing easier on
+tests.
+
+### Hierarchy ns
+
+Hierarchy defines the required multimethods in order to allow extending the app
+on the fly, based on a dispatch value. In a way, it is our plugin interface.
+When the hierarchy ns is available for a module, the `impl` directory contains
+the build-in `defmethod` implementations for the multimethods.
+
+## General re-frame recommendations
+
+Avoid chaining events to create new ones. Always prefer composing transformation
+functions. That is the whole purpose of `handlers` namespace.
 
 Use interceptors sparingly. Although they look (and probably are) ingenious, it
 is hard to write and reason with them. Doing things explicitly, is usually
@@ -76,6 +118,17 @@ easier to grasp and maintain.
 Always use auto-qualified keywords (e.g. `::copy`) for subscriptions, events and
 effects. You can use `as-alias` to require those namespaces without evaluating
 the registrations multiple times.
+
+When you are not sure if you should add new state to the app db, the answer is
+usually yes, if the state is going to be used outside of the context of a single
+component view. If it also needs to be persisted to local storage, it should be
+serializable to json.
+
+If you need to reuse the result of a subscription within an event, add reusable
+functions to handlers, and use them in subs and events. If it's an expensive
+calculation, you can write the result to the db within the event handler, or in
+an interceptor. Using the recently introduced [flows](https://day8.github.io/re-frame/Flows/)
+is also an option, but we haven't tested that feature yet.
 
 ## Spec
 
@@ -100,30 +153,3 @@ Ctrl+Shift+I -> Toggle devtools
 Ctrl+Shift+X -> Toggle 10x
 Ctrl+R       -> Reload app
 ```
-
-## AI and LLM policy
-
-Contributors should ensure that their work does not violate any copyright laws.
-This also applies to AI generated code. Check the tool’s terms of use, to ensure
-you are not using copyrighted sources. You are advised to use models trained on
-content with compatible licensing.
-
-Using AI to review changes to catch minor errors or fix typos before submitting
-a PR is allowed, and does not require notice.
-
-Changes assisted by AI tools should be marked by adding an "Assisted-by: MODELS"
-label at the end of the pull requests. `MODELS` should be replaced by a
-comma-separated list of the utilized models. You should always review any AI
-generated changes, and make sure that they don't introduce any bugs, or reduce
-the quality of the code.
-
-Contributions that are fully generated by AI tools will be rejected.
-
-Translations under `src/lang` are mostly generated using LLMs, and are exempted
-from the previous rule. Using AI to update or add new languages without further
-modifications is accepted, but human intervention may required to make sure that
-the changes don't break existing functionality, or do not reduce the quality of
-existing translations. We are looking into ways to fully automate this process.
-
-Pull requests fully generated by AI tools should be marked by adding a
-"Generated-by: MODELS" label at the end of the pull requests.

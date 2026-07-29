@@ -10,13 +10,16 @@
    [renderer.action.subs]
    [renderer.app.events :as app.events]
    [renderer.app.subs]
+   [renderer.attribute.impl.core]
    [renderer.dialog.events]
+   [renderer.dialog.subs]
    [renderer.document.events]
    [renderer.document.subs]
    [renderer.element.events]
    [renderer.element.impl.core]
    [renderer.element.subs]
    [renderer.error.events]
+   [renderer.error.subs]
    [renderer.frame.events]
    [renderer.frame.subs]
    [renderer.history.events]
@@ -25,12 +28,18 @@
    [renderer.i18n.subs]
    [renderer.icon.events]
    [renderer.icon.subs]
+   [renderer.menubar.events]
+   [renderer.menubar.subs]
    [renderer.panel.events]
    [renderer.panel.subs]
+   [renderer.shell.events]
+   [renderer.shell.impl.core]
+   [renderer.shell.subs]
    [renderer.snap.events]
    [renderer.theme.events]
    [renderer.theme.subs]
    [renderer.timeline.events]
+   [renderer.timeline.subs]
    [renderer.tool.events]
    [renderer.tool.impl.core]
    [renderer.tool.subs]
@@ -46,4 +55,7 @@
   (rf/reg-global-interceptor app.events/schema-validator))
 
 (instrument!)
+
+;; We need to initialize the app state at before running tests, otherwise 
+;; some of the tests will fail because of the way we extend the app.
 (rf/dispatch-sync [::app.events/initialize])

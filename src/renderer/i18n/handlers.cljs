@@ -12,24 +12,22 @@
 (m/=> register-language [:-> App Language App])
 (defn register-language
   [db language]
-  (if-not (i18n.db/valid-language? language)
+  (when-not (i18n.db/valid-language? language)
     (let [error (-> language i18n.db/explain-language m.error/humanize)]
-      (throw (ex-info (str "Invalid language: " error) {:language language})))
-    (assoc-in db [:languages (:id language)] language)))
+      (throw (ex-info (str "Invalid language: " error) {:language language}))))
+  (assoc-in db [:languages (:id language)] language))
 
 (m/=> deregister-language [:-> App LanguageCodeIdentifier App])
 (defn deregister-language
   [db id]
-  (if-not (get-in db [:languages id])
-    (throw (ex-info "Language not registered" {:id id}))
-    (update db :languages dissoc id)))
+  (update db :languages dissoc id))
 
 (m/=> set-translation [:-> App LanguageCodeIdentifier keyword? Translation App])
 (defn set-translation
   [db lang-id k v]
-  (if-not (get-in db [:languages lang-id])
-    (throw (ex-info "Language not registered" {:id lang-id}))
-    (assoc-in db [:languages lang-id :dictionary k] v)))
+  (when-not (get-in db [:languages lang-id])
+    (throw (ex-info "Language not registered" {:id lang-id})))
+  (assoc-in db [:languages lang-id :dictionary k] v))
 
 (m/=> supported-lang? [:->
                        LanguageRegistry [:maybe LanguageCodeIdentifier]

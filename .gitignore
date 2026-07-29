@@ -11,6 +11,7 @@
 /resources/public/css/files/
 /resources/public/css/styles.css
 /resources/public/src/
+/resources/public/pyodide/
 /resources/*.js
 /resources/*.js.map
 

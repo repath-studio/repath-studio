@@ -17,7 +17,7 @@
    [renderer.i18n.events :as-alias i18n.events]
    [renderer.input.events :as-alias input.events]
    [renderer.input.impl.keyboard :as impl.keyboard]
-   [renderer.reepl.effects :as-alias repl.effects]
+   [renderer.shell.events :as-alias shell.events]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.theme.effects :as-alias theme.effects]
    [renderer.theme.events :as-alias theme.events]
@@ -132,6 +132,7 @@
                [:dispatch [::theme.events/update-meta-color]]
                [:dispatch [::window.events/update-width]]
                [:dispatch [::i18n.events/set-lang-attrs]]
+               [:dispatch [::shell.events/init]]
                [:dispatch [::set-loading false]]
                [::app.effects/hide-splash-screen]
                ;; We flush to render once so we can get the canvas size.
@@ -140,7 +141,6 @@
                [::effects/ipc-send ["initialized"]]
                [::theme.effects/add-listener [::theme.events/set-native-mode]]
                [::app.effects/setup-paper]
-               [::repl.effects/init]
                ;; The status bar needs to be updated later for some reason.
                [:dispatch [::theme.events/update-mobile-status-bar]]
                [::action.effects/update-keydown-rules
@@ -151,12 +151,6 @@
  ::set-system-fonts
  (fn [db [_ fonts]]
    (assoc db :system-fonts fonts)))
-
-(rf/reg-event-db
- ::set-repl-mode
- [persist]
- (fn [db [_ mode]]
-   (assoc db :repl-mode mode)))
 
 (rf/reg-event-db
  ::toggle-debug-info

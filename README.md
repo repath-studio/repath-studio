@@ -9,6 +9,8 @@
 [![Static security testing](https://github.com/repath-studio/repath-studio/actions/workflows/clj-holmes.yml/badge.svg)](https://github.com/repath-studio/repath-studio/actions/workflows/clj-holmes.yml)
 [![CodeFactor](https://codescene.io/projects/72168/status-badges/average-code-health)](https://codescene.io/projects/72168)
 
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/13788/badge)](https://www.bestpractices.dev/projects/13788)
+
 ![Studio Screenshot](https://repath.studio/assets/images/studio.png)
 
 Repath Studio is a cross platform vector graphics editor, that combines

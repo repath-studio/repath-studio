@@ -56,10 +56,15 @@
           i18n.views/t))
 
 (defn deref-action
-  [id]
-  (when-let [action @(rf/subscribe [::action.subs/action id])]
+  [action]
+  (when-let [action (cond-> action
+                      (keyword? action)
+                      (->> (conj [::action.subs/action])
+                           (rf/subscribe)
+                           deref))]
     (when (available? action)
-      (let [shortcuts @(rf/subscribe [::action.subs/action-shortcuts id])]
+      (let [shortcuts @(rf/subscribe [::action.subs/action-shortcuts
+                                      (:id action)])]
         (cond-> action
           (seq shortcuts) (assoc :shortcuts shortcuts)
           (empty? shortcuts) (dissoc :shortcuts))))))

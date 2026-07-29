@@ -9,7 +9,7 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :tools/misc
-               :label [::misc "Miscallaneous"]
+               :label [::misc "Miscellaneous"]
                :actions [:tool/fill
                          :tool/measure
                          :tool/eye-dropper]}])

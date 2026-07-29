@@ -288,7 +288,7 @@
 
 (defn heading
   [label tag attr]
-  [:div.flex.bg-primary.py-5.px-4.gap-1.items-center
+  [:div.flex.bg-primary.p-4.gap-1.items-center
    [:h1.flex-1.text-lg.overflow-hidden.text-ellipsis.button-size label]
    (when tag [heading-info tag attr])])
 

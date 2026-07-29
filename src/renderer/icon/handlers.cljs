@@ -8,14 +8,12 @@
 (m/=> register-icon [:-> App Icon App])
 (defn register-icon
   [db icon]
-  (if-not (icon.db/valid-icon? icon)
+  (when-not (icon.db/valid-icon? icon)
     (let [error (-> icon icon.db/explain-icon m.error/humanize)]
-      (throw (ex-info (str "Invalid icon: " error) {:icon icon})))
-    (assoc-in db [:icons (:id icon)] icon)))
+      (throw (ex-info (str "Invalid icon: " error) {:icon icon}))))
+  (assoc-in db [:icons (:id icon)] icon))
 
 (m/=> deregister-icon [:-> App IconId App])
 (defn deregister-icon
   [db id]
-  (if-not (get-in db [:icons id])
-    (throw (ex-info "Icon not registered" {:id id}))
-    (update db :icons dissoc id)))
+  (update db :icons dissoc id))

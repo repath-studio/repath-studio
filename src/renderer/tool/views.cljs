@@ -256,9 +256,9 @@
              (->> groups
                   (map dropdown-button)
                   (into [views/toolbar
-                         {:class "bg-primary justify-center py-2 gap-2"}]))
+                         {:class "bg-primary justify-center gap-2"}]))
              (->> groups
                   (map button-group)
                   (interpose [:span.v-divider])
                   (into [views/toolbar
-                         {:class "bg-primary justify-center py-2"}])))]))})))
+                         {:class "bg-primary justify-center "}])))]))})))

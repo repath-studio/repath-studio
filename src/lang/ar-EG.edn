@@ -26,7 +26,7 @@
   :show "إظهار"
   :hide "إخفاء"}
 
- :renderer.reepl.views
+ :renderer.shell.views
  {:hide-command-output "إخفاء مخرجات الأمر"
   :show-command-output "إظهار مخرجات الأمر"}
 
@@ -869,5 +869,7 @@
  :renderer.utils.element
  {:centroid "مركز ثقل"}
 
- :renderer.reepl.core
- {:focus-shell "تركيز الطرفية"}}
+ :renderer.shell.core
+ {:focus-shell "تركيز الطرفية"
+  :clear-output "مسح المخرجات"
+  :verbose "مطوّل"}}

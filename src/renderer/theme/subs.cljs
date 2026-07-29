@@ -15,8 +15,7 @@
 (rf/reg-sub
  ::selected-mode?
  :<- [::mode]
- (fn [mode [_ k]]
-   (= mode k)))
+ :=> =)
 
 (rf/reg-sub
  ::native-mode

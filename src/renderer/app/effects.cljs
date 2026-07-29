@@ -12,7 +12,8 @@
    [re-frame.db :as rf.db]
    [renderer.app.db :as app.db]
    [renderer.app.events :as-alias app.events]
-   [renderer.history.handlers :as history.handlers]))
+   [renderer.history.handlers :as history.handlers]
+   [renderer.shell.handlers :as shell.handlers]))
 
 (rf/reg-cofx
  ::platform
@@ -124,6 +125,7 @@
   []
   (let [persisted-db (-> @rf.db/app-db
                          (history.handlers/drop-rest)
+                         (shell.handlers/serialize-items)
                          (select-keys app.db/persisted-keys))]
     (when-let [json (clj->json persisted-db)]
       (-> (localforage/setItem config/app-name json)

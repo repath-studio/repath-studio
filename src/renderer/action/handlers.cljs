@@ -58,9 +58,7 @@
 (m/=> deregister-action [:-> App ActionId App])
 (defn deregister-action
   [db id]
-  (if-not (get-in db [:actions id])
-    (throw (ex-info "Action not registered" {:id id}))
-    (update db :actions dissoc id)))
+  (update db :actions dissoc id))
 
 (m/=> register-action-group [:-> App ActionGroup App])
 (defn register-action-group
@@ -73,25 +71,18 @@
 (m/=> deregister-action-group [:-> App ActionGroupId App])
 (defn deregister-action-group
   [db id]
-  (if-not (get-in db [:action-groups id])
-    (throw (ex-info "Action group not registered" {:id id}))
-    (update db :action-groups dissoc id)))
+  (update db :action-groups dissoc id))
 
 (m/=> add-action-to-group [:-> App ActionGroupId ActionId App])
 (defn add-action-to-group
   [db group-id action-id]
   (let [actions (get-in db [:action-groups group-id :actions])]
-    (when (some #{action-id} actions)
-      (throw (ex-info "Action already in group" {:group-id group-id
-                                                 :action-id action-id})))
-    (update-in db [:action-groups group-id :actions] conj action-id)))
+    (cond-> db
+      (not (some #{action-id} actions))
+      (update-in [:action-groups group-id :actions] conj action-id))))
 
 (m/=> remove-action-from-group [:-> App ActionGroupId ActionId App])
 (defn remove-action-from-group
   [db group-id action-id]
-  (let [actions (get-in db [:action-groups group-id :actions])]
-    (when-not (some #{action-id} actions)
-      (throw (ex-info "Action not in group" {:group-id group-id
-                                             :action-id action-id})))
-    (->> (partial filterv (complement #{action-id}))
-         (update-in db [:action-groups group-id :actions]))))
+  (->> (partial filterv (complement #{action-id}))
+       (update-in db [:action-groups group-id :actions])))

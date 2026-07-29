@@ -18,6 +18,7 @@
    [renderer.input.db :refer [PointerEvent PointerId]]
    [renderer.menubar.db :refer [Menubar]]
    [renderer.panel.db :as panel.db :refer [Panel PanelId]]
+   [renderer.shell.db :refer [Shell]]
    [renderer.snap.db :refer [Snap NearestNeighbor]]
    [renderer.theme.db :refer [Theme]]
    [renderer.timeline.db :refer [Timeline]]
@@ -104,8 +105,8 @@
    [:menubar {:default {}} Menubar]
    [:install-prompt {:optional true} JS_Object]
    [:user-agent {:optional true} string?]
-   [:repl-mode {:default :cljs
-                :persist true} keyword?]
+   [:shell {:default {}
+            :persist true} Shell]
    [:error-reporting {:optional true
                       :persist true} boolean?]
    [:worker {:default {:tasks {}}} [:map [:tasks map?]]]

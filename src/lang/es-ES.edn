@@ -26,7 +26,7 @@
   :show "Mostrar"
   :hide "Ocultar"}
 
- :renderer.reepl.views
+ :renderer.shell.views
  {:hide-command-output "Ocultar salida de comandos"
   :show-command-output "Mostrar salida de comandos"}
 
@@ -902,5 +902,7 @@
  :renderer.utils.element
  {:centroid "centroide"}
 
- :renderer.reepl.core
- {:focus-shell "Enfocar consola"}}
+ :renderer.shell.core
+ {:focus-shell "Enfocar consola"
+  :clear-output "Limpiar salida"
+  :verbose "Detallado"}}

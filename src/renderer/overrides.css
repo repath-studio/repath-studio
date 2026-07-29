@@ -126,7 +126,7 @@
 /* react-timeline-editor */
 
 .timeline-editor {
-  @apply bg-primary! w-full! min-h-0! h-full! text-foreground-muted!;
+  @apply bg-secondary! w-full! min-h-0! h-full! text-foreground-muted!;
   font-family: inherit !important;
  }
 
@@ -165,7 +165,7 @@
 }
 
 .timeline-editor-edit-row {
-  background-image: linear-gradient(var(--primary), var(--primary)),
+  background-image: linear-gradient(var(--secondary), var(--secondary)),
                     linear-gradient(90deg, var(--border) 1px, transparent 0) !important;
 }
 

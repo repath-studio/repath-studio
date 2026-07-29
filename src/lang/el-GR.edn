@@ -26,7 +26,7 @@
   :show "Εμφάνιση"
   :hide "Απόκρυψη"}
 
- :renderer.reepl.views
+ :renderer.shell.views
  {:hide-command-output "Απόκρυψη ιστορικού εντολών"
   :show-command-output "Εμφάνιση ιστορικού εντολών"}
 
@@ -919,5 +919,7 @@
  :renderer.utils.element
  {:centroid "κεντροειδές"}
 
- :renderer.reepl.core
- {:focus-shell "Εστίαση στο τερματικό"}}
+ :renderer.shell.core
+ {:focus-shell "Εστίαση στο τερματικό"
+  :clear-output "Εκκαθάριση εξόδου"
+  :verbose "Λεπτομερής"}}

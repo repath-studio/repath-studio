@@ -11,7 +11,7 @@
    [renderer.error.effects :as-alias error.effects]
    [renderer.i18n.effects :as-alias i18n.effects]
    [renderer.input.events :as-alias input.events]
-   [renderer.reepl.effects :as-alias reepl.effects]
+   [renderer.shell.effects :as-alias shell.effects]
    [renderer.theme.effects :as-alias theme.effects]
    [renderer.utils.element :as utils.element]
    [renderer.window.effects :as-alias window.effects]))
@@ -197,13 +197,38 @@
  (fn [_]))
 
 (rf/reg-fx
+ ::effects/file-save
+ (fn [params]
+   (rf/dispatch (conj (:on-success params)
+                      (-> ((:formatter params) #js {:name "document.rps"})
+                          (dissoc :file-handle))))))
+
+(rf/reg-fx
  ::action.effects/update-keydown-rules
+ (fn [_]))
+
+(rf/reg-fx
+ ::shell.effects/focus
+ (fn [_]))
+
+(rf/reg-fx
+ ::shell.effects/init
+ (fn [[_event params]]
+   (rf/dispatch (:on-success params))))
+
+(rf/reg-fx
+ ::shell.effects/init-language
+ (fn [params]
+   (rf/dispatch (:on-success params))))
+
+(rf/reg-fx
+ ::shell.effects/welcome
+ (fn [_]))
+
+(rf/reg-fx
+ ::shell.effects/execute
  (fn [_]))
 
 (rf/reg-event-db
  ::input.events/keyboard
- (fn [_]))
-
-(rf/reg-fx
- ::reepl.effects/init
  (fn [_]))

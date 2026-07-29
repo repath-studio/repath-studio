@@ -13,6 +13,9 @@
 (def Orientation
   [:enum :vertical :horizontal])
 
+(def LoadingState
+  [:enum :loading :success :error])
+
 (def JS_Element
   [:fn (fn [x] (instance? js/Element x))])
 

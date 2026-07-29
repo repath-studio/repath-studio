@@ -71,6 +71,13 @@
    :object/animate
    :object/entity])
 
+(defn on-keyboard-event
+  "Propagates the keyboard events to the parent window."
+  [e]
+  (.preventDefault e)
+  (.dispatchEvent js/window.parent.document
+                  (js/KeyboardEvent. (.-type e) e)))
+
 (defn root
   "Our canvas is wrapped within an iframe element that hosts anything
    that needs to be rendered.
@@ -89,14 +96,7 @@
       (fn []
         (let [root-el @(rf/subscribe [::element.subs/root])
               idle? @(rf/subscribe [::tool.subs/idle?])
-              {:keys [x y]} @(rf/subscribe [::app.subs/dom-rect])
-              ;; This is a different browsing context inside an iframe.
-              ;; We need to simulate the events to the parent window.
-              on-keyboard-event (fn [e]
-                                  (.preventDefault e)
-                                  (.dispatchEvent js/window.parent.document
-                                                  (js/KeyboardEvent. (.-type e)
-                                                                     e)))]
+              {:keys [x y]} @(rf/subscribe [::app.subs/dom-rect])]
           [:> Frame
            {:initial-content (server/render-to-static-markup (initial-markup))
             :mount-target "body"
