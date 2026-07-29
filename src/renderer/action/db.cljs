@@ -43,3 +43,6 @@
 
 (def ActionGroupRegistry
   [:map-of ActionGroupId ActionGroup])
+
+(def KeyBindings
+  [:map-of ActionId [:set Shortcut]])

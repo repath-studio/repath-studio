@@ -58,6 +58,15 @@
                      props)
    [icon icon-name]])
 
+(defn tag
+  [content on-remove & {:keys [remove-label]}]
+  [:div.flex.items-center.gap-1.bg-overlay.rounded.pl-2.pr-1.py-1
+   content
+   [icon-button "times"
+    {:on-click on-remove
+     :aria-label (or remove-label (i18n.views/t [::remove "Remove"]))
+     :class "h-4 w-4 text-foreground-muted"}]])
+
 (defn action-icon-button
   [action & {:as props}]
   [icon-button (:icon action)

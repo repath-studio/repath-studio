@@ -59,7 +59,10 @@
   [id]
   (when-let [action @(rf/subscribe [::action.subs/action id])]
     (when (available? action)
-      action)))
+      (let [shortcuts @(rf/subscribe [::action.subs/action-shortcuts id])]
+        (cond-> action
+          (seq shortcuts) (assoc :shortcuts shortcuts)
+          (empty? shortcuts) (dissoc :shortcuts))))))
 
 (defn deref-action-group
   [id]

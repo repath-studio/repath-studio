@@ -4,13 +4,48 @@
    [malli.error :as m.error]
    [renderer.action.db
     :as action.db
-    :refer [Action ActionGroup ActionGroupId ActionId]]
+    :refer [Action ActionGroup ActionGroupId ActionId Shortcut]]
    [renderer.app.db :refer [App]]))
 
 (m/=> entities [:-> App [:vector Action]])
 (defn entities
   [db]
   (-> db :actions vals vec))
+
+(m/=> effective-shortcuts [:-> App ActionId [:set Shortcut]])
+(defn effective-shortcuts
+  [db id]
+  (let [key-bindings (:key-bindings db)]
+    (if (contains? key-bindings id)
+      (get key-bindings id)
+      (set (get-in db [:actions id :shortcuts])))))
+
+(m/=> actions-with-shortcuts [:-> App [:vector Action]])
+(defn actions-with-shortcuts
+  [db]
+  (mapv (fn [{:keys [id]
+              :as action}]
+          (let [shortcuts (effective-shortcuts db id)]
+            (if (seq shortcuts)
+              (assoc action :shortcuts (vec shortcuts))
+              (dissoc action :shortcuts))))
+        (entities db)))
+
+(m/=> add-shortcut [:-> App ActionId Shortcut App])
+(defn add-shortcut
+  [db id shortcut]
+  (assoc-in db [:key-bindings id] (conj (effective-shortcuts db id) shortcut)))
+
+(m/=> remove-shortcut [:-> App ActionId Shortcut App])
+(defn remove-shortcut
+  [db id shortcut]
+  (assoc-in db [:key-bindings id] (disj (effective-shortcuts db id) shortcut)))
+
+(m/=> reset-shortcuts [:-> App ActionId App])
+(defn reset-shortcuts
+  "Removes the user override so the action falls back to its default shortcuts."
+  [db id]
+  (update db :key-bindings dissoc id))
 
 (m/=> register-action [:-> App Action App])
 (defn register-action

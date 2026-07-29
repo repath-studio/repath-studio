@@ -52,3 +52,41 @@
                      :history/undo-group])
 
        (is (not @new-group))))))
+
+(deftest shortcuts
+  (rf.test/run-test-sync
+   (rf/dispatch [::app.events/initialize])
+
+   (let [default-shortcut {:keyCode 90 :ctrlKey true :altKey true}
+         extra-shortcut {:keyCode 89 :ctrlKey true}
+         undo-action {:id :history/undo-twice
+                      :label [:history/undo-twice "Undo twice"]
+                      :icon "undo"
+                      :event [::history.events/undo-by 2]
+                      :shortcuts [default-shortcut]}
+         effective (rf/subscribe [::action.subs/action-shortcuts
+                                  :history/undo-twice])]
+
+     (rf/dispatch [::action.events/register-action undo-action])
+
+     (testing "falls back to default shortcuts"
+       (is (= @effective #{default-shortcut})))
+
+     (testing "add shortcut keeps defaults"
+       (rf/dispatch [::action.events/add-shortcut
+                     :history/undo-twice extra-shortcut])
+       (is (= @effective #{default-shortcut extra-shortcut})))
+
+     (testing "remove shortcut overrides defaults"
+       (rf/dispatch [::action.events/remove-shortcut
+                     :history/undo-twice default-shortcut])
+       (is (= @effective #{extra-shortcut})))
+
+     (testing "removing all shortcuts overrides with an empty set"
+       (rf/dispatch [::action.events/remove-shortcut
+                     :history/undo-twice extra-shortcut])
+       (is (= @effective #{})))
+
+     (testing "reset restores default shortcuts"
+       (rf/dispatch [::action.events/reset-shortcuts :history/undo-twice])
+       (is (= @effective #{default-shortcut}))))))
