@@ -1,6 +1,6 @@
 (ns renderer.shell.impl.python
   (:require
-   ["codemirror/mode/python/python.js"]
+   ["@codemirror/lang-python" :refer [python]]
    [camel-snake-kebab.core :as camel-snake-kebab]
    [clojure.string :as string]
    [goog.html.legacyconversions :refer [trustedResourceUrlFromString]]
@@ -78,7 +78,7 @@
 
 (defmethod shell.hierarchy/codemirror-options :python
   [_language]
-  {:mode "python"})
+  {:extensions [(python)]})
 
 (defmethod shell.hierarchy/completions :python
   [_language s]
