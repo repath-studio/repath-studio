@@ -160,61 +160,55 @@
                       :ch (+ (count text)
                              (.-ch from))}))))
 
-(def cmp-ignore #{9 16 17 18 91 93})
-(def cmp-show #{17 18 91 93})
-
 (defn on-keyup-handler
   [options evt inst]
   (let [{:keys [complete-atom complete-word]} options]
     (.stopPropagation evt)
-    (cond
-      (= 27 (.-keyCode evt))
+    (case (.-key evt)
+      "Escape"
       (if @complete-atom
         (reset! complete-atom nil)
         (some-> (.-activeElement js/document)
                 (.blur)))
 
-      (= 13 (.-keyCode evt))
+      "Enter"
       (reset! complete-atom nil)
 
-      (cmp-show (.-keyCode evt))
+      ("Control" "Alt" "Meta" "ContextMenu")
       (swap! complete-atom assoc :show-all false)
 
-      (not (cmp-ignore (.-keyCode evt)))
-      (reset! complete-atom (repl-hint complete-word inst nil)))))
+      (when-not (contains? #{"Tab" "Shift"} (.-key evt))
+        (reset! complete-atom (repl-hint complete-word inst nil))))))
 
 (defn on-keydown-handler
   [options evt inst]
   (let [{:keys [complete-atom on-eval on-up on-down]} options]
     (.stopPropagation evt)
-    (case (.-keyCode evt)
-      (17 18 91 93)
+    (case (.-key evt)
+      ("Control" "Alt" "Meta" "ContextMenu")
       (swap! complete-atom assoc :show-all true)
-      ;; tab
-      9 (swap! complete-atom
-               cycle-completions
-               (.-shiftKey evt)
-               inst
-               evt)
-      ;; enter
-      13 (let [source (.. inst -state -doc toString)]
-           (when (should-eval? inst evt)
-             (.preventDefault evt)
-             (on-eval source)))
-      ;; up
-      38 (let [source (.. inst -state -doc toString)]
-           (when (and (not (.-shiftKey evt))
-                      (should-go-up? source inst))
-             (.preventDefault evt)
-             (on-up)))
-      ;; down
-      40 (let [source (.. inst -state -doc toString)]
-           (when (and (not (.-shiftKey evt))
-                      (should-go-down? source inst))
-             (.preventDefault evt)
-             (on-down)))
 
-      :none)))
+      "Tab"
+      (swap! complete-atom cycle-completions (.-shiftKey evt) inst evt)
 
+      "Enter"
+      (let [source (.. inst -state -doc toString)]
+        (when (should-eval? inst evt)
+          (.preventDefault evt)
+          (on-eval source)))
 
+      "ArrowUp"
+      (let [source (.. inst -state -doc toString)]
+        (when (and (not (.-shiftKey evt))
+                   (should-go-up? source inst))
+          (.preventDefault evt)
+          (on-up)))
 
+      "ArrowDown"
+      (let [source (.. inst -state -doc toString)]
+        (when (and (not (.-shiftKey evt))
+                   (should-go-down? source inst))
+          (.preventDefault evt)
+          (on-down)))
+
+      nil)))

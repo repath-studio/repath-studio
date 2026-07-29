@@ -273,11 +273,6 @@
 (defn select-arrow []
   [:> Select/Arrow {:class "fill-primary stroke-border"}])
 
-(def cm-defaults
-  {:styleActiveLine true
-   :tabMode "spaces"
-   :extraKeys {"Ctrl-Space" "autocomplete"}})
-
 (def cm-theme
   (clj->js {"&" {:backgroundColor "transparent"
                  :fontSize "var(--text-xs)"}
@@ -293,32 +288,27 @@
         ref (react/createRef)
         updating? (atom false)
         theme-compartment (Compartment.)
-        theme (fn [mode] (if (= mode :dark) oneDark #js []))]
-    ^{:key (str (hash value) (hash extensions))}
+        theme (fn [mode] (if (= mode :dark) oneDark #js []))
+        default-extensions [(.theme EditorView cm-theme)
+                            (.of theme-compartment (theme theme-mode))
+                            (.-lineWrapping EditorView)
+                            (syntaxHighlighting defaultHighlightStyle)
+                            (.domEventHandlers EditorView
+                                               #js {:keydown on-keydown
+                                                    :keyup on-keyup
+                                                    :blur on-blur
+                                                    :change on-change})]]
     (reagent/create-class
      {:component-did-mount
       (fn [_this]
         (let [dom-el (.-current ref)
               view (EditorView.
                     (clj->js {:doc value
-                              :extensions
-                              (cond-> [(.theme EditorView cm-theme)
-                                       (.of theme-compartment
-                                            (theme theme-mode))
-                                       (.-lineWrapping EditorView)
-                                       (syntaxHighlighting defaultHighlightStyle)
-                                       (.domEventHandlers
-                                        EditorView
-                                        #js {:keydown on-keydown
-                                             :keyup on-keyup
-                                             :blur on-blur
-                                             :change on-change})]
+                              :extensions (cond-> (into default-extensions
+                                                        basicSetup)
 
-                                :always
-                                (into basicSetup)
-
-                                extensions
-                                (conj extensions))
+                                            extensions
+                                            (conj extensions))
 
                               :parent dom-el}))]
           (reset! cm view)
@@ -328,9 +318,6 @@
           #_(when on-change (.on @cm "change" #(when-not @updating?
                                                  (on-change (.getValue %)))))))
 
-      :component-will-unmount
-      #(reset! cm nil)
-
       :component-did-update
       (fn [this _]
         (let [value (second (reagent/argv this))
@@ -339,14 +326,13 @@
           (when (and @cm (not= (.. @cm -state -doc toString) value))
             (reset! updating? true)
             (.dispatch @cm #js {:changes #js {:from 0
-                                              :to (.. ^js @cm -state -doc -length)
+                                              :to (.. ^js @cm
+                                                      -state -doc -length)
                                               :insert value}})
             (reset! updating? false)
             #_(let [last-line (.lastLine @cm)
                     last-ch (count (.getLine ^js @cm last-line))]
                 (.setCursor ^js @cm last-line last-ch)))
-          #_(doseq [[k v] options]
-              (.setOption @cm (name k) v))
           (.dispatch @cm #js {:effects (.reconfigure theme-compartment
                                                      (theme theme-mode))})))
 
@@ -357,7 +343,8 @@
 (defn toaster
   [theme]
   [:> Toaster
-   {:toastOptions {:classNames {:toast "bg-primary! border! border-border!
+   {:theme theme
+    :toastOptions {:classNames {:toast "bg-primary! border! border-border!
                                         shadow-md! p-4! rounded-md!"
                                 :title "text-foreground-hovered!"
                                 :description "text-foreground! text-xs"}}

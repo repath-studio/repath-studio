@@ -13,9 +13,8 @@
 
 (defn get-cljs-arities
   [f]
-  (map
-   #(aget f %)
-   (filter #(.startsWith % cljs-fn-prefix) (js->clj (js/Object.keys f)))))
+  (map #(aget f %)
+       (filter #(.startsWith % cljs-fn-prefix) (js->clj (js/Object.keys f)))))
 
 (defn get-fn-summary
   [f]
@@ -37,9 +36,14 @@
   [f]
   (let [parts (.split (.-name f) \$)]
     (cond
-      (empty? (.-name f)) "*anonymous*"
-      (= 1 (count parts)) (.-name f)
-      :else (recover-cljs-name parts))))
+      (empty? (.-name f))
+      "*anonymous*"
+
+      (= 1 (count parts))
+      (.-name f)
+
+      :else
+      (recover-cljs-name parts))))
 
 (defn str-fn-forms
   [forms]
@@ -54,6 +58,6 @@
        (if docs
          [:span.function-docs docs]
          [:<>
-          [:span.function-head "fn " (get-fn-name f)]
-          [:span.function-arities (str-fn-forms (get-function-forms f))]
-          [:span.function-body (when native-fn? "[native code]")]])])))
+          [:span "fn " (get-fn-name f)]
+          [:span (str-fn-forms (get-function-forms f))]
+          [:span (when native-fn? "[native code]")]])])))

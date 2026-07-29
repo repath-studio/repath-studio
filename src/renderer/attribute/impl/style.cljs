@@ -2,7 +2,6 @@
   "https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/style"
   (:require
    ["@codemirror/lang-css" :refer [css]]
-   ["@codemirror/state" :refer [EditorState]]
    ["@codemirror/view" :refer [EditorView placeholder]]
    [re-frame.core :as rf]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
@@ -14,9 +13,10 @@
 (defmethod attribute.hierarchy/form-element [::element.hierarchy/element :style]
   [_ k v {:keys [disabled]}]
   (let [theme-mode @(rf/subscribe [::theme.subs/computed-mode])]
-    [:div.w-full.bg-primary.px-1
-     {:class ["py-px"
+    [:div.w-full.bg-primary
+     {:class ["px-1.5 py-px"
               (when disabled "*:opacity-50")]}
+     ^{:key disabled}
      [views/cm-editor
       (str v)
       {:on-blur #(->> (.. ^js %2 -state -doc toString)
@@ -24,11 +24,9 @@
                       (rf/dispatch))
        :on-keydown #(.stopPropagation %)
        :on-keyup #(.stopPropagation %)
-       :props {:id (name k)}
        :theme-mode theme-mode
        :extensions [(css)
                     (placeholder (when-not v "multiple"))
-                    (EditorState.readOnly.of disabled)
-                    (EditorView.editable.of (not disabled))
-                    (EditorView.contentAttributes.of #js {:aria-label
-                                                          "Style"})]}]]))
+                    (EditorView.contentAttributes.of
+                     #js {:id (name k)
+                          :aria-label "Style"})]}]]))

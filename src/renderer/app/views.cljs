@@ -236,7 +236,7 @@
       :extensions [(xml)
                    (lineNumbers)
                    (EditorState.readOnly.of true)
-                   #_(EditorView.editable.of false)
+                   (EditorView.editable.of false)
                    (EditorView.contentAttributes.of
                     #js {:tabindex "0"
                          :aria-label "XML"})]}]))

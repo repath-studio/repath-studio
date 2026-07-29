@@ -10,10 +10,11 @@
 
 (defn parse-style
   [raw]
-  (into {}
-        (map (fn [line]
-               (let [[k v] (string/split line ":")]
-                 [(keyword k) v])) (string/split raw ";"))))
+  (->> (string/split raw ";")
+       (map (fn [line]
+              (let [[k v] (string/split line ":")]
+                [(keyword k) v])))
+       (into {})))
 
 (defn show-el
   [v show-value]
@@ -45,8 +46,7 @@
   [v config show-value]
   (when-not (var? v)
     (let [header (try (devtools.formatters/header-api-call v config)
-                      (catch js/Error err
-                        err))]
+                      (catch js/Error err err))]
       (cond
         (not header)
         nil

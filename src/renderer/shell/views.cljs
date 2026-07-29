@@ -4,7 +4,7 @@
    ["@codemirror/language" :refer [bracketMatching]]
    ["@codemirror/view" :refer [EditorView]]
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
-   ["react" :as react]
+   #_["react" :as react]
    [clojure.string :as string]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
@@ -30,9 +30,10 @@
   (:require-macros
    [reagent.ratom :refer [reaction]]))
 
-#_(defn color-highlighted-text
-    [_text _theme-mode]
-    (let [ref (react/createRef)
+(defn static-highlight
+  [text _theme-mode]
+  text
+  #_(let [ref (react/createRef)
           colorize #(when-let [dom-el (.-current ref)]
                       ((aget codemirror "colorize") #js[dom-el] "clojure")
                       ;; Hacky way to remove the theme class added by CodeMirror
@@ -104,13 +105,12 @@
     [:div.flex.items-center
      [:div.flex.self-start.flex-1
       [:div.flex.text-xs.self-start
-       {:class "p-1.5"}
+       {:class "p-1.5 pr-1"}
        (if loaded?
          (string/trim (replumb/get-prompt))
          [:span.text-foreground-disabled
           (i18n.views/t [::loading-language "Loading language..."])])]
-      [:div.flex-1
-
+      [:div.flex-1.py-px
        (when loaded?
          ^{:key lang}
          [code-mirror current-text
@@ -144,8 +144,7 @@
    [:div.text-foreground-disabled.font-bold (str current-ns "=>")]
    [:div.flex-1.cursor-pointer.break-words
     {:on-click #(rf/dispatch [::shell.events/set-text text])}
-    text
-    #_[color-highlighted-text text theme-mode]]])
+    [static-highlight text theme-mode]]])
 
 (defmethod item :error
   [{:keys [value]} opts]
@@ -211,8 +210,8 @@
         [fn-name signature doc] (filter seq (string/split-lines s))]
     [:div.bg-primary.drop-shadow.p-4.absolute.bottom-full.flex.flex-col.gap-4
      [:div.font-semibold fn-name]
-     (when signature signature
-           #_[color-highlighted-text signature theme-mode])
+     (when signature
+       [static-highlight signature theme-mode])
      (when doc [:div doc])]))
 
 (defn completion-list
