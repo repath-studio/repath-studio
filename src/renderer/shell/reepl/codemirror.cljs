@@ -164,7 +164,7 @@
 (def cmp-show #{17 18 91 93})
 
 (defn on-keyup-handler
-  [options inst evt]
+  [options evt inst]
   (let [{:keys [complete-atom complete-word]} options]
     (.stopPropagation evt)
     (cond
@@ -184,7 +184,7 @@
       (reset! complete-atom (repl-hint complete-word inst nil)))))
 
 (defn on-keydown-handler
-  [options inst evt]
+  [options evt inst]
   (let [{:keys [complete-atom on-eval on-up on-down]} options]
     (.stopPropagation evt)
     (case (.-keyCode evt)

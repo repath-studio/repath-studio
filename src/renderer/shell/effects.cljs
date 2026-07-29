@@ -52,8 +52,6 @@
  ::focus
  (fn []
    (some-> (.getElementById js/document utils.dom/shell-input-id)
-           (.getElementsByTagName "textarea")
-           (first)
            (.focus))))
 
 (rf/reg-fx

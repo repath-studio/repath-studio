@@ -2,7 +2,6 @@
   "A collection of stateless reusable ui components.
    Avoid using subscriptions to keep the components pure."
   (:require
-
    ["@codemirror/language" :refer [syntaxHighlighting defaultHighlightStyle]]
    ["@codemirror/state" :refer [Compartment]]
    ["@codemirror/theme-one-dark" :refer [oneDark]]
@@ -275,71 +274,57 @@
   [:> Select/Arrow {:class "fill-primary stroke-border"}])
 
 (def cm-defaults
-  {:matchBrackets true
-   :styleActiveLine true
+  {:styleActiveLine true
    :tabMode "spaces"
-   :extraKeys {"Ctrl-Space" "autocomplete"}
-   :autoCloseBrackets true})
+   :extraKeys {"Ctrl-Space" "autocomplete"}})
 
-#_(defn cm-render-line
-    "Line up wrapped text with the base indentation.
-   https://codemirror.net/demo/indentwrap.html"
-    [editor line dom-el]
-    (let [tab-size (.getOption editor "tabSize")
-          off (* (.countColumn codemirror (.-text line) nil tab-size)
-                 (.defaultCharWidth editor))]
-      (set! (.. dom-el -style -textIndent)
-            (str "-" off "px"))
-      (set! (.. dom-el -style -paddingLeft)
-            (str (+ 4 off) "px"))))
+(def cm-theme
+  (clj->js {"&" {:backgroundColor "transparent"
+                 :fontSize "var(--text-xs)"}
+            ".cm-content" {:caretColor "var(--foreground-hovered)"},
+            "&.cm-focused" {:outline "none"}
+            ".cm-gutters" {:backgroundColor "var(--primary)",
+                           :color "var(--foreground-muted)",
+                           :border "none"}}))
 
 (defn cm-editor
-  [value {:keys [props extensions theme-mode on-init on-blur on-change on-keyup on-keydown]}]
+  [value {:keys [extensions theme-mode on-blur on-change on-keyup on-keydown]}]
   (let [cm (reagent/atom nil)
         ref (react/createRef)
         updating? (atom false)
-        editor-theme (Compartment.)]
+        theme-compartment (Compartment.)
+        theme (fn [mode] (if (= mode :dark) oneDark #js []))]
     ^{:key (str (hash value) (hash extensions))}
     (reagent/create-class
      {:component-did-mount
       (fn [_this]
-        (let [dom-el (.-current ref)]
-          (reset! cm (EditorView.
-                      (clj->js {:doc value
-                                :extensions
-                                (cond-> basicSetup
-                                  :always
-                                  (into [(.-lineWrapping EditorView)
-                                         (syntaxHighlighting defaultHighlightStyle)
-                                         (.domEventHandlers
-                                          EditorView
-                                          (clj->js {:keydown
-                                                    (if on-keydown
-                                                      (fn [evt] (on-keydown @cm evt))
-                                                      (fn [evt] (.stopPropagation evt)))
-                                                    :keyup
-                                                    (if on-keyup
-                                                      (fn [evt] (on-keyup @cm evt))
-                                                      (fn [evt] (.stopPropagation evt)))}))])
+        (let [dom-el (.-current ref)
+              view (EditorView.
+                    (clj->js {:doc value
+                              :extensions
+                              (cond-> [(.theme EditorView cm-theme)
+                                       (.of theme-compartment
+                                            (theme theme-mode))
+                                       (.-lineWrapping EditorView)
+                                       (syntaxHighlighting defaultHighlightStyle)
+                                       (.domEventHandlers
+                                        EditorView
+                                        #js {:keydown on-keydown
+                                             :keyup on-keyup
+                                             :blur on-blur
+                                             :change on-change})]
 
-                                  (= theme-mode :dark)
-                                  (conj (.of editor-theme oneDark))
+                                :always
+                                (into basicSetup)
 
-                                  extensions
-                                  (conj extensions))
+                                extensions
+                                (conj extensions))
 
-                                :parent dom-el})))
-          #_(.dispatch @cm #js {:changes #js {:from 0
-                                              :to (.. ^js @cm -state -doc -length)
-                                              :insert value}})
-          #_(.on @cm "renderLine" cm-render-line)
-          #_(.on @cm "keydown" (or on-keydown
-                                   (fn [_editor evt] (.stopPropagation evt))))
-          #_(.on @cm "keyup" (or on-keyup
-                                 (fn [_editor evt] (.stopPropagation evt))))
-          #_(.refresh @cm)
-          #_(when on-blur (.on @cm "blur" #(on-blur (.getValue %))))
-          #_(when on-init (on-init @cm))
+                              :parent dom-el}))]
+          (reset! cm view)
+          (.dispatch @cm #js {:changes #js {:from 0
+                                            :to (.. ^js @cm -state -doc -length)
+                                            :insert value}})
           #_(when on-change (.on @cm "change" #(when-not @updating?
                                                  (on-change (.getValue %)))))))
 
@@ -349,7 +334,7 @@
       :component-did-update
       (fn [this _]
         (let [value (second (reagent/argv this))
-              options (:options (last (reagent/argv this)))
+              options (last (reagent/argv this))
               {:keys [theme-mode]} options]
           (when (and @cm (not= (.. @cm -state -doc toString) value))
             (reset! updating? true)
@@ -362,21 +347,17 @@
                 (.setCursor ^js @cm last-line last-ch)))
           #_(doseq [[k v] options]
               (.setOption @cm (name k) v))
-          (.dispatch @cm
-                     {:effects (.reconfigure editor-theme
-                                             (if (= theme-mode :light)
-                                               []
-                                               oneDark))})))
+          (.dispatch @cm #js {:effects (.reconfigure theme-compartment
+                                                     (theme theme-mode))})))
 
       :reagent-render
       (fn []
-        [:div (merge {:ref ref} props)])})))
+        [:div {:ref ref}])})))
 
 (defn toaster
   [theme]
   [:> Toaster
-   {:theme theme
-    :toastOptions {:classNames {:toast "bg-primary! border! border-border!
+   {:toastOptions {:classNames {:toast "bg-primary! border! border-border!
                                         shadow-md! p-4! rounded-md!"
                                 :title "text-foreground-hovered!"
                                 :description "text-foreground! text-xs"}}

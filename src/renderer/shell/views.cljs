@@ -1,5 +1,7 @@
 (ns renderer.shell.views
   (:require
+   ["@codemirror/autocomplete" :refer [closeBrackets]]
+   ["@codemirror/language" :refer [bracketMatching]]
    ["@codemirror/view" :refer [EditorView]]
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
    ["react" :as react]
@@ -76,10 +78,12 @@
 (defn code-mirror
   [value options]
   [views/cm-editor value
-   {:props {:id utils.dom/shell-input-id
-            :style {:height "auto"
-                    :flex 1}}
-    :extensions (conj [(EditorView.contentAttributes.of #js {:aria-label "Shell"})]
+   {:theme-mode (:theme-mode options)
+    :extensions (conj [(bracketMatching)
+                       (closeBrackets)
+                       (EditorView.contentAttributes.of
+                        #js {:id utils.dom/shell-input-id
+                             :aria-label "Shell"})]
                       (:extensions options))
     :options {:viewportMargin js/Infinity
               :extraKeys #js {"Shift-Enter" "newlineAndIndent"}
@@ -112,7 +116,9 @@
          [code-mirror current-text
           (merge {:theme-mode theme-mode
                   :on-eval #(rf/dispatch [::shell.events/execute %])
-                  :on-change #(rf/dispatch [::shell.events/set-text %])
+                  :on-change #(->> (.. ^js %2 -state -doc toString)
+                                   (conj [::shell.events/set-text])
+                                   (rf/dispatch))
                   :complete-word #(shell.hierarchy/completions lang %)
                   :on-up #(rf/dispatch [::shell.events/go-up])
                   :on-down #(rf/dispatch [::shell.events/go-down])

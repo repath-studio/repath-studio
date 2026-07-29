@@ -231,12 +231,15 @@
         theme-mode @(rf/subscribe [::theme.subs/computed-mode])]
     [views/cm-editor text
      {:theme-mode theme-mode
+      :on-keydown #(.stopPropagation %)
+      :on-keyup #(.stopPropagation %)
       :extensions [(xml)
                    (lineNumbers)
                    (EditorState.readOnly.of true)
-                   (EditorView.editable.of false)
-                   (EditorView.contentAttributes.of #js {:tabindex "0"
-                                                         :aria-label "XML"})]}]))
+                   #_(EditorView.editable.of false)
+                   (EditorView.contentAttributes.of
+                    #js {:tabindex "0"
+                         :aria-label "XML"})]}]))
 
 (defn center-top-group
   []
