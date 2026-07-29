@@ -95,20 +95,21 @@
                 (action.views/disabled? action))
     [:> Command/CommandItem
      {:on-select #(rf/dispatch [::dialog.events/close event])
-      :class ["flex p-2 rounded-md items-center justify-between group"
+      :class ["flex p-2 rounded-md items-center justify-between gap-2 group"
               "data-[selected=true]:bg-overlay"]}
-     [:div.flex.items-center.gap-2
-      [:div.w-7.h-7.rounded.line-height-6.flex.justify-center.items-center
-       {:class (when icon "bg-overlay")}
+     [:div.flex.items-center.gap-2.min-w-0
+      [:div.w-7.h-7.rounded.flex.justify-center.items-center.shrink-0
+       {:class ["line-height-6" (when icon "bg-overlay")]}
        [views/icon icon]]
-      [:div (->> label
-                 (remove nil?)
-                 (map i18n.views/t)
-                 (string/join " - "))]]
-     [:div.flex.items-center.gap-2
-      [views/shortcuts action]
-      [views/icon-button "edit"
-       {:aria-label (i18n.views/t [::edit-shortcuts "Edit keyboard shortcuts"])
+      [:div.truncate (->> label
+                          (remove nil?)
+                          (map i18n.views/t)
+                          (string/join " - "))]]
+     [:div.flex.items-center.gap-2.shrink-0
+      [views/shortcuts action :limit 3]
+      [views/tooltip-icon-button "pencil"
+       (i18n.views/t [::edit-shortcut "Edit shortcut"])
+       {:aria-label (i18n.views/t [::edit-shortcut "Edit shortcut"])
         :class ["opacity-0 group-hover:opacity-100 focus:opacity-100"
                 "h-5 w-5 text-foreground-muted"]
         :on-pointer-down #(.stopPropagation %)

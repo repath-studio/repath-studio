@@ -141,20 +141,38 @@
           (conj (utils.key/code->key (:keyCode shortcut))))))
 
 (defn shortcuts
-  [action]
+  [action & {:keys [limit]}]
   (let [event-shortcuts (:shortcuts action)]
     (when (seq event-shortcuts)
-      (into [:span.text-foreground-muted.hidden.lg:inline-flex
-             {:class "gap-1.5"}]
-            (comp (map format-shortcut)
-                  (interpose [:span]))
-            event-shortcuts))))
+      (let [truncated? (and limit (> (count event-shortcuts) limit))
+            shown (cond->> event-shortcuts limit (take limit))]
+        (into [:span.text-foreground-muted.hidden.lg:inline-flex.items-center
+               {:class "gap-1.5"}]
+              (cond-> (into []
+                            (comp (map format-shortcut)
+                                  (interpose [:span]))
+                            shown)
+                truncated? (conj [:span "…"])))))))
 
 (defn radio-icon-button
   [icon-name active props]
   [icon-button icon-name
    (merge-with-class {:class ["active:overlay" (when active "accent")]}
                      props)])
+
+(defn tooltip-icon-button
+  [icon-name label props]
+  [:> Tooltip/Root
+   [:> Tooltip/Trigger
+    {:as-child true}
+    [:span [icon-button icon-name props]]]
+   [:> Tooltip/Portal
+    [:> Tooltip/Content
+     {:class "tooltip-content pointer-events-none"
+      :side-offset 5
+      :side "top"
+      :on-escape-key-down #(.stopPropagation %)}
+     label]]])
 
 (defn tooltip-action-icon-button
   [action & {:as content-props}]
