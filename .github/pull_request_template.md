@@ -3,7 +3,7 @@
 Please include a summary of the changes and the related issue. Please also
 include relevant motivation and context.
 
-Fixes # (issue)
+Resolves # (issue)
 
 ## Type of change
 
@@ -25,29 +25,20 @@ test configuration
 - [ ] Test A
 - [ ] Test B
 
-**Test Configuration**:
-
-- Firmware version:
-- Hardware:
-- Toolchain:
-- SDK:
-
 ## Checklist
 
 - [ ] My code follows the style guidelines of this project
 - [ ] I have performed a self-review of my code
-- [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have commented my code in hard-to-understand areas
 - [ ] I have made corresponding changes to the documentation
 - [ ] My changes generate no new warnings
 - [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] New and existing unit tests pass locally with my changes
+- [ ] New and existing tests pass locally with my changes
 - [ ] Any dependent changes have been merged and published in downstream modules
 - [ ] My work does not violate any copyright laws
 
 ## AI assistance
 
-Please remove one of the following labels and add the utilized models, or remove
-both if not applicable.
+Please add the utilized models, or remove the line if not applicable.
 
 Assisted-by: [MODELS/TOOLS]
-Generated-by: [MODELS/TOOLS]
