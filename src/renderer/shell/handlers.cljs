@@ -91,7 +91,7 @@
                           {}
                           langs))))
 
-(m/=> set-verbose [:-> App boolean? App])
+(m/=> toggle-verbose [:-> App boolean? App])
 (defn toggle-verbose
   [db]
   (update-in db [:shell :verbose] not))
