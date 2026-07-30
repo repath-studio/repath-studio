@@ -5,5 +5,5 @@
 
 (defn path
   [id]
-  (let [path-data @(rf/subscribe [::icon.subs/path-data id])]
+  (when-let [path-data @(rf/subscribe [::icon.subs/path-data id])]
     [:path {:d path-data}]))
