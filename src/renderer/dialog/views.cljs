@@ -106,17 +106,15 @@
                           (map i18n.views/t)
                           (string/join " - "))]]
      [:div.flex.items-center.gap-2.shrink-0
-      [views/shortcuts action :limit 3]
       [views/tooltip-icon-button "pencil"
-       (i18n.views/t [::edit-shortcut "Edit shortcut"])
-       {:aria-label (i18n.views/t [::edit-shortcut "Edit shortcut"])
-        :class ["opacity-0 group-hover:opacity-100 focus:opacity-100"
+       (i18n.views/t [::edit-shortcuts "Edit shortcuts"])
+       {:class ["opacity-0 group-hover:opacity-100 focus:opacity-100"
                 "h-5 w-5 text-foreground-muted"]
         :on-pointer-down #(.stopPropagation %)
         :on-click (fn [e]
                     (.stopPropagation e)
-                    (.preventDefault e)
-                    (rf/dispatch [::dialog.events/show-edit-shortcut id]))}]]]))
+                    (rf/dispatch [::dialog.events/show-edit-shortcut id]))}]
+      [views/shortcuts action :limit 3]]]))
 
 (defn cmdk-group-inner
   [items label]
@@ -177,52 +175,49 @@
        (string/join " + ")))
 
 (defn edit-shortcut
-  [_id]
-  (let [pending (reagent/atom nil)]
-    (fn [id]
-      (let [shortcuts @(rf/subscribe [::action.subs/action-shortcuts id])
-            add! (fn [_]
-                   (when @pending
-                     (rf/dispatch [::action.events/add-shortcut id @pending]))
-                   (reset! pending nil))
-            remove! (fn [shortcut]
-                      (rf/dispatch
-                       [::action.events/remove-shortcut id shortcut]))]
-        [:div
-         [views/icon-button "times"
-          {:aria-label (i18n.views/t [::close "Close"])
-           :class "absolute top-3 right-3 h-6 w-6 text-foreground-muted"
-           :on-click #(rf/dispatch [::dialog.events/close])}]
-         [:div.flex.gap-2.mb-4
-          [:input.form-element.p-2.rounded.flex-1.bg-primary.border
-           {:class "border-border"
-            :auto-focus true
-            :read-only true
-            :placeholder (i18n.views/t [::press-keys "Press a key combination"])
-            :value (if @pending (shortcut->string @pending) "")
-            :on-key-down (fn [e]
-                           (.preventDefault e)
-                           (.stopPropagation e)
-                           (when-let [shortcut (keydown->shortcut e)]
-                             (reset! pending shortcut)))}]
-          [:button.button.px-3.rounded.font-medium.bg-overlay
-           {:disabled (nil? @pending)
-            :on-click add!}
-           (i18n.views/t [::add "Add"])]]
-         (into [:div.flex.flex-wrap.gap-2.min-h-8.mb-4]
-               (map (fn [shortcut]
-                      ^{:key (str shortcut)}
-                      [views/tag
-                       [views/format-shortcut shortcut]
-                       #(remove! shortcut)])
-                    shortcuts))
-         [button-bar
-          [:button.button.px-1.rounded.font-medium.w-full.bg-overlay
-           {:class "sm:bg-transparent"
-            :on-click #(rf/dispatch [::action.events/reset-shortcuts id])}
-           (i18n.views/t [::reset-shortcuts "Reset to defaults"])]
-          [button {:label [::ok "OK"]
-                   :class "accent"}]]]))))
+  [id label]
+  (reagent/with-let [pending (reagent/atom nil)]
+    (let [shortcuts @(rf/subscribe [::action.subs/action-shortcuts id])
+          label (i18n.views/t label)
+          add! (fn [_]
+                 (when @pending
+                   (rf/dispatch [::action.events/add-shortcut id @pending]))
+                 (reset! pending nil))
+          remove! (fn [shortcut]
+                    (rf/dispatch
+                     [::action.events/remove-shortcut id shortcut]))]
+      [:div.flex.flex-col.gap-4
+       [:div (i18n.views/t [::customize-shortcuts-for
+                            [:div "Customize shortcuts for %1"]]
+                           [[:strong label]])]
+       [:div.flex.gap-2
+        [:input.rounded.px-2.flex-1.border.border-border.focus:border-accent
+         {:auto-focus true
+          :placeholder (i18n.views/t [::press-keys "Press a key combination"])
+          :default-value (if @pending (shortcut->string @pending) "")
+          :on-key-down (fn [e]
+                         (.preventDefault e)
+                         (.stopPropagation e)
+                         (when-let [shortcut (keydown->shortcut e)]
+                           (reset! pending shortcut)))}]
+        [:button.button.px-3.rounded.bg-overlay
+         {:disabled (nil? @pending)
+          :on-click add!}
+         (i18n.views/t [::add "Add"])]]
+       (into [:div.flex.flex-wrap.gap-2.min-h-8]
+             (map (fn [shortcut]
+                    ^{:key (str shortcut)}
+                    [views/tag
+                     [views/format-shortcut shortcut]
+                     #(remove! shortcut)])
+                  shortcuts))
+       [button-bar
+        [:button.button.px-1.rounded.font-medium.w-full.bg-overlay
+         {:class "sm:bg-transparent"
+          :on-click #(rf/dispatch [::action.events/reset-shortcuts id])}
+         (i18n.views/t [::reset-shortcuts "Reset to defaults"])]
+        [button {:label [::ok "OK"]
+                 :class "accent"}]]])))
 
 (defn root
   []

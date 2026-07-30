@@ -60,12 +60,13 @@
 
 (defn tag
   [content on-remove & {:keys [remove-label]}]
-  [:div.flex.items-center.gap-1.bg-overlay.rounded.pl-2.pr-1.py-1
+  [:div.flex.items-center.gap-2.bg-overlay.rounded.py-1
+   {:class "px-1.5"}
    content
    [icon-button "times"
     {:on-click on-remove
-     :aria-label (or remove-label (i18n.views/t [::remove "Remove"]))
-     :class "h-4 w-4 text-foreground-muted"}]])
+     :title (or remove-label (i18n.views/t [::remove "Remove"]))
+     :class "button-size-sm text-foreground-muted"}]])
 
 (defn action-icon-button
   [action & {:as props}]

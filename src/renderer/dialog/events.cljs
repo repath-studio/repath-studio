@@ -20,8 +20,9 @@
    (let [label (get-in db [:actions id :label])]
      (dialog.handlers/create
       db
-      {:title (i18n.handlers/t db label)
-       :content [dialog.views/edit-shortcut id]}))))
+      {:title (i18n.handlers/t db [::keybindings "Keybindings"])
+       :content [dialog.views/edit-shortcut id label]
+       :attrs {:on-escape-key-down #(.stopPropagation %)}}))))
 
 (rf/reg-event-db
  ::show-about
