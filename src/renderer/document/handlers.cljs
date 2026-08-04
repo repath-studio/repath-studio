@@ -264,6 +264,18 @@
        (filter #(not (open? db (:id %))))
        (reverse)))
 
+(m/=> requires-migration? [:-> map? SemanticVersion boolean?])
+(defn requires-migration?
+  "Checks if the provided document requires migration to the given version.
+
+   Returns true if the document's version is older than the given version,
+   or if the document has no version (a document created before versioning was
+   introduced to the document schema)."
+  [document version]
+  (or (not (:version document))
+      (-> (utils.compatibility/version->vec (:version document))
+          (utils.compatibility/requires-migration? version))))
+
 (m/=> migrate [:function
                [:-> map? map?]
                [:-> map? [:tuple SemanticVersion ifn?] map?]])
@@ -272,7 +284,5 @@
    (reduce migrate document document.migrations/migrations))
   ([document [version f]]
    (cond-> document
-     (or (not (:version document))
-         (-> (utils.compatibility/version->vec (:version document))
-             (utils.compatibility/requires-migration? version)))
-     f)))
+     (requires-migration? document version)
+     (f))))

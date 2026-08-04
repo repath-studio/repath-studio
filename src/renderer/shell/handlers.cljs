@@ -8,7 +8,7 @@
     :refer [ShellHistory ShellItem ShellLanguageId]]
    [renderer.utils.math :as utils.math]))
 
-(def max-items 50)
+(def max-items 200)
 
 (m/=> active-language [:-> App ShellLanguageId])
 (defn active-language

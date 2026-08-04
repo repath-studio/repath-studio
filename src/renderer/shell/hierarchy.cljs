@@ -1,15 +1,13 @@
-(ns renderer.shell.hierarchy
-  (:require
-   [renderer.hierarchy :as hierarchy]))
+(ns renderer.shell.hierarchy)
 
-(defmulti init :language :hierarchy hierarchy/hierarchy)
-(defmulti welcome identity :hierarchy hierarchy/hierarchy)
-(defmulti help identity :hierarchy hierarchy/hierarchy)
-(defmulti evaluate identity :hierarchy hierarchy/hierarchy)
-(defmulti show-error identity :hierarchy hierarchy/hierarchy)
-(defmulti completions identity :hierarchy hierarchy/hierarchy)
-(defmulti docs identity :hierarchy hierarchy/hierarchy)
-(defmulti codemirror-options identity :hierarchy hierarchy/hierarchy)
+(defmulti init :language)
+(defmulti welcome identity)
+(defmulti help identity)
+(defmulti evaluate identity)
+(defmulti show-error identity)
+(defmulti completions identity)
+(defmulti docs identity)
+(defmulti codemirror-options identity)
 
 (defmethod init :default [_params])
 (defmethod welcome :default [_language])
