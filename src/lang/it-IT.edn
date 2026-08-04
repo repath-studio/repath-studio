@@ -34,10 +34,16 @@
  {:create-doc "Crea documento"}
 
  :renderer.dialog.events
- {:are-you-sure "Sei sicuro di voler continuare?"}
+ {:are-you-sure "Sei sicuro di voler continuare?"
+  :keybindings "Tasti di scelta rapida"}
 
  :renderer.dialog.views
- {:search-command "Cerca un comando"
+ {:edit-shortcuts "Modifica scorciatoie"
+  :customize-shortcuts-for [:div "Personalizza scorciatoie per %1"]
+  :press-keys "Premi una combinazione di tasti"
+  :add "Aggiungi"
+  :reset-shortcuts "Ripristina impostazioni predefinite"
+  :search-command "Cerca un comando"
   :no-results "Nessun risultato trovato."
   :version "Versione: "
   :browser "Browser: "
@@ -751,7 +757,8 @@
  {:close-panel "Chiudi pannello"}
 
  :renderer.app.core
- {:grid "Griglia"
+ {:features "Funzionalità"
+  :grid "Griglia"
   :help-bar "Barra aiuto"
   :debug-info "Info debug"
   :guides "Guide"
@@ -762,7 +769,8 @@
   :about "Informazioni"}
 
  :renderer.document.core
- {:new "Nuovo"
+ {:document "Documento"
+  :new "Nuovo"
   :open "Apri..."
   :recent-clear "Cancella recenti"
   :print "Stampa"
@@ -834,7 +842,8 @@
   :entity "Entità"
   :image "Immagine"
   :path "Tracciato"
-  :select "Seleziona"}
+  :select "Seleziona"
+  :convert "Converti"}
 
  :renderer.error.core
  {:report-errors "Segnala errori automaticamente"}
@@ -898,7 +907,9 @@
 
  :renderer.window.core
  {:exit "Esci"
-  :toggle-fullscreen "Attiva/disattiva schermo intero"}
+  :toggle-fullscreen "Attiva/disattiva schermo intero"
+  :toggle-maximized "Attiva/disattiva finestra ingrandita"
+  :minimize "Riduci a icona"}
 
  :renderer.tool.core
  {:cancel "Annulla"}
@@ -915,4 +926,8 @@
  :renderer.shell.core
  {:focus-shell "Porta il focus alla shell"
   :clear-output "Cancella output"
-  :verbose "Dettagliato"}}
+  :verbose "Dettagliato"}
+
+ :renderer.views
+ {:remove "Rimuovi"
+  :resize-thumb "Ridimensiona pannello"}}

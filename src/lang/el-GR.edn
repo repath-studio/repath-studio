@@ -34,10 +34,16 @@
  {:create-doc "Δημιουργία εγγράφου"}
 
  :renderer.dialog.events
- {:are-you-sure "Είστε βέβαιοι ότι θέλετε να συνεχίσετε;"}
+ {:are-you-sure "Είστε βέβαιοι ότι θέλετε να συνεχίσετε;"
+  :keybindings "Συντομεύσεις πληκτρολογίου"}
 
  :renderer.dialog.views
- {:search-command "Αναζήτηση εντολής"
+ {:edit-shortcuts "Επεξεργασία συντομεύσεων"
+  :customize-shortcuts-for [:div "Προσαρμογή συντομεύσεων για %1"]
+  :press-keys "Πιέστε συνδυασμό πλήκτρων"
+  :add "Προσθήκη"
+  :reset-shortcuts "Επαναφορά στις προεπιλογές"
+  :search-command "Αναζήτηση εντολής"
   :no-results "Δεν βρέθηκαν αποτελέσματα."
   :version "Έκδοση: "
   :browser "Πρόγραμμα περιήγησης: "
@@ -758,7 +764,8 @@
  {:close-panel "Κλείσιμο πάνελ"}
 
  :renderer.app.core
- {:grid "Πλέγμα"
+ {:features "Χαρακτηριστικά"
+  :grid "Πλέγμα"
   :help-bar "Μπάρα βοηθείας"
   :debug-info "Πληροφορίες αποσφαλμάτωσης"
   :guides "Οδηγοί"
@@ -769,7 +776,8 @@
   :about "Σχετικά"}
 
  :renderer.document.core
- {:new "Νέο"
+ {:document "Έγγραφο"
+  :new "Νέο"
   :open "Άνοιγμα..."
   :recent-clear "Καθαρισμός πρόσφατων"
   :print "Εκτύπωση"
@@ -841,7 +849,8 @@
   :entity "Οντότητα"
   :image "Εικόνα"
   :path "Διαδρομή"
-  :select "Επιλογή"}
+  :select "Επιλογή"
+  :convert "Μετατροπή"}
 
  :renderer.error.core
  {:report-errors "Αναφορά σφαλμάτων αυτόματα"}
@@ -905,7 +914,9 @@
 
  :renderer.window.core
  {:exit "Έξοδος"
-  :toggle-fullscreen "Εναλλαγή πλήρους οθόνης"}
+  :toggle-fullscreen "Εναλλαγή πλήρους οθόνης"
+  :toggle-maximized "Εναλλαγή μεγιστοποιημένης"
+  :minimize "Ελαχιστοποίηση"}
 
  :renderer.tool.core
  {:cancel "Ακύρωση"}
@@ -922,4 +933,8 @@
  :renderer.shell.core
  {:focus-shell "Εστίαση στο τερματικό"
   :clear-output "Εκκαθάριση εξόδου"
-  :verbose "Λεπτομερής"}}
+  :verbose "Λεπτομερής"}
+
+ :renderer.views
+ {:remove "Αφαίρεση"
+  :resize-thumb "Αλλαγή μεγέθους πάνελ"}}

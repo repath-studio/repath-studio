@@ -34,10 +34,16 @@
  {:create-doc "Belge oluştur"}
 
  :renderer.dialog.events
- {:are-you-sure "Devam etmek istediğinizden emin misiniz?"}
+ {:are-you-sure "Devam etmek istediğinizden emin misiniz?"
+  :keybindings "Klavye kısayolları"}
 
  :renderer.dialog.views
- {:search-command "Komut ara"
+ {:edit-shortcuts "Kısayolları düzenle"
+  :customize-shortcuts-for [:div "%1 için kısayolları özelleştir"]
+  :press-keys "Bir tuş kombinasyonu girin"
+  :add "Ekle"
+  :reset-shortcuts "Varsayılanlara sıfırla"
+  :search-command "Komut ara"
   :no-results "Sonuç bulunamadı."
   :version "Sürüm: "
   :browser "Tarayıcı: "
@@ -730,7 +736,8 @@
  {:close-panel "Paneli kapat"}
 
  :renderer.app.core
- {:grid "Izgara"
+ {:features "Özellikler"
+  :grid "Izgara"
   :help-bar "Yardım çubuğu"
   :debug-info "Hata ayıklama bilgisi"
   :guides "Kılavuzlar"
@@ -741,7 +748,8 @@
   :about "Hakkında"}
 
  :renderer.document.core
- {:new "Yeni"
+ {:document "Belge"
+  :new "Yeni"
   :open "Aç..."
   :recent-clear "Son kullanılanları temizle"
   :print "Yazdır"
@@ -813,7 +821,8 @@
   :entity "Varlık"
   :image "Resim"
   :path "Yol"
-  :select "Seç"}
+  :select "Seç"
+  :convert "Dönüştür"}
 
  :renderer.error.core
  {:report-errors "Hataları otomatik olarak bildir"}
@@ -877,7 +886,9 @@
 
  :renderer.window.core
  {:exit "Çıkış"
-  :toggle-fullscreen "Tam ekranı aç/kapat"}
+  :toggle-fullscreen "Tam ekranı aç/kapat"
+  :toggle-maximized "Büyütülmüş durumu aç/kapat"
+  :minimize "Simge durumuna küçült"}
 
  :renderer.tool.core
  {:cancel "İptal"}
@@ -894,4 +905,8 @@
  :renderer.shell.core
  {:focus-shell "Shell'e odaklan"
   :clear-output "Çıktıyı temizle"
-  :verbose "Ayrıntılı"}}
+  :verbose "Ayrıntılı"}
+
+ :renderer.views
+ {:remove "Kaldır"
+  :resize-thumb "Panel boyutunu değiştir"}}

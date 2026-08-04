@@ -34,10 +34,16 @@
  {:create-doc "Dokument erstellen"}
 
  :renderer.dialog.events
- {:are-you-sure "Sind Sie sicher, dass Sie fortfahren möchten?"}
+ {:are-you-sure "Sind Sie sicher, dass Sie fortfahren möchten?"
+  :keybindings "Tastenkombinationen"}
 
  :renderer.dialog.views
- {:search-command "Nach einem Befehl suchen"
+ {:edit-shortcuts "Tastenkürzel bearbeiten"
+  :customize-shortcuts-for [:div "Tastenkürzel anpassen für %1"]
+  :press-keys "Tastenkombination drücken"
+  :add "Hinzufügen"
+  :reset-shortcuts "Auf Standard zurücksetzen"
+  :search-command "Nach einem Befehl suchen"
   :no-results "Keine Ergebnisse gefunden."
   :version "Version: "
   :browser "Browser: "
@@ -754,7 +760,8 @@
  {:close-panel "Panel schließen"}
 
  :renderer.app.core
- {:grid "Raster"
+ {:features "Funktionen"
+  :grid "Raster"
   :help-bar "Hilfeleiste"
   :debug-info "Debug-Informationen"
   :guides "Hilfslinien"
@@ -765,7 +772,8 @@
   :about "Über"}
 
  :renderer.document.core
- {:new "Neu"
+ {:document "Dokument"
+  :new "Neu"
   :open "Öffnen..."
   :recent-clear "Verlauf löschen"
   :print "Drucken"
@@ -837,7 +845,8 @@
   :entity "Element"
   :image "Bild"
   :path "Pfad"
-  :select "Auswählen"}
+  :select "Auswählen"
+  :convert "Konvertieren"}
 
  :renderer.error.core
  {:report-errors "Fehler automatisch melden"}
@@ -901,7 +910,9 @@
 
  :renderer.window.core
  {:exit "Beenden"
-  :toggle-fullscreen "Vollbild umschalten"}
+  :toggle-fullscreen "Vollbild umschalten"
+  :toggle-maximized "Maximiert umschalten"
+  :minimize "Minimieren"}
 
  :renderer.tool.core
  {:cancel "Abbrechen"}
@@ -918,4 +929,8 @@
  :renderer.shell.core
  {:focus-shell "Shell fokussieren"
   :clear-output "Ausgabe löschen"
-  :verbose "Ausführlich"}}
+  :verbose "Ausführlich"}
+
+ :renderer.views
+ {:remove "Entfernen"
+  :resize-thumb "Bereichsgröße ändern"}}

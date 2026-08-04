@@ -34,10 +34,16 @@
  {:create-doc "Create document"}
 
  :renderer.dialog.events
- {:are-you-sure "Are you sure you want to continue?"}
+ {:are-you-sure "Are you sure you want to continue?"
+  :keybindings "Keybindings"}
 
  :renderer.dialog.views
- {:search-command "Search for a command"
+ {:edit-shortcuts "Edit shortcuts"
+  :customize-shortcuts-for [:div "Customize shortcuts for %1"]
+  :press-keys "Press a key combination"
+  :add "Add"
+  :reset-shortcuts "Reset to defaults"
+  :search-command "Search for a command"
   :no-results "No results found."
   :version "Version: "
   :browser "Browser: "
@@ -723,7 +729,8 @@
  {:close-panel "Close panel"}
 
  :renderer.app.core
- {:grid "Grid"
+ {:features "Features"
+  :grid "Grid"
   :help-bar "Help bar"
   :debug-info "Debug info"
   :guides "Guides"
@@ -734,7 +741,8 @@
   :about "About"}
 
  :renderer.document.core
- {:new "New"
+ {:document "Document"
+  :new "New"
   :open "Open…"
   :recent-clear "Clear recent"
   :print "Print"
@@ -806,7 +814,8 @@
   :entity "Entity"
   :image "Image"
   :path "Path"
-  :select "Select"}
+  :select "Select"
+  :convert "Convert"}
 
  :renderer.error.core
  {:report-errors "Report errors automatically"}
@@ -870,7 +879,9 @@
 
  :renderer.window.core
  {:exit "Exit"
-  :toggle-fullscreen "Toggle fullscreen"}
+  :toggle-fullscreen "Toggle fullscreen"
+  :toggle-maximized "Toggle maximized"
+  :minimize "Minimize"}
 
  :renderer.tool.core
  {:cancel "Cancel"}
@@ -888,6 +899,10 @@
  {:focus-shell "Focus shell"
   :clear-output "Clear output"
   :verbose "Verbose"}
- 
+
  :renderer.shell.impl.core
- {:shell-languages "Shell languages"}}
+ {:shell-languages "Shell languages"}
+
+ :renderer.views
+ {:remove "Remove"
+  :resize-thumb "Resize panel thumb"}}

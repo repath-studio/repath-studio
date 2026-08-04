@@ -34,10 +34,16 @@
  {:create-doc "Skapa dokument"}
 
  :renderer.dialog.events
- {:are-you-sure "Är du säker på att du vill fortsätta?"}
+ {:are-you-sure "Är du säker på att du vill fortsätta?"
+  :keybindings "Tangentbordsgenvägar"}
 
  :renderer.dialog.views
- {:search-command "Sök efter ett kommando"
+ {:edit-shortcuts "Redigera genvägar"
+  :customize-shortcuts-for [:div "Anpassa genvägar för %1"]
+  :press-keys "Tryck på en tangentkombination"
+  :add "Lägg till"
+  :reset-shortcuts "Återställ till standard"
+  :search-command "Sök efter ett kommando"
   :no-results "Inga resultat hittades."
   :version "Version: "
   :browser "Webbläsare: "
@@ -736,7 +742,8 @@
  {:close-panel "Stäng panel"}
 
  :renderer.app.core
- {:grid "Rutnät"
+ {:features "Funktioner"
+  :grid "Rutnät"
   :help-bar "Hjälpfält"
   :debug-info "Felsökningsinformation"
   :guides "Stödlinjer"
@@ -747,7 +754,8 @@
   :about "Om"}
 
  :renderer.document.core
- {:new "Ny"
+ {:document "Dokument"
+  :new "Ny"
   :open "Öppna..."
   :recent-clear "Rensa senaste"
   :print "Skriv ut"
@@ -819,7 +827,8 @@
   :entity "Entitet"
   :image "Bild"
   :path "Bana"
-  :select "Markera"}
+  :select "Markera"
+  :convert "Konvertera"}
 
  :renderer.error.core
  {:report-errors "Rapportera fel automatiskt"}
@@ -883,7 +892,9 @@
 
  :renderer.window.core
  {:exit "Avsluta"
-  :toggle-fullscreen "Växla helskärm"}
+  :toggle-fullscreen "Växla helskärm"
+  :toggle-maximized "Växla maximerat"
+  :minimize "Minimera"}
 
  :renderer.tool.core
  {:cancel "Avbryt"}
@@ -900,4 +911,8 @@
  :renderer.shell.core
  {:focus-shell "Fokusera terminal"
   :clear-output "Rensa utdata"
-  :verbose "Utförlig"}}
+  :verbose "Utförlig"}
+
+ :renderer.views
+ {:remove "Ta bort"
+  :resize-thumb "Ändra storlek på panel"}}

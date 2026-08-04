@@ -34,10 +34,16 @@
  {:create-doc "Créer un document"}
 
  :renderer.dialog.events
- {:are-you-sure "Êtes-vous sûr de vouloir continuer ?"}
+ {:are-you-sure "Êtes-vous sûr de vouloir continuer ?"
+  :keybindings "Raccourcis clavier"}
 
  :renderer.dialog.views
- {:search-command "Rechercher une commande"
+ {:edit-shortcuts "Modifier les raccourcis"
+  :customize-shortcuts-for [:div "Personnaliser les raccourcis pour %1"]
+  :press-keys "Appuyez sur une combinaison de touches"
+  :add "Ajouter"
+  :reset-shortcuts "Réinitialiser les valeurs par défaut"
+  :search-command "Rechercher une commande"
   :no-results "Aucun résultat trouvé."
   :version "Version : "
   :browser "Navigateur : "
@@ -748,7 +754,8 @@
  {:close-panel "Fermer le panneau"}
 
  :renderer.app.core
- {:grid "Grille"
+ {:features "Fonctionnalités"
+  :grid "Grille"
   :help-bar "Barre d'aide"
   :debug-info "Informations de débogage"
   :guides "Guides"
@@ -759,7 +766,8 @@
   :about "À propos"}
 
  :renderer.document.core
- {:new "Nouveau"
+ {:document "Document"
+  :new "Nouveau"
   :open "Ouvrir..."
   :recent-clear "Effacer les récents"
   :print "Imprimer"
@@ -831,7 +839,8 @@
   :entity "Entité"
   :image "Image"
   :path "Tracé"
-  :select "Sélectionner"}
+  :select "Sélectionner"
+  :convert "Convertir"}
 
  :renderer.error.core
  {:report-errors "Signaler les erreurs automatiquement"}
@@ -895,7 +904,9 @@
 
  :renderer.window.core
  {:exit "Quitter"
-  :toggle-fullscreen "Basculer en plein écran"}
+  :toggle-fullscreen "Basculer en plein écran"
+  :toggle-maximized "Basculer la fenêtre agrandie"
+  :minimize "Réduire"}
 
  :renderer.tool.core
  {:cancel "Annuler"}
@@ -912,4 +923,8 @@
  :renderer.shell.core
  {:focus-shell "Focaliser la console"
   :clear-output "Effacer la sortie"
-  :verbose "Verbeux"}}
+  :verbose "Verbeux"}
+
+ :renderer.views
+ {:remove "Supprimer"
+  :resize-thumb "Redimensionner le panneau"}}

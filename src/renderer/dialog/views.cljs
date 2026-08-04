@@ -110,7 +110,6 @@
        {:class ["opacity-0 group-hover:opacity-100 focus:opacity-100"
                 "h-5 w-5 text-foreground-muted"]
         :on-pointer-down #(.stopPropagation %)
-
         :on-click (fn [e]
                     (.stopPropagation e)
                     (rf/dispatch [::dialog.events/show-edit-shortcut id]))}]

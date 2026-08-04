@@ -34,10 +34,16 @@
  {:create-doc "문서 생성"}
 
  :renderer.dialog.events
- {:are-you-sure "계속하시겠습니까?"}
+ {:are-you-sure "계속하시겠습니까?"
+  :keybindings "키 바인딩"}
 
  :renderer.dialog.views
- {:search-command "명령 검색"
+ {:edit-shortcuts "단축키 편집"
+  :customize-shortcuts-for [:div "%1의 단축키 사용자화"]
+  :press-keys "키 조합을 누르세요"
+  :add "추가"
+  :reset-shortcuts "기본값으로 재설정"
+  :search-command "명령 검색"
   :no-results "검색 결과가 없습니다."
   :version "버전: "
   :browser "브라우저: "
@@ -688,7 +694,8 @@
  {:close-panel "패널 닫기"}
 
  :renderer.app.core
- {:grid "격자"
+ {:features "기능"
+  :grid "격자"
   :help-bar "도움말 바"
   :debug-info "디버그 정보"
   :guides "가이드"
@@ -699,7 +706,8 @@
   :about "정보"}
 
  :renderer.document.core
- {:new "새로 만들기"
+ {:document "문서"
+  :new "새로 만들기"
   :open "열기..."
   :print "인쇄"
   :save "저장"
@@ -770,7 +778,8 @@
   :entity "엔티티"
   :image "이미지"
   :path "패스"
-  :select "선택"}
+  :select "선택"
+  :convert "변환"}
 
  :renderer.error.core
  {:report-errors "오류 자동 보고"}
@@ -834,7 +843,9 @@
 
  :renderer.window.core
  {:exit "종료"
-  :toggle-fullscreen "전체 화면 전환"}
+  :toggle-fullscreen "전체 화면 전환"
+  :toggle-maximized "최대화 전환"
+  :minimize "최소화"}
 
  :renderer.tool.core
  {:cancel "취소"}
@@ -851,4 +862,8 @@
  :renderer.shell.core
  {:focus-shell "셸에 포커스"
   :clear-output "입력 지우기"
-  :verbose "상세"}}
+  :verbose "상세"}
+
+ :renderer.views
+ {:remove "제거"
+  :resize-thumb "패널 크기 조정"}}

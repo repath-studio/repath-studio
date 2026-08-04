@@ -34,10 +34,16 @@
  {:create-doc "Document aanmaken"}
 
  :renderer.dialog.events
- {:are-you-sure "Weet u zeker dat u wilt doorgaan?"}
+ {:are-you-sure "Weet u zeker dat u wilt doorgaan?"
+  :keybindings "Sneltoetsen"}
 
  :renderer.dialog.views
- {:search-command "Zoek naar een commando"
+ {:edit-shortcuts "Sneltoetsen bewerken"
+  :customize-shortcuts-for [:div "Sneltoetsen aanpassen voor %1"]
+  :press-keys "Druk op een toetscombinatie"
+  :add "Toevoegen"
+  :reset-shortcuts "Standaardinstellingen herstellen"
+  :search-command "Zoek naar een commando"
   :no-results "Geen resultaten gevonden."
   :version "Versie: "
   :browser "Browser: "
@@ -752,7 +758,8 @@
  {:close-panel "Paneel sluiten"}
 
  :renderer.app.core
- {:grid "Raster"
+ {:features "Functies"
+  :grid "Raster"
   :help-bar "Helpbalk"
   :debug-info "Debug-informatie"
   :guides "Hulplijnen"
@@ -763,7 +770,8 @@
   :about "Over"}
 
  :renderer.document.core
- {:new "Nieuw"
+ {:document "Document"
+  :new "Nieuw"
   :open "Openen..."
   :recent-clear "Recent wissen"
   :print "Afdrukken"
@@ -835,7 +843,8 @@
   :entity "Entiteit"
   :image "Afbeelding"
   :path "Pad"
-  :select "Selecteren"}
+  :select "Selecteren"
+  :convert "Converteren"}
 
  :renderer.error.core
  {:report-errors "Fouten automatisch melden"}
@@ -899,7 +908,9 @@
 
  :renderer.window.core
  {:exit "Afsluiten"
-  :toggle-fullscreen "Volledig scherm in-/uitschakelen"}
+  :toggle-fullscreen "Volledig scherm in-/uitschakelen"
+  :toggle-maximized "Maximalisatie in-/uitschakelen"
+  :minimize "Minimaliseren"}
 
  :renderer.tool.core
  {:cancel "Annuleren"}
@@ -916,4 +927,8 @@
  :renderer.shell.core
  {:focus-shell "Focus op shell"
   :clear-output "Uitvoer wissen"
-  :verbose "Uitgebreid"}}
+  :verbose "Uitgebreid"}
+
+ :renderer.views
+ {:remove "Verwijderen"
+  :resize-thumb "Paneel formaat wijzigen"}}

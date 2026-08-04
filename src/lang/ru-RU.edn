@@ -34,10 +34,16 @@
  {:create-doc "Создать документ"}
 
  :renderer.dialog.events
- {:are-you-sure "Вы уверены, что хотите продолжить?"}
+ {:are-you-sure "Вы уверены, что хотите продолжить?"
+  :keybindings "Горячие клавиши"}
 
  :renderer.dialog.views
- {:search-command "Поиск команды"
+ {:edit-shortcuts "Изменить горячие клавиши"
+  :customize-shortcuts-for [:div "Настройка горячих клавиш для %1"]
+  :press-keys "Нажмите комбинацию клавиш"
+  :add "Добавить"
+  :reset-shortcuts "Сбросить до стандартных"
+  :search-command "Поиск команды"
   :no-results "Результаты не найдены."
   :version "Версия: "
   :browser "Браузер: "
@@ -735,7 +741,8 @@
  {:close-panel "Закрыть панель"}
 
  :renderer.app.core
- {:grid "Сетка"
+ {:features "Функции"
+  :grid "Сетка"
   :help-bar "Панель справки"
   :debug-info "Отладочная информация"
   :guides "Направляющие"
@@ -746,7 +753,8 @@
   :about "О программе"}
 
  :renderer.document.core
- {:new "Новый"
+ {:document "Документ"
+  :new "Новый"
   :open "Открыть..."
   :recent-clear "Очистить недавние"
   :print "Печать"
@@ -817,7 +825,8 @@
   :entity "Сущность"
   :image "Изображение"
   :path "Контур"
-  :select "Выделение"}
+  :select "Выделение"
+  :convert "Конвертировать"}
 
  :renderer.error.core
  {:report-errors "Сообщать об ошибках автоматически"}
@@ -881,7 +890,9 @@
 
  :renderer.window.core
  {:exit "Выход"
-  :toggle-fullscreen "Переключить полноэкранный режим"}
+  :toggle-fullscreen "Переключить полноэкранный режим"
+  :toggle-maximized "Переключить развёрнутый режим"
+  :minimize "Свернуть"}
 
  :renderer.tool.core
  {:cancel "Отмена"}
@@ -898,4 +909,8 @@
  :renderer.shell.core
  {:focus-shell "Фокус на консоли"
   :clear-output "Очистить вывод"
-  :verbose "Подробно"}}
+  :verbose "Подробно"}
+
+ :renderer.views
+ {:remove "Удалить"
+  :resize-thumb "Изменить размер панели"}}

@@ -34,10 +34,16 @@
  {:create-doc "إنشاء مستند"}
 
  :renderer.dialog.events
- {:are-you-sure "هل أنت متأكد أنك تريد المتابعة؟"}
+ {:are-you-sure "هل أنت متأكد أنك تريد المتابعة؟"
+  :keybindings "اختصارات لوحة المفاتيح"}
 
  :renderer.dialog.views
- {:search-command "البحث عن أمر"
+ {:edit-shortcuts "تعديل الاختصارات"
+  :customize-shortcuts-for [:div "تخصيص الاختصارات لـ %1"]
+  :press-keys "اضغط على تركيبة مفاتيح"
+  :add "إضافة"
+  :reset-shortcuts "إعادة الضبط إلى الافتراضي"
+  :search-command "البحث عن أمر"
   :no-results "لا توجد نتائج."
   :version "الإصدار: "
   :browser "المتصفح: "
@@ -708,7 +714,8 @@
  {:close-panel "إغلاق اللوحة"}
 
  :renderer.app.core
- {:grid "الشبكة"
+ {:features "الميزات"
+  :grid "الشبكة"
   :help-bar "شريط المساعدة"
   :debug-info "معلومات التصحيح"
   :guides "الأدلة"
@@ -719,7 +726,8 @@
   :about "حول"}
 
  :renderer.document.core
- {:new "جديد"
+ {:document "مستند"
+  :new "جديد"
   :open "فتح..."
   :recent-clear "مسح الحديثة"
   :print "طباعة"
@@ -791,7 +799,8 @@
   :entity "كائن"
   :image "صورة"
   :path "مسار"
-  :select "تحديد"}
+  :select "تحديد"
+  :convert "تحويل"}
 
  :renderer.error.core
  {:report-errors "الإبلاغ عن الأخطاء تلقائياً"}
@@ -855,7 +864,9 @@
 
  :renderer.window.core
  {:exit "خروج"
-  :toggle-fullscreen "تبديل ملء الشاشة"}
+  :toggle-fullscreen "تبديل ملء الشاشة"
+  :toggle-maximized "تبديل التكبير"
+  :minimize "تصغير"}
 
  :renderer.tool.core
  {:cancel "إلغاء"}
@@ -872,4 +883,8 @@
  :renderer.shell.core
  {:focus-shell "تركيز الطرفية"
   :clear-output "مسح المخرجات"
-  :verbose "مطوّل"}}
+  :verbose "مطوّل"}
+
+ :renderer.views
+ {:remove "إزالة"
+  :resize-thumb "تغيير حجم لوح التحكم"}}
