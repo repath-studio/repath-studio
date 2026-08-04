@@ -37,7 +37,7 @@
                             :shiftKey true}]}])
 
 (rf/dispatch [::action.events/register-action
-              {:id :view/toggle-guides-locked
+              {:id :guides/toggle-locked
                :label [::lock-guides "Lock guides"]
                :icon "ruler-straight"
                :event [::app.events/toggle-guides-locked]
@@ -60,3 +60,12 @@
                :shortcuts [{:keyCode (utils.key/codes "D")
                             :ctrlKey true
                             :shiftKey true}]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :view/features
+               :label [::features "Features"]
+               :actions [:view/toggle-grid
+                         :view/toggle-rulers
+                         :view/toggle-guides
+                         :view/toggle-help-bar
+                         :view/toggle-debug-info]}])

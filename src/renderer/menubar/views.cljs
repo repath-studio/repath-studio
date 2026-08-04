@@ -76,8 +76,7 @@
    :label [::object "Object"]
    :type :root
    :enabled [::document.subs/some-entities?]
-   :actions (->> [[:object/to-path
-                   :object/stroke-to-path]
+   :actions (->> [(:actions (action.views/deref-action-group :object/convert))
                   (:actions (action.views/deref-action-group :object/grouping))
                   (:actions (action.views/deref-action-group :object/locking))
                   [{:id :align
@@ -119,18 +118,13 @@
              (action.views/deref-action-group :theme/mode)
              (action.views/deref-action-group :a11y/filter)
              (action.views/deref-action-group :i18n/language)
-             :separator
-             :view/toggle-grid
-             :view/toggle-guides
-             :view/toggle-rulers
-             :view/toggle-help-bar
-             :view/toggle-debug-info
+             (action.views/deref-action-group :view/features)
              {:type :separator
               :available [::window.subs/md?]}
              (action.views/deref-action-group :view/panels)
              {:type :separator
               :available [::app.subs/not-mobile?]}
-             :view/toggle-fullscreen]})
+             :window/toggle-fullscreen]})
 
 (defn help-menu
   []

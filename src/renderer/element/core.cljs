@@ -449,3 +449,9 @@
                          :element/deselect-all
                          :element/invert-selection
                          :element/select-same-tags]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :object/convert
+               :label [::convert "Convert"]
+               :actions [:object/to-path
+                         :object/stroke-to-path]}])

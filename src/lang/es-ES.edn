@@ -34,10 +34,16 @@
  {:create-doc "Crear documento"}
 
  :renderer.dialog.events
- {:are-you-sure "¿Seguro que quieres continuar?"}
+ {:are-you-sure "¿Seguro que quieres continuar?"
+  :keybindings "Atajos de teclado"}
 
  :renderer.dialog.views
- {:search-command "Buscar un comando"
+ {:edit-shortcuts "Editar atajos"
+  :customize-shortcuts-for [:div "Personalizar atajos para %1"]
+  :press-keys "Pulsa una combinación de teclas"
+  :add "Añadir"
+  :reset-shortcuts "Restablecer valores predeterminados"
+  :search-command "Buscar un comando"
   :no-results "No se encontraron resultados."
   :version "Versión: "
   :browser "Navegador: "
@@ -741,7 +747,8 @@
  {:close-panel "Cerrar panel"}
 
  :renderer.app.core
- {:grid "Cuadrícula"
+ {:features "Características"
+  :grid "Cuadrícula"
   :help-bar "Barra de ayuda"
   :debug-info "Información de depuración"
   :guides "Guías"
@@ -752,7 +759,8 @@
   :about "Acerca de"}
 
  :renderer.document.core
- {:new "Nuevo"
+ {:document "Documento"
+  :new "Nuevo"
   :open "Abrir..."
   :recent-clear "Limpiar recientes"
   :print "Imprimir"
@@ -824,7 +832,8 @@
   :entity "Entidad"
   :image "Imagen"
   :path "Trazado"
-  :select "Seleccionar"}
+  :select "Seleccionar"
+  :convert "Convertir"}
 
  :renderer.error.core
  {:report-errors "Reportar errores automáticamente"}
@@ -888,7 +897,9 @@
 
  :renderer.window.core
  {:exit "Salir"
-  :toggle-fullscreen "Alternar pantalla completa"}
+  :toggle-fullscreen "Alternar pantalla completa"
+  :toggle-maximized "Alternar maximizado"
+  :minimize "Minimizar"}
 
  :renderer.tool.core
  {:cancel "Cancelar"}
@@ -905,4 +916,8 @@
  :renderer.shell.core
  {:focus-shell "Enfocar consola"
   :clear-output "Limpiar salida"
-  :verbose "Detallado"}}
+  :verbose "Detallado"}
+
+ :renderer.views
+ {:remove "Eliminar"
+  :resize-thumb "Redimensionar panel"}}

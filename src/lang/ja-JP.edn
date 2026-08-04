@@ -34,10 +34,16 @@
  {:create-doc "ドキュメントを作成"}
 
  :renderer.dialog.events
- {:are-you-sure "続行してもよろしいですか？"}
+ {:are-you-sure "続行してもよろしいですか？"
+  :keybindings "キーバインド"}
 
  :renderer.dialog.views
- {:search-command "コマンドを検索"
+ {:edit-shortcuts "ショートカットを編集"
+  :customize-shortcuts-for [:div "%1 のショートカットをカスタマイズ"]
+  :press-keys "キーの組み合わせを押してください"
+  :add "追加"
+  :reset-shortcuts "デフォルトにリセット"
+  :search-command "コマンドを検索"
   :no-results "結果が見つかりません。"
   :version "バージョン: "
   :browser "ブラウザ: "
@@ -693,7 +699,8 @@
  {:close-panel "パネルを閉じる"}
 
  :renderer.app.core
- {:grid "グリッド"
+ {:features "機能"
+  :grid "グリッド"
   :help-bar "ヘルプバー"
   :debug-info "デバッグ情報"
   :guides "ガイド"
@@ -704,7 +711,8 @@
   :about "このアプリについて"}
 
  :renderer.document.core
- {:new "新規"
+ {:document "ドキュメント"
+  :new "新規"
   :open "開く..."
   :print "印刷"
   :save "保存"
@@ -776,7 +784,8 @@
   :entity "エンティティ"
   :image "画像"
   :path "パス"
-  :select "選択"}
+  :select "選択"
+  :convert "変換"}
 
  :renderer.error.core
  {:report-errors "エラーを自動的に報告"}
@@ -840,7 +849,9 @@
 
  :renderer.window.core
  {:exit "終了"
-  :toggle-fullscreen "フルスクリーン切り替え"}
+  :toggle-fullscreen "フルスクリーン切り替え"
+  :toggle-maximized "最大化の切り替え"
+  :minimize "最小化"}
 
  :renderer.tool.core
  {:cancel "キャンセル"}
@@ -857,4 +868,8 @@
  :renderer.shell.core
  {:focus-shell "シェルにフォーカス"
   :clear-output "出力をクリア"
-  :verbose "詳細"}}
+  :verbose "詳細"}
+
+ :renderer.views
+ {:remove "削除"
+  :resize-thumb "パネルのサイズ変更"}}

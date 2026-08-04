@@ -15,6 +15,16 @@
                                                "p-0 w-150"]}})))
 
 (rf/reg-event-db
+ ::show-edit-shortcut
+ (fn [db [_ id]]
+   (let [label (get-in db [:actions id :label])]
+     (dialog.handlers/create
+      db
+      {:title (i18n.handlers/t db [::keybindings "Keybindings"])
+       :content [dialog.views/edit-shortcut id label]
+       :attrs {:on-escape-key-down #(.stopPropagation %)}}))))
+
+(rf/reg-event-db
  ::show-about
  (fn [db [_]]
    (dialog.handlers/create db {:title [:div.sr-only config/app-name]

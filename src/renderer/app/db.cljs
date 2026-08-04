@@ -4,7 +4,7 @@
    [malli.core :as m]
    [malli.transform :as m.transform]
    [renderer.a11y.db :refer [A11y]]
-   [renderer.action.db :refer [ActionRegistry ActionGroupRegistry]]
+   [renderer.action.db :refer [ActionRegistry ActionGroupRegistry KeyBindings]]
    [renderer.db :refer [BBox Vec2 JS_Object]]
    [renderer.dialog.db :refer [Dialog]]
    [renderer.document.db :refer [Document DocumentId RecentDocument]]
@@ -131,6 +131,8 @@
    [:viewbox-kdtree {:optional true} [:maybe map?]]
    [:actions {:default {}} ActionRegistry]
    [:action-groups {:default {}} ActionGroupRegistry]
+   [:key-bindings {:default {}
+                   :persist true} KeyBindings]
    [:a11y {:default {:filters []}} A11y]
    [:re-pressed.core/keydown {:optional true} map?]])
 

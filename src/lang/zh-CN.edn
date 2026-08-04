@@ -34,10 +34,16 @@
  {:create-doc "创建文档"}
 
  :renderer.dialog.events
- {:are-you-sure "您确定要继续吗？"}
+ {:are-you-sure "您确定要继续吗？"
+  :keybindings "键盘快捷键"}
 
  :renderer.dialog.views
- {:search-command "搜索命令"
+ {:edit-shortcuts "编辑快捷键"
+  :customize-shortcuts-for [:div "为 %1 自定义快捷键"]
+  :press-keys "按下一个按键组合"
+  :add "添加"
+  :reset-shortcuts "恢复默认设置"
+  :search-command "搜索命令"
   :no-results "未找到结果。"
   :version "版本："
   :browser "浏览器："
@@ -649,7 +655,8 @@
  {:close-panel "关闭面板"}
 
  :renderer.app.core
- {:grid "网格"
+ {:features "功能"
+  :grid "网格"
   :help-bar "帮助栏"
   :debug-info "调试信息"
   :guides "参考线"
@@ -660,7 +667,8 @@
   :about "关于"}
 
  :renderer.document.core
- {:new "新建"
+ {:document "文档"
+  :new "新建"
   :open "打开..."
   :recent-clear "清除最近"
   :print "打印"
@@ -732,7 +740,8 @@
   :entity "实体"
   :image "图像"
   :path "路径"
-  :select "选择"}
+  :select "选择"
+  :convert "转换"}
 
  :renderer.error.core
  {:report-errors "自动报告错误"}
@@ -796,7 +805,9 @@
 
  :renderer.window.core
  {:exit "退出"
-  :toggle-fullscreen "切换全屏"}
+  :toggle-fullscreen "切换全屏"
+  :toggle-maximized "切换最大化"
+  :minimize "最小化"}
 
  :renderer.tool.core
  {:cancel "取消"}
@@ -813,4 +824,8 @@
  :renderer.shell.core
  {:focus-shell "聚焦 Shell"
   :clear-output "清除输出"
-  :verbose "详细"}}
+  :verbose "详细"}
+
+ :renderer.views
+ {:remove "删除"
+  :resize-thumb "调整面板大小"}}

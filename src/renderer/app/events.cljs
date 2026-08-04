@@ -144,7 +144,7 @@
                ;; The status bar needs to be updated later for some reason.
                [:dispatch [::theme.events/update-mobile-status-bar]]
                [::action.effects/update-keydown-rules
-                (action.handlers/entities db)]]
+                (action.handlers/actions-with-shortcuts db)]]
               listeners)}))
 
 (rf/reg-event-db

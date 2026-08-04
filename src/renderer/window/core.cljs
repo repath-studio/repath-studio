@@ -9,7 +9,7 @@
    [renderer.window.subs :as window.subs]))
 
 (rf/dispatch [::action.events/register-action
-              {:id :view/toggle-fullscreen
+              {:id :window/toggle-fullscreen
                :label [::toggle-fullscreen "Toggle fullscreen"]
                :icon "arrow-minimize"
                :event [::window.events/toggle-fullscreen]
@@ -18,9 +18,33 @@
                :active [::window.subs/fullscreen?]}])
 
 (rf/dispatch [::action.events/register-action
+              {:id :window/toggle-maximized
+               :label [::toggle-maximized "Toggle maximized"]
+               :icon "window-restore"
+               :event [::window.events/toggle-maximized]
+               :available [::app.subs/desktop?]
+               :active [::window.subs/maximized?]}])
+
+(rf/dispatch [::action.events/register-action
+              {:id :window/minimize
+               :label [::minimize "Minimize"]
+               :icon "window-minimize"
+               :event [::window.events/minimize]
+               :available [::app.subs/desktop?]}])
+
+(rf/dispatch [::action.events/register-action
               {:id :window/close
                :label [::exit "Exit"]
                :icon "exit"
                :event [::window.events/close]
                :shortcuts [{:keyCode (utils.key/codes "Q")
                             :ctrlKey true}]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :window/actions
+               :icon "window-maximize"
+               :label [::window "Window"]
+               :actions [:window/toggle-maximized
+                         :window/toggle-fullscreen
+                         :window/minimize
+                         :window/close]}])
