@@ -9,7 +9,7 @@
    [renderer.window.subs :as window.subs]))
 
 (rf/dispatch [::action.events/register-action
-              {:id :view/toggle-fullscreen
+              {:id :window/toggle-fullscreen
                :label [::toggle-fullscreen "Toggle fullscreen"]
                :icon "arrow-minimize"
                :event [::window.events/toggle-fullscreen]

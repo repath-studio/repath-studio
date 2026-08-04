@@ -124,7 +124,7 @@
              (action.views/deref-action-group :view/panels)
              {:type :separator
               :available [::app.subs/not-mobile?]}
-             :view/toggle-fullscreen]})
+             :window/toggle-fullscreen]})
 
 (defn help-menu
   []
