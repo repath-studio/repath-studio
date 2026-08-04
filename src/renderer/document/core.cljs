@@ -155,3 +155,16 @@
                          :export/jpg
                          :export/webp
                          :export/gif]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :document/actions
+               :label [::document "Document"]
+               :icon "file"
+               :actions [:document/new
+                         :document/open
+                         :document/save
+                         :document/save-as
+                         :document/download
+                         :document/print
+                         :document/close
+                         :document/close-all]}])
