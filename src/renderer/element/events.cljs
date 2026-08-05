@@ -1,12 +1,12 @@
 (ns renderer.element.events
   (:require
    [clojure.string :as string]
+   [config :as config]
    [re-frame.core :as rf]
    [renderer.app.events :as-alias app.events]
    [renderer.document.events :as-alias document.events]
    [renderer.effects :as-alias effects]
    [renderer.element.core :as-alias element.core]
-   [renderer.element.db :as element.db]
    [renderer.element.effects :as-alias element.effects]
    [renderer.element.handlers :as element.handlers]
    [renderer.history.events :refer [finalize]]
@@ -359,7 +359,7 @@
                              :on-fire [::import-svg]}
                      "error" {:on-fire [::app.events/toast-error]}}]}
 
-       (contains? element.db/image-mime-types file-type)
+       (contains? config/image-mime-types file-type)
        {::element.effects/import-image
         {:file file
          :position position

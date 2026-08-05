@@ -13,7 +13,6 @@
    [renderer.document.effects :as-alias document.effects]
    [renderer.document.handlers :as document.handlers]
    [renderer.effects :as-alias effects]
-   [renderer.element.db :as element.db]
    [renderer.element.effects :as-alias element.effects]
    [renderer.element.handlers :as element.handlers]
    [renderer.events :as-alias events]
@@ -476,7 +475,7 @@
 (rf/reg-event-fx
  ::save-rasterized-image
  (fn [_ [_ data mime-type]]
-   (let [extensions (get element.db/image-mime-types mime-type)]
+   (let [extensions (get config/image-mime-types mime-type)]
      {::effects/file-save
       {:data data
        :on-error [::app.events/toast-error]

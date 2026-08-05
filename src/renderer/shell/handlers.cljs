@@ -1,5 +1,6 @@
 (ns renderer.shell.handlers
   (:require
+   [config :as config]
    [malli.core :as m]
    [renderer.app.db :refer [App]]
    [renderer.db :refer [LoadingState]]
@@ -7,8 +8,6 @@
     :as shell.db
     :refer [ShellHistory ShellItem ShellLanguageId]]
    [renderer.utils.math :as utils.math]))
-
-(def max-items 200)
 
 (m/=> active-language [:-> App ShellLanguageId])
 (defn active-language
@@ -62,7 +61,7 @@
   [db text]
   (update-in db [:shell :languages (active-language db) :history]
              #(->> (conj % text)
-                   (take-last max-items)
+                   (take-last config/max-shell-history)
                    (vec))))
 
 (m/=> clear-items [:-> App App])
@@ -101,7 +100,7 @@
   [db item]
   (update-in db [:shell :languages (active-language db) :items]
              #(->> (conj % item)
-                   (take-last max-items)
+                   (take-last config/max-shell-history)
                    (vec))))
 
 (m/=> set-text [:-> App string? App])

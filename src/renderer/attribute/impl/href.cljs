@@ -2,11 +2,11 @@
   "https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/href"
   (:require
    [clojure.string :as string]
+   [config :as config]
    [re-frame.core :as rf]
    [renderer.app.events :as-alias app.events]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.views :as attribute.views]
-   [renderer.element.db :as element.db]
    [renderer.element.effects :as-alias element.effects]
    [renderer.element.events :as-alias element.events]
    [renderer.element.hierarchy :as-alias element.hierarchy]
@@ -40,7 +40,7 @@
        :on-click #(rf/dispatch
                    [::events/file-open
                     {:options {:startIn "pictures"
-                               :types [{:accept element.db/image-mime-types}]}
+                               :types [{:accept config/image-mime-types}]}
                      :on-success [::success]
                      :on-error [::app.events/toast-error]}])}
       [views/icon "folder"]]]))

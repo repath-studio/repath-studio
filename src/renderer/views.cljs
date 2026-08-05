@@ -356,7 +356,7 @@
       (fn [this _]
         (let [value (second (reagent/argv this))
               options (:options (last (reagent/argv this)))]
-          (when (and @cm (not= (.getValue @cm) value))
+          (when (and @cm value (not= (.getValue @cm) value))
             (reset! updating? true)
             (.setValue @cm value)
             (reset! updating? false)
