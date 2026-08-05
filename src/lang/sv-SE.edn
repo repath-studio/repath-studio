@@ -920,6 +920,9 @@
   :clear-output "Rensa utdata"
   :verbose "Utförlig"}
 
+ :renderer.shell.impl.core
+ {:shell-languages "Shell-språk"}
+
  :renderer.views
  {:remove "Ta bort"
   :resize-thumb "Ändra storlek på panel"}}

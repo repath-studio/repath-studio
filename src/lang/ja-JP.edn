@@ -877,6 +877,9 @@
   :clear-output "出力をクリア"
   :verbose "詳細"}
 
+ :renderer.shell.impl.core
+ {:shell-languages "シェル言語"}
+
  :renderer.views
  {:remove "削除"
   :resize-thumb "パネルのサイズ変更"}}

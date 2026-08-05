@@ -936,6 +936,9 @@
   :clear-output "Uitvoer wissen"
   :verbose "Uitgebreid"}
 
+ :renderer.shell.impl.core
+ {:shell-languages "Shell-talen"}
+
  :renderer.views
  {:remove "Verwijderen"
   :resize-thumb "Paneel formaat wijzigen"}}

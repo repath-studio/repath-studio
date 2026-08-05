@@ -914,6 +914,9 @@
   :clear-output "Çıktıyı temizle"
   :verbose "Ayrıntılı"}
 
+ :renderer.shell.impl.core
+ {:shell-languages "Kabuk dilleri"}
+
  :renderer.views
  {:remove "Kaldır"
   :resize-thumb "Panel boyutunu değiştir"}}

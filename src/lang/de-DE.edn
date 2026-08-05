@@ -938,6 +938,9 @@
   :clear-output "Ausgabe löschen"
   :verbose "Ausführlich"}
 
+ :renderer.shell.impl.core
+ {:shell-languages "Shell-Sprachen"}
+
  :renderer.views
  {:remove "Entfernen"
   :resize-thumb "Bereichsgröße ändern"}}

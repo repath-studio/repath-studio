@@ -918,6 +918,9 @@
   :clear-output "Очистить вывод"
   :verbose "Подробно"}
 
+ :renderer.shell.impl.core
+ {:shell-languages "Языки Shell"}
+
  :renderer.views
  {:remove "Удалить"
   :resize-thumb "Изменить размер панели"}}

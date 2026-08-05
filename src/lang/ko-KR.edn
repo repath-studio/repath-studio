@@ -871,6 +871,9 @@
   :clear-output "입력 지우기"
   :verbose "상세"}
 
+ :renderer.shell.impl.core
+ {:shell-languages "쉘 언어"}
+
  :renderer.views
  {:remove "제거"
   :resize-thumb "패널 크기 조정"}}

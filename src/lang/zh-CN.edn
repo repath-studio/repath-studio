@@ -833,6 +833,9 @@
   :clear-output "清除输出"
   :verbose "详细"}
 
+ :renderer.shell.impl.core
+ {:shell-languages "Shell 语言"}
+
  :renderer.views
  {:remove "删除"
   :resize-thumb "调整面板大小"}}

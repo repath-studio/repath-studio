@@ -917,6 +917,9 @@
   :clear-output "Limpar saída"
   :verbose "Detalhado"}
 
+ :renderer.shell.impl.core
+ {:shell-languages "Linguagens de shell"}
+
  :renderer.views
  {:remove "Remover"
   :resize-thumb "Redimensionar painel"}}

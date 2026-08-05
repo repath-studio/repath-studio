@@ -925,6 +925,9 @@
   :clear-output "Limpiar salida"
   :verbose "Detallado"}
 
+ :renderer.shell.impl.core
+ {:shell-languages "Lenguajes de consola"}
+
  :renderer.views
  {:remove "Eliminar"
   :resize-thumb "Redimensionar panel"}}

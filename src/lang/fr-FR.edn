@@ -932,6 +932,9 @@
   :clear-output "Effacer la sortie"
   :verbose "Verbeux"}
 
+ :renderer.shell.impl.core
+ {:shell-languages "Langages de console"}
+
  :renderer.views
  {:remove "Supprimer"
   :resize-thumb "Redimensionner le panneau"}}

@@ -942,6 +942,9 @@
   :clear-output "Εκκαθάριση εξόδου"
   :verbose "Λεπτομερής"}
 
+ :renderer.shell.impl.core
+ {:shell-languages "Γλώσσες τερματικού"}
+
  :renderer.views
  {:remove "Αφαίρεση"
   :resize-thumb "Αλλαγή μεγέθους πάνελ"}}

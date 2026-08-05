@@ -935,6 +935,9 @@
   :clear-output "Cancella output"
   :verbose "Dettagliato"}
 
+ :renderer.shell.impl.core
+ {:shell-languages "Linguaggi shell"}
+
  :renderer.views
  {:remove "Rimuovi"
   :resize-thumb "Ridimensiona pannello"}}

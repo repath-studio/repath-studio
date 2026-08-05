@@ -892,6 +892,9 @@
   :clear-output "مسح المخرجات"
   :verbose "مطوّل"}
 
+ :renderer.shell.impl.core
+ {:shell-languages "لغات الطرفية"}
+
  :renderer.views
  {:remove "إزالة"
   :resize-thumb "تغيير حجم لوح التحكم"}}
