@@ -41,7 +41,7 @@
   [:map-of {:title "name"} string? Font])
 
 (def App
-  [:map {:closed true}
+  [:map
    [:tool {:default ::tool.transform/transform} Tool]
    [:cached-tool {:optional true} Tool]
    [:active-pointers {:default {}} [:map-of PointerId PointerEvent]]
