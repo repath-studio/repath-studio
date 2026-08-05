@@ -62,8 +62,8 @@
   [delta]
   (let [[delta-x delta-y] delta]
     (if (> (abs delta-x) (abs delta-y))
-      :vertical
-      :horizontal)))
+      :horizontal
+      :vertical)))
 
 (m/=> translate [:-> App Vec2 boolean? App])
 (defn translate
@@ -79,8 +79,8 @@
                           (not (next parent-ids))
                           (utils.element/container? parent-el))
         offset (case axis
-                 :vertical [offset-x 0]
-                 :horizontal [0 offset-y]
+                 :horizontal [offset-x 0]
+                 :vertical [0 offset-y]
                  offset)]
     (->> top-ancestor-ids
          (reduce (rpartial translate-el {:offset offset
