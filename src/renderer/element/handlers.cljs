@@ -1025,7 +1025,6 @@
   ([db]
    (reduce paste-styles db (selected-ids db)))
   ([db id]
-   ;; TODO: Merge attributes from multiple selected elements.
    (if (= 1 (count (-> db :clipboard :elements)))
      (let [attrs (-> db :clipboard :elements first :attrs)
            style-attrs (disj utils.attribute/presentation :transform)]
