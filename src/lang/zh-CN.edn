@@ -38,7 +38,8 @@
   :keybindings "键盘快捷键"}
 
  :renderer.dialog.views
- {:edit-shortcuts "编辑快捷键"
+ {:other-actions "其他操作"
+  :edit-shortcuts "编辑快捷键"
   :customize-shortcuts-for [:div "为 %1 自定义快捷键"]
   :press-keys "按下一个按键组合"
   :add "添加"
@@ -358,6 +359,8 @@
 
  :renderer.tool.impl.misc.guide
  {:label "参考线"
+  :guides "参考线"
+  :lock-guides "锁定参考线"
   :idle "将标尺拖到画布上以创建参考线。"
   :create "放下以完成参考线。"}
 
@@ -663,7 +666,8 @@
   :rulers "标尺"}
 
  :renderer.dialog.core
- {:command-panel "命令面板"
+ {:dialog "对话框"
+  :command-panel "命令面板"
   :about "关于"}
 
  :renderer.document.core
@@ -763,7 +767,8 @@
   :clear-history "清除历史"}
 
  :renderer.menubar.core
- {:website "网站"
+ {:menubar "菜单栏"
+  :website "网站"
   :source-code "源代码"
   :license "许可证"
   :changelog "更改日志"
@@ -795,7 +800,8 @@
   :corners "角点"
   :nodes "节点"
   :grid "网格"
-  :guides "参考线"}
+  :guides "参考线"
+  :snap-options "吸附选项"}
 
  :renderer.theme.core
  {:theme-mode "主题模式"
@@ -822,7 +828,8 @@
  {:centroid "质心"}
 
  :renderer.shell.core
- {:focus-shell "聚焦 Shell"
+ {:shell "Shell"
+  :focus-shell "聚焦 Shell"
   :clear-output "清除输出"
   :verbose "详细"}
 

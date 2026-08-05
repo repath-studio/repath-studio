@@ -38,7 +38,8 @@
   :keybindings "اختصارات لوحة المفاتيح"}
 
  :renderer.dialog.views
- {:edit-shortcuts "تعديل الاختصارات"
+ {:other-actions "إجراءات أخرى"
+  :edit-shortcuts "تعديل الاختصارات"
   :customize-shortcuts-for [:div "تخصيص الاختصارات لـ %1"]
   :press-keys "اضغط على تركيبة مفاتيح"
   :add "إضافة"
@@ -404,6 +405,8 @@
 
  :renderer.tool.impl.misc.guide
  {:label "دليل"
+  :guides "أدلة"
+  :lock-guides "قفل الأدلة"
   :idle "اسحب المسطرة إلى اللوحة لإنشاء دليل."
   :create "أسقط لإتمام الدليل."}
 
@@ -722,7 +725,8 @@
   :rulers "المساطر"}
 
  :renderer.dialog.core
- {:command-panel "لوحة الأوامر"
+ {:dialog "مربع حوار"
+  :command-panel "لوحة الأوامر"
   :about "حول"}
 
  :renderer.document.core
@@ -822,7 +826,8 @@
   :clear-history "مسح التاريخ"}
 
  :renderer.menubar.core
- {:website "الموقع الإلكتروني"
+ {:menubar "شريط القوائم"
+  :website "الموقع الإلكتروني"
   :source-code "الكود المصدري"
   :license "الرخصة"
   :changelog "سجل التغييرات"
@@ -854,7 +859,8 @@
   :corners "الزوايا"
   :nodes "العقد"
   :grid "الشبكة"
-  :guides "الأدلة"}
+  :guides "الأدلة"
+  :snap-options "خيارات الالتقاط"}
 
  :renderer.theme.core
  {:theme-mode "وضع السمة"
@@ -881,7 +887,8 @@
  {:centroid "مركز ثقل"}
 
  :renderer.shell.core
- {:focus-shell "تركيز الطرفية"
+ {:shell "الطرفية"
+  :focus-shell "تركيز الطرفية"
   :clear-output "مسح المخرجات"
   :verbose "مطوّل"}
 

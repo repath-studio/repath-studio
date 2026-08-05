@@ -38,7 +38,8 @@
   :keybindings "Atalhos de teclado"}
 
  :renderer.dialog.views
- {:edit-shortcuts "Editar atalhos"
+ {:other-actions "Outras ações"
+  :edit-shortcuts "Editar atalhos"
   :customize-shortcuts-for [:div "Personalizar atalhos para %1"]
   :press-keys "Prima uma combinação de teclas"
   :add "Adicionar"
@@ -419,6 +420,8 @@
 
  :renderer.tool.impl.misc.guide
  {:label "Guia"
+  :guides "Guias"
+  :lock-guides "Bloquear guias"
   :idle "Arraste a régua para a tela para criar um guia."
   :create "Solte para finalizar o guia."}
 
@@ -748,7 +751,8 @@
   :rulers "Réguas"}
 
  :renderer.dialog.core
- {:command-panel "Painel de comandos"
+ {:dialog "Caixa de diálogo"
+  :command-panel "Painel de comandos"
   :about "Acerca de"}
 
  :renderer.document.core
@@ -847,7 +851,8 @@
   :clear-history "Limpar histórico"}
 
  :renderer.menubar.core
- {:website "Website"
+ {:menubar "Barra de menu"
+  :website "Website"
   :source-code "Código-fonte"
   :license "Licença"
   :changelog "Registo de alterações"
@@ -879,7 +884,8 @@
   :corners "Cantos"
   :nodes "Nós"
   :grid "Grelha"
-  :guides "Guias"}
+  :guides "Guias"
+  :snap-options "Opções de ajuste"}
 
  :renderer.theme.core
  {:theme-mode "Modo de tema"
@@ -906,7 +912,8 @@
  {:centroid "centroide"}
 
  :renderer.shell.core
- {:focus-shell "Focar na shell"
+ {:shell "Shell"
+  :focus-shell "Focar na shell"
   :clear-output "Limpar saída"
   :verbose "Detalhado"}
 

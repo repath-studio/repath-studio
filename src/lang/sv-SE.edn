@@ -38,7 +38,8 @@
   :keybindings "Tangentbordsgenvägar"}
 
  :renderer.dialog.views
- {:edit-shortcuts "Redigera genvägar"
+ {:other-actions "Andra åtgärder"
+  :edit-shortcuts "Redigera genvägar"
   :customize-shortcuts-for [:div "Anpassa genvägar för %1"]
   :press-keys "Tryck på en tangentkombination"
   :add "Lägg till"
@@ -441,6 +442,8 @@
 
  :renderer.tool.impl.misc.guide
  {:label "Guide"
+  :guides "Stödlinjer"
+  :lock-guides "Lås stödlinjer"
   :idle "Dra linjalen till duken för att skapa en guide."
   :create "Släpp för att slutföra guiden."}
 
@@ -750,7 +753,8 @@
   :rulers "Linjaler"}
 
  :renderer.dialog.core
- {:command-panel "Kommandopanel"
+ {:dialog "Dialog"
+  :command-panel "Kommandopanel"
   :about "Om"}
 
  :renderer.document.core
@@ -850,7 +854,8 @@
   :clear-history "Rensa historik"}
 
  :renderer.menubar.core
- {:website "Webbplats"
+ {:menubar "Menyrad"
+  :website "Webbplats"
   :source-code "Källkod"
   :license "Licens"
   :changelog "Ändringslogg"
@@ -882,7 +887,8 @@
   :corners "Hörn"
   :nodes "Noder"
   :grid "Rutnät"
-  :guides "Stödlinjer"}
+  :guides "Stödlinjer"
+  :snap-options "Fästalternativ"}
 
  :renderer.theme.core
  {:theme-mode "Tema-läge"
@@ -909,7 +915,8 @@
  {:centroid "centroid"}
 
  :renderer.shell.core
- {:focus-shell "Fokusera terminal"
+ {:shell "Terminal"
+  :focus-shell "Fokusera terminal"
   :clear-output "Rensa utdata"
   :verbose "Utförlig"}
 

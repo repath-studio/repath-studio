@@ -38,7 +38,8 @@
   :keybindings "Raccourcis clavier"}
 
  :renderer.dialog.views
- {:edit-shortcuts "Modifier les raccourcis"
+ {:other-actions "Autres actions"
+  :edit-shortcuts "Modifier les raccourcis"
   :customize-shortcuts-for [:div "Personnaliser les raccourcis pour %1"]
   :press-keys "Appuyez sur une combinaison de touches"
   :add "Ajouter"
@@ -427,6 +428,8 @@
 
  :renderer.tool.impl.misc.guide
  {:label "Guide"
+  :guides "Guides"
+  :lock-guides "Verrouiller les guides"
   :idle "Faites glisser la règle sur le canevas pour créer un guide."
   :create "Déposez pour finaliser le guide."}
 
@@ -762,7 +765,8 @@
   :rulers "Règles"}
 
  :renderer.dialog.core
- {:command-panel "Panneau de commandes"
+ {:dialog "Boîte de dialogue"
+  :command-panel "Panneau de commandes"
   :about "À propos"}
 
  :renderer.document.core
@@ -862,7 +866,8 @@
   :clear-history "Effacer l'historique"}
 
  :renderer.menubar.core
- {:website "Site web"
+ {:menubar "Barre de menu"
+  :website "Site web"
   :source-code "Code source"
   :license "Licence"
   :changelog "Journal des modifications"
@@ -894,7 +899,8 @@
   :corners "Coins"
   :nodes "Nœuds"
   :grid "Grille"
-  :guides "Guides"}
+  :guides "Guides"
+  :snap-options "Options de magnétisme"}
 
  :renderer.theme.core
  {:theme-mode "Mode de thème"
@@ -921,7 +927,8 @@
  {:centroid "centroïde"}
 
  :renderer.shell.core
- {:focus-shell "Focaliser la console"
+ {:shell "Console"
+  :focus-shell "Focaliser la console"
   :clear-output "Effacer la sortie"
   :verbose "Verbeux"}
 

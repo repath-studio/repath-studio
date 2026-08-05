@@ -38,7 +38,8 @@
   :keybindings "Συντομεύσεις πληκτρολογίου"}
 
  :renderer.dialog.views
- {:edit-shortcuts "Επεξεργασία συντομεύσεων"
+ {:other-actions "Άλλες ενέργειες"
+  :edit-shortcuts "Επεξεργασία συντομεύσεων"
   :customize-shortcuts-for [:div "Προσαρμογή συντομεύσεων για %1"]
   :press-keys "Πιέστε συνδυασμό πλήκτρων"
   :add "Προσθήκη"
@@ -453,6 +454,8 @@
 
  :renderer.tool.impl.misc.guide
  {:label "Οδηγός"
+  :guides "Οδηγοί"
+  :lock-guides "Κλείδωμα οδηγών"
   :idle "Σύρετε τον χάρακα στον καμβά για να δημιουργήσετε έναν οδηγό."
   :create "Αφήστε για να οριστικοποιήσετε τον οδηγό."}
 
@@ -772,7 +775,8 @@
   :rulers "Χάρακες"}
 
  :renderer.dialog.core
- {:command-panel "Πάνελ εντολών"
+ {:dialog "Παράθυρο διαλόγου"
+  :command-panel "Πάνελ εντολών"
   :about "Σχετικά"}
 
  :renderer.document.core
@@ -872,7 +876,8 @@
   :clear-history "Εκκαθάριση ιστορικού"}
 
  :renderer.menubar.core
- {:website "Ιστότοπος"
+ {:menubar "Γραμμή μενού"
+  :website "Ιστότοπος"
   :source-code "Πηγαίος κώδικας"
   :license "Άδεια χρήσης"
   :changelog "Αρχείο αλλαγών"
@@ -904,7 +909,8 @@
   :corners "Γωνία"
   :nodes "Κόμβος"
   :grid "Πλέγμα"
-  :guides "Οδηγοί"}
+  :guides "Οδηγοί"
+  :snap-options "Επιλογές προσκόλλησης"}
 
  :renderer.theme.core
  {:theme-mode "Λειτουργία θέματος"
@@ -931,7 +937,8 @@
  {:centroid "κεντροειδές"}
 
  :renderer.shell.core
- {:focus-shell "Εστίαση στο τερματικό"
+ {:shell "Τερματικό"
+  :focus-shell "Εστίαση στο τερματικό"
   :clear-output "Εκκαθάριση εξόδου"
   :verbose "Λεπτομερής"}
 

@@ -38,7 +38,8 @@
   :keybindings "Горячие клавиши"}
 
  :renderer.dialog.views
- {:edit-shortcuts "Изменить горячие клавиши"
+ {:other-actions "Другие действия"
+  :edit-shortcuts "Изменить горячие клавиши"
   :customize-shortcuts-for [:div "Настройка горячих клавиш для %1"]
   :press-keys "Нажмите комбинацию клавиш"
   :add "Добавить"
@@ -416,6 +417,8 @@
 
  :renderer.tool.impl.misc.guide
  {:label "Направляющая"
+  :guides "Направляющие"
+  :lock-guides "Заблокировать направляющие"
   :idle "Перетащите линейку на холст, чтобы создать направляющую."
   :create "Отпустите, чтобы завершить создание направляющей."}
 
@@ -749,7 +752,8 @@
   :rulers "Линейки"}
 
  :renderer.dialog.core
- {:command-panel "Панель команд"
+ {:dialog "Диалоговое окно"
+  :command-panel "Панель команд"
   :about "О программе"}
 
  :renderer.document.core
@@ -848,7 +852,8 @@
   :clear-history "Очистить историю"}
 
  :renderer.menubar.core
- {:website "Веб-сайт"
+ {:menubar "Строка меню"
+  :website "Веб-сайт"
   :source-code "Исходный код"
   :license "Лицензия"
   :changelog "Журнал изменений"
@@ -880,7 +885,8 @@
   :corners "Углы"
   :nodes "Узлы"
   :grid "Сетка"
-  :guides "Направляющие"}
+  :guides "Направляющие"
+  :snap-options "Параметры привязки"}
 
  :renderer.theme.core
  {:theme-mode "Режим темы"
@@ -907,7 +913,8 @@
  {:centroid "центроид"}
 
  :renderer.shell.core
- {:focus-shell "Фокус на консоли"
+ {:shell "Консоль"
+  :focus-shell "Фокус на консоли"
   :clear-output "Очистить вывод"
   :verbose "Подробно"}
 

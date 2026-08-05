@@ -38,7 +38,8 @@
   :keybindings "キーバインド"}
 
  :renderer.dialog.views
- {:edit-shortcuts "ショートカットを編集"
+ {:other-actions "その他のアクション"
+  :edit-shortcuts "ショートカットを編集"
   :customize-shortcuts-for [:div "%1 のショートカットをカスタマイズ"]
   :press-keys "キーの組み合わせを押してください"
   :add "追加"
@@ -389,6 +390,8 @@
 
  :renderer.tool.impl.misc.guide
  {:label "ガイド"
+  :guides "ガイド"
+  :lock-guides "ガイドをロック"
   :idle "定規をキャンバスにドラッグしてガイドを作成します。"
   :create "ガイドを確定するにはドロップしてください。"}
 
@@ -707,7 +710,8 @@
   :rulers "ルーラー"}
 
  :renderer.dialog.core
- {:command-panel "コマンドパネル"
+ {:dialog "ダイアログ"
+  :command-panel "コマンドパネル"
   :about "このアプリについて"}
 
  :renderer.document.core
@@ -807,7 +811,8 @@
   :clear-history "履歴をクリア"}
 
  :renderer.menubar.core
- {:website "ウェブサイト"
+ {:menubar "メニューバー"
+  :website "ウェブサイト"
   :source-code "ソースコード"
   :license "ライセンス"
   :changelog "変更履歴"
@@ -839,7 +844,8 @@
   :corners "角"
   :nodes "ノード"
   :grid "グリッド"
-  :guides "ガイド"}
+  :guides "ガイド"
+  :snap-options "スナップオプション"}
 
  :renderer.theme.core
  {:theme-mode "テーマモード"
@@ -866,7 +872,8 @@
  {:centroid "重心"}
 
  :renderer.shell.core
- {:focus-shell "シェルにフォーカス"
+ {:shell "シェル"
+  :focus-shell "シェルにフォーカス"
   :clear-output "出力をクリア"
   :verbose "詳細"}
 
