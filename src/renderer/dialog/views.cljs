@@ -125,7 +125,14 @@
 
 (defn cmdk
   []
-  (let [action-groups @(rf/subscribe [::action.subs/action-groups])]
+  (let [action-groups @(rf/subscribe [::action.subs/action-groups])
+        groupless-actions @(rf/subscribe [::action.subs/groupless-actions])
+        action-groups (cond-> action-groups
+                        (seq groupless-actions)
+                        (assoc :other-actions
+                               {:id :other-actions
+                                :label [::other-actions "Other Actions"]
+                                :actions (keys groupless-actions)}))]
     [:> Command/Command
      {:label "Command Menu"
       :on-key-down #(.stopPropagation %)}

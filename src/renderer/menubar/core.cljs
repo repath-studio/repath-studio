@@ -90,7 +90,7 @@
                        "https://github.com/repath-studio/repath-studio/issues/new/choose"]}])
 
 (rf/dispatch [::action.events/register-action-group
-              {:id :app/help
+              {:id :help
                :label [::help "Help"]
                :actions [:help/website
                          :help/source-code
@@ -98,3 +98,12 @@
                          :help/changelog
                          :help/privacy-policy
                          :help/submit-issue]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :menubar
+               :label [::menubar "Menu bar"]
+               :actions [:menubar/activate-file
+                         :menubar/activate-edit
+                         :menubar/activate-object
+                         :menubar/activate-view
+                         :menubar/activate-help]}])

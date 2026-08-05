@@ -40,23 +40,23 @@
                :event [::snap.events/toggle-option :nodes]
                :active [::snap.subs/option-enabled? :nodes]}])
 
-(rf/dispatch [::action.events/register-action
-              {:id :snap/toggle-grid
-               :label [::grid "Grid"]
-               :icon "magnet"
-               :event [::snap.events/toggle-option :grid]
-               :active [::snap.subs/option-enabled? :grid]}])
+#_(rf/dispatch [::action.events/register-action
+                {:id :snap/toggle-grid
+                 :label [::grid "Grid"]
+                 :icon "magnet"
+                 :event [::snap.events/toggle-option :grid]
+                 :active [::snap.subs/option-enabled? :grid]}])
 
-(rf/dispatch [::action.events/register-action
-              {:id :snap/toggle-guides
-               :label [::guides "Guides"]
-               :icon "magnet"
-               :event [::snap.events/toggle-option :guides]
-               :active [::snap.subs/option-enabled? :guides]}])
+#_(rf/dispatch [::action.events/register-action
+                {:id :snap/toggle-guides
+                 :label [::guides "Guides"]
+                 :icon "magnet"
+                 :event [::snap.events/toggle-option :guides]
+                 :active [::snap.subs/option-enabled? :guides]}])
 
 (rf/dispatch [::action.events/register-action-group
               {:id :snap/options
-               :label [::options "options"]
+               :label [::snap-options "Snap options"]
                :actions [:snap/toggle-centers
                          :snap/toggle-midpoints
                          :snap/toggle-corners

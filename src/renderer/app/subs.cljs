@@ -92,10 +92,6 @@
  :-> :guides)
 
 (rf/reg-sub
- ::guides-locked?
- :-> :guides-locked)
-
-(rf/reg-sub
  ::loading?
  :-> :loading)
 

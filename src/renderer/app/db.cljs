@@ -68,8 +68,6 @@
              :persist true} boolean?]
    [:guides {:default true
              :persist true} boolean?]
-   [:guides-locked {:default false
-                    :persist true} boolean?]
    [:snap {:default {}
            :persist true} Snap]
    [:active-document {:optional true
