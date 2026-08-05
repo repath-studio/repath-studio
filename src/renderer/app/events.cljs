@@ -83,7 +83,12 @@
    (let [app-db (merge db persisted-db)]
      (if (app.db/valid? app-db)
        {:db app-db}
-       {::app.effects/clear-local-store nil}))))
+       {::app.effects/clear-local-store
+        {:on-success [::app.events/toast
+                      :error
+                      "Invalid configuration"
+                      {:description "Your local configuration was invalid and
+                                     has been reset."}]}}))))
 
 (rf/reg-event-db
  ::set-loading

@@ -117,8 +117,9 @@
 
 (rf/reg-fx
  ::clear-local-store
- (fn [{:keys [on-error]}]
+ (fn [{:keys [on-success on-error]}]
    (-> (localforage/clear)
+       (.then #(some-> on-success (conj %) rf/dispatch))
        (.catch #(some-> on-error (conj %) rf/dispatch)))))
 
 (defn persist
