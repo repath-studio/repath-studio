@@ -4,6 +4,9 @@
    [reagent.core :as reagent]
    [renderer.action.events :as-alias action.events]
    [renderer.app.handlers :as app.handlers]
+   [renderer.document.events :as-alias document.events]
+   [renderer.document.handlers :as document.handlers]
+   [renderer.document.subs :as-alias document.subs]
    [renderer.element.handlers :as element.handlers]
    [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
@@ -44,7 +47,7 @@
      orientation
       (-> db
           (assoc :guides true)
-          (assoc :guides-locked false)
+          (document.handlers/assoc-attr :guides-locked false)
           (tool.handlers/set-cursor (cursor orientation))
           (app.handlers/add-fx [::set-orientation orientation]))
       (tool.handlers/deactivate db))))
@@ -109,3 +112,16 @@
                :icon "ruler-straight"
                :event [::tool.events/activate ::guide]
                :active [::tool.subs/active? ::guide]}])
+
+(rf/dispatch [::action.events/register-action
+              {:id :guides/toggle-locked
+               :label [::lock-guides "Lock guides"]
+               :icon "lock"
+               :event [::document.events/toggle-attr :guides-locked]
+               :active [::document.subs/attr :guides-locked]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :guides
+               :label [::guides "Guides"]
+               :actions [:tool/guide
+                         :guides/toggle-locked]}])

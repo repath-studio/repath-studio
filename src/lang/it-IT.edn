@@ -38,7 +38,8 @@
   :keybindings "Tasti di scelta rapida"}
 
  :renderer.dialog.views
- {:edit-shortcuts "Modifica scorciatoie"
+ {:other-actions "Altre azioni"
+  :edit-shortcuts "Modifica scorciatoie"
   :customize-shortcuts-for [:div "Personalizza scorciatoie per %1"]
   :press-keys "Premi una combinazione di tasti"
   :add "Aggiungi"
@@ -450,6 +451,8 @@
 
  :renderer.tool.impl.misc.guide
  {:label "Guida"
+  :guides "Guide"
+  :lock-guides "Blocca guide"
   :idle "Trascina il righello sulla tela per creare una guida."
   :create "Rilascia per finalizzare la guida."}
 
@@ -765,7 +768,8 @@
   :rulers "Righelli"}
 
  :renderer.dialog.core
- {:command-panel "Pannello comandi"
+ {:dialog "Finestra di dialogo"
+  :command-panel "Pannello comandi"
   :about "Informazioni"}
 
  :renderer.document.core
@@ -865,7 +869,8 @@
   :clear-history "Cancella cronologia"}
 
  :renderer.menubar.core
- {:website "Sito web"
+ {:menubar "Barra dei menu"
+  :website "Sito web"
   :source-code "Codice sorgente"
   :license "Licenza"
   :changelog "Changelog"
@@ -897,7 +902,8 @@
   :corners "Angoli"
   :nodes "Nodi"
   :grid "Griglia"
-  :guides "Guide"}
+  :guides "Guide"
+  :snap-options "Opzioni di aggancio"}
 
  :renderer.theme.core
  {:theme-mode "Modalità tema"
@@ -924,9 +930,13 @@
  {:centroid "centroide"}
 
  :renderer.shell.core
- {:focus-shell "Porta il focus alla shell"
+ {:shell "Shell"
+  :focus-shell "Porta il focus alla shell"
   :clear-output "Cancella output"
   :verbose "Dettagliato"}
+
+ :renderer.shell.impl.core
+ {:shell-languages "Linguaggi shell"}
 
  :renderer.views
  {:remove "Rimuovi"

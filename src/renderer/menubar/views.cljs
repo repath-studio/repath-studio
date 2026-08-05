@@ -132,7 +132,7 @@
    :label [::help "Help"]
    :type :root
    :actions (->> [[:dialog/command-panel]
-                  (->> :app/help
+                  (->> :help
                        (action.views/deref-action-group)
                        :actions)
                   [:error/toggle-reporting]

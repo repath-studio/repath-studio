@@ -187,12 +187,6 @@
  (fn [db [_]]
    (update db :guides not)))
 
-(rf/reg-event-db
- ::toggle-guides-locked
- [persist]
- (fn [db [_]]
-   (update db :guides-locked not)))
-
 (rf/reg-event-fx
  ::load-system-fonts
  (fn [_ _]

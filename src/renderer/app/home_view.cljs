@@ -122,7 +122,7 @@
           (i18n.views/t [::help "Help"])]
 
          (->> (conj [(action.views/deref-action :dialog/command-panel)]
-                    (->> :app/help
+                    (->> :help
                          (action.views/deref-action-group)
                          :actions))
               (flatten)

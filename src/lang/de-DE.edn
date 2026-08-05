@@ -38,7 +38,8 @@
   :keybindings "Tastenkombinationen"}
 
  :renderer.dialog.views
- {:edit-shortcuts "Tastenkürzel bearbeiten"
+ {:other-actions "Weitere Aktionen"
+  :edit-shortcuts "Tastenkürzel bearbeiten"
   :customize-shortcuts-for [:div "Tastenkürzel anpassen für %1"]
   :press-keys "Tastenkombination drücken"
   :add "Hinzufügen"
@@ -433,6 +434,8 @@
 
  :renderer.tool.impl.misc.guide
  {:label "Führungslinie"
+  :guides "Hilfslinien"
+  :lock-guides "Führungslinien sperren"
   :idle "Ziehen Sie das Lineal auf die Leinwand, um eine Führungslinie zu
          erstellen."
   :create "Loslassen, um die Führungslinie zu finalisieren."}
@@ -768,7 +771,8 @@
   :rulers "Lineale"}
 
  :renderer.dialog.core
- {:command-panel "Befehlsfeld"
+ {:dialog "Dialog"
+  :command-panel "Befehlsfeld"
   :about "Über"}
 
  :renderer.document.core
@@ -868,7 +872,8 @@
   :clear-history "Verlauf löschen"}
 
  :renderer.menubar.core
- {:website "Website"
+ {:menubar "Menüleiste"
+  :website "Website"
   :source-code "Quellcode"
   :license "Lizenz"
   :changelog "Änderungsprotokoll"
@@ -900,7 +905,8 @@
   :corners "Ecken"
   :nodes "Knoten"
   :grid "Raster"
-  :guides "Hilfslinien"}
+  :guides "Hilfslinien"
+  :snap-options "Einrast-Optionen"}
 
  :renderer.theme.core
  {:theme-mode "Thema-Modus"
@@ -927,9 +933,13 @@
  {:centroid "Schwerpunkt"}
 
  :renderer.shell.core
- {:focus-shell "Shell fokussieren"
+ {:shell "Shell"
+  :focus-shell "Shell fokussieren"
   :clear-output "Ausgabe löschen"
   :verbose "Ausführlich"}
+
+ :renderer.shell.impl.core
+ {:shell-languages "Shell-Sprachen"}
 
  :renderer.views
  {:remove "Entfernen"

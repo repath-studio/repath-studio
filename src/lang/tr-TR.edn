@@ -38,7 +38,8 @@
   :keybindings "Klavye kısayolları"}
 
  :renderer.dialog.views
- {:edit-shortcuts "Kısayolları düzenle"
+ {:other-actions "Diğer eylemler"
+  :edit-shortcuts "Kısayolları düzenle"
   :customize-shortcuts-for [:div "%1 için kısayolları özelleştir"]
   :press-keys "Bir tuş kombinasyonu girin"
   :add "Ekle"
@@ -434,6 +435,8 @@
 
  :renderer.tool.impl.misc.guide
  {:label "Kılavuz"
+  :guides "Kılavuzlar"
+  :lock-guides "Kılavuzları kilitle"
   :idle "Kılavuz oluşturmak için cetveli tuval üzerine sürükleyin."
   :create "Kılavuzu tamamlamak için bırakın."}
 
@@ -744,7 +747,8 @@
   :rulers "Cetveller"}
 
  :renderer.dialog.core
- {:command-panel "Komut paneli"
+ {:dialog "İletişim kutusu"
+  :command-panel "Komut paneli"
   :about "Hakkında"}
 
  :renderer.document.core
@@ -844,7 +848,8 @@
   :clear-history "Geçmişi temizle"}
 
  :renderer.menubar.core
- {:website "Web sitesi"
+ {:menubar "Menü çubuğu"
+  :website "Web sitesi"
   :source-code "Kaynak kodu"
   :license "Lisans"
   :changelog "Değişiklik günlüğü"
@@ -876,7 +881,8 @@
   :corners "Köşeler"
   :nodes "Düğümler"
   :grid "Izgara"
-  :guides "Kılavuzlar"}
+  :guides "Kılavuzlar"
+  :snap-options "Yapışma seçenekleri"}
 
  :renderer.theme.core
  {:theme-mode "Tema modu"
@@ -903,9 +909,13 @@
  {:centroid "ağırlık merkezi"}
 
  :renderer.shell.core
- {:focus-shell "Shell'e odaklan"
+ {:shell "Kabuk"
+  :focus-shell "Shell'e odaklan"
   :clear-output "Çıktıyı temizle"
   :verbose "Ayrıntılı"}
+
+ :renderer.shell.impl.core
+ {:shell-languages "Kabuk dilleri"}
 
  :renderer.views
  {:remove "Kaldır"

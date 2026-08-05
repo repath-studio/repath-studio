@@ -5,8 +5,6 @@
    [renderer.app.effects]
    [renderer.app.events :as app.events]
    [renderer.app.subs :as app.subs]
-   [renderer.tool.impl.misc.guide :as-alias tool.impl.misc.guide]
-   [renderer.tool.subs :as tool.subs]
    [renderer.utils.key :as utils.key]))
 
 (rf/dispatch [::action.events/register-action
@@ -35,14 +33,6 @@
                :active [::app.subs/guides?]
                :shortcuts [{:keyCode (utils.key/codes "PERIOD")
                             :shiftKey true}]}])
-
-(rf/dispatch [::action.events/register-action
-              {:id :guides/toggle-locked
-               :label [::lock-guides "Lock guides"]
-               :icon "ruler-straight"
-               :event [::app.events/toggle-guides-locked]
-               :enabled [::tool.subs/not-active? ::tool.impl.misc.guide/guide]
-               :active [::app.subs/guides-locked?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :view/toggle-help-bar

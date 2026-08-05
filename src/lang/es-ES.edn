@@ -38,7 +38,8 @@
   :keybindings "Atajos de teclado"}
 
  :renderer.dialog.views
- {:edit-shortcuts "Editar atajos"
+ {:other-actions "Otras acciones"
+  :edit-shortcuts "Editar atajos"
   :customize-shortcuts-for [:div "Personalizar atajos para %1"]
   :press-keys "Pulsa una combinación de teclas"
   :add "Añadir"
@@ -422,6 +423,8 @@
 
  :renderer.tool.impl.misc.guide
  {:label "Guía"
+  :guides "Guías"
+  :lock-guides "Bloquear guías"
   :idle "Arrastra la regla al lienzo para crear una guía."
   :create "Suelta para finalizar la guía."}
 
@@ -755,7 +758,8 @@
   :rulers "Reglas"}
 
  :renderer.dialog.core
- {:command-panel "Panel de comandos"
+ {:dialog "Cuadro de diálogo"
+  :command-panel "Panel de comandos"
   :about "Acerca de"}
 
  :renderer.document.core
@@ -855,7 +859,8 @@
   :clear-history "Limpiar historial"}
 
  :renderer.menubar.core
- {:website "Sitio web"
+ {:menubar "Barra de menú"
+  :website "Sitio web"
   :source-code "Código fuente"
   :license "Licencia"
   :changelog "Registro de cambios"
@@ -887,7 +892,8 @@
   :corners "Esquinas"
   :nodes "Nodos"
   :grid "Cuadrícula"
-  :guides "Guías"}
+  :guides "Guías"
+  :snap-options "Opciones de ajuste"}
 
  :renderer.theme.core
  {:theme-mode "Modo de tema"
@@ -914,9 +920,13 @@
  {:centroid "centroide"}
 
  :renderer.shell.core
- {:focus-shell "Enfocar consola"
+ {:shell "Consola"
+  :focus-shell "Enfocar consola"
   :clear-output "Limpiar salida"
   :verbose "Detallado"}
+
+ :renderer.shell.impl.core
+ {:shell-languages "Lenguajes de consola"}
 
  :renderer.views
  {:remove "Eliminar"

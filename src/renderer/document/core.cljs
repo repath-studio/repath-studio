@@ -157,14 +157,17 @@
                          :export/gif]}])
 
 (rf/dispatch [::action.events/register-action-group
-              {:id :document/actions
+              {:id :document
                :label [::document "Document"]
                :icon "file"
                :actions [:document/new
                          :document/open
+                         :document/reopen-last-closed
+                         :document/clear-recent
                          :document/save
                          :document/save-as
                          :document/download
                          :document/print
                          :document/close
-                         :document/close-all]}])
+                         :document/close-all
+                         :document/close-saved]}])

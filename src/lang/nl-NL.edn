@@ -38,7 +38,8 @@
   :keybindings "Sneltoetsen"}
 
  :renderer.dialog.views
- {:edit-shortcuts "Sneltoetsen bewerken"
+ {:other-actions "Andere acties"
+  :edit-shortcuts "Sneltoetsen bewerken"
   :customize-shortcuts-for [:div "Sneltoetsen aanpassen voor %1"]
   :press-keys "Druk op een toetscombinatie"
   :add "Toevoegen"
@@ -452,6 +453,8 @@
 
  :renderer.tool.impl.misc.guide
  {:label "Gids"
+  :guides "Hulplijnen"
+  :lock-guides "Hulplijnen vergrendelen"
   :idle "Sleep de liniaal naar het canvas om een gids te maken."
   :create "Laat los om de gids te voltooien."}
 
@@ -766,7 +769,8 @@
   :rulers "Linealen"}
 
  :renderer.dialog.core
- {:command-panel "Commandopaneel"
+ {:dialog "Dialoogvenster"
+  :command-panel "Commandopaneel"
   :about "Over"}
 
  :renderer.document.core
@@ -866,7 +870,8 @@
   :clear-history "Geschiedenis wissen"}
 
  :renderer.menubar.core
- {:website "Website"
+ {:menubar "Menubalk"
+  :website "Website"
   :source-code "Broncode"
   :license "Licentie"
   :changelog "Wijzigingslog"
@@ -898,7 +903,8 @@
   :corners "Hoeken"
   :nodes "Knooppunten"
   :grid "Raster"
-  :guides "Hulplijnen"}
+  :guides "Hulplijnen"
+  :snap-options "Uitlijningsopties"}
 
  :renderer.theme.core
  {:theme-mode "Thema-modus"
@@ -925,9 +931,13 @@
  {:centroid "centroïde"}
 
  :renderer.shell.core
- {:focus-shell "Focus op shell"
+ {:shell "Shell"
+  :focus-shell "Focus op shell"
   :clear-output "Uitvoer wissen"
   :verbose "Uitgebreid"}
+
+ :renderer.shell.impl.core
+ {:shell-languages "Shell-talen"}
 
  :renderer.views
  {:remove "Verwijderen"

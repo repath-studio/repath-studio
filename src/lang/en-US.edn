@@ -38,7 +38,8 @@
   :keybindings "Keybindings"}
 
  :renderer.dialog.views
- {:edit-shortcuts "Edit shortcuts"
+ {:other-actions "Other Actions"
+  :edit-shortcuts "Edit shortcuts"
   :customize-shortcuts-for [:div "Customize shortcuts for %1"]
   :press-keys "Press a key combination"
   :add "Add"
@@ -433,6 +434,8 @@
 
  :renderer.tool.impl.misc.guide
  {:label "Guide"
+  :guides "Guides"
+  :lock-guides "Lock guides"
   :idle "Drag the ruler to the canvas to create a guide."
   :create "Drop to finalize the guide."}
 
@@ -737,7 +740,8 @@
   :rulers "Rulers"}
 
  :renderer.dialog.core
- {:command-panel "Command panel"
+ {:dialog "Dialog"
+  :command-panel "Command panel"
   :about "About"}
 
  :renderer.document.core
@@ -837,7 +841,8 @@
   :clear-history "Clear history"}
 
  :renderer.menubar.core
- {:website "Website"
+ {:menubar "Menu bar"
+  :website "Website"
   :source-code "Source Code"
   :license "License"
   :changelog "Changelog"
@@ -869,7 +874,8 @@
   :corners "Corners"
   :nodes "Nodes"
   :grid "Grid"
-  :guides "Guides"}
+  :guides "Guides"
+  :snap-options "Snap options"}
 
  :renderer.theme.core
  {:theme-mode "Theme mode"
@@ -896,7 +902,8 @@
  {:centroid "centroid"}
 
  :renderer.shell.core
- {:focus-shell "Focus shell"
+ {:shell "Shell"
+  :focus-shell "Focus shell"
   :clear-output "Clear output"
   :verbose "Verbose"}
 

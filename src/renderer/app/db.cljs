@@ -41,7 +41,7 @@
   [:map-of {:title "name"} string? Font])
 
 (def App
-  [:map {:closed true}
+  [:map
    [:tool {:default ::tool.transform/transform} Tool]
    [:cached-tool {:optional true} Tool]
    [:active-pointers {:default {}} [:map-of PointerId PointerEvent]]
@@ -68,8 +68,6 @@
              :persist true} boolean?]
    [:guides {:default true
              :persist true} boolean?]
-   [:guides-locked {:default false
-                    :persist true} boolean?]
    [:snap {:default {}
            :persist true} Snap]
    [:active-document {:optional true

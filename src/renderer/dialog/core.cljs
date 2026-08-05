@@ -22,3 +22,9 @@
                :shortcuts [{:keyCode (utils.key/codes "F1")}
                            {:keyCode (utils.key/codes "K")
                             :ctrlKey true}]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :dialog
+               :label [::dialog "Dialog"]
+               :actions [:dialog/about
+                         :dialog/command-panel]}])

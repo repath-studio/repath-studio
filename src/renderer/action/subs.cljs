@@ -32,6 +32,14 @@
  :-> :action-groups)
 
 (rf/reg-sub
+ ::groupless-actions
+ :<- [::actions]
+ :<- [::action-groups]
+ (fn [[actions action-groups] _]
+   (let [grouped-ids (mapcat :actions (vals action-groups))]
+     (apply dissoc actions grouped-ids))))
+
+(rf/reg-sub
  ::action-group
  :<- [::action-groups]
  :=> get)

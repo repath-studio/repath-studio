@@ -50,7 +50,7 @@
         pointer-handler (partial input.impl.pointer/handler! el)
         viewbox-bounds @(rf/subscribe [::frame.subs/viewbox-bounds])
         guides? @(rf/subscribe [::app.subs/guides?])
-        guides-locked? @(rf/subscribe [::app.subs/guides-locked?])
+        guides-locked? @(rf/subscribe [::document.subs/attr :guides-locked])
         attrs (default-attrs (:attrs el) viewbox-bounds)]
     (when guides?
       [:g

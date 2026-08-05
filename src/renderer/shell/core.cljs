@@ -28,3 +28,10 @@
                :icon "eye"
                :event [::shell.events/toggle-verbose]
                :active [::shell.subs/verbose?]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :shell
+               :label [::shell "Shell"]
+               :actions [:shell/focus
+                         :shell/clear-output
+                         :shell/toggle-verbose]}])

@@ -11,6 +11,7 @@
    [renderer.app.status-view :as app.status-view]
    [renderer.app.subs :as-alias app.subs]
    [renderer.dialog.views :as dialog.views]
+   [renderer.document.events :as-alias document.events]
    [renderer.document.subs :as-alias document.subs]
    [renderer.document.views :as document.views]
    [renderer.element.subs :as-alias element.subs]
@@ -119,7 +120,7 @@
 
 (defn guides-locked-toggle
   []
-  (let [locked? @(rf/subscribe [::app.subs/guides-locked?])]
+  (let [locked? @(rf/subscribe [::document.subs/attr :guides-locked])]
     [:div.bg-primary
      {:style {:width ruler.views/ruler-size
               :height ruler.views/ruler-size}}
@@ -131,7 +132,8 @@
        :title (i18n.views/t (if locked?
                               [::unlock "Unlock"]
                               [::lock "Lock"]))
-       :on-click #(rf/dispatch [::app.events/toggle-guides-locked])}]]))
+       :on-click #(rf/dispatch [::document.events/toggle-attr
+                                :guides-locked])}]]))
 
 (defn frame
   []
