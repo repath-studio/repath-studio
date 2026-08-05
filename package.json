@@ -1,7 +1,7 @@
 {
   "name": "repath-studio",
   "description": "Vector Graphics Editor",
-  "repository": "https://github.com/sprocketc/repath-studio",
+  "repository": "https://github.com/repath-studio/repath-studio",
   "author": "Konstantinos Kaloutas",
   "homepage": "https://repath.studio",
   "license": "AGPL-3.0",
