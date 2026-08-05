@@ -86,8 +86,7 @@
 (m/=> add-recent [:-> App map? App])
 (defn add-recent
   [db document]
-  (let [max-recent 10
-        equals? (fn [x] (or (and (:path x)
+  (let [equals? (fn [x] (or (and (:path x)
                                  (= (:path x) (:path document)))
                             (= (:id x) (:id document))))]
     (cond-> db
@@ -95,7 +94,7 @@
           (:file-handle document))
       (update :recent #(->> (recent document)
                             (conj (filterv (complement equals?) %))
-                            (take-last max-recent)
+                            (take-last config/max-recent-documents)
                             (vec))))))
 
 (m/=> move-recent-to-front [:-> App DocumentId App])

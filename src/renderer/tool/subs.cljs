@@ -19,11 +19,6 @@
  :-> (partial = ::tool.impl.base.edit/edit))
 
 (rf/reg-sub
- ::not-active?
- :<- [::active]
- :=> not=)
-
-(rf/reg-sub
  ::cached
  :-> :cached-tool)
 

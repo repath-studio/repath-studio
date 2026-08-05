@@ -79,7 +79,7 @@
                 :persist true} [:map-of DocumentId Document]]
    [:document-tabs {:default []
                     :persist true} [:vector DocumentId]]
-   [:recent {:max 10
+   [:recent {:max config/max-recent-documents
              :default []
              :persist true} [:vector RecentDocument]]
    [:drag-threshold {:default 2} number?]
