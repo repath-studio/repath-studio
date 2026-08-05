@@ -10,7 +10,7 @@
   :history "السجل"
   :attributes "الخصائص"}
 
- :renderer.home.views
+ :renderer.app.home-view
  {:svg-description "محرر الرسوميات المتجهة"
   :start "ابدأ"
   :or "أو"
@@ -654,7 +654,7 @@
   :exit-fullscreen "خروج من الشاشة الكاملة"
   :install "تثبيت"}
 
- :renderer.toolbar.status
+ :renderer.app.status-view
  {:select-zoom "اختيار مستوى التكبير"
   :zoom "تكبير"
   :fill-color "اختيار لون الملء"

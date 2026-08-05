@@ -10,7 +10,7 @@
   :history "履歴"
   :attributes "属性"}
 
- :renderer.home.views
+ :renderer.app.home-view
  {:svg-description "ベクターグラフィックエディター"
   :start "開始"
   :or "または"
@@ -640,7 +640,7 @@
   :exit-fullscreen "フルスクリーンを終了"
   :install "インストール"}
 
- :renderer.toolbar.status
+ :renderer.app.status-view
  {:select-zoom "ズームレベルを選択"
   :zoom "ズーム"
   :fill-color "塗り色を選択"

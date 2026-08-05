@@ -10,7 +10,7 @@
   :history "Geschiedenis"
   :attributes "Attributen"}
 
- :renderer.home.views
+ :renderer.app.home-view
  {:svg-description "Vector Graphics Editor"
   :start "Start"
   :or "of"
@@ -697,7 +697,7 @@
   :exit-fullscreen "Volledig scherm verlaten"
   :install "Installeren"}
 
- :renderer.toolbar.status
+ :renderer.app.status-view
  {:select-zoom "Zoomniveau selecteren"
   :zoom "Zoom"
   :fill-color "Vulkleur kiezen"

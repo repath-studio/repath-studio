@@ -10,7 +10,7 @@
   :history "Geschichte"
   :attributes "Attribute"}
 
- :renderer.home.views
+ :renderer.app.home-view
  {:svg-description "Vektorgrafik-Editor"
   :start "Starten"
   :or "oder"
@@ -698,7 +698,7 @@
   :exit-fullscreen "Vollbild verlassen"
   :install "Installieren"}
 
- :renderer.toolbar.status
+ :renderer.app.status-view
  {:select-zoom "Zoom-Ebene auswählen"
   :zoom "Zoom"
   :fill-color "Füllfarbe wählen"

@@ -10,7 +10,7 @@
   :history "Geçmiş"
   :attributes "Özellikler"}
 
- :renderer.home.views
+ :renderer.app.home-view
  {:svg-description "Vektör Grafik Editörü"
   :start "Başla"
   :or "veya"
@@ -675,7 +675,7 @@
   :exit-fullscreen "Tam ekrandan çık"
   :install "Kur"}
 
- :renderer.toolbar.status
+ :renderer.app.status-view
  {:select-zoom "Yakınlaştırma seviyesi seç"
   :zoom "Yakınlaştır"
   :fill-color "Dolgu rengi seç"

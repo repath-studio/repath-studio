@@ -10,7 +10,7 @@
   :history "Historia"
   :attributes "Attribut"}
 
- :renderer.home.views
+ :renderer.app.home-view
  {:svg-description "Vektorgrafik-editor"
   :start "Start"
   :or "eller"
@@ -682,7 +682,7 @@
   :exit-fullscreen "Lämna helskärm"
   :install "Installera"}
 
- :renderer.toolbar.status
+ :renderer.app.status-view
  {:select-zoom "Välj zoomnivå"
   :zoom "Zoom"
   :fill-color "Välj fyllnadsfärg"

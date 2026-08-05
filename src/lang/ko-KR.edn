@@ -10,7 +10,7 @@
   :history "히스토리"
   :attributes "속성"}
 
- :renderer.home.views
+ :renderer.app.home-view
  {:svg-description "벡터 그래픽 편집기"
   :start "시작"
   :or "또는"
@@ -635,7 +635,7 @@
   :exit-fullscreen "전체화면 종료"
   :install "설치"}
 
- :renderer.toolbar.status
+ :renderer.app.status-view
  {:select-zoom "확대/축소 레벨 선택"
   :zoom "확대/축소"
   :fill-color "채우기 색상 선택"

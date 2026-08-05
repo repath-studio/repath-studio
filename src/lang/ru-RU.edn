@@ -10,7 +10,7 @@
   :history "История"
   :attributes "Атрибуты"}
 
- :renderer.home.views
+ :renderer.app.home-view
  {:svg-description "Редактор Векторной Графики"
   :start "Начать"
   :or "или"
@@ -679,7 +679,7 @@
   :exit-fullscreen "Выйти из полноэкранного режима"
   :install "Установить"}
 
- :renderer.toolbar.status
+ :renderer.app.status-view
  {:select-zoom "Выбрать уровень масштаба"
   :zoom "Масштаб"
   :fill-color "Выбрать цвет заливки"

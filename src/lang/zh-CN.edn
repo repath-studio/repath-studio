@@ -10,7 +10,7 @@
   :history "历史"
   :attributes "属性"}
 
- :renderer.home.views
+ :renderer.app.home-view
  {:svg-description "矢量图形编辑器"
   :start "开始"
   :or "或"
@@ -596,7 +596,7 @@
   :exit-fullscreen "退出全屏"
   :install "安装"}
 
- :renderer.toolbar.status
+ :renderer.app.status-view
  {:select-zoom "选择缩放级别"
   :zoom "缩放"
   :fill-color "选择填充颜色"

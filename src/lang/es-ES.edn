@@ -10,7 +10,7 @@
   :history "Historia"
   :attributes "Atributos"}
 
- :renderer.home.views
+ :renderer.app.home-view
  {:svg-description "Editor de Gráficos Vectoriales"
   :start "Iniciar"
   :or "o"
@@ -685,7 +685,7 @@
   :exit-fullscreen "Salir de pantalla completa"
   :install "Instalar"}
 
- :renderer.toolbar.status
+ :renderer.app.status-view
  {:select-zoom "Seleccionar nivel de zoom"
   :zoom "Zoom"
   :fill-color "Elegir color de relleno"

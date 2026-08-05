@@ -10,7 +10,7 @@
   :history "Ιστορία"
   :attributes "Χαρακτηριστικά"}
 
- :renderer.home.views
+ :renderer.app.home-view
  {:svg-description "Επεξεργαστής Διανυσματικών Γραφικών"
   :start "Έναρξη"
   :or "ή"
@@ -704,7 +704,7 @@
   :exit-fullscreen "Έξοδος από πλήρη οθόνη"
   :install "Εγκατάσταση"}
 
- :renderer.toolbar.status
+ :renderer.app.status-view
  {:select-zoom "Επιλέξτε επίπεδο μεγέθυνσης"
   :fill-color "Επιλέξτε χρώμα γεμίσματος"
   :stroke-color "Επιλέξτε χρώμα περιγράμματος"
