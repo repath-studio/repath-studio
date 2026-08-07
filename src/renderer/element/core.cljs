@@ -360,6 +360,7 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :object/index-operations
+               :icon "bring-forward"
                :label [::index-operations "Index operations"]
                :actions [:object/raise
                          :object/lower
@@ -368,6 +369,7 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :object/boolean-operations
+               :icon "subtract"
                :label [::boolean-operations "Boolean operations"]
                :enabled [::element.subs/multiple-selected?]
                :actions [:boolean/unite
@@ -378,6 +380,7 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :object/horizontal-alignment
+               :icon "objects-align-left"
                :label [::horizontal-alignment "Horizontal alignment"]
                :actions [:align/left
                          :align/center-horizontal
@@ -385,6 +388,7 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :object/vertical-alignment
+               :icon "objects-align-top"
                :label [::vertical-alignment "Vertical alignment"]
                :actions [:align/top
                          :align/center-vertical
@@ -392,6 +396,7 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :edit/clipboard
+               :icon "copy"
                :label [::clipboard "Clipboard"]
                :actions [:clipboard/cut
                          :clipboard/copy
@@ -401,18 +406,21 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :object/grouping
+               :icon "group"
                :label [::grouping "Grouping"]
                :actions [:object/group
                          :object/ungroup]}])
 
 (rf/dispatch [::action.events/register-action-group
               {:id :object/locking
+               :icon "lock"
                :label [::locking "Locking"]
                :actions [:object/lock
                          :object/unlock]}])
 
 (rf/dispatch [::action.events/register-action-group
               {:id :object/animate
+               :icon "animation"
                :label [::animate "Animate"]
                :enabled [::element.subs/some-selected?]
                :actions [:animate/animate
@@ -421,12 +429,14 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :object/entity
+               :icon "delete"
                :label [::entity "Entity"]
                :actions [:element/duplicate
                          :element/delete]}])
 
 (rf/dispatch [::action.events/register-action-group
               {:id :object/path-operations
+               :icon "bezier-curve"
                :label [::path "Path"]
                :enabled [::element.subs/some-selected-tag? :path]
                :actions [:path/simplify
@@ -438,12 +448,14 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :object/image-operations
+               :icon "image"
                :label [::image "Image"]
                :enabled [::element.subs/some-selected-tag? :image]
                :actions [:image/trace]}])
 
 (rf/dispatch [::action.events/register-action-group
               {:id :object/selection
+               :icon "select-same"
                :label [::select "Select"]
                :actions [:element/select-all
                          :element/deselect-all
@@ -452,6 +464,7 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :object/convert
+               :icon "swap-horizontal"
                :label [::convert "Convert"]
                :actions [:object/to-path
                          :object/stroke-to-path]}])

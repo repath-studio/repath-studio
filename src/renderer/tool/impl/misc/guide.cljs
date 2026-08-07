@@ -122,6 +122,7 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :guides
+               :icon "ruler-straight"
                :label [::guides "Guides"]
                :actions [:tool/guide
                          :guides/toggle-locked]}])

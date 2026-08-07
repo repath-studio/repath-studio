@@ -25,6 +25,7 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :dialog
+               :icon "window-maximize"
                :label [::dialog "Dialog"]
                :actions [:dialog/about
                          :dialog/command-panel]}])

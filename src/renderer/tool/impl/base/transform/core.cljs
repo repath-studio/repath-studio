@@ -66,6 +66,7 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :transform/options
+               :icon "toggles"
                :label [::transform-options "Transform options"]
                :enabled [::tool.subs/active? ::transform]
                :actions [:transform/toggle-aspect-ratio-lock

@@ -29,6 +29,7 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :pencil/options
+               :icon "toggles"
                :label [::pen-options "Pencil options"]
                :enabled [::tool.subs/active? ::pencil]
                :actions [:pencil/toggle-smooth]}])

@@ -39,6 +39,7 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :edit/history
+               :icon "history"
                :label [::history "History"]
                :actions [:history/undo
                          :history/redo
