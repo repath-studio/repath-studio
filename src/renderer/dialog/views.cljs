@@ -44,7 +44,8 @@
      [button-bar
       [button
        {:auto-focus true
-        :class "accent"}
+        :class "accent"
+        :on-click #(rf/dispatch [::dialog.events/close nil])}
        (i18n.views/t [::ok "OK"])]]]))
 
 (defn confirmation
