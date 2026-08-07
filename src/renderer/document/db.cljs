@@ -15,7 +15,14 @@
 
 (def DocumentTitle [:string {:min 1}])
 
-(def DocumentAttrs [:map-of keyword? any?])
+(def DocumentAttrs
+  [:map
+   [:fill {:optional true} string?]
+   [:stroke {:optional true} string?]
+   [:stroke-width {:optional true} string?]
+   [:rulers {:optional true} boolean?]
+   [:guides {:optional true} boolean?]
+   [:grid {:optional true} boolean?]])
 
 (def Document
   [:map {:closed true}
