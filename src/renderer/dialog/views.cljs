@@ -18,12 +18,11 @@
    [renderer.views :as views]))
 
 (defn button
-  [{:keys [event label auto-focus class]}]
-  [:button.button.px-1.rounded.font-medium.w-full.bg-overlay.sm:bg-transparent
-   {:class class
-    :auto-focus auto-focus
-    :on-click #(rf/dispatch [::dialog.events/close event])}
-   (i18n.views/t label)])
+  [props & children]
+  (into [:button
+         (views/merge-with-class
+          {:class ["button px-1 rounded font-medium w-full max-sm:py-3"]}
+          props)] children))
 
 (defn button-bar
   [& children]
@@ -43,9 +42,10 @@
       [:strong (i18n.views/t [::browser "Browser:"])]
       [:code user-agent]]
      [button-bar
-      [button {:label [::ok "OK"]
-               :auto-focus true
-               :class "accent"}]]]))
+      [button
+       {:auto-focus true
+        :class "accent"}
+       (i18n.views/t [::ok "OK"])]]]))
 
 (defn confirmation
   [{:keys [content confirm-event confirm-label cancel-event
@@ -62,12 +62,14 @@
      :else content)
 
    [button-bar
-    [button {:label (or cancel-label [::cancel "Cancel"])
-             :event cancel-event}]
-    [button {:label (or confirm-label [::ok "OK"])
-             :event confirm-event
-             :auto-focus true
-             :class "accent"}]]])
+    [button
+     {:on-click #(rf/dispatch [::dialog.events/close cancel-event])}
+     (i18n.views/t (or cancel-label [::cancel "Cancel"]))]
+    [button
+     {:on-click #(rf/dispatch [::dialog.events/close confirm-event])
+      :auto-focus true
+      :class "accent"}
+     (i18n.views/t (or confirm-label [::ok "OK"]))]]])
 
 (defn save
   [{:keys [id title]}]
@@ -78,14 +80,21 @@
           saving."]]
     [[:strong title]])
    [button-bar
-    [button {:label [::dont-save "Don't save"]
-             :event [::document.events/close id false]}]
-    [button {:label [::cancel "Cancel"]}]
-    [button {:label [::save "Save"]
-             :auto-focus true
-             :class "accent"
-             :event [::document.events/save {:id id
-                                             :close true}]}]]])
+    [button
+     {:on-click #(rf/dispatch [::dialog.events/close [::document.events/close
+                                                      id
+                                                      false]])}
+     (i18n.views/t [::dont-save "Don't save"])]
+    [button
+     {:on-click #(rf/dispatch [::dialog.events/close nil])}
+     (i18n.views/t [::cancel "Cancel"])]
+    [button
+     {:auto-focus true
+      :class "accent"
+      :on-click #(rf/dispatch [::dialog.events/close [::document.events/save
+                                                      {:id id
+                                                       :close true}]])}
+     (i18n.views/t [::save "Save"])]]])
 
 (defn cmdk-item
   [parent-label {:keys [id label event icon]
@@ -209,12 +218,13 @@
                      #(remove! shortcut)])
                   shortcuts))
        [button-bar
-        [:button.button.px-1.rounded.font-medium.w-full.bg-overlay
-         {:class "sm:bg-transparent"
-          :on-click #(rf/dispatch [::action.events/reset-shortcuts id])}
+        [button
+         {:on-click #(rf/dispatch [::action.events/reset-shortcuts id])}
          (i18n.views/t [::reset-shortcuts "Reset to defaults"])]
-        [button {:label [::ok "OK"]
-                 :class "accent"}]]])))
+        [button
+         {:on-click #(rf/dispatch [::dialog.events/close nil])
+          :class "accent"}
+         (i18n.views/t [::ok "OK"])]]])))
 
 (defn root
   []
