@@ -62,12 +62,6 @@
    [:double-click-delta {:default 300} [:and number? pos?]]
    [:state {:default :idle} State]
    [:cached-state {:optional true} State]
-   [:grid {:default false
-           :persist true} boolean?]
-   [:rulers {:default true
-             :persist true} boolean?]
-   [:guides {:default true
-             :persist true} boolean?]
    [:snap {:default {}
            :persist true} Snap]
    [:active-document {:optional true

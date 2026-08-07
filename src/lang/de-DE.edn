@@ -763,12 +763,9 @@
  {:close-panel "Panel schließen"}
 
  :renderer.app.core
- {:features "Funktionen"
-  :grid "Raster"
+ {:help-view "Hilfeansicht"
   :help-bar "Hilfeleiste"
-  :debug-info "Debug-Informationen"
-  :guides "Hilfslinien"
-  :rulers "Lineale"}
+  :debug-info "Debug-Informationen"}
 
  :renderer.dialog.core
  {:dialog "Dialog"
@@ -794,7 +791,11 @@
   :gif "GIF"
   :reopen-last-closed "Zuletzt geschlossenes erneut öffnen"
   :vector-formats "Vektorformate"
-  :rasterised-formats "Rasterformate"}
+  :rasterised-formats "Rasterformate"
+  :document-view "Dokumentansicht"
+  :grid "Raster"
+  :guides "Hilfslinien"
+  :rulers "Lineale"}
 
  :renderer.element.core
  {:cut "Ausschneiden"
@@ -887,7 +888,7 @@
   :menubar-object "Menü Objekt"
   :menubar-view "Menü Ansicht"
   :menubar-help "Menü Hilfe"
-  :help "Hilfe"}
+  :help-links "Hilfe-Links"}
 
  :renderer.panel.core
  {:panels "Panels"

@@ -90,9 +90,9 @@
                        "https://github.com/repath-studio/repath-studio/issues/new/choose"]}])
 
 (rf/dispatch [::action.events/register-action-group
-              {:id :help
+              {:id :help-links
                :icon "help"
-               :label [::help "Help"]
+               :label [::help-links "Help links"]
                :actions [:help/website
                          :help/source-code
                          :help/license

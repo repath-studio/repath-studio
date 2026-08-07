@@ -744,12 +744,9 @@
  {:close-panel "Закрыть панель"}
 
  :renderer.app.core
- {:features "Функции"
-  :grid "Сетка"
+ {:help-view "Вид справки"
   :help-bar "Панель справки"
-  :debug-info "Отладочная информация"
-  :guides "Направляющие"
-  :rulers "Линейки"}
+  :debug-info "Отладочная информация"}
 
  :renderer.dialog.core
  {:dialog "Диалоговое окно"
@@ -775,7 +772,11 @@
   :gif "GIF"
   :reopen-last-closed "Открыть последний закрытый"
   :vector-formats "Векторные форматы"
-  :rasterised-formats "Растровые форматы"}
+  :rasterised-formats "Растровые форматы"
+  :document-view "Вид документа"
+  :grid "Сетка"
+  :guides "Направляющие"
+  :rulers "Линейки"}
 
  :renderer.element.core
  {:cut "Вырезать"
@@ -867,7 +868,7 @@
   :menubar-object "Меню Объект"
   :menubar-view "Меню Вид"
   :menubar-help "Меню Справка"
-  :help "Справка"}
+  :help-links "Ссылки справки"}
 
  :renderer.panel.core
  {:panels "Панели"

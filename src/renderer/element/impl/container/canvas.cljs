@@ -70,7 +70,7 @@
         bbox @(rf/subscribe [::element.subs/bbox])
         active-tool @(rf/subscribe [::tool.subs/active])
         edit? @(rf/subscribe [::tool.subs/editing?])
-        grid? @(rf/subscribe [::app.subs/grid?])
+        grid? @(rf/subscribe [::document.subs/attr :grid])
         state @(rf/subscribe [::tool.subs/state])
         idle? @(rf/subscribe [::tool.subs/idle?])
         pointer-handler (partial input.impl.pointer/handler! el)

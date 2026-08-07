@@ -658,12 +658,9 @@
  {:close-panel "关闭面板"}
 
  :renderer.app.core
- {:features "功能"
-  :grid "网格"
+ {:help-view "帮助视图"
   :help-bar "帮助栏"
-  :debug-info "调试信息"
-  :guides "参考线"
-  :rulers "标尺"}
+  :debug-info "调试信息"}
 
  :renderer.dialog.core
  {:dialog "对话框"
@@ -689,7 +686,11 @@
   :gif "GIF"
   :reopen-last-closed "重新打开上次关闭的"
   :vector-formats "矢量格式"
-  :rasterised-formats "光栅格式"}
+  :rasterised-formats "光栅格式"
+  :document-view "文档视图"
+  :grid "网格"
+  :guides "参考线"
+  :rulers "标尺"}
 
  :renderer.element.core
  {:cut "剪切"
@@ -782,7 +783,7 @@
   :menubar-object "对象菜单"
   :menubar-view "视图菜单"
   :menubar-help "帮助菜单"
-  :help "帮助"}
+  :help-links "帮助链接"}
 
  :renderer.panel.core
  {:panels "面板"

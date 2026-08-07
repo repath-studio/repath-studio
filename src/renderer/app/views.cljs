@@ -189,7 +189,7 @@
 
 (defn frame-panel
   []
-  (let [rulers? @(rf/subscribe [::app.subs/rulers?])
+  (let [rulers? @(rf/subscribe [::document.subs/attr :rulers])
         md? @(rf/subscribe [::window.subs/md?])
         active? @(rf/subscribe [::tool.subs/active?
                                 ::tool.impl.misc.guide/guide])

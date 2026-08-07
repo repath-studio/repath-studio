@@ -197,8 +197,7 @@
           (interpose [:div.v-divider.hidden {:class "@5xl/toolbar:flex"}])
           (into [:<>]))
      [:div.grow.hidden.md:block]
-     (->> [:view/toggle-grid
-           :view/toggle-rulers]
+     (->> (:actions (action.views/deref-action-group :document/view))
           (keep views/tooltip-action-icon-button)
           (into [:<>]))
      [snap.views/root]

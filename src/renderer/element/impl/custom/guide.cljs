@@ -1,7 +1,6 @@
 (ns renderer.element.impl.custom.guide
   (:require
    [re-frame.core :as rf]
-   [renderer.app.subs :as-alias app.subs]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.views :as attribute.views]
    [renderer.document.subs :as-alias document.subs]
@@ -49,7 +48,7 @@
         hovered? @(rf/subscribe [::element.subs/hovered? (:id el)])
         pointer-handler (partial input.impl.pointer/handler! el)
         viewbox-bounds @(rf/subscribe [::frame.subs/viewbox-bounds])
-        guides? @(rf/subscribe [::app.subs/guides?])
+        guides? @(rf/subscribe [::document.subs/attr :guides])
         guides-locked? @(rf/subscribe [::document.subs/attr :guides-locked])
         attrs (default-attrs (:attrs el) viewbox-bounds)]
     (when guides?

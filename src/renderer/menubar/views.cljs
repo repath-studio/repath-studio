@@ -118,7 +118,6 @@
              (action.views/deref-action-group :theme/mode)
              (action.views/deref-action-group :a11y/filter)
              (action.views/deref-action-group :i18n/language)
-             (action.views/deref-action-group :view/features)
              {:type :separator
               :available [::window.subs/md?]}
              (action.views/deref-action-group :view/panels)
@@ -132,7 +131,8 @@
    :label [::help "Help"]
    :type :root
    :actions (->> [[:dialog/command-panel]
-                  (->> :help
+                  (:actions (action.views/deref-action-group :help-view))
+                  (->> :help-links
                        (action.views/deref-action-group)
                        :actions)
                   [:error/toggle-reporting]

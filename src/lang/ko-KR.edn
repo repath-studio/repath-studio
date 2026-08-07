@@ -697,12 +697,9 @@
  {:close-panel "패널 닫기"}
 
  :renderer.app.core
- {:features "기능"
-  :grid "격자"
+ {:help-view "도움말 보기"
   :help-bar "도움말 바"
-  :debug-info "디버그 정보"
-  :guides "가이드"
-  :rulers "눈금자"}
+  :debug-info "디버그 정보"}
 
  :renderer.dialog.core
  {:dialog "대화 상자"
@@ -727,7 +724,11 @@
   :gif "GIF"
   :reopen-last-closed "마지막으로 닫은 항목 다시 열기"
   :vector-formats "벡터 형식"
-  :rasterised-formats "래스터 형식"}
+  :rasterised-formats "래스터 형식"
+  :document-view "문서 보기"
+  :grid "격자"
+  :guides "가이드"
+  :rulers "눈금자"}
 
  :renderer.element.core
  {:cut "잘라내기"
@@ -820,7 +821,7 @@
   :menubar-object "객체 메뉴"
   :menubar-view "보기 메뉴"
   :menubar-help "도움말 메뉴"
-  :help "도움말"}
+  :help-links "도움말 링크"}
 
  :renderer.panel.core
  {:panels "패널"

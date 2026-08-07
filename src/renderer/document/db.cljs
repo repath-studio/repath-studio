@@ -15,7 +15,14 @@
 
 (def DocumentTitle [:string {:min 1}])
 
-(def DocumentAttrs [:map-of keyword? any?])
+(def DocumentAttrs
+  [:map
+   [:fill {:optional true} string?]
+   [:stroke {:optional true} string?]
+   [:stroke-width {:optional true} string?]
+   [:rulers {:optional true} boolean?]
+   [:guides {:optional true} boolean?]
+   [:grid {:optional true} boolean?]])
 
 (def Document
   [:map {:closed true}
@@ -39,7 +46,9 @@
    [:centered {:optional true} boolean?]
    [:attrs {:default {:fill "lightgray"
                       :stroke "black"
-                      :stroke-width "1px"}} DocumentAttrs]
+                      :stroke-width "1px"
+                      :rulers true
+                      :guides true}} DocumentAttrs]
    [:preview-label {:optional true} string?]
    [:file-handle {:optional true} JS_Object]])
 

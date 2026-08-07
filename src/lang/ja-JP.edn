@@ -702,12 +702,9 @@
  {:close-panel "パネルを閉じる"}
 
  :renderer.app.core
- {:features "機能"
-  :grid "グリッド"
+ {:help-view "ヘルプビュー"
   :help-bar "ヘルプバー"
-  :debug-info "デバッグ情報"
-  :guides "ガイド"
-  :rulers "ルーラー"}
+  :debug-info "デバッグ情報"}
 
  :renderer.dialog.core
  {:dialog "ダイアログ"
@@ -733,7 +730,11 @@
   :gif "GIF"
   :reopen-last-closed "最後に閉じたものを再度開く"
   :vector-formats "ベクター形式"
-  :rasterised-formats "ラスター形式"}
+  :rasterised-formats "ラスター形式"
+  :document-view "ドキュメントビュー"
+  :grid "グリッド"
+  :guides "ガイド"
+  :rulers "ルーラー"}
 
  :renderer.element.core
  {:cut "切り取り"
@@ -826,7 +827,7 @@
   :menubar-object "オブジェクトメニュー"
   :menubar-view "ビューメニュー"
   :menubar-help "ヘルプメニュー"
-  :help "ヘルプ"}
+  :help-links "ヘルプリンク"}
 
  :renderer.panel.core
  {:panels "パネル"
