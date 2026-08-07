@@ -29,6 +29,7 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :theme/mode
+               :icon "light"
                :label [::theme-mode "Theme mode"]
                :actions [:theme/set-system-mode
                          :theme/set-dark-mode

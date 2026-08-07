@@ -91,6 +91,7 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :help
+               :icon "help"
                :label [::help "Help"]
                :actions [:help/website
                          :help/source-code
@@ -101,6 +102,7 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :menubar
+               :icon "menu"
                :label [::menubar "Menu bar"]
                :actions [:menubar/activate-file
                          :menubar/activate-edit

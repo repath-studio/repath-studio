@@ -8,6 +8,7 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :shell/languages
+               :icon "code"
                :label [::shell-languages "Shell languages"]
                :actions [:shell-language/clojurescript
                          :shell-language/javascript

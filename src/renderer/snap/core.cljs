@@ -56,6 +56,7 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :snap/options
+               :icon "toggles"
                :label [::snap-options "Snap options"]
                :actions [:snap/toggle-centers
                          :snap/toggle-midpoints

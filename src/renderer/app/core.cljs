@@ -53,6 +53,7 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :view/features
+               :icon "toggles"
                :label [::features "Features"]
                :actions [:view/toggle-grid
                          :view/toggle-rulers

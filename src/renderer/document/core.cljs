@@ -145,11 +145,13 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :export/vector
+               :icon "bezier-curve"
                :label [::vector-formats "Vector formats"]
                :actions [:export/svg]}])
 
 (rf/dispatch [::action.events/register-action-group
               {:id :export/raster
+               :icon "image"
                :label [::rasterised-formats "Rasterised formats"]
                :actions [:export/png
                          :export/jpg

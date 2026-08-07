@@ -25,6 +25,7 @@
                                          :altKey true}]
                             :enabled [::history.subs/undos?]}
          undo-group {:id :history/undo-group
+                     :icon "history"
                      :label [:history/undo-group "Undo group"]
                      :actions [:history/undo-twice]}]
 
@@ -57,8 +58,11 @@
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
 
-   (let [default-shortcut {:keyCode 90 :ctrlKey true :altKey true}
-         extra-shortcut {:keyCode 89 :ctrlKey true}
+   (let [default-shortcut {:keyCode 90
+                           :ctrlKey true
+                           :altKey true}
+         extra-shortcut {:keyCode 89
+                         :ctrlKey true}
          undo-action {:id :history/undo-twice
                       :label [:history/undo-twice "Undo twice"]
                       :icon "undo"

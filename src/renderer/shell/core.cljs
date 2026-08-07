@@ -31,6 +31,7 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :shell
+               :icon "shell"
                :label [::shell "Shell"]
                :actions [:shell/focus
                          :shell/clear-output
