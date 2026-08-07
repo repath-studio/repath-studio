@@ -796,7 +796,10 @@
   :zoom-set-200 "200%로 설정"
   :zoom-focus-selected "선택 항목에 초점"
   :zoom-fit-selected "선택 항목에 맞춤"
-  :zoom-fill-selected "선택 항목 채우기"}
+  :zoom-fill-selected "선택 항목 채우기"
+  :zoom-in-out "확대/축소"
+  :zoom-set "줌 설정"
+  :focus "초점"}
 
  :renderer.history.core
  {:undo "실행 취소"
@@ -851,7 +854,8 @@
  {:exit "종료"
   :toggle-fullscreen "전체 화면 전환"
   :toggle-maximized "최대화 전환"
-  :minimize "최소화"}
+  :minimize "최소화"
+  :window "창"}
 
  :renderer.tool.core
  {:cancel "취소"}

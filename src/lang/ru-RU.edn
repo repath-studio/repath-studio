@@ -843,7 +843,10 @@
   :zoom-set-200 "Установить 200%"
   :zoom-focus-selected "Сфокусировать на выделенном"
   :zoom-fit-selected "Уместить выделенное"
-  :zoom-fill-selected "Заполнить выделенным"}
+  :zoom-fill-selected "Заполнить выделенным"
+  :zoom-in-out "Увеличить/Уменьшить"
+  :zoom-set "Установить масштаб"
+  :focus "Фокус"}
 
  :renderer.history.core
  {:undo "Отменить"
@@ -898,7 +901,8 @@
  {:exit "Выход"
   :toggle-fullscreen "Переключить полноэкранный режим"
   :toggle-maximized "Переключить развёрнутый режим"
-  :minimize "Свернуть"}
+  :minimize "Свернуть"
+  :window "Окно"}
 
  :renderer.tool.core
  {:cancel "Отмена"}

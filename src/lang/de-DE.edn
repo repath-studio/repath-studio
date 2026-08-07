@@ -863,7 +863,10 @@
   :zoom-set-200 "Auf 200% setzen"
   :zoom-focus-selected "Auswahl fokussieren"
   :zoom-fit-selected "An Auswahl anpassen"
-  :zoom-fill-selected "Auswahl ausfüllen"}
+  :zoom-fill-selected "Auswahl ausfüllen"
+  :zoom-in-out "Vergrößern/Verkleinern"
+  :zoom-set "Zoom einstellen"
+  :focus "Fokus"}
 
  :renderer.history.core
  {:undo "Rückgängig"
@@ -918,7 +921,8 @@
  {:exit "Beenden"
   :toggle-fullscreen "Vollbild umschalten"
   :toggle-maximized "Maximiert umschalten"
-  :minimize "Minimieren"}
+  :minimize "Minimieren"
+  :window "Fenster"}
 
  :renderer.tool.core
  {:cancel "Abbrechen"}

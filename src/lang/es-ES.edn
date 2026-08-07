@@ -850,7 +850,10 @@
   :zoom-set-200 "Establecer a 200%"
   :zoom-focus-selected "Enfocar selección"
   :zoom-fit-selected "Ajustar a selección"
-  :zoom-fill-selected "Llenar con selección"}
+  :zoom-fill-selected "Llenar con selección"
+  :zoom-in-out "Acercar/Alejar"
+  :zoom-set "Establecer zoom"
+  :focus "Enfocar"}
 
  :renderer.history.core
  {:undo "Deshacer"
@@ -905,7 +908,8 @@
  {:exit "Salir"
   :toggle-fullscreen "Alternar pantalla completa"
   :toggle-maximized "Alternar maximizado"
-  :minimize "Minimizar"}
+  :minimize "Minimizar"
+  :window "Ventana"}
 
  :renderer.tool.core
  {:cancel "Cancelar"}

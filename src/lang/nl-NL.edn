@@ -861,7 +861,10 @@
   :zoom-set-200 "Instellen op 200%"
   :zoom-focus-selected "Focus op geselecteerd"
   :zoom-fit-selected "Geselecteerd passend maken"
-  :zoom-fill-selected "Geselecteerd vullen"}
+  :zoom-fill-selected "Geselecteerd vullen"
+  :zoom-in-out "In-/uitzoomen"
+  :zoom-set "Zoom instellen"
+  :focus "Focus"}
 
  :renderer.history.core
  {:undo "Ongedaan maken"
@@ -916,7 +919,8 @@
  {:exit "Afsluiten"
   :toggle-fullscreen "Volledig scherm in-/uitschakelen"
   :toggle-maximized "Maximalisatie in-/uitschakelen"
-  :minimize "Minimaliseren"}
+  :minimize "Minimaliseren"
+  :window "Venster"}
 
  :renderer.tool.core
  {:cancel "Annuleren"}

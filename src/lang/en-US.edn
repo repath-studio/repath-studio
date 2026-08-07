@@ -832,7 +832,10 @@
   :zoom-set-200 "Set to 200%"
   :zoom-focus-selected "Focus selected"
   :zoom-fit-selected "Fit selected"
-  :zoom-fill-selected "Fill selected"}
+  :zoom-fill-selected "Fill selected"
+  :zoom-in-out "Zoom in/out"
+  :zoom-set "Set zoom"
+  :focus "Focus"}
 
  :renderer.history.core
  {:undo "Undo"
@@ -887,7 +890,8 @@
  {:exit "Exit"
   :toggle-fullscreen "Toggle fullscreen"
   :toggle-maximized "Toggle maximized"
-  :minimize "Minimize"}
+  :minimize "Minimize"
+  :window "Window"}
 
  :renderer.tool.core
  {:cancel "Cancel"}

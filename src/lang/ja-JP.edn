@@ -802,7 +802,10 @@
   :zoom-set-200 "200%に設定"
   :zoom-focus-selected "選択項目にフォーカス"
   :zoom-fit-selected "選択項目にフィット"
-  :zoom-fill-selected "選択項目を画面に合わせる"}
+  :zoom-fill-selected "選択項目を画面に合わせる"
+  :zoom-in-out "ズームイン/アウト"
+  :zoom-set "ズームを設定"
+  :focus "フォーカス"}
 
  :renderer.history.core
  {:undo "元に戻す"
@@ -857,7 +860,8 @@
  {:exit "終了"
   :toggle-fullscreen "フルスクリーン切り替え"
   :toggle-maximized "最大化の切り替え"
-  :minimize "最小化"}
+  :minimize "最小化"
+  :window "ウィンドウ"}
 
  :renderer.tool.core
  {:cancel "キャンセル"}

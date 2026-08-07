@@ -43,7 +43,7 @@
      [views/icon "chevron-up"]]]
    [:> DropdownMenu/Portal
     (->> [(:actions (action.views/deref-action-group :zoom/set))
-          (:actions (action.views/deref-action-group :zoom/auto))]
+          (:actions (action.views/deref-action-group :zoom/focus))]
          (interpose {:type :separator})
          (flatten)
          (map #(dissoc % :icon))

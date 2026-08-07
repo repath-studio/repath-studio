@@ -817,7 +817,10 @@
   :zoom-set-200 "تعيين إلى 200%"
   :zoom-focus-selected "تركيز على المحدد"
   :zoom-fit-selected "ملائمة المحدد"
-  :zoom-fill-selected "ملء المحدد"}
+  :zoom-fill-selected "ملء المحدد"
+  :zoom-in-out "تكبير/تصغير"
+  :zoom-set "ضبط التكبير"
+  :focus "تركيز"}
 
  :renderer.history.core
  {:undo "تراجع"
@@ -872,7 +875,8 @@
  {:exit "خروج"
   :toggle-fullscreen "تبديل ملء الشاشة"
   :toggle-maximized "تبديل التكبير"
-  :minimize "تصغير"}
+  :minimize "تصغير"
+  :window "نافذة"}
 
  :renderer.tool.core
  {:cancel "إلغاء"}

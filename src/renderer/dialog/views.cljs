@@ -151,6 +151,7 @@
        :placeholder (i18n.views/t [::search-command "Search for a command"])}]
      [views/scroll-area
       (->> (vals action-groups)
+           (sort-by (comp i18n.views/t :label))
            (keep cmdk-group)
            (into [:> Command/CommandList
                   {:class "p-1 max-h-[50dvh]"}

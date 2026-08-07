@@ -857,7 +857,10 @@
   :zoom-set-200 "Définir à 200%"
   :zoom-focus-selected "Focaliser la sélection"
   :zoom-fit-selected "Ajuster à la sélection"
-  :zoom-fill-selected "Remplir avec la sélection"}
+  :zoom-fill-selected "Remplir avec la sélection"
+  :zoom-in-out "Agrandir/Réduire"
+  :zoom-set "Définir le zoom"
+  :focus "Focaliser"}
 
  :renderer.history.core
  {:undo "Annuler"
@@ -912,7 +915,8 @@
  {:exit "Quitter"
   :toggle-fullscreen "Basculer en plein écran"
   :toggle-maximized "Basculer la fenêtre agrandie"
-  :minimize "Réduire"}
+  :minimize "Réduire"
+  :window "Fenêtre"}
 
  :renderer.tool.core
  {:cancel "Annuler"}

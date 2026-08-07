@@ -84,9 +84,9 @@
                          :zoom/set-200]}])
 
 (rf/dispatch [::action.events/register-action-group
-              {:id :zoom/auto
+              {:id :zoom/focus
                :icon "focus"
-               :label [::zoom-auto "Auto zoom"]
+               :label [::focus "Focus"]
                :actions [:zoom/focus-selected
                          :zoom/fit-selected
                          :zoom/fill-selected]}])

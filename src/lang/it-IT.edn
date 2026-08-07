@@ -860,7 +860,10 @@
   :zoom-set-200 "Imposta al 200%"
   :zoom-focus-selected "Focalizza selezionato"
   :zoom-fit-selected "Adatta selezionato"
-  :zoom-fill-selected "Riempi selezionato"}
+  :zoom-fill-selected "Riempi selezionato"
+  :zoom-in-out "Ingrandisci/Riduci"
+  :zoom-set "Imposta zoom"
+  :focus "Focalizza"}
 
  :renderer.history.core
  {:undo "Annulla"
@@ -915,7 +918,8 @@
  {:exit "Esci"
   :toggle-fullscreen "Attiva/disattiva schermo intero"
   :toggle-maximized "Attiva/disattiva finestra ingrandita"
-  :minimize "Riduci a icona"}
+  :minimize "Riduci a icona"
+  :window "Finestra"}
 
  :renderer.tool.core
  {:cancel "Annulla"}

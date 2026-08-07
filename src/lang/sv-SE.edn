@@ -845,7 +845,10 @@
   :zoom-set-200 "Sätt till 200%"
   :zoom-focus-selected "Fokusera markerat"
   :zoom-fit-selected "Anpassa markerat"
-  :zoom-fill-selected "Fyll markerat"}
+  :zoom-fill-selected "Fyll markerat"
+  :zoom-in-out "Zooma in/ut"
+  :zoom-set "Ange zoom"
+  :focus "Fokusera"}
 
  :renderer.history.core
  {:undo "Ångra"
@@ -900,7 +903,8 @@
  {:exit "Avsluta"
   :toggle-fullscreen "Växla helskärm"
   :toggle-maximized "Växla maximerat"
-  :minimize "Minimera"}
+  :minimize "Minimera"
+  :window "Fönster"}
 
  :renderer.tool.core
  {:cancel "Avbryt"}

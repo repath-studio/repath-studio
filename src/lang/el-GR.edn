@@ -867,7 +867,10 @@
   :zoom-set-200 "Ορισμός σε 200%"
   :zoom-focus-selected "Εστίαση επιλογής"
   :zoom-fit-selected "Προσαρμογή επιλογής"
-  :zoom-fill-selected "Γέμισμα επιλογής"}
+  :zoom-fill-selected "Γέμισμα επιλογής"
+  :zoom-in-out "Μεγέθυνση/Σμίκρυνση"
+  :zoom-set "Ορισμός ζουμ"
+  :focus "Εστίαση"}
 
  :renderer.history.core
  {:undo "Αναίρεση"
@@ -922,7 +925,8 @@
  {:exit "Έξοδος"
   :toggle-fullscreen "Εναλλαγή πλήρους οθόνης"
   :toggle-maximized "Εναλλαγή μεγιστοποιημένης"
-  :minimize "Ελαχιστοποίηση"}
+  :minimize "Ελαχιστοποίηση"
+  :window "Παράθυρο"}
 
  :renderer.tool.core
  {:cancel "Ακύρωση"}

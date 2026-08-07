@@ -102,7 +102,7 @@
   []
   (->> [(:actions (action.views/deref-action-group :zoom/in-out))
         (:actions (action.views/deref-action-group :zoom/set))
-        (:actions (action.views/deref-action-group :zoom/auto))]
+        (:actions (action.views/deref-action-group :zoom/focus))]
        (interpose :separator)
        (flatten)))
 

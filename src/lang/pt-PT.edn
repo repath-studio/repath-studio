@@ -842,7 +842,10 @@
   :zoom-set-200 "Definir para 200%"
   :zoom-focus-selected "Focar seleção"
   :zoom-fit-selected "Ajustar à seleção"
-  :zoom-fill-selected "Preencher com seleção"}
+  :zoom-fill-selected "Preencher com seleção"
+  :zoom-in-out "Ampliar/Reduzir"
+  :zoom-set "Definir zoom"
+  :focus "Foco"}
 
  :renderer.history.core
  {:undo "Desfazer"
@@ -897,7 +900,8 @@
  {:exit "Sair"
   :toggle-fullscreen "Alternar ecrã completo"
   :toggle-maximized "Alternar maximizado"
-  :minimize "Minimizar"}
+  :minimize "Minimizar"
+  :window "Janela"}
 
  :renderer.tool.core
  {:cancel "Cancelar"}

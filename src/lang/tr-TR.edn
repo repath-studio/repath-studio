@@ -839,7 +839,10 @@
   :zoom-set-200 "%200'e ayarla"
   :zoom-focus-selected "Seçilene odaklan"
   :zoom-fit-selected "Seçilene sığdır"
-  :zoom-fill-selected "Seçileni doldur"}
+  :zoom-fill-selected "Seçileni doldur"
+  :zoom-in-out "Yakınlaştır/Uzaklaştır"
+  :zoom-set "Yakınlaştırmayı ayarla"
+  :focus "Odak"}
 
  :renderer.history.core
  {:undo "Geri al"
@@ -894,7 +897,8 @@
  {:exit "Çıkış"
   :toggle-fullscreen "Tam ekranı aç/kapat"
   :toggle-maximized "Büyütülmüş durumu aç/kapat"
-  :minimize "Simge durumuna küçült"}
+  :minimize "Simge durumuna küçült"
+  :window "Pencere"}
 
  :renderer.tool.core
  {:cancel "İptal"}
