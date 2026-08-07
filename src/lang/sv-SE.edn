@@ -745,12 +745,9 @@
  {:close-panel "Stäng panel"}
 
  :renderer.app.core
- {:features "Funktioner"
-  :grid "Rutnät"
+ {:help-view "Hjälpvy"
   :help-bar "Hjälpfält"
-  :debug-info "Felsökningsinformation"
-  :guides "Stödlinjer"
-  :rulers "Linjaler"}
+  :debug-info "Felsökningsinformation"}
 
  :renderer.dialog.core
  {:dialog "Dialog"
@@ -776,7 +773,11 @@
   :gif "GIF"
   :reopen-last-closed "Öppna senast stängda igen"
   :vector-formats "Vektorformat"
-  :rasterised-formats "Rasterformat"}
+  :rasterised-formats "Rasterformat"
+  :document-view "Dokumentvy"
+  :grid "Rutnät"
+  :guides "Stödlinjer"
+  :rulers "Linjaler"}
 
  :renderer.element.core
  {:cut "Klipp ut"
@@ -869,7 +870,7 @@
   :menubar-object "Objektmeny"
   :menubar-view "Visningsmeny"
   :menubar-help "Hjälpmeny"
-  :help "Hjälp"}
+  :help-links "Hjälplänkar"}
 
  :renderer.panel.core
  {:panels "Paneler"

@@ -732,12 +732,9 @@
  {:close-panel "Close panel"}
 
  :renderer.app.core
- {:features "Features"
-  :grid "Grid"
+ {:help-view "Help view"
   :help-bar "Help bar"
-  :debug-info "Debug info"
-  :guides "Guides"
-  :rulers "Rulers"}
+  :debug-info "Debug info"}
 
  :renderer.dialog.core
  {:dialog "Dialog"
@@ -763,7 +760,11 @@
   :gif "GIF"
   :reopen-last-closed "Reopen last closed"
   :vector-formats "Vector formats"
-  :rasterised-formats "Rasterised formats"}
+  :rasterised-formats "Rasterised formats"
+  :document-view "Document view"
+  :grid "Grid"
+  :guides "Guides"
+  :rulers "Rulers"}
 
  :renderer.element.core
  {:cut "Cut"
@@ -856,7 +857,7 @@
   :menubar-object "Object menu"
   :menubar-view "View menu"
   :menubar-help "Help menu"
-  :help "Help"}
+  :help-links "Help links"}
 
  :renderer.panel.core
  {:panels "Panels"

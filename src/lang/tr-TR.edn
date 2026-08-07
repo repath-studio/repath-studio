@@ -739,12 +739,9 @@
  {:close-panel "Paneli kapat"}
 
  :renderer.app.core
- {:features "Özellikler"
-  :grid "Izgara"
+ {:help-view "Yardım görünümü"
   :help-bar "Yardım çubuğu"
-  :debug-info "Hata ayıklama bilgisi"
-  :guides "Kılavuzlar"
-  :rulers "Cetveller"}
+  :debug-info "Hata ayıklama bilgisi"}
 
  :renderer.dialog.core
  {:dialog "İletişim kutusu"
@@ -770,7 +767,11 @@
   :gif "GIF"
   :reopen-last-closed "Son kapatılanı yeniden aç"
   :vector-formats "Vektör biçimleri"
-  :rasterised-formats "Raster biçimleri"}
+  :rasterised-formats "Raster biçimleri"
+  :document-view "Belge görünümü"
+  :grid "Izgara"
+  :guides "Kılavuzlar"
+  :rulers "Cetveller"}
 
  :renderer.element.core
  {:cut "Kes"
@@ -863,7 +864,7 @@
   :menubar-object "Nesne Menüsü"
   :menubar-view "Görünüm Menüsü"
   :menubar-help "Yardım Menüsü"
-  :help "Yardım"}
+  :help-links "Yardım bağlantıları"}
 
  :renderer.panel.core
  {:panels "Paneller"

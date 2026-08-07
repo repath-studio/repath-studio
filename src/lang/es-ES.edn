@@ -750,12 +750,9 @@
  {:close-panel "Cerrar panel"}
 
  :renderer.app.core
- {:features "Características"
-  :grid "Cuadrícula"
+ {:help-view "Vista de ayuda"
   :help-bar "Barra de ayuda"
-  :debug-info "Información de depuración"
-  :guides "Guías"
-  :rulers "Reglas"}
+  :debug-info "Información de depuración"}
 
  :renderer.dialog.core
  {:dialog "Cuadro de diálogo"
@@ -781,7 +778,11 @@
   :gif "GIF"
   :reopen-last-closed "Reabrir último cerrado"
   :vector-formats "Formatos vectoriales"
-  :rasterised-formats "Formatos rasterizados"}
+  :rasterised-formats "Formatos rasterizados"
+  :document-view "Vista del documento"
+  :grid "Cuadrícula"
+  :guides "Guías"
+  :rulers "Reglas"}
 
  :renderer.element.core
  {:cut "Cortar"
@@ -874,7 +875,7 @@
   :menubar-object "Menú Objeto"
   :menubar-view "Menú Ver"
   :menubar-help "Menú Ayuda"
-  :help "Ayuda"}
+  :help-links "Enlaces de ayuda"}
 
  :renderer.panel.core
  {:panels "Paneles"

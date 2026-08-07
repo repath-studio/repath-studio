@@ -767,12 +767,9 @@
  {:close-panel "Κλείσιμο πάνελ"}
 
  :renderer.app.core
- {:features "Χαρακτηριστικά"
-  :grid "Πλέγμα"
+ {:help-view "Προβολή βοήθειας"
   :help-bar "Μπάρα βοηθείας"
-  :debug-info "Πληροφορίες αποσφαλμάτωσης"
-  :guides "Οδηγοί"
-  :rulers "Χάρακες"}
+  :debug-info "Πληροφορίες αποσφαλμάτωσης"}
 
  :renderer.dialog.core
  {:dialog "Παράθυρο διαλόγου"
@@ -798,7 +795,11 @@
   :gif "GIF"
   :reopen-last-closed "Επαναφορά τελευταίου κλεισμένου"
   :vector-formats "Μορφές διανυσμάτων"
-  :rasterised-formats "Ραστεροποιημένες μορφές"}
+  :rasterised-formats "Ραστεροποιημένες μορφές"
+  :document-view "Προβολή εγγράφου"
+  :grid "Πλέγμα"
+  :guides "Οδηγοί"
+  :rulers "Χάρακες"}
 
  :renderer.element.core
  {:cut "Αποκοπή"
@@ -891,7 +892,7 @@
   :menubar-object "Μενού Αντικειμένου"
   :menubar-view "Μενού Προβολής"
   :menubar-help "Μενού Βοήθειας"
-  :help "Βοήθεια"}
+  :help-links "Σύνδεσμοι βοήθειας"}
 
  :renderer.panel.core
  {:panels "Πάνελ"

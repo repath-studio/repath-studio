@@ -717,12 +717,9 @@
  {:close-panel "إغلاق اللوحة"}
 
  :renderer.app.core
- {:features "الميزات"
-  :grid "الشبكة"
+ {:help-view "عرض المساعدة"
   :help-bar "شريط المساعدة"
-  :debug-info "معلومات التصحيح"
-  :guides "الأدلة"
-  :rulers "المساطر"}
+  :debug-info "معلومات التصحيح"}
 
  :renderer.dialog.core
  {:dialog "مربع حوار"
@@ -748,7 +745,11 @@
   :gif "GIF"
   :reopen-last-closed "إعادة فتح آخر مغلق"
   :vector-formats "تنسيقات متجهية"
-  :rasterised-formats "تنسيقات نقطية"}
+  :rasterised-formats "تنسيقات نقطية"
+  :document-view "عرض المستند"
+  :grid "الشبكة"
+  :guides "الأدلة"
+  :rulers "المساطر"}
 
  :renderer.element.core
  {:cut "قص"
@@ -841,7 +842,7 @@
   :menubar-object "قائمة الكائن"
   :menubar-view "قائمة العرض"
   :menubar-help "قائمة المساعدة"
-  :help "مساعدة"}
+  :help-links "روابط المساعدة"}
 
  :renderer.panel.core
  {:panels "لوحات"
