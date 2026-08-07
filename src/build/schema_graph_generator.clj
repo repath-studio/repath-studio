@@ -81,7 +81,7 @@
   "Postwalk a schema form to make it safe for Clojure-side malli:
    - [:fn ...]        -> :any  (strips ClojureScript predicates)
    - js/Foo           -> :any  (strips JS interop symbols)
-   - other-ns/sym     -> nil   (only appears in :default values; safe)
+   - other-ns/sym     -> :any  (qualified symbols may appear in schema position)
    - KnownType symbol -> [:ref `KnownType`]"
   [form known-types]
   (walk/postwalk
@@ -90,11 +90,8 @@
        (and (vector? x) (= :fn (first x)))
        :any
 
-       (and (symbol? x) (= "js" (namespace x)))
-       :any
-
        (and (symbol? x) (some? (namespace x)))
-       nil
+       :any
 
        (and (symbol? x)
             (nil? (namespace x))
@@ -196,7 +193,10 @@
         m/schema
         md/transform)
     (catch Exception e
-      (println "schema-graph-generator] DOT generation failed:" (.getMessage e))
+      (println "[schema-graph-generator] DOT generation failed:"
+               (.getMessage e))
+      (when-let [d (ex-data e)]
+        (println "[schema-graph-generator] ex-data:" (pr-str d)))
       nil)))
 
 (defn generate!
