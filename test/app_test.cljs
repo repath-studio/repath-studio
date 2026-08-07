@@ -20,13 +20,6 @@
        (is @web?)
        (is (not @desktop?))))
 
-   (testing "toggling grid"
-     (let [grid? (rf/subscribe [::app.subs/grid?])]
-       (is (not @grid?))
-
-       (rf/dispatch [::app.events/toggle-grid])
-       (is @grid?)))
-
    (testing "toggling panel"
      (let [tree-visible (rf/subscribe [::panel.subs/visible? :tree])]
        (is @tree-visible)

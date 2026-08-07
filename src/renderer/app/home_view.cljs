@@ -121,10 +121,8 @@
          [:h2.mb-3.mt-8.text-2xl
           (i18n.views/t [::help "Help"])]
 
-         (->> (conj [(action.views/deref-action :dialog/command-panel)]
-                    (->> :help
-                         (action.views/deref-action-group)
-                         :actions))
+         (->> (:actions (action.views/deref-action-group :help-links))
+              (conj [(action.views/deref-action :dialog/command-panel)])
               (flatten)
               (map command)
               (into [:div]))]]]]]]])

@@ -173,3 +173,38 @@
                          :document/close
                          :document/close-all
                          :document/close-saved]}])
+
+(rf/dispatch [::action.events/register-action
+              {:id :document-view/toggle-grid
+               :label [::grid "Grid"]
+               :icon "grid"
+               :event [::document.events/toggle-attr :grid]
+               :active [::document.subs/attr :grid]
+               :shortcuts [{:keyCode (utils.key/codes "PERIOD")
+                            :ctrlKey true}]}])
+
+(rf/dispatch [::action.events/register-action
+              {:id :document-view/toggle-rulers
+               :label [::rulers "Rulers"]
+               :icon "ruler-combined"
+               :event [::document.events/toggle-attr :rulers]
+               :active [::document.subs/attr :rulers]
+               :shortcuts [{:keyCode (utils.key/codes "R")
+                            :ctrlKey true}]}])
+
+(rf/dispatch [::action.events/register-action
+              {:id :document-view/toggle-guides
+               :label [::guides "Guides"]
+               :icon "ruler-straight"
+               :event [::document.events/toggle-attr :guides]
+               :active [::document.subs/attr :guides]
+               :shortcuts [{:keyCode (utils.key/codes "PERIOD")
+                            :shiftKey true}]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :document/view
+               :icon "toggles"
+               :label [::document-view "Document view"]
+               :actions [:document-view/toggle-grid
+                         :document-view/toggle-rulers
+                         :document-view/toggle-guides]}])

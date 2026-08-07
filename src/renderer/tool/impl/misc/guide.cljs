@@ -46,7 +46,7 @@
     (if
      orientation
       (-> db
-          (assoc :guides true)
+          (document.handlers/assoc-attr :guides true)
           (document.handlers/assoc-attr :guides-locked false)
           (tool.handlers/set-cursor (cursor orientation))
           (app.handlers/add-fx [::set-orientation orientation]))

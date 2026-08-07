@@ -80,18 +80,6 @@
  :-> :user-agent)
 
 (rf/reg-sub
- ::grid?
- :-> :grid)
-
-(rf/reg-sub
- ::rulers?
- :-> :rulers)
-
-(rf/reg-sub
- ::guides?
- :-> :guides)
-
-(rf/reg-sub
  ::loading?
  :-> :loading)
 
