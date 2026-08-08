@@ -56,10 +56,6 @@
   [db]
   (tool.handlers/set-cursor db "crosshair"))
 
-(defmethod tool.hierarchy/on-deactivate ::measure
-  [db]
-  (app.handlers/add-fx db [::set-measure-attrs nil]))
-
 (defmethod tool.hierarchy/on-drag-start [::measure :idle]
   [db _e]
   (-> db
