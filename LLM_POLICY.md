@@ -66,16 +66,11 @@ allowed to license them. Even marking them as public domain requires owning the
 intellectual rights. Treating files under `src/lang` and `src/build` as source
 available seems to be the safest option for now.
 
-Those PRs should be marked by adding an "Assisted-by: MODELS" label at the end
-of the pull requests. `MODELS` should be replaced by a comma-separated list of
-the utilized models.
-
 Contributors should always ensure that their work does not violate any copyright
 laws. This also applies to AI generated code. Check the tool’s terms of use, to
 make sure you are not using copyrighted sources. You are advised to
 use models trained on content with compatible licensing.
 
-Those guidelines depend on various factors, so there is a huge gray area. As a
-general rule, if your contribution does not increase your understanding of the
-domain, and/or decreases the amount of confidence that you have regarding the
-way the app behaves, you should be alarmed.
+Those PRs should be marked by adding an "Assisted-by: MODELS" label at the end
+of the pull requests. `MODELS` should be replaced by a comma-separated list of
+the utilized models.
