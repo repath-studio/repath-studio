@@ -144,10 +144,6 @@
   }
 }
 
-.timeline-editor-time-area .ReactVirtualized__Grid {
-  overflow: hidden !important;
-}
-
 .timeline-editor-cursor {
   @apply border-accent!;
 }
@@ -165,8 +161,8 @@
 }
 
 .timeline-editor-edit-row {
-  background-image: linear-gradient(var(--secondary), var(--secondary)),
-                    linear-gradient(90deg, var(--border) 1px, transparent 0) !important;
+  background-image: linear-gradient(transparent, transparent),
+                    linear-gradient(90deg, var(--border) 1px, transparent 0) ;
 }
 
 /* react-d3-tree */

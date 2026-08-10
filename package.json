@@ -7,7 +7,7 @@
   "license": "AGPL-3.0",
   "version": "0.4.18",
   "scripts": {
-    "upgrade": "npx npm-check-updates -u -x 'codemirror paperjs-offset @xzdarcy/react-timeline-editor' --cooldown 7d && npm install && npm upgrade",
+    "upgrade": "npx npm-check-updates -u -x 'codemirror paperjs-offset' --cooldown 7d && npm install && npm upgrade",
     "fonts:sans": "npx shx cp -r node_modules/@fontsource/noto-sans/files/. resources/public/css/files",
     "fonts:mono": "npx shx cp -r node_modules/@fontsource/noto-sans-mono/files/. resources/public/css/files",
     "pyodide": "npx shx cp -r node_modules/pyodide/. resources/public/pyodide",
@@ -113,7 +113,7 @@
     "@sentry/cli": "3.6.2",
     "@sentry/react": "10.60.0",
     "@tailwindcss/cli": "4.3.3",
-    "@xzdarcy/react-timeline-editor": "0.1.9",
+    "@xzdarcy/react-timeline-editor": "1.0.0",
     "acorn": "8.18.0",
     "blobs": "2.3.0-beta.2",
     "buffer": "6.0.3",
