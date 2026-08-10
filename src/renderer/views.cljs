@@ -374,10 +374,19 @@
   [theme]
   [:> Toaster
    {:theme theme
+    :closeButton true
+    :duration js/Infinity
     :toastOptions {:classNames {:toast "bg-primary! border! border-border!
                                         shadow-md! p-4! rounded-md!"
+                                :closeButton "right-0! left-auto! bg-primary!
+                                              h-6! w-6! transform-none!
+                                              translate-x-1/2! -translate-y-1/2!
+                                              rounded-sm! border-border!
+                                              hover:text-foreground-hovered!
+                                              text-foreground!"
                                 :title "text-foreground-hovered!"
-                                :description "text-foreground! text-xs"}}
+                                :description "text-foreground! text-xs
+                                              overflow-y-auto! max-h-20"}}
     :icons {:success
             (reagent/as-element [icon "success" {:class "text-success"}])
             :error
