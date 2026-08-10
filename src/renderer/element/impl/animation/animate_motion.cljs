@@ -13,4 +13,22 @@
    :label [::label "Animate Motion"]
    :description [::description
                  "The SVG <animateMotion> element let define how an element
-                  moves along a motion path."]})
+                  moves along a motion path."]
+   :attrs [:begin
+           :end
+           :min
+           :max
+           :restart
+           :repeatDur
+           :calcMode
+           :values
+           :keyTimes
+           :keySplines
+           :by
+           :autoReverse
+           :accelerate
+           :decelerate
+           :additive
+           :accumulate
+           :id
+           :class]})
