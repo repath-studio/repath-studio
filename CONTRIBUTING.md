@@ -146,6 +146,38 @@ handlers. By default, function schemas are instrumented only during tests to
 avoid performance overhead. However, runtime instrumentation can also be enabled
 in the development environment (see `dev.cljs`).
 
+## Upgrading dependencies
+
+### NPM packages
+
+Running `npm run upgrade` automatically upgrades `package.json` dependencies to
+the latest versions. The script checks for new versions with 7 day minimum age
+to reduce the risk of installing compromised packages. If just want to look at
+the available upgrades without changing `package.json`, you can run
+`npm outdated`.
+
+After upgrading we need to check the release notes of the upgraded packages, to
+make sure there is no breaking change, and to look for introduced features or
+changes that can improve our application.
+
+If a package introduced a lot of breaking changes, and requires spacial
+handling, we can add it to the ignore list by passing
+`-x 'ignored-package-name'` to `npm-check-updates`. In this case, we need to
+also open a corresponding upgrade issue with its priority se to `high`, to keep
+track of those packages and handle the upgrade as soon as possible.
+
+When we are happy with the `package.json` changes, we need to manually run
+`npm install` to also update our `package-lock.json`, and handle any package
+resolution issues that may arise.
+
+Before pushing those changes, we need to test all related functionality to
+ensure that there are no regressions.
+
+## Clojure packages
+
+We can check for outdated Clojure dependencies by running `clojure -M:outdated`.
+There is an automated action that runs this check once a week.
+
 ## Useful development shortcuts
 
 ```text
