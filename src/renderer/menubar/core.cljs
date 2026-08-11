@@ -5,13 +5,15 @@
    [renderer.events :as-alias events]
    [renderer.menubar.events :as menubar.events]
    [renderer.menubar.subs]
-   [renderer.utils.key :as utils.key]))
+   [renderer.utils.key :as utils.key]
+   [renderer.window.subs :as-alias window.subs]))
 
 (rf/dispatch [::action.events/register-action
               {:id :menubar/activate-file
                :label [::menubar-file "File menu"]
                :icon "file"
                :event [::menubar.events/activate :file]
+               :available [::window.subs/md?]
                :shortcuts [{:keyCode (utils.key/codes "F")
                             :altKey true}]}])
 
@@ -20,6 +22,7 @@
                :label [::menubar-edit "Edit menu"]
                :icon "pencil"
                :event [::menubar.events/activate :edit]
+               :available [::window.subs/md?]
                :shortcuts [{:keyCode (utils.key/codes "E")
                             :altKey true}]}])
 
@@ -28,6 +31,7 @@
                :label [::menubar-object "Object menu"]
                :icon "circle"
                :event [::menubar.events/activate :object]
+               :available [::window.subs/md?]
                :shortcuts [{:keyCode (utils.key/codes "O")
                             :altKey true}]}])
 
@@ -36,6 +40,7 @@
                :label [::menubar-view "View menu"]
                :icon "eye"
                :event [::menubar.events/activate :view]
+               :available [::window.subs/md?]
                :shortcuts [{:keyCode (utils.key/codes "V")
                             :altKey true}]}])
 
@@ -44,6 +49,7 @@
                :label [::menubar-help "Help menu"]
                :icon "help"
                :event [::menubar.events/activate :help]
+               :available [::window.subs/md?]
                :shortcuts [{:keyCode (utils.key/codes "H")
                             :altKey true}]}])
 
