@@ -876,6 +876,7 @@
  {:exit "خروج"
   :toggle-fullscreen "تبديل ملء الشاشة"
   :toggle-maximized "تبديل التكبير"
+  :toggle-devtools "تبديل أدوات المطور"
   :minimize "تصغير"
   :window "نافذة"}
 

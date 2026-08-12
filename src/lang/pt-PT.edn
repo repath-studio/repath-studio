@@ -901,6 +901,7 @@
  {:exit "Sair"
   :toggle-fullscreen "Alternar ecrã completo"
   :toggle-maximized "Alternar maximizado"
+  :toggle-devtools "Alternar ferramentas de desenvolvimento"
   :minimize "Minimizar"
   :window "Janela"}
 

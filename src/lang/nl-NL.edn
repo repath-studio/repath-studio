@@ -918,8 +918,9 @@
 
  :renderer.window.core
  {:exit "Afsluiten"
-  :toggle-fullscreen "Volledig scherm in-/uitschakelen"
-  :toggle-maximized "Maximalisatie in-/uitschakelen"
+  :toggle-fullscreen "Volledig scherm wisselen"
+  :toggle-maximized "Gemaximaliseerd wisselen"
+  :toggle-devtools "Ontwikkelaarsgereedschap wisselen"
   :minimize "Minimaliseren"
   :window "Venster"}
 

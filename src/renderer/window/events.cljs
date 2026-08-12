@@ -74,6 +74,11 @@
    {::effects/ipc-send ["toggle-maximized"]}))
 
 (rf/reg-event-fx
+ ::toggle-devtools
+ (fn [_ _]
+   {::effects/ipc-send ["toggle-devtools"]}))
+
+(rf/reg-event-fx
  ::toggle-fullscreen
  (fn [{:keys [db]} _]
    (if (app.handlers/desktop? db)

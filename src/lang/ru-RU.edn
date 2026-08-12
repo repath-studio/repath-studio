@@ -901,7 +901,8 @@
  :renderer.window.core
  {:exit "Выход"
   :toggle-fullscreen "Переключить полноэкранный режим"
-  :toggle-maximized "Переключить развёрнутый режим"
+  :toggle-maximized "Переключить развернутое состояние"
+  :toggle-devtools "Переключить инструменты разработчика"
   :minimize "Свернуть"
   :window "Окно"}
 

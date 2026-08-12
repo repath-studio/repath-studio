@@ -925,7 +925,8 @@
  :renderer.window.core
  {:exit "Έξοδος"
   :toggle-fullscreen "Εναλλαγή πλήρους οθόνης"
-  :toggle-maximized "Εναλλαγή μεγιστοποιημένης"
+  :toggle-maximized "Εναλλαγή μεγιστοποίησης"
+  :toggle-devtools "Εναλλαγή εργαλείων ανάπτυξης"
   :minimize "Ελαχιστοποίηση"
   :window "Παράθυρο"}
 

@@ -915,7 +915,8 @@
  :renderer.window.core
  {:exit "Quitter"
   :toggle-fullscreen "Basculer en plein écran"
-  :toggle-maximized "Basculer la fenêtre agrandie"
+  :toggle-maximized "Basculer en mode maximisé"
+  :toggle-devtools "Basculer les outils de développement"
   :minimize "Réduire"
   :window "Fenêtre"}
 

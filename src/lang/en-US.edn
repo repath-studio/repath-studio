@@ -891,6 +891,7 @@
  {:exit "Exit"
   :toggle-fullscreen "Toggle fullscreen"
   :toggle-maximized "Toggle maximized"
+  :toggle-devtools "Toggle developer tools"
   :minimize "Minimize"
   :window "Window"}
 

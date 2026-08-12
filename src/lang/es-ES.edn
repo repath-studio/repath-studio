@@ -909,6 +909,7 @@
  {:exit "Salir"
   :toggle-fullscreen "Alternar pantalla completa"
   :toggle-maximized "Alternar maximizado"
+  :toggle-devtools "Alternar herramientas de desarrollo"
   :minimize "Minimizar"
   :window "Ventana"}
 

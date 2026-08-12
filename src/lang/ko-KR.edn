@@ -855,6 +855,7 @@
  {:exit "종료"
   :toggle-fullscreen "전체 화면 전환"
   :toggle-maximized "최대화 전환"
+  :toggle-devtools "개발자 도구 전환"
   :minimize "최소화"
   :window "창"}
 

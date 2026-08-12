@@ -918,8 +918,9 @@
  :renderer.window.core
  {:exit "Esci"
   :toggle-fullscreen "Attiva/disattiva schermo intero"
-  :toggle-maximized "Attiva/disattiva finestra ingrandita"
-  :minimize "Riduci a icona"
+  :toggle-maximized "Attiva/disattiva massimizzato"
+  :toggle-devtools "Attiva/disattiva strumenti di sviluppo"
+  :minimize "Minimizza"
   :window "Finestra"}
 
  :renderer.tool.core

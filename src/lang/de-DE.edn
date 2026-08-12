@@ -922,6 +922,7 @@
  {:exit "Beenden"
   :toggle-fullscreen "Vollbild umschalten"
   :toggle-maximized "Maximiert umschalten"
+  :toggle-devtools "Developer-Tools umschalten"
   :minimize "Minimieren"
   :window "Fenster"}
 

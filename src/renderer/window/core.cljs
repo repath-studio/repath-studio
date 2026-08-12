@@ -40,6 +40,16 @@
                :shortcuts [{:keyCode (utils.key/codes "Q")
                             :ctrlKey true}]}])
 
+(rf/dispatch [::action.events/register-action
+              {:id :window/toggle-devtools
+               :label [::toggle-devtools "Toggle developer tools"]
+               :icon "window-restore"
+               :event [::window.events/toggle-devtools]
+               :available [::app.subs/desktop?]
+               :shortcuts [{:keyCode (utils.key/codes "I")
+                            :ctrlKey true
+                            :shiftKey true}]}])
+
 (rf/dispatch [::action.events/register-action-group
               {:id :window/actions
                :icon "window-maximize"
@@ -47,4 +57,5 @@
                :actions [:window/toggle-maximized
                          :window/toggle-fullscreen
                          :window/minimize
-                         :window/close]}])
+                         :window/close
+                         :window/toggle-devtools]}])

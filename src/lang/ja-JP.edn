@@ -859,8 +859,9 @@
 
  :renderer.window.core
  {:exit "終了"
-  :toggle-fullscreen "フルスクリーン切り替え"
-  :toggle-maximized "最大化の切り替え"
+  :toggle-fullscreen "全画面切り替え"
+  :toggle-maximized "最大化切り替え"
+  :toggle-devtools "開発者ツール切り替え"
   :minimize "最小化"
   :window "ウィンドウ"}
 

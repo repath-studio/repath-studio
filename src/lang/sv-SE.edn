@@ -903,7 +903,8 @@
  :renderer.window.core
  {:exit "Avsluta"
   :toggle-fullscreen "Växla helskärm"
-  :toggle-maximized "Växla maximerat"
+  :toggle-maximized "Växla maximerad"
+  :toggle-devtools "Växla utvecklarverktyg"
   :minimize "Minimera"
   :window "Fönster"}
 

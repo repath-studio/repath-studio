@@ -896,9 +896,10 @@
 
  :renderer.window.core
  {:exit "Çıkış"
-  :toggle-fullscreen "Tam ekranı aç/kapat"
-  :toggle-maximized "Büyütülmüş durumu aç/kapat"
-  :minimize "Simge durumuna küçült"
+  :toggle-fullscreen "Tam ekran geçiş"
+  :toggle-maximized "Büyütülmuş geçiş"
+  :toggle-devtools "Geliştirici araçlarını geçiş"
+  :minimize "Küçült"
   :window "Pencere"}
 
  :renderer.tool.core

@@ -56,7 +56,10 @@
                              (.setFullScreen ^js @main-window (not v)))]
      ["toggle-maximized" #(if (.isMaximized ^js @main-window)
                             (.unmaximize ^js @main-window)
-                            (.maximize ^js @main-window))]]]
+                            (.maximize ^js @main-window))]
+     ["toggle-devtools" #(if (.isDevToolsOpened ^js @main-window)
+                           (.closeDevTools ^js @main-window)
+                           (.openDevTools ^js @main-window))]]]
     (.on ipcMain e #(f %2))))
 
 (defn register-ipc-handle-events []
