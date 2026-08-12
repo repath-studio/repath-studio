@@ -7,7 +7,7 @@
   "license": "AGPL-3.0",
   "version": "0.4.18",
   "scripts": {
-    "upgrade": "npx npm-check-updates -u -x 'codemirror paperjs-offset' --cooldown 7d",
+    "upgrade": "npx npm-check-updates -u -x 'codemirror' --cooldown 7d",
     "fonts:sans": "npx shx cp -r node_modules/@fontsource/noto-sans/files/. resources/public/css/files",
     "fonts:mono": "npx shx cp -r node_modules/@fontsource/noto-sans-mono/files/. resources/public/css/files",
     "pyodide": "npx shx cp -r node_modules/pyodide/. resources/public/pyodide",
@@ -95,7 +95,7 @@
     "@capacitor/status-bar": "8.0.3",
     "@fontsource/noto-sans": "5.3.0",
     "@fontsource/noto-sans-mono": "5.3.0",
-    "@mdn/browser-compat-data": "8.0.8",
+    "@mdn/browser-compat-data": "8.0.9",
     "@radix-ui/react-context-menu": "2.3.7",
     "@radix-ui/react-dialog": "1.1.23",
     "@radix-ui/react-direction": "1.1.4",
@@ -121,7 +121,7 @@
     "codemirror": "5.65.15",
     "create-react-class": "15.7.0",
     "doc-link-checker-cli": "1.0.4",
-    "electron": "43.2.0",
+    "electron": "43.3.0",
     "electron-builder": "26.15.3",
     "electron-builder-notarize": "1.5.2",
     "highlight.js": "11.11.1",
@@ -134,15 +134,15 @@
     "karma-junit-reporter": "2.0.1",
     "localforage": "1.10.0",
     "markdownlint-cli": "0.49.1",
-    "mdn-data": "2.29.0",
+    "mdn-data": "2.31.0",
     "npm-run-all": "4.1.5",
     "opentype.js": "2.0.0",
     "paper": "0.12.18",
-    "paperjs-offset": "1.0.8",
+    "paperjs-offset": "2.2.1",
     "path-browserify": "1.0.1",
     "perfect-freehand": "1.2.3",
     "process": "0.11.10",
-    "puppeteer": "25.4.0",
+    "puppeteer": "25.5.0",
     "pyodide": "314.0.3",
     "react": "19.2.8",
     "react-d3-tree": "3.6.6",
@@ -179,6 +179,6 @@
     "@sentry/capacitor@4.2.0": true,
     "@sentry/cli@3.6.2": true,
     "electron-winstaller@5.4.0": true,
-    "puppeteer@25.4.0": true
+    "puppeteer@25.5.0": true
   }
 }
