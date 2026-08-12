@@ -3,7 +3,7 @@
 Thank you for your interest in participating in the project's development!
 Please read the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md)
 and the [Contributor License Agreement](CLA.md) first. If you plan to use LLMs
-to contribute, make sure you also read our AI and LLM policy.
+to contribute, make sure you also read our [AI and LLM policy](LLM_POLICY.md).
 
 The project is written in [ClojureScript](https://clojurescript.org/) - a
 compiler for [Clojure](https://clojure.org/) that targets JavaScript, and is
