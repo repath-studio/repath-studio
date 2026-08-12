@@ -51,6 +51,7 @@ with some additions.
 
 ```text
 module\
+├── impl\           -> built-in multimethod implementations
 ├── core.cljs       -> entry point (will be evaluated on load)
 ├── db.cljs         -> schema, validation
 ├── views.cljs      -> reagent views
@@ -58,7 +59,7 @@ module\
 ├── subs.cljs       -> subscription handlers
 ├── handlers.cljs   -> helper functions for db transformations
 ├── effects.cljs    -> effect handlers
-├── hierarchy.cljs  -> multimethods and hierarchies
+├── hierarchy.cljs  -> multimethod and hierarchy definitions
 ├── migrations.cljs -> data migrations
 └── README.md       -> documentation
 ```
@@ -109,7 +110,9 @@ the build-in `defmethod` implementations for the multimethods.
 ## General re-frame recommendations
 
 Avoid chaining events to create new ones. Always prefer composing transformation
-functions. That is the whole purpose of `handlers` namespace.
+functions. That is the whole purpose of `handlers` namespace. Re-frame events
+should be treated as db transactions. All of the required operations should be
+handled within the event.
 
 Use interceptors sparingly. Although they look (and probably are) ingenious, it
 is hard to write and reason with them. Doing things explicitly, is usually
