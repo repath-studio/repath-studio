@@ -22,6 +22,7 @@ digraph {
   "App$Worker" [label="{App$Worker|:tasks map?\l}", fillcolor="#e6caab"]
   "BBox" [label="{BBox|[:tuple [number? \{:title \"min-x\"\}] [number? \{:title \"min-y\"\}] [number? \{:title \"max-x\"\}] [number? \{:title \"max-y\"\}]]\l}", fillcolor="#fff0cd"]
   "BooleanOperation" [label="{BooleanOperation|[:enum :unite :intersect :subtract :exclude :divide]\l}", fillcolor="#fff0cd"]
+  "Breakpoint" [label="{Breakpoint|[:enum :2xl :xl :lg :md :sm]\l}", fillcolor="#fff0cd"]
   "Cursor" [label="{Cursor|[:enum \"auto\" \"default\" \"none\" \"context-menu\" \"help\" \"pointer\" \"progress\" \"wait\" \"cell\" \"crosshair\" \"text\" \"vertical-text\" \"alias\" \"copy\" \"move\" \"no-drop\" \"not-allowed\" \"grab\" \"grabbing\" \"e-resize\" \"n-resize\" \"ne-resize\" \"nw-resize\" \"s-resize\" \"se-resize\" \"sw-resize\" \"w-resize\" \"ew-resize\" \"ns-resize\" \"nesw-resize\" \"nwse-resize\" \"col-resize\" \"row-resize\" \"all-scroll\" \"zoom-in\" \"zoom-out\"]\l}", fillcolor="#fff0cd"]
   "Dialog" [label="{Dialog|:title any?\l:content any?\l:attrs Dialog$Attrs\l}", fillcolor="#fff0cd"]
   "Dialog$Attrs" [label="{Dialog$Attrs|:as-child boolean?\l:force-mount boolean?\l:on-open-auto-focus ifn?\l:on-close-auto-focus ifn?\l:on-escape-key-down ifn?\l:on-pointer-down-outside ifn?\l:on-interact-outside ifn?\l}", fillcolor="#e6caab"]

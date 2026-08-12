@@ -6,6 +6,7 @@
    [renderer.shell.db :as shell.db]
    [renderer.shell.effects :as-alias shell.effects]
    [renderer.shell.handlers :as shell.handlers]
+   [renderer.window.handlers :as window.handlers]
    [replumb.repl :as repl]))
 
 (rf/reg-event-fx
@@ -84,7 +85,8 @@
 
      (and value
           (= item-type :error)
-          (not (get-in db [:panels :repl-history :visible])))
+          (not (get-in db [:panels :repl-history :visible]))
+          (window.handlers/breakpoint? (-> db :window :width) :md))
      (assoc ::app.effects/toast [:error
                                  "Error evaluating expression"
                                  {:description (:cause value)}]))))
