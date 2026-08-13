@@ -326,7 +326,7 @@
                                   ::element.hierarchy/container))
                     (zipmap core (repeat "")))))
          (when (contains? #{:animateMotion :animateTransform} tag)
-           (->attrs-memo (:animate (:elements svg-data))))
+           (defaults :animate))
          (zipmap (:attrs (element.hierarchy/properties tag)) (repeat ""))))
 
 (def defaults-memo (memoize defaults))

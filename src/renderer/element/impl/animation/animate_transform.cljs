@@ -15,22 +15,4 @@
                  "The <animateTransform> element animates a
                   transformation attribute on its target element, thereby
                   allowing animations to control translation, scaling,
-                  rotation, and/or skewing"]
-   :attrs [:begin
-           :end
-           :min
-           :max
-           :restart
-           :repeatDur
-           :calcMode
-           :values
-           :keyTimes
-           :keySplines
-           :by
-           :autoReverse
-           :accelerate
-           :decelerate
-           :additive
-           :accumulate
-           :id
-           :class]})
+                  rotation, and/or skewing"]})
