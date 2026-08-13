@@ -76,12 +76,12 @@ and the corresponding [validators](https://github.com/metosin/malli#validation),
 [explainers](https://github.com/metosin/malli#humanized-error-messages), and
 [transformers](https://github.com/metosin/malli#value-transformation).
 
-### Events db
+### Events ns
 
 Registers our re-frame events. Most events use functions from handlers to
 transform our db.
 
-### Subs db
+### Subs ns
 
 Registers our re-frame subscriptions. This ns is usually very thin.
 
