@@ -100,20 +100,20 @@
 
 (defn titlebar
   [s]
-  [:div.drag.grow.items-center
+  [:div
    {:dir "ltr"
-    :class ["pointer-events-none truncate lg:absolute lg:justify-center px-1"
-            "lg:left-1/2 lg:-translate-x-1/2 lg:flex"]}
+    :class ["drag grow items-center pointer-events-none truncate lg:absolute"
+            "lg:justify-center px-1 lg:left-1/2 lg:-translate-x-1/2 lg:flex"]}
    s])
 
 (defn language-select
   [system-code code]
   (let [action-group (action.views/deref-action-group :i18n/language)]
     [dropdown
-     [:button.button
+     [:button
       {:title (i18n.views/t (:label action-group))
-       :class ["flex gap-1 items-center px-3 uppercase bg-primary font-mono"
-               "outline-inset"]}
+       :class ["button flex gap-1 items-center px-3 uppercase bg-primary"
+               "font-mono outline-inset"]}
       code]
      (->> (:actions action-group)
           (mapv (partial language-item system-code)))]))
@@ -122,9 +122,9 @@
   [mode]
   (let [{:keys [label actions]} (action.views/deref-action-group :theme/mode)]
     [dropdown
-     [:button.button
+     [:button
       {:title (i18n.views/t label)
-       :class "flex gap-1 items-center px-3 bg-primary outline-inset"}
+       :class "button flex gap-1 items-center px-3 bg-primary outline-inset"}
       [views/icon (name mode)]]
      (->> actions
           (mapv views/dropdown-menu-item))]))
