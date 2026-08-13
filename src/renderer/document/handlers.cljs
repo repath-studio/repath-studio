@@ -194,12 +194,16 @@
 (m/=> assoc-attr [:-> App keyword? any? App])
 (defn assoc-attr
   [db k v]
-  (assoc-in db (path db :attrs k) v))
+  (cond-> db
+    (:active-document db)
+    (assoc-in (path db :attrs k) v)))
 
 (m/=> update-attr [:-> App keyword? ifn? [:* any?] App])
 (defn update-attr
   [db k f & args]
-  (apply update-in db (path db :attrs k) f args))
+  (if (:active-document db)
+    (apply update-in db (path db :attrs k) f args)
+    db))
 
 (m/=> update-saved-history-index [:function
                                   [:-> App App]
