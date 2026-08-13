@@ -68,6 +68,7 @@
                :label [::close-all "Close all"]
                :icon "window-close"
                :event [::document.events/close-all]
+               :enabled [::document.subs/some-entities?]
                :shortcuts [{:keyCode (utils.key/codes "W")
                             :ctrlKey true
                             :altKey true}]}])
@@ -180,6 +181,7 @@
                :icon "grid"
                :event [::document.events/toggle-attr :grid]
                :active [::document.subs/attr :grid]
+               :enabled [::document.subs/some-entities?]
                :shortcuts [{:keyCode (utils.key/codes "PERIOD")
                             :ctrlKey true}]}])
 
@@ -189,6 +191,7 @@
                :icon "ruler-combined"
                :event [::document.events/toggle-attr :rulers]
                :active [::document.subs/attr :rulers]
+               :enabled [::document.subs/some-entities?]
                :shortcuts [{:keyCode (utils.key/codes "R")
                             :ctrlKey true}]}])
 
@@ -198,6 +201,7 @@
                :icon "ruler-straight"
                :event [::document.events/toggle-attr :guides]
                :active [::document.subs/attr :guides]
+               :enabled [::document.subs/some-entities?]
                :shortcuts [{:keyCode (utils.key/codes "PERIOD")
                             :shiftKey true}]}])
 
