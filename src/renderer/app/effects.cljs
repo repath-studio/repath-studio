@@ -7,7 +7,7 @@
    ["sonner" :refer [toast]]
    [cognitect.transit :as transit]
    [config :as config]
-   [goog.functions]
+   [goog.functions :as goog.functions]
    [re-frame.core :as rf]
    [re-frame.db :as rf.db]
    [renderer.app.db :as app.db]

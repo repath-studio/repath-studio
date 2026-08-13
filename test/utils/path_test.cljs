@@ -1,7 +1,6 @@
 (ns utils.path-test
   (:require
    [cljs.test :refer-macros [deftest testing are]]
-   [goog.object]
    [renderer.utils.path :as utils.path]))
 
 (deftest test-segment->command
