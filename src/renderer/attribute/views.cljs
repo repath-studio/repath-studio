@@ -2,7 +2,6 @@
   (:require
    ["@radix-ui/react-hover-card" :as HoverCard]
    ["@radix-ui/react-select" :as Select]
-   ["dompurify" :as DOMPurify]
    [clojure.string :as string]
    [re-frame.core :as rf]
    [renderer.app.subs :as-alias app.subs]
