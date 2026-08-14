@@ -25,8 +25,7 @@
    {:class "flex p-2 rounded-sm items-center justify-between
             data-[selected=true]:bg-overlay"
     :on-select #(rf/dispatch [::element.events/set-attr :attributeName s])}
-   [:div.flex.justify-between.items-center.w-full.gap-2
-    (name s)]])
+   [:div.flex.justify-between.items-center.w-full.gap-2 s]])
 
 (defn suggestions-list
   []
@@ -45,7 +44,7 @@
         (i18n.views/t [::no-attributes "No attributes found."])]
        (for [attr utils.attribute/presentation]
          ^{:key attr}
-         [attr-item attr])]]]]])
+         [attr-item (name attr)])]]]]])
 
 (defmethod attribute.hierarchy/form-element [::element.hierarchy/animation
                                              :attributeName]
