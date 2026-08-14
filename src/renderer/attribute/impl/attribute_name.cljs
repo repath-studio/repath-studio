@@ -35,7 +35,8 @@
      :on-key-down #(.stopPropagation %)}
     [:> Command/CommandInput
      {:class "p-3 bg-primary border-b border-border w-full"
-      :placeholder (i18n.views/t [::search-attribute "Search for an attribute"])}]
+      :placeholder (i18n.views/t [::search-attribute
+                                  "Search for an attribute"])}]
     [:div.flex.max-h-80.overflow-hidden
      [views/scroll-area
       [:> Command/CommandList
