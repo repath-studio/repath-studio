@@ -25,6 +25,7 @@
 (def allowed-urls
   #{"repath.studio"
     "github.com"
+    "w3c.github.io"
     "developer.mozilla.org"
     "svgwg.org"
     "fxtf.org"
