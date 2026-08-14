@@ -326,9 +326,6 @@
   :href "Attributet href definierar en länk till en resurs som en referens-URL.
          Den exakta betydelsen av den länken beror på kontexten för varje
          element som använder den."
-  :attribute-name "Attributet attributeName indikerar namnet på CSS
-                   egenskapen eller attributet för målelementet som kommer att
-                   ändras under en animation."
   :begin "Attributet begin definierar när en animation ska börja."
   :end "Attributet end definierar ett slutvärde för animationen som kan
         begränsa den aktiva varaktigheten."
@@ -371,6 +368,14 @@
                           element med en viewBox som tillhandahåller ett givet
                           bildförhållande måste passa in i en viewport med ett
                           annat bildförhållande."}
+
+ :renderer.attribute.impl.attribute-name
+ {:description "Attributet attributeName indikerar namnet på CSS egenskapen
+                eller attributet för målelementet som kommer att ändras under en
+                animation."
+  :search-attribute "Sök efter ett attribut"
+  :no-attributes "Inga attribut hittades."
+  :select-attribute "Välj attribut"}
 
  :renderer.tool.impl.element.path
  {:click-to-start "Klicka för att lägga till den första punkten."

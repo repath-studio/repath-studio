@@ -283,8 +283,6 @@
           style 属性相同。"
   :href "href 属性定义作为参考 URL 的资源链接。该链接的确切含义取决于使用它
          的每个元素的上下文。"
-  :attribute-name "attributeName 属性指示在动画期间将要更改的目标元素的
-                   CSS 属性或属性的名称。"
   :begin "begin 属性定义动画何时开始。"
   :end "end 属性定义动画的结束值，可以限制活动持续时间。"
   :dur "dur 属性指示动画的简单持续时间。"
@@ -308,6 +306,12 @@
   :view-box "viewBox 属性在用户空间中定义 SVG 视口的位置和尺寸。"
   :preserve-aspect-ratio "preserveAspectRatio 属性指示具有提供给定纵横比的
                           viewBox 的元素如何适合具有不同纵横比的视口。"}
+
+ :renderer.attribute.impl.attribute-name
+ {:description "attributeName 属性指示在动画期间将要更改的目标元素的 CSS 属性或属性的名称。"
+  :search-attribute "搜索属性"
+  :no-attributes "未找到属性。"
+  :select-attribute "选择属性"}
 
  :renderer.tool.impl.element.core
  {:click-and-drag "点击并拖动以创建元素。"

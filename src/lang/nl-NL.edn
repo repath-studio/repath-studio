@@ -335,9 +335,6 @@
   :href "Het href attribuut definieert een link naar een bron als een
          referentie URL. De exacte betekenis van die link hangt af van de
          context van elk element dat het gebruikt."
-  :attribute-name "Het attributeName attribuut geeft de naam van de CSS
-                   eigenschap of attribuut van het doelelement aan dat
-                   gewijzigd gaat worden tijdens een animatie."
   :begin "Het begin attribuut definieert wanneer een animatie moet beginnen."
   :end "Het end attribuut definieert een eindwaarde voor de animatie die de
         actieve duur kan beperken."
@@ -382,6 +379,14 @@
                           element met een viewBox die een gegeven
                           beeldverhouding biedt moet passen in een viewport met
                           een andere beeldverhouding."}
+
+ :renderer.attribute.impl.attribute-name
+ {:description "Het attributeName attribuut geeft de naam van de CSS eigenschap
+                of attribuut van het doelelement aan dat gewijzigd gaat worden
+                tijdens een animatie."
+  :search-attribute "Zoeken naar een attribuut"
+  :no-attributes "Geen attributen gevonden."
+  :select-attribute "Attribuut selecteren"}
 
  :renderer.tool.impl.element.path
  {:click-to-start "Klik om het eerste punt toe te voegen."

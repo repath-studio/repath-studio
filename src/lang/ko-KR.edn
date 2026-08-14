@@ -305,8 +305,6 @@
           HTML의 style 속성과 동일하게 작동합니다."
   :href "href 속성은 참조 URL로 리소스에 대한 링크를 정의합니다.
          해당 링크의 정확한 의미는 이를 사용하는 각 요소의 컨텍스트에 따라 다릅니다."
-  :attribute-name "attributeName 속성은 애니메이션 중에 변경될 대상 요소의
-                   CSS 속성이나 속성의 이름을 나타냅니다."
   :begin "begin 속성은 애니메이션이 언제 시작되어야 하는지 정의합니다."
   :end "end 속성은 활성 지속 시간을 제한할 수 있는 애니메이션의 종료 값을 정의합니다."
   :dur "dur 속성은 애니메이션의 단순 지속 시간을 나타냅니다."
@@ -334,6 +332,13 @@
   :preserve-aspect-ratio "preserveAspectRatio 속성은 주어진 종횡비를 제공하는
                           viewBox가 있는 요소가 다른 종횡비를 가진 뷰포트에
                           어떻게 맞춰져야 하는지를 나타냅니다."}
+
+ :renderer.attribute.impl.attribute-name
+ {:description "attributeName 속성은 애니메이션 중에 변경될 대상 요소의 CSS 속성이나 속성의
+                이름을 나타냅니다."
+  :search-attribute "속성 검색"
+  :no-attributes "속성을 찾을 수 없습니다."
+  :select-attribute "속성 선택"}
 
  :renderer.tool.impl.element.path
  {:click-to-start "첫 번째 점을 추가하려면 클릭합니다."

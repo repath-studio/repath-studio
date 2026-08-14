@@ -336,9 +336,6 @@
   :href "Das href-Attribut definiert einen Link zu einer Ressource als
          Referenz-URL. Die genaue Bedeutung dieses Links hängt vom Kontext jedes
          Elements ab, das ihn verwendet."
-  :attribute-name "Das attributeName-Attribut zeigt den Namen der
-                   CSS-Eigenschaft oder des Attributs des Zielelements an, das
-                   während einer Animation geändert wird."
   :begin "Das begin-Attribut definiert, wann eine Animation beginnen soll."
   :end "Das end-Attribut definiert einen Endwert für die Animation, der die
         aktive Dauer einschränken kann."
@@ -382,6 +379,14 @@
                           Element mit einer viewBox, die ein gegebenes
                           Seitenverhältnis bereitstellt, in einen Viewport mit
                           einem anderen Seitenverhältnis passen muss."}
+
+ :renderer.attribute.impl.attribute-name
+ {:description "Das attributeName-Attribut zeigt den Namen der
+                CSS-Eigenschaft oder des Attributs des Zielelements an, das
+                während einer Animation geändert wird."
+  :search-attribute "Attribut suchen"
+  :no-attributes "Keine Attribute gefunden."
+  :select-attribute "Attribut auswählen"}
 
  :renderer.tool.impl.element.core
  {:click-and-drag "Klicken und ziehen, um ein Element zu erstellen."

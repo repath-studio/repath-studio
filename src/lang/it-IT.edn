@@ -334,9 +334,6 @@
   :href "L'attributo href definisce un collegamento a una risorsa come URL di
          riferimento. Il significato esatto di quel collegamento dipende dal
          contesto di ogni elemento che lo utilizza."
-  :attribute-name "L'attributo attributeName indica il nome della proprietà CSS
-                   o attributo dell'elemento di destinazione che sarà
-                   modificato durante un'animazione."
   :begin "L'attributo begin definisce quando un'animazione dovrebbe iniziare."
   :end "L'attributo end definisce un valore finale per l'animazione che può
         vincolare la durata attiva."
@@ -380,6 +377,14 @@
                           elemento con un viewBox che fornisce un dato rapporto
                           d'aspetto deve adattarsi in un viewport con un
                           rapporto d'aspetto diverso."}
+
+ :renderer.attribute.impl.attribute-name
+ {:description "L'attributo attributeName indica il nome della proprietà CSS o
+                attributo dell'elemento di destinazione che sarà modificato
+                durante un'animazione."
+  :search-attribute "Cerca un attributo"
+  :no-attributes "Nessun attributo trovato."
+  :select-attribute "Seleziona attributo"}
 
  :renderer.tool.impl.element.path
  {:click-to-start "Clicca per aggiungere il primo punto."

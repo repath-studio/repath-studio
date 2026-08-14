@@ -322,8 +322,6 @@
           çalışır."
   :href "href özniteliği, bir referans URL olarak bir kaynağa bağlantı tanımlar.
          Bu bağlantının tam anlamı, onu kullanan her öğenin bağlamına bağlıdır."
-  :attribute-name "attributeName özniteliği, animasyon sırasında değiştirilecek
-                   hedef öğenin CSS özelliği veya özniteliğinin adını gösterir."
   :begin "begin özniteliği, bir animasyonun ne zaman başlaması gerektiğini
           tanımlar."
   :end "end özniteliği, etkin süreyi kısıtlayabilen animasyon için bir bitiş
@@ -364,6 +362,13 @@
                           oranı sağlayan viewBox'a sahip bir öğenin, farklı
                           en boy oranına sahip bir görünüm alanına nasıl
                           sığdırılması gerektiğini gösterir."}
+
+ :renderer.attribute.impl.attribute-name
+ {:description "attributeName özniteliği, animasyon sırasında değiştirilecek
+                hedef öğenin CSS özelliği veya özniteliğinin adını gösterir."
+  :search-attribute "Öznitelik ara"
+  :no-attributes "Öznitelik bulunamadı."
+  :select-attribute "Öznitelik seç"}
 
  :renderer.tool.impl.element.path
  {:click-to-start "İlk noktayı eklemek için tıklayın."
