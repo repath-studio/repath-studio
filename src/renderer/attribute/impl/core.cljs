@@ -1,6 +1,7 @@
 (ns renderer.attribute.impl.core
   (:require
    [renderer.attribute.hierarchy :as attribute.hierarchy]
+   [renderer.attribute.impl.attribute-name]
    [renderer.attribute.impl.color]
    [renderer.attribute.impl.crossorigin]
    [renderer.attribute.impl.d]
@@ -162,13 +163,6 @@
   [::href "The href attribute defines a link to a resource as a reference URL.
            The exact meaning of that link depends on the context of each element
            using it."])
-
-(defmethod attribute.hierarchy/description [::element.hierarchy/element
-                                            :attributeName]
-  []
-  [::attribute-name "The attributeName attribute indicates the name of the CSS
-                     property or attribute of the target element that is going
-                     to be changed during an animation."])
 
 (defmethod attribute.hierarchy/description [::element.hierarchy/element :begin]
   []

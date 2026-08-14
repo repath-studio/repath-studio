@@ -319,9 +319,6 @@
   :href "The href attribute defines a link to a resource as a reference URL.
          The exact meaning of that link depends on the context of each element
          using it."
-  :attribute-name "The attributeName attribute indicates the name of the CSS
-                   property or attribute of the target element that is going to
-                   be changed during an animation."
   :begin "The begin attribute defines when an animation should begin."
   :end "The end attribute defines an end value for the animation that can
         constrain the active duration."
@@ -364,6 +361,14 @@
                           element with a viewBox providing a given aspect ratio
                           must fit into a viewport with a different aspect
                           ratio."}
+
+ :renderer.attribute.impl.attribute-name
+ {:description "The attributeName attribute indicates the name of the CSS
+                property or attribute of the target element that is going to be
+                changed during an animation."
+  :search-attribute "Search for an attribute"
+  :no-attributes "No attributes found."
+  :select-attribute "Select attribute"}
 
  :renderer.tool.impl.element.path
  {:click-to-start "Click to add the first point."

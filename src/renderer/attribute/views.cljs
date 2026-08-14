@@ -10,6 +10,7 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
    [renderer.events :as-alias events]
+   [renderer.i18n.subs :as-alias i18n.subs]
    [renderer.i18n.views :as i18n.views]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
@@ -179,6 +180,11 @@
          {:class "select-scroll-button"}
          [views/icon "chevron-down"]]]]])])
 
+(defn purify
+  [s]
+  (-> (.parseFromString (js/DOMParser.) s "text/html")
+      (.. -body -textContent)))
+
 (defn feature
   [property {:keys [id label]}]
   (when-let [v (get property id)]
@@ -186,7 +192,10 @@
      [:h3.font-bold (i18n.views/t label)]
      [:p (cond->> v
            (vector? v)
-           (string/join " | "))]]))
+           (string/join " | ")
+
+           (not= id :syntax)
+           (purify))]]))
 
 (def features
   [{:id :appliesto
@@ -204,7 +213,8 @@
 
 (defn attr-card-content
   [tag k]
-  (let [property (utils.attribute/property-data-memo k)
+  (let [lang @(rf/subscribe [::i18n.subs/lang])
+        property (utils.attribute/property-data-memo k lang)
         description (attribute.hierarchy/description tag k)]
     [:div.p-5
      [:h2.mb-4.text-lg.font-mono.text-foreground-hovered k]

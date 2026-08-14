@@ -8,7 +8,8 @@
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.element.db :as element.db :refer [ElementAttrs ElementTag]]
    [renderer.element.hierarchy :as element.hierarchy]
-   [renderer.hierarchy :as hierarchy]))
+   [renderer.hierarchy :as hierarchy]
+   [renderer.utils.extra :refer [rpartial]]))
 
 (def mdn-data
   "https://github.com/mdn/data/blob/main/docs/updating_css_json.md"
@@ -237,21 +238,37 @@
    (or (-> svg-data :elements tag attr :__compat)
        (-> svg-data :global_attributes attr :__compat))))
 
+(defn translation
+  [k lang]
+  (let [translations (get-in mdn-data [:l10n :css])]
+    (or (get-in translations [k (keyword lang)])
+        (get-in translations [k (keyword (subs lang 0 2))])
+        (get-in translations [k :en-US])
+        (name k))))
+
+(defn remove-refs
+  [s]
+  (string/replace s #"\{\{[^}]+\(\"([^\"]*)\"\)\}\}"
+                  (fn [[_ match]] match)))
+
 (defn enhance-data-readability
-  [property k]
+  [property k lang]
   (cond-> property
     (and (get property k)
          (string? (get property k)))
-    (update k #(-> (camel-snake-kebab/->kebab-case-string %)
-                   (string/replace "-" " ")))))
+    (update k #(-> (keyword %)
+                   (translation lang)
+                   (remove-refs)))))
 
 (m/=> property-data [:-> keyword? any?])
 (defn property-data
-  [k]
-  (let [css-property (get-in mdn-data [:css :properties k])]
-    (reduce enhance-data-readability
-            css-property
-            [:appliesto :computed :percentages :animationType])))
+  ([k]
+   (property-data k "en-US"))
+  ([k lang]
+   (let [css-property (get-in mdn-data [:css :properties k])]
+     (reduce (rpartial enhance-data-readability lang)
+             css-property
+             (keys css-property)))))
 
 (def property-data-memo (memoize property-data))
 
@@ -326,7 +343,7 @@
                                   ::element.hierarchy/container))
                     (zipmap core (repeat "")))))
          (when (contains? #{:animateMotion :animateTransform} tag)
-           (->attrs-memo (:animate (:elements svg-data))))
+           (defaults :animate))
          (zipmap (:attrs (element.hierarchy/properties tag)) (repeat ""))))
 
 (def defaults-memo (memoize defaults))

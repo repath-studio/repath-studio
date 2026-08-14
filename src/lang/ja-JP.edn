@@ -304,8 +304,6 @@
           できます。HTMLのstyle属性と同じように機能します。"
   :href "href属性は、参照URLとしてリソースへのリンクを定義します。そのリンク
          の正確な意味は、それを使用する各要素のコンテキストに依存します。"
-  :attribute-name "attributeName属性は、アニメーション中に変更されるターゲット
-                   要素のCSSプロパティまたは属性の名前を示します。"
   :begin "begin属性は、アニメーションが開始するタイミングを定義します。"
   :end "end属性は、アクティブな継続時間を制約できるアニメーションの終了値を
         定義します。"
@@ -338,6 +336,13 @@
                           提供するviewBoxを持つ要素が、異なるアスペクト比の
                           ビューポートにどのようにフィットする必要があるかを
                           示します。"}
+
+ :renderer.attribute.impl.attribute-name
+ {:description "attributeName属性は、アニメーション中に変更されるターゲット
+                要素のCSSプロパティまたは属性の名前を示します。"
+  :search-attribute "属性を検索"
+  :no-attributes "属性が見つかりません。"
+  :select-attribute "属性を選択"}
 
  :renderer.tool.impl.element.core
  {:click-and-drag "クリックしてドラッグして要素を作成します。"
