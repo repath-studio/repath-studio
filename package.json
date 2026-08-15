@@ -53,7 +53,7 @@
         "ext": "rps",
         "name": "Repath Studio File",
         "role": "Editor",
-        "mimeType": "application/repath-studio"
+        "mimeType": "application/x-repath-studio"
       }
     ],
     "publish": [
