@@ -248,11 +248,13 @@
 
 (defn remove-refs
   [s]
-  (string/replace s #"\{\{[^}]+\(\"([^\"]*)\"\)\}\}"
-                  (fn [[_ match]] match)))
+  (-> s
+      (string/replace #"\{\{[^}]+\(\"([^\"]*)\"\)\}\}" (fn [[_ match]] match))
+      (string/replace "$1$, " "")))
 
 (defn enhance-data-readability
   [property k lang]
+  (print property)
   (cond-> property
     (and (get property k)
          (string? (get property k)))
