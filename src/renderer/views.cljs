@@ -381,7 +381,7 @@
                                 :closeButton "right-0! left-auto! bg-primary!
                                               h-6! w-6! transform-none!
                                               translate-x-1/2! -translate-y-1/2!
-                                              rounded-sm! border-border!
+                                              rounded-sm! border! border-border!
                                               hover:text-foreground-hovered!
                                               text-foreground!"
                                 :title "text-foreground-hovered!"
