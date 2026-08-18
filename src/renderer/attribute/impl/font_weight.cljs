@@ -18,8 +18,7 @@
 
 (defn label
   [weight]
-  (let [weight-name (first (get utils.attribute/weight-name-mapping weight))]
-    (str weight " - " weight-name)))
+  (first (get utils.attribute/weight-name-mapping weight)))
 
 (defmethod attribute.hierarchy/form-element [::element.hierarchy/element
                                              :font-weight]

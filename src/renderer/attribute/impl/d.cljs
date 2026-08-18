@@ -222,7 +222,7 @@
                                     (js/Date.now)])
       :disabled disabled?}
      [:> Select/Trigger
-      {:class "form-control-button flex gap-1 px-2!
+      {:class "form-control-button flex gap-1 px-2! items-center!
                bg-transparent! hover:bg-overlay! text-inherit!"
        :aria-label (i18n.views/t [::convert-segment "Convert segment"])}
       [:div.absolute [:> Select/Value ""]]
@@ -252,7 +252,7 @@
          (map (fn [[command {:keys [label]}]]
                 [:> DropdownMenu/Item
                  {:key command
-                  :class "menu-item dropdown-menu-item"
+                  :class "menu-item"
                   :onSelect #(rf/dispatch [::add-segment el-id command
                                            (.-timeStamp %)])}
                  [:div.menu-item-indicator command]

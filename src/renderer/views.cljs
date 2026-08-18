@@ -259,7 +259,7 @@
 
     :else
     [:> DropdownMenu/Item
-     {:class "menu-item dropdown-menu-item"
+     {:class "menu-item"
       :onSelect (action.views/dispatch action)
       :disabled (action.views/disabled? action)}
      [:div.flex.items-center.gap-2
