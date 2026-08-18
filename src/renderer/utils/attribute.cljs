@@ -254,7 +254,6 @@
 
 (defn enhance-data-readability
   [property k lang]
-  (print property)
   (cond-> property
     (and (get property k)
          (string? (get property k)))

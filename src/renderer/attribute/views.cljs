@@ -141,12 +141,18 @@
 
 (defn select-item
   [{:keys [icon label value]}]
-  [:> Select/Item
-   {:value value
-    :class "menu-item"}
-   (when icon
-     [:div.absolute.left-2 [views/icon icon]])
-   [:> Select/ItemText (i18n.views/t label)]])
+  (let [label (i18n.views/t label)]
+    [:> Select/Item
+     {:value value
+      :class "menu-item px-2!"}
+     (when icon
+       [:div.absolute.left-2 [views/icon icon]])
+     [:> Select/ItemText
+      {:as-child true}
+      [:div.flex-1.flex.gap-3.justify-between
+       [:span label]
+       (when (not= value (string/lower-case label))
+         [:span.text-foreground-muted value])]]]))
 
 (defn select-input
   [k v {:keys [disabled items default-value]
