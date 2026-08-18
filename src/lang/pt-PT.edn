@@ -138,6 +138,12 @@
                 animações controlem translação, dimensionamento, rotação e/ou
                 inclinação"}
 
+ :renderer.element.impl.mpath
+ {:label "Percurso de movimento"
+  :description "O subelemento SVG <mpath> para o elemento <animateMotion>
+                fornece a possibilidade de referenciar um elemento <path>
+                externo como definição de um percurso de movimento."}
+
  :renderer.element.impl.box
  {:position-handle "alça de posição"
   :size-handle "alça de tamanho"}

@@ -138,6 +138,12 @@
                 ölçekleme, döndürme ve/veya eğmeyi kontrol etmesine olanak
                 tanır"}
 
+ :renderer.element.impl.mpath
+ {:label "Hareket yolu"
+  :description "<animateMotion> öğesine ait SVG alt öğesi <mpath>, hareket
+                yolunun tanımı olarak dış bir <path> öğesine atıf yapabilme
+                imkânı sağlar."}
+
  :renderer.element.impl.box
  {:position-handle "konum tutamacı"
   :size-handle "boyut tutamacı"}

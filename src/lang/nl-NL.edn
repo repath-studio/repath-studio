@@ -139,6 +139,12 @@
                 translatie, schaling, rotatie en/of scheeftrekken kunnen
                 besturen"}
 
+ :renderer.element.impl.mpath
+ {:label "Bewegingspad"
+  :description "Het SVG-subelement <mpath> voor het element <animateMotion>
+                stelt u in staat om naar een extern <path>-element te verwijzen
+                als definitie van een bewegingspad."}
+
  :renderer.element.impl.box
  {:position-handle "positiegreep"
   :size-handle "groottegreep"}

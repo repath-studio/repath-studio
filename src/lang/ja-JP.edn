@@ -137,6 +137,11 @@
                 属性をアニメーション化し、平行移動、拡大縮小、回転、および/
                 または傾斜を制御するアニメーションを可能にします"}
 
+ :renderer.element.impl.mpath
+ {:label "モーションパス"
+  :description "<animateMotion> 要素用の SVG サブ要素 <mpath> は、外部の <path>
+                要素をモーションパスの定義として参照する機能を提供します。"}
+
  :renderer.element.impl.box
  {:position-handle "位置ハンドル"
   :size-handle "サイズハンドル"}

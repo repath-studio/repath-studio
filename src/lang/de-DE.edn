@@ -138,6 +138,12 @@
                 so Animationen zur Steuerung von Translation, Skalierung,
                 Rotation und/oder Scherung"}
 
+ :renderer.element.impl.mpath
+ {:label "Bewegungspfad"
+  :description "Das SVG-Unterelement <mpath> für das Element <animateMotion>
+                ermöglicht es, ein externes <path>-Element als Definition eines
+                Bewegungspfads zu referenzieren."}
+
  :renderer.element.impl.box
  {:position-handle "Positionsgriff"
   :size-handle "Größengriff"}

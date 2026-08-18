@@ -133,6 +133,11 @@
   :description "<animateTransform> 元素在其目标元素上为变换属性设置动画,从而
                 允许动画控制平移、缩放、旋转和/或倾斜"}
 
+ :renderer.element.impl.mpath
+ {:label "运动路径"
+  :description "<animateMotion> 元素的 SVG 子元素 <mpath>, 提供将外部 <path>
+                元素参考为运动路径定义的能力。"}
+
  :renderer.element.impl.box
  {:position-handle "位置手柄"
   :size-handle "大小手柄"}

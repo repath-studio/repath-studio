@@ -136,6 +136,12 @@
                 المستهدف، مما يسمح بالرسوم المتحركة للتحكم في الترجمة
                 والتحجيم والدوران و/أو الانحراف"}
 
+ :renderer.element.impl.mpath
+ {:label "مسار الحركة"
+  :description "العنصر الفرعي SVG <mpath> الخاص بعنصر <animateMotion>
+                يتيح إمكانية الإشارة إلى عنصر <path> خارجي
+                كتعريف لمسار الحركة."}
+
  :renderer.element.impl.box
  {:position-handle "مقبض الموضع"
   :size-handle "مقبض الحجم"}

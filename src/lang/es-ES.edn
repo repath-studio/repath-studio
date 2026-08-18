@@ -138,6 +138,12 @@
                 animaciones controlen traslación, escalado, rotación y/o
                 inclinación"}
 
+ :renderer.element.impl.mpath
+ {:label "Trayectoria de movimiento"
+  :description "El subelemento SVG <mpath> para el elemento <animateMotion>
+                permite referenciar un elemento <path> externo como definición
+                de una trayectoria de movimiento."}
+
  :renderer.element.impl.box
  {:position-handle "manija de posición"
   :size-handle "manija de tamaño"}

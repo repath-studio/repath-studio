@@ -139,6 +139,12 @@
                 animations de contrôler la translation, la mise à l'échelle, la
                 rotation et/ou l'inclinaison"}
 
+ :renderer.element.impl.mpath
+ {:label "Chemin de mouvement"
+  :description "Le sous-élément SVG <mpath> pour l'élément <animateMotion>
+                permet de référencer un élément <path> externe comme définition
+                d'un chemin de mouvement."}
+
  :renderer.element.impl.box
  {:position-handle "poignée de position"
   :size-handle "poignée de taille"}

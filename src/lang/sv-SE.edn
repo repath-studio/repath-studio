@@ -138,6 +138,12 @@
                 möjligt för animationer att styra translation, skalning,
                 rotation och/eller skevning"}
 
+ :renderer.element.impl.mpath
+ {:label "Rörelsebana"
+  :description "SVG-underelementet <mpath> för elementet <animateMotion> ger
+                möjlighet att referera ett externt <path>-element som
+                definition av en rörelsebana."}
+
  :renderer.element.impl.box
  {:position-handle "positionshandtag"
   :size-handle "storlekshandtag"}

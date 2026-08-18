@@ -137,6 +137,11 @@
                 애니메이션이 이동, 크기 조정, 회전 및/또는 기울이기를 제어할 수
                 있도록 합니다"}
 
+ :renderer.element.impl.mpath
+ {:label "모션 패스"
+  :description "<animateMotion> 요소에 사용되는 SVG 서브요소 <mpath>는 외부의 <path>
+                요소를 모션 패스의 정의로서 참조할 수 있는 기능을 제공합니다."}
+
  :renderer.element.impl.box
  {:position-handle "위치 핸들"
   :size-handle "크기 핸들"}
