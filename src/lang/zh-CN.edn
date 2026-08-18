@@ -291,7 +291,6 @@
   :restart "restart 属性指定动画是否可以重新启动。"
   :repeat-count "repeatCount 属性指示动画将发生的次数。"
   :repeat-dur "repeatDur 属性指定重复动画的总持续时间。"
-  :calc-mode "calcMode 属性指定动画的插值模式。"
   :values "values 属性有不同的含义，取决于使用它的上下文，它要么定义在动画
            过程中使用的值序列，要么是颜色矩阵的数字列表，根据要执行的颜色
            变化类型进行不同的解释。"
@@ -306,6 +305,9 @@
   :view-box "viewBox 属性在用户空间中定义 SVG 视口的位置和尺寸。"
   :preserve-aspect-ratio "preserveAspectRatio 属性指示具有提供给定纵横比的
                           viewBox 的元素如何适合具有不同纵横比的视口。"}
+
+ :renderer.attribute.impl.calc-mode
+ {:description "calcMode 属性指定动画的插值模式。"}
 
  :renderer.attribute.impl.attribute-name
  {:description "attributeName 属性指示在动画期间将要更改的目标元素的 CSS 属性或属性的名称。"

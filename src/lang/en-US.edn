@@ -333,8 +333,6 @@
                  animation will take place."
   :repeat-dur "The repeatDur attribute specifies the total duration for
                repeating an animation."
-  :calc-mode "The calcMode attribute specifies the interpolation mode for the
-              animation."
   :values "The values attribute has different meanings, depending upon the
            context where it's used, either it defines a sequence of values used
            over the course of an animation, or it's a list of numbers for a
@@ -361,6 +359,10 @@
                           element with a viewBox providing a given aspect ratio
                           must fit into a viewport with a different aspect
                           ratio."}
+
+ :renderer.attribute.impl.calc-mode
+ {:description "The calcMode attribute specifies the interpolation mode for the
+                animation."}
 
  :renderer.attribute.impl.attribute-name
  {:description "The attributeName attribute indicates the name of the CSS

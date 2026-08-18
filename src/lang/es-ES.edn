@@ -340,8 +340,6 @@
                  animación tendrá lugar."
   :repeat-dur "El atributo repeatDur especifica la duración total para
                repetir una animación."
-  :calc-mode "El atributo calcMode especifica el modo de interpolación para
-              la animación."
   :values "El atributo values tiene diferentes significados, dependiendo del
            contexto donde se usa, ya sea define una secuencia de valores
            usados durante el curso de una animación, o es una lista de números
@@ -368,6 +366,10 @@
                           elemento con un viewBox que proporciona una
                           proporción de aspecto dada debe ajustarse en un
                           viewport con una proporción de aspecto diferente."}
+
+ :renderer.attribute.impl.calc-mode
+ {:description "El atributo calcMode especifica el modo de interpolación para
+                la animación."}
 
  :renderer.attribute.impl.attribute-name
  {:description "El atributo attributeName indica el nombre de la propiedad CSS o

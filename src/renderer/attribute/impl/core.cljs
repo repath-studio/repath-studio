@@ -2,6 +2,7 @@
   (:require
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.impl.attribute-name]
+   [renderer.attribute.impl.calc-mode]
    [renderer.attribute.impl.color]
    [renderer.attribute.impl.crossorigin]
    [renderer.attribute.impl.d]
@@ -205,12 +206,6 @@
   []
   [::repeat-dur "The repeatDur attribute specifies the total duration for
                  repeating an animation."])
-
-(defmethod attribute.hierarchy/description [::element.hierarchy/element
-                                            :calcMode]
-  []
-  [::calc-mode "The calcMode attribute specifies the interpolation mode for the
-                animation."])
 
 (defmethod attribute.hierarchy/description [::element.hierarchy/element :values]
   []

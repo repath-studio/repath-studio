@@ -313,7 +313,6 @@
   :restart "restart 속성은 애니메이션을 다시 시작할 수 있는지 여부를 지정합니다."
   :repeat-count "repeatCount 속성은 애니메이션이 실행될 횟수를 나타냅니다."
   :repeat-dur "repeatDur 속성은 애니메이션을 반복하는 총 지속 시간을 지정합니다."
-  :calc-mode "calcMode 속성은 애니메이션의 보간 모드를 지정합니다."
   :values "values 속성은 사용되는 컨텍스트에 따라 다른 의미를 가지며,
            애니메이션 과정에서 사용되는 값 순서를 정의하거나
            색상 매트릭스의 숫자 목록으로, 수행할 색상 변경 유형에 따라
@@ -332,6 +331,9 @@
   :preserve-aspect-ratio "preserveAspectRatio 속성은 주어진 종횡비를 제공하는
                           viewBox가 있는 요소가 다른 종횡비를 가진 뷰포트에
                           어떻게 맞춰져야 하는지를 나타냅니다."}
+
+ :renderer.attribute.impl.calc-mode
+ {:description "calcMode 속성은 애니메이션의 보간 모드를 지정합니다."}
 
  :renderer.attribute.impl.attribute-name
  {:description "attributeName 속성은 애니메이션 중에 변경될 대상 요소의 CSS 속성이나 속성의

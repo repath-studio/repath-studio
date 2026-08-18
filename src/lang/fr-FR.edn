@@ -345,8 +345,6 @@
                  animation aura lieu."
   :repeat-dur "L'attribut repeatDur spécifie la durée totale pour répéter une
                animation."
-  :calc-mode "L'attribut calcMode spécifie le mode d'interpolation pour
-              l'animation."
   :values "L'attribut values a différentes significations, selon le contexte où
            il est utilisé, soit il définit une séquence de valeurs utilisées au
            cours d'une animation, soit c'est une liste de nombres pour une
@@ -373,6 +371,10 @@
                           élément avec une viewBox fournissant un rapport
                           d'aspect donné doit s'adapter dans une fenêtre
                           d'affichage avec un rapport d'aspect différent."}
+
+ :renderer.attribute.impl.calc-mode
+ {:description "L'attribut calcMode spécifie le mode d'interpolation pour
+                l'animation."}
 
  :renderer.attribute.impl.attribute-name
  {:description "L'attribut attributeName indique le nom de la propriété CSS ou

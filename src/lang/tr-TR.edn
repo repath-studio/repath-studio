@@ -335,8 +335,6 @@
                  sayısını gösterir."
   :repeat-dur "repeatDur özniteliği, bir animasyonu tekrarlamanın toplam
                süresini belirtir."
-  :calc-mode "calcMode özniteliği, animasyon için enterpolasyon modunu
-              belirtir."
   :values "values özniteliği, kullanıldığı bağlama bağlı olarak farklı anlamlara
            sahiptir; ya animasyon boyunca kullanılan değer dizisini tanımlar
            ya da gerçekleştirilecek renk değişikliği türüne bağlı olarak
@@ -362,6 +360,10 @@
                           oranı sağlayan viewBox'a sahip bir öğenin, farklı
                           en boy oranına sahip bir görünüm alanına nasıl
                           sığdırılması gerektiğini gösterir."}
+
+ :renderer.attribute.impl.calc-mode
+ {:description "calcMode özniteliği, animasyon için enterpolasyon modunu
+                belirtir."}
 
  :renderer.attribute.impl.attribute-name
  {:description "attributeName özniteliği, animasyon sırasında değiştirilecek

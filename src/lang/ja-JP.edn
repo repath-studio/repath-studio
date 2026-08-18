@@ -314,7 +314,6 @@
   :repeat-count "repeatCount属性は、アニメーションが実行される回数を示します。"
   :repeat-dur "repeatDur属性は、アニメーションを繰り返すための総継続時間を
                指定します。"
-  :calc-mode "calcMode属性は、アニメーションの補間モードを指定します。"
   :values "values属性は、使用されるコンテキストに応じて異なる意味を持ちます。
            アニメーションの過程で使用される値のシーケンスを定義するか、実行
            される色変更のタイプに応じて異なって解釈される色行列の数値の
@@ -336,6 +335,9 @@
                           提供するviewBoxを持つ要素が、異なるアスペクト比の
                           ビューポートにどのようにフィットする必要があるかを
                           示します。"}
+
+ :renderer.attribute.impl.calc-mode
+ {:description "calcMode属性は、アニメーションの補間モードを指定します。"}
 
  :renderer.attribute.impl.attribute-name
  {:description "attributeName属性は、アニメーション中に変更されるターゲット
