@@ -22,6 +22,7 @@
            :repeatDur
            :calcMode
            :values
+           :keyPoints
            :keyTimes
            :keySplines
            :by
