@@ -144,7 +144,7 @@
   (let [label (i18n.views/t label)]
     [:> Select/Item
      {:value value
-      :class "menu-item px-2!"}
+      :class "menu-item"}
      (when icon
        [:div.absolute.left-2 [views/icon icon]])
      [:> Select/ItemText
