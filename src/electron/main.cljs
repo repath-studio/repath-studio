@@ -26,6 +26,7 @@
   #{"repath.studio"
     "github.com"
     "w3c.github.io"
+    "w3.org"
     "developer.mozilla.org"
     "svgwg.org"
     "fxtf.org"
