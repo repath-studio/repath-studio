@@ -324,4 +324,5 @@
   [parent child]
   (let [permitted-content (:permitted-content (properties parent))]
     (->> permitted-content
-         (some (partial isa? @hierarchy/hierarchy (:tag child))))))
+         (some (partial isa? @hierarchy/hierarchy (:tag child)))
+         (boolean))))
