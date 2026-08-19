@@ -84,7 +84,6 @@
    "arabicForm"
    "attributeName"
    "attributeType"
-   "autoReverse"
    "baseFrequency"
    "baseProfile"
    "baselineShift"

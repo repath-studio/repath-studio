@@ -26,9 +26,6 @@
            :keyTimes
            :keySplines
            :by
-           :autoReverse
-           :accelerate
-           :decelerate
            :additive
            :accumulate
            :id
