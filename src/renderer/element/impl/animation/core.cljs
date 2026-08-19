@@ -6,6 +6,7 @@
    [renderer.element.impl.animation.animate]
    [renderer.element.impl.animation.animate-motion]
    [renderer.element.impl.animation.animate-transform]
+   [renderer.element.impl.animation.set]
    [renderer.element.subs :as-alias element.subs]
    [renderer.hierarchy :as hierarchy]))
 
