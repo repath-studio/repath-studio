@@ -415,10 +415,12 @@
   :create "أسقط لإتمام الدليل."}
 
  :renderer.attribute.impl.accumulate
- {:description "خاصية accumulate تتحكم في ما إذا كانت الرسوم المتحركة تراكمية أم لا."}
+ {:description "خاصية accumulate تتحكم في ما إذا كانت الرسوم المتحركة تراكمية
+                أم لا."}
 
  :renderer.attribute.impl.additive
- {:description "خاصية additive تتحكم في ما إذا كانت الرسوم المتحركة إضافية أم لا."}
+ {:description "خاصية additive تتحكم في ما إذا كانت الرسوم المتحركة إضافية أم
+                لا."}
 
  :renderer.attribute.impl.calc-mode
  {:description "خاصية calcMode تحدد وضع الاستيفاء للرسوم المتحركة."}
