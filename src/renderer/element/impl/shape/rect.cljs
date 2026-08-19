@@ -20,6 +20,8 @@
   []
   {:icon "rectangle"
    :label [::label "Rectangle"]
+   :permitted-content #{::element.hierarchy/animation
+                        ::element.hierarchy/descriptive}
    :description [::description
                  "The <rect> element is a basic SVG shape that draws
                   rectangles, defined by their position, width, and height.

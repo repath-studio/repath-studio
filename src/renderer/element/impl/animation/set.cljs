@@ -11,6 +11,7 @@
   []
   {:icon "animation"
    :label [::label "Set"]
+   :permitted-content #{::element.hierarchy/descriptive}
    :description [::description
                  "The <set> SVG element provides a method of setting the value
                   of an attribute for a specified duration."]})

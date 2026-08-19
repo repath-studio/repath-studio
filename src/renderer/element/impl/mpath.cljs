@@ -11,6 +11,7 @@
   []
   {:icon "bezier-curve"
    :label [::label "Motion Path"]
+   :permitted-content #{::element.hierarchy/descriptive}
    :description [::description
                  "The <mpath> SVG sub-element for the <animateMotion> element
                   provides the ability to reference an external <path> element

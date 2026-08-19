@@ -12,7 +12,7 @@
 
 (hierarchy/derive!
  ::element.hierarchy/animation
- ::element.hierarchy/descriptive)
+ ::element.hierarchy/element)
 
 (defmethod element.hierarchy/render ::element.hierarchy/animation
   [el]

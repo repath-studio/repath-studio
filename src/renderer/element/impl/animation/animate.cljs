@@ -11,6 +11,7 @@
   []
   {:icon "animation"
    :label [::label "Animate"]
+   :permitted-content #{::element.hierarchy/descriptive}
    :description [::description
                  "The SVG <animate> element provides a way to animate an
                   attribute of an element over time."]
