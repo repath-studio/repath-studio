@@ -138,6 +138,11 @@
                 so Animationen zur Steuerung von Translation, Skalierung,
                 Rotation und/oder Scherung"}
 
+ :renderer.element.impl.animation.set
+ {:label "Setzen"
+  :description "Das SVG-Element <set> stellt eine Methode bereit, den Wert eines
+                Attributs für eine angegebene Dauer festzulegen."}
+
  :renderer.element.impl.mpath
  {:label "Bewegungspfad"
   :description "Das SVG-Unterelement <mpath> für das Element <animateMotion>
@@ -367,22 +372,29 @@
                 Kontrollpunkten, die mit der keyTimes-Liste verknüpft sind und
                 eine kubische Bézier-Funktion definieren, die das Intervalltempo
                 steuert"
+  :key-points "Das keyPoints-Attribut zeigt im Bereich [0,1] an, wie weit sich
+               das Objekt entlang des Pfads für jeden zugehörigen Wert in
+               keyTimes befindet."
   :from "Das from-Attribut zeigt den Anfangswert des Attributs an, das während
          der Animation geändert wird."
   :to "Das to-Attribut zeigt den Endwert des Attributs an, das während der
        Animation geändert wird."
   :by "Das by-Attribut spezifiziert einen relativen Offset-Wert für ein
        Attribut, das während einer Animation geändert wird."
-  :additive "Das additive-Attribut kontrolliert, ob eine Animation additiv ist
-             oder nicht."
-  :accumulate "Das accumulate-Attribut kontrolliert, ob eine Animation kumulativ
-               ist oder nicht."
   :view-box "Das viewBox-Attribut definiert die Position und Dimension im
              Benutzerraum eines SVG-Viewports."
   :preserve-aspect-ratio "Das preserveAspectRatio-Attribut zeigt an, wie ein
                           Element mit einer viewBox, die ein gegebenes
                           Seitenverhältnis bereitstellt, in einen Viewport mit
                           einem anderen Seitenverhältnis passen muss."}
+
+ :renderer.attribute.impl.accumulate
+ {:description "Das accumulate-Attribut kontrolliert, ob eine Animation
+                kumulativ ist oder nicht."}
+
+ :renderer.attribute.impl.additive
+ {:description "Das additive-Attribut kontrolliert, ob eine Animation additiv
+                ist oder nicht."}
 
  :renderer.attribute.impl.calc-mode
  {:description "Das calcMode-Attribut spezifiziert den Interpolationsmodus für

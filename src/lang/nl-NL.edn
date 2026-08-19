@@ -139,6 +139,11 @@
                 translatie, schaling, rotatie en/of scheeftrekken kunnen
                 besturen"}
 
+ :renderer.element.impl.animation.set
+ {:label "Instellen"
+  :description "Het SVG-element <set> biedt een manier om de waarde van een
+                attribuut voor een bepaalde duur in te stellen."}
+
  :renderer.element.impl.mpath
  {:label "Bewegingspad"
   :description "Het SVG-subelement <mpath> voor het element <animateMotion>
@@ -367,22 +372,29 @@
                 controlepunten geassocieerd met de keyTimes lijst, die een
                 kubieke Bézier functie definieert die interval timing
                 controleert"
+  :key-points "Het keyPoints-attribuut geeft in het bereik [0,1] aan hoe ver het
+               object zich langs het pad bevindt voor elke bijbehorende waarde
+               in keyTimes."
   :from "Het from attribuut geeft de initiële waarde van het attribuut aan dat
          gewijzigd zal worden tijdens de animatie."
   :to "Het to attribuut geeft de eindwaarde van het attribuut aan dat
        gewijzigd zal worden tijdens de animatie."
   :by "Het by attribuut specificeert een relatieve offset waarde voor een
        attribuut dat gewijzigd zal worden tijdens een animatie."
-  :additive "Het additive attribuut controleert of een animatie additief is of
-             niet."
-  :accumulate "Het accumulate attribuut controleert of een animatie cumulatief
-               is of niet."
   :view-box "Het viewBox attribuut definieert de positie en dimensie, in
              gebruikersruimte, van een SVG viewport."
   :preserve-aspect-ratio "Het preserveAspectRatio attribuut geeft aan hoe een
                           element met een viewBox die een gegeven
                           beeldverhouding biedt moet passen in een viewport met
                           een andere beeldverhouding."}
+
+ :renderer.attribute.impl.accumulate
+ {:description "Het accumulate attribuut controleert of een animatie cumulatief
+                is of niet."}
+
+ :renderer.attribute.impl.additive
+ {:description "Het additive attribuut controleert of een animatie additief is
+                of niet."}
 
  :renderer.attribute.impl.calc-mode
  {:description "Het calcMode attribuut specificeert de interpolatiemodus voor de

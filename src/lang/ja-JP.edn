@@ -137,6 +137,10 @@
                 属性をアニメーション化し、平行移動、拡大縮小、回転、および/
                 または傾斜を制御するアニメーションを可能にします"}
 
+ :renderer.element.impl.animation.set
+ {:label "設定"
+  :description "SVGの<set>要素は、指定した期間、属性の値を設定する方法を提供します。"}
+
  :renderer.element.impl.mpath
  {:label "モーションパス"
   :description "<animateMotion> 要素用の SVG サブ要素 <mpath> は、外部の <path>
@@ -328,18 +332,24 @@
   :key-splines "keySplines属性は、keyTimesリストに関連付けられたベジェ曲線
                 制御点のセットを定義し、区間ペーシングを制御する3次ベジェ関数を
                 定義します。"
+  :key-points "keyPoints属性は、[0,1]の範囲で、keyTimesの各関連値に対してオブジェクトがパ
+               ス上をどの程度進んでいるかを表します。"
   :from "from属性は、アニメーション中に変更される属性の初期値を示します。"
   :to "to属性は、アニメーション中に変更される属性の最終値を示します。"
   :by "by属性は、アニメーション中に変更される属性の相対オフセット値を
        指定します。"
-  :additive "additive属性は、アニメーションが加算的かどうかを制御します。"
-  :accumulate "accumulate属性は、アニメーションが累積的かどうかを制御します。"
   :view-box "viewBox属性は、ユーザー空間内でのSVGビューポートの位置と寸法を
              定義します。"
   :preserve-aspect-ratio "preserveAspectRatio属性は、指定されたアスペクト比を
                           提供するviewBoxを持つ要素が、異なるアスペクト比の
                           ビューポートにどのようにフィットする必要があるかを
                           示します。"}
+
+ :renderer.attribute.impl.accumulate
+ {:description "accumulate属性は、アニメーションが累積的かどうかを制御します。"}
+
+ :renderer.attribute.impl.additive
+ {:description "additive属性は、アニメーションが加算的かどうかを制御します。"}
 
  :renderer.attribute.impl.calc-mode
  {:description "calcMode属性は、アニメーションの補間モードを指定します。"}

@@ -133,6 +133,10 @@
   :description "<animateTransform> 元素在其目标元素上为变换属性设置动画,从而
                 允许动画控制平移、缩放、旋转和/或倾斜"}
 
+ :renderer.element.impl.animation.set
+ {:label "设置"
+  :description "SVG <set> 元素提供了一种方法，用于在指定时间内设置属性的值。"}
+
  :renderer.element.impl.mpath
  {:label "运动路径"
   :description "<animateMotion> 元素的 SVG 子元素 <mpath>, 提供将外部 <path>
@@ -302,14 +306,20 @@
   :key-times "keyTimes 属性表示用于控制动画节奏的时间值列表。"
   :key-splines "keySplines 属性定义与 keyTimes 列表关联的一组贝塞尔曲线
                 控制点，定义控制间隔节奏的三次贝塞尔函数"
+  :key-points "keyPoints 属性表示对于 keyTimes 中的每个关联值，对象沿路径前进的程度，
+               范围为 [0,1]。"
   :from "from 属性指示在动画期间将被修改的属性的初始值。"
   :to "to 属性指示在动画期间将被修改的属性的最终值。"
   :by "by 属性指定在动画期间将被修改的属性的相对偏移值。"
-  :additive "additive 属性控制动画是否为附加的。"
-  :accumulate "accumulate 属性控制动画是否为累积的。"
   :view-box "viewBox 属性在用户空间中定义 SVG 视口的位置和尺寸。"
   :preserve-aspect-ratio "preserveAspectRatio 属性指示具有提供给定纵横比的
                           viewBox 的元素如何适合具有不同纵横比的视口。"}
+
+ :renderer.attribute.impl.accumulate
+ {:description "accumulate 属性控制动画是否为累积的。"}
+
+ :renderer.attribute.impl.additive
+ {:description "additive 属性控制动画是否为附加的。"}
 
  :renderer.attribute.impl.calc-mode
  {:description "calcMode 属性指定动画的插值模式。"}

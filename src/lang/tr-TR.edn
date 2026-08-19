@@ -138,6 +138,11 @@
                 ölçekleme, döndürme ve/veya eğmeyi kontrol etmesine olanak
                 tanır"}
 
+ :renderer.element.impl.animation.set
+ {:label "Ayar"
+  :description "<set> SVG öğesi, bir özniteliğin değerini belirli bir süre
+                boyunca ayarlamanın bir yöntemini sağlar."}
+
  :renderer.element.impl.mpath
  {:label "Hareket yolu"
   :description "<animateMotion> öğesine ait SVG alt öğesi <mpath>, hareket
@@ -350,22 +355,29 @@
   :key-splines "keySplines özniteliği, keyTimes listesiyle ilişkili Bézier
                 eğrisi kontrol noktaları kümesini tanımlayarak aralık hızını
                 kontrol eden kübik Bézier fonksiyonunu tanımlar."
+  :key-points "keyPoints özniteliği, [0,1] aralığında, keyTimes'taki her bir
+               ilişkili değer için nesnenin yolda ne kadar ilerlediğini
+               belirtir."
   :from "from özniteliği, animasyon sırasında değiştirilecek özniteliğin
          başlangıç değerini gösterir."
   :to "to özniteliği, animasyon sırasında değiştirilecek özniteliğin
        son değerini gösterir."
   :by "by özniteliği, animasyon sırasında değiştirilecek öznitelik için
        göreceli ofset değerini belirtir."
-  :additive "additive özniteliği, bir animasyonun eklemeli olup olmadığını
-             kontrol eder."
-  :accumulate "accumulate özniteliği, bir animasyonun kümülatif olup olmadığını
-               kontrol eder."
   :view-box "viewBox özniteliği, kullanıcı alanında bir SVG görünüm alanının
              konumunu ve boyutunu tanımlar."
   :preserve-aspect-ratio "preserveAspectRatio özniteliği, belirli bir en boy
                           oranı sağlayan viewBox'a sahip bir öğenin, farklı
                           en boy oranına sahip bir görünüm alanına nasıl
                           sığdırılması gerektiğini gösterir."}
+
+ :renderer.attribute.impl.accumulate
+ {:description "accumulate özniteliği, bir animasyonun kümülatif olup olmadığını
+                kontrol eder."}
+
+ :renderer.attribute.impl.additive
+ {:description "additive özniteliği, bir animasyonun eklemeli olup olmadığını
+                kontrol eder."}
 
  :renderer.attribute.impl.calc-mode
  {:description "calcMode özniteliği, animasyon için enterpolasyon modunu
