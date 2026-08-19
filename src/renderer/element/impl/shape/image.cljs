@@ -12,6 +12,8 @@
   []
   {:icon "image"
    :label [::label "Image"]
+   :permitted-content #{::element.hierarchy/animation
+                        ::element.hierarchy/descriptive}
    :description [::description
                  "The <image> SVG element includes images inside SVG documents.
                   It can display raster image files or other SVG files."]

@@ -22,6 +22,8 @@
   []
   {:icon "bezier-curve"
    :label [::label "Path"]
+   :permitted-content #{::element.hierarchy/animation
+                        ::element.hierarchy/descriptive}
    :description [::description
                  "The <path> SVG element is the generic element to define a
                   shape. All the basic shapes can be created with a path

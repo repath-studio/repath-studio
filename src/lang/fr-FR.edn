@@ -139,6 +139,17 @@
                 animations de contrôler la translation, la mise à l'échelle, la
                 rotation et/ou l'inclinaison"}
 
+ :renderer.element.impl.animation.set
+ {:label "Définir"
+  :description "L'élément SVG <set> fournit une méthode pour définir la valeur
+                d'un attribut pendant une durée spécifiée."}
+
+ :renderer.element.impl.mpath
+ {:label "Chemin de mouvement"
+  :description "Le sous-élément SVG <mpath> pour l'élément <animateMotion>
+                permet de référencer un élément <path> externe comme définition
+                d'un chemin de mouvement."}
+
  :renderer.element.impl.box
  {:position-handle "poignée de position"
   :size-handle "poignée de taille"}
@@ -345,8 +356,6 @@
                  animation aura lieu."
   :repeat-dur "L'attribut repeatDur spécifie la durée totale pour répéter une
                animation."
-  :calc-mode "L'attribut calcMode spécifie le mode d'interpolation pour
-              l'animation."
   :values "L'attribut values a différentes significations, selon le contexte où
            il est utilisé, soit il définit une séquence de valeurs utilisées au
            cours d'une animation, soit c'est une liste de nombres pour une
@@ -358,21 +367,33 @@
                 de courbe de Bézier associés à la liste keyTimes, définissant
                 une fonction de Bézier cubique qui contrôle le rythme
                 d'intervalle"
+  :key-points "L'attribut keyPoints indique, dans l'intervalle [0,1], à quel
+               point l'objet est avancé le long du chemin pour chaque valeur
+               associée dans keyTimes."
   :from "L'attribut from indique la valeur initiale de l'attribut qui sera
          modifié pendant l'animation."
   :to "L'attribut to indique la valeur finale de l'attribut qui sera modifié
        pendant l'animation."
   :by "L'attribut by spécifie une valeur de décalage relatif pour un attribut
        qui sera modifié pendant une animation."
-  :additive "L'attribut additive contrôle si une animation est additive ou non."
-  :accumulate "L'attribut accumulate contrôle si une animation est cumulative
-               ou non."
   :view-box "L'attribut viewBox définit la position et la dimension, dans
              l'espace utilisateur, d'une fenêtre d'affichage SVG."
   :preserve-aspect-ratio "L'attribut preserveAspectRatio indique comment un
                           élément avec une viewBox fournissant un rapport
                           d'aspect donné doit s'adapter dans une fenêtre
                           d'affichage avec un rapport d'aspect différent."}
+
+ :renderer.attribute.impl.accumulate
+ {:description "L'attribut accumulate contrôle si une animation est cumulative
+                ou non."}
+
+ :renderer.attribute.impl.additive
+ {:description "L'attribut additive contrôle si une animation est additive ou
+                non."}
+
+ :renderer.attribute.impl.calc-mode
+ {:description "L'attribut calcMode spécifie le mode d'interpolation pour
+                l'animation."}
 
  :renderer.attribute.impl.attribute-name
  {:description "L'attribut attributeName indique le nom de la propriété CSS ou

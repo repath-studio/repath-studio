@@ -28,6 +28,8 @@
   []
   {:icon "text"
    :label [::label "Text"]
+   :permitted-content #{::element.hierarchy/animation
+                        ::element.hierarchy/descriptive}
    :description [::description
                  "The SVG <text> element draws a graphics element consisting
                   of text. It's possible to apply a gradient, pattern,

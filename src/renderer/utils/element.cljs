@@ -14,6 +14,7 @@
     :as element.db
     :refer [Element ElementAttrs ElementTag PersistedElement]]
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.hierarchy :as hierarchy]
    [renderer.snap.db :refer [SnapOptions]]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.bounds :as utils.bounds]
@@ -317,3 +318,11 @@
                    (str)
                    (string/upper-case)
                    (string/includes? "M"))))
+
+(m/=> permitted-content? [:-> Element Element boolean?])
+(defn permitted-content?
+  [parent child]
+  (let [permitted-content (:permitted-content (properties parent))]
+    (->> permitted-content
+         (some (partial isa? @hierarchy/hierarchy (:tag child)))
+         (boolean))))

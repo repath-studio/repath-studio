@@ -665,13 +665,15 @@
          last-index (count sibling-els)]
      (set-parent db id parent-id last-index)))
   ([db id parent-id index]
-   (let [el (entity db id)]
+   (let [el (entity db id)
+         parent-el (entity db parent-id)]
      (cond-> db
        (and el
             (not (locked? db id))
             (not= id parent-id)
-            (not= (:parent (entity db id)) parent-id)
-            (not (contains? (descendant-ids db id) parent-id)))
+            (not= (:parent el) parent-id)
+            (not (contains? (descendant-ids db id) parent-id))
+            (utils.element/permitted-content? parent-el el))
        (-> (update-prop (:parent el) :children #(vec (remove #{id} %)))
            (update-prop parent-id :children utils.vec/add index id)
            (assoc-prop id :parent parent-id)

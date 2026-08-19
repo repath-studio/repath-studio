@@ -138,6 +138,17 @@
                 möjligt för animationer att styra translation, skalning,
                 rotation och/eller skevning"}
 
+ :renderer.element.impl.animation.set
+ {:label "Sätt"
+  :description "SVG-elementet <set> tillhandahåller ett sätt att sätta värdet på
+                ett attribut under en angiven tid."}
+
+ :renderer.element.impl.mpath
+ {:label "Rörelsebana"
+  :description "SVG-underelementet <mpath> för elementet <animateMotion> ger
+                möjlighet att referera ett externt <path>-element som
+                definition av en rörelsebana."}
+
  :renderer.element.impl.box
  {:position-handle "positionshandtag"
   :size-handle "storlekshandtag"}
@@ -340,8 +351,6 @@
                  kommer att äga rum."
   :repeat-dur "Attributet repeatDur specificerar den totala varaktigheten för
                att upprepa en animation."
-  :calc-mode "Attributet calcMode specificerar interpolationsläget för
-              animationen."
   :values "Attributet values har olika betydelser, beroende på kontexten där
            det används, antingen definierar det en sekvens av värden som
            används under loppet av en animation, eller så är det en lista med
@@ -352,22 +361,33 @@
   :key-splines "Attributet keySplines definierar en uppsättning Bézier-kurva
                 kontrollpunkter associerade med keyTimes listan, som definierar
                 en kubisk Bézier funktion som kontrollerar intervalltajming"
+  :key-points "Attributet keyPoints anger, i intervallet [0,1], hur långt
+               objektet är framme längs sökvägen för varje associerat värde i
+               keyTimes."
   :from "Attributet from indikerar det initiala värdet för attributet som
          kommer att ändras under animationen."
   :to "Attributet to indikerar slutvärdet för attributet som kommer att ändras
        under animationen."
   :by "Attributet by specificerar ett relativt offset-värde för ett attribut
        som kommer att ändras under en animation."
-  :additive "Attributet additive kontrollerar om en animation är additiv eller
-             inte."
-  :accumulate "Attributet accumulate kontrollerar om en animation är
-               kumulativ eller inte."
   :view-box "Attributet viewBox definierar positionen och dimensionen, i
              användarutrymme, för en SVG viewport."
   :preserve-aspect-ratio "Attributet preserveAspectRatio indikerar hur ett
                           element med en viewBox som tillhandahåller ett givet
                           bildförhållande måste passa in i en viewport med ett
                           annat bildförhållande."}
+
+ :renderer.attribute.impl.accumulate
+ {:description "Attributet accumulate kontrollerar om en animation är kumulativ
+                eller inte."}
+
+ :renderer.attribute.impl.additive
+ {:description "Attributet additive kontrollerar om en animation är additiv
+                eller inte."}
+
+ :renderer.attribute.impl.calc-mode
+ {:description "Attributet calcMode specificerar interpolationsläget för
+                animationen."}
 
  :renderer.attribute.impl.attribute-name
  {:description "Attributet attributeName indikerar namnet på CSS egenskapen

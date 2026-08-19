@@ -28,6 +28,11 @@
 (defmethod element.hierarchy/properties :canvas
   []
   {:label [::label "Canvas"]
+   :permitted-content #{::element.hierarchy/animation
+                        ::element.hierarchy/container
+                        ::element.hierarchy/descriptive
+                        ::element.hierarchy/shape
+                        ::element.hierarchy/gradient}
    :description [::description "The canvas is the main SVG container that hosts
                                 all elements."]
    :attrs [:fill]})
