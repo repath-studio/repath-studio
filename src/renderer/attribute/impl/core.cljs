@@ -1,6 +1,8 @@
 (ns renderer.attribute.impl.core
   (:require
    [renderer.attribute.hierarchy :as attribute.hierarchy]
+   [renderer.attribute.impl.accumulate]
+   [renderer.attribute.impl.additive]
    [renderer.attribute.impl.attribute-name]
    [renderer.attribute.impl.calc-mode]
    [renderer.attribute.impl.color]
@@ -16,6 +18,7 @@
    [renderer.attribute.impl.overflow]
    [renderer.attribute.impl.points]
    [renderer.attribute.impl.range]
+   [renderer.attribute.impl.restart]
    [renderer.attribute.impl.stroke-linecap]
    [renderer.attribute.impl.stroke-linejoin]
    [renderer.attribute.impl.style]
@@ -190,12 +193,6 @@
           duration."])
 
 (defmethod attribute.hierarchy/description [::element.hierarchy/element
-                                            :restart]
-  []
-  [::restart "The restart attribute specifies whether or not an animation can
-              restart."])
-
-(defmethod attribute.hierarchy/description [::element.hierarchy/element
                                             :repeatCount]
   []
   [::repeat-count "The repeatCount attribute indicates the number of times an
@@ -214,6 +211,13 @@
              used over the course of an animation, or it's a list of numbers for
              a color matrix, which is interpreted differently depending on the
              type of color change to be performed."])
+
+(defmethod attribute.hierarchy/description [::element.hierarchy/element
+                                            :keyPoints]
+  []
+  [::key-points "The keyPoints attribute indicates, in the range [0,1], how far
+                 the object is along the path for each associated value in
+                 keyTimes."])
 
 (defmethod attribute.hierarchy/description [::element.hierarchy/element
                                             :keyTimes]
@@ -242,18 +246,6 @@
   []
   [::by "The by attribute specifies a relative offset value for an attribute
          that will be modified during an animation."])
-
-(defmethod attribute.hierarchy/description [::element.hierarchy/element
-                                            :additive]
-  []
-  [::additive "The additive attribute controls whether or not an animation is
-               additive."])
-
-(defmethod attribute.hierarchy/description [::element.hierarchy/element
-                                            :accumulate]
-  []
-  [::accumulate "The accumulate attribute controls whether or not an animation
-                 is cumulative."])
 
 (defmethod attribute.hierarchy/description [::element.hierarchy/element
                                             :viewBox]

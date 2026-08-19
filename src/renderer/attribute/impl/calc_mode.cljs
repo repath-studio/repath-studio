@@ -5,13 +5,13 @@
    [renderer.attribute.views :as attribute.views]
    [renderer.element.hierarchy :as-alias element.hierarchy]))
 
-(defmethod attribute.hierarchy/description [::element.hierarchy/element
+(defmethod attribute.hierarchy/description [::element.hierarchy/animation
                                             :calcMode]
   []
   [::description "The calcMode attribute specifies the interpolation mode for
                   the animation."])
 
-(defmethod attribute.hierarchy/form-element [::element.hierarchy/element
+(defmethod attribute.hierarchy/form-element [::element.hierarchy/animation
                                              :calcMode]
   [_ k v {:keys [disabled]}]
   [attribute.views/select-input k v
@@ -20,13 +20,13 @@
     :default-value "linear"
     :items [{:key :discrete
              :value "discrete"
-             :label [::discrete "discrete"]}
+             :label [::discrete "Discrete"]}
             {:key :linear
              :value "linear"
-             :label [::linear "linear"]}
+             :label [::linear "Linear"]}
             {:key :paced
              :value "paced"
-             :label [::paced "paced"]}
+             :label [::paced "Paced"]}
             {:key :spline
              :value "spline"
-             :label [::spline "spline"]}]}])
+             :label [::spline "Spline"]}]}])
