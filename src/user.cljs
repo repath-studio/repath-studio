@@ -123,8 +123,9 @@
 (defn ^:export path
   "Creates a path."
   [path-commands & {:as attrs}]
-  (create {:path (merge {:d (string/join " " (flatten path-commands))}
-                        attrs)}))
+  (create {:tag :path
+           :attrs (merge {:d (string/join " " (flatten path-commands))}
+                         attrs)}))
 
 (defn ^:export image
   "Creates an image."
