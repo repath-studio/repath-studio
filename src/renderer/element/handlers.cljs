@@ -851,7 +851,8 @@
       (let [error (-> el element.db/explain m.error/humanize)]
         (throw (ex-info (str "Invalid element: " error) {:element new-el})))
 
-      (not (utils.element/permitted-content? parent-el (:tag new-el)))
+      (and parent-el
+           (not (utils.element/permitted-content? parent-el (:tag new-el))))
       (throw (js/Error. "Invalid parent"))
 
       :else
