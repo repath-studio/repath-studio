@@ -10,9 +10,7 @@
    [renderer.element.subs :as-alias element.subs]
    [renderer.hierarchy :as hierarchy]))
 
-(hierarchy/derive!
- ::element.hierarchy/animation
- ::element.hierarchy/element)
+(hierarchy/derive! ::element.hierarchy/animation ::element.hierarchy/element)
 
 (defmethod element.hierarchy/render ::element.hierarchy/animation
   [el]
