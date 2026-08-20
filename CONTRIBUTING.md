@@ -97,7 +97,7 @@ namespace.
 ### Effects ns
 
 Registers all re-frame effects. Although we could use the events ns for this, we
-prefer isung dedicated ns to isolate all side effects and make stabing easier on
+prefer using dedicated ns to isolate all side effects and make stabbing easier on
 tests.
 
 ### Hierarchy ns
@@ -163,10 +163,10 @@ After upgrading we need to check the release notes of the upgraded packages, to
 make sure there is no breaking change, and to look for introduced features or
 changes that can improve our application.
 
-If a package introduced a lot of breaking changes, and requires spacial
+If a package introduced a lot of breaking changes, and requires special
 handling, we can add it to the ignore list by passing
 `-x 'ignored-package-name'` to `npm-check-updates`. In this case, we need to
-also open a corresponding upgrade issue with its priority se to `high`, to keep
+also open a corresponding upgrade issue with its priority set to `high`, to keep
 track of those packages and handle the upgrade as soon as possible.
 
 When we are happy with the `package.json` changes, we need to manually run
