@@ -1,4 +1,4 @@
-(ns renderer.element.impl.container.canvas
+(ns renderer.element.impl.custom.canvas
   "The main SVG element that hosts all pages."
   (:require
    [re-frame.core :as rf]
@@ -28,12 +28,6 @@
 (defmethod element.hierarchy/properties :canvas
   []
   {:label [::label "Canvas"]
-   :permitted-content #{::element.hierarchy/animation
-                        ::element.hierarchy/container
-                        ::element.hierarchy/custom
-                        ::element.hierarchy/descriptive
-                        ::element.hierarchy/shape
-                        ::element.hierarchy/gradient}
    :description [::description "The canvas is the main SVG container that hosts
                                 all elements."]
    :attrs [:fill]})
@@ -128,3 +122,11 @@
     (into [:svg attrs]
           (map element.hierarchy/render-to-string)
           child-elements)))
+
+(defmethod element.hierarchy/permitted-content :canvas
+  [_el]
+  #{::element.hierarchy/container
+    ::element.hierarchy/custom
+    ::element.hierarchy/descriptive
+    ::element.hierarchy/shape
+    ::element.hierarchy/gradient})

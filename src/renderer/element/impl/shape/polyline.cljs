@@ -11,8 +11,6 @@
   []
   {:icon "polyline-tool"
    :label [::label "Polyline"]
-   :permitted-content #{::element.hierarchy/animation
-                        ::element.hierarchy/descriptive}
    :description [::description
                  "The <polyline> SVG element is an SVG basic shape that
                   creates straight lines connecting several points. Typically

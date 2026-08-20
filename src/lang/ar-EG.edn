@@ -140,7 +140,7 @@
  {:label "تعيين"
   :description "يوفر عنصر <set> في SVG طريقة لتعيين قيمة الخاصية لمدة محددة."}
 
- :renderer.element.impl.mpath
+ :renderer.element.impl.descriptive.mpath
  {:label "مسار الحركة"
   :description "العنصر الفرعي SVG <mpath> الخاص بعنصر <animateMotion>
                 يتيح إمكانية الإشارة إلى عنصر <path> خارجي
@@ -227,7 +227,7 @@
   :description "ارسم خطوطاً حرة حساسة للضغط باستخدام perfect-freehand."
   :brush-point "نقطة الفرشاة"}
 
- :renderer.element.impl.container.canvas
+ :renderer.element.impl.custom.canvas
  {:label "لوحة الرسم"
   :description "لوحة الرسم هي حاوية SVG الرئيسية التي تستضيف جميع
                 العناصر."

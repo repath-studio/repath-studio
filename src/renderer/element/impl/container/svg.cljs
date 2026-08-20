@@ -21,12 +21,6 @@
   {:icon "svg"
    :top-level true
    :label label
-   :permitted-content #{::element.hierarchy/animation
-                        ::element.hierarchy/container
-                        ::element.hierarchy/custom
-                        ::element.hierarchy/descriptive
-                        ::element.hierarchy/shape
-                        ::element.hierarchy/gradient}
    :description [::description
                  "The svg element is a container that defines a new
                   coordinate system and viewport. It is used as the outermost

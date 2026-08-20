@@ -11,7 +11,6 @@
   []
   {:icon "animation"
    :label [::label "Animate Transform"]
-   :permitted-content #{::element.hierarchy/descriptive}
    :description [::description
                  "The <animateTransform> element animates a
                   transformation attribute on its target element, thereby

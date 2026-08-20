@@ -28,6 +28,7 @@
 (defmulti scale dispatch :hierarchy hierarchy/hierarchy)
 (defmulti handle-drag dispatch :hierarchy hierarchy/hierarchy)
 (defmulti handle-click dispatch :hierarchy hierarchy/hierarchy)
+(defmulti permitted-content dispatch :hierarchy hierarchy/hierarchy)
 (defmulti properties identity :hierarchy hierarchy/hierarchy)
 
 (defmethod render :default [_el])
@@ -43,6 +44,7 @@
 (defmethod scale :default [el _ratio _pivot-point] el)
 (defmethod handle-drag :default [el _offset _handle _lock?] el)
 (defmethod handle-click :default [el _handle] el)
+(defmethod permitted-content :default [_el])
 (defmethod properties :default [_tag])
 
 (hierarchy/derive! ::graphics ::renderable)

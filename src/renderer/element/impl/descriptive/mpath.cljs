@@ -1,4 +1,4 @@
-(ns renderer.element.impl.mpath
+(ns renderer.element.impl.descriptive.mpath
   "https://svgwg.org/specs/animations/#MPathElement
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/mpath"
   (:require
@@ -11,7 +11,6 @@
   []
   {:icon "bezier-curve"
    :label [::label "Motion Path"]
-   :permitted-content #{::element.hierarchy/descriptive}
    :description [::description
                  "The <mpath> SVG sub-element for the <animateMotion> element
                   provides the ability to reference an external <path> element

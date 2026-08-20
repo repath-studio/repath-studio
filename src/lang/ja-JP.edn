@@ -141,7 +141,7 @@
  {:label "設定"
   :description "SVGの<set>要素は、指定した期間、属性の値を設定する方法を提供します。"}
 
- :renderer.element.impl.mpath
+ :renderer.element.impl.descriptive.mpath
  {:label "モーションパス"
   :description "<animateMotion> 要素用の SVG サブ要素 <mpath> は、外部の <path>
                 要素をモーションパスの定義として参照する機能を提供します。"}
@@ -223,7 +223,7 @@
   :description "perfect-freehandを使用して、筆圧感応のフリーハンドラインを描画します。"
   :brush-point "ブラシポイント"}
 
- :renderer.element.impl.container.canvas
+ :renderer.element.impl.custom.canvas
  {:label "キャンバス"
   :description "キャンバスは、すべての要素をホストするメインのSVGコンテナです。"
   :fill-description "塗りつぶし属性は、メインキャンバスの背景色を定義します。

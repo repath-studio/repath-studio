@@ -10,7 +10,6 @@
    [renderer.attribute.views :as attribute.views]
    [renderer.element.events :as-alias element.events]
    [renderer.element.hierarchy :as element.hierarchy]
-   [renderer.element.subs :as-alias element.subs]
    [renderer.hierarchy :as hierarchy]
    [renderer.i18n.views :as i18n.views]
    [renderer.input.impl.pointer :as input.impl.pointer]
@@ -108,19 +107,17 @@
 
 (defmethod element.hierarchy/render :blob
   [el]
-  (let [{:keys [attrs children]} el
-        child-elements @(rf/subscribe [::element.subs/filter-visible children])
-        pointer-handler (partial input.impl.pointer/handler! el)]
+  (let [pointer-handler (partial input.impl.pointer/handler! el)]
     [:path (merge {:d (element.hierarchy/path el)
                    :on-pointer-up pointer-handler
                    :on-pointer-down pointer-handler
                    :on-pointer-move pointer-handler}
-                  (select-keys attrs [:stroke
-                                      :fill
-                                      :stroke-width
-                                      :id
-                                      :class
-                                      :opacity])) child-elements]))
+                  (select-keys (:attrs el) [:stroke
+                                            :fill
+                                            :stroke-width
+                                            :id
+                                            :class
+                                            :opacity]))]))
 
 (defmethod element.hierarchy/translate :blob
   [el [x y]]

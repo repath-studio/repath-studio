@@ -3,7 +3,6 @@
   (:require
    [re-frame.core :as rf]
    [renderer.element.hierarchy :as element.hierarchy]
-   [renderer.element.impl.container.canvas]
    [renderer.element.impl.container.group]
    [renderer.element.impl.container.svg]
    [renderer.element.subs :as-alias element.subs]
@@ -38,3 +37,12 @@
                    (into {}))]
     (into [tag attrs (when title [:title title])]
           (map element.hierarchy/render-to-string child-elements))))
+
+(defmethod element.hierarchy/permitted-content ::element.hierarchy/container
+  [_el]
+  #{::element.hierarchy/animation
+    ::element.hierarchy/container
+    ::element.hierarchy/custom
+    ::element.hierarchy/descriptive
+    ::element.hierarchy/shape
+    ::element.hierarchy/gradient})

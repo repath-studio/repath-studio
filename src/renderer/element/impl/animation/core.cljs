@@ -22,3 +22,7 @@
      (for [el child-elements]
        ^{:key id}
        [element.hierarchy/render el])]))
+
+(defmethod element.hierarchy/permitted-content ::element.hierarchy/animation
+  [_el]
+  #{::element.hierarchy/descriptive})

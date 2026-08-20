@@ -17,12 +17,6 @@
   []
   {:icon "group"
    :label [::label "Group"]
-   :permitted-content #{::element.hierarchy/animation
-                        ::element.hierarchy/container
-                        ::element.hierarchy/custom
-                        ::element.hierarchy/descriptive
-                        ::element.hierarchy/shape
-                        ::element.hierarchy/gradient}
    :description [::description "The <g> SVG element is a container used to group
                                 other SVG elements."]
    :attrs []})

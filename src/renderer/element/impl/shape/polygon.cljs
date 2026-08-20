@@ -11,8 +11,6 @@
   []
   {:icon "polygon"
    :label [::label "Polygon"]
-   :permitted-content #{::element.hierarchy/animation
-                        ::element.hierarchy/descriptive}
    :description [::description
                  "The <polygon> SVG element defines a closed shape consisting
                   of a set of connected straight line segments. The last

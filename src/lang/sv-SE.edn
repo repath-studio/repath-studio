@@ -143,7 +143,7 @@
   :description "SVG-elementet <set> tillhandahåller ett sätt att sätta värdet på
                 ett attribut under en angiven tid."}
 
- :renderer.element.impl.mpath
+ :renderer.element.impl.descriptive.mpath
  {:label "Rörelsebana"
   :description "SVG-underelementet <mpath> för elementet <animateMotion> ger
                 möjlighet att referera ett externt <path>-element som
@@ -232,7 +232,7 @@
   :description "Rita tryckkänsliga frihandslinjer med perfect-freehand."
   :brush-point "penselpunkt"}
 
- :renderer.element.impl.container.canvas
+ :renderer.element.impl.custom.canvas
  {:label "Duk"
   :description "Duken är huvud-SVG behållaren som innehåller alla element."
   :fill-description "Fyllnadsattributet definierar bakgrundsfärgen för

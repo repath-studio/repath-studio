@@ -18,8 +18,6 @@
   []
   {:icon "line"
    :label [::label "Line"]
-   :permitted-content #{::element.hierarchy/animation
-                        ::element.hierarchy/descriptive}
    :description [::description
                  "The <line> element is an SVG basic shape used to create a line
                   connecting two points."]
