@@ -20,8 +20,6 @@
   []
   {:icon "ellipse"
    :label [::label "Ellipse"]
-   :permitted-content #{::element.hierarchy/animation
-                        ::element.hierarchy/descriptive}
    :description [::description
                  "The <ellipse> element is an SVG basic shape, used to create
                   ellipses based on a center coordinate, and both their x and

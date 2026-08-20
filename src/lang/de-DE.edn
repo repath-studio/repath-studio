@@ -143,7 +143,7 @@
   :description "Das SVG-Element <set> stellt eine Methode bereit, den Wert eines
                 Attributs für eine angegebene Dauer festzulegen."}
 
- :renderer.element.impl.mpath
+ :renderer.element.impl.descriptive.mpath
  {:label "Bewegungspfad"
   :description "Das SVG-Unterelement <mpath> für das Element <animateMotion>
                 ermöglicht es, ein externes <path>-Element als Definition eines
@@ -236,7 +236,7 @@
                 perfect-freehand."
   :brush-point "Bürstenpunkt"}
 
- :renderer.element.impl.container.canvas
+ :renderer.element.impl.custom.canvas
  {:label "Leinwand"
   :description "Die Leinwand ist der Haupt-SVG-Container, der alle Elemente
                 beherbergt."

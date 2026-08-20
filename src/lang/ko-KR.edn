@@ -141,7 +141,7 @@
  {:label "설정"
   :description "SVG <set> 요소는 지정된 기간 동안 속성의 값을 설정하는 방법을 제공합니다."}
 
- :renderer.element.impl.mpath
+ :renderer.element.impl.descriptive.mpath
  {:label "모션 패스"
   :description "<animateMotion> 요소에 사용되는 SVG 서브요소 <mpath>는 외부의 <path>
                 요소를 모션 패스의 정의로서 참조할 수 있는 기능을 제공합니다."}
@@ -225,7 +225,7 @@
   :description "perfect-freehand를 사용하여 압력 감지 자유 곡선을 그립니다."
   :brush-point "브러시 포인트"}
 
- :renderer.element.impl.container.canvas
+ :renderer.element.impl.custom.canvas
  {:label "캔버스"
   :description "캔버스는 모든 요소를 포함하는 주요 SVG 컨테이너입니다."
   :fill-description "채우기 속성은 메인 캔버스의 배경색을 정의합니다. 기본값은

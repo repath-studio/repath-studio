@@ -20,8 +20,6 @@
   []
   {:icon "circle"
    :label [::label "Circle"]
-   :permitted-content #{::element.hierarchy/animation
-                        ::element.hierarchy/descriptive}
    :description [::description
                  "The <circle> SVG element is an SVG basic shape, used to
                   draw circles based on a center point and a radius."]

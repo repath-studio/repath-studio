@@ -11,7 +11,6 @@
   []
   {:icon "animation"
    :label [::label "Animate Motion"]
-   :permitted-content #{::element.hierarchy/descriptive}
    :description [::description
                  "The SVG <animateMotion> element let define how an element
                   moves along a motion path."]})

@@ -137,7 +137,7 @@
  {:label "设置"
   :description "SVG <set> 元素提供了一种方法，用于在指定时间内设置属性的值。"}
 
- :renderer.element.impl.mpath
+ :renderer.element.impl.descriptive.mpath
  {:label "运动路径"
   :description "<animateMotion> 元素的 SVG 子元素 <mpath>, 提供将外部 <path>
                 元素参考为运动路径定义的能力。"}
@@ -216,7 +216,7 @@
   :description "使用 perfect-freehand 绘制压力敏感的手绘线条。"
   :brush-point "画笔点"}
 
- :renderer.element.impl.container.canvas
+ :renderer.element.impl.custom.canvas
  {:label "画布"
   :description "画布是承载所有元素的主要 SVG 容器。"
   :fill-description "填充属性定义主画布的背景颜色。默认值取决于当前主题，这意味着

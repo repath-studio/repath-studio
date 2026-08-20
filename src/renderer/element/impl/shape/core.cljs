@@ -27,3 +27,8 @@
                    (into {}))]
     (into [tag attrs (when title [:title title]) content]
           (map element.hierarchy/render-to-string child-elements))))
+
+(defmethod element.hierarchy/permitted-content ::element.hierarchy/shape
+  [_el]
+  #{::element.hierarchy/animation
+    ::element.hierarchy/descriptive})

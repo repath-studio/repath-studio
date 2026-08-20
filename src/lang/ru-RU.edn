@@ -143,7 +143,7 @@
   :description "Элемент SVG <set> предоставляет способ установки значения
                 атрибута на определённый период времени."}
 
- :renderer.element.impl.mpath
+ :renderer.element.impl.descriptive.mpath
  {:label "Траектория движения"
   :description "SVG-подэлемент <mpath> для элемента <animateMotion>
                 предоставляет возможность ссылаться на внешний элемент <path>
@@ -229,7 +229,7 @@
                 perfect-freehand."
   :brush-point "точка кисти"}
 
- :renderer.element.impl.container.canvas
+ :renderer.element.impl.custom.canvas
  {:label "Холст"
   :description "Холст является основным контейнером SVG, который содержит все
                 элементы."

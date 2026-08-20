@@ -143,7 +143,7 @@
   :description "<set> SVG öğesi, bir özniteliğin değerini belirli bir süre
                 boyunca ayarlamanın bir yöntemini sağlar."}
 
- :renderer.element.impl.mpath
+ :renderer.element.impl.descriptive.mpath
  {:label "Hareket yolu"
   :description "<animateMotion> öğesine ait SVG alt öğesi <mpath>, hareket
                 yolunun tanımı olarak dış bir <path> öğesine atıf yapabilme
@@ -233,7 +233,7 @@
                 çizgileri çizin."
   :brush-point "fırça noktası"}
 
- :renderer.element.impl.container.canvas
+ :renderer.element.impl.custom.canvas
  {:label "Tuval"
   :description "Tuval, tüm öğeleri barındıran ana SVG kapsayıcısıdır."
   :fill-description "Dolgu özniteliği, ana tuvalin arka plan rengini tanımlar.

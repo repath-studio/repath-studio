@@ -142,7 +142,7 @@
   :description "The <set> SVG element provides a method of setting the value of
                  an attribute for a specified duration."}
 
- :renderer.element.impl.mpath
+ :renderer.element.impl.descriptive.mpath
  {:label "Motion Path"
   :description "The <mpath> SVG sub-element for the <animateMotion> element
                 provides the ability to reference an external <path> element as
@@ -229,7 +229,7 @@
   :description "Draw pressure-sensitive freehand lines using perfect-freehand."
   :brush-point "brush point"}
 
- :renderer.element.impl.container.canvas
+ :renderer.element.impl.custom.canvas
  {:label "Canvas"
   :description "The canvas is the main SVG container that hosts all elements."
   :fill-description "The fill attribute defines the background color of the main

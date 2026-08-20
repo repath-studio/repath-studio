@@ -143,7 +143,7 @@
   :description "Το στοιχείο <set> του SVG παρέχει μια μέθοδο ορισμού της τιμής
                 ενός χαρακτηριστικού για μια καθορισμένη διάρκεια."}
 
- :renderer.element.impl.mpath
+ :renderer.element.impl.descriptive.mpath
  {:label "Διαδρομή κίνησης"
   :description "Το υποστοιχείο SVG <mpath> για το στοιχείο <animateMotion>
                 παρέχει τη δυνατότητα αναφοράς σε ένα εξωτερικό στοιχείο <path>
@@ -236,7 +236,7 @@
                 perfect-freehand."
   :brush-point "σημείο πινέλου"}
 
- :renderer.element.impl.container.canvas
+ :renderer.element.impl.custom.canvas
  {:label "Καμβάς"
   :description "Ο καμβάς είναι το κύριο πλαίσιο SVG που περιέχει όλα τα
                 στοιχεία."

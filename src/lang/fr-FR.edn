@@ -144,7 +144,7 @@
   :description "L'élément SVG <set> fournit une méthode pour définir la valeur
                 d'un attribut pendant une durée spécifiée."}
 
- :renderer.element.impl.mpath
+ :renderer.element.impl.descriptive.mpath
  {:label "Chemin de mouvement"
   :description "Le sous-élément SVG <mpath> pour l'élément <animateMotion>
                 permet de référencer un élément <path> externe comme définition
@@ -235,7 +235,7 @@
                 utilisant perfect-freehand."
   :brush-point "point de pinceau"}
 
- :renderer.element.impl.container.canvas
+ :renderer.element.impl.custom.canvas
  {:label "Canevas"
   :description "Le canevas est le conteneur SVG principal qui héberge tous les
                 éléments."

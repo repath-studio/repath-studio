@@ -144,7 +144,7 @@
   :description "Het SVG-element <set> biedt een manier om de waarde van een
                 attribuut voor een bepaalde duur in te stellen."}
 
- :renderer.element.impl.mpath
+ :renderer.element.impl.descriptive.mpath
  {:label "Bewegingspad"
   :description "Het SVG-subelement <mpath> voor het element <animateMotion>
                 stelt u in staat om naar een extern <path>-element te verwijzen
@@ -234,7 +234,7 @@
   :description "Teken drukkevoelige vrijhandlijnen met perfect-freehand."
   :brush-point "penseel punt"}
 
- :renderer.element.impl.container.canvas
+ :renderer.element.impl.custom.canvas
  {:label "Canvas"
   :description "Het canvas is de hoofd-SVG container die alle elementen bevat."
   :fill-description "Het vulattribuut definieert de achtergrondkleur van het

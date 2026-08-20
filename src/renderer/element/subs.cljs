@@ -79,6 +79,14 @@
  :-> (comp boolean seq))
 
 (rf/reg-sub
+ ::some-allow-content?
+ :<- [::selected]
+ (fn [selected-elements [_ tag]]
+   (->> selected-elements
+        (some #(utils.element/permitted-content? % tag))
+        (boolean))))
+
+(rf/reg-sub
  ::every-selected-locked?
  :<- [::selected]
  :-> (partial every? :locked))

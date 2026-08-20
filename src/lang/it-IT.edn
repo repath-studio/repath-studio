@@ -144,7 +144,7 @@
   :description "L'elemento SVG <set> fornisce un metodo per impostare il valore
                 di un attributo per una durata specificata."}
 
- :renderer.element.impl.mpath
+ :renderer.element.impl.descriptive.mpath
  {:label "Percorso di movimento"
   :description "Il sottoelemento SVG <mpath> per l'elemento <animateMotion>
                 fornisce la possibilità di fare riferimento a un elemento <path>
@@ -234,7 +234,7 @@
                 utilizzando perfect-freehand."
   :brush-point "punto pennello"}
 
- :renderer.element.impl.container.canvas
+ :renderer.element.impl.custom.canvas
  {:label "Tela"
   :description "La tela è il contenitore SVG principale che ospita tutti gli
                 elementi."
