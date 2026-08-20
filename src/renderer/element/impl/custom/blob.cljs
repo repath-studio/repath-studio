@@ -20,7 +20,7 @@
    [renderer.utils.svg :as utils.svg]
    [renderer.views :as views]))
 
-(hierarchy/derive! :blob ::element.hierarchy/renderable)
+(hierarchy/derive! :blob ::element.hierarchy/custom)
 
 (hierarchy/derive! :size ::attribute.impl.length/length)
 

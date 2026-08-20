@@ -17,7 +17,7 @@
    [renderer.utils.length :as utils.length]
    [renderer.utils.path :as utils.path]))
 
-(hierarchy/derive! :brush ::element.hierarchy/renderable)
+(hierarchy/derive! :brush ::element.hierarchy/custom)
 
 (defmethod element.hierarchy/properties :brush
   []

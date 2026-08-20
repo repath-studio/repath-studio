@@ -11,7 +11,7 @@
    [renderer.input.handlers :as input.handlers]
    [renderer.input.impl.pointer :as input.impl.pointer]))
 
-(hierarchy/derive! :guide ::element.hierarchy/renderable)
+(hierarchy/derive! :guide ::element.hierarchy/custom)
 
 (defmethod element.hierarchy/properties :guide
   []

@@ -19,6 +19,7 @@
    :label [::label "Group"]
    :permitted-content #{::element.hierarchy/animation
                         ::element.hierarchy/container
+                        ::element.hierarchy/custom
                         ::element.hierarchy/descriptive
                         ::element.hierarchy/shape
                         ::element.hierarchy/gradient}
