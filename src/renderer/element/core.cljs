@@ -288,21 +288,22 @@
                :label [::animate "Animate"]
                :icon "animation"
                :event [::element.events/animate :animate]
-               :enabled [::element.subs/some-selected?]}])
+               :enabled [::element.subs/some-allow-content? :animate]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :animate/transform
                :label [::animate-transform "Animate Transform"]
                :icon "animation"
                :event [::element.events/animate :animateTransform]
-               :enabled [::element.subs/some-selected?]}])
+               :enabled [::element.subs/some-allow-content?
+                         :animateTransform]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :animate/motion
                :label [::animate-motion "Animate Motion"]
                :icon "animation"
                :event [::element.events/animate :animateMotion]
-               :enabled [::element.subs/some-selected?]}])
+               :enabled [::element.subs/some-allow-content? :animateMotion]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :path/simplify

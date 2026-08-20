@@ -673,7 +673,7 @@
             (not= id parent-id)
             (not= (:parent el) parent-id)
             (not (contains? (descendant-ids db id) parent-id))
-            (utils.element/permitted-content? parent-el el))
+            (utils.element/permitted-content? parent-el (:tag el)))
        (-> (update-prop (:parent el) :children #(vec (remove #{id} %)))
            (update-prop parent-id :children utils.vec/add index id)
            (assoc-prop id :parent parent-id)
@@ -846,9 +846,15 @@
         is-translated (or (utils.element/svg? new-el)
                           (utils.element/root? new-el)
                           (:parent el))]
-    (if-not (element.db/valid? new-el)
+    (cond
+      (not (element.db/valid? new-el))
       (let [error (-> el element.db/explain m.error/humanize)]
         (throw (ex-info (str "Invalid element: " error) {:element new-el})))
+
+      (not (utils.element/permitted-content? parent-el (:tag new-el)))
+      (throw (js/Error. "Invalid parent"))
+
+      :else
       (cond-> db
         :always
         (assoc-in (path db id) new-el)

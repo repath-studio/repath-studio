@@ -319,10 +319,10 @@
                    (string/upper-case)
                    (string/includes? "M"))))
 
-(m/=> permitted-content? [:-> Element Element boolean?])
+(m/=> permitted-content? [:-> Element ElementTag boolean?])
 (defn permitted-content?
-  [parent child]
-  (let [permitted-content (:permitted-content (properties parent))]
+  [parent tag]
+  (let [permitted-content (element.hierarchy/permitted-content parent)]
     (->> permitted-content
-         (some (partial isa? @hierarchy/hierarchy (:tag child)))
+         (some (partial isa? @hierarchy/hierarchy tag))
          (boolean))))
