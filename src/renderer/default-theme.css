@@ -1,0 +1,54 @@
+@import './fonts.css';
+
+[data-theme='dark'] {
+  --primary: #2d2d2d;
+  --secondary: #222222;
+
+  --foreground-rgb: 255, 255, 255;
+
+  --error: lch(70% 70 30);
+  --warning: lch(70% 70 85);
+  --success: lch(70% 70 145);
+
+  --backdrop: rgb(0 0 0 / 0.7);
+
+  .devtools {
+    filter:invert(1);
+  }
+}
+
+[data-theme='light'] {
+  --primary: #ffffff;
+  --secondary: #eeeeee;
+
+  --foreground-rgb: 0, 0, 0;
+
+  --error: lch(40% 70 30);
+  --warning: lch(40% 70 85);
+  --success: lch(40% 70 145);
+
+  --backdrop: rgb(0 0 0 / 0.3);
+}
+
+:root {
+  --button-size-lg: 33px;
+  --button-size-md: 27px;
+  --button-size-sm: 21px;
+
+  --font-size: 13px;
+
+  --sans: 'Noto Sans', sans;
+  --mono: 'Noto Sans Mono', monospace;
+
+  --accent: #d12b65;
+  --accent-light: #e23572;
+  --accent-foreground: #fff;
+
+  --foreground-default: rgba(var(--foreground-rgb), 0.75);
+  --foreground-disabled: rgba(var(--foreground-rgb), 0.3);
+  --foreground-muted: rgba(var(--foreground-rgb), 0.5);
+  --foreground-hovered: rgba(var(--foreground-rgb), 1);
+
+  --overlay: rgba(var(--foreground-rgb), 0.1);
+  --border: rgba(var(--foreground-rgb), 0.15);
+}

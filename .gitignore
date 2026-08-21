@@ -8,7 +8,7 @@
 .idea
 
 /resources/public/js/
-/resources/public/css/styles.css
+/resources/public/css/
 /resources/public/src/
 /resources/public/pyodide/
 /resources/*.js
