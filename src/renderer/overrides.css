@@ -131,7 +131,15 @@
  }
 
  .timeline-editor-action {
-  @apply bg-overlay! flex! justify-around! items-center!;
+  @apply bg-primary! flex! justify-around! items-center!;
+
+  .timeline-editor-action-left-stretch::after {
+    @apply border-l-border!;
+  }
+
+  .timeline-editor-action-right-stretch::after {
+    @apply border-r-border!;
+  }
 
   &.timeline-editor-action-selected {
     @apply border border-accent;
