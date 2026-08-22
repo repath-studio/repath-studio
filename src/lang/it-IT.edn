@@ -748,11 +748,13 @@
  {:speed "Velocità"
   :no-filter "Nessun filtro"
   :filter "Filtro"
-  :grid-snap "Aggancio griglia"
-  :guide-snap "Aggancio guide"
   :play "Riproduci"
-  :replay "Riproduci di nuovo"
   :pause "Pausa"}
+
+ :renderer.timeline.core
+ {:replay "Riproduci di nuovo"
+  :grid-snap "Aggancio griglia"
+  :guide-snap "Aggancio guide"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Preleva angolo"}

@@ -745,11 +745,13 @@
  {:speed "Vitesse"
   :no-filter "Aucun filtre"
   :filter "Filtre"
-  :grid-snap "Magnétisme de grille"
-  :guide-snap "Magnétisme de guide"
   :play "Jouer"
-  :replay "Rejouer"
   :pause "Pause"}
+
+ :renderer.timeline.core
+ {:replay "Rejouer"
+  :grid-snap "Magnétisme de grille"
+  :guide-snap "Magnétisme de guide"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Choisir un angle"}

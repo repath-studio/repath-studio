@@ -730,11 +730,13 @@
  {:speed "Скорость"
   :no-filter "Без фильтра"
   :filter "Фильтр"
-  :grid-snap "Привязка к сетке"
-  :guide-snap "Привязка к направляющим"
   :play "Воспроизвести"
-  :replay "Повтор"
   :pause "Пауза"}
+
+ :renderer.timeline.core
+ {:replay "Повтор"
+  :grid-snap "Привязка к сетке"
+  :guide-snap "Привязка к направляющим"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Выбрать угол"}

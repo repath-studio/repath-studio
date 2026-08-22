@@ -704,11 +704,13 @@
  {:speed "السرعة"
   :no-filter "لا يوجد مرشح"
   :filter "مرشح"
-  :grid-snap "التقاط الشبكة"
-  :guide-snap "التقاط الدليل"
   :play "تشغيل"
-  :replay "إعادة تشغيل"
   :pause "إيقاف مؤقت"}
+
+ :renderer.timeline.core
+ {:replay "إعادة تشغيل"
+  :grid-snap "التقاط الشبكة"
+  :guide-snap "التقاط الدليل"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "اختيار زاوية"}
