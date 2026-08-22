@@ -727,11 +727,13 @@
  {:speed "Hız"
   :no-filter "Filtre yok"
   :filter "Filtre"
-  :grid-snap "Izgara yapışı"
-  :guide-snap "Kılavuz yapışı"
   :play "Oynat"
-  :replay "Tekrar oynat"
   :pause "Duraklat"}
+
+ :renderer.timeline.core
+ {:replay "Tekrar oynat"
+  :grid-snap "Izgara yapışı"
+  :guide-snap "Kılavuz yapışı"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Açı seç"}

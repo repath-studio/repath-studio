@@ -74,29 +74,11 @@
          {:class "select-scroll-button"}
          [views/icon "chevron-down"]]]]]]))
 
-(defn snap-controls
-  []
-  (let [grid-snap? @(rf/subscribe [::timeline.subs/grid-snap?])
-        guide-snap? @(rf/subscribe [::timeline.subs/guide-snap?])]
-    [:div.grow.flex.gap-1
-     [views/switch
-      (i18n.views/t [::grid-snap "Grid snap"])
-      {:id "grid-snap"
-       :default-checked grid-snap?
-       :on-checked-change #(rf/dispatch [::timeline.events/set-grid-snap %])}]
-     [views/switch
-      (i18n.views/t [::guide-snap "Guide snap"])
-      {:id "guide-snap"
-       :default-checked guide-snap?
-       :on-checked-change #(rf/dispatch [::timeline.events/set-guide-snap
-                                         %])}]]))
-
 (defn toolbar
   [timeline-ref]
   (let [tm @(rf/subscribe [::timeline.subs/time])
         time-formatted @(rf/subscribe [::timeline.subs/time-formatted])
         paused? @(rf/subscribe [::timeline.subs/paused?])
-        replay? @(rf/subscribe [::timeline.subs/replay?])
         end @(rf/subscribe [::timeline.subs/end])
         speed @(rf/subscribe [::timeline.subs/speed])
         sm? @(rf/subscribe [::window.subs/sm?])
@@ -118,15 +100,15 @@
      [views/icon-button "go-to-end"
       {:on-click #(.setTime (.-current timeline-ref) end)
        :disabled (>= tm end)}]
-     [views/radio-icon-button "refresh" replay?
-      {:title (i18n.views/t [::replay "Replay"])
-       :on-click #(rf/dispatch [::timeline.events/toggle-replay])}]
+     [views/tooltip-action-icon-button :timeline/toggle-replay]
      [speed-select timeline-ref]
      [:span.font-mono.px-2 time-formatted]
      (when sm?
        [:<>
         [:span.v-divider]
-        [snap-controls]])
+        [:div.grow.flex.gap-1
+         [views/action-switch :timeline/toggle-grid-snap]
+         [views/action-switch :timeline/toggle-guide-snap]]])
      [:div.flex-1]
      (when md? [panel.views/close-button :timeline])]))
 
@@ -135,7 +117,7 @@
   (doseq
    [[e f]
     [["play"
-      #(rf/dispatch-sync [::timeline.events/play])] ;; Prevent navigation
+      #(rf/dispatch-sync [::timeline.events/play])]
      ["paused"
       #(rf/dispatch-sync [::timeline.events/pause])]
      ["afterSetTime"
@@ -169,9 +151,10 @@
       :drag-line guide-snap?
       :auto-scroll true
       :getActionRender custom-renderer
-      :on-click-action #(let [el-id (keyword (.. %2 -action -id))]
-                          (rf/dispatch [::element.events/select
-                                        el-id false]))}]))
+      :onClickActionOnly (fn [e action]
+                           (let [el-id (uuid (.. action -action -id))]
+                             (rf/dispatch [::element.events/select
+                                           el-id (.-shiftKey e)])))}]))
 
 (defn time-bar
   []

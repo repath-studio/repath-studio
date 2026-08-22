@@ -731,11 +731,13 @@
  {:speed "Velocidade"
   :no-filter "Sem filtro"
   :filter "Filtro"
-  :grid-snap "Ajuste à grelha"
-  :guide-snap "Ajuste à guia"
   :play "Reproduzir"
-  :replay "Repetir"
   :pause "Pausar"}
+
+ :renderer.timeline.core
+ {:replay "Repetir"
+  :grid-snap "Ajuste à grelha"
+  :guide-snap "Ajuste à guia"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Escolher ângulo"}

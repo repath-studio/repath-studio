@@ -750,11 +750,13 @@
  {:speed "Geschwindigkeit"
   :no-filter "Kein Filter"
   :filter "Filter"
-  :grid-snap "Raster-Einrasten"
-  :guide-snap "Hilfslinien-Einrasten"
   :play "Abspielen"
-  :replay "Wiederholen"
   :pause "Pause"}
+
+ :renderer.timeline.core
+ {:replay "Wiederholen"
+  :grid-snap "Raster-Einrasten"
+  :guide-snap "Hilfslinien-Einrasten"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Winkel auswählen"}

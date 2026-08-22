@@ -684,11 +684,13 @@
  {:speed "속도"
   :no-filter "필터 없음"
   :filter "필터"
-  :grid-snap "격자 스냅"
-  :guide-snap "가이드 스냅"
   :play "재생"
-  :replay "다시 재생"
   :pause "일시정지"}
+
+ :renderer.timeline.core
+ {:replay "다시 재생"
+  :grid-snap "격자 스냅"
+  :guide-snap "가이드 스냅"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "각도 선택"}

@@ -749,11 +749,13 @@
  {:speed "Snelheid"
   :no-filter "Geen filter"
   :filter "Filter"
-  :grid-snap "Rasteruitlijning"
-  :guide-snap "Hulplijnuitlijning"
   :play "Afspelen"
-  :replay "Opnieuw afspelen"
   :pause "Pauzeren"}
+
+ :renderer.timeline.core
+ {:replay "Opnieuw afspelen"
+  :grid-snap "Rasteruitlijning"
+  :guide-snap "Hulplijnuitlijning"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Hoek kiezen"}
