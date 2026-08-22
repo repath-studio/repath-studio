@@ -4,7 +4,8 @@
    [re-frame.core :as rf]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
-   [renderer.hierarchy :as hierarchy]))
+   [renderer.hierarchy :as hierarchy]
+   [renderer.utils.clock :as utils.clock]))
 
 (rf/reg-sub
  ::animations
@@ -23,9 +24,9 @@
   [{:keys [id tag attrs selected locked]
     :as el}]
   (let [{:keys [begin dur end attributeName]} attrs
-        start (or begin 0)
+        start (or (some-> begin utils.clock/->ms (/ 1000)) 0)
         _dur (or dur 0)
-        end (or end nil)]
+        end (some-> end utils.clock/->ms (/ 1000))]
     {:id id
      :selected selected
      :actions [{:id (str id)

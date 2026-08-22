@@ -5,6 +5,7 @@
    [renderer.attribute.impl.additive]
    [renderer.attribute.impl.attribute-name]
    [renderer.attribute.impl.calc-mode]
+   [renderer.attribute.impl.clock-value]
    [renderer.attribute.impl.color]
    [renderer.attribute.impl.crossorigin]
    [renderer.attribute.impl.d]
