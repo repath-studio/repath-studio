@@ -88,22 +88,22 @@
 (rf/reg-sub
  ::paused?
  :<- [::timeline]
- :-> :paused?)
+ :-> :paused)
 
 (rf/reg-sub
  ::grid-snap?
  :<- [::timeline]
- :-> :grid-snap?)
+ :-> :grid-snap)
 
 (rf/reg-sub
  ::guide-snap?
  :<- [::timeline]
- :-> :guide-snap?)
+ :-> :guide-snap)
 
 (rf/reg-sub
  ::replay?
  :<- [::timeline]
- :-> :replay?)
+ :-> :replay)
 
 (rf/reg-sub
  ::speed
