@@ -18,7 +18,7 @@
          speed (rf/subscribe [::timeline.subs/speed])
          t (rf/subscribe [::timeline.subs/time])]
      (testing "initial state"
-       (is (false? @paused?))
+       (is (true? @paused?))
        (is (false? @grid-snap?))
        (is (true? @guide-snap?))
        (is (false? @replay?))
