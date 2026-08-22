@@ -131,7 +131,7 @@
  }
 
  .timeline-editor-action {
-  @apply bg-overlay! flex! justify-around! items-center! pointer-events-none!;
+  @apply bg-overlay! flex! justify-around! items-center!;
 
   &-selected {
     @apply border border-accent;
