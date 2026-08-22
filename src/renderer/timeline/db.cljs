@@ -5,6 +5,6 @@
    [:time {:default 0} number?]
    [:speed {:default 1} number?]
    [:replay {:default false} boolean?]
-   [:grid-snap {:default false} boolean?]
+   [:grid-snap {:default true} boolean?]
    [:guide-snap {:default true} boolean?]
    [:paused {:default true} boolean?]])

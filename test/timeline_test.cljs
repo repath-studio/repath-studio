@@ -19,19 +19,19 @@
          t (rf/subscribe [::timeline.subs/time])]
      (testing "initial state"
        (is (true? @paused?))
-       (is (false? @grid-snap?))
+       (is (true? @grid-snap?))
        (is (true? @guide-snap?))
        (is (false? @replay?))
        (is (= @speed 1))
        (is (= @t 0)))
 
      (testing "set grid snap"
-       (rf/dispatch [::timeline.events/set-grid-snap true])
-       (is (true? @grid-snap?)))
+       (rf/dispatch [::timeline.events/toggle-grid-snap])
+       (is (false? @grid-snap?)))
 
      (testing "set guide snap"
-       (rf/dispatch [::timeline.events/set-guide-snap true])
-       (is (true? @guide-snap?)))
+       (rf/dispatch [::timeline.events/toggle-guide-snap])
+       (is (false? @guide-snap?)))
 
      (testing "toggle replay"
        (rf/dispatch [::timeline.events/toggle-replay])
