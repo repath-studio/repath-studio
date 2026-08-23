@@ -652,6 +652,9 @@
   :grid-snap "网格吸附"
   :guide-snap "参考线吸附"}
 
+ :renderer.timeline.events
+ {:update-animation "更新动画"}
+
  :renderer.attribute.impl.angle
  {:pick-angle "选择角度"}
 

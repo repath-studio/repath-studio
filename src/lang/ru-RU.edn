@@ -738,6 +738,9 @@
   :grid-snap "Привязка к сетке"
   :guide-snap "Привязка к направляющим"}
 
+ :renderer.timeline.events
+ {:update-animation "Обновить анимацию"}
+
  :renderer.attribute.impl.angle
  {:pick-angle "Выбрать угол"}
 

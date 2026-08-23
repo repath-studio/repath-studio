@@ -697,6 +697,9 @@
   :grid-snap "グリッドスナップ"
   :guide-snap "ガイドスナップ"}
 
+ :renderer.timeline.events
+ {:update-animation "アニメーションの更新"}
+
  :renderer.attribute.impl.angle
  {:pick-angle "角度を選択"}
 

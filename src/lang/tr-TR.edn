@@ -735,6 +735,9 @@
   :grid-snap "Izgara yapışı"
   :guide-snap "Kılavuz yapışı"}
 
+ :renderer.timeline.events
+ {:update-animation "Animasyonu güncelle"}
+
  :renderer.attribute.impl.angle
  {:pick-angle "Açı seç"}
 

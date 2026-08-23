@@ -744,6 +744,9 @@
  :renderer.timeline.core
  {:replay "Repetir"}
 
+ :renderer.timeline.events
+ {:update-animation "Actualizar animación"}
+
  :renderer.attribute.impl.angle
  {:pick-angle "Elegir ángulo"
   :grid-snap "Ajuste a cuadrícula"

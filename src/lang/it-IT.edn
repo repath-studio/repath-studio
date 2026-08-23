@@ -756,6 +756,9 @@
   :grid-snap "Aggancio griglia"
   :guide-snap "Aggancio guide"}
 
+ :renderer.timeline.events
+ {:update-animation "Aggiorna animazione"}
+
  :renderer.attribute.impl.angle
  {:pick-angle "Preleva angolo"}
 

@@ -742,6 +742,9 @@
   :grid-snap "Rutnätsfäst"
   :guide-snap "Hjälplinjefäst"}
 
+ :renderer.timeline.events
+ {:update-animation "Uppdatera animation"}
+
  :renderer.attribute.impl.angle
  {:pick-angle "Välj vinkel"}
 

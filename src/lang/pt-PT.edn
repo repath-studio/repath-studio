@@ -739,6 +739,9 @@
   :grid-snap "Ajuste à grelha"
   :guide-snap "Ajuste à guia"}
 
+ :renderer.timeline.events
+ {:update-animation "Atualizar animação"}
+
  :renderer.attribute.impl.angle
  {:pick-angle "Escolher ângulo"}
 

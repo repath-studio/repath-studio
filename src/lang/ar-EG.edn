@@ -712,6 +712,9 @@
   :grid-snap "التقاط الشبكة"
   :guide-snap "التقاط الدليل"}
 
+ :renderer.timeline.events
+ {:update-animation "تحديث الحركة"}
+
  :renderer.attribute.impl.angle
  {:pick-angle "اختيار زاوية"}
 

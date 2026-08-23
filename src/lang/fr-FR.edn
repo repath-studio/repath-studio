@@ -753,6 +753,9 @@
   :grid-snap "Magnétisme de grille"
   :guide-snap "Magnétisme de guide"}
 
+ :renderer.timeline.events
+ {:update-animation "Mettre à jour l'animation"}
+
  :renderer.attribute.impl.angle
  {:pick-angle "Choisir un angle"}
 

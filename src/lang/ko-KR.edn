@@ -692,6 +692,9 @@
   :grid-snap "격자 스냅"
   :guide-snap "가이드 스냅"}
 
+ :renderer.timeline.events
+ {:update-animation "애니메이션 업데이트"}
+
  :renderer.attribute.impl.angle
  {:pick-angle "각도 선택"}
 

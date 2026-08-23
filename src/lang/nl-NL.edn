@@ -757,6 +757,9 @@
   :grid-snap "Rasteruitlijning"
   :guide-snap "Hulplijnuitlijning"}
 
+ :renderer.timeline.events
+ {:update-animation "Animatie bijwerken"}
+
  :renderer.attribute.impl.angle
  {:pick-angle "Hoek kiezen"}
 

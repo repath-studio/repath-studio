@@ -763,6 +763,9 @@
   :grid-snap "Σύνδεση πλέγματος"
   :guide-snap "Οδηγός πλέγματος"}
 
+ :renderer.timeline.events
+ {:update-animation "Ενημέρωση κίνησης"}
+
  :renderer.attribute.impl.angle
  {:pick-angle "Επιλογή γωνίας"}
 

@@ -1,10 +1,12 @@
 (ns renderer.timeline.views
   (:require
+   ["@radix-ui/react-context-menu" :as ContextMenu]
    ["@radix-ui/react-select" :as Select]
    ["@xzdarcy/react-timeline-editor" :refer [Timeline]]
    ["react" :as react]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
+   [renderer.action.views :as action.views]
    [renderer.element.events :as-alias element.events]
    [renderer.i18n.views :as i18n.views]
    [renderer.panel.subs :as-alias panel.subs]
@@ -137,24 +139,55 @@
   (reagent/as-element
    [:span (.-name action)]))
 
+(defn params->id
+  [params]
+  (uuid (.. params -action -id)))
+
 (defn timeline
   [timeline-ref]
   (let [data @(rf/subscribe [::timeline.subs/rows])
         effects @(rf/subscribe [::timeline.subs/effects])
         grid-snap? @(rf/subscribe [::timeline.subs/grid-snap?])
-        guide-snap? @(rf/subscribe [::timeline.subs/guide-snap?])]
-    [:> Timeline
-     {:editor-data data
-      :effects effects
-      :ref timeline-ref
-      :grid-snap grid-snap?
-      :drag-line guide-snap?
-      :auto-scroll true
-      :getActionRender custom-renderer
-      :onClickActionOnly (fn [e action]
-                           (let [el-id (uuid (.. action -action -id))]
+        guide-snap? @(rf/subscribe [::timeline.subs/guide-snap?])
+        preview-action! #(rf/dispatch-sync [::timeline.events/preview-action
+                                            (params->id %)
+                                            (.-start %)
+                                            (.-end %)])
+        finalize-action! #(rf/dispatch-sync [::timeline.events/finalize-action
+                                             (.-start %)
+                                             (.-end %)])]
+    [:> ContextMenu/Root
+     [:> ContextMenu/Trigger
+      {:class "flex h-full w-full overflow-hidden"}
+      [:> Timeline
+       {:editor-data data
+        :effects effects
+        :ref timeline-ref
+        :grid-snap grid-snap?
+        :drag-line guide-snap?
+        :auto-scroll true
+        :key #(js/console.log %)
+        :getActionRender custom-renderer
+        :onActionResizing preview-action!
+        :onActionResizeEnd finalize-action!
+        :onActionMoving preview-action!
+        :onActionMoveEnd finalize-action!
+        :onClickActionOnly (fn [e params]
+                             (.stopPropagation e)
                              (rf/dispatch [::element.events/select
-                                           el-id (.-shiftKey e)])))}]))
+                                           (params->id params)
+                                           (.-shiftKey e)]))}]]
+     [:> ContextMenu/Portal
+      (->> [:object/locking
+            :object/entity]
+           (map (comp :actions action.views/deref-action-group))
+           (interpose {:type :separator})
+           (flatten)
+           (map views/context-menu-item)
+           (into [:> ContextMenu/Content
+                  {:class "menu-content context-menu-content"
+                   :on-key-down #(.stopPropagation %)
+                   :on-escape-key-down #(.stopPropagation %)}]))]]))
 
 (defn time-bar
   []

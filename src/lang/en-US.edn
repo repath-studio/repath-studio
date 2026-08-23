@@ -729,6 +729,9 @@
   :grid-snap "Grid snap"
   :guide-snap "Guide snap"}
 
+ :renderer.timeline.events
+ {:update-animation "Update animation"}
+
  :renderer.attribute.impl.angle
  {:pick-angle "Pick angle"}
 

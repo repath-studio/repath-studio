@@ -758,6 +758,9 @@
   :grid-snap "Raster-Einrasten"
   :guide-snap "Hilfslinien-Einrasten"}
 
+ :renderer.timeline.events
+ {:update-animation "Animation aktualisieren"}
+
  :renderer.attribute.impl.angle
  {:pick-angle "Winkel auswählen"}
 
