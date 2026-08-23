@@ -751,7 +751,9 @@
  :renderer.timeline.core
  {:replay "Rejouer"
   :grid-snap "Magnétisme de grille"
-  :guide-snap "Magnétisme de guide"}
+  :guide-snap "Magnétisme de guide"
+  :fit-duration "Ajuster la durée"
+  :timeline "Chronologie"}
 
  :renderer.timeline.events
  {:update-animation "Mettre à jour l'animation"}

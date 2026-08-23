@@ -695,7 +695,9 @@
  :renderer.timeline.core
  {:replay "リプレイ"
   :grid-snap "グリッドスナップ"
-  :guide-snap "ガイドスナップ"}
+  :guide-snap "ガイドスナップ"
+  :fit-duration "期間を合わせる"
+  :timeline "タイムライン"}
 
  :renderer.timeline.events
  {:update-animation "アニメーションの更新"}

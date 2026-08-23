@@ -740,7 +740,9 @@
  :renderer.timeline.core
  {:replay "Spela om"
   :grid-snap "Rutnätsfäst"
-  :guide-snap "Hjälplinjefäst"}
+  :guide-snap "Hjälplinjefäst"
+  :fit-duration "Justera varaktighet"
+  :timeline "Tidslinje"}
 
  :renderer.timeline.events
  {:update-animation "Uppdatera animation"}

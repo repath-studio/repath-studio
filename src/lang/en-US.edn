@@ -727,7 +727,9 @@
  :renderer.timeline.core
  {:replay "Replay"
   :grid-snap "Grid snap"
-  :guide-snap "Guide snap"}
+  :guide-snap "Guide snap"
+  :fit-duration "Fit duration"
+  :timeline "Timeline"}
 
  :renderer.timeline.events
  {:update-animation "Update animation"}

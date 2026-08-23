@@ -690,7 +690,9 @@
  :renderer.timeline.core
  {:replay "다시 재생"
   :grid-snap "격자 스냅"
-  :guide-snap "가이드 스냅"}
+  :guide-snap "가이드 스냅"
+  :fit-duration "기간 맞춤"
+  :timeline "타임라인"}
 
  :renderer.timeline.events
  {:update-animation "애니메이션 업데이트"}

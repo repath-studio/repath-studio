@@ -756,7 +756,9 @@
  :renderer.timeline.core
  {:replay "Wiederholen"
   :grid-snap "Raster-Einrasten"
-  :guide-snap "Hilfslinien-Einrasten"}
+  :guide-snap "Hilfslinien-Einrasten"
+  :fit-duration "Dauer anpassen"
+  :timeline "Zeitleiste"}
 
  :renderer.timeline.events
  {:update-animation "Animation aktualisieren"}

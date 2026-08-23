@@ -761,7 +761,9 @@
  :renderer.timeline.core
  {:replay "Αναπαραγωγή ξανά"
   :grid-snap "Σύνδεση πλέγματος"
-  :guide-snap "Οδηγός πλέγματος"}
+  :guide-snap "Οδηγός πλέγματος"
+  :fit-duration "Προσαρμογή διάρκειας"
+  :timeline "Χρονολόγιο"}
 
  :renderer.timeline.events
  {:update-animation "Ενημέρωση κίνησης"}

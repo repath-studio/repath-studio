@@ -742,7 +742,11 @@
   :pause "Pausar"}
 
  :renderer.timeline.core
- {:replay "Repetir"}
+ {:replay "Repetir"
+  :grid-snap "Ajustar a cuadrícula"
+  :guide-snap "Ajustar a guías"
+  :fit-duration "Ajustar duración"
+  :timeline "Línea de tiempo"}
 
  :renderer.timeline.events
  {:update-animation "Actualizar animación"}

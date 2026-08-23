@@ -108,9 +108,9 @@
  :-> :replay)
 
 (rf/reg-sub
- ::auto-duration?
+ ::fit-duration?
  :<- [::timeline]
- :-> :auto-duration)
+ :-> :fit-duration)
 
 (rf/reg-sub
  ::speed

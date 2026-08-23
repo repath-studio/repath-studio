@@ -32,9 +32,9 @@
    (update-in db [:timeline :replay] not)))
 
 (rf/reg-event-db
- ::toggle-auto-duration
+ ::toggle-fit-duration
  (fn [db _]
-   (update-in db [:timeline :auto-duration] not)))
+   (update-in db [:timeline :fit-duration] not)))
 
 (rf/reg-event-db
  ::set-speed
@@ -50,7 +50,7 @@
          (element.handlers/set-attr :begin (utils.attribute/->fixed start))
          (element.handlers/set-attr :end (utils.attribute/->fixed end)))
 
-     (-> db :timeline :auto-duration)
+     (-> db :timeline :fit-duration)
      (element.handlers/set-attr :dur (utils.attribute/->fixed (- end start))))))
 
 (rf/reg-event-db

@@ -650,7 +650,9 @@
  :renderer.timeline.core
  {:replay "重播"
   :grid-snap "网格吸附"
-  :guide-snap "参考线吸附"}
+  :guide-snap "参考线吸附"
+  :fit-duration "适配时长"
+  :timeline "时间轴"}
 
  :renderer.timeline.events
  {:update-animation "更新动画"}

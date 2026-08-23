@@ -733,7 +733,9 @@
  :renderer.timeline.core
  {:replay "Tekrar oynat"
   :grid-snap "Izgara yapışı"
-  :guide-snap "Kılavuz yapışı"}
+  :guide-snap "Kılavuz yapışı"
+  :fit-duration "Süreyi uydur"
+  :timeline "Zaman Çizelgesi"}
 
  :renderer.timeline.events
  {:update-animation "Animasyonu güncelle"}

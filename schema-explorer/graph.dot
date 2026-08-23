@@ -101,7 +101,7 @@ digraph {
   "Theme" [label="{Theme|:mode [:ref \"ThemeMode\"]\l:native-mode [:ref \"NativeMode\"]\l}", fillcolor="#fff0cd"]
   "ThemeMode" [label="{ThemeMode|[:enum :dark :light :system]\l}", fillcolor="#fff0cd"]
   "TimeStamp" [label="{TimeStamp|number?\l}", fillcolor="#fff0cd"]
-  "Timeline" [label="{Timeline|:time number?\l:speed number?\l:replay boolean?\l:grid-snap boolean?\l:guide-snap boolean?\l:auto-duration boolean?\l:paused boolean?\l}", fillcolor="#fff0cd"]
+  "Timeline" [label="{Timeline|:time number?\l:speed number?\l:replay boolean?\l:grid-snap boolean?\l:guide-snap boolean?\l:fit-duration boolean?\l:paused boolean?\l}", fillcolor="#fff0cd"]
   "Tool" [label="{Tool|:any\l}", fillcolor="#fff0cd"]
   "Translation" [label="{Translation|[:* any?]\l}", fillcolor="#fff0cd"]
   "Vec2" [label="{Vec2|[:tuple number? number?]\l}", fillcolor="#fff0cd"]

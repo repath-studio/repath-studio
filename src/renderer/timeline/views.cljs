@@ -111,7 +111,7 @@
         [views/action-switch :timeline/toggle-grid-snap]
         [views/action-switch :timeline/toggle-guide-snap]
         [:span.v-divider]
-        [views/action-switch :timeline/toggle-auto-duration]])
+        [views/action-switch :timeline/toggle-fit-duration]])
      [:div.flex-1]
      (when md? [panel.views/close-button :timeline])]))
 

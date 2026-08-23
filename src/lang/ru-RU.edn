@@ -736,7 +736,9 @@
  :renderer.timeline.core
  {:replay "Повтор"
   :grid-snap "Привязка к сетке"
-  :guide-snap "Привязка к направляющим"}
+  :guide-snap "Привязка к направляющим"
+  :fit-duration "Подогнать длительность"
+  :timeline "Временная шкала"}
 
  :renderer.timeline.events
  {:update-animation "Обновить анимацию"}

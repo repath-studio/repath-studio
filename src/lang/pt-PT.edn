@@ -737,7 +737,9 @@
  :renderer.timeline.core
  {:replay "Repetir"
   :grid-snap "Ajuste à grelha"
-  :guide-snap "Ajuste à guia"}
+  :guide-snap "Ajuste à guia"
+  :fit-duration "Ajustar duração"
+  :timeline "Cronologia"}
 
  :renderer.timeline.events
  {:update-animation "Atualizar animação"}

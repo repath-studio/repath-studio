@@ -755,7 +755,9 @@
  :renderer.timeline.core
  {:replay "Opnieuw afspelen"
   :grid-snap "Rasteruitlijning"
-  :guide-snap "Hulplijnuitlijning"}
+  :guide-snap "Hulplijnuitlijning"
+  :fit-duration "Duur aanpassen"
+  :timeline "Tijdlijn"}
 
  :renderer.timeline.events
  {:update-animation "Animatie bijwerken"}

@@ -710,7 +710,9 @@
  :renderer.timeline.core
  {:replay "إعادة تشغيل"
   :grid-snap "التقاط الشبكة"
-  :guide-snap "التقاط الدليل"}
+  :guide-snap "التقاط الدليل"
+  :fit-duration "ملاءمة المدة"
+  :timeline "الجدول الزمني"}
 
  :renderer.timeline.events
  {:update-animation "تحديث الحركة"}
