@@ -52,7 +52,7 @@ Translations make the project widely accessible, and we don't have the capacity
 to maintain user generated translations yet. They are also isolated, so
 replacing or removing them won't affect the core product. Using LLMs to update
 or add new languages under `src/lang` is allowed, but human intervention is
-required to validate that the changes don't break existing unctionality, or
+required to validate that the changes don't break existing functionality, or
 reduce the quality of existing translations.
 
 The same is also true for our dev tools under `src/build`. They usually contain
