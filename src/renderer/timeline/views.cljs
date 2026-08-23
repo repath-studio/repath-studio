@@ -155,7 +155,11 @@
                                             (.-end %)])
         finalize-action! #(rf/dispatch-sync [::timeline.events/finalize-action
                                              (.-start %)
-                                             (.-end %)])]
+                                             (.-end %)])
+        select-action! (fn [e params]
+                         (rf/dispatch [::element.events/select
+                                       (params->id params)
+                                       (.-shiftKey e)]))]
     [:> ContextMenu/Root
      [:> ContextMenu/Trigger
       {:class "flex h-full w-full overflow-hidden"}
@@ -171,11 +175,8 @@
         :onActionResizeEnd finalize-action!
         :onActionMoving preview-action!
         :onActionMoveEnd finalize-action!
-        :onClickActionOnly (fn [e params]
-                             (.stopPropagation e)
-                             (rf/dispatch [::element.events/select
-                                           (params->id params)
-                                           (.-shiftKey e)]))}]]
+        :onContextMenuAction select-action!
+        :onClickActionOnly select-action!}]]
      [:> ContextMenu/Portal
       (->> [:object/locking
             :object/entity]
