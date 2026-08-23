@@ -33,7 +33,7 @@
                 :selected selected
                 :disable locked
                 :movable (not locked)
-                :name (string/join " " [tag attributeName])
+                :name (string/join " " [(name tag) attributeName])
                 :start start
                 :end end
                 :effectId (effect-id el)}]}))

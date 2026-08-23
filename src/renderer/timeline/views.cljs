@@ -166,7 +166,6 @@
         :grid-snap grid-snap?
         :drag-line guide-snap?
         :auto-scroll true
-        :key #(js/console.log %)
         :getActionRender custom-renderer
         :onActionResizing preview-action!
         :onActionResizeEnd finalize-action!
