@@ -21,7 +21,7 @@
   (str "effect" (:id el)))
 
 (defn animation->timeline-row
-  [{:keys [id tag attrs selected locked]
+  [{:keys [id tag attrs selected locked visible]
     :as el}]
   (let [{:keys [begin dur end attributeName]} attrs
         start (or (some-> begin utils.clock/->ms (/ 1000)) 0)
@@ -31,8 +31,9 @@
      :selected selected
      :actions [{:id (str id)
                 :selected selected
-                :disable locked
+                :flexible (not locked)
                 :movable (not locked)
+                :hidden (not visible)
                 :name (string/join " " [(name tag) attributeName])
                 :start start
                 :end end

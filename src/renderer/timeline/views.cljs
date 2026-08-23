@@ -135,9 +135,11 @@
     (.on (.-listener (.-current timeline-ref)) e f)))
 
 (defn custom-renderer
-  [action _row]
+  [^js action _row]
   (reagent/as-element
-   [:span (.-name action)]))
+   [:span
+    {:class (when (.-hidden action) "text-foreground-disabled")}
+    (.-name action)]))
 
 (defn params->id
   [params]
