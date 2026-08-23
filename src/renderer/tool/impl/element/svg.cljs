@@ -12,8 +12,8 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
-   [renderer.utils.key :as utils.key]
-   [renderer.utils.length :as utils.length]))
+   [renderer.utils.attribute :as utils.attribute]
+   [renderer.utils.key :as utils.key]))
 
 (hierarchy/derive! ::svg ::tool.hierarchy/element)
 
@@ -23,11 +23,11 @@
   [db]
   (let [[offset-x offset-y] (tool.handlers/snapped-offset db)
         [x y] (tool.handlers/snapped-position db)
-        [width height] (mapv (comp utils.length/->fixed abs)
+        [width height] (mapv (comp utils.attribute/->fixed abs)
                              [(- x offset-x) (- y offset-y)])
         origin [(cond-> offset-x (< x offset-x) (- width))
                 (cond-> offset-y (< y offset-y) (- height))]
-        [x y] (mapv utils.length/->fixed origin)]
+        [x y] (mapv utils.attribute/->fixed origin)]
     (-> db
         (assoc :last-origin origin)
         (tool.handlers/set-state :create)
@@ -48,14 +48,14 @@
                    (input.handlers/snap-to-angle? db e)
                    (input.handlers/snap-angle origin))
         size (matrix/sub position origin)
-        [w h] (mapv (comp utils.length/->fixed abs) size)
+        [w h] (mapv (comp utils.attribute/->fixed abs) size)
         new-x (cond-> (first origin)
                 (neg? (first size))
                 (+ (first size)))
         new-y (cond-> (second origin)
                 (neg? (second size))
                 (+ (second size)))
-        [new-x new-y] (mapv utils.length/->fixed [new-x new-y])]
+        [new-x new-y] (mapv utils.attribute/->fixed [new-x new-y])]
     (element.handlers/update-selected db #(-> %
                                               (assoc-in [:attrs :x] new-x)
                                               (assoc-in [:attrs :y] new-y)

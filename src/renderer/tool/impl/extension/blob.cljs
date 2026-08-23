@@ -12,7 +12,7 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
-   [renderer.utils.length :as utils.length]))
+   [renderer.utils.attribute :as utils.attribute]))
 
 (hierarchy/derive! ::blob ::tool.hierarchy/element)
 
@@ -27,9 +27,9 @@
         radius (pointer-delta db)
         attrs (-> (document.handlers/attrs db)
                   (select-keys [:stroke :fill :stroke-width]))]
-    (merge attrs {:x (utils.length/->fixed (- offset-x radius))
-                  :y (utils.length/->fixed (- offset-y radius))
-                  :size (utils.length/->fixed (* radius 2))})))
+    (merge attrs {:x (utils.attribute/->fixed (- offset-x radius))
+                  :y (utils.attribute/->fixed (- offset-y radius))
+                  :size (utils.attribute/->fixed (* radius 2))})))
 
 (defmethod tool.hierarchy/on-drag-start [::blob :idle]
   [db _e]

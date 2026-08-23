@@ -7,4 +7,5 @@
    [:replay {:default false} boolean?]
    [:grid-snap {:default true} boolean?]
    [:guide-snap {:default true} boolean?]
+   [:auto-duration {:default true} boolean?]
    [:paused {:default true} boolean?]])

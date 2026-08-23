@@ -8,6 +8,7 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
    [renderer.input.handlers :as input.handlers]
+   [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
@@ -166,7 +167,7 @@
       curved? (conj "L" x y1)
       curved? (conj "C" x (- y1 kry) (- x1 krx) y x1 y)
       :always (conj "z")
-      :always (->> (map #(cond-> % (number? %) utils.length/->fixed))
+      :always (->> (map #(cond-> % (number? %) utils.attribute/->fixed))
                    (string/join " ")))))
 
 (defmethod element.hierarchy/bbox :rect

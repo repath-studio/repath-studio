@@ -363,3 +363,17 @@
   (->> (defaults-memo tag)
        (map (fn [[k v]] [k (or (initial-memo tag k) v)]))
        (into {})))
+
+(m/=> ->fixed [:function
+               [:-> number? string?]
+               [:-> number? integer? string?]
+               [:-> number? integer? boolean? string?]])
+(defn ->fixed
+  ([v]
+   (->fixed v 3))
+  ([v precision]
+   (->fixed v precision true))
+  ([v precision remove-trailing-zeros]
+   (cond-> (.toFixed v precision)
+     remove-trailing-zeros
+     (-> js/parseFloat str))))

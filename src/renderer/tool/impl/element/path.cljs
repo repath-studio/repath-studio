@@ -21,6 +21,7 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
+   [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.key :as utils.key]
    [renderer.utils.length :as utils.length]
    [renderer.utils.path :as utils.path]
@@ -67,7 +68,7 @@
 (m/=> add-to-path [:-> string? string? [:* number?] string?])
 (defn add-to-path
   [d command & coords]
-  (->> (mapv utils.length/->fixed coords)
+  (->> (mapv utils.attribute/->fixed coords)
        (into [d command])
        (string/join " ")))
 
@@ -75,7 +76,7 @@
 (defn create-el
   [db]
   (let [path (->> (tool.handlers/snapped-offset db)
-                  (mapv utils.length/->fixed)
+                  (mapv utils.attribute/->fixed)
                   (into ["M"])
                   (string/join " "))
         attrs (-> (document.handlers/attrs db)
@@ -97,7 +98,7 @@
 (defmethod tool.hierarchy/on-pointer-move [::path :create]
   [db e]
   (let [[x y] (->> (adjusted-pointer-position db e)
-                   (mapv utils.length/->fixed))]
+                   (mapv utils.attribute/->fixed))]
     (update-path
      db
      #(let [segments (-> (utils.path/string->segments %)
@@ -116,7 +117,7 @@
 (defmethod tool.hierarchy/on-pointer-up [::path :create]
   [db e]
   (let [[x y] (->> (adjusted-pointer-position db e)
-                   (mapv utils.length/->fixed))]
+                   (mapv utils.attribute/->fixed))]
     (update-path db (fn [d]
                       (let [segments (utils.path/string->segments d)
                             preview (aget segments (dec (count segments)))]
@@ -130,10 +131,10 @@
         drag-pos (->> (tool.handlers/snapped-position db)
                       (element.handlers/adjusted-point db))
         [cp2-x cp2-y] (->> (matrix/sub (matrix/mul anchor 2) drag-pos)
-                           (mapv utils.length/->fixed))]
+                           (mapv utils.attribute/->fixed))]
     (update-path db #(let [segments (utils.path/string->segments %)]
                        (if (> (count segments) 1)
-                         (let [[ax ay] (mapv utils.length/->fixed anchor)]
+                         (let [[ax ay] (mapv utils.attribute/->fixed anchor)]
                            (-> (utils.path/drop-last-segment segments)
                                (.concat #js [#js ["S" cp2-x cp2-y ax ay]])
                                (utils.path/segments->string)))

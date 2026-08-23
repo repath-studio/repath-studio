@@ -108,9 +108,10 @@
      (when sm?
        [:<>
         [:span.v-divider]
-        [:div.grow.flex.gap-1
-         [views/action-switch :timeline/toggle-grid-snap]
-         [views/action-switch :timeline/toggle-guide-snap]]])
+        [views/action-switch :timeline/toggle-grid-snap]
+        [views/action-switch :timeline/toggle-guide-snap]
+        [:span.v-divider]
+        [views/action-switch :timeline/toggle-auto-duration]])
      [:div.flex-1]
      (when md? [panel.views/close-button :timeline])]))
 

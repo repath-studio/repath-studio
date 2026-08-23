@@ -63,20 +63,6 @@
    (let [initial (utils.attribute/initial-memo tag attr)]
      (unit->px v (unit->px initial 0)))))
 
-(m/=> ->fixed [:function
-               [:-> number? string?]
-               [:-> number? integer? string?]
-               [:-> number? integer? boolean? string?]])
-(defn ->fixed
-  ([v]
-   (->fixed v 3))
-  ([v precision]
-   (->fixed v precision true))
-  ([v precision remove-trailing-zeros]
-   (cond-> (.toFixed v precision)
-     remove-trailing-zeros
-     (-> js/parseFloat str))))
-
 (m/=> transform [:-> [:or string? number? nil?] ifn? [:* any?] string?])
 (defn transform
   "Converts a value to pixels, applies a function and converts the result
@@ -86,5 +72,5 @@
      (-> (apply f (->px n unit) more)
          (js/parseFloat)
          (->unit unit)
-         (->fixed)
+         (utils.attribute/->fixed)
          (str (when (valid-unit? unit) unit))))))

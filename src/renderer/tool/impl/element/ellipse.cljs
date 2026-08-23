@@ -13,6 +13,7 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
+   [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.length :as utils.length]))
 
 (hierarchy/derive! ::ellipse ::tool.hierarchy/element)
@@ -24,7 +25,7 @@
         [offset-x offset-y] (tool.handlers/snapped-offset db)
         [x y] (tool.handlers/snapped-position db)
         [rx ry] (->> [(abs (- x offset-x)) (abs (- y offset-y))]
-                     (mapv utils.length/->fixed))]
+                     (mapv utils.attribute/->fixed))]
     (-> db
         (tool.handlers/set-state :create)
         (element.handlers/add {:type :element
@@ -44,7 +45,7 @@
                    (input.handlers/snap-to-angle? db e)
                    (input.handlers/snap-angle center))
         radius (matrix/sub center position)
-        [rx ry] (mapv (comp utils.length/->fixed abs) radius)]
+        [rx ry] (mapv (comp utils.attribute/->fixed abs) radius)]
     (element.handlers/update-selected db #(-> %
                                               (assoc-in [:attrs :rx] rx)
                                               (assoc-in [:attrs :ry] ry)))))

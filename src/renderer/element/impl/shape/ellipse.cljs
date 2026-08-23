@@ -8,6 +8,7 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
    [renderer.tool.impl.element.core :as-alias element.core]
+   [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
@@ -74,7 +75,7 @@
           "S" (- cx krx) (- cy ry) cx (- cy ry)
           "S" (+ cx rx) (- cy kry) (+ cx rx) cy
           "z"]
-         (map #(cond-> % (number? %) utils.length/->fixed))
+         (map #(cond-> % (number? %) utils.attribute/->fixed))
          (string/join " "))))
 
 (defmethod element.hierarchy/area :ellipse
@@ -131,11 +132,12 @@
      [utils.svg/line [cx cy] [line-end-x cy] :stroke-dasharray 5]
      [utils.svg/line [cx cy] [cx line-end-y] :stroke-dasharray 5]
 
-     [utils.svg/label (utils.length/->fixed rx 2 false) {:x (+ cx (/ rx 2))
-                                                         :y cy}]
+     [utils.svg/label (utils.attribute/->fixed rx 2 false) {:x (+ cx (/ rx 2))
+                                                            :y cy}]
 
-     [utils.svg/label (utils.length/->fixed ry 2 false) {:x cx
-                                                         :y (- cy (/ ry 2))}]]))
+     [utils.svg/label (utils.attribute/->fixed ry 2 false) {:x cx
+                                                            :y (- cy
+                                                                  (/ ry 2))}]]))
 
 (defmethod element.hierarchy/snapping-points :ellipse
   [el]

@@ -13,6 +13,7 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
+   [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.key :as utils.key]
    [renderer.utils.length :as utils.length]))
 
@@ -42,7 +43,7 @@
         end-pos (cond->> end-pos
                   (input.handlers/snap-to-angle? db e)
                   (input.handlers/snap-angle start-pos))
-        [x2 y2] (mapv utils.length/->fixed end-pos)]
+        [x2 y2] (mapv utils.attribute/->fixed end-pos)]
     (element.handlers/update-selected db #(-> %
                                               (assoc-in [:attrs :x2] x2)
                                               (assoc-in [:attrs :y2] y2)))))

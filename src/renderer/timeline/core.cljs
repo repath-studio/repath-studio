@@ -27,8 +27,18 @@
                :active [::timeline.subs/guide-snap?]
                :event [::timeline.events/toggle-guide-snap]}])
 
+(rf/dispatch [::action.events/register-action
+              {:id :timeline/toggle-auto-duration
+               :label [::auto-duration "Auto duration"]
+               :icon "clock"
+               :active [::timeline.subs/auto-duration?]
+               :event [::timeline.events/toggle-auto-duration]}])
+
 (rf/dispatch [::action.events/register-action-group
               {:id :timeline
                :icon "animation"
                :label [::timeline "Timeline"]
-               :actions [:timeline/toggle-replay]}])
+               :actions [:timeline/toggle-replay
+                         :timeline/toggle-grid-snap
+                         :timeline/toggle-guide-snap
+                         :timeline/toggle-auto-duration]}])

@@ -15,8 +15,8 @@
    [renderer.timeline.views :as timeline.views]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
+   [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.key :as utils.key]
-   [renderer.utils.length :as utils.length]
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]))
 
@@ -28,9 +28,9 @@
       :style {:min-width "90px"}
       :dir "ltr"}
      [:div.flex.justify-between
-      [:span.mr-1 "X:"] [:span (utils.length/->fixed x 2 false)]]
+      [:span.mr-1 "X:"] [:span (utils.attribute/->fixed x 2 false)]]
      [:div.flex.justify-between
-      [:span.mr-1 "Y:"] [:span (utils.length/->fixed y 2 false)]]]))
+      [:span.mr-1 "Y:"] [:span (utils.attribute/->fixed y 2 false)]]]))
 
 (defn zoom-menu
   []
@@ -73,7 +73,7 @@
 (defn zoom-input
   [zoom]
   (let [precision (zoom-decimal-points zoom)
-        value (utils.length/->fixed (* 100 zoom) precision false)]
+        value (utils.attribute/->fixed (* 100 zoom) precision false)]
     [:input.text-right.font-mono.p-1
      {:key zoom
       :aria-label (i18n.views/t [::zoom "Zoom"])
