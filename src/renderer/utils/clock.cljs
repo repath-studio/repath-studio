@@ -25,21 +25,23 @@
        (or (get metrics-multiplier unit)
            (get metrics-multiplier "s")))))
 
+(def full-clock-count (dec (count metrics)))
+
 (defn clock->ms
   [clock]
-  (let [start (-> (count metrics)
-                  (dec)
-                  (- (count clock)))]
-    (reduce-kv (fn [total index timecount]
-                 (+ total (* (max 0 (js/parseFloat timecount))
-                             (index->multiplier (+ start index)))))
-               0
-               clock)))
+  (when (<= (count clock) full-clock-count)
+    (let [start (- full-clock-count (count clock))]
+      (reduce-kv (fn [total index timecount]
+                   (+ total (* (max 0 (js/parseFloat timecount))
+                               (index->multiplier (+ start index)))))
+                 0
+                 clock))))
 
 (defn ->ms
   [s]
   (let [clock (-> (string/trim s)
                   (string/split #":"))]
-    (if (next clock)
-      (clock->ms clock)
-      (timecount->ms (first clock)))))
+    (when (seq clock)
+      (if (next clock)
+        (clock->ms clock)
+        (timecount->ms (first clock))))))
