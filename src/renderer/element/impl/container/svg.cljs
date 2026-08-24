@@ -30,14 +30,12 @@
                   an SVG fragment inside an SVG or HTML document."]
    :attrs [:overflow]})
 
-(defn shadow-rect
+(defn shadow
   [rect-attrs shadow-size]
-  [:rect
-   (merge
-    rect-attrs
-    {:fill "rgba(0, 0, 0, .1)"
-     :transform (str "translate(" shadow-size " " shadow-size ")")
-     :style {:filter (str "blur(" shadow-size "px)")}})])
+  [:rect (merge rect-attrs
+                {:fill "rgba(0, 0, 0, .1)"
+                 :transform (str "translate(" shadow-size " " shadow-size ")")
+                 :style {:filter (str "blur(" shadow-size "px)")}})])
 
 (defmethod element.hierarchy/render :svg
   [_el]
@@ -69,7 +67,7 @@
             (or (:label el)
                 (i18n.views/t label))]
 
-           [shadow-rect rect-attrs shadow-size]
+           [shadow rect-attrs shadow-size]
 
            [:svg
             (cond-> attrs
