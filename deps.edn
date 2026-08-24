@@ -26,7 +26,7 @@
                      no.cjohansen/portfolio {:mvn/version "2026.03.1"}}}
   :format {:deps {dev.weavejester/cljfmt {:mvn/version "0.16.5"}}}
   :lint {:deps {clj-kondo/clj-kondo {:mvn/version "2026.08.04"}}}
-  :outdated {:deps {com.github.liquidz/antq {:mvn/version "RELEASE"}}
+  :outdated {:deps {com.github.liquidz/antq {:mvn/version "2.11.1276"}}
              :main-opts ["-m" "antq.core"]}
   :clj-watson {:deps {io.github.clj-holmes/clj-watson {:git/tag "v6.1.0"
                                                        :git/sha "be98e4d"}}
