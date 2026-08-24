@@ -21,7 +21,7 @@
 (defn timecount->ms
   [t]
   (when-let [[_ number unit] (re-find timecount-pattern t)]
-    (* (js/parseFloat number)
+    (* (max 0 (js/parseFloat number))
        (or (get metrics-multiplier unit)
            (get metrics-multiplier "s")))))
 
@@ -31,7 +31,7 @@
                   (dec)
                   (- (count clock)))]
     (reduce-kv (fn [total index timecount]
-                 (+ total (* (js/parseFloat timecount)
+                 (+ total (* (max 0 (js/parseFloat timecount))
                              (index->multiplier (+ start index)))))
                0
                clock)))
