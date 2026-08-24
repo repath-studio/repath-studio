@@ -2,7 +2,9 @@
   "https://www.w3.org/TR/SVG/struct.html#SVGElement
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/svg"
   (:require
+   ["react" :as react]
    [re-frame.core :as rf]
+   [reagent.core :as reagent]
    [renderer.a11y.subs :as-alias a11y.subs]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
@@ -29,51 +31,60 @@
    :attrs [:overflow]})
 
 (defmethod element.hierarchy/render :svg
-  [el]
-  (let [{:keys [selected attrs]} el
-        child-els @(rf/subscribe [::element.subs/filter-visible (:children el)])
-        rect-attrs (select-keys attrs [:x :y :width :height])
-        text-attrs (select-keys attrs [:x :y])
-        active-filter @(rf/subscribe [::a11y.subs/active-filter])
-        zoom @(rf/subscribe [::document.subs/zoom])
-        pointer-handler (partial input.impl.pointer/handler! el)
-        shadow-size (/ 2 zoom)]
-    [:g
-     [:text
-      (merge
-       (update text-attrs :y - (/ 10 zoom))
-       {:on-pointer-up pointer-handler
-        :on-pointer-down pointer-handler
-        :on-pointer-move pointer-handler
-        :fill "var(--foreground-muted)"
-        :font-size (/ 12 zoom)})
-      (or (:label el)
-          (i18n.views/t label))]
+  [_el]
+  (let [ref (react/createRef)]
+    (reagent/create-class
+     {:display-name "svg-renderer"
 
-     [:rect
-      (merge
-       rect-attrs
-       {:fill "rgba(0, 0, 0, .1)"
-        :transform (str "translate(" shadow-size " " shadow-size ")")
-        :style {:filter (str "blur(" shadow-size "px)")}})]
+      :component-did-mount #(some-> ref (.-current) (.pauseAnimations))
 
-     [:svg
-      (cond-> attrs
-        :always
-        (dissoc :style)
+      :reagent-render
+      (fn [el]
+        (let [{:keys [selected attrs children]} el
+              child-els @(rf/subscribe [::element.subs/filter-visible children])
+              rect-attrs (select-keys attrs [:x :y :width :height])
+              text-attrs (select-keys attrs [:x :y])
+              active-filter @(rf/subscribe [::a11y.subs/active-filter])
+              zoom @(rf/subscribe [::document.subs/zoom])
+              pointer-handler (partial input.impl.pointer/handler! el)
+              shadow-size (/ 2 zoom)]
+          [:g
+           [:text
+            (merge
+             (update text-attrs :y - (/ 10 zoom))
+             {:on-pointer-up pointer-handler
+              :on-pointer-down pointer-handler
+              :on-pointer-move pointer-handler
+              :fill "var(--foreground-muted)"
+              :font-size (/ 12 zoom)})
+            (or (:label el)
+                (i18n.views/t label))]
 
-        active-filter
-        (assoc :filter (str "url(#" (name active-filter) ")")))
-      [:rect
-       (merge
-        rect-attrs
-        {:x 0
-         :y 0
-         :fill "white"
-         :on-pointer-up pointer-handler
-         :on-pointer-move #(when selected (pointer-handler %))
-         :on-pointer-down #(when (or selected (= (.-button %) 2))
-                             (pointer-handler %))})]
-      (for [el child-els]
-        ^{:key (:id el)}
-        [element.hierarchy/render el])]]))
+           [:rect
+            (merge
+             rect-attrs
+             {:fill "rgba(0, 0, 0, .1)"
+              :transform (str "translate(" shadow-size " " shadow-size ")")
+              :style {:filter (str "blur(" shadow-size "px)")}})]
+
+           [:svg
+            (cond-> attrs
+              :always
+              (-> (dissoc :style)
+                  (assoc :ref ref))
+
+              active-filter
+              (assoc :filter (str "url(#" (name active-filter) ")")))
+            [:rect
+             (merge
+              rect-attrs
+              {:x 0
+               :y 0
+               :fill "white"
+               :on-pointer-up pointer-handler
+               :on-pointer-move #(when selected (pointer-handler %))
+               :on-pointer-down #(when (or selected (= (.-button %) 2))
+                                   (pointer-handler %))})]
+            (for [el child-els]
+              ^{:key (:id el)}
+              [element.hierarchy/render el])]]))})))

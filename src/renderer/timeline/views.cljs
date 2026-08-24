@@ -204,12 +204,12 @@
 
 (defn root
   []
-  (let [timeline-ref (react/createRef)]
+  (let [timeline-ref (react/createRef)
+        t @(rf/subscribe [::timeline.subs/time])]
     (reagent/create-class
      {:component-did-mount
       (fn []
-        (rf/dispatch [::timeline.events/pause])
-        (rf/dispatch [::timeline.events/set-time 0])
+        (.setTime (.-current timeline-ref) t)
         (register-listeners timeline-ref))
 
       :component-will-unmount
