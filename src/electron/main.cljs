@@ -42,7 +42,8 @@
 
 (defn open-external
   [url]
-  (let [url-parsed (js/URL. url)]
+  (when-let [url-parsed (try (js/URL. url)
+                             (catch :default _err nil))]
     (when (allowed-url? url-parsed)
       (.openExternal shell url-parsed.href))))
 
