@@ -689,11 +689,18 @@
  {:speed "速度"
   :no-filter "フィルタなし"
   :filter "フィルタ"
+  :play "再生"
+  :pause "一時停止"}
+
+ :renderer.timeline.core
+ {:replay "リプレイ"
   :grid-snap "グリッドスナップ"
   :guide-snap "ガイドスナップ"
-  :play "再生"
-  :replay "リプレイ"
-  :pause "一時停止"}
+  :fit-duration "期間を合わせる"
+  :timeline "タイムライン"}
+
+ :renderer.timeline.events
+ {:update-animation "アニメーションの更新"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "角度を選択"}

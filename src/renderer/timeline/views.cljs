@@ -1,10 +1,12 @@
 (ns renderer.timeline.views
   (:require
+   ["@radix-ui/react-context-menu" :as ContextMenu]
    ["@radix-ui/react-select" :as Select]
    ["@xzdarcy/react-timeline-editor" :refer [Timeline]]
    ["react" :as react]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
+   [renderer.action.views :as action.views]
    [renderer.element.events :as-alias element.events]
    [renderer.i18n.views :as i18n.views]
    [renderer.panel.subs :as-alias panel.subs]
@@ -74,35 +76,16 @@
          {:class "select-scroll-button"}
          [views/icon "chevron-down"]]]]]]))
 
-(defn snap-controls
-  []
-  (let [grid-snap? @(rf/subscribe [::timeline.subs/grid-snap?])
-        guide-snap? @(rf/subscribe [::timeline.subs/guide-snap?])]
-    [:div.grow.flex.gap-1
-     [views/switch
-      (i18n.views/t [::grid-snap "Grid snap"])
-      {:id "grid-snap"
-       :default-checked grid-snap?
-       :on-checked-change #(rf/dispatch [::timeline.events/set-grid-snap %])}]
-     [views/switch
-      (i18n.views/t [::guide-snap "Guide snap"])
-      {:id "guide-snap"
-       :default-checked guide-snap?
-       :on-checked-change #(rf/dispatch [::timeline.events/set-guide-snap
-                                         %])}]]))
-
 (defn toolbar
   [timeline-ref]
   (let [tm @(rf/subscribe [::timeline.subs/time])
         time-formatted @(rf/subscribe [::timeline.subs/time-formatted])
         paused? @(rf/subscribe [::timeline.subs/paused?])
-        replay? @(rf/subscribe [::timeline.subs/replay?])
         end @(rf/subscribe [::timeline.subs/end])
         speed @(rf/subscribe [::timeline.subs/speed])
-        sm? @(rf/subscribe [::window.subs/sm?])
         md? @(rf/subscribe [::window.subs/md?])]
     [views/toolbar
-     {:class "bg-primary"}
+     {:class "bg-primary @container/toolbar"}
      [views/icon-button "go-to-start"
       {:on-click #(.setTime (.-current timeline-ref) 0)
        :disabled (zero? tm)}]
@@ -118,15 +101,16 @@
      [views/icon-button "go-to-end"
       {:on-click #(.setTime (.-current timeline-ref) end)
        :disabled (>= tm end)}]
-     [views/radio-icon-button "refresh" replay?
-      {:title (i18n.views/t [::replay "Replay"])
-       :on-click #(rf/dispatch [::timeline.events/toggle-replay])}]
+     [views/tooltip-action-icon-button :timeline/toggle-replay]
      [speed-select timeline-ref]
      [:span.font-mono.px-2 time-formatted]
-     (when sm?
-       [:<>
-        [:span.v-divider]
-        [snap-controls]])
+     [:span.v-divider]
+     [views/tooltip-action-icon-button :timeline/toggle-fit-duration]
+     [:div.gap-1.h-full.hidden
+      {:class "@3xl/toolbar:flex"}
+      [:span.v-divider]
+      [views/action-switch :timeline/toggle-grid-snap]
+      [views/action-switch :timeline/toggle-guide-snap]]
      [:div.flex-1]
      (when md? [panel.views/close-button :timeline])]))
 
@@ -135,7 +119,7 @@
   (doseq
    [[e f]
     [["play"
-      #(rf/dispatch-sync [::timeline.events/play])] ;; Prevent navigation
+      #(rf/dispatch-sync [::timeline.events/play])]
      ["paused"
       #(rf/dispatch-sync [::timeline.events/pause])]
      ["afterSetTime"
@@ -151,27 +135,62 @@
     (.on (.-listener (.-current timeline-ref)) e f)))
 
 (defn custom-renderer
-  [action _row]
+  [^js action _row]
   (reagent/as-element
-   [:span (.-name action)]))
+   [:span.text-foreground.text-nowrap.px-2.z-1.pointer-events-none
+    {:class (when (.-hidden action) "text-foreground-disabled")}
+    (.-name action)]))
+
+(defn params->id
+  [params]
+  (uuid (.. params -action -id)))
 
 (defn timeline
   [timeline-ref]
   (let [data @(rf/subscribe [::timeline.subs/rows])
         effects @(rf/subscribe [::timeline.subs/effects])
         grid-snap? @(rf/subscribe [::timeline.subs/grid-snap?])
-        guide-snap? @(rf/subscribe [::timeline.subs/guide-snap?])]
-    [:> Timeline
-     {:editor-data data
-      :effects effects
-      :ref timeline-ref
-      :grid-snap grid-snap?
-      :drag-line guide-snap?
-      :auto-scroll true
-      :getActionRender custom-renderer
-      :on-click-action #(let [el-id (keyword (.. %2 -action -id))]
-                          (rf/dispatch [::element.events/select
-                                        el-id false]))}]))
+        guide-snap? @(rf/subscribe [::timeline.subs/guide-snap?])
+        preview-action! #(rf/dispatch-sync [::timeline.events/preview-action
+                                            (params->id %)
+                                            (.-start %)
+                                            (.-end %)])
+        finalize-action! #(rf/dispatch-sync [::timeline.events/finalize-action
+                                             (params->id %)
+                                             (.-start %)
+                                             (.-end %)])
+        select-action! (fn [e params]
+                         (rf/dispatch [::element.events/select
+                                       (params->id params)
+                                       (.-shiftKey e)]))]
+    [:> ContextMenu/Root
+     [:> ContextMenu/Trigger
+      {:class "flex h-full w-full overflow-hidden"}
+      [:> Timeline
+       {:editor-data data
+        :effects effects
+        :ref timeline-ref
+        :grid-snap grid-snap?
+        :drag-line guide-snap?
+        :auto-scroll true
+        :getActionRender custom-renderer
+        :onActionResizing preview-action!
+        :onActionResizeEnd finalize-action!
+        :onActionMoving preview-action!
+        :onActionMoveEnd finalize-action!
+        :onContextMenuAction select-action!
+        :onClickActionOnly select-action!}]]
+     [:> ContextMenu/Portal
+      (->> [:object/locking
+            :object/entity]
+           (map (comp :actions action.views/deref-action-group))
+           (interpose {:type :separator})
+           (flatten)
+           (map views/context-menu-item)
+           (into [:> ContextMenu/Content
+                  {:class "menu-content context-menu-content"
+                   :on-key-down #(.stopPropagation %)
+                   :on-escape-key-down #(.stopPropagation %)}]))]]))
 
 (defn time-bar
   []
@@ -185,12 +204,12 @@
 
 (defn root
   []
-  (let [timeline-ref (react/createRef)]
+  (let [timeline-ref (react/createRef)
+        t @(rf/subscribe [::timeline.subs/time])]
     (reagent/create-class
      {:component-did-mount
       (fn []
-        (rf/dispatch [::timeline.events/pause])
-        (rf/dispatch [::timeline.events/set-time 0])
+        (.setTime (.-current timeline-ref) t)
         (register-listeners timeline-ref))
 
       :component-will-unmount

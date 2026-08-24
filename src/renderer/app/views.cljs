@@ -34,8 +34,8 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.tool.views :as tool.views]
    [renderer.tree.views :as tree.views]
+   [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.extra :refer [rpartial]]
-   [renderer.utils.length :as utils.length]
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]
    [renderer.window.views :as window.views]
@@ -43,7 +43,7 @@
 
 (defn coll->str
   [coll]
-  (str "[" (string/join " " (map utils.length/->fixed coll)) "]"))
+  (str "[" (string/join " " (map utils.attribute/->fixed coll)) "]"))
 
 (defn map->str
   [m]
@@ -51,7 +51,7 @@
        (map (fn [[k v]]
               ^{:key k}
               [:span (str (name k) ": " (if (number? v)
-                                          (utils.length/->fixed v)
+                                          (utils.attribute/->fixed v)
                                           (coll->str v)))]))
        (interpose ", ")))
 

@@ -727,11 +727,18 @@
  {:speed "Hız"
   :no-filter "Filtre yok"
   :filter "Filtre"
+  :play "Oynat"
+  :pause "Duraklat"}
+
+ :renderer.timeline.core
+ {:replay "Tekrar oynat"
   :grid-snap "Izgara yapışı"
   :guide-snap "Kılavuz yapışı"
-  :play "Oynat"
-  :replay "Tekrar oynat"
-  :pause "Duraklat"}
+  :fit-duration "Süreyi uydur"
+  :timeline "Zaman Çizelgesi"}
+
+ :renderer.timeline.events
+ {:update-animation "Animasyonu güncelle"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Açı seç"}

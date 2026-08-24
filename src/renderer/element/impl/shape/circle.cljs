@@ -8,6 +8,7 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
    [renderer.tool.impl.element.core :as-alias element.core]
+   [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
@@ -75,7 +76,7 @@
           "S" (- cx kr) (- cy r) cx (- cy r)
           "S" (+ cx r) (- cy kr) (+ cx r) cy
           "z"]
-         (map #(cond-> % (number? %) utils.length/->fixed))
+         (map #(cond-> % (number? %) utils.attribute/->fixed))
          (string/join " "))))
 
 (defmethod element.hierarchy/handle-drag :circle
@@ -107,8 +108,8 @@
     [:g
      [utils.svg/line [cx cy] [(+ cx r) cy] :stroke "var(--accent-foreground)"]
      [utils.svg/line [cx cy] [(+ cx r) cy] :stroke-dasharray 5]
-     [utils.svg/label (utils.length/->fixed r 2 false) {:x (+ cx (/ r 2))
-                                                        :y cy}]
+     [utils.svg/label (utils.attribute/->fixed r 2 false) {:x (+ cx (/ r 2))
+                                                           :y cy}]
      [utils.svg/times [cx cy]]]))
 
 (defmethod element.hierarchy/snapping-points :circle

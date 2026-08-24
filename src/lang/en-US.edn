@@ -721,11 +721,18 @@
  {:speed "Speed"
   :no-filter "No filter"
   :filter "Filter"
+  :play "Play"
+  :pause "Pause"}
+
+ :renderer.timeline.core
+ {:replay "Replay"
   :grid-snap "Grid snap"
   :guide-snap "Guide snap"
-  :play "Play"
-  :replay "Replay"
-  :pause "Pause"}
+  :fit-duration "Fit duration"
+  :timeline "Timeline"}
+
+ :renderer.timeline.events
+ {:update-animation "Update animation"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Pick angle"}

@@ -730,11 +730,18 @@
  {:speed "Скорость"
   :no-filter "Без фильтра"
   :filter "Фильтр"
+  :play "Воспроизвести"
+  :pause "Пауза"}
+
+ :renderer.timeline.core
+ {:replay "Повтор"
   :grid-snap "Привязка к сетке"
   :guide-snap "Привязка к направляющим"
-  :play "Воспроизвести"
-  :replay "Повтор"
-  :pause "Пауза"}
+  :fit-duration "Подогнать длительность"
+  :timeline "Временная шкала"}
+
+ :renderer.timeline.events
+ {:update-animation "Обновить анимацию"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Выбрать угол"}

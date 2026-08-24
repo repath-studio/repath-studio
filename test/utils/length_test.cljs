@@ -1,6 +1,6 @@
 (ns utils.length-test
   (:require
-   [cljs.test :refer-macros [deftest testing are is]]
+   [cljs.test :refer-macros [deftest testing is]]
    [renderer.utils.length :as utils.length]))
 
 (deftest test-valid-unit?
@@ -10,16 +10,3 @@
     (is (true? (utils.length/valid-unit? "rem")))
     (is (false? (utils.length/valid-unit? "foo")))
     (is (false? (utils.length/valid-unit? "")))))
-
-(deftest test-to-fixed
-  (testing "round to precision"
-    (are [x y] (= x y)
-      "1.111" (utils.length/->fixed 1.111111 3)
-      "1" (utils.length/->fixed 1 3)
-      "1.000" (utils.length/->fixed 1 3 false)
-      "1.11" (utils.length/->fixed 1.111 2)
-      "1.11" (utils.length/->fixed 1.114 2)
-      "1.12" (utils.length/->fixed 1.116 2)
-      "1.11" (utils.length/->fixed 1.11100 2)
-      "1" (utils.length/->fixed 1 0)
-      "0" (utils.length/->fixed 0 2))))

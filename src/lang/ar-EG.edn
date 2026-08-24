@@ -704,11 +704,18 @@
  {:speed "السرعة"
   :no-filter "لا يوجد مرشح"
   :filter "مرشح"
+  :play "تشغيل"
+  :pause "إيقاف مؤقت"}
+
+ :renderer.timeline.core
+ {:replay "إعادة تشغيل"
   :grid-snap "التقاط الشبكة"
   :guide-snap "التقاط الدليل"
-  :play "تشغيل"
-  :replay "إعادة تشغيل"
-  :pause "إيقاف مؤقت"}
+  :fit-duration "ملاءمة المدة"
+  :timeline "الجدول الزمني"}
+
+ :renderer.timeline.events
+ {:update-animation "تحديث الحركة"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "اختيار زاوية"}

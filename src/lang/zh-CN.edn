@@ -644,11 +644,18 @@
  {:speed "速度"
   :no-filter "无过滤器"
   :filter "过滤器"
+  :play "播放"
+  :pause "暂停"}
+
+ :renderer.timeline.core
+ {:replay "重播"
   :grid-snap "网格吸附"
   :guide-snap "参考线吸附"
-  :play "播放"
-  :replay "重播"
-  :pause "暂停"}
+  :fit-duration "适配时长"
+  :timeline "时间轴"}
+
+ :renderer.timeline.events
+ {:update-animation "更新动画"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "选择角度"}

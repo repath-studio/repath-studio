@@ -12,8 +12,8 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
-   [renderer.utils.key :as utils.key]
-   [renderer.utils.length :as utils.length]))
+   [renderer.utils.attribute :as utils.attribute]
+   [renderer.utils.key :as utils.key]))
 
 (hierarchy/derive! ::circle ::tool.hierarchy/element)
 
@@ -40,7 +40,7 @@
         radius (-> position
                    (matrix/sub (element.handlers/parent-offset db))
                    (matrix/distance [cx cy])
-                   (utils.length/->fixed))]
+                   (utils.attribute/->fixed))]
     (element.handlers/update-selected db #(assoc-in % [:attrs :r] radius))))
 
 (defn finalize

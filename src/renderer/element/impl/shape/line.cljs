@@ -8,6 +8,7 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
    [renderer.input.handlers :as input.handlers]
+   [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]))
@@ -54,7 +55,7 @@
         [x1 y1 x2 y2] (mapv utils.length/unit->px [x1 y1 x2 y2])]
     (->> ["M" x1 y1
           "L" x2 y2]
-         (map #(cond-> % (number? %) utils.length/->fixed))
+         (map #(cond-> % (number? %) utils.attribute/->fixed))
          (string/join " "))))
 
 (defmethod element.hierarchy/handles :line

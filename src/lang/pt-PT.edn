@@ -731,11 +731,18 @@
  {:speed "Velocidade"
   :no-filter "Sem filtro"
   :filter "Filtro"
+  :play "Reproduzir"
+  :pause "Pausar"}
+
+ :renderer.timeline.core
+ {:replay "Repetir"
   :grid-snap "Ajuste à grelha"
   :guide-snap "Ajuste à guia"
-  :play "Reproduzir"
-  :replay "Repetir"
-  :pause "Pausar"}
+  :fit-duration "Ajustar duração"
+  :timeline "Cronologia"}
+
+ :renderer.timeline.events
+ {:update-animation "Atualizar animação"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Escolher ângulo"}

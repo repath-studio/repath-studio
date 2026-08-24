@@ -734,11 +734,18 @@
  {:speed "Hastighet"
   :no-filter "Inget filter"
   :filter "Filter"
+  :play "Spela"
+  :pause "Pausa"}
+
+ :renderer.timeline.core
+ {:replay "Spela om"
   :grid-snap "Rutnätsfäst"
   :guide-snap "Hjälplinjefäst"
-  :play "Spela"
-  :replay "Spela om"
-  :pause "Pausa"}
+  :fit-duration "Justera varaktighet"
+  :timeline "Tidslinje"}
+
+ :renderer.timeline.events
+ {:update-animation "Uppdatera animation"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Välj vinkel"}

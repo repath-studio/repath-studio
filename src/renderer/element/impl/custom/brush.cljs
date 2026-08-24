@@ -83,10 +83,16 @@
     (if (< length 4)
       ""
       (let [[[ax ay] [bx by] [cx cy]] points
-            d (str "M" (utils.length/->fixed ax) "," (utils.length/->fixed ay)
-                   " Q" (utils.length/->fixed bx) "," (utils.length/->fixed by)
-                   " " (utils.length/->fixed (matrix.stats/mean [bx cx])) ","
-                   (utils.length/->fixed (matrix.stats/mean [by cy])) " T")]
+            d (str "M"
+                   (utils.attribute/->fixed ax) ","
+                   (utils.attribute/->fixed ay)
+                   " Q"
+                   (utils.attribute/->fixed bx) ","
+                   (utils.attribute/->fixed by)
+                   " "
+                   (utils.attribute/->fixed (matrix.stats/mean [bx cx])) ","
+                   (utils.attribute/->fixed (matrix.stats/mean [by cy]))
+                   " T")]
         (reduce-kv
          (fn [result index]
            (if (or (= length (inc index))
@@ -95,9 +101,9 @@
              (let [[ax ay] (nth points index)
                    [bx by] (nth points (inc index))]
                (str result
-                    (utils.length/->fixed (matrix.stats/mean [ax bx]))
+                    (utils.attribute/->fixed (matrix.stats/mean [ax bx]))
                     ","
-                    (utils.length/->fixed (matrix.stats/mean [ay by]))
+                    (utils.attribute/->fixed (matrix.stats/mean [ay by]))
                     " ")))) d points)))))
 
 (def partition-to-px

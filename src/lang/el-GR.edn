@@ -755,11 +755,18 @@
  {:speed "Ταχύτητα"
   :no-filter "Κανένα φίλτρο"
   :filter "Φίλτρο"
+  :play "Αναπαραγωγή"
+  :pause "Παύση"}
+
+ :renderer.timeline.core
+ {:replay "Αναπαραγωγή ξανά"
   :grid-snap "Σύνδεση πλέγματος"
   :guide-snap "Οδηγός πλέγματος"
-  :play "Αναπαραγωγή"
-  :replay "Αναπαραγωγή ξανά"
-  :pause "Παύση"}
+  :fit-duration "Προσαρμογή διάρκειας"
+  :timeline "Χρονολόγιο"}
+
+ :renderer.timeline.events
+ {:update-animation "Ενημέρωση κίνησης"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Επιλογή γωνίας"}

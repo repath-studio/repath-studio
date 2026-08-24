@@ -750,11 +750,18 @@
  {:speed "Geschwindigkeit"
   :no-filter "Kein Filter"
   :filter "Filter"
+  :play "Abspielen"
+  :pause "Pause"}
+
+ :renderer.timeline.core
+ {:replay "Wiederholen"
   :grid-snap "Raster-Einrasten"
   :guide-snap "Hilfslinien-Einrasten"
-  :play "Abspielen"
-  :replay "Wiederholen"
-  :pause "Pause"}
+  :fit-duration "Dauer anpassen"
+  :timeline "Zeitleiste"}
+
+ :renderer.timeline.events
+ {:update-animation "Animation aktualisieren"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Winkel auswählen"}

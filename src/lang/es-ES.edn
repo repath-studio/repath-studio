@@ -738,14 +738,23 @@
  {:speed "Velocidad"
   :no-filter "Sin filtro"
   :filter "Filtro"
-  :grid-snap "Ajuste a cuadrícula"
-  :guide-snap "Ajuste a guía"
   :play "Reproducir"
-  :replay "Repetir"
   :pause "Pausar"}
 
+ :renderer.timeline.core
+ {:replay "Repetir"
+  :grid-snap "Ajustar a cuadrícula"
+  :guide-snap "Ajustar a guías"
+  :fit-duration "Ajustar duración"
+  :timeline "Línea de tiempo"}
+
+ :renderer.timeline.events
+ {:update-animation "Actualizar animación"}
+
  :renderer.attribute.impl.angle
- {:pick-angle "Elegir ángulo"}
+ {:pick-angle "Elegir ángulo"
+  :grid-snap "Ajuste a cuadrícula"
+  :guide-snap "Ajuste a guía"}
 
  :renderer.attribute.impl.href
  {:select-file "Seleccionar archivo"}

@@ -55,3 +55,16 @@
          :opacity ""
          :id ""
          :class ""} (utils.attribute/defaults :rect)))))
+
+(deftest test-to-fixed
+  (testing "round to precision"
+    (are [x y] (= x y)
+      "1.111" (utils.attribute/->fixed 1.111111 3)
+      "1" (utils.attribute/->fixed 1 3)
+      "1.000" (utils.attribute/->fixed 1 3 false)
+      "1.11" (utils.attribute/->fixed 1.111 2)
+      "1.11" (utils.attribute/->fixed 1.114 2)
+      "1.12" (utils.attribute/->fixed 1.116 2)
+      "1.11" (utils.attribute/->fixed 1.11100 2)
+      "1" (utils.attribute/->fixed 1 0)
+      "0" (utils.attribute/->fixed 0 2))))

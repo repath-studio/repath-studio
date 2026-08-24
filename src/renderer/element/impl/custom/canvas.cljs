@@ -1,7 +1,9 @@
 (ns renderer.element.impl.custom.canvas
   "The main SVG element that hosts all pages."
   (:require
+   ["react" :as react]
    [re-frame.core :as rf]
+   [reagent.core :as reagent]
    [renderer.a11y.subs :as-alias a11y.subs]
    [renderer.app.subs :as-alias app.subs]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
@@ -59,69 +61,78 @@
       [snap.views/canvas-label nearest-neighbor])))
 
 (defmethod element.hierarchy/render :canvas
-  [el]
-  (let [{:keys [attrs children]} el
-        child-elements @(rf/subscribe [::element.subs/filter-visible children])
-        child-elements (sort-by utils.element/virtual? child-elements)
-        viewbox-attr @(rf/subscribe [::frame.subs/viewbox-attr])
-        {:keys [width height]} @(rf/subscribe [::app.subs/dom-rect])
-        read-only? @(rf/subscribe [::document.subs/read-only?])
-        cursor @(rf/subscribe [::tool.subs/cursor])
-        bbox @(rf/subscribe [::element.subs/bbox])
-        active-tool @(rf/subscribe [::tool.subs/active])
-        edit? @(rf/subscribe [::tool.subs/editing?])
-        grid? @(rf/subscribe [::document.subs/attr :grid])
-        state @(rf/subscribe [::tool.subs/state])
-        idle? @(rf/subscribe [::tool.subs/idle?])
-        pointer-handler (partial input.impl.pointer/handler! el)
-        filters @(rf/subscribe [::a11y.subs/filters])
-        snap? @(rf/subscribe [::snap.subs/active?])]
-    [:svg {:id utils.dom/canvas-id
-           :on-pointer-up pointer-handler
-           :on-pointer-down pointer-handler
-           :on-pointer-move pointer-handler
-           :on-context-menu (when-not idle? pointer-handler)
-           :on-key-up input.impl.keyboard/handler!
-           :on-key-down input.impl.keyboard/handler!
-           :tab-index 0 ; Enable keyboard events
-           :viewBox viewbox-attr
-           :on-drop input.impl.drag/handler!
-           :on-drag-over input.impl.drag/handler!
-           :width width
-           :height height
-           :cursor cursor
-           :style {:outline 0
-                   :background (:fill attrs)}}
-     (when (and (seq bbox) (not edit?))
-       [tool.views/selected-bbox bbox])
+  [_el]
+  (let [ref (react/createRef)]
+    (reagent/create-class
+     {:display-name "svg-renderer"
 
-     (for [el child-elements]
-       ^{:key (:id el)}
-       [element.hierarchy/render el])
+      :component-did-mount #(some-> ref (.-current) (.pauseAnimations))
 
-     (->> filters
-          (map a11y-filter)
-          (into [:defs]))
+      :reagent-render
+      (fn [el]
+        (let [{:keys [attrs children]} el
+              child-els @(rf/subscribe [::element.subs/filter-visible children])
+              child-els (sort-by utils.element/virtual? child-els)
+              viewbox-attr @(rf/subscribe [::frame.subs/viewbox-attr])
+              {:keys [width height]} @(rf/subscribe [::app.subs/dom-rect])
+              read-only? @(rf/subscribe [::document.subs/read-only?])
+              cursor @(rf/subscribe [::tool.subs/cursor])
+              bbox @(rf/subscribe [::element.subs/bbox])
+              active-tool @(rf/subscribe [::tool.subs/active])
+              edit? @(rf/subscribe [::tool.subs/editing?])
+              grid? @(rf/subscribe [::document.subs/attr :grid])
+              state @(rf/subscribe [::tool.subs/state])
+              idle? @(rf/subscribe [::tool.subs/idle?])
+              pointer-handler (partial input.impl.pointer/handler! el)
+              filters @(rf/subscribe [::a11y.subs/filters])
+              snap? @(rf/subscribe [::snap.subs/active?])]
+          [:svg {:id utils.dom/canvas-id
+                 :ref ref
+                 :on-pointer-up pointer-handler
+                 :on-pointer-down pointer-handler
+                 :on-pointer-move pointer-handler
+                 :on-context-menu (when-not idle? pointer-handler)
+                 :on-key-up input.impl.keyboard/handler!
+                 :on-key-down input.impl.keyboard/handler!
+                 :tab-index 0 ; Enable keyboard events
+                 :viewBox viewbox-attr
+                 :on-drop input.impl.drag/handler!
+                 :on-drag-over input.impl.drag/handler!
+                 :width width
+                 :height height
+                 :cursor cursor
+                 :style {:outline 0
+                         :background (:fill attrs)}}
+           (when (and (seq bbox) (not edit?))
+             [tool.views/selected-bbox bbox])
 
-     (when grid?
-       [ruler.views/grid])
+           (for [el child-els]
+             ^{:key (:id el)}
+             [element.hierarchy/render el])
 
-     (when-not read-only?
-       [tool.hierarchy/render active-tool])
+           (->> filters
+                (map a11y-filter)
+                (into [:defs]))
 
-     (when (and snap? (not= state :select))
-       [snap-info])]))
+           (when grid?
+             [ruler.views/grid])
+
+           (when-not read-only?
+             [tool.hierarchy/render active-tool])
+
+           (when (and snap? (not= state :select))
+             [snap-info])]))})))
 
 (defmethod element.hierarchy/render-to-string :canvas
   [el]
   (let [{:keys [attrs children]} el
-        child-elements @(rf/subscribe [::element.subs/filter-visible children])
+        child-els @(rf/subscribe [::element.subs/filter-visible children])
         attrs (->> (dissoc attrs :fill)
                    (remove #(empty? (str (second %))))
                    (into {}))]
     (into [:svg attrs]
           (map element.hierarchy/render-to-string)
-          child-elements)))
+          child-els)))
 
 (defmethod element.hierarchy/permitted-content :canvas
   [_el]
