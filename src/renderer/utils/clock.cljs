@@ -1,6 +1,7 @@
 (ns renderer.utils.clock
   (:require
-   [clojure.string :as string]))
+   [clojure.string :as string]
+   [malli.core :as m]))
 
 (def metrics
   ["h" "min" "s" "ms"])
@@ -14,10 +15,12 @@
 (def timecount-pattern
   #"^(\d+\.?\d*)(h|min|s|ms)?$")
 
+(m/=> index->multiplier [:-> int? number?])
 (defn index->multiplier
   [i]
   (get metrics-multiplier (get metrics i)))
 
+(m/=> timecount->ms [:-> number? [:maybe number?]])
 (defn timecount->ms
   [t]
   (when-let [[_ number unit] (re-find timecount-pattern t)]
@@ -27,6 +30,7 @@
 
 (def full-clock-count (dec (count metrics)))
 
+(m/=> clock->ms [:-> vector? [:maybe number?]])
 (defn clock->ms
   [clock]
   (when (<= (count clock) full-clock-count)
@@ -37,6 +41,7 @@
                  0
                  clock))))
 
+(m/=> ->ms [:-> string? [:maybe number?]])
 (defn ->ms
   [s]
   (let [clock (-> (string/trim s)

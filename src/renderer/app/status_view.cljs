@@ -23,7 +23,7 @@
 (defn coordinates
   []
   (let [[x y] @(rf/subscribe [::input.subs/adjusted-pointer-pos])]
-    [:div.flex-col.font-mono.leading-tight.hidden.mx-1.hidden
+    [:div.flex-col.font-mono.leading-tight.mx-1.hidden
      {:class "@3xl/toolbar:flex"
       :style {:min-width "90px"}
       :dir "ltr"}

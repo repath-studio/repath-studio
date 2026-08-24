@@ -83,10 +83,9 @@
         paused? @(rf/subscribe [::timeline.subs/paused?])
         end @(rf/subscribe [::timeline.subs/end])
         speed @(rf/subscribe [::timeline.subs/speed])
-        sm? @(rf/subscribe [::window.subs/sm?])
         md? @(rf/subscribe [::window.subs/md?])]
     [views/toolbar
-     {:class "bg-primary"}
+     {:class "bg-primary @container/toolbar"}
      [views/icon-button "go-to-start"
       {:on-click #(.setTime (.-current timeline-ref) 0)
        :disabled (zero? tm)}]
@@ -105,13 +104,13 @@
      [views/tooltip-action-icon-button :timeline/toggle-replay]
      [speed-select timeline-ref]
      [:span.font-mono.px-2 time-formatted]
-     (when sm?
-       [:<>
-        [:span.v-divider]
-        [views/action-switch :timeline/toggle-grid-snap]
-        [views/action-switch :timeline/toggle-guide-snap]
-        [:span.v-divider]
-        [views/action-switch :timeline/toggle-fit-duration]])
+     [:span.v-divider]
+     [views/tooltip-action-icon-button :timeline/toggle-fit-duration]
+     [:div.gap-1.h-full.hidden
+      {:class "@3xl/toolbar:flex"}
+      [:span.v-divider]
+      [views/action-switch :timeline/toggle-grid-snap]
+      [views/action-switch :timeline/toggle-guide-snap]]
      [:div.flex-1]
      (when md? [panel.views/close-button :timeline])]))
 
@@ -138,7 +137,7 @@
 (defn custom-renderer
   [^js action _row]
   (reagent/as-element
-   [:span
+   [:span.text-foreground.text-nowrap.px-2.z-1.pointer-events-none
     {:class (when (.-hidden action) "text-foreground-disabled")}
     (.-name action)]))
 
@@ -157,6 +156,7 @@
                                             (.-start %)
                                             (.-end %)])
         finalize-action! #(rf/dispatch-sync [::timeline.events/finalize-action
+                                             (params->id %)
                                              (.-start %)
                                              (.-end %)])
         select-action! (fn [e params]

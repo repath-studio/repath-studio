@@ -1,10 +1,9 @@
 (ns renderer.timeline.events
   (:require
    [re-frame.core :as rf]
-   [renderer.element.handlers :as element.handlers]
    [renderer.history.events :refer [finalize]]
    [renderer.timeline.effects :as-alias timeline.effects]
-   [renderer.utils.attribute :as utils.attribute]))
+   [renderer.timeline.handlers :as timeline.handlers]))
 
 (rf/reg-event-db
  ::pause
@@ -44,22 +43,13 @@
 (rf/reg-event-db
  ::preview-action
  (fn [db [_ id start end]]
-   (cond-> db
-     :always
-     (-> (element.handlers/toggle-selection id false)
-         (element.handlers/set-attr :begin (utils.attribute/->fixed start))
-         (element.handlers/set-attr :end (utils.attribute/->fixed end)))
-
-     (-> db :timeline :fit-duration)
-     (element.handlers/set-attr :dur (utils.attribute/->fixed (- end start))))))
+   (timeline.handlers/update-action db id start end)))
 
 (rf/reg-event-db
  ::finalize-action
  [(finalize [::update-animation "Update animation"])]
- (fn [db [_ start end]]
-   (-> db
-       (element.handlers/set-attr :begin (utils.attribute/->fixed start))
-       (element.handlers/set-attr :end (utils.attribute/->fixed end)))))
+ (fn [db [_ id start end]]
+   (timeline.handlers/update-action db id start end)))
 
 (rf/reg-event-fx
  ::set-time
