@@ -53,9 +53,9 @@
 
 (rf/reg-sub
  ::end
- :<- [::animations]
- (fn [animations]
-   (reduce #(max (js/parseInt (-> %2 :attrs :end)) %1) 0 animations)))
+ :<- [::rows]
+ (fn [rows]
+   (reduce #(max (-> %2 .-actions first .-end) %1) 0 rows)))
 
 (defn animation->effect
   [el]
