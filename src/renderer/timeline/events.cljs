@@ -40,16 +40,18 @@
  (fn [db [_ speed]]
    (assoc-in db [:timeline :speed] speed)))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  ::preview-action
- (fn [db [_ id start end]]
-   (timeline.handlers/update-action db id start end)))
+ (fn [{:keys [db]} [_ id start end]]
+   {:db (timeline.handlers/update-action db id start end)
+    ::timeline.effects/set-current-time (get-in db [:timeline :time])}))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  ::finalize-action
  [(finalize [::update-animation "Update animation"])]
- (fn [db [_ id start end]]
-   (timeline.handlers/update-action db id start end)))
+ (fn [{:keys [db]} [_ id start end]]
+   {:db (timeline.handlers/update-action db id start end)
+    ::timeline.effects/set-current-time (get-in db [:timeline :time])}))
 
 (rf/reg-event-fx
  ::set-time
