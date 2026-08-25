@@ -13,22 +13,19 @@
    [renderer.element.impl.shape.polyline]
    [renderer.element.impl.shape.rect]
    [renderer.element.subs :as-alias element.subs]
+   [renderer.element.views :as element.views]
    [renderer.hierarchy :as hierarchy]
-   [renderer.utils.element :as utils.element]))
+   [renderer.tool.subs :as-alias tool.subs]))
 
 (hierarchy/derive! ::element.hierarchy/shape ::element.hierarchy/graphics)
-
-(defmethod element.hierarchy/render-to-string ::element.hierarchy/shape
-  [el]
-  (let [{:keys [tag attrs title children content]} el
-        child-elements @(rf/subscribe [::element.subs/filter-visible children])
-        attrs (->> (utils.element/style->map attrs)
-                   (remove #(empty? (str (second %))))
-                   (into {}))]
-    (into [tag attrs (when title [:title title]) content]
-          (map element.hierarchy/render-to-string child-elements))))
 
 (defmethod element.hierarchy/permitted-content ::element.hierarchy/shape
   [_el]
   #{::element.hierarchy/animation
     ::element.hierarchy/descriptive})
+
+(defmethod element.hierarchy/render ::element.hierarchy/shape
+  [el]
+  (let [child-els @(rf/subscribe [::element.subs/filter-visible (:children el)])
+        idle? @(rf/subscribe [::tool.subs/idle?])]
+    [element.views/render-to-dom el child-els idle?]))

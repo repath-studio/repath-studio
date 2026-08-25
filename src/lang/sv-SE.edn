@@ -119,7 +119,8 @@
   :trace-image "Spåra bild"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Kombinera"
-  :break-apart "Dela upp"}
+  :break-apart "Dela upp"
+  :add-motion-path "Lägg till rörelsebana"}
 
  :renderer.element.impl.animation.animate
  {:label "Animera"

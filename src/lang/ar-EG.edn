@@ -119,7 +119,8 @@
   :trace-image "تتبع الصورة"
   :toggle-handle-selection "Toggle handle selection"
   :combine "دمج"
-  :break-apart "فصل"}
+  :break-apart "فصل"
+  :add-motion-path "إضافة مسار الحركة"}
 
  :renderer.element.impl.animation.animate
  {:label "تحريك"

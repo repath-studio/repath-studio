@@ -277,6 +277,19 @@
    (element.handlers/animate db tag attrs)))
 
 (rf/reg-event-db
+ ::add-mpath
+ [(finalize [::add-motion-path "Add motion path"])]
+ (fn [db _]
+   (let [parent-els (element.handlers/filter-selected-by-tag db :animateMotion)]
+     (reduce (fn [db parent]
+               (element.handlers/create db {:type :element
+                                            :tag :mpath
+                                            :selected true
+                                            :parent (:id parent)}))
+             (element.handlers/deselect db)
+             parent-els))))
+
+(rf/reg-event-db
  ::set-parent
  [(finalize [::set-parent "Set parent"])]
  (fn [db [_ id parent-id]]

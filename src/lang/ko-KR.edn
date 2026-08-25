@@ -119,7 +119,8 @@
   :trace-image "이미지 추적"
   :toggle-handle-selection "Toggle handle selection"
   :combine "결합"
-  :break-apart "분리"}
+  :break-apart "분리"
+  :add-motion-path "모션 패스 추가"}
 
  :renderer.element.impl.animation.animate
  {:label "애니메이션"

@@ -119,7 +119,8 @@
   :trace-image "画像をトレース"
   :toggle-handle-selection "Toggle handle selection"
   :combine "複合"
-  :break-apart "分割"}
+  :break-apart "分割"
+  :add-motion-path "モーションパスを追加"}
 
  :renderer.element.impl.animation.animate
  {:label "アニメーション"

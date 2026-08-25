@@ -119,7 +119,8 @@
   :trace-image "Vetorizar imagem"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Combinar"
-  :break-apart "Separar"}
+  :break-apart "Separar"
+  :add-motion-path "Adicionar percurso de movimento"}
 
  :renderer.element.impl.animation.animate
  {:label "Animar"
