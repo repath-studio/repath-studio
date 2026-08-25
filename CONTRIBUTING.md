@@ -171,7 +171,8 @@ track of those packages and handle the upgrade as soon as possible.
 
 When we are happy with the `package.json` changes, we need to manually run
 `npm install` to also update our `package-lock.json`, and handle any package
-resolution issues that may arise.
+resolution issues that may arise. The most common problem is upgrading
+`@sentry/react` because `@sentry/capacitor` usually depends on an older version.
 
 Before pushing those changes, we need to test all related functionality to
 ensure that there are no regressions.
