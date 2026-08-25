@@ -16,7 +16,7 @@
                :event [::element.events/cut]
                :shortcuts [{:keyCode (utils.key/codes "X")
                             :ctrlKey true}]
-               :enabled [::element.subs/some-selected?]}])
+               :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :clipboard/copy
@@ -25,7 +25,7 @@
                :event [::element.events/copy]
                :shortcuts [{:keyCode (utils.key/codes "C")
                             :ctrlKey true}]
-               :enabled [::element.subs/some-selected?]}])
+               :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :clipboard/paste
@@ -51,7 +51,7 @@
                :label [::paste-styles "Paste styles"]
                :icon "paste"
                :event [::element.events/paste-styles]
-               :enabled [::element.subs/some-selected?]
+               :enabled [::element.subs/some-non-root-selected?]
                :shortcuts [{:keyCode (utils.key/codes "V")
                             :ctrlKey true
                             :shiftKey true}]}])
@@ -62,7 +62,7 @@
                :icon "copy"
                :event [::element.events/duplicate]
                :shortcuts [{:keyCode (utils.key/codes "D")}]
-               :enabled [::element.subs/some-selected?]}])
+               :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :element/delete
@@ -71,7 +71,7 @@
                :event [::element.events/delete]
                :shortcuts [{:keyCode (utils.key/codes "DELETE")}
                            {:keyCode (utils.key/codes "BACKSPACE")}]
-               :enabled [::element.subs/some-selected?]}])
+               :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :element/select-all
@@ -104,7 +104,7 @@
                :shortcuts [{:keyCode (utils.key/codes "A")
                             :ctrlKey true
                             :shiftKey true}]
-               :enabled [::element.subs/some-selected?]}])
+               :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :object/to-path
@@ -114,7 +114,7 @@
                :shortcuts [{:keyCode (utils.key/codes "P")
                             :ctrlKey true
                             :shiftKey true}]
-               :enabled [::element.subs/some-selected?]}])
+               :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :object/stroke-to-path
@@ -124,7 +124,7 @@
                :shortcuts [{:keyCode (utils.key/codes "P")
                             :ctrlKey true
                             :altKey true}]
-               :enabled [::element.subs/some-selected?]}])
+               :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :object/group
@@ -133,7 +133,7 @@
                :event [::element.events/group]
                :shortcuts [{:keyCode (utils.key/codes "G")
                             :ctrlKey true}]
-               :enabled [::element.subs/some-selected?]}])
+               :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :object/ungroup
@@ -152,7 +152,7 @@
                :event [::element.events/lock]
                :shortcuts [{:keyCode (utils.key/codes "L")
                             :ctrlKey true}]
-               :enabled [::element.subs/some-selected?]}])
+               :enabled [::element.subs/some-selected-unlocked?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :object/unlock
@@ -162,7 +162,7 @@
                :shortcuts [{:keyCode (utils.key/codes "L")
                             :ctrlKey true
                             :shiftKey true}]
-               :enabled [::element.subs/some-selected?]}])
+               :enabled [::element.subs/some-selected-locked?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :object/raise
@@ -170,7 +170,7 @@
                :icon "bring-forward"
                :event [::element.events/raise]
                :shortcuts [{:keyCode (utils.key/codes "PAGE_UP")}]
-               :enabled [::element.subs/some-selected?]}])
+               :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :object/lower
@@ -178,7 +178,7 @@
                :icon "send-backward"
                :event [::element.events/lower]
                :shortcuts [{:keyCode (utils.key/codes "PAGE_DOWN")}]
-               :enabled [::element.subs/some-selected?]}])
+               :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :object/raise-to-top
@@ -186,7 +186,7 @@
                :icon "bring-front"
                :event [::element.events/raise-to-top]
                :shortcuts [{:keyCode (utils.key/codes "HOME")}]
-               :enabled [::element.subs/some-selected?]}])
+               :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :object/lower-to-bottom
@@ -194,7 +194,7 @@
                :icon "send-back"
                :event [::element.events/lower-to-bottom]
                :shortcuts [{:keyCode (utils.key/codes "END")}]
-               :enabled [::element.subs/some-selected?]}])
+               :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :align/left
@@ -430,7 +430,7 @@
               {:id :object/animate
                :icon "animation"
                :label [::animate "Animate"]
-               :enabled [::element.subs/some-selected?]
+               :enabled [::element.subs/some-non-root-selected?]
                :actions [:animate/animate
                          :animate/transform
                          :animate/motion
