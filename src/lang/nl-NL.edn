@@ -119,7 +119,8 @@
   :trace-image "Afbeelding traceren"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Combineren"
-  :break-apart "Opsplitsen"}
+  :break-apart "Opsplitsen"
+  :add-motion-path "Bewegingspad toevoegen"}
 
  :renderer.element.impl.animation.animate
  {:label "Animeren"

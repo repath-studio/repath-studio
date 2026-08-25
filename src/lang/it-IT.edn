@@ -120,7 +120,8 @@
   :trace-image "Traccia immagine"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Combina"
-  :break-apart "Separa"}
+  :break-apart "Separa"
+  :add-motion-path "Aggiungi percorso di movimento"}
 
  :renderer.element.impl.animation.animate
  {:label "Anima"

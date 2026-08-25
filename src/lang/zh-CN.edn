@@ -118,7 +118,8 @@
   :trace-image "描摹图像"
   :toggle-handle-selection "Toggle handle selection"
   :combine "组合"
-  :break-apart "拆分"}
+  :break-apart "拆分"
+  :add-motion-path "添加运动路径"}
 
  :renderer.element.impl.animation.animate
  {:label "动画"

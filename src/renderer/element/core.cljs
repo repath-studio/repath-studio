@@ -307,7 +307,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :animate/add-mpath
-               :label [::add-mpath "Add motion path"]
+               :label [::element.events/add-motion-path]
                :icon "bezier-curve"
                :event [::element.events/add-mpath]
                :enabled [::element.subs/some-selected-tag? :animateMotion]}])

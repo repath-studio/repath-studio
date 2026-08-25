@@ -278,7 +278,7 @@
 
 (rf/reg-event-db
  ::add-mpath
- [(finalize [::add-mpath "Add motion path"])]
+ [(finalize [::add-motion-path "Add motion path"])]
  (fn [db _]
    (let [parent-els (element.handlers/filter-selected-by-tag db :animateMotion)]
      (reduce (fn [db parent]

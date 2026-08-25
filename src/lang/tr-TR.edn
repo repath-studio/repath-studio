@@ -119,7 +119,8 @@
   :trace-image "Resim izini sür"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Kombine"
-  :break-apart "Parçalara Ayır"}
+  :break-apart "Parçalara Ayır"
+  :add-motion-path "Hareket yolu ekle"}
 
  :renderer.element.impl.animation.animate
  {:label "Animasyon"

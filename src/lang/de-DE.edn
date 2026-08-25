@@ -119,7 +119,8 @@
   :trace-image "Bild nachzeichnen"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Kombinieren"
-  :break-apart "Trennen"}
+  :break-apart "Trennen"
+  :add-motion-path "Bewegungspfad hinzufügen"}
 
  :renderer.element.impl.animation.animate
  {:label "Animieren"

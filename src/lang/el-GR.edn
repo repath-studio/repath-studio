@@ -119,7 +119,8 @@
   :trace-image "Ανίχνευση εικόνας"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Συνδυασμός"
-  :break-apart "Διάσπαση"}
+  :break-apart "Διάσπαση"
+  :add-motion-path "Προσθήκη διαδρομής κίνησης"}
 
  :renderer.element.impl.animation.animate
  {:label "Κίνηση"

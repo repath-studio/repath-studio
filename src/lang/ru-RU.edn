@@ -120,7 +120,8 @@
   :trace-image "Трассировать изображение"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Совместить"
-  :break-apart "Разбить"}
+  :break-apart "Разбить"
+  :add-motion-path "Добавить траекторию движения"}
 
  :renderer.element.impl.animation.animate
  {:label "Анимировать"
