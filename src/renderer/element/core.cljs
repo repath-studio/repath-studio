@@ -306,6 +306,13 @@
                :enabled [::element.subs/some-allow-content? :animateMotion]}])
 
 (rf/dispatch [::action.events/register-action
+              {:id :animate/add-mpath
+               :label [::add-mpath "Add motion path"]
+               :icon "bezier-curve"
+               :event [::element.events/add-mpath]
+               :enabled [::element.subs/some-selected-tag? :animateMotion]}])
+
+(rf/dispatch [::action.events/register-action
               {:id :path/simplify
                :label [::path-simplify "Simplify"]
                :icon "bezier-curve"
@@ -426,7 +433,8 @@
                :enabled [::element.subs/some-selected?]
                :actions [:animate/animate
                          :animate/transform
-                         :animate/motion]}])
+                         :animate/motion
+                         :animate/add-mpath]}])
 
 (rf/dispatch [::action.events/register-action-group
               {:id :object/entity

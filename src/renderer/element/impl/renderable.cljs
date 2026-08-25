@@ -17,6 +17,16 @@
         idle? @(rf/subscribe [::tool.subs/idle?])]
     [element.views/render-to-dom el child-els idle?]))
 
+(defmethod element.hierarchy/render-to-string ::element.hierarchy/renderable
+  [el]
+  (let [{:keys [tag attrs title children content]} el
+        child-elements @(rf/subscribe [::element.subs/filter-visible children])
+        attrs (->> (utils.element/style->map attrs)
+                   (remove #(empty? (str (second %))))
+                   (into {}))]
+    (into [tag attrs (when title [:title title]) content]
+          (map element.hierarchy/render-to-string child-elements))))
+
 (defmethod element.hierarchy/bbox ::element.hierarchy/renderable
   [el]
   (:bbox (utils.element/get-computed-styles el)))
