@@ -2,7 +2,7 @@
   (:require
    ["paper" :refer [Path]]
    ["paperjs-offset" :refer [PaperOffset]]
-   ["style-to-object" :default parse]
+   ["style-to-object" :as parse]
    [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [clojure.zip :as zip]
