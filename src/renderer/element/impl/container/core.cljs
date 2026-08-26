@@ -24,4 +24,5 @@
     ::element.hierarchy/custom
     ::element.hierarchy/descriptive
     ::element.hierarchy/shape
-    ::element.hierarchy/gradient})
+    ::element.hierarchy/gradient
+    ::element.hierarchy/graphics})
