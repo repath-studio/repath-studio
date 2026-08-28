@@ -1128,7 +1128,9 @@
   [db els]
   (if (-> db :snap :active)
     (let [options (-> db :snap :options)]
-      (into [] (mapcat #(utils.element/acc-snapping-points % options)) els))
+      (into []
+            (mapcat #(utils.element/acc-snapping-points-memo % options))
+            els))
     []))
 
 (m/=> handles [:function

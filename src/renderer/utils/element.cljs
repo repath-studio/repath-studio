@@ -100,6 +100,8 @@
       (into (mapv #(with-meta % (merge (meta %) {:id (:id el)}))
                   (utils.bounds/->snapping-points (:bbox el) options))))))
 
+(def acc-snapping-points-memo (memoize acc-snapping-points))
+
 (m/=> attributes [:-> map? map?])
 (defn attributes
   "Returns existing attributes merged with defaults."
