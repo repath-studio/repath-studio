@@ -113,6 +113,13 @@
   (url/format #js {:pathname (.join path js/__dirname s)
                    :protocol "file"}))
 
+(defn open-document-from-args
+  [args]
+  (when (> (count args) 1)
+    (some->> (last args)
+             (file/read)
+             (send-to-renderer "document-opened-from-args"))))
+
 (defn init-main-window! []
   (let [win-state (window-state-keeper #js {:defaultWidth 1920
                                             :defaultHeight 1080})]
@@ -142,7 +149,8 @@
              (.manage win-state ^js @main-window)
              ;; Fixes a bug on linux that blocks unmaximize after load.
              (.restore ^js @main-window)
-             (.initialize log)))
+             (.initialize log)
+             (open-document-from-args (.-argv js/process))))
 
     (.on ^js @main-window "ready-to-show" #(on-ready-to-show @main-window))
 
@@ -175,8 +183,17 @@
          "did-finish-load"
          #(.show ^js @loading-window)))
 
+(def lock? (.requestSingleInstanceLock app))
+
 (defn ^:export init! []
-  (sentry-electron-main/init config/sentry)
-  (.on app "window-all-closed" #(when-not (= js/process.platform "darwin")
-                                  (.quit app)))
-  (.on app "ready" init-loading-window!))
+  (if lock?
+    (do (sentry-electron-main/init config/sentry)
+        (.on app "window-all-closed" #(when-not (= js/process.platform "darwin")
+                                        (.quit app)))
+        (.on app "ready" init-loading-window!)
+        (.on app "second-instance" (fn [_event argv _cwd]
+                                     (when (.isMinimized ^js @main-window)
+                                       (.restore ^js @main-window))
+                                     (.focus @main-window)
+                                     (open-document-from-args argv))))
+    (.quit app)))

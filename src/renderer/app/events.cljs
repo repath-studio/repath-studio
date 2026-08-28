@@ -41,7 +41,8 @@
         ["entered-fullscreen" [::window.events/set-fullscreen true]]
         ["leaved-fullscreen" [::window.events/set-fullscreen false]]
         ["minimized" [::window.events/set-minimized true]]
-        ["restored" [::window.events/set-minimized false]]]
+        ["restored" [::window.events/set-minimized false]]
+        ["document-opened-from-args" [::document.events/load-from-args]]]
        (mapv (partial vector ::effects/ipc-on))))
 
 (defn- json->clj

@@ -189,6 +189,11 @@
        :on-error [::app.events/toast-error]}})))
 
 (rf/reg-event-fx
+ ::load-from-args
+ (fn [_ [_ document]]
+   {:dispatch [::check-if-open (string->edn document)]}))
+
+(rf/reg-event-fx
  ::open-recent
  (fn [{:keys [db]} [_ {:keys [id path]}]]
    (cond
