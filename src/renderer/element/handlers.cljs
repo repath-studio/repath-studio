@@ -1126,8 +1126,10 @@
 (m/=> snapping-points [:-> App [:maybe [:sequential Element]] [:vector Vec2]])
 (defn snapping-points
   [db els]
-  (let [options (-> db :snap :options)]
-    (into [] (mapcat #(utils.element/acc-snapping-points % options)) els)))
+  (if (-> db :snap :active)
+    (let [options (-> db :snap :options)]
+      (into [] (mapcat #(utils.element/acc-snapping-points % options)) els))
+    []))
 
 (m/=> handles [:function
                [:-> App [:vector Handle]]

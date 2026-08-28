@@ -19,4 +19,4 @@
    [:active {:default false} boolean?]
    [:transient-active {:default false} boolean?]
    [:threshold {:default 15} number?]
-   [:options {:default #{:centers :midpoints :corners :nodes}} SnapOptions]])
+   [:options {:default #{:centers :midpoints :corners}} SnapOptions]])
