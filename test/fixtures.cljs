@@ -234,6 +234,10 @@
  ::shell.effects/execute
  (fn [_]))
 
+(rf/reg-fx
+ ::effects/ipc-invoke
+ (fn [_]))
+
 (rf/reg-event-db
  ::input.events/keyboard
  (fn [_]))

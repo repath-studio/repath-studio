@@ -12,6 +12,7 @@
 (deftest init
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
+   (rf/dispatch [::document.events/new])
 
    (let [root (rf/subscribe [::element.subs/root])
          root-children (rf/subscribe [::element.subs/root-children])]
@@ -24,6 +25,7 @@
 (deftest select
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
+   (rf/dispatch [::document.events/new])
 
    (let [selected (rf/subscribe [::element.subs/selected])]
      (testing "default state"
@@ -149,6 +151,7 @@
 (deftest visibility
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
+   (rf/dispatch [::document.events/new])
 
    (let [selected (rf/subscribe [::element.subs/selected])]
      (rf/dispatch [::element.events/add {:tag :rect
@@ -170,6 +173,7 @@
 (deftest label
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
+   (rf/dispatch [::document.events/new])
 
    (let [selected (rf/subscribe [::element.subs/selected])]
      (rf/dispatch [::element.events/add {:tag :rect
@@ -191,6 +195,7 @@
 (deftest lock
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
+   (rf/dispatch [::document.events/new])
 
    (let [selected (rf/subscribe [::element.subs/selected])]
      (rf/dispatch [::element.events/add {:tag :rect
@@ -210,6 +215,7 @@
 (deftest attribute
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
+   (rf/dispatch [::document.events/new])
 
    (let [selected (rf/subscribe [::element.subs/selected])]
      (rf/dispatch [::element.events/add {:tag :rect
@@ -233,6 +239,7 @@
 (deftest delete
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
+   (rf/dispatch [::document.events/new])
 
    (let [selected (rf/subscribe [::element.subs/selected])]
      (rf/dispatch [::element.events/add {:tag :rect
@@ -249,6 +256,7 @@
 (deftest scale
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
+   (rf/dispatch [::document.events/new])
 
    (let [selected (rf/subscribe [::element.subs/selected])]
      (rf/dispatch [::element.events/add {:tag :rect
@@ -261,6 +269,7 @@
 (deftest translate
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
+   (rf/dispatch [::document.events/new])
 
    (let [selected (rf/subscribe [::element.subs/selected])]
      (rf/dispatch [::element.events/add {:tag :rect
@@ -275,6 +284,7 @@
 (deftest place
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
+   (rf/dispatch [::document.events/new])
 
    (let [selected (rf/subscribe [::element.subs/selected])]
      (rf/dispatch [::element.events/add {:tag :rect
@@ -289,6 +299,7 @@
 (deftest ->path
   (rf.test/run-test-async
    (rf/dispatch-sync [::app.events/initialize])
+   (rf/dispatch-sync [::document.events/new])
 
    (rf.test/wait-for
     [::app.events/set-loading false]
@@ -312,6 +323,7 @@
 (deftest stroke->path
   (rf.test/run-test-async
    (rf/dispatch-sync [::app.events/initialize])
+   (rf/dispatch-sync [::document.events/new])
 
    (rf.test/wait-for
     [::app.events/set-loading false]
@@ -336,6 +348,7 @@
 (deftest boolean-operation
   (rf.test/run-test-async
    (rf/dispatch-sync [::app.events/initialize])
+   (rf/dispatch-sync [::document.events/new])
 
    (rf.test/wait-for
     [::app.events/set-loading false]
@@ -365,6 +378,7 @@
 (deftest import-svg
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
+   (rf/dispatch [::document.events/new])
 
    (let [selected (rf/subscribe [::element.subs/selected])]
      (rf/dispatch [::element.events/import-svg
@@ -379,6 +393,7 @@
 (deftest animate
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
+   (rf/dispatch [::document.events/new])
 
    (rf/dispatch [::element.events/add {:tag :rect
                                        :attrs {:x "100"
@@ -394,6 +409,7 @@
 (deftest set-parent
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
+   (rf/dispatch [::document.events/new])
 
    (rf/dispatch [::element.events/add {:tag :rect
                                        :attrs {:x "100"
@@ -411,6 +427,7 @@
 (deftest group
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
+   (rf/dispatch [::document.events/new])
 
    (rf/dispatch [::element.events/add {:tag :rect
                                        :attrs {:x "100"
@@ -431,6 +448,7 @@
 (deftest fonts
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
+   (rf/dispatch [::document.events/new])
    (rf/dispatch [::app.events/load-system-fonts])
 
    (rf/dispatch [::element.events/add {:tag :text
@@ -448,6 +466,7 @@
 (deftest combine-and-break-apart
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
+   (rf/dispatch [::document.events/new])
 
    (let [selected (rf/subscribe [::element.subs/selected])]
      (rf/dispatch [::element.events/add {:tag :path

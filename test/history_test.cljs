@@ -14,6 +14,7 @@
 (deftest history
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
+   (rf/dispatch [::document.events/new])
 
    (let [undos? (rf/subscribe [::history.subs/undos?])
          redos? (rf/subscribe [::history.subs/redos?])
