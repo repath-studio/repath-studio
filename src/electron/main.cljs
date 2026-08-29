@@ -47,6 +47,12 @@
     (when (allowed-url? url-parsed)
       (.openExternal shell url-parsed.href))))
 
+(defn open-documents-args
+  [argv]
+  (when (and (> (count argv) 1)
+             (file/existing-file? (last argv)))
+    (file/open (last argv))))
+
 (defn register-ipc-on-events []
   (doseq
    [[e f]
@@ -71,7 +77,8 @@
     [["open-documents" file/open]
      ["save-document" file/save]
      ["save-document-as" file/save-as]
-     ["print" file/show-print-dialog]]]
+     ["print" file/show-print-dialog]
+     ["open-documents-from-args" #(open-documents-args (.-argv js/process))]]]
     (.handle ipcMain e #(f %2))))
 
 (defn register-window-events []
@@ -175,8 +182,19 @@
          "did-finish-load"
          #(.show ^js @loading-window)))
 
+(def lock? (.requestSingleInstanceLock app))
+
 (defn ^:export init! []
-  (sentry-electron-main/init config/sentry)
-  (.on app "window-all-closed" #(when-not (= js/process.platform "darwin")
-                                  (.quit app)))
-  (.on app "ready" init-loading-window!))
+  (if lock?
+    (do (sentry-electron-main/init config/sentry)
+        (.on app "window-all-closed" #(when-not (= js/process.platform "darwin")
+                                        (.quit app)))
+        (.on app "ready" init-loading-window!)
+        (.on app "second-instance" (fn [_event argv _cwd]
+                                     (when (.isMinimized ^js @main-window)
+                                       (.restore @main-window))
+                                     (.focus @main-window)
+                                     (->> (open-documents-args argv)
+                                          (send-to-renderer
+                                           "document-opened-from-args")))))
+    (.quit app)))

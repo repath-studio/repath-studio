@@ -4,7 +4,6 @@
    [day8.re-frame.test :as rf.test]
    [re-frame.core :as rf]
    [renderer.app.events :as-alias app.events]
-   [renderer.document.db :as document.db]
    [renderer.document.events :as-alias document.events]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.subs :as-alias element.subs]))
@@ -17,13 +16,13 @@
          active-document (rf/subscribe [::document.subs/active])
          title-bar (rf/subscribe [::document.subs/title-bar])]
      (testing "defaults"
-       (is @document-entities?)
-       (is (document.db/valid? @active-document))
-       (is (= "• Untitled-1 - Repath Studio" @title-bar)))
+       (is (not @document-entities?))
+       (is (not @active-document))
+       (is (= "Repath Studio" @title-bar)))
 
      (testing "create"
        (rf/dispatch [::document.events/new-from-template [800 600]])
-       (is (= "• Untitled-2 - Repath Studio" @title-bar))
+       (is (= "• Untitled-1 - Repath Studio" @title-bar))
        (is (= "800" (->> @(rf/subscribe [::element.subs/entities])
                          (filter #(= (:tag %) :svg))
                          (first)
@@ -37,6 +36,7 @@
    (let [active-document (rf/subscribe [::document.subs/active])
          active-id (rf/subscribe [::document.subs/active-id])]
      (testing "close"
+       (rf/dispatch [::document.events/new])
        (rf/dispatch [::document.events/close @active-id false])
        (is (not @active-document)))
 
@@ -64,6 +64,7 @@
 (deftest save
   (rf.test/run-test-async
    (rf/dispatch-sync [::app.events/initialize])
+   (rf/dispatch [::document.events/new])
 
    (let [active (rf/subscribe [::document.subs/active])
          saved? (rf/subscribe [::document.subs/active-saved?])]
@@ -121,6 +122,7 @@
 (deftest colors
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
+   (rf/dispatch [::document.events/new])
 
    (let [fill (rf/subscribe [::document.subs/attr :fill])
          stroke (rf/subscribe [::document.subs/attr :stroke])
@@ -146,6 +148,7 @@
 (deftest elements
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])
+   (rf/dispatch [::document.events/new])
 
    (testing "collapse/expand elements"
      (let [collapsed-ids (rf/subscribe [::document.subs/collapsed-ids])
