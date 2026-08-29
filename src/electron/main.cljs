@@ -47,6 +47,12 @@
     (when (allowed-url? url-parsed)
       (.openExternal shell url-parsed.href))))
 
+(defn open-documents-args
+  [argv]
+  (when (and (> (count argv) 1)
+             (file/existing-file? (last argv)))
+    (file/open (last argv))))
+
 (defn register-ipc-on-events []
   (doseq
    [[e f]
@@ -71,7 +77,8 @@
     [["open-documents" file/open]
      ["save-document" file/save]
      ["save-document-as" file/save-as]
-     ["print" file/show-print-dialog]]]
+     ["print" file/show-print-dialog]
+     ["open-documents-from-args" #(open-documents-args (.-argv js/process))]]]
     (.handle ipcMain e #(f %2))))
 
 (defn register-window-events []
@@ -113,13 +120,6 @@
   (url/format #js {:pathname (.join path js/__dirname s)
                    :protocol "file"}))
 
-(defn open-document-from-args
-  [args]
-  (when (> (count args) 1)
-    (some->> (last args)
-             (file/read)
-             (send-to-renderer "document-opened-from-args"))))
-
 (defn init-main-window! []
   (let [win-state (window-state-keeper #js {:defaultWidth 1920
                                             :defaultHeight 1080})]
@@ -149,8 +149,7 @@
              (.manage win-state ^js @main-window)
              ;; Fixes a bug on linux that blocks unmaximize after load.
              (.restore ^js @main-window)
-             (.initialize log)
-             (open-document-from-args (.-argv js/process))))
+             (.initialize log)))
 
     (.on ^js @main-window "ready-to-show" #(on-ready-to-show @main-window))
 
@@ -193,7 +192,9 @@
         (.on app "ready" init-loading-window!)
         (.on app "second-instance" (fn [_event argv _cwd]
                                      (when (.isMinimized ^js @main-window)
-                                       (.restore ^js @main-window))
+                                       (.restore @main-window))
                                      (.focus @main-window)
-                                     (open-document-from-args argv))))
+                                     (->> (open-documents-args argv)
+                                          (send-to-renderer
+                                           "document-opened-from-args")))))
     (.quit app)))

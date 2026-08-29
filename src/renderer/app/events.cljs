@@ -9,10 +9,8 @@
    [renderer.app.effects :as-alias app.effects]
    [renderer.app.events :as-alias app.events]
    [renderer.document.events :as-alias document.events]
-   [renderer.document.handlers :as document.handlers]
    [renderer.effects :as-alias effects]
    [renderer.error.events :as-alias error.events]
-   [renderer.history.handlers :as history.handlers]
    [renderer.i18n.effects :as-alias i18n.effects]
    [renderer.i18n.events :as-alias i18n.events]
    [renderer.input.events :as-alias input.events]
@@ -122,13 +120,10 @@
 
 (rf/reg-event-fx
  ::db-loaded
- [(rf/inject-cofx ::effects/guid)
-  (rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now guid]} _]
-   {:db (if (:active-document db)
-          (snap.handlers/rebuild-tree db)
-          (-> (document.handlers/create db guid)
-              (history.handlers/finalize now [::create-doc "Create document"])))
+ (fn [{:keys [db]} _]
+   {:db (cond-> db
+          (:active-document db)
+          (snap.handlers/rebuild-tree))
     ;; The order of the following events is important.
     ;; Changes require thorough testing on all platforms.
     :fx (into [[:dispatch [::error.events/init-reporting]]
@@ -139,6 +134,7 @@
                [:dispatch [::window.events/update-width]]
                [:dispatch [::i18n.events/set-lang-attrs]]
                [:dispatch [::shell.events/init]]
+               [:dispatch [::document.events/open-from-args]]
                [:dispatch [::set-loading false]]
                [::app.effects/hide-splash-screen]
                ;; We flush to render once so we can get the canvas size.
