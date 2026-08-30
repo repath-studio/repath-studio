@@ -3,6 +3,17 @@
 All notable user facing changes to this project will be documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 0.4.20 (2026-08-30)
+
+**Added**
+
+- Open document from file association or from a command line argument and
+  prevent multiple app instances [#199](https://github.com/repath-studio/repath-studio/pull/199)
+
+**Changed**
+
+- Enhance snapping points node performance
+
 ## 0.4.19 (2026-08-27)
 
 **Added**
