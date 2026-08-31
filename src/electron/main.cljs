@@ -47,7 +47,7 @@
     (when (allowed-url? url-parsed)
       (.openExternal shell url-parsed.href))))
 
-(defn open-documents-args
+(defn open-arg-document
   [argv]
   (when (and (> (count argv) 1)
              (file/existing-file? (last argv)))
@@ -78,7 +78,7 @@
      ["save-document" file/save]
      ["save-document-as" file/save-as]
      ["print" file/show-print-dialog]
-     ["open-documents-from-args" #(open-documents-args (.-argv js/process))]]]
+     ["open-documents-from-args" #(open-arg-documents (.-argv js/process))]]]
     (.handle ipcMain e #(f %2))))
 
 (defn register-window-events []
@@ -194,7 +194,7 @@
                                      (when (.isMinimized ^js @main-window)
                                        (.restore @main-window))
                                      (.focus @main-window)
-                                     (->> (open-documents-args argv)
-                                          (send-to-renderer
-                                           "document-opened-from-args")))))
+                                     (some->> (open-arg-document argv)
+                                              (send-to-renderer
+                                               "document-opened-from-args")))))
     (.quit app)))
