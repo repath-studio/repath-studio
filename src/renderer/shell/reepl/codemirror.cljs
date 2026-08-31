@@ -2,42 +2,18 @@
   (:require
    [clojure.string :as string]))
 
-;; TODO: can we avoid the global state modification here?
-#_(js/CodeMirror.registerHelper
-   "wordChars"
-   "clojure"
-   #"[^\s\(\)\[\]\{\},`']")
-
-(def wordChars
-  "[^\\s\\(\\)\\[\\]\\{\\},`']*")
-
-(defn word-in-line
-  [line lno cno]
-  (let [back (-> line
-                 (.slice 0 cno)
-                 (.match (js/RegExp. (str wordChars "$")))
-                 (first))
-        forward (-> line
-                    (.slice cno)
-                    (.match (js/RegExp. (str "^" wordChars)))
-                    (first))]
-    {:start #js {:line lno
-                 :ch (- cno (count back))}
-     :end #js {:line lno
-               :ch (+ cno (count forward))}}))
-
 (defn should-go-up?
   [_source ^js inst]
   (let [pos (.. inst -state -selection -main -head)
         line (.lineAt (.. inst -state -doc) pos)]
-    (zero? line)))
+    (zero? (.-from line))))
 
 (defn should-go-down?
   [_source ^js inst]
   (let [pos (.. inst -state -selection -main -head)
         line (.lineAt (.. inst -state -doc) pos)
         last-line (.. inst -state -doc -lines)]
-    (= last-line line)))
+    (= (dec last-line) (.-from line))))
 
 (defn in-place?
   [^js inst]
@@ -64,34 +40,34 @@
 (defn cm-current-word
   "Find the current 'word' according to CodeMirror's `wordChars' list"
   [^js cm]
-  (let [pos (.. cm -state -selection -main -head)
-        lno (.-number (.lineAt (.. cm -state -doc) pos))
-        cno (.-ch pos)
-        line (.line (.. cm -state -doc) lno)]
-    ;; findWordAt doesn't work w/ clojure-parinfer mode
-    ;; (.findWordAt cm back)
-    #_(word-in-line line lno cno)))
+  (let [pos (.. cm -state -selection -main -head)]
+    (or (.wordAt (.-state cm) pos)
+        (let [char-before (.sliceDoc (.-state cm) (dec pos) pos)]
+          (when-not (= char-before "/")
+            char-before)))))
 
 (defn repl-hint
   "Get a new completion state."
   [complete-word ^js cm _options]
-  (let [result (cm-current-word cm)
-        text (.sliceDoc (.-state cm)
-                        (:start result)
-                        (:end result))
-        words (when-not (empty? text)
-                (vec (complete-word text)))
-        ;; Remove core duplicates
-        words (vec (remove #(string/includes? (second %) "cljs.core") words))]
-    (when-not (empty? words)
-      {:words words
-       :num (count words)
-       :active (= (get (first words) 2) text)
-       :show-all false
-       :initial-text text
-       :pos 0
-       :from (:start result)
-       :to (:end result)})))
+  (when-let [result (cm-current-word cm)]
+    (let [from (.-from result)
+          to (.-to result)
+          text (.sliceDoc (.-state cm) from to)
+          words (when-not (empty? text)
+                  (vec (complete-word text)))
+          ;; Remove core duplicates
+          words (->> words
+                     (remove #(string/includes? (second %) "cljs.core"))
+                     (vec))]
+      (when-not (empty? words)
+        {:words words
+         :num (count words)
+         :active (= (get (first words) 2) text)
+         :show-all false
+         :initial-text text
+         :pos 0
+         :from from
+         :to to}))))
 
 (defn cycle-pos
   "Cycle through positions. Returns [active new-pos].
@@ -148,17 +124,13 @@
           text (if active
                  (get (get words pos) 2)
                  initial-text)]
-      ;; TODO: don't replaceRange here, instead watch the state atom and react
-      ;; to that.
       (.dispatch cm #js {:changes #js {:from from
                                        :to to
                                        :insert text}})
       (assoc state
              :pos pos
              :active active
-             :to #js {:line (.-line from)
-                      :ch (+ (count text)
-                             (.-ch from))}))))
+             :to (+ from (count text))))))
 
 (defn on-keyup-handler
   [options evt inst]
