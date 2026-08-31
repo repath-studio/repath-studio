@@ -28,11 +28,17 @@
         (.then #(-> (select-keys data [:id])
                     (serialize file-path))))))
 
+(defn existing-file?
+  [path]
+  (and (.existsSync fs path)
+       (.isFile (.lstatSync fs path))))
+
 (defn read
   [file-path]
-  (let [data (.readFileSync fs file-path "utf-8")
-        document (edn/read-string data)]
-    (serialize document file-path)))
+  (when (existing-file? file-path)
+    (let [data (.readFileSync fs file-path "utf-8")
+          document (edn/read-string data)]
+      (serialize document file-path))))
 
 (defn show-save-dialog
   [options]

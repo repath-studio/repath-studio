@@ -10,7 +10,7 @@
   :history "Cronologia"
   :attributes "Attributi"}
 
- :renderer.home.views
+ :renderer.app.home-view
  {:svg-description "Editor di Grafica Vettoriale"
   :start "Inizia"
   :or "o"
@@ -34,10 +34,17 @@
  {:create-doc "Crea documento"}
 
  :renderer.dialog.events
- {:are-you-sure "Sei sicuro di voler continuare?"}
+ {:are-you-sure "Sei sicuro di voler continuare?"
+  :keybindings "Tasti di scelta rapida"}
 
  :renderer.dialog.views
- {:search-command "Cerca un comando"
+ {:other-actions "Altre azioni"
+  :edit-shortcuts "Modifica scorciatoie"
+  :customize-shortcuts-for [:div "Personalizza scorciatoie per %1"]
+  :press-keys "Premi una combinazione di tasti"
+  :add "Aggiungi"
+  :reset-shortcuts "Ripristina impostazioni predefinite"
+  :search-command "Cerca un comando"
   :no-results "Nessun risultato trovato."
   :version "Versione: "
   :browser "Browser: "
@@ -113,7 +120,8 @@
   :trace-image "Traccia immagine"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Combina"
-  :break-apart "Separa"}
+  :break-apart "Separa"
+  :add-motion-path "Aggiungi percorso di movimento"}
 
  :renderer.element.impl.animation.animate
  {:label "Anima"
@@ -131,6 +139,17 @@
                 trasformazione sul suo elemento di destinazione, consentendo
                 così alle animazioni di controllare traslazione,
                 ridimensionamento, rotazione e/o inclinazione"}
+
+ :renderer.element.impl.animation.set
+ {:label "Imposta"
+  :description "L'elemento SVG <set> fornisce un metodo per impostare il valore
+                di un attributo per una durata specificata."}
+
+ :renderer.element.impl.descriptive.mpath
+ {:label "Percorso di movimento"
+  :description "Il sottoelemento SVG <mpath> per l'elemento <animateMotion>
+                fornisce la possibilità di fare riferimento a un elemento <path>
+                esterno come definizione di un percorso di movimento."}
 
  :renderer.element.impl.box
  {:position-handle "maniglia di posizione"
@@ -216,7 +235,7 @@
                 utilizzando perfect-freehand."
   :brush-point "punto pennello"}
 
- :renderer.element.impl.container.canvas
+ :renderer.element.impl.custom.canvas
  {:label "Tela"
   :description "La tela è il contenitore SVG principale che ospita tutti gli
                 elementi."
@@ -327,9 +346,6 @@
   :href "L'attributo href definisce un collegamento a una risorsa come URL di
          riferimento. Il significato esatto di quel collegamento dipende dal
          contesto di ogni elemento che lo utilizza."
-  :attribute-name "L'attributo attributeName indica il nome della proprietà CSS
-                   o attributo dell'elemento di destinazione che sarà
-                   modificato durante un'animazione."
   :begin "L'attributo begin definisce quando un'animazione dovrebbe iniziare."
   :end "L'attributo end definisce un valore finale per l'animazione che può
         vincolare la durata attiva."
@@ -344,8 +360,6 @@
                  animazione avrà luogo."
   :repeat-dur "L'attributo repeatDur specifica la durata totale per
                ripetere un'animazione."
-  :calc-mode "L'attributo calcMode specifica la modalità di interpolazione per
-              l'animazione."
   :values "L'attributo values ha significati diversi, a seconda del
            contesto in cui è utilizzato, o definisce una sequenza di valori
            utilizzati nel corso di un'animazione, o è una lista di numeri per
@@ -357,22 +371,41 @@
                 controllo della curva di Bézier associati alla lista keyTimes,
                 definendo una funzione di Bézier cubica che controlla il ritmo
                 dell'intervallo"
+  :key-points "L'attributo keyPoints indica, nell'intervallo [0,1], quanto è
+               avanzato l'oggetto lungo il percorso per ogni valore associato in
+               keyTimes."
   :from "L'attributo from indica il valore iniziale dell'attributo che
          sarà modificato durante l'animazione."
   :to "L'attributo to indica il valore finale dell'attributo che sarà
        modificato durante l'animazione."
   :by "L'attributo by specifica un valore di offset relativo per un attributo
        che sarà modificato durante un'animazione."
-  :additive "L'attributo additive controlla se un'animazione è
-             additiva o meno."
-  :accumulate "L'attributo accumulate controlla se un'animazione è
-               cumulativa o meno."
   :view-box "L'attributo viewBox definisce la posizione e la dimensione, nello
              spazio utente, di un viewport SVG."
   :preserve-aspect-ratio "L'attributo preserveAspectRatio indica come un
                           elemento con un viewBox che fornisce un dato rapporto
                           d'aspetto deve adattarsi in un viewport con un
                           rapporto d'aspetto diverso."}
+
+ :renderer.attribute.impl.accumulate
+ {:description "L'attributo accumulate controlla se un'animazione è cumulativa o
+                meno."}
+
+ :renderer.attribute.impl.additive
+ {:description "L'attributo additive controlla se un'animazione è additiva o
+                meno."}
+
+ :renderer.attribute.impl.calc-mode
+ {:description "L'attributo calcMode specifica la modalità di interpolazione per
+                l'animazione."}
+
+ :renderer.attribute.impl.attribute-name
+ {:description "L'attributo attributeName indica il nome della proprietà CSS o
+                attributo dell'elemento di destinazione che sarà modificato
+                durante un'animazione."
+  :search-attribute "Cerca un attributo"
+  :no-attributes "Nessun attributo trovato."
+  :select-attribute "Seleziona attributo"}
 
  :renderer.tool.impl.element.path
  {:click-to-start "Clicca per aggiungere il primo punto."
@@ -444,6 +477,8 @@
 
  :renderer.tool.impl.misc.guide
  {:label "Guida"
+  :guides "Guide"
+  :lock-guides "Blocca guide"
   :idle "Trascina il righello sulla tela per creare una guida."
   :create "Rilascia per finalizzare la guida."}
 
@@ -687,7 +722,7 @@
   :exit-fullscreen "Esci da schermo intero"
   :install "Installa"}
 
- :renderer.toolbar.status
+ :renderer.app.status-view
  {:select-zoom "Seleziona livello di zoom"
   :zoom "Zoom"
   :fill-color "Preleva colore riempimento"
@@ -714,11 +749,18 @@
  {:speed "Velocità"
   :no-filter "Nessun filtro"
   :filter "Filtro"
+  :play "Riproduci"
+  :pause "Pausa"}
+
+ :renderer.timeline.core
+ {:replay "Riproduci di nuovo"
   :grid-snap "Aggancio griglia"
   :guide-snap "Aggancio guide"
-  :play "Riproduci"
-  :replay "Riproduci di nuovo"
-  :pause "Pausa"}
+  :fit-duration "Adatta durata"
+  :timeline "Timeline"}
+
+ :renderer.timeline.events
+ {:update-animation "Aggiorna animazione"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Preleva angolo"}
@@ -751,18 +793,18 @@
  {:close-panel "Chiudi pannello"}
 
  :renderer.app.core
- {:grid "Griglia"
+ {:help-view "Vista aiuto"
   :help-bar "Barra aiuto"
-  :debug-info "Info debug"
-  :guides "Guide"
-  :rulers "Righelli"}
+  :debug-info "Info debug"}
 
  :renderer.dialog.core
- {:command-panel "Pannello comandi"
+ {:dialog "Finestra di dialogo"
+  :command-panel "Pannello comandi"
   :about "Informazioni"}
 
  :renderer.document.core
- {:new "Nuovo"
+ {:document "Documento"
+  :new "Nuovo"
   :open "Apri..."
   :recent-clear "Cancella recenti"
   :print "Stampa"
@@ -779,7 +821,11 @@
   :gif "GIF"
   :reopen-last-closed "Riapri ultimo chiuso"
   :vector-formats "Formati vettoriali"
-  :rasterised-formats "Formati rasterizzati"}
+  :rasterised-formats "Formati rasterizzati"
+  :document-view "Vista documento"
+  :grid "Griglia"
+  :guides "Guide"
+  :rulers "Righelli"}
 
  :renderer.element.core
  {:cut "Taglia"
@@ -834,7 +880,8 @@
   :entity "Entità"
   :image "Immagine"
   :path "Tracciato"
-  :select "Seleziona"}
+  :select "Seleziona"
+  :convert "Converti"}
 
  :renderer.error.core
  {:report-errors "Segnala errori automaticamente"}
@@ -847,7 +894,10 @@
   :zoom-set-200 "Imposta al 200%"
   :zoom-focus-selected "Focalizza selezionato"
   :zoom-fit-selected "Adatta selezionato"
-  :zoom-fill-selected "Riempi selezionato"}
+  :zoom-fill-selected "Riempi selezionato"
+  :zoom-in-out "Ingrandisci/Riduci"
+  :zoom-set "Imposta zoom"
+  :focus "Focalizza"}
 
  :renderer.history.core
  {:undo "Annulla"
@@ -856,7 +906,8 @@
   :clear-history "Cancella cronologia"}
 
  :renderer.menubar.core
- {:website "Sito web"
+ {:menubar "Barra dei menu"
+  :website "Sito web"
   :source-code "Codice sorgente"
   :license "Licenza"
   :changelog "Changelog"
@@ -867,7 +918,7 @@
   :menubar-object "Menu Oggetto"
   :menubar-view "Menu Visualizza"
   :menubar-help "Menu Aiuto"
-  :help "Aiuto"}
+  :help-links "Link di aiuto"}
 
  :renderer.panel.core
  {:panels "Pannelli"
@@ -888,7 +939,8 @@
   :corners "Angoli"
   :nodes "Nodi"
   :grid "Griglia"
-  :guides "Guide"}
+  :guides "Guide"
+  :snap-options "Opzioni di aggancio"}
 
  :renderer.theme.core
  {:theme-mode "Modalità tema"
@@ -898,7 +950,11 @@
 
  :renderer.window.core
  {:exit "Esci"
-  :toggle-fullscreen "Attiva/disattiva schermo intero"}
+  :toggle-fullscreen "Attiva/disattiva schermo intero"
+  :toggle-maximized "Attiva/disattiva massimizzato"
+  :toggle-devtools "Attiva/disattiva strumenti di sviluppo"
+  :minimize "Minimizza"
+  :window "Finestra"}
 
  :renderer.tool.core
  {:cancel "Annulla"}
@@ -913,6 +969,14 @@
  {:centroid "centroide"}
 
  :renderer.shell.core
- {:focus-shell "Porta il focus alla shell"
+ {:shell "Shell"
+  :focus-shell "Porta il focus alla shell"
   :clear-output "Cancella output"
-  :verbose "Dettagliato"}}
+  :verbose "Dettagliato"}
+
+ :renderer.shell.impl.core
+ {:shell-languages "Linguaggi shell"}
+
+ :renderer.views
+ {:remove "Rimuovi"
+  :resize-thumb "Ridimensiona pannello"}}

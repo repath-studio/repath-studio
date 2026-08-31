@@ -112,5 +112,6 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :tools/containers
+               :icon "svg"
                :label [::containers "Containers"]
                :actions [:tool/svg]}])

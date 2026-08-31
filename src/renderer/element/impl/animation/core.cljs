@@ -6,12 +6,11 @@
    [renderer.element.impl.animation.animate]
    [renderer.element.impl.animation.animate-motion]
    [renderer.element.impl.animation.animate-transform]
+   [renderer.element.impl.animation.set]
    [renderer.element.subs :as-alias element.subs]
    [renderer.hierarchy :as hierarchy]))
 
-(hierarchy/derive!
- ::element.hierarchy/animation
- ::element.hierarchy/descriptive)
+(hierarchy/derive! ::element.hierarchy/animation ::element.hierarchy/element)
 
 (defmethod element.hierarchy/render ::element.hierarchy/animation
   [el]
@@ -21,3 +20,7 @@
      (for [el child-elements]
        ^{:key id}
        [element.hierarchy/render el])]))
+
+(defmethod element.hierarchy/permitted-content ::element.hierarchy/animation
+  [_el]
+  #{::element.hierarchy/descriptive})

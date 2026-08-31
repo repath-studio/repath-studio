@@ -1,3 +1,4 @@
+@import './fonts.css';
 
 [data-theme='dark'] {
   --primary: #2d2d2d;

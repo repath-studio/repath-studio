@@ -2,7 +2,7 @@
   (:require
    [malli.core :as m]
    [renderer.app.db :refer [App]]
-   [renderer.db :refer [JS_Object Vec2]]
+   [renderer.db :refer [JS_Object Vec2 TimeStamp]]
    [renderer.document.db :refer [DocumentId]]
    [renderer.document.handlers :as document.handlers]
    [renderer.element.handlers :as element.handlers]
@@ -96,7 +96,7 @@
                             (assoc :index 0
                                    :children []))}))))))
 
-(m/=> preview [:-> App HistoryIndex App])
+(m/=> preview [:-> App TimeStamp HistoryIndex App])
 (defn preview
   [db time-origin pos]
   (let [preview-state (-> db history (state pos))
@@ -184,7 +184,7 @@
   [db]
   (update-in db [:documents (:active-document db)] dissoc :preview-label))
 
-(m/=> create-state [:-> App HistoryIndex Translation HistoryState])
+(m/=> create-state [:-> App HistoryIndex TimeStamp Translation HistoryState])
 (defn create-state
   [db index timestamp explanation]
   (let [new-state {:explanation explanation
@@ -246,7 +246,7 @@
           (recur (update-in db children-path utils.vec/move index new-index)
                  parent))))))
 
-(m/=> finalize [:-> App Translation App])
+(m/=> finalize [:-> App TimeStamp Translation App])
 (defn finalize
   "Pushes changes to history."
   [db timestamp & explanation]

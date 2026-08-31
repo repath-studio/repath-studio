@@ -14,6 +14,7 @@
 
    (rf/dispatch [::action.events/register-action-group
                  {:id :a11y/filter
+                  :icon "a11y"
                   :label [::accessibility-filter "Accessibility filter"]
                   :actions []}])
 

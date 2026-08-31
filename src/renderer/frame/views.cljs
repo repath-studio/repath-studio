@@ -53,15 +53,16 @@
                    :background "var(--secondary)"
                    :font-family "var(--sans)"
                    :font-size "var(--font-size)"
-                   :margin 0}}]])
+                   :margin 0
+                   :font-synthesis "none"}}]])
 
 (def resize-observer
   (js/ResizeObserver.
    (fn [entries]
-     (let [dom-rect (-> entries
-                        (.find (fn [] true))
+     (let [dom-rect (-> (first entries)
                         (.. -target getBoundingClientRect toJSON)
                         (js->clj :keywordize-keys true))]
+       ;; We dispatch synchronously to use the dom-rect in the next render.
        (rf/dispatch-sync [::frame.events/resize dom-rect])))))
 
 (def context-menu-action-groups

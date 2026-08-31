@@ -5,7 +5,7 @@
    [renderer.panel.events :as panel.events]
    [renderer.panel.subs :as panel.subs]
    [renderer.utils.key :as utils.key]
-   [renderer.window.subs :as window.subs]))
+   [renderer.window.subs :as-alias window.subs]))
 
 (rf/dispatch [::action.events/register-action
               {:id :panel/toggle-tree

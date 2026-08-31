@@ -22,3 +22,10 @@
                :shortcuts [{:keyCode (utils.key/codes "F1")}
                            {:keyCode (utils.key/codes "K")
                             :ctrlKey true}]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :dialog
+               :icon "window-maximize"
+               :label [::dialog "Dialog"]
+               :actions [:dialog/about
+                         :dialog/command-panel]}])

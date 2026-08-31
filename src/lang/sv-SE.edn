@@ -10,7 +10,7 @@
   :history "Historia"
   :attributes "Attribut"}
 
- :renderer.home.views
+ :renderer.app.home-view
  {:svg-description "Vektorgrafik-editor"
   :start "Start"
   :or "eller"
@@ -34,10 +34,17 @@
  {:create-doc "Skapa dokument"}
 
  :renderer.dialog.events
- {:are-you-sure "Är du säker på att du vill fortsätta?"}
+ {:are-you-sure "Är du säker på att du vill fortsätta?"
+  :keybindings "Tangentbordsgenvägar"}
 
  :renderer.dialog.views
- {:search-command "Sök efter ett kommando"
+ {:other-actions "Andra åtgärder"
+  :edit-shortcuts "Redigera genvägar"
+  :customize-shortcuts-for [:div "Anpassa genvägar för %1"]
+  :press-keys "Tryck på en tangentkombination"
+  :add "Lägg till"
+  :reset-shortcuts "Återställ till standard"
+  :search-command "Sök efter ett kommando"
   :no-results "Inga resultat hittades."
   :version "Version: "
   :browser "Webbläsare: "
@@ -112,7 +119,8 @@
   :trace-image "Spåra bild"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Kombinera"
-  :break-apart "Dela upp"}
+  :break-apart "Dela upp"
+  :add-motion-path "Lägg till rörelsebana"}
 
  :renderer.element.impl.animation.animate
  {:label "Animera"
@@ -130,6 +138,17 @@
                 transformationsattribut på sitt målelement, vilket gör det
                 möjligt för animationer att styra translation, skalning,
                 rotation och/eller skevning"}
+
+ :renderer.element.impl.animation.set
+ {:label "Sätt"
+  :description "SVG-elementet <set> tillhandahåller ett sätt att sätta värdet på
+                ett attribut under en angiven tid."}
+
+ :renderer.element.impl.descriptive.mpath
+ {:label "Rörelsebana"
+  :description "SVG-underelementet <mpath> för elementet <animateMotion> ger
+                möjlighet att referera ett externt <path>-element som
+                definition av en rörelsebana."}
 
  :renderer.element.impl.box
  {:position-handle "positionshandtag"
@@ -214,7 +233,7 @@
   :description "Rita tryckkänsliga frihandslinjer med perfect-freehand."
   :brush-point "penselpunkt"}
 
- :renderer.element.impl.container.canvas
+ :renderer.element.impl.custom.canvas
  {:label "Duk"
   :description "Duken är huvud-SVG behållaren som innehåller alla element."
   :fill-description "Fyllnadsattributet definierar bakgrundsfärgen för
@@ -319,9 +338,6 @@
   :href "Attributet href definierar en länk till en resurs som en referens-URL.
          Den exakta betydelsen av den länken beror på kontexten för varje
          element som använder den."
-  :attribute-name "Attributet attributeName indikerar namnet på CSS
-                   egenskapen eller attributet för målelementet som kommer att
-                   ändras under en animation."
   :begin "Attributet begin definierar när en animation ska börja."
   :end "Attributet end definierar ett slutvärde för animationen som kan
         begränsa den aktiva varaktigheten."
@@ -336,8 +352,6 @@
                  kommer att äga rum."
   :repeat-dur "Attributet repeatDur specificerar den totala varaktigheten för
                att upprepa en animation."
-  :calc-mode "Attributet calcMode specificerar interpolationsläget för
-              animationen."
   :values "Attributet values har olika betydelser, beroende på kontexten där
            det används, antingen definierar det en sekvens av värden som
            används under loppet av en animation, eller så är det en lista med
@@ -348,22 +362,41 @@
   :key-splines "Attributet keySplines definierar en uppsättning Bézier-kurva
                 kontrollpunkter associerade med keyTimes listan, som definierar
                 en kubisk Bézier funktion som kontrollerar intervalltajming"
+  :key-points "Attributet keyPoints anger, i intervallet [0,1], hur långt
+               objektet är framme längs sökvägen för varje associerat värde i
+               keyTimes."
   :from "Attributet from indikerar det initiala värdet för attributet som
          kommer att ändras under animationen."
   :to "Attributet to indikerar slutvärdet för attributet som kommer att ändras
        under animationen."
   :by "Attributet by specificerar ett relativt offset-värde för ett attribut
        som kommer att ändras under en animation."
-  :additive "Attributet additive kontrollerar om en animation är additiv eller
-             inte."
-  :accumulate "Attributet accumulate kontrollerar om en animation är
-               kumulativ eller inte."
   :view-box "Attributet viewBox definierar positionen och dimensionen, i
              användarutrymme, för en SVG viewport."
   :preserve-aspect-ratio "Attributet preserveAspectRatio indikerar hur ett
                           element med en viewBox som tillhandahåller ett givet
                           bildförhållande måste passa in i en viewport med ett
                           annat bildförhållande."}
+
+ :renderer.attribute.impl.accumulate
+ {:description "Attributet accumulate kontrollerar om en animation är kumulativ
+                eller inte."}
+
+ :renderer.attribute.impl.additive
+ {:description "Attributet additive kontrollerar om en animation är additiv
+                eller inte."}
+
+ :renderer.attribute.impl.calc-mode
+ {:description "Attributet calcMode specificerar interpolationsläget för
+                animationen."}
+
+ :renderer.attribute.impl.attribute-name
+ {:description "Attributet attributeName indikerar namnet på CSS egenskapen
+                eller attributet för målelementet som kommer att ändras under en
+                animation."
+  :search-attribute "Sök efter ett attribut"
+  :no-attributes "Inga attribut hittades."
+  :select-attribute "Välj attribut"}
 
  :renderer.tool.impl.element.path
  {:click-to-start "Klicka för att lägga till den första punkten."
@@ -435,6 +468,8 @@
 
  :renderer.tool.impl.misc.guide
  {:label "Guide"
+  :guides "Stödlinjer"
+  :lock-guides "Lås stödlinjer"
   :idle "Dra linjalen till duken för att skapa en guide."
   :create "Släpp för att slutföra guiden."}
 
@@ -673,7 +708,7 @@
   :exit-fullscreen "Lämna helskärm"
   :install "Installera"}
 
- :renderer.toolbar.status
+ :renderer.app.status-view
  {:select-zoom "Välj zoomnivå"
   :zoom "Zoom"
   :fill-color "Välj fyllnadsfärg"
@@ -700,11 +735,18 @@
  {:speed "Hastighet"
   :no-filter "Inget filter"
   :filter "Filter"
+  :play "Spela"
+  :pause "Pausa"}
+
+ :renderer.timeline.core
+ {:replay "Spela om"
   :grid-snap "Rutnätsfäst"
   :guide-snap "Hjälplinjefäst"
-  :play "Spela"
-  :replay "Spela om"
-  :pause "Pausa"}
+  :fit-duration "Justera varaktighet"
+  :timeline "Tidslinje"}
+
+ :renderer.timeline.events
+ {:update-animation "Uppdatera animation"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Välj vinkel"}
@@ -736,18 +778,18 @@
  {:close-panel "Stäng panel"}
 
  :renderer.app.core
- {:grid "Rutnät"
+ {:help-view "Hjälpvy"
   :help-bar "Hjälpfält"
-  :debug-info "Felsökningsinformation"
-  :guides "Stödlinjer"
-  :rulers "Linjaler"}
+  :debug-info "Felsökningsinformation"}
 
  :renderer.dialog.core
- {:command-panel "Kommandopanel"
+ {:dialog "Dialog"
+  :command-panel "Kommandopanel"
   :about "Om"}
 
  :renderer.document.core
- {:new "Ny"
+ {:document "Dokument"
+  :new "Ny"
   :open "Öppna..."
   :recent-clear "Rensa senaste"
   :print "Skriv ut"
@@ -764,7 +806,11 @@
   :gif "GIF"
   :reopen-last-closed "Öppna senast stängda igen"
   :vector-formats "Vektorformat"
-  :rasterised-formats "Rasterformat"}
+  :rasterised-formats "Rasterformat"
+  :document-view "Dokumentvy"
+  :grid "Rutnät"
+  :guides "Stödlinjer"
+  :rulers "Linjaler"}
 
  :renderer.element.core
  {:cut "Klipp ut"
@@ -819,7 +865,8 @@
   :entity "Entitet"
   :image "Bild"
   :path "Bana"
-  :select "Markera"}
+  :select "Markera"
+  :convert "Konvertera"}
 
  :renderer.error.core
  {:report-errors "Rapportera fel automatiskt"}
@@ -832,7 +879,10 @@
   :zoom-set-200 "Sätt till 200%"
   :zoom-focus-selected "Fokusera markerat"
   :zoom-fit-selected "Anpassa markerat"
-  :zoom-fill-selected "Fyll markerat"}
+  :zoom-fill-selected "Fyll markerat"
+  :zoom-in-out "Zooma in/ut"
+  :zoom-set "Ange zoom"
+  :focus "Fokusera"}
 
  :renderer.history.core
  {:undo "Ångra"
@@ -841,7 +891,8 @@
   :clear-history "Rensa historik"}
 
  :renderer.menubar.core
- {:website "Webbplats"
+ {:menubar "Menyrad"
+  :website "Webbplats"
   :source-code "Källkod"
   :license "Licens"
   :changelog "Ändringslogg"
@@ -852,7 +903,7 @@
   :menubar-object "Objektmeny"
   :menubar-view "Visningsmeny"
   :menubar-help "Hjälpmeny"
-  :help "Hjälp"}
+  :help-links "Hjälplänkar"}
 
  :renderer.panel.core
  {:panels "Paneler"
@@ -873,7 +924,8 @@
   :corners "Hörn"
   :nodes "Noder"
   :grid "Rutnät"
-  :guides "Stödlinjer"}
+  :guides "Stödlinjer"
+  :snap-options "Fästalternativ"}
 
  :renderer.theme.core
  {:theme-mode "Tema-läge"
@@ -883,7 +935,11 @@
 
  :renderer.window.core
  {:exit "Avsluta"
-  :toggle-fullscreen "Växla helskärm"}
+  :toggle-fullscreen "Växla helskärm"
+  :toggle-maximized "Växla maximerad"
+  :toggle-devtools "Växla utvecklarverktyg"
+  :minimize "Minimera"
+  :window "Fönster"}
 
  :renderer.tool.core
  {:cancel "Avbryt"}
@@ -898,6 +954,14 @@
  {:centroid "centroid"}
 
  :renderer.shell.core
- {:focus-shell "Fokusera terminal"
+ {:shell "Terminal"
+  :focus-shell "Fokusera terminal"
   :clear-output "Rensa utdata"
-  :verbose "Utförlig"}}
+  :verbose "Utförlig"}
+
+ :renderer.shell.impl.core
+ {:shell-languages "Shell-språk"}
+
+ :renderer.views
+ {:remove "Ta bort"
+  :resize-thumb "Ändra storlek på panel"}}

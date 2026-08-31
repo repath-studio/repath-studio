@@ -1,8 +1,6 @@
 {
   "recommendations": [
     "betterthantomorrow.calva",
-    "bradlc.vscode-tailwindcss",
-    "tekumara.typos-vscode",
-    "davidanson.vscode-markdownlint"
+    "bradlc.vscode-tailwindcss"
   ]
 }

@@ -31,7 +31,13 @@ and the [coeffects](https://day8.github.io/re-frame/Coeffects/)
 that we need on [`fixtures`](fixtures.cljs) to make them deterministic. Please
 also read the [testing guide of re-frame](https://github.com/day8/re-frame/blob/master/docs/Testing.md).
 In general, we dispatch events, and then test the result of subscriptions.
-We don't test view functions for now.
+
+We don't test view functions, but we are working on a component [portfolio](https://github.com/cjohansen/portfolio),
+served on dev mode at [`http://localhost:8083/`](http://localhost:8083/), to
+check our components states and behavior. There is a light/dark theme toggle at
+the top, so we can test both modes. We can have both theme modes in the same
+view by using the split view button, and selecting a different mode for each
+panel.
 
 When a new module is introduced, we need to add the corresponding tests, unless
 the module does not register any subs, and the events only cause side effects

@@ -9,6 +9,7 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :tools/transform
+               :icon "pointer"
                :label [::transform "Transform"]
                :actions [:tool/transform
                          :tool/edit

@@ -13,7 +13,6 @@
    [renderer.document.effects :as-alias document.effects]
    [renderer.document.handlers :as document.handlers]
    [renderer.effects :as-alias effects]
-   [renderer.element.db :as element.db]
    [renderer.element.effects :as-alias element.effects]
    [renderer.element.handlers :as element.handlers]
    [renderer.events :as-alias events]
@@ -161,14 +160,16 @@
  [(rf/inject-cofx ::effects/guid)
   (finalize [::create-doc "Create document"])]
  (fn [{:keys [db guid]} [_]]
-   {:db (document.handlers/create db guid)}))
+   {:db (document.handlers/create db guid)
+    :dispatch ^:flush-dom [::center]}))
 
 (rf/reg-event-fx
  ::new-from-template
  [(rf/inject-cofx ::effects/guid)
   (finalize [::create-doc-from-template "Create document from template"])]
  (fn [{:keys [db guid]} [_ size]]
-   {:db (document.handlers/create db guid size)}))
+   {:db (document.handlers/create db guid size)
+    :dispatch ^:flush-dom [::center]}))
 
 (defn string->edn
   [s]
@@ -188,6 +189,20 @@
       {:options (assoc file-picker-options :multiple true)
        :on-success [::file-read nil]
        :on-error [::app.events/toast-error]}})))
+
+(rf/reg-event-fx
+ ::open-from-args
+ (fn [_ _]
+   {::effects/ipc-invoke
+    {:channel "open-documents-from-args"
+     :on-success [::load-multiple]
+     :on-error [::app.events/toast-error]
+     :formatter #(mapv string->edn %)}}))
+
+(rf/reg-event-fx
+ ::load-from-args
+ (fn [_ [_ [document]]]
+   {:dispatch [::check-if-open (string->edn document)]}))
 
 (rf/reg-event-fx
  ::open-recent
@@ -307,7 +322,6 @@
        {:db (cond-> db
               :always
               (-> (document.handlers/create-tab (dissoc document :file-handle))
-                  (document.handlers/center)
                   (document.handlers/add-recent document)
                   (history.handlers/finalize now [::load-doc "Load document"]))
 
@@ -322,7 +336,8 @@
                    db [::document-migrated-description
                        "The document was created with an older version of the
                         app and was migrated to the latest version."])}]])
-             [:dispatch [::persist-file-handle file-handle id]]]}
+             [:dispatch [::persist-file-handle file-handle id]]
+             [:dispatch ^:flush-dom [::center]]]}
        (let [explanation (-> document document.db/explain m.error/humanize str)]
          {::app.effects/toast
           [:error "Invalid document" {:description explanation}]})))))
@@ -476,7 +491,7 @@
 (rf/reg-event-fx
  ::save-rasterized-image
  (fn [_ [_ data mime-type]]
-   (let [extensions (get element.db/image-mime-types mime-type)]
+   (let [extensions (get config/image-mime-types mime-type)]
      {::effects/file-save
       {:data data
        :on-error [::app.events/toast-error]

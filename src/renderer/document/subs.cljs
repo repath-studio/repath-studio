@@ -3,7 +3,6 @@
    [config :as config]
    [re-frame.core :as rf]
    [renderer.app.subs :as-alias app.subs]
-   [renderer.document.db :as document.db]
    [renderer.document.events :as-alias document.events]
    [renderer.document.handlers :as document.handlers]
    [renderer.timeline.subs :as-alias timeline.subs]
@@ -81,13 +80,13 @@
  ::zoom-in-available?
  :<- [::zoom]
  (fn [zoom [_]]
-   (and zoom (< zoom document.db/max-zoom))))
+   (and zoom (< zoom config/max-zoom))))
 
 (rf/reg-sub
  ::zoom-out-available?
  :<- [::zoom]
  (fn [zoom [_]]
-   (and zoom (> zoom document.db/min-zoom))))
+   (and zoom (> zoom config/min-zoom))))
 
 (rf/reg-sub
  ::attrs

@@ -1,10 +1,11 @@
 (ns renderer.frame.handlers
   (:require
    [clojure.core.matrix :as matrix]
+   [config :as config]
    [malli.core :as m]
    [renderer.app.db :refer [App]]
    [renderer.db :refer [BBox Vec2]]
-   [renderer.document.db :as document.db :refer [DocumentId ZoomFactor]]
+   [renderer.document.db :refer [DocumentId ZoomFactor]]
    [renderer.element.handlers :as element.handlers]
    [renderer.frame.db :refer [DomRect Viewbox FocusType]]
    [renderer.utils.bounds :as utils.bounds]
@@ -58,8 +59,7 @@
   (let [active-document (:active-document db)
         {:keys [zoom pan]} (get-in db [:documents active-document])
         updated-zoom (-> (* zoom factor)
-                         (utils.math/clamp document.db/min-zoom
-                                           document.db/max-zoom))
+                         (utils.math/clamp config/min-zoom config/max-zoom))
         updated-factor (/ updated-zoom zoom)
         updated-pan (matrix/sub (matrix/div pan updated-factor)
                                 (matrix/sub (matrix/div pos updated-factor)

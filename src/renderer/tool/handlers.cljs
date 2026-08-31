@@ -102,20 +102,24 @@
           ;; REVIEW: Can we improve performance?
           (snap.handlers/update-viewport-tree)))))
 
+(m/=> set-cached [:-> App Tool [:* any?] App])
 (defn set-cached
-  [db tool]
-  (-> db
-      (assoc :cached-tool (:tool db)
-             :cached-state (:state db))
-      (activate tool)))
+  [db tool & {:as props}]
+  (cond-> db
+    (not= tool (:tool db))
+    (-> (assoc :cached-tool (:tool db)
+               :cached-state (:state db))
+        (activate tool props))))
 
+(m/=> reset-cached [:-> App App])
 (defn reset-cached
   [db]
   (let [{:keys [cached-tool cached-state]} db]
-    (-> db
-        (activate cached-tool)
-        (set-state cached-state)
-        (dissoc :cached-tool :cached-state))))
+    (cond-> db
+      (and cached-tool cached-state)
+      (-> (activate cached-tool)
+          (set-state cached-state)
+          (dissoc :cached-tool :cached-state)))))
 
 (m/=> cancel [:-> App App])
 (defn cancel

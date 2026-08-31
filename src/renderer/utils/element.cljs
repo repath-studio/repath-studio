@@ -2,7 +2,7 @@
   (:require
    ["paper" :refer [Path]]
    ["paperjs-offset" :refer [PaperOffset]]
-   ["style-to-object" :default parse]
+   ["style-to-object" :as parse]
    [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [clojure.zip :as zip]
@@ -14,6 +14,7 @@
     :as element.db
     :refer [Element ElementAttrs ElementTag PersistedElement]]
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.hierarchy :as hierarchy]
    [renderer.snap.db :refer [SnapOptions]]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.bounds :as utils.bounds]
@@ -98,6 +99,8 @@
       (:bbox el)
       (into (mapv #(with-meta % (merge (meta %) {:id (:id el)}))
                   (utils.bounds/->snapping-points (:bbox el) options))))))
+
+(def acc-snapping-points-memo (memoize acc-snapping-points))
 
 (m/=> attributes [:-> map? map?])
 (defn attributes
@@ -317,3 +320,11 @@
                    (str)
                    (string/upper-case)
                    (string/includes? "M"))))
+
+(m/=> permitted-content? [:-> Element ElementTag boolean?])
+(defn permitted-content?
+  [parent tag]
+  (let [permitted-content (element.hierarchy/permitted-content parent)]
+    (->> permitted-content
+         (some (partial isa? @hierarchy/hierarchy tag))
+         (boolean))))

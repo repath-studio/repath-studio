@@ -10,7 +10,7 @@
   :history "السجل"
   :attributes "الخصائص"}
 
- :renderer.home.views
+ :renderer.app.home-view
  {:svg-description "محرر الرسوميات المتجهة"
   :start "ابدأ"
   :or "أو"
@@ -34,10 +34,17 @@
  {:create-doc "إنشاء مستند"}
 
  :renderer.dialog.events
- {:are-you-sure "هل أنت متأكد أنك تريد المتابعة؟"}
+ {:are-you-sure "هل أنت متأكد أنك تريد المتابعة؟"
+  :keybindings "اختصارات لوحة المفاتيح"}
 
  :renderer.dialog.views
- {:search-command "البحث عن أمر"
+ {:other-actions "إجراءات أخرى"
+  :edit-shortcuts "تعديل الاختصارات"
+  :customize-shortcuts-for [:div "تخصيص الاختصارات لـ %1"]
+  :press-keys "اضغط على تركيبة مفاتيح"
+  :add "إضافة"
+  :reset-shortcuts "إعادة الضبط إلى الافتراضي"
+  :search-command "البحث عن أمر"
   :no-results "لا توجد نتائج."
   :version "الإصدار: "
   :browser "المتصفح: "
@@ -112,7 +119,8 @@
   :trace-image "تتبع الصورة"
   :toggle-handle-selection "Toggle handle selection"
   :combine "دمج"
-  :break-apart "فصل"}
+  :break-apart "فصل"
+  :add-motion-path "إضافة مسار الحركة"}
 
  :renderer.element.impl.animation.animate
  {:label "تحريك"
@@ -128,6 +136,16 @@
   :description "يقوم عنصر <animateTransform> بتحريك سمة التحويل على العنصر
                 المستهدف، مما يسمح بالرسوم المتحركة للتحكم في الترجمة
                 والتحجيم والدوران و/أو الانحراف"}
+
+ :renderer.element.impl.animation.set
+ {:label "تعيين"
+  :description "يوفر عنصر <set> في SVG طريقة لتعيين قيمة الخاصية لمدة محددة."}
+
+ :renderer.element.impl.descriptive.mpath
+ {:label "مسار الحركة"
+  :description "العنصر الفرعي SVG <mpath> الخاص بعنصر <animateMotion>
+                يتيح إمكانية الإشارة إلى عنصر <path> خارجي
+                كتعريف لمسار الحركة."}
 
  :renderer.element.impl.box
  {:position-handle "مقبض الموضع"
@@ -210,7 +228,7 @@
   :description "ارسم خطوطاً حرة حساسة للضغط باستخدام perfect-freehand."
   :brush-point "نقطة الفرشاة"}
 
- :renderer.element.impl.container.canvas
+ :renderer.element.impl.custom.canvas
  {:label "لوحة الرسم"
   :description "لوحة الرسم هي حاوية SVG الرئيسية التي تستضيف جميع
                 العناصر."
@@ -304,9 +322,6 @@
           تعمل بشكل مطابق لخاصية style في HTML."
   :href "خاصية href تحدد رابطاً إلى مورد كمرجع URL. المعنى الدقيق
          لهذا الرابط يعتمد على سياق كل عنصر يستخدمه."
-  :attribute-name "خاصية attributeName تشير إلى اسم خاصية CSS أو
-                   خاصية العنصر المستهدف التي ستتغير أثناء الرسوم
-                   المتحركة."
   :begin "خاصية begin تحدد متى يجب أن تبدأ الرسوم المتحركة."
   :end "خاصية end تحدد قيمة نهائية للرسوم المتحركة يمكنها تقييد المدة
         النشطة."
@@ -319,7 +334,6 @@
                  فيها الرسوم المتحركة."
   :repeat-dur "خاصية repeatDur تحدد المدة الإجمالية لتكرار الرسوم
                المتحركة."
-  :calc-mode "خاصية calcMode تحدد وضع الاستيفاء للرسوم المتحركة."
   :values "خاصية values لها معانٍ مختلفة، اعتماداً على السياق
            المستخدم فيه، إما أنها تحدد تسلسل القيم المستخدمة خلال
            الرسوم المتحركة، أو هي قائمة من الأرقام لمصفوفة الألوان،
@@ -330,16 +344,14 @@
   :key-splines "خاصية keySplines تحدد مجموعة من نقاط التحكم في منحنى
                 بيزيه المرتبطة بقائمة keyTimes، وتحدد دالة بيزيه
                 المكعبة التي تتحكم في وتيرة الفترة"
+  :key-points "تحدد الخاصية keyPoints، في النطاق [0,1]،
+               مدى تقدم العنصر على طول المسار لكل قيمة مرتبطة في keyTimes."
   :from "خاصية from تشير إلى القيمة الأولية للخاصية التي ستتم
          تعديلها أثناء الرسوم المتحركة."
   :to "خاصية to تشير إلى القيمة النهائية للخاصية التي ستتم تعديلها
        أثناء الرسوم المتحركة."
   :by "خاصية by تحدد قيمة إزاحة نسبية لخاصية ستتم تعديلها أثناء
        الرسوم المتحركة."
-  :additive "خاصية additive تتحكم في ما إذا كانت الرسوم المتحركة
-             إضافية أم لا."
-  :accumulate "خاصية accumulate تتحكم في ما إذا كانت الرسوم المتحركة
-               تراكمية أم لا."
   :view-box "خاصية viewBox تحدد الموضع والبعد، في مساحة المستخدم،
              لمنفذ عرض SVG."
   :preserve-aspect-ratio "خاصية preserveAspectRatio تشير إلى كيفية
@@ -398,8 +410,29 @@
 
  :renderer.tool.impl.misc.guide
  {:label "دليل"
+  :guides "أدلة"
+  :lock-guides "قفل الأدلة"
   :idle "اسحب المسطرة إلى اللوحة لإنشاء دليل."
   :create "أسقط لإتمام الدليل."}
+
+ :renderer.attribute.impl.accumulate
+ {:description "خاصية accumulate تتحكم في ما إذا كانت الرسوم المتحركة تراكمية
+                أم لا."}
+
+ :renderer.attribute.impl.additive
+ {:description "خاصية additive تتحكم في ما إذا كانت الرسوم المتحركة إضافية أم
+                لا."}
+
+ :renderer.attribute.impl.calc-mode
+ {:description "خاصية calcMode تحدد وضع الاستيفاء للرسوم المتحركة."}
+
+ :renderer.attribute.impl.attribute-name
+ {:description "خاصية attributeName تشير إلى اسم خاصية CSS أو
+                خاصية العنصر المستهدف التي ستتغير أثناء الرسوم
+                المتحركة."
+  :search-attribute "البحث عن خاصية"
+  :no-attributes "لم يتم العثور على خصائص."
+  :select-attribute "اختيار خاصية"}
 
  :renderer.tool.impl.element.path
  {:click-to-start "انقر لإضافة النقطة الأولى."
@@ -645,7 +678,7 @@
   :exit-fullscreen "خروج من الشاشة الكاملة"
   :install "تثبيت"}
 
- :renderer.toolbar.status
+ :renderer.app.status-view
  {:select-zoom "اختيار مستوى التكبير"
   :zoom "تكبير"
   :fill-color "اختيار لون الملء"
@@ -672,11 +705,18 @@
  {:speed "السرعة"
   :no-filter "لا يوجد مرشح"
   :filter "مرشح"
+  :play "تشغيل"
+  :pause "إيقاف مؤقت"}
+
+ :renderer.timeline.core
+ {:replay "إعادة تشغيل"
   :grid-snap "التقاط الشبكة"
   :guide-snap "التقاط الدليل"
-  :play "تشغيل"
-  :replay "إعادة تشغيل"
-  :pause "إيقاف مؤقت"}
+  :fit-duration "ملاءمة المدة"
+  :timeline "الجدول الزمني"}
+
+ :renderer.timeline.events
+ {:update-animation "تحديث الحركة"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "اختيار زاوية"}
@@ -708,18 +748,18 @@
  {:close-panel "إغلاق اللوحة"}
 
  :renderer.app.core
- {:grid "الشبكة"
+ {:help-view "عرض المساعدة"
   :help-bar "شريط المساعدة"
-  :debug-info "معلومات التصحيح"
-  :guides "الأدلة"
-  :rulers "المساطر"}
+  :debug-info "معلومات التصحيح"}
 
  :renderer.dialog.core
- {:command-panel "لوحة الأوامر"
+ {:dialog "مربع حوار"
+  :command-panel "لوحة الأوامر"
   :about "حول"}
 
  :renderer.document.core
- {:new "جديد"
+ {:document "مستند"
+  :new "جديد"
   :open "فتح..."
   :recent-clear "مسح الحديثة"
   :print "طباعة"
@@ -736,7 +776,11 @@
   :gif "GIF"
   :reopen-last-closed "إعادة فتح آخر مغلق"
   :vector-formats "تنسيقات متجهية"
-  :rasterised-formats "تنسيقات نقطية"}
+  :rasterised-formats "تنسيقات نقطية"
+  :document-view "عرض المستند"
+  :grid "الشبكة"
+  :guides "الأدلة"
+  :rulers "المساطر"}
 
  :renderer.element.core
  {:cut "قص"
@@ -791,7 +835,8 @@
   :entity "كائن"
   :image "صورة"
   :path "مسار"
-  :select "تحديد"}
+  :select "تحديد"
+  :convert "تحويل"}
 
  :renderer.error.core
  {:report-errors "الإبلاغ عن الأخطاء تلقائياً"}
@@ -804,7 +849,10 @@
   :zoom-set-200 "تعيين إلى 200%"
   :zoom-focus-selected "تركيز على المحدد"
   :zoom-fit-selected "ملائمة المحدد"
-  :zoom-fill-selected "ملء المحدد"}
+  :zoom-fill-selected "ملء المحدد"
+  :zoom-in-out "تكبير/تصغير"
+  :zoom-set "ضبط التكبير"
+  :focus "تركيز"}
 
  :renderer.history.core
  {:undo "تراجع"
@@ -813,7 +861,8 @@
   :clear-history "مسح التاريخ"}
 
  :renderer.menubar.core
- {:website "الموقع الإلكتروني"
+ {:menubar "شريط القوائم"
+  :website "الموقع الإلكتروني"
   :source-code "الكود المصدري"
   :license "الرخصة"
   :changelog "سجل التغييرات"
@@ -824,7 +873,7 @@
   :menubar-object "قائمة الكائن"
   :menubar-view "قائمة العرض"
   :menubar-help "قائمة المساعدة"
-  :help "مساعدة"}
+  :help-links "روابط المساعدة"}
 
  :renderer.panel.core
  {:panels "لوحات"
@@ -845,7 +894,8 @@
   :corners "الزوايا"
   :nodes "العقد"
   :grid "الشبكة"
-  :guides "الأدلة"}
+  :guides "الأدلة"
+  :snap-options "خيارات الالتقاط"}
 
  :renderer.theme.core
  {:theme-mode "وضع السمة"
@@ -855,7 +905,11 @@
 
  :renderer.window.core
  {:exit "خروج"
-  :toggle-fullscreen "تبديل ملء الشاشة"}
+  :toggle-fullscreen "تبديل ملء الشاشة"
+  :toggle-maximized "تبديل التكبير"
+  :toggle-devtools "تبديل أدوات المطور"
+  :minimize "تصغير"
+  :window "نافذة"}
 
  :renderer.tool.core
  {:cancel "إلغاء"}
@@ -870,6 +924,14 @@
  {:centroid "مركز ثقل"}
 
  :renderer.shell.core
- {:focus-shell "تركيز الطرفية"
+ {:shell "الطرفية"
+  :focus-shell "تركيز الطرفية"
   :clear-output "مسح المخرجات"
-  :verbose "مطوّل"}}
+  :verbose "مطوّل"}
+
+ :renderer.shell.impl.core
+ {:shell-languages "لغات الطرفية"}
+
+ :renderer.views
+ {:remove "إزالة"
+  :resize-thumb "تغيير حجم لوح التحكم"}}

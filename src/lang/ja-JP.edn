@@ -10,7 +10,7 @@
   :history "履歴"
   :attributes "属性"}
 
- :renderer.home.views
+ :renderer.app.home-view
  {:svg-description "ベクターグラフィックエディター"
   :start "開始"
   :or "または"
@@ -34,10 +34,17 @@
  {:create-doc "ドキュメントを作成"}
 
  :renderer.dialog.events
- {:are-you-sure "続行してもよろしいですか？"}
+ {:are-you-sure "続行してもよろしいですか？"
+  :keybindings "キーバインド"}
 
  :renderer.dialog.views
- {:search-command "コマンドを検索"
+ {:other-actions "その他のアクション"
+  :edit-shortcuts "ショートカットを編集"
+  :customize-shortcuts-for [:div "%1 のショートカットをカスタマイズ"]
+  :press-keys "キーの組み合わせを押してください"
+  :add "追加"
+  :reset-shortcuts "デフォルトにリセット"
+  :search-command "コマンドを検索"
   :no-results "結果が見つかりません。"
   :version "バージョン: "
   :browser "ブラウザ: "
@@ -112,7 +119,8 @@
   :trace-image "画像をトレース"
   :toggle-handle-selection "Toggle handle selection"
   :combine "複合"
-  :break-apart "分割"}
+  :break-apart "分割"
+  :add-motion-path "モーションパスを追加"}
 
  :renderer.element.impl.animation.animate
  {:label "アニメーション"
@@ -129,6 +137,15 @@
   :description "<animateTransform> 要素は、ターゲット要素のトランスフォーム
                 属性をアニメーション化し、平行移動、拡大縮小、回転、および/
                 または傾斜を制御するアニメーションを可能にします"}
+
+ :renderer.element.impl.animation.set
+ {:label "設定"
+  :description "SVGの<set>要素は、指定した期間、属性の値を設定する方法を提供します。"}
+
+ :renderer.element.impl.descriptive.mpath
+ {:label "モーションパス"
+  :description "<animateMotion> 要素用の SVG サブ要素 <mpath> は、外部の <path>
+                要素をモーションパスの定義として参照する機能を提供します。"}
 
  :renderer.element.impl.box
  {:position-handle "位置ハンドル"
@@ -207,7 +224,7 @@
   :description "perfect-freehandを使用して、筆圧感応のフリーハンドラインを描画します。"
   :brush-point "ブラシポイント"}
 
- :renderer.element.impl.container.canvas
+ :renderer.element.impl.custom.canvas
  {:label "キャンバス"
   :description "キャンバスは、すべての要素をホストするメインのSVGコンテナです。"
   :fill-description "塗りつぶし属性は、メインキャンバスの背景色を定義します。
@@ -297,8 +314,6 @@
           できます。HTMLのstyle属性と同じように機能します。"
   :href "href属性は、参照URLとしてリソースへのリンクを定義します。そのリンク
          の正確な意味は、それを使用する各要素のコンテキストに依存します。"
-  :attribute-name "attributeName属性は、アニメーション中に変更されるターゲット
-                   要素のCSSプロパティまたは属性の名前を示します。"
   :begin "begin属性は、アニメーションが開始するタイミングを定義します。"
   :end "end属性は、アクティブな継続時間を制約できるアニメーションの終了値を
         定義します。"
@@ -309,7 +324,6 @@
   :repeat-count "repeatCount属性は、アニメーションが実行される回数を示します。"
   :repeat-dur "repeatDur属性は、アニメーションを繰り返すための総継続時間を
                指定します。"
-  :calc-mode "calcMode属性は、アニメーションの補間モードを指定します。"
   :values "values属性は、使用されるコンテキストに応じて異なる意味を持ちます。
            アニメーションの過程で使用される値のシーケンスを定義するか、実行
            される色変更のタイプに応じて異なって解釈される色行列の数値の
@@ -319,18 +333,34 @@
   :key-splines "keySplines属性は、keyTimesリストに関連付けられたベジェ曲線
                 制御点のセットを定義し、区間ペーシングを制御する3次ベジェ関数を
                 定義します。"
+  :key-points "keyPoints属性は、[0,1]の範囲で、keyTimesの各関連値に対してオブジェクトがパ
+               ス上をどの程度進んでいるかを表します。"
   :from "from属性は、アニメーション中に変更される属性の初期値を示します。"
   :to "to属性は、アニメーション中に変更される属性の最終値を示します。"
   :by "by属性は、アニメーション中に変更される属性の相対オフセット値を
        指定します。"
-  :additive "additive属性は、アニメーションが加算的かどうかを制御します。"
-  :accumulate "accumulate属性は、アニメーションが累積的かどうかを制御します。"
   :view-box "viewBox属性は、ユーザー空間内でのSVGビューポートの位置と寸法を
              定義します。"
   :preserve-aspect-ratio "preserveAspectRatio属性は、指定されたアスペクト比を
                           提供するviewBoxを持つ要素が、異なるアスペクト比の
                           ビューポートにどのようにフィットする必要があるかを
                           示します。"}
+
+ :renderer.attribute.impl.accumulate
+ {:description "accumulate属性は、アニメーションが累積的かどうかを制御します。"}
+
+ :renderer.attribute.impl.additive
+ {:description "additive属性は、アニメーションが加算的かどうかを制御します。"}
+
+ :renderer.attribute.impl.calc-mode
+ {:description "calcMode属性は、アニメーションの補間モードを指定します。"}
+
+ :renderer.attribute.impl.attribute-name
+ {:description "attributeName属性は、アニメーション中に変更されるターゲット
+                要素のCSSプロパティまたは属性の名前を示します。"
+  :search-attribute "属性を検索"
+  :no-attributes "属性が見つかりません。"
+  :select-attribute "属性を選択"}
 
  :renderer.tool.impl.element.core
  {:click-and-drag "クリックしてドラッグして要素を作成します。"
@@ -383,6 +413,8 @@
 
  :renderer.tool.impl.misc.guide
  {:label "ガイド"
+  :guides "ガイド"
+  :lock-guides "ガイドをロック"
   :idle "定規をキャンバスにドラッグしてガイドを作成します。"
   :create "ガイドを確定するにはドロップしてください。"}
 
@@ -631,7 +663,7 @@
   :exit-fullscreen "フルスクリーンを終了"
   :install "インストール"}
 
- :renderer.toolbar.status
+ :renderer.app.status-view
  {:select-zoom "ズームレベルを選択"
   :zoom "ズーム"
   :fill-color "塗り色を選択"
@@ -658,11 +690,18 @@
  {:speed "速度"
   :no-filter "フィルタなし"
   :filter "フィルタ"
+  :play "再生"
+  :pause "一時停止"}
+
+ :renderer.timeline.core
+ {:replay "リプレイ"
   :grid-snap "グリッドスナップ"
   :guide-snap "ガイドスナップ"
-  :play "再生"
-  :replay "リプレイ"
-  :pause "一時停止"}
+  :fit-duration "期間を合わせる"
+  :timeline "タイムライン"}
+
+ :renderer.timeline.events
+ {:update-animation "アニメーションの更新"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "角度を選択"}
@@ -693,18 +732,18 @@
  {:close-panel "パネルを閉じる"}
 
  :renderer.app.core
- {:grid "グリッド"
+ {:help-view "ヘルプビュー"
   :help-bar "ヘルプバー"
-  :debug-info "デバッグ情報"
-  :guides "ガイド"
-  :rulers "ルーラー"}
+  :debug-info "デバッグ情報"}
 
  :renderer.dialog.core
- {:command-panel "コマンドパネル"
+ {:dialog "ダイアログ"
+  :command-panel "コマンドパネル"
   :about "このアプリについて"}
 
  :renderer.document.core
- {:new "新規"
+ {:document "ドキュメント"
+  :new "新規"
   :open "開く..."
   :print "印刷"
   :save "保存"
@@ -721,7 +760,11 @@
   :gif "GIF"
   :reopen-last-closed "最後に閉じたものを再度開く"
   :vector-formats "ベクター形式"
-  :rasterised-formats "ラスター形式"}
+  :rasterised-formats "ラスター形式"
+  :document-view "ドキュメントビュー"
+  :grid "グリッド"
+  :guides "ガイド"
+  :rulers "ルーラー"}
 
  :renderer.element.core
  {:cut "切り取り"
@@ -776,7 +819,8 @@
   :entity "エンティティ"
   :image "画像"
   :path "パス"
-  :select "選択"}
+  :select "選択"
+  :convert "変換"}
 
  :renderer.error.core
  {:report-errors "エラーを自動的に報告"}
@@ -789,7 +833,10 @@
   :zoom-set-200 "200%に設定"
   :zoom-focus-selected "選択項目にフォーカス"
   :zoom-fit-selected "選択項目にフィット"
-  :zoom-fill-selected "選択項目を画面に合わせる"}
+  :zoom-fill-selected "選択項目を画面に合わせる"
+  :zoom-in-out "ズームイン/アウト"
+  :zoom-set "ズームを設定"
+  :focus "フォーカス"}
 
  :renderer.history.core
  {:undo "元に戻す"
@@ -798,7 +845,8 @@
   :clear-history "履歴をクリア"}
 
  :renderer.menubar.core
- {:website "ウェブサイト"
+ {:menubar "メニューバー"
+  :website "ウェブサイト"
   :source-code "ソースコード"
   :license "ライセンス"
   :changelog "変更履歴"
@@ -809,7 +857,7 @@
   :menubar-object "オブジェクトメニュー"
   :menubar-view "ビューメニュー"
   :menubar-help "ヘルプメニュー"
-  :help "ヘルプ"}
+  :help-links "ヘルプリンク"}
 
  :renderer.panel.core
  {:panels "パネル"
@@ -830,7 +878,8 @@
   :corners "角"
   :nodes "ノード"
   :grid "グリッド"
-  :guides "ガイド"}
+  :guides "ガイド"
+  :snap-options "スナップオプション"}
 
  :renderer.theme.core
  {:theme-mode "テーマモード"
@@ -840,7 +889,11 @@
 
  :renderer.window.core
  {:exit "終了"
-  :toggle-fullscreen "フルスクリーン切り替え"}
+  :toggle-fullscreen "全画面切り替え"
+  :toggle-maximized "最大化切り替え"
+  :toggle-devtools "開発者ツール切り替え"
+  :minimize "最小化"
+  :window "ウィンドウ"}
 
  :renderer.tool.core
  {:cancel "キャンセル"}
@@ -855,6 +908,14 @@
  {:centroid "重心"}
 
  :renderer.shell.core
- {:focus-shell "シェルにフォーカス"
+ {:shell "シェル"
+  :focus-shell "シェルにフォーカス"
   :clear-output "出力をクリア"
-  :verbose "詳細"}}
+  :verbose "詳細"}
+
+ :renderer.shell.impl.core
+ {:shell-languages "シェル言語"}
+
+ :renderer.views
+ {:remove "削除"
+  :resize-thumb "パネルのサイズ変更"}}

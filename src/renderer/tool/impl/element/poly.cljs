@@ -48,7 +48,7 @@
                                     (mapv utils.length/unit->px)))
 
     :always
-    (mapv utils.length/->fixed)))
+    (mapv utils.attribute/->fixed)))
 
 (defmethod tool.hierarchy/on-pointer-up [::tool.hierarchy/poly :create]
   [db e]

@@ -52,6 +52,13 @@
  :-> (partial filter :selected))
 
 (rf/reg-sub
+ ::non-root-selected
+ :<- [::selected]
+ :<- [::root]
+ (fn [[selected root] _]
+   (filter #(not= (:id %) (:id root)) selected)))
+
+(rf/reg-sub
  ::hovered
  :<- [::document.subs/elements]
  :<- [::document.subs/hovered-ids]
@@ -79,9 +86,31 @@
  :-> (comp boolean seq))
 
 (rf/reg-sub
- ::every-selected-locked?
+ ::some-non-root-selected?
+ :<- [::non-root-selected]
+ :-> (comp boolean seq))
+
+(rf/reg-sub
+ ::some-allow-content?
  :<- [::selected]
+ (fn [selected-elements [_ tag]]
+   (->> selected-elements
+        (some #(utils.element/permitted-content? % tag))
+        (boolean))))
+(rf/reg-sub
+ ::some-selected-locked?
+ :<- [::non-root-selected]
+ :-> (comp boolean (partial some :locked)))
+
+(rf/reg-sub
+ ::every-selected-locked?
+ :<- [::non-root-selected]
  :-> (partial every? :locked))
+
+(rf/reg-sub
+ ::some-selected-unlocked?
+ :<- [::every-selected-locked?]
+ :-> not)
 
 (rf/reg-sub
  ::multiple-selected?
@@ -95,7 +124,7 @@
 
 (rf/reg-sub
  ::bbox
- :<- [::selected]
+ :<- [::non-root-selected]
  :-> utils.element/united-bbox)
 
 (rf/reg-sub
@@ -105,7 +134,7 @@
 
 (rf/reg-sub
  ::area
- :<- [::selected]
+ :<- [::non-root-selected]
  :-> utils.element/area)
 
 (rf/reg-sub

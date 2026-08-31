@@ -14,6 +14,7 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
+   [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.key :as utils.key]
    [renderer.utils.length :as utils.length]
    [renderer.utils.math :as utils.math]
@@ -55,10 +56,6 @@
 (defmethod tool.hierarchy/on-activate ::measure
   [db]
   (tool.handlers/set-cursor db "crosshair"))
-
-(defmethod tool.hierarchy/on-deactivate ::measure
-  [db]
-  (app.handlers/add-fx db [::set-measure-attrs nil]))
 
 (defmethod tool.hierarchy/on-drag-start [::measure :idle]
   [db _e]
@@ -120,13 +117,13 @@
        [utils.svg/cross [x2 y2] handle-size]
 
        [utils.svg/label
-        (str (utils.length/->fixed straight-angle 2 false) "°")
+        (str (utils.attribute/->fixed straight-angle 2 false) "°")
         {:x (+ x1 (/ 40 zoom))
          :y y1
          :text-anchor "start"}]
 
        [utils.svg/label
-        (-> hypotenuse js/parseFloat (utils.length/->fixed 2 false))
+        (-> hypotenuse js/parseFloat (utils.attribute/->fixed 2 false))
         {:x (/ (+ x1 x2) 2)
          :y (/ (+ y1 y2) 2)}]])))
 

@@ -10,6 +10,7 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
    [renderer.events :as-alias events]
+   [renderer.i18n.subs :as-alias i18n.subs]
    [renderer.i18n.views :as i18n.views]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
@@ -140,12 +141,18 @@
 
 (defn select-item
   [{:keys [icon label value]}]
-  [:> Select/Item
-   {:value value
-    :class "menu-item"}
-   (when icon
-     [:div.absolute.left-2 [views/icon icon]])
-   [:> Select/ItemText (i18n.views/t label)]])
+  (let [label (i18n.views/t label)]
+    [:> Select/Item
+     {:value value
+      :class "menu-item"}
+     (when icon
+       [:div.absolute.left-2 [views/icon icon]])
+     [:> Select/ItemText
+      {:as-child true}
+      [:div.flex-1.flex.gap-3.justify-between
+       [:span label]
+       (when (not= value (string/lower-case label))
+         [:span.text-foreground-muted value])]]]))
 
 (defn select-input
   [k v {:keys [disabled items default-value]
@@ -179,6 +186,11 @@
          {:class "select-scroll-button"}
          [views/icon "chevron-down"]]]]])])
 
+(defn purify
+  [s]
+  (-> (.parseFromString (js/DOMParser.) s "text/html")
+      (.. -body -textContent)))
+
 (defn feature
   [property {:keys [id label]}]
   (when-let [v (get property id)]
@@ -186,7 +198,10 @@
      [:h3.font-bold (i18n.views/t label)]
      [:p (cond->> v
            (vector? v)
-           (string/join " | "))]]))
+           (string/join " | ")
+
+           (not= id :syntax)
+           (purify))]]))
 
 (def features
   [{:id :appliesto
@@ -204,7 +219,8 @@
 
 (defn attr-card-content
   [tag k]
-  (let [property (utils.attribute/property-data-memo k)
+  (let [lang @(rf/subscribe [::i18n.subs/lang])
+        property (utils.attribute/property-data-memo k lang)
         description (attribute.hierarchy/description tag k)]
     [:div.p-5
      [:h2.mb-4.text-lg.font-mono.text-foreground-hovered k]

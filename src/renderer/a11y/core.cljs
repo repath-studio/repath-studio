@@ -7,18 +7,19 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :a11y/filter
+               :icon "a11y"
                :label [::accessibility-filter "Accessibility filter"]
                :actions []}])
 
 (rf/dispatch [::a11y.events/register-filter
-              {:id :blur
+              {:id :a11y-filter/blur
                :tag :feGaussianBlur
                :label [::blur "blur"]
                :attrs {:in "SourceGraphic"
                        :stdDeviation "1"}}])
 
 (rf/dispatch [::a11y.events/register-filter
-              {:id :blur-x2
+              {:id :a11y-filter/blur-x2
                :tag :feGaussianBlur
                :label [::heavy-blur "blur-x2"]
                :attrs {:in "SourceGraphic"
@@ -27,7 +28,7 @@
 ;; https://github.com/hail2u/color-blindness-emulation
 
 (rf/dispatch [::a11y.events/register-filter
-              {:id :protanopia
+              {:id :a11y-filter/protanopia
                :tag :feColorMatrix
                :label [::protanopia "Protanopia"]
                :attrs {:in "SourceGraphic"
@@ -38,7 +39,7 @@
                                 0, 0, 0, 1, 0"}}])
 
 (rf/dispatch [::a11y.events/register-filter
-              {:id :protanomaly
+              {:id :a11y-filter/protanomaly
                :tag :feColorMatrix
                :label [::protanomaly "Protanomaly"]
                :attrs {:in "SourceGraphic"
@@ -49,7 +50,7 @@
                                 0, 0, 0, 1, 0"}}])
 
 (rf/dispatch [::a11y.events/register-filter
-              {:id :deuteranopia
+              {:id :a11y-filter/deuteranopia
                :tag :feColorMatrix
                :label [::deuteranopia "Deuteranopia"]
                :attrs {:in "SourceGraphic"
@@ -60,7 +61,7 @@
                                 0, 0, 0, 1, 0"}}])
 
 (rf/dispatch [::a11y.events/register-filter
-              {:id :deuteranomaly
+              {:id :a11y-filter/deuteranomaly
                :tag :feColorMatrix
                :label [::deuteranomaly "Deuteranomaly"]
                :attrs {:in "SourceGraphic"
@@ -71,7 +72,7 @@
                                 0, 0, 0, 1, 0"}}])
 
 (rf/dispatch [::a11y.events/register-filter
-              {:id :tritanopia
+              {:id :a11y-filter/tritanopia
                :tag :feColorMatrix
                :label [::tritanopia "Tritanopia"]
                :attrs {:in "SourceGraphic"
@@ -82,7 +83,7 @@
                                 0, 0, 0, 1, 0"}}])
 
 (rf/dispatch [::a11y.events/register-filter
-              {:id :tritanomaly
+              {:id :a11y-filter/tritanomaly
                :tag :feColorMatrix
                :label [::tritanomaly "Tritanomaly"]
                :attrs {:in "SourceGraphic"
@@ -93,7 +94,7 @@
                                 0, 0, 0, 1, 0"}}])
 
 (rf/dispatch [::a11y.events/register-filter
-              {:id :achromatopsia
+              {:id :a11y-filter/achromatopsia
                :tag :feColorMatrix
                :label [::achromatopsia "Achromatopsia"]
                :attrs {:in "SourceGraphic"
@@ -104,7 +105,7 @@
                                 0, 0, 0, 1, 0"}}])
 
 (rf/dispatch [::a11y.events/register-filter
-              {:id :achromatomaly
+              {:id :a11y-filter/achromatomaly
                :tag :feColorMatrix
                :label [::achromatomaly "Achromatomaly"]
                :attrs {:in "SourceGraphic"

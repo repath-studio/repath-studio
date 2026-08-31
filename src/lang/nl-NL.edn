@@ -10,7 +10,7 @@
   :history "Geschiedenis"
   :attributes "Attributen"}
 
- :renderer.home.views
+ :renderer.app.home-view
  {:svg-description "Vector Graphics Editor"
   :start "Start"
   :or "of"
@@ -34,10 +34,17 @@
  {:create-doc "Document aanmaken"}
 
  :renderer.dialog.events
- {:are-you-sure "Weet u zeker dat u wilt doorgaan?"}
+ {:are-you-sure "Weet u zeker dat u wilt doorgaan?"
+  :keybindings "Sneltoetsen"}
 
  :renderer.dialog.views
- {:search-command "Zoek naar een commando"
+ {:other-actions "Andere acties"
+  :edit-shortcuts "Sneltoetsen bewerken"
+  :customize-shortcuts-for [:div "Sneltoetsen aanpassen voor %1"]
+  :press-keys "Druk op een toetscombinatie"
+  :add "Toevoegen"
+  :reset-shortcuts "Standaardinstellingen herstellen"
+  :search-command "Zoek naar een commando"
   :no-results "Geen resultaten gevonden."
   :version "Versie: "
   :browser "Browser: "
@@ -112,7 +119,8 @@
   :trace-image "Afbeelding traceren"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Combineren"
-  :break-apart "Opsplitsen"}
+  :break-apart "Opsplitsen"
+  :add-motion-path "Bewegingspad toevoegen"}
 
  :renderer.element.impl.animation.animate
  {:label "Animeren"
@@ -131,6 +139,17 @@
                 transformatie-attribuut op het doelelement, waardoor animaties
                 translatie, schaling, rotatie en/of scheeftrekken kunnen
                 besturen"}
+
+ :renderer.element.impl.animation.set
+ {:label "Instellen"
+  :description "Het SVG-element <set> biedt een manier om de waarde van een
+                attribuut voor een bepaalde duur in te stellen."}
+
+ :renderer.element.impl.descriptive.mpath
+ {:label "Bewegingspad"
+  :description "Het SVG-subelement <mpath> voor het element <animateMotion>
+                stelt u in staat om naar een extern <path>-element te verwijzen
+                als definitie van een bewegingspad."}
 
  :renderer.element.impl.box
  {:position-handle "positiegreep"
@@ -216,7 +235,7 @@
   :description "Teken drukkevoelige vrijhandlijnen met perfect-freehand."
   :brush-point "penseel punt"}
 
- :renderer.element.impl.container.canvas
+ :renderer.element.impl.custom.canvas
  {:label "Canvas"
   :description "Het canvas is de hoofd-SVG container die alle elementen bevat."
   :fill-description "Het vulattribuut definieert de achtergrondkleur van het
@@ -328,9 +347,6 @@
   :href "Het href attribuut definieert een link naar een bron als een
          referentie URL. De exacte betekenis van die link hangt af van de
          context van elk element dat het gebruikt."
-  :attribute-name "Het attributeName attribuut geeft de naam van de CSS
-                   eigenschap of attribuut van het doelelement aan dat
-                   gewijzigd gaat worden tijdens een animatie."
   :begin "Het begin attribuut definieert wanneer een animatie moet beginnen."
   :end "Het end attribuut definieert een eindwaarde voor de animatie die de
         actieve duur kan beperken."
@@ -345,8 +361,6 @@
                  animatie zal plaatsvinden."
   :repeat-dur "Het repeatDur attribuut specificeert de totale duur voor het
                herhalen van een animatie."
-  :calc-mode "Het calcMode attribuut specificeert de interpolatiemodus voor de
-              animatie."
   :values "Het values attribuut heeft verschillende betekenissen, afhankelijk
            van de context waarin het gebruikt wordt, ofwel definieert het een
            reeks waarden gebruikt gedurende de loop van een animatie, of het is
@@ -359,22 +373,41 @@
                 controlepunten geassocieerd met de keyTimes lijst, die een
                 kubieke Bézier functie definieert die interval timing
                 controleert"
+  :key-points "Het keyPoints-attribuut geeft in het bereik [0,1] aan hoe ver het
+               object zich langs het pad bevindt voor elke bijbehorende waarde
+               in keyTimes."
   :from "Het from attribuut geeft de initiële waarde van het attribuut aan dat
          gewijzigd zal worden tijdens de animatie."
   :to "Het to attribuut geeft de eindwaarde van het attribuut aan dat
        gewijzigd zal worden tijdens de animatie."
   :by "Het by attribuut specificeert een relatieve offset waarde voor een
        attribuut dat gewijzigd zal worden tijdens een animatie."
-  :additive "Het additive attribuut controleert of een animatie additief is of
-             niet."
-  :accumulate "Het accumulate attribuut controleert of een animatie cumulatief
-               is of niet."
   :view-box "Het viewBox attribuut definieert de positie en dimensie, in
              gebruikersruimte, van een SVG viewport."
   :preserve-aspect-ratio "Het preserveAspectRatio attribuut geeft aan hoe een
                           element met een viewBox die een gegeven
                           beeldverhouding biedt moet passen in een viewport met
                           een andere beeldverhouding."}
+
+ :renderer.attribute.impl.accumulate
+ {:description "Het accumulate attribuut controleert of een animatie cumulatief
+                is of niet."}
+
+ :renderer.attribute.impl.additive
+ {:description "Het additive attribuut controleert of een animatie additief is
+                of niet."}
+
+ :renderer.attribute.impl.calc-mode
+ {:description "Het calcMode attribuut specificeert de interpolatiemodus voor de
+                animatie."}
+
+ :renderer.attribute.impl.attribute-name
+ {:description "Het attributeName attribuut geeft de naam van de CSS eigenschap
+                of attribuut van het doelelement aan dat gewijzigd gaat worden
+                tijdens een animatie."
+  :search-attribute "Zoeken naar een attribuut"
+  :no-attributes "Geen attributen gevonden."
+  :select-attribute "Attribuut selecteren"}
 
  :renderer.tool.impl.element.path
  {:click-to-start "Klik om het eerste punt toe te voegen."
@@ -446,6 +479,8 @@
 
  :renderer.tool.impl.misc.guide
  {:label "Gids"
+  :guides "Hulplijnen"
+  :lock-guides "Hulplijnen vergrendelen"
   :idle "Sleep de liniaal naar het canvas om een gids te maken."
   :create "Laat los om de gids te voltooien."}
 
@@ -688,7 +723,7 @@
   :exit-fullscreen "Volledig scherm verlaten"
   :install "Installeren"}
 
- :renderer.toolbar.status
+ :renderer.app.status-view
  {:select-zoom "Zoomniveau selecteren"
   :zoom "Zoom"
   :fill-color "Vulkleur kiezen"
@@ -715,11 +750,18 @@
  {:speed "Snelheid"
   :no-filter "Geen filter"
   :filter "Filter"
+  :play "Afspelen"
+  :pause "Pauzeren"}
+
+ :renderer.timeline.core
+ {:replay "Opnieuw afspelen"
   :grid-snap "Rasteruitlijning"
   :guide-snap "Hulplijnuitlijning"
-  :play "Afspelen"
-  :replay "Opnieuw afspelen"
-  :pause "Pauzeren"}
+  :fit-duration "Duur aanpassen"
+  :timeline "Tijdlijn"}
+
+ :renderer.timeline.events
+ {:update-animation "Animatie bijwerken"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Hoek kiezen"}
@@ -752,18 +794,18 @@
  {:close-panel "Paneel sluiten"}
 
  :renderer.app.core
- {:grid "Raster"
+ {:help-view "Helpweergave"
   :help-bar "Helpbalk"
-  :debug-info "Debug-informatie"
-  :guides "Hulplijnen"
-  :rulers "Linealen"}
+  :debug-info "Debug-informatie"}
 
  :renderer.dialog.core
- {:command-panel "Commandopaneel"
+ {:dialog "Dialoogvenster"
+  :command-panel "Commandopaneel"
   :about "Over"}
 
  :renderer.document.core
- {:new "Nieuw"
+ {:document "Document"
+  :new "Nieuw"
   :open "Openen..."
   :recent-clear "Recent wissen"
   :print "Afdrukken"
@@ -780,7 +822,11 @@
   :gif "GIF"
   :reopen-last-closed "Laatst gesloten opnieuw openen"
   :vector-formats "Vectorformaten"
-  :rasterised-formats "Rasterformaten"}
+  :rasterised-formats "Rasterformaten"
+  :document-view "Documentweergave"
+  :grid "Raster"
+  :guides "Hulplijnen"
+  :rulers "Linealen"}
 
  :renderer.element.core
  {:cut "Knippen"
@@ -835,7 +881,8 @@
   :entity "Entiteit"
   :image "Afbeelding"
   :path "Pad"
-  :select "Selecteren"}
+  :select "Selecteren"
+  :convert "Converteren"}
 
  :renderer.error.core
  {:report-errors "Fouten automatisch melden"}
@@ -848,7 +895,10 @@
   :zoom-set-200 "Instellen op 200%"
   :zoom-focus-selected "Focus op geselecteerd"
   :zoom-fit-selected "Geselecteerd passend maken"
-  :zoom-fill-selected "Geselecteerd vullen"}
+  :zoom-fill-selected "Geselecteerd vullen"
+  :zoom-in-out "In-/uitzoomen"
+  :zoom-set "Zoom instellen"
+  :focus "Focus"}
 
  :renderer.history.core
  {:undo "Ongedaan maken"
@@ -857,7 +907,8 @@
   :clear-history "Geschiedenis wissen"}
 
  :renderer.menubar.core
- {:website "Website"
+ {:menubar "Menubalk"
+  :website "Website"
   :source-code "Broncode"
   :license "Licentie"
   :changelog "Wijzigingslog"
@@ -868,7 +919,7 @@
   :menubar-object "Objectmenu"
   :menubar-view "Weergavemenu"
   :menubar-help "Helpmenu"
-  :help "Help"}
+  :help-links "Helplinks"}
 
  :renderer.panel.core
  {:panels "Panelen"
@@ -889,7 +940,8 @@
   :corners "Hoeken"
   :nodes "Knooppunten"
   :grid "Raster"
-  :guides "Hulplijnen"}
+  :guides "Hulplijnen"
+  :snap-options "Uitlijningsopties"}
 
  :renderer.theme.core
  {:theme-mode "Thema-modus"
@@ -899,7 +951,11 @@
 
  :renderer.window.core
  {:exit "Afsluiten"
-  :toggle-fullscreen "Volledig scherm in-/uitschakelen"}
+  :toggle-fullscreen "Volledig scherm wisselen"
+  :toggle-maximized "Gemaximaliseerd wisselen"
+  :toggle-devtools "Ontwikkelaarsgereedschap wisselen"
+  :minimize "Minimaliseren"
+  :window "Venster"}
 
  :renderer.tool.core
  {:cancel "Annuleren"}
@@ -914,6 +970,14 @@
  {:centroid "centroïde"}
 
  :renderer.shell.core
- {:focus-shell "Focus op shell"
+ {:shell "Shell"
+  :focus-shell "Focus op shell"
   :clear-output "Uitvoer wissen"
-  :verbose "Uitgebreid"}}
+  :verbose "Uitgebreid"}
+
+ :renderer.shell.impl.core
+ {:shell-languages "Shell-talen"}
+
+ :renderer.views
+ {:remove "Verwijderen"
+  :resize-thumb "Paneel formaat wijzigen"}}

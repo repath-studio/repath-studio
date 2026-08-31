@@ -33,8 +33,7 @@
 (defmethod input.hierarchy/keyboard "keydown"
   [db e]
   (cond-> db
-    (and (= (:code e) "Space")
-         (not= (:tool db) ::tool.impl.base.pan/pan))
+    (= (:code e) "Space")
     (tool.handlers/set-cached ::tool.impl.base.pan/pan)
 
     (and (= (:code e) "KeyX")
@@ -55,8 +54,7 @@
 (defmethod input.hierarchy/keyboard "keyup"
   [db e]
   (cond-> db
-    (and (= (:code e) "Space")
-         (:cached-tool db))
+    (= (:code e) "Space")
     (tool.handlers/reset-cached)
 
     (= (:code e) "KeyX")

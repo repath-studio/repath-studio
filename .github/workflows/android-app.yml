@@ -25,7 +25,7 @@ jobs:
           node-version: 24
 
       - name: Prepare java
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: 'zulu'
           java-version: '21'
@@ -44,7 +44,7 @@ jobs:
       - name: Install clojure tools
         uses: DeLaGuardo/setup-clojure@13.6.1
         with:
-          cli: 1.12.5.1654
+          cli: 1.12.5.1664
 
       - name: Cache npm dependencies
         uses: actions/cache@v6

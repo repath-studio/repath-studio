@@ -1,5 +1,6 @@
 (ns renderer.shell.db
   (:require
+   [config :as config]
    [malli.core :as m]
    [malli.transform :as m.transform]
    [renderer.db :refer [LoadingState]]
@@ -52,9 +53,11 @@
 (def ShellLanguage
   [:map {:closed true}
    [:status {:optional true} LoadingState]
-   [:history {:default [""]} ShellHistory]
+   [:history {:max config/max-shell-history
+              :default [""]} ShellHistory]
    [:history-pos {:default 0} ShellHistoryPosition]
-   [:items {:default []} [:vector ShellItem]]])
+   [:items {:max config/max-shell-history
+            :default []} [:vector ShellItem]]])
 
 (def Shell
   [:map {:closed true}

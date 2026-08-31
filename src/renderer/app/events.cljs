@@ -9,10 +9,8 @@
    [renderer.app.effects :as-alias app.effects]
    [renderer.app.events :as-alias app.events]
    [renderer.document.events :as-alias document.events]
-   [renderer.document.handlers :as document.handlers]
    [renderer.effects :as-alias effects]
    [renderer.error.events :as-alias error.events]
-   [renderer.history.handlers :as history.handlers]
    [renderer.i18n.effects :as-alias i18n.effects]
    [renderer.i18n.events :as-alias i18n.events]
    [renderer.input.events :as-alias input.events]
@@ -41,7 +39,8 @@
         ["entered-fullscreen" [::window.events/set-fullscreen true]]
         ["leaved-fullscreen" [::window.events/set-fullscreen false]]
         ["minimized" [::window.events/set-minimized true]]
-        ["restored" [::window.events/set-minimized false]]]
+        ["restored" [::window.events/set-minimized false]]
+        ["document-opened-from-args" [::document.events/load-from-args]]]
        (mapv (partial vector ::effects/ipc-on))))
 
 (defn- json->clj
@@ -83,7 +82,12 @@
    (let [app-db (merge db persisted-db)]
      (if (app.db/valid? app-db)
        {:db app-db}
-       {::app.effects/clear-local-store nil}))))
+       {::app.effects/clear-local-store
+        {:on-success [::app.events/toast
+                      :error
+                      "Invalid configuration"
+                      {:description "Your local configuration was invalid and
+                                     has been reset."}]}}))))
 
 (rf/reg-event-db
  ::set-loading
@@ -116,13 +120,10 @@
 
 (rf/reg-event-fx
  ::db-loaded
- [(rf/inject-cofx ::effects/guid)
-  (rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now guid]} _]
-   {:db (if (:active-document db)
-          (snap.handlers/rebuild-tree db)
-          (-> (document.handlers/create db guid)
-              (history.handlers/finalize now [::create-doc "Create document"])))
+ (fn [{:keys [db]} _]
+   {:db (cond-> db
+          (:active-document db)
+          (snap.handlers/rebuild-tree))
     ;; The order of the following events is important.
     ;; Changes require thorough testing on all platforms.
     :fx (into [[:dispatch [::error.events/init-reporting]]
@@ -133,6 +134,7 @@
                [:dispatch [::window.events/update-width]]
                [:dispatch [::i18n.events/set-lang-attrs]]
                [:dispatch [::shell.events/init]]
+               [:dispatch [::document.events/open-from-args]]
                [:dispatch [::set-loading false]]
                [::app.effects/hide-splash-screen]
                ;; We flush to render once so we can get the canvas size.
@@ -144,7 +146,7 @@
                ;; The status bar needs to be updated later for some reason.
                [:dispatch [::theme.events/update-mobile-status-bar]]
                [::action.effects/update-keydown-rules
-                (action.handlers/entities db)]]
+                (action.handlers/actions-with-shortcuts db)]]
               listeners)}))
 
 (rf/reg-event-db
@@ -168,30 +170,6 @@
  ::set-backdrop
  (fn [db [_ visible]]
    (assoc db :backdrop visible)))
-
-(rf/reg-event-db
- ::toggle-grid
- [persist]
- (fn [db [_]]
-   (update db :grid not)))
-
-(rf/reg-event-db
- ::toggle-rulers
- [persist]
- (fn [db [_]]
-   (update db :rulers not)))
-
-(rf/reg-event-db
- ::toggle-guides
- [persist]
- (fn [db [_]]
-   (update db :guides not)))
-
-(rf/reg-event-db
- ::toggle-guides-locked
- [persist]
- (fn [db [_]]
-   (update db :guides-locked not)))
 
 (rf/reg-event-fx
  ::load-system-fonts

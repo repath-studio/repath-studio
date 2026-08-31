@@ -10,6 +10,9 @@
    [number? {:title "max-x"}]
    [number? {:title "max-y"}]])
 
+(def TimeStamp
+  number?)
+
 (def Orientation
   [:enum :vertical :horizontal])
 

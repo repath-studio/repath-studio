@@ -3,7 +3,7 @@
 Thank you for your interest in participating in the project's development!
 Please read the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md)
 and the [Contributor License Agreement](CLA.md) first. If you plan to use LLMs
-to contribute, make sure you also read our AI and LLM policy.
+to contribute, make sure you also read our [AI and LLM policy](LLM_POLICY.md).
 
 The project is written in [ClojureScript](https://clojurescript.org/) - a
 compiler for [Clojure](https://clojure.org/) that targets JavaScript, and is
@@ -51,6 +51,7 @@ with some additions.
 
 ```text
 module\
+├── impl\           -> built-in multimethod implementations
 ├── core.cljs       -> entry point (will be evaluated on load)
 ├── db.cljs         -> schema, validation
 ├── views.cljs      -> reagent views
@@ -58,7 +59,7 @@ module\
 ├── subs.cljs       -> subscription handlers
 ├── handlers.cljs   -> helper functions for db transformations
 ├── effects.cljs    -> effect handlers
-├── hierarchy.cljs  -> multimethods and hierarchies
+├── hierarchy.cljs  -> multimethod and hierarchy definitions
 ├── migrations.cljs -> data migrations
 └── README.md       -> documentation
 ```
@@ -75,12 +76,12 @@ and the corresponding [validators](https://github.com/metosin/malli#validation),
 [explainers](https://github.com/metosin/malli#humanized-error-messages), and
 [transformers](https://github.com/metosin/malli#value-transformation).
 
-### Events db
+### Events ns
 
 Registers our re-frame events. Most events use functions from handlers to
 transform our db.
 
-### Subs db
+### Subs ns
 
 Registers our re-frame subscriptions. This ns is usually very thin.
 
@@ -96,7 +97,7 @@ namespace.
 ### Effects ns
 
 Registers all re-frame effects. Although we could use the events ns for this, we
-prefer isung dedicated ns to isolate all side effects and make stabing easier on
+prefer using dedicated ns to isolate all side effects and make stabbing easier on
 tests.
 
 ### Hierarchy ns
@@ -109,7 +110,9 @@ the build-in `defmethod` implementations for the multimethods.
 ## General re-frame recommendations
 
 Avoid chaining events to create new ones. Always prefer composing transformation
-functions. That is the whole purpose of `handlers` namespace.
+functions. That is the whole purpose of `handlers` namespace. Re-frame events
+should be treated as db transactions. All of the required operations should be
+handled within the event.
 
 Use interceptors sparingly. Although they look (and probably are) ingenious, it
 is hard to write and reason with them. Doing things explicitly, is usually
@@ -145,6 +148,39 @@ are selectively applied to pure and critical namespaces, such as utils and
 handlers. By default, function schemas are instrumented only during tests to
 avoid performance overhead. However, runtime instrumentation can also be enabled
 in the development environment (see `dev.cljs`).
+
+## Upgrading dependencies
+
+### NPM packages
+
+Running `npm run upgrade` automatically upgrades `package.json` dependencies to
+the latest versions. The script checks for new versions with 7 day minimum age
+to reduce the risk of installing compromised packages. If just want to look at
+the available upgrades without changing `package.json`, you can run
+`npm outdated`.
+
+After upgrading we need to check the release notes of the upgraded packages, to
+make sure there is no breaking change, and to look for introduced features or
+changes that can improve our application.
+
+If a package introduced a lot of breaking changes, and requires special
+handling, we can add it to the ignore list by passing
+`-x 'ignored-package-name'` to `npm-check-updates`. In this case, we need to
+also open a corresponding upgrade issue with its priority set to `high`, to keep
+track of those packages and handle the upgrade as soon as possible.
+
+When we are happy with the `package.json` changes, we need to manually run
+`npm install` to also update our `package-lock.json`, and handle any package
+resolution issues that may arise. The most common problem is upgrading
+`@sentry/react` because `@sentry/capacitor` usually depends on an older version.
+
+Before pushing those changes, we need to test all related functionality to
+ensure that there are no regressions.
+
+## Clojure packages
+
+We can check for outdated Clojure dependencies by running `clojure -M:outdated`.
+There is an automated action that runs this check once a week.
 
 ## Useful development shortcuts
 

@@ -22,12 +22,10 @@
            :repeatDur
            :calcMode
            :values
+           :keyPoints
            :keyTimes
            :keySplines
            :by
-           :autoReverse
-           :accelerate
-           :decelerate
            :additive
            :accumulate
            :id

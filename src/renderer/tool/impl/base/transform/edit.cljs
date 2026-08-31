@@ -25,8 +25,8 @@
   (let [[delta-x delta-y] delta
         [w h] (utils.bounds/->dimensions bbox)
         factor-delta (case axis
-                       :vertical [(/ delta-x w) 0]
-                       :horizontal [0 (/ delta-y h)]
+                       :horizontal [(/ delta-x w) 0]
+                       :vertical [0 (/ delta-y h)]
                        [(/ delta-x w) (/ delta-y h)])]
     (update db :anchor-offset matrix/add factor-delta)))
 

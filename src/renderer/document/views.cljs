@@ -14,7 +14,6 @@
    [renderer.i18n.views :as i18n.views]
    [renderer.panel.subs :as-alias panel.subs]
    [renderer.utils.dom :as utils.dom]
-   [renderer.utils.extra :refer [rpartial]]
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]))
 
@@ -31,7 +30,7 @@
            :document/open
            :document/save
            :document/download]
-          (keep (rpartial views/tooltip-action-icon-button :side "bottom"))
+          (keep views/action-icon-button)
           (into [:<>]))
 
      [:span.v-divider]

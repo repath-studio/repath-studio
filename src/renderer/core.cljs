@@ -34,7 +34,6 @@
    [renderer.tree.events]
    [renderer.window.core]
    [renderer.worker.core]
-
    [user]))
 
 (def easter-egg "

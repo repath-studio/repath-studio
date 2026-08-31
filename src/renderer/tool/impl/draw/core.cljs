@@ -25,6 +25,7 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :tools/draw
+               :icon "draw"
                :label [::draw "Draw"]
                :actions [:tool/pencil
                          :tool/brush]}])

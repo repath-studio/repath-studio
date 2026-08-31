@@ -6,6 +6,7 @@
                                      :output-feature-set :es-unsupported
                                      :language-in :unsupported}}
 
+ ;; Limit the amount of RAM used by shadow-cljs.
  :jvm-opts ["-Xmx2G"]
 
  :dev-http {8080 "resources/public"
@@ -30,7 +31,9 @@
              :output-dir "resources/public/js"
              :build-hooks [(build.icon-generator/hook!)
                            (build.schema-graph-generator/hook!)]
-             :compiler-options {:optimizations :simple
+             :compiler-options {;; Our embedded repl wont't work with :advanced
+                                ;; optimizations.
+                                :optimizations :simple
                                 :output-wrapper false
                                 :pseudo-names true
                                 :pretty-print true
@@ -44,6 +47,9 @@
 
                    :devtools {:preloads [devtools.preload
                                          day8.re-frame-10x.preload
+                                         ;; This can be enabled to generate a
+                                         ;; clj-kondo config based on the malli
+                                         ;; types used in the project.
                                          #_malli.dev.cljs-kondo-preload
                                          dev]}}
 

@@ -83,9 +83,17 @@
  }
 
  .timeline-editor-action {
-  @apply bg-overlay! flex! justify-around! items-center! pointer-events-none!;
+  @apply bg-primary! flex! justify-around! items-center!;
 
-  &-selected {
+  .timeline-editor-action-left-stretch::after {
+    @apply border-l-border!;
+  }
+
+  .timeline-editor-action-right-stretch::after {
+    @apply border-r-border!;
+  }
+
+  &.timeline-editor-action-selected {
     @apply border border-accent;
     .timeline-editor-action-left-stretch::after {
       @apply border-l-accent!;
@@ -94,10 +102,6 @@
       @apply border-r-accent!;
     }
   }
-}
-
-.timeline-editor-time-area .ReactVirtualized__Grid {
-  overflow: hidden !important;
 }
 
 .timeline-editor-cursor {
@@ -117,9 +121,10 @@
 }
 
 .timeline-editor-edit-row {
-  background-image: linear-gradient(var(--secondary), var(--secondary)),
-                    linear-gradient(90deg, var(--border) 1px, transparent 0) !important;
+  background-image: linear-gradient(transparent, transparent),
+                    linear-gradient(90deg, var(--border) 1px, transparent 0);
 }
+
 
 /* react-d3-tree */
 

@@ -4,7 +4,7 @@
    [malli.core :as m]
    [malli.transform :as m.transform]
    [renderer.a11y.db :refer [A11y]]
-   [renderer.action.db :refer [ActionRegistry ActionGroupRegistry]]
+   [renderer.action.db :refer [ActionRegistry ActionGroupRegistry KeyBindings]]
    [renderer.db :refer [BBox Vec2 JS_Object]]
    [renderer.dialog.db :refer [Dialog]]
    [renderer.document.db :refer [Document DocumentId RecentDocument]]
@@ -41,7 +41,7 @@
   [:map-of {:title "name"} string? Font])
 
 (def App
-  [:map {:closed true}
+  [:map
    [:tool {:default ::tool.transform/transform} Tool]
    [:cached-tool {:optional true} Tool]
    [:active-pointers {:default {}} [:map-of PointerId PointerEvent]]
@@ -62,14 +62,6 @@
    [:double-click-delta {:default 300} [:and number? pos?]]
    [:state {:default :idle} State]
    [:cached-state {:optional true} State]
-   [:grid {:default false
-           :persist true} boolean?]
-   [:rulers {:default true
-             :persist true} boolean?]
-   [:guides {:default true
-             :persist true} boolean?]
-   [:guides-locked {:default false
-                    :persist true} boolean?]
    [:snap {:default {}
            :persist true} Snap]
    [:active-document {:optional true
@@ -81,7 +73,7 @@
                 :persist true} [:map-of DocumentId Document]]
    [:document-tabs {:default []
                     :persist true} [:vector DocumentId]]
-   [:recent {:max 10
+   [:recent {:max config/max-recent-documents
              :default []
              :persist true} [:vector RecentDocument]]
    [:drag-threshold {:default 2} number?]
@@ -131,6 +123,8 @@
    [:viewbox-kdtree {:optional true} [:maybe map?]]
    [:actions {:default {}} ActionRegistry]
    [:action-groups {:default {}} ActionGroupRegistry]
+   [:key-bindings {:default {}
+                   :persist true} KeyBindings]
    [:a11y {:default {:filters []}} A11y]
    [:re-pressed.core/keydown {:optional true} map?]])
 

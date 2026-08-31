@@ -10,7 +10,7 @@
   :history "Geçmiş"
   :attributes "Özellikler"}
 
- :renderer.home.views
+ :renderer.app.home-view
  {:svg-description "Vektör Grafik Editörü"
   :start "Başla"
   :or "veya"
@@ -34,10 +34,17 @@
  {:create-doc "Belge oluştur"}
 
  :renderer.dialog.events
- {:are-you-sure "Devam etmek istediğinizden emin misiniz?"}
+ {:are-you-sure "Devam etmek istediğinizden emin misiniz?"
+  :keybindings "Klavye kısayolları"}
 
  :renderer.dialog.views
- {:search-command "Komut ara"
+ {:other-actions "Diğer eylemler"
+  :edit-shortcuts "Kısayolları düzenle"
+  :customize-shortcuts-for [:div "%1 için kısayolları özelleştir"]
+  :press-keys "Bir tuş kombinasyonu girin"
+  :add "Ekle"
+  :reset-shortcuts "Varsayılanlara sıfırla"
+  :search-command "Komut ara"
   :no-results "Sonuç bulunamadı."
   :version "Sürüm: "
   :browser "Tarayıcı: "
@@ -112,7 +119,8 @@
   :trace-image "Resim izini sür"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Kombine"
-  :break-apart "Parçalara Ayır"}
+  :break-apart "Parçalara Ayır"
+  :add-motion-path "Hareket yolu ekle"}
 
  :renderer.element.impl.animation.animate
  {:label "Animasyon"
@@ -130,6 +138,17 @@
                 niteliğini canlandırır, böylece animasyonların çeviri,
                 ölçekleme, döndürme ve/veya eğmeyi kontrol etmesine olanak
                 tanır"}
+
+ :renderer.element.impl.animation.set
+ {:label "Ayar"
+  :description "<set> SVG öğesi, bir özniteliğin değerini belirli bir süre
+                boyunca ayarlamanın bir yöntemini sağlar."}
+
+ :renderer.element.impl.descriptive.mpath
+ {:label "Hareket yolu"
+  :description "<animateMotion> öğesine ait SVG alt öğesi <mpath>, hareket
+                yolunun tanımı olarak dış bir <path> öğesine atıf yapabilme
+                imkânı sağlar."}
 
  :renderer.element.impl.box
  {:position-handle "konum tutamacı"
@@ -215,7 +234,7 @@
                 çizgileri çizin."
   :brush-point "fırça noktası"}
 
- :renderer.element.impl.container.canvas
+ :renderer.element.impl.custom.canvas
  {:label "Tuval"
   :description "Tuval, tüm öğeleri barındıran ana SVG kapsayıcısıdır."
   :fill-description "Dolgu özniteliği, ana tuvalin arka plan rengini tanımlar.
@@ -315,8 +334,6 @@
           çalışır."
   :href "href özniteliği, bir referans URL olarak bir kaynağa bağlantı tanımlar.
          Bu bağlantının tam anlamı, onu kullanan her öğenin bağlamına bağlıdır."
-  :attribute-name "attributeName özniteliği, animasyon sırasında değiştirilecek
-                   hedef öğenin CSS özelliği veya özniteliğinin adını gösterir."
   :begin "begin özniteliği, bir animasyonun ne zaman başlaması gerektiğini
           tanımlar."
   :end "end özniteliği, etkin süreyi kısıtlayabilen animasyon için bir bitiş
@@ -330,8 +347,6 @@
                  sayısını gösterir."
   :repeat-dur "repeatDur özniteliği, bir animasyonu tekrarlamanın toplam
                süresini belirtir."
-  :calc-mode "calcMode özniteliği, animasyon için enterpolasyon modunu
-              belirtir."
   :values "values özniteliği, kullanıldığı bağlama bağlı olarak farklı anlamlara
            sahiptir; ya animasyon boyunca kullanılan değer dizisini tanımlar
            ya da gerçekleştirilecek renk değişikliği türüne bağlı olarak
@@ -341,22 +356,40 @@
   :key-splines "keySplines özniteliği, keyTimes listesiyle ilişkili Bézier
                 eğrisi kontrol noktaları kümesini tanımlayarak aralık hızını
                 kontrol eden kübik Bézier fonksiyonunu tanımlar."
+  :key-points "keyPoints özniteliği, [0,1] aralığında, keyTimes'taki her bir
+               ilişkili değer için nesnenin yolda ne kadar ilerlediğini
+               belirtir."
   :from "from özniteliği, animasyon sırasında değiştirilecek özniteliğin
          başlangıç değerini gösterir."
   :to "to özniteliği, animasyon sırasında değiştirilecek özniteliğin
        son değerini gösterir."
   :by "by özniteliği, animasyon sırasında değiştirilecek öznitelik için
        göreceli ofset değerini belirtir."
-  :additive "additive özniteliği, bir animasyonun eklemeli olup olmadığını
-             kontrol eder."
-  :accumulate "accumulate özniteliği, bir animasyonun kümülatif olup olmadığını
-               kontrol eder."
   :view-box "viewBox özniteliği, kullanıcı alanında bir SVG görünüm alanının
              konumunu ve boyutunu tanımlar."
   :preserve-aspect-ratio "preserveAspectRatio özniteliği, belirli bir en boy
                           oranı sağlayan viewBox'a sahip bir öğenin, farklı
                           en boy oranına sahip bir görünüm alanına nasıl
                           sığdırılması gerektiğini gösterir."}
+
+ :renderer.attribute.impl.accumulate
+ {:description "accumulate özniteliği, bir animasyonun kümülatif olup olmadığını
+                kontrol eder."}
+
+ :renderer.attribute.impl.additive
+ {:description "additive özniteliği, bir animasyonun eklemeli olup olmadığını
+                kontrol eder."}
+
+ :renderer.attribute.impl.calc-mode
+ {:description "calcMode özniteliği, animasyon için enterpolasyon modunu
+                belirtir."}
+
+ :renderer.attribute.impl.attribute-name
+ {:description "attributeName özniteliği, animasyon sırasında değiştirilecek
+                hedef öğenin CSS özelliği veya özniteliğinin adını gösterir."
+  :search-attribute "Öznitelik ara"
+  :no-attributes "Öznitelik bulunamadı."
+  :select-attribute "Öznitelik seç"}
 
  :renderer.tool.impl.element.path
  {:click-to-start "İlk noktayı eklemek için tıklayın."
@@ -428,6 +461,8 @@
 
  :renderer.tool.impl.misc.guide
  {:label "Kılavuz"
+  :guides "Kılavuzlar"
+  :lock-guides "Kılavuzları kilitle"
   :idle "Kılavuz oluşturmak için cetveli tuval üzerine sürükleyin."
   :create "Kılavuzu tamamlamak için bırakın."}
 
@@ -666,7 +701,7 @@
   :exit-fullscreen "Tam ekrandan çık"
   :install "Kur"}
 
- :renderer.toolbar.status
+ :renderer.app.status-view
  {:select-zoom "Yakınlaştırma seviyesi seç"
   :zoom "Yakınlaştır"
   :fill-color "Dolgu rengi seç"
@@ -693,11 +728,18 @@
  {:speed "Hız"
   :no-filter "Filtre yok"
   :filter "Filtre"
+  :play "Oynat"
+  :pause "Duraklat"}
+
+ :renderer.timeline.core
+ {:replay "Tekrar oynat"
   :grid-snap "Izgara yapışı"
   :guide-snap "Kılavuz yapışı"
-  :play "Oynat"
-  :replay "Tekrar oynat"
-  :pause "Duraklat"}
+  :fit-duration "Süreyi uydur"
+  :timeline "Zaman Çizelgesi"}
+
+ :renderer.timeline.events
+ {:update-animation "Animasyonu güncelle"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Açı seç"}
@@ -730,18 +772,18 @@
  {:close-panel "Paneli kapat"}
 
  :renderer.app.core
- {:grid "Izgara"
+ {:help-view "Yardım görünümü"
   :help-bar "Yardım çubuğu"
-  :debug-info "Hata ayıklama bilgisi"
-  :guides "Kılavuzlar"
-  :rulers "Cetveller"}
+  :debug-info "Hata ayıklama bilgisi"}
 
  :renderer.dialog.core
- {:command-panel "Komut paneli"
+ {:dialog "İletişim kutusu"
+  :command-panel "Komut paneli"
   :about "Hakkında"}
 
  :renderer.document.core
- {:new "Yeni"
+ {:document "Belge"
+  :new "Yeni"
   :open "Aç..."
   :recent-clear "Son kullanılanları temizle"
   :print "Yazdır"
@@ -758,7 +800,11 @@
   :gif "GIF"
   :reopen-last-closed "Son kapatılanı yeniden aç"
   :vector-formats "Vektör biçimleri"
-  :rasterised-formats "Raster biçimleri"}
+  :rasterised-formats "Raster biçimleri"
+  :document-view "Belge görünümü"
+  :grid "Izgara"
+  :guides "Kılavuzlar"
+  :rulers "Cetveller"}
 
  :renderer.element.core
  {:cut "Kes"
@@ -813,7 +859,8 @@
   :entity "Varlık"
   :image "Resim"
   :path "Yol"
-  :select "Seç"}
+  :select "Seç"
+  :convert "Dönüştür"}
 
  :renderer.error.core
  {:report-errors "Hataları otomatik olarak bildir"}
@@ -826,7 +873,10 @@
   :zoom-set-200 "%200'e ayarla"
   :zoom-focus-selected "Seçilene odaklan"
   :zoom-fit-selected "Seçilene sığdır"
-  :zoom-fill-selected "Seçileni doldur"}
+  :zoom-fill-selected "Seçileni doldur"
+  :zoom-in-out "Yakınlaştır/Uzaklaştır"
+  :zoom-set "Yakınlaştırmayı ayarla"
+  :focus "Odak"}
 
  :renderer.history.core
  {:undo "Geri al"
@@ -835,7 +885,8 @@
   :clear-history "Geçmişi temizle"}
 
  :renderer.menubar.core
- {:website "Web sitesi"
+ {:menubar "Menü çubuğu"
+  :website "Web sitesi"
   :source-code "Kaynak kodu"
   :license "Lisans"
   :changelog "Değişiklik günlüğü"
@@ -846,7 +897,7 @@
   :menubar-object "Nesne Menüsü"
   :menubar-view "Görünüm Menüsü"
   :menubar-help "Yardım Menüsü"
-  :help "Yardım"}
+  :help-links "Yardım bağlantıları"}
 
  :renderer.panel.core
  {:panels "Paneller"
@@ -867,7 +918,8 @@
   :corners "Köşeler"
   :nodes "Düğümler"
   :grid "Izgara"
-  :guides "Kılavuzlar"}
+  :guides "Kılavuzlar"
+  :snap-options "Yapışma seçenekleri"}
 
  :renderer.theme.core
  {:theme-mode "Tema modu"
@@ -877,7 +929,11 @@
 
  :renderer.window.core
  {:exit "Çıkış"
-  :toggle-fullscreen "Tam ekranı aç/kapat"}
+  :toggle-fullscreen "Tam ekran geçiş"
+  :toggle-maximized "Büyütülmuş geçiş"
+  :toggle-devtools "Geliştirici araçlarını geçiş"
+  :minimize "Küçült"
+  :window "Pencere"}
 
  :renderer.tool.core
  {:cancel "İptal"}
@@ -892,6 +948,14 @@
  {:centroid "ağırlık merkezi"}
 
  :renderer.shell.core
- {:focus-shell "Shell'e odaklan"
+ {:shell "Kabuk"
+  :focus-shell "Shell'e odaklan"
   :clear-output "Çıktıyı temizle"
-  :verbose "Ayrıntılı"}}
+  :verbose "Ayrıntılı"}
+
+ :renderer.shell.impl.core
+ {:shell-languages "Kabuk dilleri"}
+
+ :renderer.views
+ {:remove "Kaldır"
+  :resize-thumb "Panel boyutunu değiştir"}}

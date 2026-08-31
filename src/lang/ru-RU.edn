@@ -10,7 +10,7 @@
   :history "История"
   :attributes "Атрибуты"}
 
- :renderer.home.views
+ :renderer.app.home-view
  {:svg-description "Редактор Векторной Графики"
   :start "Начать"
   :or "или"
@@ -34,10 +34,17 @@
  {:create-doc "Создать документ"}
 
  :renderer.dialog.events
- {:are-you-sure "Вы уверены, что хотите продолжить?"}
+ {:are-you-sure "Вы уверены, что хотите продолжить?"
+  :keybindings "Горячие клавиши"}
 
  :renderer.dialog.views
- {:search-command "Поиск команды"
+ {:other-actions "Другие действия"
+  :edit-shortcuts "Изменить горячие клавиши"
+  :customize-shortcuts-for [:div "Настройка горячих клавиш для %1"]
+  :press-keys "Нажмите комбинацию клавиш"
+  :add "Добавить"
+  :reset-shortcuts "Сбросить до стандартных"
+  :search-command "Поиск команды"
   :no-results "Результаты не найдены."
   :version "Версия: "
   :browser "Браузер: "
@@ -113,7 +120,8 @@
   :trace-image "Трассировать изображение"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Совместить"
-  :break-apart "Разбить"}
+  :break-apart "Разбить"
+  :add-motion-path "Добавить траекторию движения"}
 
  :renderer.element.impl.animation.animate
  {:label "Анимировать"
@@ -130,6 +138,17 @@
   :description "Элемент <animateTransform> анимирует атрибут трансформации на
                 целевом элементе, позволяя анимациям управлять перемещением,
                 масштабированием, вращением и/или наклоном"}
+
+ :renderer.element.impl.animation.set
+ {:label "Установить"
+  :description "Элемент SVG <set> предоставляет способ установки значения
+                атрибута на определённый период времени."}
+
+ :renderer.element.impl.descriptive.mpath
+ {:label "Траектория движения"
+  :description "SVG-подэлемент <mpath> для элемента <animateMotion>
+                предоставляет возможность ссылаться на внешний элемент <path>
+                как на определение траектории движения."}
 
  :renderer.element.impl.box
  {:position-handle "маркер позиции"
@@ -211,7 +230,7 @@
                 perfect-freehand."
   :brush-point "точка кисти"}
 
- :renderer.element.impl.container.canvas
+ :renderer.element.impl.custom.canvas
  {:label "Холст"
   :description "Холст является основным контейнером SVG, который содержит все
                 элементы."
@@ -314,8 +333,6 @@
   :href "Атрибут href определяет ссылку на ресурс как ссылочный URL. Точное
          значение этой ссылки зависит от контекста каждого элемента, который
          её использует."
-  :attribute-name "Атрибут attributeName указывает имя свойства CSS или атрибута
-                   целевого элемента, который будет изменён во время анимации."
   :begin "Атрибут begin определяет, когда должна начинаться анимация."
   :end "Атрибут end определяет конечное значение для анимации, которое может
         ограничить активную продолжительность."
@@ -330,7 +347,6 @@
                  будет происходить."
   :repeat-dur "Атрибут repeatDur указывает общую продолжительность для
                повторения анимации."
-  :calc-mode "Атрибут calcMode указывает режим интерполяции для анимации."
   :values "Атрибут values имеет различные значения, в зависимости от контекста,
            где он используется, либо он определяет последовательность значений,
            используемых в ходе анимации, либо это список чисел для цветовой
@@ -341,16 +357,15 @@
   :key-splines "Атрибут keySplines определяет набор контрольных точек кривой
                 Безье, связанных со списком keyTimes, определяя кубическую
                 функцию Безье, которая управляет темпом интервала"
+  :key-points "Атрибут keyPoints указывает, в диапазоне [0,1], насколько далеко
+               объект находится вдоль пути для каждого связанного значения в
+               keyTimes."
   :from "Атрибут from указывает начальное значение атрибута, которое будет
          изменено во время анимации."
   :to "Атрибут to указывает конечное значение атрибута, которое будет изменено
        во время анимации."
   :by "Атрибут by указывает относительное значение смещения для атрибута,
        который будет изменён во время анимации."
-  :additive "Атрибут additive контролирует, является ли анимация аддитивной
-             или нет."
-  :accumulate "Атрибут accumulate контролирует, является ли анимация
-               накопительной или нет."
   :view-box "Атрибут viewBox определяет позицию и размер в пользовательском
              пространстве области просмотра SVG."
   :preserve-aspect-ratio "Атрибут preserveAspectRatio указывает, как элемент с
@@ -358,6 +373,23 @@
                           должен помещаться в область просмотра с другим
                           соотношением сторон."}
 
+ :renderer.attribute.impl.accumulate
+ {:description "Атрибут accumulate контролирует, является ли анимация
+                накопительной или нет."}
+
+ :renderer.attribute.impl.additive
+ {:description "Атрибут additive контролирует, является ли анимация аддитивной
+                или нет."}
+
+ :renderer.attribute.impl.calc-mode
+ {:description "Атрибут calcMode указывает режим интерполяции для анимации."}
+
+ :renderer.attribute.impl.attribute-name
+ {:description "Атрибут attributeName указывает имя свойства CSS или атрибута
+                целевого элемента, который будет изменён во время анимации."
+  :search-attribute "Поиск атрибута"
+  :no-attributes "Атрибуты не найдены."
+  :select-attribute "Выбрать атрибут"}
  :renderer.tool.impl.element.core
  {:click-and-drag "Щёлкните и перетащите для создания элемента."
   :release-to-finalize "Отпустите для завершения элемента."
@@ -410,6 +442,8 @@
 
  :renderer.tool.impl.misc.guide
  {:label "Направляющая"
+  :guides "Направляющие"
+  :lock-guides "Заблокировать направляющие"
   :idle "Перетащите линейку на холст, чтобы создать направляющую."
   :create "Отпустите, чтобы завершить создание направляющей."}
 
@@ -670,7 +704,7 @@
   :exit-fullscreen "Выйти из полноэкранного режима"
   :install "Установить"}
 
- :renderer.toolbar.status
+ :renderer.app.status-view
  {:select-zoom "Выбрать уровень масштаба"
   :zoom "Масштаб"
   :fill-color "Выбрать цвет заливки"
@@ -697,11 +731,18 @@
  {:speed "Скорость"
   :no-filter "Без фильтра"
   :filter "Фильтр"
+  :play "Воспроизвести"
+  :pause "Пауза"}
+
+ :renderer.timeline.core
+ {:replay "Повтор"
   :grid-snap "Привязка к сетке"
   :guide-snap "Привязка к направляющим"
-  :play "Воспроизвести"
-  :replay "Повтор"
-  :pause "Пауза"}
+  :fit-duration "Подогнать длительность"
+  :timeline "Временная шкала"}
+
+ :renderer.timeline.events
+ {:update-animation "Обновить анимацию"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Выбрать угол"}
@@ -735,18 +776,18 @@
  {:close-panel "Закрыть панель"}
 
  :renderer.app.core
- {:grid "Сетка"
+ {:help-view "Вид справки"
   :help-bar "Панель справки"
-  :debug-info "Отладочная информация"
-  :guides "Направляющие"
-  :rulers "Линейки"}
+  :debug-info "Отладочная информация"}
 
  :renderer.dialog.core
- {:command-panel "Панель команд"
+ {:dialog "Диалоговое окно"
+  :command-panel "Панель команд"
   :about "О программе"}
 
  :renderer.document.core
- {:new "Новый"
+ {:document "Документ"
+  :new "Новый"
   :open "Открыть..."
   :recent-clear "Очистить недавние"
   :print "Печать"
@@ -763,7 +804,11 @@
   :gif "GIF"
   :reopen-last-closed "Открыть последний закрытый"
   :vector-formats "Векторные форматы"
-  :rasterised-formats "Растровые форматы"}
+  :rasterised-formats "Растровые форматы"
+  :document-view "Вид документа"
+  :grid "Сетка"
+  :guides "Направляющие"
+  :rulers "Линейки"}
 
  :renderer.element.core
  {:cut "Вырезать"
@@ -817,7 +862,8 @@
   :entity "Сущность"
   :image "Изображение"
   :path "Контур"
-  :select "Выделение"}
+  :select "Выделение"
+  :convert "Конвертировать"}
 
  :renderer.error.core
  {:report-errors "Сообщать об ошибках автоматически"}
@@ -830,7 +876,10 @@
   :zoom-set-200 "Установить 200%"
   :zoom-focus-selected "Сфокусировать на выделенном"
   :zoom-fit-selected "Уместить выделенное"
-  :zoom-fill-selected "Заполнить выделенным"}
+  :zoom-fill-selected "Заполнить выделенным"
+  :zoom-in-out "Увеличить/Уменьшить"
+  :zoom-set "Установить масштаб"
+  :focus "Фокус"}
 
  :renderer.history.core
  {:undo "Отменить"
@@ -839,7 +888,8 @@
   :clear-history "Очистить историю"}
 
  :renderer.menubar.core
- {:website "Веб-сайт"
+ {:menubar "Строка меню"
+  :website "Веб-сайт"
   :source-code "Исходный код"
   :license "Лицензия"
   :changelog "Журнал изменений"
@@ -850,7 +900,7 @@
   :menubar-object "Меню Объект"
   :menubar-view "Меню Вид"
   :menubar-help "Меню Справка"
-  :help "Справка"}
+  :help-links "Ссылки справки"}
 
  :renderer.panel.core
  {:panels "Панели"
@@ -871,7 +921,8 @@
   :corners "Углы"
   :nodes "Узлы"
   :grid "Сетка"
-  :guides "Направляющие"}
+  :guides "Направляющие"
+  :snap-options "Параметры привязки"}
 
  :renderer.theme.core
  {:theme-mode "Режим темы"
@@ -881,7 +932,11 @@
 
  :renderer.window.core
  {:exit "Выход"
-  :toggle-fullscreen "Переключить полноэкранный режим"}
+  :toggle-fullscreen "Переключить полноэкранный режим"
+  :toggle-maximized "Переключить развернутое состояние"
+  :toggle-devtools "Переключить инструменты разработчика"
+  :minimize "Свернуть"
+  :window "Окно"}
 
  :renderer.tool.core
  {:cancel "Отмена"}
@@ -896,6 +951,14 @@
  {:centroid "центроид"}
 
  :renderer.shell.core
- {:focus-shell "Фокус на консоли"
+ {:shell "Консоль"
+  :focus-shell "Фокус на консоли"
   :clear-output "Очистить вывод"
-  :verbose "Подробно"}}
+  :verbose "Подробно"}
+
+ :renderer.shell.impl.core
+ {:shell-languages "Языки Shell"}
+
+ :renderer.views
+ {:remove "Удалить"
+  :resize-thumb "Изменить размер панели"}}

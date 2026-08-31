@@ -1,7 +1,6 @@
 (ns renderer.panel.views
   (:require
    ["react-resizable-panels" :refer [Group Panel Separator useDefaultLayout]]
-   [goog.functions]
    [re-frame.core :as rf]
    [reagent.core :refer [defc]]
    [renderer.i18n.views :as i18n.views]

@@ -180,6 +180,11 @@
  (fn [coeffects _]
    (assoc coeffects :now (.now js/performance))))
 
+(rf/reg-cofx
+ ::effects/time-origin
+ (fn [coeffects _]
+   (assoc coeffects :time-origin (.-timeOrigin js/performance))))
+
 (rf/reg-fx
  ::effects/ipc-on
  (fn [_]))
@@ -227,6 +232,10 @@
 
 (rf/reg-fx
  ::shell.effects/execute
+ (fn [_]))
+
+(rf/reg-fx
+ ::effects/ipc-invoke
  (fn [_]))
 
 (rf/reg-event-db

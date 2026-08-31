@@ -15,6 +15,7 @@
 
    (rf/dispatch [::action.events/register-action-group
                  {:id :i18n/language
+                  :icon "language"
                   :label [::language "Language"]
                   :actions [:lang/system]}])
 

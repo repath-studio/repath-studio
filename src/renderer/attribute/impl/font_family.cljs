@@ -48,7 +48,8 @@
        {:class "p-1"}
        [:> Command/CommandEmpty
         (if-not font-list
-          [:div.w-full [views/loading-indicator]]
+          [:div.w-full.flex.justify-center.p-2.bg-primary
+           [views/loading-indicator]]
           (i18n.views/t [::no-local-font "No local fonts found."]))]
        (for [font font-list]
          ^{:key font}

@@ -16,22 +16,19 @@
 Repath Studio is a cross platform vector graphics editor, that combines
 procedural tooling with traditional design workflows. It includes an interactive
 shell, which allows evaluating code to generate shapes, or even extend the
-editor on the fly. Supporting multiple programming languages and enriching the
-existing API is planned. The tool relies heavily on the
-[SVG](https://developer.mozilla.org/en-US/docs/Web/SVG) specification,
-and aims to educate users about it. Creating and editing
-[SMIL](https://developer.mozilla.org/en-US/docs/Web/SVG/SVG_animation_with_SMIL)
-animations - an SVG extension – is an important aspect of the project, that is
-yet to be fully implemented. An advanced undo/redo mechanism is used to maintain
-a full history tree of actions in memory, so users will never lose their redo
-stack.
+editor on the fly. It currently supports ClojureScript, JavaScript, and Python.
+The tool relies heavily on the [SVG](https://developer.mozilla.org/en-US/docs/Web/SVG)
+specification, and aims to educate users about it. An advanced undo/redo
+mechanism is used to maintain a full history tree of actions in memory, so users
+will never lose their redo stack. Creating and editing [SMIL](https://developer.mozilla.org/en-US/docs/Web/SVG/SVG_animation_with_SMIL)
+animations - an SVG extension – is an important aspect of the project.
 
 ## Funding
 
-This project is funded through
+This project was funded through the
 [NGI0 Commons Fund](https://nlnet.nl/commonsfund), a fund established by
 [NLnet](https://nlnet.nl) with financial support from the European Commission's
-[Next Generation Internet](https://ngi.eu) program. Learn more at the
+[Next Generation Internet](https://ngi.eu) programme. Learn more at the
 [NLnet project page](https://nlnet.nl/project/RepathStudio).
 
 <section data-markdown>

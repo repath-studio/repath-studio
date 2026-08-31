@@ -1,6 +1,7 @@
 (ns core-test
   (:require
    [fixtures]
+   [malli.dev.pretty :as pretty]
    [malli.instrument :as m.instrument]
    [re-frame.core :as rf]
    [re-frame.subs :as rf.subs]
@@ -51,11 +52,11 @@
 (set! rf.subs/warn-when-not-reactive (constantly nil))
 
 (defn ^:dev/after-load instrument! []
-  (m.instrument/instrument!)
+  (m.instrument/instrument! {:report (pretty/reporter)})
   (rf/reg-global-interceptor app.events/schema-validator))
 
 (instrument!)
 
-;; We need to initialize the app state at before running tests, otherwise 
+;; We need to initialize the app state at before running tests, otherwise
 ;; some of the tests will fail because of the way we extend the app.
 (rf/dispatch-sync [::app.events/initialize])

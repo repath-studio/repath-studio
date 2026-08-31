@@ -10,7 +10,7 @@
   :history "历史"
   :attributes "属性"}
 
- :renderer.home.views
+ :renderer.app.home-view
  {:svg-description "矢量图形编辑器"
   :start "开始"
   :or "或"
@@ -34,10 +34,17 @@
  {:create-doc "创建文档"}
 
  :renderer.dialog.events
- {:are-you-sure "您确定要继续吗？"}
+ {:are-you-sure "您确定要继续吗？"
+  :keybindings "键盘快捷键"}
 
  :renderer.dialog.views
- {:search-command "搜索命令"
+ {:other-actions "其他操作"
+  :edit-shortcuts "编辑快捷键"
+  :customize-shortcuts-for [:div "为 %1 自定义快捷键"]
+  :press-keys "按下一个按键组合"
+  :add "添加"
+  :reset-shortcuts "恢复默认设置"
+  :search-command "搜索命令"
   :no-results "未找到结果。"
   :version "版本："
   :browser "浏览器："
@@ -111,7 +118,8 @@
   :trace-image "描摹图像"
   :toggle-handle-selection "Toggle handle selection"
   :combine "组合"
-  :break-apart "拆分"}
+  :break-apart "拆分"
+  :add-motion-path "添加运动路径"}
 
  :renderer.element.impl.animation.animate
  {:label "动画"
@@ -125,6 +133,15 @@
  {:label "变换动画"
   :description "<animateTransform> 元素在其目标元素上为变换属性设置动画,从而
                 允许动画控制平移、缩放、旋转和/或倾斜"}
+
+ :renderer.element.impl.animation.set
+ {:label "设置"
+  :description "SVG <set> 元素提供了一种方法，用于在指定时间内设置属性的值。"}
+
+ :renderer.element.impl.descriptive.mpath
+ {:label "运动路径"
+  :description "<animateMotion> 元素的 SVG 子元素 <mpath>, 提供将外部 <path>
+                元素参考为运动路径定义的能力。"}
 
  :renderer.element.impl.box
  {:position-handle "位置手柄"
@@ -200,7 +217,7 @@
   :description "使用 perfect-freehand 绘制压力敏感的手绘线条。"
   :brush-point "画笔点"}
 
- :renderer.element.impl.container.canvas
+ :renderer.element.impl.custom.canvas
  {:label "画布"
   :description "画布是承载所有元素的主要 SVG 容器。"
   :fill-description "填充属性定义主画布的背景颜色。默认值取决于当前主题，这意味着
@@ -276,8 +293,6 @@
           style 属性相同。"
   :href "href 属性定义作为参考 URL 的资源链接。该链接的确切含义取决于使用它
          的每个元素的上下文。"
-  :attribute-name "attributeName 属性指示在动画期间将要更改的目标元素的
-                   CSS 属性或属性的名称。"
   :begin "begin 属性定义动画何时开始。"
   :end "end 属性定义动画的结束值，可以限制活动持续时间。"
   :dur "dur 属性指示动画的简单持续时间。"
@@ -286,21 +301,35 @@
   :restart "restart 属性指定动画是否可以重新启动。"
   :repeat-count "repeatCount 属性指示动画将发生的次数。"
   :repeat-dur "repeatDur 属性指定重复动画的总持续时间。"
-  :calc-mode "calcMode 属性指定动画的插值模式。"
   :values "values 属性有不同的含义，取决于使用它的上下文，它要么定义在动画
            过程中使用的值序列，要么是颜色矩阵的数字列表，根据要执行的颜色
            变化类型进行不同的解释。"
   :key-times "keyTimes 属性表示用于控制动画节奏的时间值列表。"
   :key-splines "keySplines 属性定义与 keyTimes 列表关联的一组贝塞尔曲线
                 控制点，定义控制间隔节奏的三次贝塞尔函数"
+  :key-points "keyPoints 属性表示对于 keyTimes 中的每个关联值，对象沿路径前进的程度，
+               范围为 [0,1]。"
   :from "from 属性指示在动画期间将被修改的属性的初始值。"
   :to "to 属性指示在动画期间将被修改的属性的最终值。"
   :by "by 属性指定在动画期间将被修改的属性的相对偏移值。"
-  :additive "additive 属性控制动画是否为附加的。"
-  :accumulate "accumulate 属性控制动画是否为累积的。"
   :view-box "viewBox 属性在用户空间中定义 SVG 视口的位置和尺寸。"
   :preserve-aspect-ratio "preserveAspectRatio 属性指示具有提供给定纵横比的
                           viewBox 的元素如何适合具有不同纵横比的视口。"}
+
+ :renderer.attribute.impl.accumulate
+ {:description "accumulate 属性控制动画是否为累积的。"}
+
+ :renderer.attribute.impl.additive
+ {:description "additive 属性控制动画是否为附加的。"}
+
+ :renderer.attribute.impl.calc-mode
+ {:description "calcMode 属性指定动画的插值模式。"}
+
+ :renderer.attribute.impl.attribute-name
+ {:description "attributeName 属性指示在动画期间将要更改的目标元素的 CSS 属性或属性的名称。"
+  :search-attribute "搜索属性"
+  :no-attributes "未找到属性。"
+  :select-attribute "选择属性"}
 
  :renderer.tool.impl.element.core
  {:click-and-drag "点击并拖动以创建元素。"
@@ -352,6 +381,8 @@
 
  :renderer.tool.impl.misc.guide
  {:label "参考线"
+  :guides "参考线"
+  :lock-guides "锁定参考线"
   :idle "将标尺拖到画布上以创建参考线。"
   :create "放下以完成参考线。"}
 
@@ -587,7 +618,7 @@
   :exit-fullscreen "退出全屏"
   :install "安装"}
 
- :renderer.toolbar.status
+ :renderer.app.status-view
  {:select-zoom "选择缩放级别"
   :zoom "缩放"
   :fill-color "选择填充颜色"
@@ -614,11 +645,18 @@
  {:speed "速度"
   :no-filter "无过滤器"
   :filter "过滤器"
+  :play "播放"
+  :pause "暂停"}
+
+ :renderer.timeline.core
+ {:replay "重播"
   :grid-snap "网格吸附"
   :guide-snap "参考线吸附"
-  :play "播放"
-  :replay "重播"
-  :pause "暂停"}
+  :fit-duration "适配时长"
+  :timeline "时间轴"}
+
+ :renderer.timeline.events
+ {:update-animation "更新动画"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "选择角度"}
@@ -649,18 +687,18 @@
  {:close-panel "关闭面板"}
 
  :renderer.app.core
- {:grid "网格"
+ {:help-view "帮助视图"
   :help-bar "帮助栏"
-  :debug-info "调试信息"
-  :guides "参考线"
-  :rulers "标尺"}
+  :debug-info "调试信息"}
 
  :renderer.dialog.core
- {:command-panel "命令面板"
+ {:dialog "对话框"
+  :command-panel "命令面板"
   :about "关于"}
 
  :renderer.document.core
- {:new "新建"
+ {:document "文档"
+  :new "新建"
   :open "打开..."
   :recent-clear "清除最近"
   :print "打印"
@@ -677,7 +715,11 @@
   :gif "GIF"
   :reopen-last-closed "重新打开上次关闭的"
   :vector-formats "矢量格式"
-  :rasterised-formats "光栅格式"}
+  :rasterised-formats "光栅格式"
+  :document-view "文档视图"
+  :grid "网格"
+  :guides "参考线"
+  :rulers "标尺"}
 
  :renderer.element.core
  {:cut "剪切"
@@ -732,7 +774,8 @@
   :entity "实体"
   :image "图像"
   :path "路径"
-  :select "选择"}
+  :select "选择"
+  :convert "转换"}
 
  :renderer.error.core
  {:report-errors "自动报告错误"}
@@ -745,7 +788,10 @@
   :zoom-set-200 "设置为 200%"
   :zoom-focus-selected "聚焦选择"
   :zoom-fit-selected "适合选择"
-  :zoom-fill-selected "填充选择"}
+  :zoom-fill-selected "填充选择"
+  :zoom-in-out "放大/缩小"
+  :zoom-set "设置缩放"
+  :focus "聚焦"}
 
  :renderer.history.core
  {:undo "撤销"
@@ -754,7 +800,8 @@
   :clear-history "清除历史"}
 
  :renderer.menubar.core
- {:website "网站"
+ {:menubar "菜单栏"
+  :website "网站"
   :source-code "源代码"
   :license "许可证"
   :changelog "更改日志"
@@ -765,7 +812,7 @@
   :menubar-object "对象菜单"
   :menubar-view "视图菜单"
   :menubar-help "帮助菜单"
-  :help "帮助"}
+  :help-links "帮助链接"}
 
  :renderer.panel.core
  {:panels "面板"
@@ -786,7 +833,8 @@
   :corners "角点"
   :nodes "节点"
   :grid "网格"
-  :guides "参考线"}
+  :guides "参考线"
+  :snap-options "吸附选项"}
 
  :renderer.theme.core
  {:theme-mode "主题模式"
@@ -796,7 +844,11 @@
 
  :renderer.window.core
  {:exit "退出"
-  :toggle-fullscreen "切换全屏"}
+  :toggle-fullscreen "切换全屏"
+  :toggle-maximized "切换最大化"
+  :toggle-devtools "切换开发者工具"
+  :minimize "最小化"
+  :window "窗口"}
 
  :renderer.tool.core
  {:cancel "取消"}
@@ -811,6 +863,14 @@
  {:centroid "质心"}
 
  :renderer.shell.core
- {:focus-shell "聚焦 Shell"
+ {:shell "Shell"
+  :focus-shell "聚焦 Shell"
   :clear-output "清除输出"
-  :verbose "详细"}}
+  :verbose "详细"}
+
+ :renderer.shell.impl.core
+ {:shell-languages "Shell 语言"}
+
+ :renderer.views
+ {:remove "删除"
+  :resize-thumb "调整面板大小"}}

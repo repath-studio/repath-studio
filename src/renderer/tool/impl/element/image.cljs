@@ -1,12 +1,12 @@
 (ns renderer.tool.impl.element.image
   "https://www.w3.org/TR/SVG/embedded.html#ImageElement"
   (:require
+   [config :as config]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.app.events :as-alias app.events]
    [renderer.app.handlers :as app.handlers]
    [renderer.effects :as-alias effects]
-   [renderer.element.db :as element.db]
    [renderer.element.effects :as-alias element.effects]
    [renderer.element.events :as-alias element.events]
    [renderer.hierarchy :as hierarchy]
@@ -31,7 +31,7 @@
    [::effects/file-open
     {:options {:startIn "pictures"
                :id "image-picker"
-               :types [{:accept element.db/image-mime-types}]}
+               :types [{:accept config/image-mime-types}]}
      :on-success [::success]
      :on-error [::app.events/toast-error]}]))
 

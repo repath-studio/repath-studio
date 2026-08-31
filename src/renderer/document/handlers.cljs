@@ -86,8 +86,7 @@
 (m/=> add-recent [:-> App map? App])
 (defn add-recent
   [db document]
-  (let [max-recent 10
-        equals? (fn [x] (or (and (:path x)
+  (let [equals? (fn [x] (or (and (:path x)
                                  (= (:path x) (:path document)))
                             (= (:id x) (:id document))))]
     (cond-> db
@@ -95,7 +94,7 @@
           (:file-handle document))
       (update :recent #(->> (recent document)
                             (conj (filterv (complement equals?) %))
-                            (take-last max-recent)
+                            (take-last config/max-recent-documents)
                             (vec))))))
 
 (m/=> move-recent-to-front [:-> App DocumentId App])
@@ -195,12 +194,16 @@
 (m/=> assoc-attr [:-> App keyword? any? App])
 (defn assoc-attr
   [db k v]
-  (assoc-in db (path db :attrs k) v))
+  (cond-> db
+    (:active-document db)
+    (assoc-in (path db :attrs k) v)))
 
 (m/=> update-attr [:-> App keyword? ifn? [:* any?] App])
 (defn update-attr
   [db k f & args]
-  (apply update-in db (path db :attrs k) f args))
+  (if (:active-document db)
+    (apply update-in db (path db :attrs k) f args)
+    db))
 
 (m/=> update-saved-history-index [:function
                                   [:-> App App]
@@ -264,6 +267,18 @@
        (filter #(not (open? db (:id %))))
        (reverse)))
 
+(m/=> requires-migration? [:-> map? SemanticVersion boolean?])
+(defn requires-migration?
+  "Checks if the provided document requires migration to the given version.
+
+   Returns true if the document's version is older than the given version,
+   or if the document has no version (a document created before versioning was
+   introduced to the document schema)."
+  [document version]
+  (or (not (:version document))
+      (-> (utils.compatibility/version->vec (:version document))
+          (utils.compatibility/requires-migration? version))))
+
 (m/=> migrate [:function
                [:-> map? map?]
                [:-> map? [:tuple SemanticVersion ifn?] map?]])
@@ -272,7 +287,5 @@
    (reduce migrate document document.migrations/migrations))
   ([document [version f]]
    (cond-> document
-     (or (not (:version document))
-         (-> (utils.compatibility/version->vec (:version document))
-             (utils.compatibility/requires-migration? version)))
-     f)))
+     (requires-migration? document version)
+     (f))))

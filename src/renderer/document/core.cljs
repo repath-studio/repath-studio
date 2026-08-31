@@ -68,6 +68,7 @@
                :label [::close-all "Close all"]
                :icon "window-close"
                :event [::document.events/close-all]
+               :enabled [::document.subs/some-entities?]
                :shortcuts [{:keyCode (utils.key/codes "W")
                             :ctrlKey true
                             :altKey true}]}])
@@ -145,13 +146,69 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :export/vector
+               :icon "bezier-curve"
                :label [::vector-formats "Vector formats"]
                :actions [:export/svg]}])
 
 (rf/dispatch [::action.events/register-action-group
               {:id :export/raster
+               :icon "image"
                :label [::rasterised-formats "Rasterised formats"]
                :actions [:export/png
                          :export/jpg
                          :export/webp
                          :export/gif]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :document
+               :label [::document "Document"]
+               :icon "file"
+               :actions [:document/new
+                         :document/open
+                         :document/reopen-last-closed
+                         :document/clear-recent
+                         :document/save
+                         :document/save-as
+                         :document/download
+                         :document/print
+                         :document/close
+                         :document/close-all
+                         :document/close-saved]}])
+
+(rf/dispatch [::action.events/register-action
+              {:id :document-view/toggle-grid
+               :label [::grid "Grid"]
+               :icon "grid"
+               :event [::document.events/toggle-attr :grid]
+               :active [::document.subs/attr :grid]
+               :enabled [::document.subs/some-entities?]
+               :shortcuts [{:keyCode (utils.key/codes "PERIOD")
+                            :ctrlKey true}]}])
+
+(rf/dispatch [::action.events/register-action
+              {:id :document-view/toggle-rulers
+               :label [::rulers "Rulers"]
+               :icon "ruler-combined"
+               :event [::document.events/toggle-attr :rulers]
+               :active [::document.subs/attr :rulers]
+               :enabled [::document.subs/some-entities?]
+               :shortcuts [{:keyCode (utils.key/codes "R")
+                            :ctrlKey true}]}])
+
+(rf/dispatch [::action.events/register-action
+              {:id :document-view/toggle-guides
+               :label [::guides "Guides"]
+               :icon "ruler-straight"
+               :event [::document.events/toggle-attr :guides]
+               :active [::document.subs/attr :guides]
+               :enabled [::document.subs/some-entities?]
+               :shortcuts [{:keyCode (utils.key/codes "PERIOD")
+                            :shiftKey true}]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :document/view
+               :icon "toggles"
+               :label [::document-view "Document view"]
+               :actions [:document-view/toggle-grid
+                         :document-view/toggle-rulers
+                         :document-view/toggle-guides]}])

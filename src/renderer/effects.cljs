@@ -232,4 +232,4 @@
  ::ipc-on
  (fn [[channel listener]]
    (some-> js/window.api
-           (.on channel #(rf/dispatch listener)))))
+           (.on channel #(rf/dispatch (conj listener %))))))

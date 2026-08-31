@@ -35,8 +35,6 @@
       (fn
         [_this]
         (let [dom-el (.-current ref)]
-          (some-> (.-pauseAnimations dom-el)
-                  (.call))
           (.setAttribute dom-el "style" (-> el :attrs :style))))
 
       :component-did-update

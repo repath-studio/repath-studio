@@ -14,6 +14,7 @@
    [renderer.app.status-view :as app.status-view]
    [renderer.app.subs :as-alias app.subs]
    [renderer.dialog.views :as dialog.views]
+   [renderer.document.events :as-alias document.events]
    [renderer.document.subs :as-alias document.subs]
    [renderer.document.views :as document.views]
    [renderer.element.subs :as-alias element.subs]
@@ -36,8 +37,8 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.tool.views :as tool.views]
    [renderer.tree.views :as tree.views]
+   [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.extra :refer [rpartial]]
-   [renderer.utils.length :as utils.length]
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]
    [renderer.window.views :as window.views]
@@ -45,7 +46,7 @@
 
 (defn coll->str
   [coll]
-  (str "[" (string/join " " (map utils.length/->fixed coll)) "]"))
+  (str "[" (string/join " " (map utils.attribute/->fixed coll)) "]"))
 
 (defn map->str
   [m]
@@ -53,7 +54,7 @@
        (map (fn [[k v]]
               ^{:key k}
               [:span (str (name k) ": " (if (number? v)
-                                          (utils.length/->fixed v)
+                                          (utils.attribute/->fixed v)
                                           (coll->str v)))]))
        (interpose ", ")))
 
@@ -122,7 +123,7 @@
 
 (defn guides-locked-toggle
   []
-  (let [locked? @(rf/subscribe [::app.subs/guides-locked?])]
+  (let [locked? @(rf/subscribe [::document.subs/attr :guides-locked])]
     [:div.bg-primary
      {:style {:width ruler.views/ruler-size
               :height ruler.views/ruler-size}}
@@ -134,7 +135,8 @@
        :title (i18n.views/t (if locked?
                               [::unlock "Unlock"]
                               [::lock "Lock"]))
-       :on-click #(rf/dispatch [::app.events/toggle-guides-locked])}]]))
+       :on-click #(rf/dispatch [::document.events/toggle-attr
+                                :guides-locked])}]]))
 
 (defn frame
   []
@@ -190,7 +192,7 @@
 
 (defn frame-panel
   []
-  (let [rulers? @(rf/subscribe [::app.subs/rulers?])
+  (let [rulers? @(rf/subscribe [::document.subs/attr :rulers])
         md? @(rf/subscribe [::window.subs/md?])
         active? @(rf/subscribe [::tool.subs/active?
                                 ::tool.impl.misc.guide/guide])

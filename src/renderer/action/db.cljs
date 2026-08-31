@@ -16,7 +16,7 @@
 (def ActionGroup
   [:map {:closed true}
    [:id ActionGroupId]
-   [:icon {:optional true} string?]
+   [:icon string?]
    [:label Translation]
    [:enabled {:optional true} vector?]
    [:actions [:vector ActionId]]])
@@ -43,3 +43,6 @@
 
 (def ActionGroupRegistry
   [:map-of ActionGroupId ActionGroup])
+
+(def KeyBindings
+  [:map-of ActionId [:set Shortcut]])

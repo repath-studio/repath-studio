@@ -70,20 +70,23 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :zoom/in-out
+               :icon "zoom"
                :label [::zoom-in-out "Zoom in/out"]
                :actions [:zoom/in
                          :zoom/out]}])
 
 (rf/dispatch [::action.events/register-action-group
               {:id :zoom/set
+               :icon "magnifier"
                :label [::zoom-set "Set zoom"]
                :actions [:zoom/set-50
                          :zoom/set-100
                          :zoom/set-200]}])
 
 (rf/dispatch [::action.events/register-action-group
-              {:id :zoom/auto
-               :label [::zoom-auto "Auto zoom"]
+              {:id :zoom/focus
+               :icon "focus"
+               :label [::focus "Focus"]
                :actions [:zoom/focus-selected
                          :zoom/fit-selected
                          :zoom/fill-selected]}])

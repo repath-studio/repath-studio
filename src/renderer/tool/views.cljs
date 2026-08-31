@@ -180,7 +180,7 @@
         cached-tool @(rf/subscribe [::tool.subs/cached])
         active-action (tool-action actions active-tool)
         cached-action (tool-action actions cached-tool)
-        top-tool (or active-action cached-action)]
+        active-or-cached-action (or active-action cached-action)]
     (if (second actions)
       [:> DropdownMenu/Root
        [:> DropdownMenu/Trigger
@@ -196,7 +196,7 @@
                      (when active-action
                        "bg-accent text-accent-foreground! hover:bg-accent-light
                         aria-expanded:bg-accent-light active:bg-accent-light")]}
-            [views/icon (or (:icon top-tool) icon (:icon (first actions)))]
+            [views/icon (or (:icon active-or-cached-action) icon)]
             [views/icon "chevron-down"]]]
           [:> Tooltip/Portal
            [:> Tooltip/Content

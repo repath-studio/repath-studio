@@ -22,8 +22,8 @@
    [renderer.tool.impl.base.transform.translate]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.tool.views :as tool.views]
+   [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.bounds :as utils.bounds]
-   [renderer.utils.length :as utils.length]
    [renderer.utils.svg :as utils.svg]
    [renderer.views :as views]))
 
@@ -66,6 +66,7 @@
 
 (rf/dispatch [::action.events/register-action-group
               {:id :transform/options
+               :icon "toggles"
                :label [::transform-options "Transform options"]
                :enabled [::tool.subs/active? ::transform]
                :actions [:transform/toggle-aspect-ratio-lock
@@ -126,7 +127,7 @@
       (let [[min-x min-y max-x] bbox
             x (+ min-x (/ (- max-x min-x) 2))
             y (- min-y (/ handle-size 2) (/ 15 zoom))
-            text (str (utils.length/->fixed area 2 false) " px²")]
+            text (str (utils.attribute/->fixed area 2 false) " px²")]
         [utils.svg/label text {:x x
                                :y y}]))))
 
@@ -138,9 +139,9 @@
         x (+ min-x (/ (- max-x min-x) 2))
         y (+ y2 (/ handle-size 2) (/ 15 zoom))
         [w h] (utils.bounds/->dimensions bbox)
-        text (str (utils.length/->fixed w 2 false)
+        text (str (utils.attribute/->fixed w 2 false)
                   " x "
-                  (utils.length/->fixed h 2 false))]
+                  (utils.attribute/->fixed h 2 false))]
     [utils.svg/label text {:x x
                            :y y}]))
 

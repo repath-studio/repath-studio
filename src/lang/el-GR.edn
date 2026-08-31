@@ -10,7 +10,7 @@
   :history "Ιστορία"
   :attributes "Χαρακτηριστικά"}
 
- :renderer.home.views
+ :renderer.app.home-view
  {:svg-description "Επεξεργαστής Διανυσματικών Γραφικών"
   :start "Έναρξη"
   :or "ή"
@@ -34,10 +34,17 @@
  {:create-doc "Δημιουργία εγγράφου"}
 
  :renderer.dialog.events
- {:are-you-sure "Είστε βέβαιοι ότι θέλετε να συνεχίσετε;"}
+ {:are-you-sure "Είστε βέβαιοι ότι θέλετε να συνεχίσετε;"
+  :keybindings "Συντομεύσεις πληκτρολογίου"}
 
  :renderer.dialog.views
- {:search-command "Αναζήτηση εντολής"
+ {:other-actions "Άλλες ενέργειες"
+  :edit-shortcuts "Επεξεργασία συντομεύσεων"
+  :customize-shortcuts-for [:div "Προσαρμογή συντομεύσεων για %1"]
+  :press-keys "Πιέστε συνδυασμό πλήκτρων"
+  :add "Προσθήκη"
+  :reset-shortcuts "Επαναφορά στις προεπιλογές"
+  :search-command "Αναζήτηση εντολής"
   :no-results "Δεν βρέθηκαν αποτελέσματα."
   :version "Έκδοση: "
   :browser "Πρόγραμμα περιήγησης: "
@@ -112,7 +119,8 @@
   :trace-image "Ανίχνευση εικόνας"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Συνδυασμός"
-  :break-apart "Διάσπαση"}
+  :break-apart "Διάσπαση"
+  :add-motion-path "Προσθήκη διαδρομής κίνησης"}
 
  :renderer.element.impl.animation.animate
  {:label "Κίνηση"
@@ -130,6 +138,17 @@
                 μετασχηματισμού στο στοχευόμενο στοιχείο, επιτρέποντας έτσι
                 στις κινήσεις να ελέγχουν τη μετάφραση, την κλιμάκωση, την
                 περιστροφή ή/και την κλίση"}
+
+ :renderer.element.impl.animation.set
+ {:label "Ορισμός"
+  :description "Το στοιχείο <set> του SVG παρέχει μια μέθοδο ορισμού της τιμής
+                ενός χαρακτηριστικού για μια καθορισμένη διάρκεια."}
+
+ :renderer.element.impl.descriptive.mpath
+ {:label "Διαδρομή κίνησης"
+  :description "Το υποστοιχείο SVG <mpath> για το στοιχείο <animateMotion>
+                παρέχει τη δυνατότητα αναφοράς σε ένα εξωτερικό στοιχείο <path>
+                ως ορισμό μιας διαδρομής κίνησης."}
 
  :renderer.element.impl.box
  {:position-handle "χειριστήριο θέσης"
@@ -218,7 +237,7 @@
                 perfect-freehand."
   :brush-point "σημείο πινέλου"}
 
- :renderer.element.impl.container.canvas
+ :renderer.element.impl.custom.canvas
  {:label "Καμβάς"
   :description "Ο καμβάς είναι το κύριο πλαίσιο SVG που περιέχει όλα τα
                 στοιχεία."
@@ -331,9 +350,6 @@
   :href "To χαρακτηριστικό href καθορίζει έναν σύνδεσμο προς έναν πόρο ως μια
          αναφορά URL. Η ακριβής σημασία αυτού του συνδέσμου εξαρτάται από το
          συμφραζόμενο κάθε στοιχείου που τον χρησιμοποιεί."
-  :attribute-name "To χαρακτηριστικό attributeName υποδηλώνει το όνομα της CSS
-                   ιδιότητας ή του χαρακτηριστικού του στοιχείου-στόχου που
-                   πρόκειται να αλλάξει κατά τη διάρκεια μιας κίνησης."
   :begin "To χαρακτηριστικό begin καθορίζει πότε πρέπει να ξεκινήσει μια
           κίνηση."
   :end "To χαρακτηριστικό end καθορίζει μια τελική τιμή για την κίνηση που
@@ -349,8 +365,6 @@
                  που θα εκτελεστεί μια κίνηση."
   :repeat-dur "To χαρακτηριστικό repeatDur καθορίζει τη συνολική διάρκεια
                 επανάληψης μιας κίνησης."
-  :calc-mode "To χαρακτηριστικό calcMode καθορίζει τη λειτουργία παρεμβολής μιας
-              κίνησης."
   :values "To χαρακτηριστικό values έχει διαφορετικές σημασίες ανάλογα με το
            πλαίσιο χρήσης της. Μπορεί είτε να ορίζει μια ακολουθία τιμών που
            χρησιμοποιούνται κατά τη διάρκεια μιας κίνησης, είτε να είναι μια
@@ -362,17 +376,15 @@
                 ελέγχου Bézier που σχετίζονται με τη λίστα keyTimes, ορίζοντας
                 μια κυβική συνάρτηση Bézier που ελέγχει τον ρυθμό των χρονικών
                 διαστημάτων."
+  :key-points "Το χαρακτηριστικό keyPoints υποδεικνύει, στο εύρος [0,1], πόσο
+               μακριά βρίσκεται το αντικείμενο κατά μήκος της διαδρομής για κάθε
+               συσχετιζόμενη τιμή στα keyTimes."
   :from "To χαρακτηριστικό from υποδηλώνει την αρχική τιμή του χαρακτηριστικού
          που θα τροποποιηθεί κατά τη διάρκεια της κίνησης."
   :to "To χαρακτηριστικό to υποδηλώνει την τελική τιμή του χαρακτηριστικού που
        θα τροποποιηθεί κατά τη διάρκεια της κίνησης."
   :by "To χαρακτηριστικό by καθορίζει μια σχετική τιμή μετατόπισης για ένα
        χαρακτηριστικό που θα τροποποιηθεί κατά τη διάρκεια της κίνησης."
-  :additive "To χαρακτηριστικό additive καθορίζει εάν μια κίνηση προσθέτει τις
-             νέες τιμές στις υπάρχουσες ή τις αντικαθιστά."
-  :accumulate "To χαρακτηριστικό accumulate καθορίζει εάν οι επαναλήψεις μιας
-               κίνησης αθροίζονται με τις προηγούμενες ή αν κάθε κύκλος ξεκινά
-               από την αρχική κατάσταση."
   :view-box "To χαρακτηριστικό viewBox καθορίζει τη θέση και τις διαστάσεις ενός
              SVG viewport στον χώρο χρήστη."
   :preserve-aspect-ratio "To χαρακτηριστικό preserveAspectRatio καθορίζει τον
@@ -447,8 +459,31 @@
 
  :renderer.tool.impl.misc.guide
  {:label "Οδηγός"
+  :guides "Οδηγοί"
+  :lock-guides "Κλείδωμα οδηγών"
   :idle "Σύρετε τον χάρακα στον καμβά για να δημιουργήσετε έναν οδηγό."
   :create "Αφήστε για να οριστικοποιήσετε τον οδηγό."}
+
+ :renderer.attribute.impl.accumulate
+ {:description "To χαρακτηριστικό accumulate καθορίζει εάν οι επαναλήψεις μιας
+                κίνησης αθροίζονται με τις προηγούμενες ή αν κάθε κύκλος ξεκινά
+                από την αρχική κατάσταση."}
+
+ :renderer.attribute.impl.additive
+ {:description "To χαρακτηριστικό additive καθορίζει εάν μια κίνηση προσθέτει
+                τις νέες τιμές στις υπάρχουσες ή τις αντικαθιστά."}
+
+ :renderer.attribute.impl.calc-mode
+ {:description "To χαρακτηριστικό calcMode καθορίζει τη λειτουργία παρεμβολής
+                μιας κίνησης."}
+
+ :renderer.attribute.impl.attribute-name
+ {:description "Το χαρακτηριστικό attributeName υποδηλώνει το όνομα της CSS
+                ιδιότητας ή του χαρακτηριστικού του στοιχείου-στόχου που
+                πρόκειται να αλλάξει κατά τη διάρκεια μιας κίνησης."
+  :search-attribute "Αναζήτηση χαρακτηριστικού"
+  :no-attributes "Δεν βρέθηκαν χαρακτηριστικά."
+  :select-attribute "Επιλογή χαρακτηριστικού"}
 
  :renderer.tool.impl.element.path
  {:click-to-start "Κάντε κλικ για να προσθέσετε το πρώτο σημείο."
@@ -695,7 +730,7 @@
   :exit-fullscreen "Έξοδος από πλήρη οθόνη"
   :install "Εγκατάσταση"}
 
- :renderer.toolbar.status
+ :renderer.app.status-view
  {:select-zoom "Επιλέξτε επίπεδο μεγέθυνσης"
   :fill-color "Επιλέξτε χρώμα γεμίσματος"
   :stroke-color "Επιλέξτε χρώμα περιγράμματος"
@@ -721,11 +756,18 @@
  {:speed "Ταχύτητα"
   :no-filter "Κανένα φίλτρο"
   :filter "Φίλτρο"
+  :play "Αναπαραγωγή"
+  :pause "Παύση"}
+
+ :renderer.timeline.core
+ {:replay "Αναπαραγωγή ξανά"
   :grid-snap "Σύνδεση πλέγματος"
   :guide-snap "Οδηγός πλέγματος"
-  :play "Αναπαραγωγή"
-  :replay "Αναπαραγωγή ξανά"
-  :pause "Παύση"}
+  :fit-duration "Προσαρμογή διάρκειας"
+  :timeline "Χρονολόγιο"}
+
+ :renderer.timeline.events
+ {:update-animation "Ενημέρωση κίνησης"}
 
  :renderer.attribute.impl.angle
  {:pick-angle "Επιλογή γωνίας"}
@@ -758,18 +800,18 @@
  {:close-panel "Κλείσιμο πάνελ"}
 
  :renderer.app.core
- {:grid "Πλέγμα"
+ {:help-view "Προβολή βοήθειας"
   :help-bar "Μπάρα βοηθείας"
-  :debug-info "Πληροφορίες αποσφαλμάτωσης"
-  :guides "Οδηγοί"
-  :rulers "Χάρακες"}
+  :debug-info "Πληροφορίες αποσφαλμάτωσης"}
 
  :renderer.dialog.core
- {:command-panel "Πάνελ εντολών"
+ {:dialog "Παράθυρο διαλόγου"
+  :command-panel "Πάνελ εντολών"
   :about "Σχετικά"}
 
  :renderer.document.core
- {:new "Νέο"
+ {:document "Έγγραφο"
+  :new "Νέο"
   :open "Άνοιγμα..."
   :recent-clear "Καθαρισμός πρόσφατων"
   :print "Εκτύπωση"
@@ -786,7 +828,11 @@
   :gif "GIF"
   :reopen-last-closed "Επαναφορά τελευταίου κλεισμένου"
   :vector-formats "Μορφές διανυσμάτων"
-  :rasterised-formats "Ραστεροποιημένες μορφές"}
+  :rasterised-formats "Ραστεροποιημένες μορφές"
+  :document-view "Προβολή εγγράφου"
+  :grid "Πλέγμα"
+  :guides "Οδηγοί"
+  :rulers "Χάρακες"}
 
  :renderer.element.core
  {:cut "Αποκοπή"
@@ -841,7 +887,8 @@
   :entity "Οντότητα"
   :image "Εικόνα"
   :path "Διαδρομή"
-  :select "Επιλογή"}
+  :select "Επιλογή"
+  :convert "Μετατροπή"}
 
  :renderer.error.core
  {:report-errors "Αναφορά σφαλμάτων αυτόματα"}
@@ -854,7 +901,10 @@
   :zoom-set-200 "Ορισμός σε 200%"
   :zoom-focus-selected "Εστίαση επιλογής"
   :zoom-fit-selected "Προσαρμογή επιλογής"
-  :zoom-fill-selected "Γέμισμα επιλογής"}
+  :zoom-fill-selected "Γέμισμα επιλογής"
+  :zoom-in-out "Μεγέθυνση/Σμίκρυνση"
+  :zoom-set "Ορισμός ζουμ"
+  :focus "Εστίαση"}
 
  :renderer.history.core
  {:undo "Αναίρεση"
@@ -863,7 +913,8 @@
   :clear-history "Εκκαθάριση ιστορικού"}
 
  :renderer.menubar.core
- {:website "Ιστότοπος"
+ {:menubar "Γραμμή μενού"
+  :website "Ιστότοπος"
   :source-code "Πηγαίος κώδικας"
   :license "Άδεια χρήσης"
   :changelog "Αρχείο αλλαγών"
@@ -874,7 +925,7 @@
   :menubar-object "Μενού Αντικειμένου"
   :menubar-view "Μενού Προβολής"
   :menubar-help "Μενού Βοήθειας"
-  :help "Βοήθεια"}
+  :help-links "Σύνδεσμοι βοήθειας"}
 
  :renderer.panel.core
  {:panels "Πάνελ"
@@ -895,7 +946,8 @@
   :corners "Γωνία"
   :nodes "Κόμβος"
   :grid "Πλέγμα"
-  :guides "Οδηγοί"}
+  :guides "Οδηγοί"
+  :snap-options "Επιλογές προσκόλλησης"}
 
  :renderer.theme.core
  {:theme-mode "Λειτουργία θέματος"
@@ -905,7 +957,11 @@
 
  :renderer.window.core
  {:exit "Έξοδος"
-  :toggle-fullscreen "Εναλλαγή πλήρους οθόνης"}
+  :toggle-fullscreen "Εναλλαγή πλήρους οθόνης"
+  :toggle-maximized "Εναλλαγή μεγιστοποίησης"
+  :toggle-devtools "Εναλλαγή εργαλείων ανάπτυξης"
+  :minimize "Ελαχιστοποίηση"
+  :window "Παράθυρο"}
 
  :renderer.tool.core
  {:cancel "Ακύρωση"}
@@ -920,6 +976,14 @@
  {:centroid "κεντροειδές"}
 
  :renderer.shell.core
- {:focus-shell "Εστίαση στο τερματικό"
+ {:shell "Τερματικό"
+  :focus-shell "Εστίαση στο τερματικό"
   :clear-output "Εκκαθάριση εξόδου"
-  :verbose "Λεπτομερής"}}
+  :verbose "Λεπτομερής"}
+
+ :renderer.shell.impl.core
+ {:shell-languages "Γλώσσες τερματικού"}
+
+ :renderer.views
+ {:remove "Αφαίρεση"
+  :resize-thumb "Αλλαγή μεγέθους πάνελ"}}

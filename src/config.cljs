@@ -13,6 +13,21 @@
 
 (def default-path "documents")
 
+(def max-recent-documents 10)
+
+(def min-zoom 0.01)
+
+(def max-zoom 100)
+
+(def max-shell-history 200)
+
+(def image-mime-types
+  {"image/png" [".png"]
+   "image/jpeg" [".jpeg" ".jpg"]
+   "image/bmp" [".bmp"]
+   "image/gif" [".gif"]
+   "image/webp" [".webp"]})
+
 (def save-info-keys
   "These are the keys that are saved in the recent documents list.
    The opposite is true for saved documents, that shouldn't maintain keys

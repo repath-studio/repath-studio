@@ -4,7 +4,8 @@
    [re-frame.core :as rf]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
-   [renderer.hierarchy :as hierarchy]))
+   [renderer.hierarchy :as hierarchy]
+   [renderer.utils.clock :as utils.clock]))
 
 (rf/reg-sub
  ::animations
@@ -19,20 +20,25 @@
   [el]
   (str "effect" (:id el)))
 
+(defn attr->seconds
+  [v]
+  (some-> v utils.clock/->ms (/ 1000)))
+
 (defn animation->timeline-row
-  [{:keys [id tag attrs selected locked]
+  [{:keys [id tag attrs selected locked visible]
     :as el}]
   (let [{:keys [begin dur end attributeName]} attrs
-        start (or begin 0)
-        _dur (or dur 0)
-        end (or end nil)]
+        start (or (attr->seconds begin) 0)
+        dur (attr->seconds dur)
+        end (or (attr->seconds end) (+ start dur))]
     {:id id
      :selected selected
      :actions [{:id (str id)
                 :selected selected
-                :disable locked
+                :flexible (not locked)
                 :movable (not locked)
-                :name (string/join " " [tag attributeName])
+                :hidden (not visible)
+                :name (string/join " " [(name tag) attributeName])
                 :start start
                 :end end
                 :effectId (effect-id el)}]}))
@@ -47,9 +53,9 @@
 
 (rf/reg-sub
  ::end
- :<- [::animations]
- (fn [animations]
-   (reduce #(max (js/parseInt (-> %2 :attrs :end)) %1) 0 animations)))
+ :<- [::rows]
+ (fn [rows]
+   (reduce #(max (-> %2 .-actions first .-end) %1) 0 rows)))
 
 (defn animation->effect
   [el]
@@ -88,22 +94,27 @@
 (rf/reg-sub
  ::paused?
  :<- [::timeline]
- :-> :paused?)
+ :-> :paused)
 
 (rf/reg-sub
  ::grid-snap?
  :<- [::timeline]
- :-> :grid-snap?)
+ :-> :grid-snap)
 
 (rf/reg-sub
  ::guide-snap?
  :<- [::timeline]
- :-> :guide-snap?)
+ :-> :guide-snap)
 
 (rf/reg-sub
  ::replay?
  :<- [::timeline]
- :-> :replay?)
+ :-> :replay)
+
+(rf/reg-sub
+ ::fit-duration?
+ :<- [::timeline]
+ :-> :fit-duration)
 
 (rf/reg-sub
  ::speed

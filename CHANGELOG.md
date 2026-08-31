@@ -3,6 +3,53 @@
 All notable user facing changes to this project will be documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 0.4.20 (2026-08-30)
+
+**Added**
+
+- Open document from file association or from a command line argument and
+  prevent multiple app instances [#199](https://github.com/repath-studio/repath-studio/pull/199)
+
+**Changed**
+
+- Enhance snapping points node performance
+
+## 0.4.19 (2026-08-27)
+
+**Added**
+
+- Configurable keyboard shortcuts [#170](https://github.com/repath-studio/repath-studio/pull/170)
+- Missing actions to command dialog [#175](https://github.com/repath-studio/repath-studio/pull/175)
+- Autocomplete on attributeName of animations and use translated text on
+  attribute info popover [#186](https://github.com/repath-studio/repath-studio/pull/186)
+- Motion path creation action [#193](https://github.com/repath-studio/repath-studio/pull/#193)
+- Error notification on invalid local configuration
+- Toggle developer tools action
+
+**Removed**
+
+- Tooltips on document toolbar
+
+**Changed**
+
+- Timeline enhancements [#191](https://github.com/repath-studio/repath-studio/pull/191)
+- Make grid, ruler, and guide options document specific [#179](https://github.com/repath-studio/repath-studio/pull/179)
+- Improve permitted content checks [#188](https://github.com/repath-studio/repath-studio/pull/188)
+- Sort command groups by label and add translations
+- Enhance font loading indicator
+- Hide menubar actions on mobile
+- Refine linecap icons
+- Improve active action filtering
+
+**Fixed**
+
+- Font rendering differences on canvas by disabling font synthesis
+- Font rendering within the iframe
+- Unneeded shell error notifications on mobile
+- Missing w3c url to allowed list
+- Path command on user ns
+- Rendering style attribute to string
+
 ## 0.4.18 (2026-07-26)
 
 **Fixed**
@@ -300,7 +347,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Shortcuts to tooltips
 - Logo to home
 - Decoding and crossorigin attribute dropdown
-  
+
 **Removed**
 
 - Help text on mobile
