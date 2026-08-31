@@ -78,7 +78,7 @@
      ["save-document" file/save]
      ["save-document-as" file/save-as]
      ["print" file/show-print-dialog]
-     ["open-documents-from-args" #(open-arg-documents (.-argv js/process))]]]
+     ["open-documents-from-args" #(open-arg-document (.-argv js/process))]]]
     (.handle ipcMain e #(f %2))))
 
 (defn register-window-events []
