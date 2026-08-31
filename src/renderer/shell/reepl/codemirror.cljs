@@ -54,11 +54,10 @@
           to (.-to result)
           text (.sliceDoc (.-state cm) from to)
           words (when-not (empty? text)
-                  (vec (complete-word text)))
-          ;; Remove core duplicates
-          words (->> words
-                     (remove #(string/includes? (second %) "cljs.core"))
-                     (vec))]
+                  (->> (complete-word text)
+                       ;; Remove core duplicates
+                       (remove #(string/includes? (second %) "cljs.core"))
+                       (vec)))]
       (when-not (empty? words)
         {:words words
          :num (count words)

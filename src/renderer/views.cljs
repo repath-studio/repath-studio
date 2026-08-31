@@ -342,9 +342,7 @@
           (reset! cm view)
           (.dispatch @cm #js {:changes #js {:from 0
                                             :to (.. ^js @cm -state -doc -length)
-                                            :insert value}})
-          #_(when on-change (.on @cm "change" #(when-not @updating?
-                                                 (on-change (.getValue %)))))))
+                                            :insert value}})))
 
       :component-did-update
       (fn [this _]
