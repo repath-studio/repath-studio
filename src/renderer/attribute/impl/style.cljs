@@ -19,10 +19,13 @@
      ^{:key disabled}
      [views/cm-editor
       (str v)
-      {:on-blur #(->> (.. ^js %2 -state -doc toString)
+      {:on-blur #(->> (.. %2 -state -doc toString)
                       (conj [::element.events/set-attr k])
                       (rf/dispatch))
-       :on-keydown #(.stopPropagation %)
+       :on-keydown (fn [e ^js cm]
+                     (.stopPropagation e)
+                     (when (= (.-key e) "Enter")
+                       (.. cm -contentDOM blur)))
        :on-keyup #(.stopPropagation %)
        :theme-mode theme-mode
        :extensions [(css)
