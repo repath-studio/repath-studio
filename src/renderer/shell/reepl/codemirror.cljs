@@ -17,18 +17,11 @@
 
 (defn in-place?
   [^js inst]
-  (let [lines (.. inst -state -doc -lines)]
-    (or (= 1 lines)
-        (let [pos (.. inst -state -selection -main -head)
-              line (.lineAt (.. inst -state -doc) pos)
-              last-line (dec lines)]
-          (and
-           (= last-line line)
-           (= (.-ch pos)
-              (-> (.. inst -state -doc)
-                  (.line line)
-                  (.text)
-                  (count))))))))
+  (let [lines (.. inst -state -doc -lines)
+        pos (.. inst -state -selection -main -head)
+        line (.lineAt (.. inst -state -doc) pos)]
+    (and (= lines (.-number line))
+         (= pos (.-to line)))))
 
 (defn should-eval?
   [inst evt]
