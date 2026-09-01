@@ -304,10 +304,11 @@
 (def cm-theme
   (clj->js {"&" {:backgroundColor "transparent"
                  :fontSize "var(--text-xs)"}
-            ".cm-content" {:caretColor "var(--foreground-hovered)"},
+            ".cm-content" {:color "var(--foreground-default)"
+                           :caretColor "var(--foreground-hovered)"}
             "&.cm-focused" {:outline "none"}
-            ".cm-gutters" {:backgroundColor "var(--primary)",
-                           :color "var(--foreground-muted)",
+            ".cm-gutters" {:backgroundColor "var(--primary)"
+                           :color "var(--foreground-muted)"
                            :border "none"}}))
 
 (defn cm-editor
