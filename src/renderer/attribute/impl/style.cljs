@@ -24,7 +24,9 @@
                       (rf/dispatch))
        :on-keydown (fn [e ^js cm]
                      (.stopPropagation e)
-                     (when (= (.-key e) "Enter")
+                     (when (and (= (.-key e) "Enter")
+                                (not (.-shiftKey e)))
+                       (.preventDefault e)
                        (.. cm -contentDOM blur)))
        :on-keyup #(.stopPropagation %)
        :theme-mode theme-mode
