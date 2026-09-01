@@ -86,10 +86,6 @@
                         #js {:id utils.dom/shell-input-id
                              :aria-label "Shell"})]
                       (:extensions options))
-    :options {:viewportMargin js/Infinity
-              :extraKeys #js {"Shift-Enter" "newlineAndIndent"}
-              :keyMap "default"
-              :showCursorWhenSelecting true}
     :on-blur #(reset! (:complete-atom options) nil)
     :on-change (:on-change options)
     :on-keyup (partial shell.reepl.codemirror/on-keyup-handler options)

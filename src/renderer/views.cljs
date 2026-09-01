@@ -2,10 +2,11 @@
   "A collection of stateless reusable ui components.
    Avoid using subscriptions to keep the components pure."
   (:require
+   ["@codemirror/commands" :refer [insertNewlineAndIndent]]
    ["@codemirror/language" :refer [syntaxHighlighting defaultHighlightStyle]]
    ["@codemirror/state" :refer [Compartment]]
    ["@codemirror/theme-one-dark" :refer [oneDark]]
-   ["@codemirror/view" :refer [EditorView basicSetup]]
+   ["@codemirror/view" :refer [EditorView basicSetup keymap]]
    ["@radix-ui/react-context-menu" :as ContextMenu]
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
    ["@radix-ui/react-hover-card" :as HoverCard]
@@ -320,6 +321,8 @@
         theme (fn [mode] (if (= mode :dark) oneDark #js []))
         default-extensions [(.theme EditorView cm-theme)
                             (.of theme-compartment (theme theme-mode))
+                            (.of keymap #js {:key "Shift-Enter"
+                                             :run insertNewlineAndIndent})
                             (.-lineWrapping EditorView)
                             (syntaxHighlighting defaultHighlightStyle)
                             (.domEventHandlers EditorView
