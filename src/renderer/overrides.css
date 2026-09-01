@@ -135,3 +135,9 @@
 .rd3t-label__title {
   @apply fill-inherit! font-normal!;
 }
+
+/* devtools */
+
+.devtools > * {
+  background: transparent !important;
+}
