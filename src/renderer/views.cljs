@@ -306,14 +306,29 @@
   [:> Select/Arrow {:class "fill-primary stroke-border"}])
 
 (def cm-theme
-  (clj->js {"&" {:backgroundColor "transparent"
-                 :fontSize "var(--text-xs)"}
-            ".cm-content" {:color "var(--foreground-default)"
-                           :caretColor "var(--foreground-hovered)"}
-            "&.cm-focused" {:outline "none"}
-            ".cm-gutters" {:backgroundColor "var(--primary)"
-                           :color "var(--foreground-muted)"
-                           :border "none"}}))
+  (clj->js {"&"
+            {:backgroundColor "transparent"
+             :fontSize "var(--text-xs)"}
+
+            ".cm-content"
+            {:color "var(--foreground-default)"
+             :caretColor "var(--foreground-hovered)"}
+
+            "&.cm-focused"
+            {:outline "none"}
+
+            ".cm-gutters"
+            {:backgroundColor "var(--primary)"
+             :color "var(--foreground-muted)"
+             :border "none"}
+
+            "&.cm-focused .cm-matchingBracket"
+            {:backgroundColor "transparent"
+             :color "var(--foreground-hovered)"}
+
+            "&.cm-focused .cm-nonmatchingBracket"
+            {:backgroundColor "transparent"
+             :color "var(--foreground-hovered)"}}))
 
 (defn cm-editor
   [value {:keys [extensions theme-mode on-blur on-change on-keyup on-keydown]}]

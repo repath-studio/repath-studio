@@ -314,7 +314,7 @@
 
 (defn completion-item
   [text selected active set-active]
-  [:div.p-1.bg-secondary.text-nowrap
+  [:div.p-1.bg-secondary.text-nowrap.hover:bg-primary
    {:ref #(when selected (rf/dispatch [::events/scroll-into-view %]))
     :on-pointer-down #(do (.preventDefault %)
                           (set-active %))
@@ -329,7 +329,8 @@
         lang @(rf/subscribe [::shell.subs/active-language])
         [fn-name signature doc] (filter seq (string/split-lines s))]
     [:div.bg-primary.drop-shadow.p-4.absolute.bottom-full.flex.flex-col.gap-4
-     [:div.font-semibold fn-name]
+     [:div.font-semibold
+      [static-highlight (str fn-name) theme-mode lang]]
      (when signature
        [static-highlight signature theme-mode lang])
      (when doc [:div doc])]))
