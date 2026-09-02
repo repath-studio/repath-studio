@@ -238,10 +238,8 @@
       :extensions [(xml)
                    (lineNumbers)
                    (EditorState.readOnly.of true)
-                   (EditorView.editable.of false)
                    (EditorView.contentAttributes.of
-                    #js {:tabindex "0"
-                         :aria-label "XML"})]}]))
+                    #js {:aria-label "XML"})]}]))
 
 (defn center-top-group
   []
