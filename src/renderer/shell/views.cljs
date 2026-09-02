@@ -112,9 +112,8 @@
          [code-mirror current-text
           (merge {:theme-mode theme-mode
                   :on-eval #(rf/dispatch [::shell.events/execute %])
-                  :on-change #(->> (.. ^js %2 -state -doc toString)
-                                   (conj [::shell.events/set-text])
-                                   (rf/dispatch))
+                  :on-change #(rf/dispatch [::shell.events/set-text
+                                            (.. % -state -doc toString)])
                   :complete-word #(shell.hierarchy/completions lang %)
                   :on-up #(rf/dispatch [::shell.events/go-up])
                   :on-down #(rf/dispatch [::shell.events/go-down])

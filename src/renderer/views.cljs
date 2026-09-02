@@ -314,44 +314,51 @@
                            :color "var(--foreground-muted)"
                            :border "none"}}))
 
+(defn cm-length
+  [cm]
+  (.. cm -state -doc -length))
+
+(defn updade-cm-value
+  [cm value]
+  (.dispatch cm #js {:changes #js {:from 0
+                                   :to (cm-length cm)
+                                   :insert value}}))
+
 (defn cm-editor
   [value {:keys [extensions theme-mode on-blur on-change on-keyup on-keydown]}]
   (let [cm (reagent/atom nil)
         ref (react/createRef)
-        updating? (atom false)
         theme-compartment (Compartment.)
         theme (fn [mode] (if (= mode :dark) oneDark #js []))
         default-extensions [(.theme EditorView cm-theme)
                             (.of theme-compartment (theme theme-mode))
                             (.of keymap defaultKeymap)
                             (.of keymap indentWithTab)
-                            (.of keymap #js {:key "Shift-Enter"
-                                             :run insertNewlineAndIndent})
                             (.-lineWrapping EditorView)
                             (syntaxHighlighting defaultHighlightStyle)
+                            (.of keymap #js {:key "Shift-Enter"
+                                             :run insertNewlineAndIndent})
+                            (.of EditorView.updateListener
+                                 (fn [^js change]
+                                   (when (and on-change (.-docChanged change))
+                                     (on-change change))))
                             (.high Prec (.domEventHandlers
                                          EditorView
                                          #js {:keydown on-keydown
                                               :keyup on-keyup
-                                              :blur on-blur
-                                              :change on-change}))]]
+                                              :blur on-blur}))]]
     (reagent/create-class
      {:component-did-mount
       (fn [_this]
         (let [dom-el (.-current ref)
               view (EditorView.
                     (clj->js {:doc value
-                              :extensions (cond-> (into default-extensions
-                                                        basicSetup)
-
-                                            extensions
-                                            (conj extensions))
-
-                              :parent dom-el}))]
+                              :parent dom-el
+                              :extensions (cond-> default-extensions
+                                            :always (into basicSetup)
+                                            extensions (conj extensions))}))]
           (reset! cm view)
-          (.dispatch @cm #js {:changes #js {:from 0
-                                            :to (.. ^js @cm -state -doc -length)
-                                            :insert value}})))
+          (updade-cm-value @cm value)))
 
       :component-did-update
       (fn [this _]
@@ -359,15 +366,8 @@
               options (last (reagent/argv this))
               {:keys [theme-mode]} options]
           (when (and @cm (not= (.. @cm -state -doc toString) value))
-            (reset! updating? true)
-            (.dispatch @cm #js {:changes #js {:from 0
-                                              :to (.. ^js @cm
-                                                      -state -doc -length)
-                                              :insert value}})
-            (reset! updating? false)
-            #_(let [last-line (.lastLine @cm)
-                    last-ch (count (.getLine ^js @cm last-line))]
-                (.setCursor ^js @cm last-line last-ch)))
+            (updade-cm-value @cm value)
+            (.dispatch @cm #js {:selection #js {:anchor (cm-length @cm)}}))
           (.dispatch @cm #js {:effects (.reconfigure theme-compartment
                                                      (theme theme-mode))})))
 
