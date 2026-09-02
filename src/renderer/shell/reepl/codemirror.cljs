@@ -20,8 +20,9 @@
   (let [lines (.. inst -state -doc -lines)
         pos (.. inst -state -selection -main -head)
         line (.lineAt (.. inst -state -doc) pos)]
-    (and (= lines (.-number line))
-         (= pos (.-to line)))))
+    (or (= 1 lines)
+        (and (= lines (.-number line))
+             (= pos (.-to line))))))
 
 (defn should-eval?
   [inst evt]
