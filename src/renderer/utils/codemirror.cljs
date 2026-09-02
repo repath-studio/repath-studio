@@ -31,8 +31,8 @@
 
 (defn last-line?
   [^js inst]
-  (= (dec (get-lines inst))
-     (.-from (get-line inst))))
+  (= (get-lines inst)
+     (.-number (get-line inst))))
 
 (defn in-place?
   [^js inst]

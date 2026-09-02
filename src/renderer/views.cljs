@@ -330,23 +330,28 @@
             {:backgroundColor "transparent"
              :color "var(--foreground-hovered)"}}))
 
+(def cm-defaults
+  [(.of keymap defaultKeymap)
+   (.of keymap indentWithTab)
+   (.-lineWrapping EditorView)
+   (syntaxHighlighting defaultHighlightStyle)
+   (.of keymap #js {:key "Shift-Enter"
+                    :run insertNewlineAndIndent})])
+
 (defn cm-editor
   [value {:keys [extensions theme-mode on-blur on-change on-keyup on-keydown]}]
   (let [cm (reagent/atom nil)
+        updating? (atom false)
         ref (react/createRef)
         theme-compartment (Compartment.)
         theme (fn [mode] (if (= mode :dark) oneDark #js []))
-        default-extensions [(.theme EditorView cm-theme)
+        dynamic-extensions [(.theme EditorView cm-theme)
                             (.of theme-compartment (theme theme-mode))
-                            (.of keymap defaultKeymap)
-                            (.of keymap indentWithTab)
-                            (.-lineWrapping EditorView)
-                            (syntaxHighlighting defaultHighlightStyle)
-                            (.of keymap #js {:key "Shift-Enter"
-                                             :run insertNewlineAndIndent})
                             (.of EditorView.updateListener
                                  (fn [^js change]
-                                   (when (and on-change (.-docChanged change))
+                                   (when (and on-change
+                                              (not @updating?)
+                                              (.-docChanged change))
                                      (on-change change))))
                             (.high Prec (.domEventHandlers
                                          EditorView
@@ -360,8 +365,9 @@
               view (EditorView.
                     (clj->js {:doc value
                               :parent dom-el
-                              :extensions (cond-> default-extensions
-                                            :always (into basicSetup)
+                              :extensions (cond-> dynamic-extensions
+                                            :always (-> (conj cm-defaults)
+                                                        (into basicSetup))
                                             extensions (conj extensions))}))]
           (reset! cm view)
           (utils.codemirror/set-value @cm value)))
@@ -372,7 +378,9 @@
               options (last (reagent/argv this))
               {:keys [theme-mode]} options]
           (when (and @cm (not= (.. @cm -state -doc toString) value))
+            (reset! updating? true)
             (utils.codemirror/set-value @cm value)
+            (reset! updating? false)
             (.dispatch @cm #js {:selection
                                 #js {:anchor (utils.codemirror/get-length
                                               @cm)}}))
