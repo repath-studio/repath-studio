@@ -21,6 +21,8 @@
 
 (def max-shell-history 200)
 
+(def max-shell-completions 50)
+
 (def image-mime-types
   {"image/png" [".png"]
    "image/jpeg" [".jpeg" ".jpg"]

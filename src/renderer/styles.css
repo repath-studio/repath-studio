@@ -1,8 +1,5 @@
 @import 'tailwindcss';
 @import "tw-animate-css";
-@import 'codemirror/lib/codemirror.css';
-@import 'codemirror/addon/hint/show-hint.css';
-@import 'codemirror/theme/tomorrow-night-eighties.css';
 @import '@xzdarcy/react-timeline-editor/dist/react-timeline-editor.css';
 
 @import './fonts.css';

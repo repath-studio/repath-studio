@@ -1,13 +1,11 @@
 (ns renderer.shell.views
   (:require
+   ["@codemirror/autocomplete" :refer [closeBrackets]]
+   ["@codemirror/language" :refer [bracketMatching defaultHighlightStyle]]
+   ["@codemirror/theme-one-dark" :refer [oneDarkHighlightStyle]]
+   ["@codemirror/view" :refer [EditorView]]
+   ["@lezer/highlight" :refer [highlightCode]]
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
-   ["codemirror" :as codemirror]
-   ["codemirror/addon/edit/closebrackets.js"]
-   ["codemirror/addon/edit/matchbrackets.js"]
-   ["codemirror/addon/hint/show-hint.js"]
-   ["codemirror/addon/runmode/colorize.js"]
-   ["codemirror/addon/runmode/runmode.js"]
-   ["react" :as react]
    [clojure.string :as string]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
@@ -19,13 +17,13 @@
    [renderer.panel.views :as panel.views]
    [renderer.shell.events :as-alias shell.events]
    [renderer.shell.hierarchy :as shell.hierarchy]
-   [renderer.shell.reepl.codemirror :as shell.reepl.codemirror]
    [renderer.shell.reepl.replumb :as reepl.replumb]
    [renderer.shell.reepl.show-devtools :as show-devtools]
    [renderer.shell.reepl.show-function :as show-function]
    [renderer.shell.reepl.show-value :refer [show-value]]
    [renderer.shell.subs :as-alias shell.subs]
    [renderer.theme.subs :as-alias theme.subs]
+   [renderer.utils.codemirror :as utils.codemirror]
    [renderer.utils.dom :as utils.dom]
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]
@@ -33,27 +31,150 @@
   (:require-macros
    [reagent.ratom :refer [reaction]]))
 
-(defn color-highlighted-text
-  [_text _theme]
-  (let [ref (react/createRef)
-        colorize #(when-let [dom-el (.-current ref)]
-                    ((aget codemirror "colorize") #js[dom-el] "clojure")
-                    ;; Hacky way to remove the theme class added by CodeMirror
-                    ;; https://codemirror.net/5/addon/runmode/colorize.js
-                    (-> dom-el .-classList (.remove "cm-s-default")))]
-    (reagent/create-class
-     {:component-did-mount
-      (fn [_this] (colorize))
+(defn theme-highlighters
+  [theme-mode]
+  (if (= theme-mode :light)
+    #js [defaultHighlightStyle]
+    #js [oneDarkHighlightStyle defaultHighlightStyle]))
 
-      :component-did-update
-      (fn [_this _old-argv] (colorize))
+(defn highlight-piece
+  [i [text class]]
+  (cond->> text
+    (seq class)
+    (into [:span {:key i
+                  :class class}])))
 
-      :reagent-render
-      (fn [text theme]
-        [:pre.p-0.m-0
-         {:class (str "cm-s-" theme)
-          :ref ref}
-         text])})))
+(defn static-highlight
+  "https://lezer.codemirror.net/examples/highlight/#running-a-highlighter"
+  [text theme-mode lang]
+  (let [parser (shell.hierarchy/parser lang)
+        tree (.parse parser text)
+        pieces (atom [])]
+    (highlightCode text tree (theme-highlighters theme-mode)
+                   (fn [piece classes]
+                     (swap! pieces conj [(str piece) (str classes)]))
+                   (fn [] (swap! pieces conj ["\n" nil])))
+    [:pre.p-0.m-0
+     (map-indexed highlight-piece @pieces)]))
+
+(defn should-eval?
+  [inst evt]
+  (or (.-metaKey evt)
+      (and (not (.-shiftKey evt))
+           (utils.codemirror/in-place? inst))))
+
+(defn repl-hint
+  [complete-word ^js inst _options]
+  (when-let [result (utils.codemirror/current-word inst)]
+    (let [from (.-from result)
+          to (.-to result)
+          text (.sliceDoc (.-state inst) from to)
+          words (when-not (empty? text)
+                  (->> (complete-word text)
+                       ;; Remove core duplicates
+                       (remove #(string/includes? (second %) "cljs.core"))
+                       (vec)))]
+      (when-not (empty? words)
+        {:words words
+         :num (count words)
+         :active (= (get (first words) 2) text)
+         :show-all false
+         :initial-text text
+         :pos 0
+         :from from
+         :to to}))))
+
+(defn cycle-pos
+  "Cycle through positions. Returns [active new-pos]."
+  [n current-pos go-back? initial-active?]
+  (if go-back?
+    (if (>= 0 current-pos)
+      (if initial-active?
+        [true (dec n)]
+        [false 0])
+      [true (dec current-pos)])
+    (if (>= current-pos (dec n))
+      [initial-active? 0]
+      [true (inc current-pos)])))
+
+(defn should-cycle?
+  [{:keys [words initial-text]
+    :as state}]
+  (and state
+       (or (< 1 (count words))
+           (and (< 0 (count words))
+                (not= initial-text (get (first words) 2))))))
+
+(defn cycle-completions
+  [{:keys [num pos active from to words initial-text]
+    :as state}
+   go-back? inst evt]
+  (when (should-cycle? state)
+    (.preventDefault evt)
+    (let [initial-active (= initial-text (get (first words) 2))
+          [active pos] (if active
+                         (cycle-pos num pos go-back? initial-active)
+                         [true (if go-back? (dec num) pos)])
+          text (if active
+                 (get (get words pos) 2)
+                 initial-text)]
+      (.dispatch inst #js {:changes #js {:from from
+                                         :to to
+                                         :insert text}})
+      (assoc state
+             :pos pos
+             :active active
+             :to (+ from (count text))))))
+
+(defn on-keyup-handler
+  [options evt inst]
+  (let [{:keys [complete-atom complete-word]} options]
+    (.stopPropagation evt)
+    (case (.-key evt)
+      "Escape"
+      (if @complete-atom
+        (reset! complete-atom nil)
+        (some-> (.-activeElement js/document)
+                (.blur)))
+
+      "Enter"
+      (reset! complete-atom nil)
+
+      ("Control" "Alt" "Meta" "ContextMenu")
+      (swap! complete-atom assoc :show-all false)
+
+      (when-not (contains? #{"Tab" "Shift"} (.-key evt))
+        (reset! complete-atom (repl-hint complete-word inst nil))))))
+
+(defn on-keydown-handler
+  [options evt inst]
+  (let [{:keys [complete-atom on-eval on-up on-down]} options]
+    (.stopPropagation evt)
+    (case (.-key evt)
+      ("Control" "Alt" "Meta" "ContextMenu")
+      (swap! complete-atom assoc :show-all true)
+
+      "Tab"
+      (swap! complete-atom cycle-completions (.-shiftKey evt) inst evt)
+
+      "Enter"
+      (when (should-eval? inst evt)
+        (.preventDefault evt)
+        (on-eval (.. inst -state -doc toString)))
+
+      "ArrowUp"
+      (when (and (not (.-shiftKey evt))
+                 (utils.codemirror/first-line? inst))
+        (.preventDefault evt)
+        (on-up))
+
+      "ArrowDown"
+      (when (and (not (.-shiftKey evt))
+                 (utils.codemirror/last-line? inst))
+        (.preventDefault evt)
+        (on-down))
+
+      nil)))
 
 (defn language-dropdown-button
   [enabled?]
@@ -81,48 +202,46 @@
 (defn code-mirror
   [value options]
   [views/cm-editor value
-   {:props {:id utils.dom/shell-input-id
-            :style {:height "auto"
-                    :flex 1}}
-    :options (merge {:viewportMargin js/Infinity
-                     :extraKeys #js {"Shift-Enter" "newlineAndIndent"}
-                     :keyMap "default"
-                     :showCursorWhenSelecting true
-                     :screenReaderLabel "Shell"}
-                    (:cm-options options))
+   {:theme-mode (:theme-mode options)
+    :extensions (conj [(bracketMatching)
+                       (closeBrackets)
+                       (EditorView.contentAttributes.of
+                        #js {:id utils.dom/shell-input-id
+                             :aria-label "Shell"})]
+                      (:extensions options))
     :on-blur #(reset! (:complete-atom options) nil)
     :on-change (:on-change options)
-    :on-keyup (partial shell.reepl.codemirror/on-keyup-handler options)
-    :on-keydown (partial shell.reepl.codemirror/on-keydown-handler options)}])
+    :on-keyup (partial on-keyup-handler options)
+    :on-keydown (partial on-keydown-handler options)}])
 
 (defn repl-input
   [complete-atom]
   (let [lang @(rf/subscribe [::shell.subs/active-language])
-        codemirror-theme @(rf/subscribe [::theme.subs/codemirror])
+        theme-mode @(rf/subscribe [::theme.subs/computed-mode])
         repl-history? @(rf/subscribe [::panel.subs/visible? :repl-history])
         loaded? @(rf/subscribe [::shell.subs/language-loaded?])
         current-text @(rf/subscribe [::shell.subs/current-text])]
     [:div.flex.items-center
-     [:div.flex.self-start.p-1.5.flex-1
+     [:div.flex.self-start.flex-1
       [:div.flex.text-xs.self-start
-       {:class "p-0.5"}
+       {:class "p-1.5 pr-1"}
        (if loaded?
          (string/trim (replumb/get-prompt))
-         [:span.text-foreground-disabled
+         [:span.text-foreground-muted
           (i18n.views/t [::loading-language "Loading language..."])])]
-      [:div.flex-1
-       {:class "p-0.5"}
+      [:div.flex-1.py-px
        (when loaded?
          ^{:key lang}
          [code-mirror current-text
-          {:on-eval #(rf/dispatch [::shell.events/execute %])
-           :on-change #(rf/dispatch [::shell.events/set-text %])
-           :complete-word #(shell.hierarchy/completions lang %)
-           :on-up #(rf/dispatch [::shell.events/go-up])
-           :on-down #(rf/dispatch [::shell.events/go-down])
-           :complete-atom complete-atom
-           :cm-options (merge {:theme codemirror-theme}
-                              (shell.hierarchy/codemirror-options lang))}])]]
+          (merge {:theme-mode theme-mode
+                  :on-eval #(rf/dispatch [::shell.events/execute %])
+                  :on-change #(rf/dispatch [::shell.events/set-text
+                                            (.. % -state -doc toString)])
+                  :complete-word #(shell.hierarchy/completions lang %)
+                  :on-up #(rf/dispatch [::shell.events/go-up])
+                  :on-down #(rf/dispatch [::shell.events/go-down])
+                  :complete-atom complete-atom}
+                 (shell.hierarchy/codemirror-options lang))])]]
      [:div.self-start.h-full.flex.items-center
       [language-dropdown-button loaded?]
       (when @(rf/subscribe [::window.subs/md?])
@@ -138,12 +257,12 @@
 (defmulti item (fn [i _opts] (:type i)))
 
 (defmethod item :input
-  [{{:keys [current-ns text]} :value} {:keys [theme]}]
+  [{{:keys [current-ns text]} :value} {:keys [theme-mode language]}]
   [:div.flex.gap-2
-   [:div.text-foreground-disabled.font-bold (str current-ns "=>")]
+   [:div.text-foreground-muted.font-bold (str current-ns "=>")]
    [:div.flex-1.cursor-pointer.break-words
     {:on-click #(rf/dispatch [::shell.events/set-text text])}
-    [color-highlighted-text text theme]]])
+    [static-highlight text theme-mode language]]])
 
 (defmethod item :error
   [{:keys [value]} opts]
@@ -166,10 +285,10 @@
   []
   (let [loaded? @(rf/subscribe [::shell.subs/language-loaded?])
         items @(rf/subscribe [::shell.subs/items])
-        codemirror-theme @(rf/subscribe [::theme.subs/codemirror])
+        theme-mode @(rf/subscribe [::theme.subs/computed-mode])
         lang @(rf/subscribe [::shell.subs/active-language])
         md? @(rf/subscribe [::window.subs/md?])
-        opts {:theme codemirror-theme
+        opts {:theme-mode theme-mode
               :language lang
               :showers [show-devtools/show-devtools
                         (partial show-function/show-fn-with-docs
@@ -195,9 +314,10 @@
 
 (defn completion-item
   [text selected active set-active]
-  [:div.p-1.bg-secondary.text-nowrap
+  [:div.p-1.bg-secondary.text-nowrap.hover:bg-primary
    {:ref #(when selected (rf/dispatch [::events/scroll-into-view %]))
-    :on-pointer-enter set-active
+    :on-pointer-down #(do (.preventDefault %)
+                          (set-active %))
     :class (when selected (if active
                             "bg-accent! text-accent-foreground!"
                             "bg-primary!"))}
@@ -205,11 +325,14 @@
 
 (defn function-docs
   [s]
-  (let [codemirror-theme @(rf/subscribe [::theme.subs/codemirror])
+  (let [theme-mode @(rf/subscribe [::theme.subs/computed-mode])
+        lang @(rf/subscribe [::shell.subs/active-language])
         [fn-name signature doc] (filter seq (string/split-lines s))]
     [:div.bg-primary.drop-shadow.p-4.absolute.bottom-full.flex.flex-col.gap-4
-     [:div.font-semibold fn-name]
-     (when signature [color-highlighted-text signature codemirror-theme])
+     [:div.font-semibold
+      [static-highlight (str fn-name) theme-mode lang]]
+     (when signature
+       [static-highlight signature theme-mode lang])
      (when doc [:div doc])]))
 
 (defn completion-list

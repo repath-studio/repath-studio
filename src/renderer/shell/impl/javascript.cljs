@@ -1,6 +1,6 @@
 (ns renderer.shell.impl.javascript
   (:require
-   ["codemirror/mode/javascript/javascript.js"]
+   ["@codemirror/lang-javascript" :refer [javascript]]
    [camel-snake-kebab.core :as camel-snake-kebab]
    [clojure.string :as string]
    [re-frame.core :as rf]
@@ -54,7 +54,11 @@
 
 (defmethod shell.hierarchy/codemirror-options :js
   [_language]
-  {:mode "javascript"})
+  {:extensions [(javascript)]})
+
+(defmethod shell.hierarchy/parser :js
+  [_language]
+  (.. (javascript) -language -parser))
 
 (defmethod shell.hierarchy/completions :js
   [_language s]

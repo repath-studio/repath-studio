@@ -16,11 +16,13 @@
 
     (let [active-language (rf/subscribe [::shell.subs/active-language])
           history (rf/subscribe [::shell.subs/history])
-          items (rf/subscribe [::shell.subs/items])]
+          items (rf/subscribe [::shell.subs/items])
+          current-text (rf/subscribe [::shell.subs/current-text])]
 
       (testing "initial"
         (is (= @active-language :cljs))
-        (is (= @history [""])))
+        (is (= @history [""]))
+        (is (= @current-text "")))
 
       (testing "eval hashmap"
         (rf/dispatch [::shell.events/execute "{}"])
@@ -30,6 +32,10 @@
 
          (is (= @history ["{}"]))
          (is (= @items ["{}"]))))
+
+      (testing "set text"
+        (rf/dispatch-sync [::shell.events/set-text "foo"])
+        (is (= @current-text "foo")))
 
       (testing "clear command"
         (rf/dispatch [::shell.events/execute "(clear)"])
@@ -48,4 +54,3 @@
 
          (is (= @active-language :js))
          (is (= @history [""]))))))))
-

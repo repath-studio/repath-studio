@@ -126,6 +126,7 @@
                       renderer.tree.views tree.views
                       renderer.utils.attribute utils.attribute
                       renderer.utils.bounds utils.bounds
+                      renderer.utils.codemirror utils.codemirror
                       renderer.utils.compatibility utils.compatibility
                       renderer.utils.dom utils.dom
                       renderer.utils.element utils.element

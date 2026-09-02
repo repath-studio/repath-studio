@@ -2,6 +2,13 @@
   "A collection of stateless reusable ui components.
    Avoid using subscriptions to keep the components pure."
   (:require
+   ["@codemirror/commands" :refer [defaultKeymap
+                                   indentWithTab
+                                   insertNewlineAndIndent]]
+   ["@codemirror/language" :refer [syntaxHighlighting defaultHighlightStyle]]
+   ["@codemirror/state" :refer [Compartment Prec]]
+   ["@codemirror/theme-one-dark" :refer [oneDark]]
+   ["@codemirror/view" :refer [EditorView basicSetup keymap]]
    ["@radix-ui/react-context-menu" :as ContextMenu]
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
    ["@radix-ui/react-hover-card" :as HoverCard]
@@ -11,12 +18,6 @@
    ["@radix-ui/react-slider" :as Slider]
    ["@radix-ui/react-switch" :as Switch]
    ["@radix-ui/react-tooltip" :as Tooltip]
-   ["codemirror" :as codemirror]
-   ["codemirror/addon/display/placeholder.js"]
-   ["codemirror/addon/hint/css-hint.js"]
-   ["codemirror/addon/hint/show-hint.js"]
-   ["codemirror/mode/css/css.js"]
-   ["codemirror/mode/xml/xml.js"]
    ["react" :as react]
    ["sonner" :refer [Toaster]]
    ["tailwind-merge" :refer [twMerge]]
@@ -25,6 +26,7 @@
    [renderer.action.views :as action.views]
    [renderer.i18n.views :as i18n.views]
    [renderer.icon.views :as icon.views]
+   [renderer.utils.codemirror :as utils.codemirror]
    [renderer.utils.extra :refer [rpartial]]
    [renderer.utils.key :as utils.key]))
 
@@ -303,72 +305,90 @@
 (defn select-arrow []
   [:> Select/Arrow {:class "fill-primary stroke-border"}])
 
-(def cm-defaults
-  {:lineNumbers false
-   :matchBrackets true
-   :lineWrapping true
-   :styleActiveLine true
-   :tabMode "spaces"
-   :autofocus false
-   :extraKeys {"Ctrl-Space" "autocomplete"}
-   :theme "tomorrow-night-eighties"
-   :autoCloseBrackets true})
+(def cm-theme
+  (clj->js {"&"
+            {:backgroundColor "transparent"
+             :fontSize "var(--text-xs)"}
 
-(defn cm-render-line
-  "Line up wrapped text with the base indentation.
-   https://codemirror.net/demo/indentwrap.html"
-  [editor line dom-el]
-  (let [tab-size (.getOption editor "tabSize")
-        off (* (.countColumn codemirror (.-text line) nil tab-size)
-               (.defaultCharWidth editor))]
-    (set! (.. dom-el -style -textIndent)
-          (str "-" off "px"))
-    (set! (.. dom-el -style -paddingLeft)
-          (str (+ 4 off) "px"))))
+            ".cm-content"
+            {:color "var(--foreground-default)"
+             :caretColor "var(--foreground-hovered)"}
+
+            "&.cm-focused"
+            {:outline "none"}
+
+            ".cm-gutters"
+            {:backgroundColor "var(--primary)"
+             :color "var(--foreground-muted)"
+             :border "none"}
+
+            "&.cm-focused .cm-matchingBracket"
+            {:backgroundColor "transparent"
+             :color "var(--foreground-hovered)"}
+
+            "&.cm-focused .cm-nonmatchingBracket"
+            {:backgroundColor "transparent"
+             :color "var(--foreground-hovered)"}}))
+
+(def cm-defaults
+  [(.of keymap defaultKeymap)
+   (.of keymap indentWithTab)
+   (.-lineWrapping EditorView)
+   (syntaxHighlighting defaultHighlightStyle)
+   (.of keymap #js {:key "Shift-Enter"
+                    :run insertNewlineAndIndent})])
 
 (defn cm-editor
-  [value {:keys [props options on-init on-blur on-change on-keyup on-keydown]}]
+  [value {:keys [extensions theme-mode on-blur on-change on-keyup on-keydown]}]
   (let [cm (reagent/atom nil)
+        updating? (atom false)
         ref (react/createRef)
-        updating? (atom false)]
+        theme-compartment (Compartment.)
+        theme (fn [mode] (if (= mode :dark) oneDark #js []))
+        dynamic-extensions [(.theme EditorView cm-theme)
+                            (.of theme-compartment (theme theme-mode))
+                            (.of EditorView.updateListener
+                                 (fn [^js change]
+                                   (when (and on-change
+                                              (not @updating?)
+                                              (.-docChanged change))
+                                     (on-change change))))
+                            (.high Prec (.domEventHandlers
+                                         EditorView
+                                         #js {:keydown on-keydown
+                                              :keyup on-keyup
+                                              :blur on-blur}))]]
     (reagent/create-class
      {:component-did-mount
       (fn [_this]
         (let [dom-el (.-current ref)
-              options (clj->js (merge cm-defaults options))]
-          (reset! cm (codemirror dom-el options))
-          (.setValue @cm value)
-          (.on @cm "renderLine" cm-render-line)
-          (.on @cm "keydown" (or on-keydown
-                                 (fn [_editor evt] (.stopPropagation evt))))
-          (.on @cm "keyup" (or on-keyup
-                               (fn [_editor evt] (.stopPropagation evt))))
-          (.refresh @cm)
-          (when on-blur (.on @cm "blur" #(on-blur (.getValue %))))
-          (when on-init (on-init @cm))
-          (when on-change (.on @cm "change" #(when-not @updating?
-                                               (on-change (.getValue %)))))))
-
-      :component-will-unmount
-      #(reset! cm nil)
+              view (EditorView.
+                    (clj->js {:doc value
+                              :parent dom-el
+                              :extensions (cond-> dynamic-extensions
+                                            :always (-> (conj cm-defaults)
+                                                        (into basicSetup))
+                                            extensions (conj extensions))}))]
+          (reset! cm view)
+          (utils.codemirror/set-value @cm value)))
 
       :component-did-update
       (fn [this _]
         (let [value (second (reagent/argv this))
-              options (:options (last (reagent/argv this)))]
-          (when (and @cm value (not= (.getValue @cm) value))
+              options (last (reagent/argv this))
+              {:keys [theme-mode]} options]
+          (when (and @cm (not= (.. @cm -state -doc toString) value))
             (reset! updating? true)
-            (.setValue @cm value)
+            (utils.codemirror/set-value @cm value)
             (reset! updating? false)
-            (let [last-line (.lastLine @cm)
-                  last-ch (count (.getLine @cm last-line))]
-              (.setCursor @cm last-line last-ch)))
-          (doseq [[k v] options]
-            (.setOption @cm (name k) v))))
+            (.dispatch @cm #js {:selection
+                                #js {:anchor (utils.codemirror/get-length
+                                              @cm)}}))
+          (.dispatch @cm #js {:effects (.reconfigure theme-compartment
+                                                     (theme theme-mode))})))
 
       :reagent-render
-      (fn []
-        [:div (merge {:ref ref} props)])})))
+      (fn [] [:div {:ref ref}])})))
 
 (defn toaster
   [theme]

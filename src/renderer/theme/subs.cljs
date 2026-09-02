@@ -28,10 +28,3 @@
  :<- [::native-mode]
  :-> (partial apply theme.handlers/computed-mode))
 
-(rf/reg-sub
- ::codemirror
- :<- [::computed-mode]
- (fn [computed-mode _]
-   (if (= computed-mode :dark)
-     "tomorrow-night-eighties"
-     "default")))

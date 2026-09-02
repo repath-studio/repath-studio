@@ -16,13 +16,14 @@
 (defn show-value-
   [v config showers]
   (loop [shower-list showers]
-    (if (empty? shower-list)
-      (throw (js/Error. (str "No shower for value " v)))
-      (if-let [res (->> showers
-                        (rpartial show-value-)
-                        ((first shower-list) v config))]
-        [:div.inline-flex res]
-        (recur (rest shower-list))))))
+    (when (empty? shower-list)
+      (throw (js/Error. (str "No shower for value " v))))
+
+    (if-let [res (->> showers
+                      (rpartial show-value-)
+                      ((first shower-list) v config))]
+      [:div.inline-flex res]
+      (recur (rest shower-list)))))
 
 (defn show-value
   [v opts show-opts]
