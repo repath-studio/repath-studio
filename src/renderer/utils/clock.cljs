@@ -20,10 +20,10 @@
   [i]
   (get metrics-multiplier (get metrics i)))
 
-(m/=> timecount->ms [:-> number? [:maybe number?]])
+(m/=> timecount->ms [:-> string? [:maybe number?]])
 (defn timecount->ms
-  [t]
-  (when-let [[_ number unit] (re-find timecount-pattern t)]
+  [s]
+  (when-let [[_ number unit] (re-find timecount-pattern s)]
     (* (max 0 (js/parseFloat number))
        (or (get metrics-multiplier unit)
            (get metrics-multiplier "s")))))
