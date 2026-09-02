@@ -26,6 +26,7 @@
    [renderer.action.views :as action.views]
    [renderer.i18n.views :as i18n.views]
    [renderer.icon.views :as icon.views]
+   [renderer.utils.codemirror :as utils.codemirror]
    [renderer.utils.extra :refer [rpartial]]
    [renderer.utils.key :as utils.key]))
 
@@ -314,16 +315,6 @@
                            :color "var(--foreground-muted)"
                            :border "none"}}))
 
-(defn cm-length
-  [cm]
-  (.. cm -state -doc -length))
-
-(defn updade-cm-value
-  [cm value]
-  (.dispatch cm #js {:changes #js {:from 0
-                                   :to (cm-length cm)
-                                   :insert value}}))
-
 (defn cm-editor
   [value {:keys [extensions theme-mode on-blur on-change on-keyup on-keydown]}]
   (let [cm (reagent/atom nil)
@@ -358,7 +349,7 @@
                                             :always (into basicSetup)
                                             extensions (conj extensions))}))]
           (reset! cm view)
-          (updade-cm-value @cm value)))
+          (utils.codemirror/set-value @cm value)))
 
       :component-did-update
       (fn [this _]
@@ -366,14 +357,15 @@
               options (last (reagent/argv this))
               {:keys [theme-mode]} options]
           (when (and @cm (not= (.. @cm -state -doc toString) value))
-            (updade-cm-value @cm value)
-            (.dispatch @cm #js {:selection #js {:anchor (cm-length @cm)}}))
+            (utils.codemirror/set-value @cm value)
+            (.dispatch @cm #js {:selection
+                                #js {:anchor (utils.codemirror/get-length
+                                              @cm)}}))
           (.dispatch @cm #js {:effects (.reconfigure theme-compartment
                                                      (theme theme-mode))})))
 
       :reagent-render
-      (fn []
-        [:div {:ref ref}])})))
+      (fn [] [:div {:ref ref}])})))
 
 (defn toaster
   [theme]

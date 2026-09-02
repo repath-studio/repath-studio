@@ -1,52 +1,20 @@
 (ns renderer.shell.reepl.codemirror
   (:require
-   [clojure.string :as string]))
-
-(defn should-go-up?
-  [_source ^js inst]
-  (let [pos (.. inst -state -selection -main -head)
-        line (.lineAt (.. inst -state -doc) pos)]
-    (zero? (.-from line))))
-
-(defn should-go-down?
-  [_source ^js inst]
-  (let [pos (.. inst -state -selection -main -head)
-        line (.lineAt (.. inst -state -doc) pos)
-        last-line (.. inst -state -doc -lines)]
-    (= (dec last-line) (.-from line))))
-
-(defn in-place?
-  [^js inst]
-  (let [lines (.. inst -state -doc -lines)
-        pos (.. inst -state -selection -main -head)
-        line (.lineAt (.. inst -state -doc) pos)]
-    (or (= 1 lines)
-        (and (= lines (.-number line))
-             (= pos (.-to line))))))
+   [clojure.string :as string]
+   [renderer.utils.codemirror :as utils.codemirror]))
 
 (defn should-eval?
   [inst evt]
-  (cond
-    (.-shiftKey evt) false
-    (.-metaKey evt) true
-    :else (in-place? inst)))
-
-(defn cm-current-word
-  "Find the current 'word' according to CodeMirror's `wordChars' list"
-  [^js cm]
-  (let [pos (.. cm -state -selection -main -head)]
-    (or (.wordAt (.-state cm) pos)
-        (let [char-before (.sliceDoc (.-state cm) (dec pos) pos)]
-          (when-not (= char-before "/")
-            char-before)))))
+  (or (.-metaKey evt)
+      (and (not (.-shiftKey evt))
+           (utils.codemirror/in-place? inst))))
 
 (defn repl-hint
-  "Get a new completion state."
-  [complete-word ^js cm _options]
-  (when-let [result (cm-current-word cm)]
+  [complete-word ^js inst _options]
+  (when-let [result (utils.codemirror/current-word inst)]
     (let [from (.-from result)
           to (.-to result)
-          text (.sliceDoc (.-state cm) from to)
+          text (.sliceDoc (.-state inst) from to)
           words (when-not (empty? text)
                   (->> (complete-word text)
                        ;; Remove core duplicates
@@ -63,26 +31,17 @@
          :to to}))))
 
 (defn cycle-pos
-  "Cycle through positions. Returns [active new-pos].
-
-  count
-    total number of completions
-  current
-    current position
-  go-back?
-    should we be going in reverse
-  initial-active
-    if false, then we return not-active when wrapping around"
-  [n current go-back initial-active]
-  (if go-back
-    (if (>= 0 current)
-      (if initial-active
+  "Cycle through positions. Returns [active new-pos]."
+  [n current-pos go-back? initial-active?]
+  (if go-back?
+    (if (>= 0 current-pos)
+      (if initial-active?
         [true (dec n)]
         [false 0])
-      [true (dec current)])
-    (if (>= current (dec n))
-      [initial-active 0]
-      [true (inc current)])))
+      [true (dec current-pos)])
+    (if (>= current-pos (dec n))
+      [initial-active? 0]
+      [true (inc current-pos)])))
 
 (defn should-cycle?
   [{:keys [words initial-text]
@@ -93,21 +52,9 @@
                 (not= initial-text (get (first words) 2))))))
 
 (defn cycle-completions
-  "Cycle through completions, changing the codemirror text accordingly. Returns
-  a new state map.
-
-  state
-    the current completion state
-  go-back?
-    whether to cycle in reverse (generally b/c shift is pressed)
-  cm
-    the codemirror instance
-  evt
-    the triggering event. it will be `.preventDefault'd if there are completions
-    to cycle through."
   [{:keys [num pos active from to words initial-text]
     :as state}
-   go-back? cm evt]
+   go-back? inst evt]
   (when (should-cycle? state)
     (.preventDefault evt)
     (let [initial-active (= initial-text (get (first words) 2))
@@ -117,9 +64,9 @@
           text (if active
                  (get (get words pos) 2)
                  initial-text)]
-      (.dispatch cm #js {:changes #js {:from from
-                                       :to to
-                                       :insert text}})
+      (.dispatch inst #js {:changes #js {:from from
+                                         :to to
+                                         :insert text}})
       (assoc state
              :pos pos
              :active active
@@ -157,23 +104,20 @@
       (swap! complete-atom cycle-completions (.-shiftKey evt) inst evt)
 
       "Enter"
-      (let [source (.. inst -state -doc toString)]
-        (when (should-eval? inst evt)
-          (.preventDefault evt)
-          (on-eval source)))
+      (when (should-eval? inst evt)
+        (.preventDefault evt)
+        (on-eval (.. inst -state -doc toString)))
 
       "ArrowUp"
-      (let [source (.. inst -state -doc toString)]
-        (when (and (not (.-shiftKey evt))
-                   (should-go-up? source inst))
-          (.preventDefault evt)
-          (on-up)))
+      (when (and (not (.-shiftKey evt))
+                 (utils.codemirror/first-line? inst))
+        (.preventDefault evt)
+        (on-up))
 
       "ArrowDown"
-      (let [source (.. inst -state -doc toString)]
-        (when (and (not (.-shiftKey evt))
-                   (should-go-down? source inst))
-          (.preventDefault evt)
-          (on-down)))
+      (when (and (not (.-shiftKey evt))
+                 (utils.codemirror/last-line? inst))
+        (.preventDefault evt)
+        (on-down))
 
       nil)))
