@@ -227,7 +227,7 @@
        {:class "p-1.5 pr-1"}
        (if loaded?
          (string/trim (replumb/get-prompt))
-         [:span.text-foreground-disabled
+         [:span.text-foreground-muted
           (i18n.views/t [::loading-language "Loading language..."])])]
       [:div.flex-1.py-px
        (when loaded?
@@ -259,7 +259,7 @@
 (defmethod item :input
   [{{:keys [current-ns text]} :value} {:keys [theme-mode language]}]
   [:div.flex.gap-2
-   [:div.text-foreground-disabled.font-bold (str current-ns "=>")]
+   [:div.text-foreground-muted.font-bold (str current-ns "=>")]
    [:div.flex-1.cursor-pointer.break-words
     {:on-click #(rf/dispatch [::shell.events/set-text text])}
     [static-highlight text theme-mode language]]])
