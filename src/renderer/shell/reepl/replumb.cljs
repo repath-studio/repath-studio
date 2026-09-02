@@ -5,6 +5,7 @@
    [cljs.tools.reader]
    [cljs.tools.reader.reader-types :refer [string-push-back-reader]]
    [clojure.string :as string]
+   [config :as config]
    [replumb.ast :as ast]
    [replumb.core :as replumb]
    [replumb.doc-maps :as docs]
@@ -166,7 +167,6 @@ cljs.js/*load-fn*
          (sort (partial compare-completion text))
          (map #(vector nil (prefix %) (prefix %))))))
 
-;; TODO: fuzzy-match if there are no normal matches
 (defn cljs-completion
   "Tab completion, copied w/ extensive modifications from
    replumb.repl/process-apropos."
@@ -202,8 +202,7 @@ cljs.js/*load-fn*
                   (map #(vector % (str %) (replace-name %) (name %)))
                   (sort-by #(get % 3) (partial compare-completion text)))]
     (vec (concat
-          ;; TODO: make this configurable
-          (take 75 defs)
+          (take config/max-shell-completions defs)
           (map
            #(vector % (str %) (str %))
            (filter matches? names))))))
