@@ -316,7 +316,8 @@
   [text selected active set-active]
   [:div.p-1.bg-secondary.text-nowrap
    {:ref #(when selected (rf/dispatch [::events/scroll-into-view %]))
-    :on-pointer-enter set-active
+    :on-pointer-down #(do (.preventDefault %)
+                          (set-active %))
     :class (when selected (if active
                             "bg-accent! text-accent-foreground!"
                             "bg-primary!"))}
