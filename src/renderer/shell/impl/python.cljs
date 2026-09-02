@@ -80,6 +80,10 @@
   [_language]
   {:extensions [(python)]})
 
+(defmethod shell.hierarchy/parser :python
+  [_language]
+  (.. (python) -language -parser))
+
 (defmethod shell.hierarchy/completions :python
   [_language s]
   (when (zero? (.indexOf s "js."))

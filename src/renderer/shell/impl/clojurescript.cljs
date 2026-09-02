@@ -1,6 +1,6 @@
 (ns renderer.shell.impl.clojurescript
   (:require
-   ["@nextjournal/lang-clojure" :refer [clojure]]
+   ["@nextjournal/lang-clojure" :refer [clojure clojureLanguage]]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.hierarchy :as hierarchy]
@@ -35,6 +35,10 @@
 (defmethod shell.hierarchy/codemirror-options :cljs
   [_language]
   {:extensions [(clojure)]})
+
+(defmethod shell.hierarchy/parser :cljs
+  [_language]
+  (.-parser clojureLanguage))
 
 (defmethod shell.hierarchy/completions :cljs
   [_language s]

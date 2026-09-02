@@ -1,10 +1,11 @@
 (ns renderer.shell.views
   (:require
    ["@codemirror/autocomplete" :refer [closeBrackets]]
-   ["@codemirror/language" :refer [bracketMatching]]
+   ["@codemirror/language" :refer [bracketMatching defaultHighlightStyle]]
+   ["@codemirror/theme-one-dark" :refer [oneDarkHighlightStyle]]
    ["@codemirror/view" :refer [EditorView]]
+   ["@lezer/highlight" :refer [highlightCode]]
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
-   #_["react" :as react]
    [clojure.string :as string]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
@@ -30,28 +31,31 @@
   (:require-macros
    [reagent.ratom :refer [reaction]]))
 
+(defn theme-highlighters
+  [theme-mode]
+  (if (= theme-mode :light)
+    #js [defaultHighlightStyle]
+    #js [oneDarkHighlightStyle defaultHighlightStyle]))
+
+(defn highlight-piece
+  [i [text class]]
+  (cond->> text
+    (seq class)
+    (into [:span {:key i
+                  :class class}])))
+
 (defn static-highlight
-  [text _theme-mode]
-  text
-  #_(let [ref (react/createRef)
-          colorize #(when-let [dom-el (.-current ref)]
-                      ((aget codemirror "colorize") #js[dom-el] "clojure")
-                      ;; Hacky way to remove the theme class added by CodeMirror
-                      ;; https://codemirror.net/5/addon/runmode/colorize.js
-                      (-> dom-el .-classList (.remove "cm-s-default")))]
-      (reagent/create-class
-       {:component-did-mount
-        (fn [_this] (colorize))
-
-        :component-did-update
-        (fn [_this _old-argv] (colorize))
-
-        :reagent-render
-        (fn [text theme]
-          [:pre.p-0.m-0
-           {:class (str "cm-s-" theme)
-            :ref ref}
-           text])})))
+  "https://lezer.codemirror.net/examples/highlight/#running-a-highlighter"
+  [text theme-mode lang]
+  (let [parser (shell.hierarchy/parser lang)
+        tree (.parse parser text)
+        pieces (atom [])]
+    (highlightCode text tree (theme-highlighters theme-mode)
+                   (fn [piece classes]
+                     (swap! pieces conj [(str piece) (str classes)]))
+                   (fn [] (swap! pieces conj ["\n" nil])))
+    [:pre.p-0.m-0
+     (map-indexed highlight-piece @pieces)]))
 
 (defn language-dropdown-button
   [enabled?]
@@ -134,12 +138,12 @@
 (defmulti item (fn [i _opts] (:type i)))
 
 (defmethod item :input
-  [{{:keys [current-ns text]} :value} {:keys [theme-mode]}]
+  [{{:keys [current-ns text]} :value} {:keys [theme-mode language]}]
   [:div.flex.gap-2
    [:div.text-foreground-disabled.font-bold (str current-ns "=>")]
    [:div.flex-1.cursor-pointer.break-words
     {:on-click #(rf/dispatch [::shell.events/set-text text])}
-    [static-highlight text theme-mode]]])
+    [static-highlight text theme-mode language]]])
 
 (defmethod item :error
   [{:keys [value]} opts]
@@ -201,12 +205,13 @@
 
 (defn function-docs
   [s]
-  (let [theme-mode (rf/subscribe [::theme.subs/computed-mode])
+  (let [theme-mode @(rf/subscribe [::theme.subs/computed-mode])
+        lang @(rf/subscribe [::shell.subs/active-language])
         [fn-name signature doc] (filter seq (string/split-lines s))]
     [:div.bg-primary.drop-shadow.p-4.absolute.bottom-full.flex.flex-col.gap-4
      [:div.font-semibold fn-name]
      (when signature
-       [static-highlight signature theme-mode])
+       [static-highlight signature theme-mode lang])
      (when doc [:div doc])]))
 
 (defn completion-list

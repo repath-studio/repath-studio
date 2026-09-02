@@ -56,6 +56,10 @@
   [_language]
   {:extensions [(javascript)]})
 
+(defmethod shell.hierarchy/parser :js
+  [_language]
+  (.. (javascript) -language -parser))
+
 (defmethod shell.hierarchy/completions :js
   [_language s]
   (shell.utils.completion/js-completion s ""))

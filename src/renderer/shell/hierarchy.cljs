@@ -8,6 +8,7 @@
 (defmulti completions identity)
 (defmulti docs identity)
 (defmulti codemirror-options identity)
+(defmulti parser identity)
 
 (defmethod init :default [_params])
 (defmethod welcome :default [_language])
@@ -17,5 +18,6 @@
 (defmethod completions :default [_language _s])
 (defmethod docs :default [_language _s])
 (defmethod codemirror-options :default [_language])
+(defmethod parser :default [_language])
 
 
