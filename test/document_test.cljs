@@ -62,8 +62,8 @@
        (is (not @active-document))))))
 
 (deftest save
-  (rf.test/run-test-async
-   (rf/dispatch-sync [::app.events/initialize])
+  (rf.test/run-test-sync
+   (rf/dispatch [::app.events/initialize])
    (rf/dispatch [::document.events/new])
 
    (let [active (rf/subscribe [::document.subs/active])
