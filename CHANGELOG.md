@@ -22,7 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Missing actions to command dialog [#175](https://github.com/repath-studio/repath-studio/pull/175)
 - Autocomplete on attributeName of animations and use translated text on
   attribute info popover [#186](https://github.com/repath-studio/repath-studio/pull/186)
-- Motion path creation action [#193](https://github.com/repath-studio/repath-studio/pull/#193)
+- Motion path creation action [#193](https://github.com/repath-studio/repath-studio/pull/193)
 - Error notification on invalid local configuration
 - Toggle developer tools action
 
