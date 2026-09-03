@@ -40,7 +40,7 @@ jobs:
       - name: Install clojure tools
         uses: DeLaGuardo/setup-clojure@13.6.1
         with:
-          cli: 1.12.5.1664
+          cli: 1.12.6.1673
           clj-kondo: 2026.08.04
 
       - name: Cache npm dependencies

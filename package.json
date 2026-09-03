@@ -134,7 +134,7 @@
     "cmdk": "1.1.1",
     "create-react-class": "15.7.0",
     "doc-link-checker-cli": "1.0.4",
-    "electron": "43.4.1",
+    "electron": "44.0.0",
     "electron-builder": "26.15.3",
     "electron-builder-notarize": "1.5.2",
     "highlight.js": "11.12.0",
@@ -155,8 +155,8 @@
     "path-browserify": "1.0.1",
     "perfect-freehand": "1.2.3",
     "process": "0.11.10",
-    "puppeteer": "25.8.0",
-    "pyodide": "314.0.5",
+    "puppeteer": "25.9.0",
+    "pyodide": "314.0.6",
     "react": "19.2.8",
     "react-d3-tree": "3.6.6",
     "react-dom": "19.2.8",
@@ -192,6 +192,6 @@
     "@sentry/capacitor@4.3.0": true,
     "@sentry/cli@3.6.2": true,
     "electron-winstaller@5.4.0": true,
-    "puppeteer@25.8.0": true
+    "puppeteer@25.9.0": true
   }
 }
