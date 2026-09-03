@@ -6,7 +6,6 @@
    [renderer.app.events :as-alias app.events]
    [renderer.document.events :as-alias document.events]
    [renderer.effects :as-alias effects]
-   [renderer.element.core :as-alias element.core]
    [renderer.element.effects :as-alias element.effects]
    [renderer.element.handlers :as element.handlers]
    [renderer.history.events :refer [finalize]]
@@ -46,13 +45,13 @@
 
 (rf/reg-event-db
  ::lock
- [(finalize [::lock-selection "Lock selection"])]
+ [(finalize [::lock "Lock"])]
  (fn [db _]
    (element.handlers/assoc-prop db :locked true)))
 
 (rf/reg-event-db
  ::unlock
- [(finalize [::unlock-selection "Unlock selection"])]
+ [(finalize [::unlock "Unlock"])]
  (fn [db _]
    (element.handlers/assoc-prop db :locked false)))
 
@@ -82,7 +81,7 @@
 
 (rf/reg-event-db
  ::delete
- [(finalize [::delete-selection "Delete selection"])]
+ [(finalize [::delete "Delete"])]
  (fn [db _]
    (tool.hierarchy/on-delete db)))
 
@@ -112,56 +111,86 @@
 
 (rf/reg-event-db
  ::raise
- [(finalize [::raise-selection "Raise selection"])]
+ [(finalize [::raise "Raise"])]
  (fn [db _]
    (element.handlers/update-index db inc)))
 
 (rf/reg-event-db
  ::lower
- [(finalize [::lower-selection "Lower selection"])]
+ [(finalize [::lower "Lower"])]
  (fn [db _]
    (element.handlers/update-index db dec)))
 
 (rf/reg-event-db
  ::raise-to-top
- [(finalize [::raise-selection-top "Raise selection to top"])]
+ [(finalize [::raise-to-top "Raise to top"])]
  (fn [db _]
    (element.handlers/update-index db (fn [_i sibling-count]
                                        (dec sibling-count)))))
 
 (rf/reg-event-db
  ::lower-to-bottom
- [(finalize [::lower-selection-bottom "Lower selection to bottom"])]
+ [(finalize [::lower-to-bottom "Lower to bottom"])]
  (fn [db _]
    (element.handlers/update-index db (constantly 0))))
 
 (rf/reg-event-db
- ::align
- [(finalize (fn [[_ direction]] [[::update "Update %1"] [direction]]))]
- (fn [db [_ direction]]
-   (element.handlers/align db direction)))
+ ::align-left
+ [(finalize [::align-left "Align left"])]
+ (fn [db _]
+   (element.handlers/align db :left)))
+
+(rf/reg-event-db
+ ::center-horizontally
+ [(finalize [::center-horizontally "Center horizontally"])]
+ (fn [db _]
+   (element.handlers/align db :center-horizontal)))
+
+(rf/reg-event-db
+ ::align-right
+ [(finalize [::align-right "Align right"])]
+ (fn [db _]
+   (element.handlers/align db :right)))
+
+(rf/reg-event-db
+ ::align-top
+ [(finalize [::align-top "Align top"])]
+ (fn [db _]
+   (element.handlers/align db :top)))
+
+(rf/reg-event-db
+ ::center-vertically
+ [(finalize [::center-vertically "Center vertically"])]
+ (fn [db _]
+   (element.handlers/align db :center-vertical)))
+
+(rf/reg-event-db
+ ::align-bottom
+ [(finalize [::align-bottom "Align bottom"])]
+ (fn [db _]
+   (element.handlers/align db :bottom)))
 
 (rf/reg-event-db
  ::paste
- [(finalize [::paste-selection "Paste selection"])]
+ [(finalize [::paste "Paste"])]
  (fn [db _]
    (element.handlers/paste db)))
 
 (rf/reg-event-db
  ::paste-in-place
- [(finalize [::paste-selection-in-place "Paste selection in place"])]
+ [(finalize [::paste-in-place "Paste in place"])]
  (fn [db _]
    (element.handlers/paste-in-place db)))
 
 (rf/reg-event-db
  ::paste-styles
- [(finalize [::paste-styles-to-selection "Paste styles to selection"])]
+ [(finalize [::paste-styles "Paste styles"])]
  (fn [db _]
    (element.handlers/paste-styles db)))
 
 (rf/reg-event-db
  ::duplicate
- [(finalize [::duplicate-selection "Duplicate selection"])]
+ [(finalize [::duplicate "Duplicate"])]
  (fn [db _]
    (element.handlers/duplicate db)))
 
@@ -196,7 +225,7 @@
 
 (rf/reg-event-db
  ::finalize->path
- [(finalize [::convert-selection-path "Convert selection to path"])]
+ [(finalize [::object-to-path "Object to path"])]
  (fn [db [_ elements]]
    (reduce element.handlers/swap db elements)))
 
@@ -212,8 +241,7 @@
 
 (rf/reg-event-db
  ::finalize-stroke->path
- [(finalize [::convert-selection-stroke-path
-             "Convert selection's stroke to path"])]
+ [(finalize [::stroke-to-path "Stroke to path"])]
  (fn [db [_ elements]]
    (-> (reduce element.handlers/swap db elements)
        (element.handlers/stroke->path))))
@@ -226,21 +254,48 @@
      {:db (tool.handlers/deactivate db)
       ::element.effects/->path
       {:data (element.handlers/selected db)
-       :on-success [::finalize-boolean-operation operation]
+       :on-success (case operation
+                     :unite [::finalize-boolean-unite]
+                     :intersect [::finalize-boolean-intersect]
+                     :subtract [::finalize-boolean-subtract]
+                     :exclude [::finalize-boolean-exclude]
+                     :divide [::finalize-boolean-divide])
        :on-error [::app.events/toast-error]}})))
 
 (rf/reg-event-db
- ::finalize-boolean-operation
- [(finalize (fn [[_ operation]]
-              [(case operation
-                 :unite [::element.core/boolean-unite]
-                 :intersect [::element.core/boolean-intersect]
-                 :subtract [::element.core/boolean-subtract]
-                 :exclude [::element.core/boolean-exclude]
-                 :divide [::element.core/boolean-divide])]))]
- (fn [db [_ operation elements]]
+ ::finalize-boolean-unite
+ [(finalize [::boolean-unite "Unite"])]
+ (fn [db [_ elements]]
    (-> (reduce element.handlers/swap db elements)
-       (element.handlers/boolean-operation operation))))
+       (element.handlers/boolean-operation :unite))))
+
+(rf/reg-event-db
+ ::finalize-boolean-intersect
+ [(finalize [::boolean-intersect "Intersect"])]
+ (fn [db [_ elements]]
+   (-> (reduce element.handlers/swap db elements)
+       (element.handlers/boolean-operation :intersect))))
+
+(rf/reg-event-db
+ ::finalize-boolean-subtract
+ [(finalize [::boolean-subtract "Subtract"])]
+ (fn [db [_ elements]]
+   (-> (reduce element.handlers/swap db elements)
+       (element.handlers/boolean-operation :subtract))))
+
+(rf/reg-event-db
+ ::finalize-boolean-exclude
+ [(finalize [::boolean-exclude "Exclude"])]
+ (fn [db [_ elements]]
+   (-> (reduce element.handlers/swap db elements)
+       (element.handlers/boolean-operation :exclude))))
+
+(rf/reg-event-db
+ ::finalize-boolean-divide
+ [(finalize [::boolean-divide "Divide"])]
+ (fn [db [_ elements]]
+   (-> (reduce element.handlers/swap db elements)
+       (element.handlers/boolean-operation :divide))))
 
 (rf/reg-event-db
  ::combine
@@ -268,13 +323,21 @@
 
 (rf/reg-event-db
  ::animate
- [(finalize (fn [[_ tag]]
-              [(case tag
-                 :animate [::element.core/animate]
-                 :animateTransform [::element.core/animate-transform]
-                 :animateMotion [::element.core/animate-motion])]))]
- (fn [db [_ tag attrs]]
-   (element.handlers/animate db tag attrs)))
+ [(finalize [::animate "Animate"])]
+ (fn [db [_ attrs]]
+   (element.handlers/animate db :animate attrs)))
+
+(rf/reg-event-db
+ ::animate-transform
+ [(finalize [::animate-transform "Animate Transform"])]
+ (fn [db [_ attrs]]
+   (element.handlers/animate db :animateTransform attrs)))
+
+(rf/reg-event-db
+ ::animate-motion
+ [(finalize [::animate-motion "Animate Motion"])]
+ (fn [db [_ attrs]]
+   (element.handlers/animate db :animateMotion attrs)))
 
 (rf/reg-event-db
  ::add-mpath
@@ -297,26 +360,39 @@
 
 (rf/reg-event-db
  ::group
- [(finalize [::group-selection "Group selection"])]
+ [(finalize [::group "Group"])]
  (fn [db _]
    (element.handlers/group db)))
 
 (rf/reg-event-db
  ::ungroup
- [(finalize [::ungroup-selection "Ungroup selection"])]
+ [(finalize [::ungroup "Ungroup"])]
  (fn [db _]
    (element.handlers/ungroup db)))
 
 (rf/reg-event-db
- ::manipulate-path
- [(finalize (fn [[_ action]]
-              [(case action
-                 :simplify [::element.core/path-simplify]
-                 :smooth [::element.core/path-smooth]
-                 :flatten [::element.core/path-flatten]
-                 :reverse [::element.core/path-reverse])]))]
- (fn [db [_ action]]
-   (element.handlers/manipulate-path db action)))
+ ::path-simplify
+ [(finalize [::path-simplify "Simplify"])]
+ (fn [db _]
+   (element.handlers/manipulate-path db :simplify)))
+
+(rf/reg-event-db
+ ::path-smooth
+ [(finalize [::path-smooth "Smooth"])]
+ (fn [db _]
+   (element.handlers/manipulate-path db :smooth)))
+
+(rf/reg-event-db
+ ::path-flatten
+ [(finalize [::path-flatten "Flatten"])]
+ (fn [db _]
+   (element.handlers/manipulate-path db :flatten)))
+
+(rf/reg-event-db
+ ::path-reverse
+ [(finalize [::path-reverse "Reverse"])]
+ (fn [db _]
+   (element.handlers/manipulate-path db :reverse)))
 
 (rf/reg-event-fx
  ::copy
@@ -332,7 +408,7 @@
 
 (rf/reg-event-fx
  ::cut
- [(finalize [::cut-selection "Cut selection"])]
+ [(finalize [::cut "Cut"])]
  (fn [{:keys [db]} _]
    (when (= (:state db) :idle)
      (let [els (element.handlers/top-selected-sorted db)]
@@ -354,7 +430,7 @@
 
 (rf/reg-event-db
  ::create-traced-image
- [(finalize [::trace-image "Trace image"])]
+ [(finalize [::image-trace "Trace"])]
  (fn [db [_ data]]
    (element.handlers/import-svg db data)))
 

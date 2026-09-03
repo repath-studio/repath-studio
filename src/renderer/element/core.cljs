@@ -11,7 +11,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :clipboard/cut
-               :label [::cut "Cut"]
+               :label [::element.events/cut]
                :icon "cut"
                :event [::element.events/cut]
                :shortcuts [{:keyCode (utils.key/codes "X")
@@ -29,7 +29,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :clipboard/paste
-               :label [::paste "Paste"]
+               :label [::element.events/paste]
                :icon "paste"
                :event [::element.events/paste]
                :enabled [::document.subs/some-entities?]
@@ -38,7 +38,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :clipboard/paste-in-place
-               :label [::paste-in-place "Paste in place"]
+               :label [::element.events/paste-in-place]
                :icon "paste"
                :event [::element.events/paste-in-place]
                :enabled [::document.subs/some-entities?]
@@ -48,7 +48,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :clipboard/paste-styles
-               :label [::paste-styles "Paste styles"]
+               :label [::element.events/paste-styles]
                :icon "paste"
                :event [::element.events/paste-styles]
                :enabled [::element.subs/some-non-root-selected?]
@@ -58,7 +58,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :element/duplicate
-               :label [::duplicate "Duplicate"]
+               :label [::element.events/duplicate]
                :icon "copy"
                :event [::element.events/duplicate]
                :shortcuts [{:keyCode (utils.key/codes "D")}]
@@ -66,7 +66,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :element/delete
-               :label [::delete "Delete"]
+               :label [::element.events/delete]
                :icon "delete"
                :event [::element.events/delete]
                :shortcuts [{:keyCode (utils.key/codes "DELETE")}
@@ -75,7 +75,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :element/select-all
-               :label [::select-all "Select all"]
+               :label [::element.events/select-all]
                :icon "select-all"
                :event [::element.events/select-all]
                :enabled [::document.subs/some-entities?]
@@ -84,21 +84,21 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :element/deselect-all
-               :label [::deselect-all "Deselect all"]
+               :label [::element.events/deselect-all]
                :icon "deselect-all"
                :event [::element.events/deselect-all]
                :enabled [::element.subs/some-selected?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :element/invert-selection
-               :label [::invert-selection "Invert selection"]
+               :label [::element.events/invert-selection]
                :icon "invert-selection"
                :enabled [::document.subs/some-entities?]
                :event [::element.events/invert-selection]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :element/select-same-tags
-               :label [::select-same-tags "Select same tags"]
+               :label [::element.events/select-same-tags]
                :icon "select-same"
                :event [::element.events/select-same-tags]
                :shortcuts [{:keyCode (utils.key/codes "A")
@@ -108,7 +108,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :object/to-path
-               :label [::object-to-path "Object to path"]
+               :label [::element.events/object-to-path]
                :icon "bezier-curve"
                :event [::element.events/->path]
                :shortcuts [{:keyCode (utils.key/codes "P")
@@ -118,7 +118,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :object/stroke-to-path
-               :label [::stroke-to-path "Stroke to path"]
+               :label [::element.events/stroke-to-path]
                :icon "bezier-curve"
                :event [::element.events/stroke->path]
                :shortcuts [{:keyCode (utils.key/codes "P")
@@ -128,7 +128,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :object/group
-               :label [::group "Group"]
+               :label [::element.events/group]
                :icon "group"
                :event [::element.events/group]
                :shortcuts [{:keyCode (utils.key/codes "G")
@@ -137,7 +137,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :object/ungroup
-               :label [::ungroup "Ungroup"]
+               :label [::element.events/ungroup]
                :icon "ungroup"
                :event [::element.events/ungroup]
                :shortcuts [{:keyCode (utils.key/codes "G")
@@ -147,7 +147,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :object/lock
-               :label [::lock "Lock"]
+               :label [::element.events/lock]
                :icon "lock"
                :event [::element.events/lock]
                :shortcuts [{:keyCode (utils.key/codes "L")
@@ -156,7 +156,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :object/unlock
-               :label [::unlock "Unlock"]
+               :label [::element.events/unlock]
                :icon "unlock"
                :event [::element.events/unlock]
                :shortcuts [{:keyCode (utils.key/codes "L")
@@ -166,7 +166,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :object/raise
-               :label [::raise "Raise"]
+               :label [::element.events/raise]
                :icon "bring-forward"
                :event [::element.events/raise]
                :shortcuts [{:keyCode (utils.key/codes "PAGE_UP")}]
@@ -174,7 +174,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :object/lower
-               :label [::lower "Lower"]
+               :label [::element.events/lower]
                :icon "send-backward"
                :event [::element.events/lower]
                :shortcuts [{:keyCode (utils.key/codes "PAGE_DOWN")}]
@@ -182,7 +182,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :object/raise-to-top
-               :label [::raise-to-top "Raise to top"]
+               :label [::element.events/raise-to-top]
                :icon "bring-front"
                :event [::element.events/raise-to-top]
                :shortcuts [{:keyCode (utils.key/codes "HOME")}]
@@ -190,7 +190,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :object/lower-to-bottom
-               :label [::lower-to-bottom "Lower to bottom"]
+               :label [::element.events/lower-to-bottom]
                :icon "send-back"
                :event [::element.events/lower-to-bottom]
                :shortcuts [{:keyCode (utils.key/codes "END")}]
@@ -198,111 +198,111 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :align/left
-               :label [::align-left "Align left"]
+               :label [::element.events/align-left]
                :icon "objects-align-left"
-               :event [::element.events/align :left]
+               :event [::element.events/align-left]
                :enabled [::element.subs/not-every-top-level?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :align/center-horizontal
-               :label [::center-horizontally "Center horizontally"]
+               :label [::element.events/center-horizontally]
                :icon "objects-align-center-horizontal"
-               :event [::element.events/align :center-horizontal]
+               :event [::element.events/center-horizontally]
                :enabled [::element.subs/not-every-top-level?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :align/right
-               :label [::align-right "Align right"]
+               :label [::element.events/align-right]
                :icon "objects-align-right"
-               :event [::element.events/align :right]
+               :event [::element.events/align-right]
                :enabled [::element.subs/not-every-top-level?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :align/top
-               :label [::align-top "Align top"]
+               :label [::element.events/align-top]
                :icon "objects-align-top"
-               :event [::element.events/align :top]
+               :event [::element.events/align-top]
                :enabled [::element.subs/not-every-top-level?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :align/center-vertical
-               :label [::center-vertically "Center vertically"]
+               :label [::element.events/center-vertically]
                :icon "objects-align-center-vertical"
-               :event [::element.events/align :center-vertical]
+               :event [::element.events/center-vertically]
                :enabled [::element.subs/not-every-top-level?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :align/bottom
-               :label [::align-bottom "Align bottom"]
+               :label [::element.events/align-bottom]
                :icon "objects-align-bottom"
-               :event [::element.events/align :bottom]
+               :event [::element.events/align-bottom]
                :enabled [::element.subs/not-every-top-level?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :boolean/exclude
-               :label [::boolean-exclude "Exclude"]
+               :label [::element.events/boolean-exclude]
                :icon "exclude"
-               :event [::element.events/boolean-operation :exclude]
+               :event [::element.events/boolean-exclude]
                :shortcuts [{:keyCode (utils.key/codes "E")
                             :ctrlKey true}]
                :enabled [::element.subs/multiple-selected?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :boolean/unite
-               :label [::boolean-unite "Unite"]
+               :label [::element.events/boolean-unite]
                :icon "unite"
-               :event [::element.events/boolean-operation :unite]
+               :event [::element.events/boolean-unite]
                :shortcuts [{:keyCode (utils.key/codes "U")
                             :ctrlKey true}]
                :enabled [::element.subs/multiple-selected?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :boolean/intersect
-               :label [::boolean-intersect "Intersect"]
+               :label [::element.events/boolean-intersect]
                :icon "intersect"
-               :event [::element.events/boolean-operation :intersect]
+               :event [::element.events/boolean-intersect]
                :shortcuts [{:keyCode (utils.key/codes "I")
                             :ctrlKey true}]
                :enabled [::element.subs/multiple-selected?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :boolean/subtract
-               :label [::boolean-subtract "Subtract"]
+               :label [::element.events/boolean-subtract]
                :icon "subtract"
-               :event [::element.events/boolean-operation :subtract]
+               :event [::element.events/boolean-subtract]
                :shortcuts [{:keyCode (utils.key/codes "BACKSLASH")
                             :ctrlKey true}]
                :enabled [::element.subs/multiple-selected?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :boolean/divide
-               :label [::boolean-divide "Divide"]
+               :label [::element.events/boolean-divide]
                :icon "divide"
-               :event [::element.events/boolean-operation :divide]
+               :event [::element.events/boolean-divide]
                :shortcuts [{:keyCode (utils.key/codes "D")
                             :ctrlKey true}]
                :enabled [::element.subs/multiple-selected?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :animate/animate
-               :label [::animate "Animate"]
+               :label [::element.events/animate]
                :icon "animation"
-               :event [::element.events/animate :animate]
+               :event [::element.events/animate]
                :enabled [::element.subs/some-allow-content? :animate]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :animate/transform
-               :label [::animate-transform "Animate Transform"]
+               :label [::element.events/animate-transform]
                :icon "animation"
-               :event [::element.events/animate :animateTransform]
+               :event [::element.events/animate-transform]
                :enabled [::element.subs/some-allow-content?
                          :animateTransform]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :animate/motion
-               :label [::animate-motion "Animate Motion"]
+               :label [::element.events/animate-motion]
                :icon "animation"
-               :event [::element.events/animate :animateMotion]
+               :event [::element.events/animate-motion]
                :enabled [::element.subs/some-allow-content? :animateMotion]}])
 
 (rf/dispatch [::action.events/register-action
@@ -314,35 +314,35 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :path/simplify
-               :label [::path-simplify "Simplify"]
+               :label [::element.events/path-simplify]
                :icon "bezier-curve"
-               :event [::element.events/manipulate-path :simplify]
+               :event [::element.events/path-simplify]
                :enabled [::element.subs/some-selected-tag? :path]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :path/smooth
-               :label [::path-smooth "Smooth"]
+               :label [::element.events/path-smooth]
                :icon "bezier-curve"
-               :event [::element.events/manipulate-path :smooth]
+               :event [::element.events/path-smooth]
                :enabled [::element.subs/some-selected-tag? :path]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :path/flatten
-               :label [::path-flatten "Flatten"]
+               :label [::element.events/path-flatten]
                :icon "bezier-curve"
-               :event [::element.events/manipulate-path :flatten]
+               :event [::element.events/path-flatten]
                :enabled [::element.subs/some-selected-tag? :path]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :path/reverse
-               :label [::path-reverse "Reverse"]
+               :label [::element.events/path-reverse]
                :icon "bezier-curve"
-               :event [::element.events/manipulate-path :reverse]
+               :event [::element.events/path-reverse]
                :enabled [::element.subs/some-selected-tag? :path]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :path/combine
-               :label [::combine "Combine"]
+               :label [::element.events/combine]
                :icon "group"
                :event [::element.events/combine]
                :enabled [::element.subs/some-selected-tag? :path]
@@ -351,7 +351,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :path/break-apart
-               :label [::break-apart "Break apart"]
+               :label [::element.events/break-apart]
                :icon "ungroup"
                :event [::element.events/break-apart]
                :enabled [::element.subs/some-selected-tag? :path]
@@ -361,7 +361,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :image/trace
-               :label [::image-trace "Trace"]
+               :label [::element.events/image-trace]
                :icon "image"
                :event [::element.events/trace]
                :enabled [::element.subs/some-selected-tag? :image]}])
@@ -429,7 +429,7 @@
 (rf/dispatch [::action.events/register-action-group
               {:id :object/animate
                :icon "animation"
-               :label [::animate "Animate"]
+               :label [::element.events/animate]
                :enabled [::element.subs/some-non-root-selected?]
                :actions [:animate/animate
                          :animate/transform
