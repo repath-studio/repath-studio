@@ -102,7 +102,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :tool/zoom
-               :label [::tool-zoom "Zoom"]
+               :label [::label "Zoom"]
                :icon "magnifier"
                :event [::tool.events/activate ::zoom]
                :active [::tool.subs/active? ::zoom]

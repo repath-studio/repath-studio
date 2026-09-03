@@ -30,9 +30,6 @@
  {:hide-command-output "Скрыть вывод команд"
   :show-command-output "Показать вывод команд"}
 
- :renderer.app.events
- {:create-doc "Создать документ"}
-
  :renderer.dialog.events
  {:are-you-sure "Вы уверены, что хотите продолжить?"
   :keybindings "Горячие клавиши"}
@@ -63,7 +60,6 @@
   :edit "Правка"
   :object "Объект"
   :align "Выровнять"
-  :animate "Анимировать"
   :view "Вид"
   :zoom "Масштаб"
   :help "Справка"}
@@ -188,7 +184,9 @@
  {:label "Эллипс"
   :description "Элемент <ellipse> является базовой формой SVG, используемой для
                 создания эллипсов на основе центральной координаты и их радиусов
-                x и y."}
+                x и y."
+  :rx-handle "маркер радиуса x"
+  :ry-handle "маркер радиуса y"}
 
  :renderer.element.impl.shape.line
  {:label "Линия"
@@ -224,7 +222,9 @@
  {:label "Прямоугольник"
   :description "Элемент <rect> является базовой формой SVG, которая рисует
                 прямоугольники, определённые их позицией, шириной и высотой.
-                Прямоугольники могут иметь закруглённые углы."}
+                Прямоугольники могут иметь закруглённые углы."
+  :rx-handle "маркер радиуса x"
+  :ry-handle "маркер радиуса y"}
 
  :renderer.element.impl.custom.blob
  {:x "Горизонтальная координата центра blob."
@@ -286,7 +286,7 @@
   :computed "Вычисляемое"
   :percentages "Проценты"
   :animatable "Анимируемое"
-  :animationType "Тип анимации"
+  :animation-type "Тип анимации"
   :syntax "Синтаксис"
   :mdn-info "Информация MDN"
   :attributes-title "%1 %2 элементов"}
@@ -359,8 +359,6 @@
         анимации."
   :max "Атрибут max указывает максимальное значение активной продолжительности
         анимации."
-  :restart "Атрибут restart указывает, может ли анимация перезапускаться или
-            нет."
   :repeat-count "Атрибут repeatCount указывает количество раз, которое анимация
                  будет происходить."
   :repeat-dur "Атрибут repeatDur указывает общую продолжительность для
@@ -390,6 +388,10 @@
                           viewBox, предоставляющим заданное соотношение сторон,
                           должен помещаться в область просмотра с другим
                           соотношением сторон."}
+
+ :renderer.attribute.impl.restart
+ {:description "Атрибут restart указывает, может ли анимация перезапускаться или
+                нет."}
 
  :renderer.attribute.impl.accumulate
  {:description "Атрибут accumulate контролирует, является ли анимация
@@ -602,7 +604,7 @@
                     Щёлкните на элементе для изменения выделения."]}
 
  :renderer.tool.impl.base.edit.select
- {:select-element "Выбрать элемент"}
+ {:select-handles "Выбрать маркеры"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Удерживайте %1 для ограничения направления."]
@@ -655,15 +657,13 @@
  :renderer.tool.impl.base.pan
  {:label "Панорамирование"
   :click-and-drag "Щёлкните и перетащите для панорамирования."
-  :release-to-stop "Отпустите для остановки панорамирования."
-  :tool-pan "Панорамирование"}
+  :release-to-stop "Отпустите для остановки панорамирования."}
 
  :renderer.tool.impl.base.zoom
  {:label "Масштабирование"
   :help-idle [:div "Щёлкните или выделите область для увеличения.
                     Удерживайте %1 для уменьшения."]
-  :release-to-focus "Отпустите для фокусировки на области."
-  :tool-zoom "Масштабирование"}
+  :release-to-focus "Отпустите для фокусировки на области."}
 
  :renderer.tool.impl.draw.brush
  {:label "Кисть"
@@ -740,8 +740,6 @@
 
  :renderer.history.views
  {:center-view "Центрировать вид"
-  :select-element "Выделить элемент"
-  :delete-selection "Удалить выделенное"
   :oldest "Самые старые"
   :newest "Самые новые"}
 
@@ -888,9 +886,6 @@
   :panel-history-tree "Дерево истории"
   :panel-shell-history "История консоли"
   :panel-timeline-editor "Редактор временной шкалы"}
-
- :renderer.ruler.core
- {:rulers "Линейки"}
 
  :renderer.snap.core
  {:snap "Привязка"

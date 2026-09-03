@@ -30,9 +30,6 @@
  {:hide-command-output "コマンド出力を非表示"
   :show-command-output "コマンド出力を表示"}
 
- :renderer.app.events
- {:create-doc "ドキュメントを作成"}
-
  :renderer.dialog.events
  {:are-you-sure "続行してもよろしいですか？"
   :keybindings "キーバインド"}
@@ -276,7 +273,7 @@
   :computed "計算値"
   :percentages "パーセンテージ"
   :animatable "アニメーション可能"
-  :animationType "アニメーションタイプ"
+  :animation-type "アニメーションタイプ"
   :syntax "構文"
   :mdn-info "MDN情報"
   :attributes-title "%1 %2 要素"}
@@ -338,7 +335,6 @@
   :dur "dur属性は、アニメーションの単純な継続時間を示します。"
   :min "min属性は、アクティブなアニメーション継続時間の最小値を指定します。"
   :max "max属性は、アクティブなアニメーション継続時間の最大値を指定します。"
-  :restart "restart属性は、アニメーションを再開できるかどうかを指定します。"
   :repeat-count "repeatCount属性は、アニメーションが実行される回数を示します。"
   :repeat-dur "repeatDur属性は、アニメーションを繰り返すための総継続時間を
                指定します。"
@@ -363,6 +359,9 @@
                           提供するviewBoxを持つ要素が、異なるアスペクト比の
                           ビューポートにどのようにフィットする必要があるかを
                           示します。"}
+
+ :renderer.attribute.impl.restart
+ {:description "restart属性は、アニメーションを再開できるかどうかを指定します。"}
 
  :renderer.attribute.impl.accumulate
  {:description "accumulate属性は、アニメーションが累積的かどうかを制御します。"}
@@ -565,7 +564,7 @@
  {:help-idle [:div "ハンドルをドラッグして形状を変更。要素をクリックして選択を変更。"]}
 
  :renderer.tool.impl.base.edit.select
- {:select-element "要素を選択"}
+ {:select-handles "ハンドルを選択"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "%1を押しながら方向を制限。"]
@@ -614,15 +613,13 @@
  :renderer.tool.impl.base.pan
  {:label "パン"
   :click-and-drag "クリックしてドラッグしてパン。"
-  :release-to-stop "パンを停止するには離す。"
-  :tool-pan "パン"}
+  :release-to-stop "パンを停止するには離す。"}
 
  :renderer.tool.impl.base.zoom
  {:label "ズーム"
   :help-idle [:div "クリックするか範囲を選択してズームイン。
                     %1を押しながらズームアウト。"]
-  :release-to-focus "エリアにフォーカスするには離す。"
-  :tool-zoom "ズーム"}
+  :release-to-focus "エリアにフォーカスするには離す。"}
 
  :renderer.tool.impl.draw.brush
  {:label "ブラシ"
@@ -699,8 +696,6 @@
 
  :renderer.history.views
  {:center-view "ビューを中央に"
-  :select-element "要素を選択"
-  :delete-selection "選択を削除"
   :oldest "最古"
   :newest "最新"}
 
@@ -763,6 +758,7 @@
  {:document "ドキュメント"
   :new "新規"
   :open "開く..."
+  :recent-clear "最近使用したものをクリア"
   :print "印刷"
   :save "保存"
   :save-as "名前を付けて保存..."
@@ -844,9 +840,6 @@
   :panel-history-tree "履歴ツリー"
   :panel-shell-history "シェル履歴"
   :panel-timeline-editor "タイムラインエディタ"}
-
- :renderer.ruler.core
- {:rulers "ルーラー"}
 
  :renderer.snap.core
  {:snap "スナップ"

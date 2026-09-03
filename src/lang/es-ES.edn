@@ -30,9 +30,6 @@
  {:hide-command-output "Ocultar salida de comandos"
   :show-command-output "Mostrar salida de comandos"}
 
- :renderer.app.events
- {:create-doc "Crear documento"}
-
  :renderer.dialog.events
  {:are-you-sure "¿Seguro que quieres continuar?"
   :keybindings "Atajos de teclado"}
@@ -290,7 +287,7 @@
   :computed "Calculado"
   :percentages "Porcentajes"
   :animatable "Animable"
-  :animationType "Tipo de animación"
+  :animation-type "Tipo de animación"
   :syntax "Sintaxis"
   :mdn-info "Info MDN"
   :attributes-title "%1 %2 elementos"}
@@ -364,8 +361,6 @@
         activa."
   :max "El atributo max especifica el valor máximo de la duración de animación
         activa."
-  :restart "El atributo restart especifica si una animación puede
-            reiniciarse o no."
   :repeat-count "El atributo repeatCount indica el número de veces que una
                  animación tendrá lugar."
   :repeat-dur "El atributo repeatDur especifica la duración total para
@@ -396,6 +391,10 @@
                           elemento con un viewBox que proporciona una
                           proporción de aspecto dada debe ajustarse en un
                           viewport con una proporción de aspecto diferente."}
+
+ :renderer.attribute.impl.restart
+ {:description "El atributo restart especifica si una animación puede
+                reiniciarse o no."}
 
  :renderer.attribute.impl.accumulate
  {:description "El atributo accumulate controla si una animación es
@@ -610,7 +609,7 @@
                     Haga clic en un elemento para cambiar la selección."]}
 
  :renderer.tool.impl.base.edit.select
- {:select-element "Seleccionar elemento"}
+ {:select-handles "Seleccionar controladores"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Mantenga %1 para restringir la dirección."]
@@ -662,15 +661,13 @@
  :renderer.tool.impl.base.pan
  {:label "Panorámica"
   :click-and-drag "Haga clic y arrastre para hacer panorámica."
-  :release-to-stop "Suelte para detener la panorámica."
-  :tool-pan "Desplazar"}
+  :release-to-stop "Suelte para detener la panorámica."}
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
   :help-idle [:div "Haga clic o seleccione un área para acercar.
                     Mantenga %1 para alejar."]
-  :release-to-focus "Suelte para centrarse en el área."
-  :tool-zoom "Zoom"}
+  :release-to-focus "Suelte para centrarse en el área."}
 
  :renderer.tool.impl.draw.brush
  {:label "Pincel"
@@ -748,8 +745,6 @@
 
  :renderer.history.views
  {:center-view "Centrar vista"
-  :select-element "Seleccionar elemento"
-  :delete-selection "Eliminar selección"
   :oldest "Más antiguo"
   :newest "Más reciente"}
 
@@ -771,9 +766,7 @@
  {:update-animation "Actualizar animación"}
 
  :renderer.attribute.impl.angle
- {:pick-angle "Elegir ángulo"
-  :grid-snap "Ajuste a cuadrícula"
-  :guide-snap "Ajuste a guía"}
+ {:pick-angle "Elegir ángulo"}
 
  :renderer.attribute.impl.href
  {:select-file "Seleccionar archivo"}
@@ -898,9 +891,6 @@
   :panel-history-tree "Árbol de historial"
   :panel-shell-history "Historial de terminal"
   :panel-timeline-editor "Editor de línea de tiempo"}
-
- :renderer.ruler.core
- {:rulers "Reglas"}
 
  :renderer.snap.core
  {:snap "Ajustar"

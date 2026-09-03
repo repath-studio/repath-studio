@@ -55,7 +55,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :tool/pan
-               :label [::tool-pan "Pan"]
+               :label [::label "Pan"]
                :icon "hand"
                :event [::tool.events/activate ::pan]
                :active [::tool.subs/active? ::pan]}])

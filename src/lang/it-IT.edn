@@ -30,9 +30,6 @@
  {:hide-command-output "Nascondi output comando"
   :show-command-output "Mostra output comando"}
 
- :renderer.app.events
- {:create-doc "Crea documento"}
-
  :renderer.dialog.events
  {:are-you-sure "Sei sicuro di voler continuare?"
   :keybindings "Tasti di scelta rapida"}
@@ -292,7 +289,7 @@
   :computed "Calcolato"
   :percentages "Percentuali"
   :animatable "Animabile"
-  :animationType "Tipo di animazione"
+  :animation-type "Tipo di animazione"
   :syntax "Sintassi"
   :mdn-info "Info MDN"
   :attributes-title "%1 %2 elementi"}
@@ -372,8 +369,6 @@
         attiva."
   :max "L'attributo max specifica il valore massimo della durata dell'animazione
         attiva."
-  :restart "L'attributo restart specifica se un'animazione può
-            riavviarsi o meno."
   :repeat-count "L'attributo repeatCount indica il numero di volte che un'
                  animazione avrà luogo."
   :repeat-dur "L'attributo repeatDur specifica la durata totale per
@@ -404,6 +399,10 @@
                           elemento con un viewBox che fornisce un dato rapporto
                           d'aspetto deve adattarsi in un viewport con un
                           rapporto d'aspetto diverso."}
+
+ :renderer.attribute.impl.restart
+ {:description "L'attributo restart specifica se un'animazione può
+                riavviarsi o meno."}
 
  :renderer.attribute.impl.accumulate
  {:description "L'attributo accumulate controlla se un'animazione è cumulativa o
@@ -620,7 +619,7 @@
                     Clicca su un elemento per cambiare selezione."]}
 
  :renderer.tool.impl.base.edit.select
- {:select-element "Seleziona elemento"}
+ {:select-handles "Seleziona maniglie"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Tieni premuto %1 per limitare la direzione."]
@@ -673,15 +672,13 @@
  :renderer.tool.impl.base.pan
  {:label "Panoramica"
   :click-and-drag "Clicca e trascina per panoramica."
-  :release-to-stop "Rilascia per fermare la panoramica."
-  :tool-pan "Sposta"}
+  :release-to-stop "Rilascia per fermare la panoramica."}
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
   :help-idle [:div "Clicca o seleziona un'area per ingrandire.
                     Tieni premuto %1 per ridurre."]
-  :release-to-focus "Rilascia per concentrarsi sull'area."
-  :tool-zoom "Zoom"}
+  :release-to-focus "Rilascia per concentrarsi sull'area."}
 
  :renderer.tool.impl.draw.brush
  {:label "Pennello"
@@ -758,8 +755,6 @@
 
  :renderer.history.views
  {:center-view "Centra vista"
-  :select-element "Seleziona elemento"
-  :delete-selection "Elimina selezione"
   :oldest "Più vecchio"
   :newest "Più recente"}
 
@@ -905,9 +900,6 @@
   :panel-history-tree "Albero cronologia"
   :panel-shell-history "Cronologia shell"
   :panel-timeline-editor "Editor timeline"}
-
- :renderer.ruler.core
- {:rulers "Righelli"}
 
  :renderer.snap.core
  {:snap "Aggancia"

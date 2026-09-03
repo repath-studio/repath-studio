@@ -30,9 +30,6 @@
  {:hide-command-output "Befehlsausgabe verbergen"
   :show-command-output "Befehlsausgabe anzeigen"}
 
- :renderer.app.events
- {:create-doc "Dokument erstellen"}
-
  :renderer.dialog.events
  {:are-you-sure "Sind Sie sicher, dass Sie fortfahren möchten?"
   :keybindings "Tastenkombinationen"}
@@ -294,7 +291,7 @@
   :computed "Berechnet"
   :percentages "Prozentsätze"
   :animatable "Animierbar"
-  :animationType "Animationstyp"
+  :animation-type "Animationstyp"
   :syntax "Syntax"
   :mdn-info "MDN-Info"
   :attributes-title "%1 %2 Elemente"}
@@ -374,8 +371,6 @@
         Animationsdauer."
   :max "Das max-Attribut spezifiziert den Höchstwert der aktiven
         Animationsdauer."
-  :restart "Das restart-Attribut spezifiziert, ob eine Animation neu gestartet
-            werden kann oder nicht."
   :repeat-count "Das repeatCount-Attribut zeigt die Anzahl der Male an, die eine
                  Animation stattfinden wird."
   :repeat-dur "Das repeatDur-Attribut spezifiziert die Gesamtdauer für die
@@ -406,6 +401,10 @@
                           Element mit einer viewBox, die ein gegebenes
                           Seitenverhältnis bereitstellt, in einen Viewport mit
                           einem anderen Seitenverhältnis passen muss."}
+
+ :renderer.attribute.impl.restart
+ {:description "Das restart-Attribut spezifiziert, ob eine Animation neu
+                gestartet werden kann oder nicht."}
 
  :renderer.attribute.impl.accumulate
  {:description "Das accumulate-Attribut kontrolliert, ob eine Animation
@@ -622,7 +621,7 @@
                     Klicken Sie auf ein Element, um die Auswahl zu ändern."]}
 
  :renderer.tool.impl.base.edit.select
- {:select-element "Element auswählen"}
+ {:select-handles "Anfasser auswählen"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Halten Sie %1, um die Richtung zu beschränken."]
@@ -674,15 +673,13 @@
  :renderer.tool.impl.base.pan
  {:label "Schwenken"
   :click-and-drag "Klicken und ziehen zum Schwenken."
-  :release-to-stop "Loslassen, um das Schwenken zu beenden."
-  :tool-pan "Verschieben"}
+  :release-to-stop "Loslassen, um das Schwenken zu beenden."}
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
   :help-idle [:div "Klicken oder einen Bereich auswählen, um zu vergrößern.
                     Halten Sie %1, um zu verkleinern."]
-  :release-to-focus "Loslassen, um auf den Bereich zu fokussieren."
-  :tool-zoom "Zoomen"}
+  :release-to-focus "Loslassen, um auf den Bereich zu fokussieren."}
 
  :renderer.tool.impl.draw.brush
  {:label "Pinsel"
@@ -760,8 +757,6 @@
 
  :renderer.history.views
  {:center-view "Ansicht zentrieren"
-  :select-element "Element auswählen"
-  :delete-selection "Auswahl löschen"
   :oldest "Älteste"
   :newest "Neueste"}
 
@@ -908,9 +903,6 @@
   :panel-history-tree "Verlaufsbaum"
   :panel-shell-history "Shell-Verlauf"
   :panel-timeline-editor "Timeline-Editor"}
-
- :renderer.ruler.core
- {:rulers "Lineale"}
 
  :renderer.snap.core
  {:snap "Einrasten"

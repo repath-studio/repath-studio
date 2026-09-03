@@ -30,9 +30,6 @@
  {:hide-command-output "隐藏命令输出"
   :show-command-output "显示命令输出"}
 
- :renderer.app.events
- {:create-doc "创建文档"}
-
  :renderer.dialog.events
  {:are-you-sure "您确定要继续吗？"
   :keybindings "键盘快捷键"}
@@ -265,7 +262,7 @@
   :computed "计算值"
   :percentages "百分比"
   :animatable "可动画"
-  :animationType "动画类型"
+  :animation-type "动画类型"
   :syntax "语法"
   :mdn-info "MDN 信息"
   :attributes-title "%1 %2 个元素"}
@@ -316,7 +313,6 @@
   :dur "dur 属性指示动画的简单持续时间。"
   :min "min 属性指定活动动画持续时间的最小值。"
   :max "max 属性指定活动动画持续时间的最大值。"
-  :restart "restart 属性指定动画是否可以重新启动。"
   :repeat-count "repeatCount 属性指示动画将发生的次数。"
   :repeat-dur "repeatDur 属性指定重复动画的总持续时间。"
   :values "values 属性有不同的含义，取决于使用它的上下文，它要么定义在动画
@@ -333,6 +329,9 @@
   :view-box "viewBox 属性在用户空间中定义 SVG 视口的位置和尺寸。"
   :preserve-aspect-ratio "preserveAspectRatio 属性指示具有提供给定纵横比的
                           viewBox 的元素如何适合具有不同纵横比的视口。"}
+
+ :renderer.attribute.impl.restart
+ {:description "restart 属性指定动画是否可以重新启动。"}
 
  :renderer.attribute.impl.accumulate
  {:description "accumulate 属性控制动画是否为累积的。"}
@@ -524,7 +523,7 @@
  {:help-idle [:div "拖动控制柄修改您的形状。点击元素更改选择。"]}
 
  :renderer.tool.impl.base.edit.select
- {:select-element "选择元素"}
+ {:select-handles "选择控制点"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "按住 %1 限制方向。"]
@@ -571,14 +570,12 @@
  :renderer.tool.impl.base.pan
  {:label "平移"
   :click-and-drag "点击并拖动进行平移。"
-  :release-to-stop "松开以停止平移。"
-  :tool-pan "平移"}
+  :release-to-stop "松开以停止平移。"}
 
  :renderer.tool.impl.base.zoom
  {:label "缩放"
   :help-idle [:div "点击或选择区域进行放大。按住 %1 进行缩小。"]
-  :release-to-focus "松开以聚焦该区域。"
-  :tool-zoom "缩放"}
+  :release-to-focus "松开以聚焦该区域。"}
 
  :renderer.tool.impl.draw.brush
  {:label "画笔"
@@ -654,8 +651,6 @@
 
  :renderer.history.views
  {:center-view "居中视图"
-  :select-element "选择元素"
-  :delete-selection "删除选择"
   :oldest "最旧的"
   :newest "最新的"}
 
@@ -799,9 +794,6 @@
   :panel-history-tree "历史树"
   :panel-shell-history "终端历史"
   :panel-timeline-editor "时间轴编辑器"}
-
- :renderer.ruler.core
- {:rulers "标尺"}
 
  :renderer.snap.core
  {:snap "吸附"

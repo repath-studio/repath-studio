@@ -30,9 +30,6 @@
  {:hide-command-output "Dölj kommandoutdata"
   :show-command-output "Visa kommandoutdata"}
 
- :renderer.app.events
- {:create-doc "Skapa dokument"}
-
  :renderer.dialog.events
  {:are-you-sure "Är du säker på att du vill fortsätta?"
   :keybindings "Tangentbordsgenvägar"}
@@ -289,7 +286,7 @@
   :computed "Beräknad"
   :percentages "Procentsatser"
   :animatable "Animerbar"
-  :animationType "Animationstyp"
+  :animation-type "Animationstyp"
   :syntax "Syntax"
   :mdn-info "MDN Info"
   :attributes-title "%1 %2 element"}
@@ -364,8 +361,6 @@
         animationsvaraktigheten."
   :max "Attributet max specificerar maximivärdet för den aktiva
         animationsvaraktigheten."
-  :restart "Attributet restart specificerar om en animation kan starta om
-            eller inte."
   :repeat-count "Attributet repeatCount indikerar antalet gånger en animation
                  kommer att äga rum."
   :repeat-dur "Attributet repeatDur specificerar den totala varaktigheten för
@@ -395,6 +390,10 @@
                           element med en viewBox som tillhandahåller ett givet
                           bildförhållande måste passa in i en viewport med ett
                           annat bildförhållande."}
+
+ :renderer.attribute.impl.restart
+ {:description "Attributet restart specificerar om en animation kan starta om
+                eller inte."}
 
  :renderer.attribute.impl.accumulate
  {:description "Attributet accumulate kontrollerar om en animation är kumulativ
@@ -608,7 +607,7 @@
                     Klicka på ett element för att ändra markering."]}
 
  :renderer.tool.impl.base.edit.select
- {:select-element "Välj element"}
+ {:select-handles "Välj handtag"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Håll %1 för att begränsa riktning."]
@@ -659,15 +658,13 @@
  :renderer.tool.impl.base.pan
  {:label "Panorera"
   :click-and-drag "Klicka och dra för att panorera."
-  :release-to-stop "Släpp för att sluta panorera."
-  :tool-pan "Panorera"}
+  :release-to-stop "Släpp för att sluta panorera."}
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
   :help-idle [:div "Klicka eller markera ett område för att zooma in.
                     Håll %1 för att zooma ut."]
-  :release-to-focus "Släpp för att fokusera på området."
-  :tool-zoom "Zooma"}
+  :release-to-focus "Släpp för att fokusera på området."}
 
  :renderer.tool.impl.draw.brush
  {:label "Pensel"
@@ -744,8 +741,6 @@
 
  :renderer.history.views
  {:center-view "Centrera vy"
-  :select-element "Markera element"
-  :delete-selection "Ta bort markering"
   :oldest "Äldsta"
   :newest "Nyaste"}
 
@@ -890,9 +885,6 @@
   :panel-history-tree "Historikträd"
   :panel-shell-history "Skalhistorik"
   :panel-timeline-editor "Tidslinjeeditor"}
-
- :renderer.ruler.core
- {:rulers "Linjaler"}
 
  :renderer.snap.core
  {:snap "Fäst"

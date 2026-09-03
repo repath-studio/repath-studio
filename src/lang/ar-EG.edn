@@ -30,9 +30,6 @@
  {:hide-command-output "إخفاء مخرجات الأمر"
   :show-command-output "إظهار مخرجات الأمر"}
 
- :renderer.app.events
- {:create-doc "إنشاء مستند"}
-
  :renderer.dialog.events
  {:are-you-sure "هل أنت متأكد أنك تريد المتابعة؟"
   :keybindings "اختصارات لوحة المفاتيح"}
@@ -280,7 +277,7 @@
   :computed "محسوب"
   :percentages "النسب المئوية"
   :animatable "قابل للتحريك"
-  :animationType "نوع التحريك"
+  :animation-type "نوع التحريك"
   :syntax "بنية الجملة"
   :mdn-info "معلومات MDN"
   :attributes-title "%1 %2 عناصر"}
@@ -346,8 +343,6 @@
   :dur "خاصية dur تشير إلى المدة البسيطة للرسوم المتحركة."
   :min "خاصية min تحدد الحد الأدنى لقيمة مدة الرسوم المتحركة النشطة."
   :max "خاصية max تحدد الحد الأقصى لقيمة مدة الرسوم المتحركة النشطة."
-  :restart "خاصية restart تحدد ما إذا كان يمكن إعادة تشغيل الرسوم
-            المتحركة أم لا."
   :repeat-count "خاصية repeatCount تشير إلى عدد المرات التي ستحدث
                  فيها الرسوم المتحركة."
   :repeat-dur "خاصية repeatDur تحدد المدة الإجمالية لتكرار الرسوم
@@ -432,6 +427,10 @@
   :lock-guides "قفل الأدلة"
   :idle "اسحب المسطرة إلى اللوحة لإنشاء دليل."
   :create "أسقط لإتمام الدليل."}
+
+ :renderer.attribute.impl.restart
+ {:description "خاصية restart تحدد ما إذا كان يمكن إعادة تشغيل الرسوم
+                المتحركة أم لا."}
 
  :renderer.attribute.impl.accumulate
  {:description "خاصية accumulate تتحكم في ما إذا كانت الرسوم المتحركة تراكمية
@@ -581,7 +580,7 @@
  {:help-idle [:div "اسحب مقبضاً لتعديل شكلك .انقر على عنصر لتغيير التحديد."]}
 
  :renderer.tool.impl.base.edit.select
- {:select-element "تحديد عنصر"}
+ {:select-handles "تحديد مقابض"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "اضغط %1 لتقييد الاتجاه."]
@@ -630,14 +629,12 @@
  :renderer.tool.impl.base.pan
  {:label "تحريك"
   :click-and-drag "انقر واسحب للتحريك."
-  :release-to-stop "أفلت للتوقف عن التحريك."
-  :tool-pan "تحريك"}
+  :release-to-stop "أفلت للتوقف عن التحريك."}
 
  :renderer.tool.impl.base.zoom
  {:label "تكبير"
   :help-idle [:div "انقر أو حدد منطقة للتكبير .اضغط %1 للتصغير."]
-  :release-to-focus "أفلت للتركيز على المنطقة."
-  :tool-zoom "تكبير"}
+  :release-to-focus "أفلت للتركيز على المنطقة."}
 
  :renderer.tool.impl.draw.brush
  {:label "فرشاة"
@@ -714,8 +711,6 @@
 
  :renderer.history.views
  {:center-view "عرض المركز"
-  :select-element "تحديد عنصر"
-  :delete-selection "حذف التحديد"
   :oldest "الأقدم"
   :newest "الأحدث"}
 
@@ -860,9 +855,6 @@
   :panel-history-tree "شجرة التاريخ"
   :panel-shell-history "تاريخ الأوامر"
   :panel-timeline-editor "محرر الجدول الزمني"}
-
- :renderer.ruler.core
- {:rulers "المساطر"}
 
  :renderer.snap.core
  {:snap "التقاط"

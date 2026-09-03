@@ -30,9 +30,6 @@
  {:hide-command-output "Masquer la sortie de commande"
   :show-command-output "Afficher la sortie de commande"}
 
- :renderer.app.events
- {:create-doc "Créer un document"}
-
  :renderer.dialog.events
  {:are-you-sure "Êtes-vous sûr de vouloir continuer ?"
   :keybindings "Raccourcis clavier"}
@@ -292,7 +289,7 @@
   :computed "Calculé"
   :percentages "Pourcentages"
   :animatable "Animable"
-  :animationType "Type d'animation"
+  :animation-type "Type d'animation"
   :syntax "Syntaxe"
   :mdn-info "Infos MDN"
   :attributes-title "%1 %2 éléments"}
@@ -368,8 +365,6 @@
         active."
   :max "L'attribut max spécifie la valeur maximale de la durée d'animation
         active."
-  :restart "L'attribut restart spécifie si une animation peut redémarrer ou
-            non."
   :repeat-count "L'attribut repeatCount indique le nombre de fois qu'une
                  animation aura lieu."
   :repeat-dur "L'attribut repeatDur spécifie la durée totale pour répéter une
@@ -400,6 +395,10 @@
                           élément avec une viewBox fournissant un rapport
                           d'aspect donné doit s'adapter dans une fenêtre
                           d'affichage avec un rapport d'aspect différent."}
+
+ :renderer.attribute.impl.restart
+ {:description "L'attribut restart spécifie si une animation peut redémarrer ou
+                non."}
 
  :renderer.attribute.impl.accumulate
  {:description "L'attribut accumulate contrôle si une animation est cumulative
@@ -615,7 +614,7 @@
                     Cliquez sur un élément pour changer la sélection."]}
 
  :renderer.tool.impl.base.edit.select
- {:select-element "Sélectionner un élément"}
+ {:select-handles "Sélectionner les poignées"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Maintenez %1 pour restreindre la direction."]
@@ -668,15 +667,13 @@
  :renderer.tool.impl.base.pan
  {:label "Panoramique"
   :click-and-drag "Cliquez et faites glisser pour faire un panoramique."
-  :release-to-stop "Relâchez pour arrêter le panoramique."
-  :tool-pan "Déplacer"}
+  :release-to-stop "Relâchez pour arrêter le panoramique."}
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
   :help-idle [:div "Cliquez ou sélectionnez une zone pour agrandir.
                     Maintenez %1 pour réduire."]
-  :release-to-focus "Relâchez pour vous concentrer sur la zone."
-  :tool-zoom "Zoom"}
+  :release-to-focus "Relâchez pour vous concentrer sur la zone."}
 
  :renderer.tool.impl.draw.brush
  {:label "Pinceau"
@@ -754,8 +751,6 @@
 
  :renderer.history.views
  {:center-view "Centrer la vue"
-  :select-element "Sélectionner l'élément"
-  :delete-selection "Supprimer la sélection"
   :oldest "Plus ancien"
   :newest "Plus récent"}
 
@@ -902,9 +897,6 @@
   :panel-history-tree "Arbre d'historique"
   :panel-shell-history "Historique du terminal"
   :panel-timeline-editor "Éditeur de chronologie"}
-
- :renderer.ruler.core
- {:rulers "Règles"}
 
  :renderer.snap.core
  {:snap "Magnétisme"

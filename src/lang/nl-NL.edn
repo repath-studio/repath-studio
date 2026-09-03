@@ -30,9 +30,6 @@
  {:hide-command-output "Commando-uitvoer verbergen"
   :show-command-output "Commando-uitvoer tonen"}
 
- :renderer.app.events
- {:create-doc "Document aanmaken"}
-
  :renderer.dialog.events
  {:are-you-sure "Weet u zeker dat u wilt doorgaan?"
   :keybindings "Sneltoetsen"}
@@ -291,7 +288,7 @@
   :computed "Berekend"
   :percentages "Percentages"
   :animatable "Animeerbaar"
-  :animationType "Animatietype"
+  :animation-type "Animatietype"
   :syntax "Syntaxis"
   :mdn-info "MDN Info"
   :attributes-title "%1 %2 elementen"}
@@ -373,8 +370,6 @@
         animatieduur."
   :max "Het max attribuut specificeert de maximumwaarde van de actieve
         animatieduur."
-  :restart "Het restart attribuut specificeert of een animatie opnieuw kan
-            starten of niet."
   :repeat-count "Het repeatCount attribuut geeft het aantal keren aan dat een
                  animatie zal plaatsvinden."
   :repeat-dur "Het repeatDur attribuut specificeert de totale duur voor het
@@ -406,6 +401,10 @@
                           element met een viewBox die een gegeven
                           beeldverhouding biedt moet passen in een viewport met
                           een andere beeldverhouding."}
+
+ :renderer.attribute.impl.restart
+ {:description "Het restart attribuut specificeert of een animatie opnieuw kan
+                starten of niet."}
 
  :renderer.attribute.impl.accumulate
  {:description "Het accumulate attribuut controleert of een animatie cumulatief
@@ -622,7 +621,7 @@
                     Klik op een element om selectie te wijzigen."]}
 
  :renderer.tool.impl.base.edit.select
- {:select-element "Selecteer element"}
+ {:select-handles "Selecteer handvatten"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Houd %1 ingedrukt om richting te beperken."]
@@ -674,15 +673,13 @@
  :renderer.tool.impl.base.pan
  {:label "Pannen"
   :click-and-drag "Klik en sleep om te pannen."
-  :release-to-stop "Loslaten om te stoppen met pannen."
-  :tool-pan "Pannen"}
+  :release-to-stop "Loslaten om te stoppen met pannen."}
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
   :help-idle [:div "Klik of selecteer een gebied om in te zoomen.
                     Houd %1 ingedrukt om uit te zoomen."]
-  :release-to-focus "Loslaten om op het gebied te focussen."
-  :tool-zoom "Zoomen"}
+  :release-to-focus "Loslaten om op het gebied te focussen."}
 
  :renderer.tool.impl.draw.brush
  {:label "Penseel"
@@ -759,8 +756,6 @@
 
  :renderer.history.views
  {:center-view "Weergave centreren"
-  :select-element "Element selecteren"
-  :delete-selection "Selectie verwijderen"
   :oldest "Oudste"
   :newest "Nieuwste"}
 
@@ -906,9 +901,6 @@
   :panel-history-tree "Geschiedenisboom"
   :panel-shell-history "Shell-geschiedenis"
   :panel-timeline-editor "Tijdlijn-editor"}
-
- :renderer.ruler.core
- {:rulers "Linealen"}
 
  :renderer.snap.core
  {:snap "Uitlijnen"

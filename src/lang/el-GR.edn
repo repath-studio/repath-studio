@@ -30,9 +30,6 @@
  {:hide-command-output "Απόκρυψη ιστορικού εντολών"
   :show-command-output "Εμφάνιση ιστορικού εντολών"}
 
- :renderer.app.events
- {:create-doc "Δημιουργία εγγράφου"}
-
  :renderer.dialog.events
  {:are-you-sure "Είστε βέβαιοι ότι θέλετε να συνεχίσετε;"
   :keybindings "Συντομεύσεις πληκτρολογίου"}
@@ -108,8 +105,8 @@
   :align-right "Στοίχιση δεξιά"
   :align-top "Στοίχιση στη κορυφή"
   :animate "Κίνηση"
-  :animate-motion "Κινούμενη κίνηση"
-  :animate-transform "Κινούμενη μετατροπή"
+  :animate-motion "Κίνηση μετατόπισης"
+  :animate-transform "Κίνηση μετασχηματισμού"
   :boolean-divide "Διαίρεση"
   :boolean-exclude "Απόκλειση"
   :boolean-intersect "Τομή"
@@ -146,7 +143,7 @@
                 ενός χαρακτηριστικού ενός στοιχείου με την πάροδο του χρόνου."}
 
  :renderer.element.impl.animation.animate-motion
- {:label "Κίνηση κίνησης"
+ {:label "Κίνηση μετατόπισης"
   :description "Το στοιχείο SVG <animateMotion> επιτρέπει τον ορισμό του πώς
                 ένα στοιχείο κινείται κατά μήκος μιας διαδρομής κίνησης."}
 
@@ -294,7 +291,7 @@
   :computed "Υπολογισμός"
   :percentages "Τιμές σε ποσοστά"
   :animatable "Δυνατότητα κίνησης"
-  :animationType "Τύπος κίνησης"
+  :animation-type "Τύπος κίνησης"
   :syntax "Σύνταξη"
   :mdn-info "Πληροφορίες MDN"
   :attributes-title "%1 %2 στοιχεία"}
@@ -377,8 +374,6 @@
         μιας κίνησης."
   :max "To χαρακτηριστικό max καθορίζει τη μέγιστη τιμή της ενεργής διάρκειας
         μιας κίνησης."
-  :restart "To χαρακτηριστικό restart καθορίζει εάν μια κίνηση μπορεί να
-            ξεκινήσει ξανά ή όχι."
   :repeat-count "To χαρακτηριστικό repeatCount καθορίζει τον αριθμό των φορών
                  που θα εκτελεστεί μια κίνηση."
   :repeat-dur "To χαρακτηριστικό repeatDur καθορίζει τη συνολική διάρκεια
@@ -481,6 +476,10 @@
   :lock-guides "Κλείδωμα οδηγών"
   :idle "Σύρετε τον χάρακα στον καμβά για να δημιουργήσετε έναν οδηγό."
   :create "Αφήστε για να οριστικοποιήσετε τον οδηγό."}
+
+ :renderer.attribute.impl.restart
+ {:description "To χαρακτηριστικό restart καθορίζει εάν μια κίνηση μπορεί να
+                ξεκινήσει ξανά ή όχι."}
 
  :renderer.attribute.impl.accumulate
  {:description "To χαρακτηριστικό accumulate καθορίζει εάν οι επαναλήψεις μιας
@@ -628,7 +627,7 @@
                     Κάντε κλικ σε ένα στοιχείο για αλλάξετε επιλογή."]}
 
  :renderer.tool.impl.base.edit.select
- {:select-element "Επιλογή στοιχείου"}
+ {:select-handles "Επιλογή λαβών"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Κρατήστε %1 για να περιορίσετε την κατεύθυνση."]
@@ -680,15 +679,13 @@
  :renderer.tool.impl.base.pan
  {:label "Μετατόπιση"
   :click-and-drag "Κάντε κλικ και σύρετε για μετατόπιση."
-  :release-to-stop "Αφήστε για να σταματήσετε τη μετατόπιση."
-  :tool-pan "Κύλιση"}
+  :release-to-stop "Αφήστε για να σταματήσετε τη μετατόπιση."}
 
  :renderer.tool.impl.base.zoom
  {:label "Μεγέθυνση"
   :help-idle [:div "Κάντε κλικ ή επιλέξτε μια περιοχή για μεγέθυνση.
                     Κρατήστε %1 για σμίκρυνση."]
-  :release-to-focus "Αφήστε για να εστιάσετε στην περιοχή."
-  :tool-zoom "Ζουμ"}
+  :release-to-focus "Αφήστε για να εστιάσετε στην περιοχή."}
 
  :renderer.tool.impl.draw.brush
  {:label "Πινέλο"
@@ -750,6 +747,7 @@
 
  :renderer.app.status-view
  {:select-zoom "Επιλέξτε επίπεδο μεγέθυνσης"
+  :zoom "Μεγέθυνση"
   :fill-color "Επιλέξτε χρώμα γεμίσματος"
   :stroke-color "Επιλέξτε χρώμα περιγράμματος"
   :swap-color "Ανταλλάξτε το γέμισμα με τη γραμμή"}
@@ -765,8 +763,6 @@
 
  :renderer.history.views
  {:center-view "Κεντρική προβολή"
-  :select-element "Επιλογή στοιχείου"
-  :delete-selection "Διαγραφή επιλεγμένου"
   :oldest "Παλαιότερο"
   :newest "Νεότερο"}
 
@@ -912,9 +908,6 @@
   :panel-history-tree "Δέντρο ιστορικού"
   :panel-shell-history "Ιστορικό γραμμής εντολών"
   :panel-timeline-editor "Επεξεργαστής χρονολόγιας"}
-
- :renderer.ruler.core
- {:rulers "Χάρακες"}
 
  :renderer.snap.core
  {:snap "Προσκόλληση"

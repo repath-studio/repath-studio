@@ -30,9 +30,6 @@
  {:hide-command-output "명령 출력 숨기기"
   :show-command-output "명령 출력 보이기"}
 
- :renderer.app.events
- {:create-doc "문서 생성"}
-
  :renderer.dialog.events
  {:are-you-sure "계속하시겠습니까?"
   :keybindings "키 바인딩"}
@@ -278,7 +275,7 @@
   :computed "계산됨"
   :percentages "백분율"
   :animatable "애니메이션 가능"
-  :animationType "애니메이션 유형"
+  :animation-type "애니메이션 유형"
   :syntax "구문"
   :mdn-info "MDN 정보"
   :attributes-title "%1 %2 요소"}
@@ -338,7 +335,6 @@
   :dur "dur 속성은 애니메이션의 단순 지속 시간을 나타냅니다."
   :min "min 속성은 활성 애니메이션 지속 시간의 최솟값을 지정합니다."
   :max "max 속성은 활성 애니메이션 지속 시간의 최댓값을 지정합니다."
-  :restart "restart 속성은 애니메이션을 다시 시작할 수 있는지 여부를 지정합니다."
   :repeat-count "repeatCount 속성은 애니메이션이 실행될 횟수를 나타냅니다."
   :repeat-dur "repeatDur 속성은 애니메이션을 반복하는 총 지속 시간을 지정합니다."
   :values "values 속성은 사용되는 컨텍스트에 따라 다른 의미를 가지며,
@@ -359,6 +355,9 @@
   :preserve-aspect-ratio "preserveAspectRatio 속성은 주어진 종횡비를 제공하는
                           viewBox가 있는 요소가 다른 종횡비를 가진 뷰포트에
                           어떻게 맞춰져야 하는지를 나타냅니다."}
+
+ :renderer.attribute.impl.restart
+ {:description "restart 속성은 애니메이션을 다시 시작할 수 있는지 여부를 지정합니다."}
 
  :renderer.attribute.impl.accumulate
  {:description "accumulate 속성은 애니메이션이 누적적인지 여부를 제어합니다."}
@@ -561,7 +560,7 @@
  {:help-idle [:div "핸들을 드래그하여 모양을 수정합니다. 요소를 클릭하여 선택을 변경합니다."]}
 
  :renderer.tool.impl.base.edit.select
- {:select-element "요소 선택"}
+ {:select-handles "핸들 선택"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "%1을 누르면 방향을 제한합니다."]
@@ -610,14 +609,12 @@
  :renderer.tool.impl.base.pan
  {:label "팬"
   :click-and-drag "클릭하고 드래그하여 팬합니다."
-  :release-to-stop "팬을 멈주려면 놓으세요."
-  :tool-pan "이동"}
+  :release-to-stop "팬을 멈주려면 놓으세요."}
 
  :renderer.tool.impl.base.zoom
  {:label "확대/축소"
   :help-idle [:div "클릭하거나 영역을 선택하여 확대합니다. %1을 누르면 축소합니다."]
-  :release-to-focus "영역에 집중하려면 놓으세요."
-  :tool-zoom "줌"}
+  :release-to-focus "영역에 집중하려면 놓으세요."}
 
  :renderer.tool.impl.draw.brush
  {:label "브러시"
@@ -694,8 +691,6 @@
 
  :renderer.history.views
  {:center-view "뷰 중앙"
-  :select-element "요소 선택"
-  :delete-selection "선택 삭제"
   :oldest "가장 오래된"
   :newest "가장 최신"}
 
@@ -758,6 +753,7 @@
  {:document "문서"
   :new "새로 만들기"
   :open "열기..."
+  :recent-clear "최근 항목 지우기"
   :print "인쇄"
   :save "저장"
   :save-as "다른 이름으로 저장..."
@@ -838,9 +834,6 @@
   :panel-history-tree "기록 트리"
   :panel-shell-history "쉘 기록"
   :panel-timeline-editor "타임라인 편집기"}
-
- :renderer.ruler.core
- {:rulers "눈금자"}
 
  :renderer.snap.core
  {:snap "스냅"
