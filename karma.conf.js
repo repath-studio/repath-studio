@@ -2,6 +2,8 @@ module.exports = function (config) {
   var junitOutputDir = process.env.CIRCLE_TEST_REPORTS || "target/junit"
 
   config.set({
+    browserDisconnectTimeout: 10000,
+    browserNoActivityTimeout: 60000,
     customLaunchers: {
       ChromeHeadlessNoSandbox: {
         base: 'ChromeHeadless',
