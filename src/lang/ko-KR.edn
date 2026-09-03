@@ -30,9 +30,6 @@
  {:hide-command-output "명령 출력 숨기기"
   :show-command-output "명령 출력 보이기"}
 
- :renderer.app.events
- {:create-doc "문서 생성"}
-
  :renderer.dialog.events
  {:are-you-sure "계속하시겠습니까?"
   :keybindings "키 바인딩"}
@@ -87,39 +84,57 @@
  {:modify-selection "선택 수정"
   :select-element "요소 선택"
   :select-elements "요소들 선택"
-  :delete-selection "선택 삭제"
   :set-label "레이블 설정"
-  :lock-selection "선택 잠금"
-  :unlock-selection "선택 잠금 해제"
   :remove "%1 제거"
   :update "%1 업데이트"
   :deselect-all "모두 선택 해제"
   :select-all "모두 선택"
   :select-same-tags "같은 태그 선택"
   :invert-selection "선택 반전"
-  :raise-selection "선택 앞으로"
-  :lower-selection "선택 뒤로"
-  :raise-selection-top "선택을 맨 앞으로"
-  :lower-selection-bottom "선택을 맨 뒤로"
-  :paste-selection "선택 붙여넣기"
-  :paste-selection-in-place "선택을 제자리에 붙여넣기"
-  :paste-styles-to-selection "선택에 스타일 붙여넣기"
-  :duplicate-selection "선택 복제"
   :move-selection "선택 이동"
   :place-selection "선택 배치"
   :scale-selection "선택 크기 조정"
-  :convert-selection-path "선택을 패스로 변환"
-  :convert-selection-stroke-path "선택의 획을 패스로 변환"
   :create "%1 생성"
   :import-svg "SVG 가져오기"
   :set-parent "부모 설정"
-  :group-selection "선택 그룹화"
-  :ungroup-selection "선택 그룹 해제"
-  :cut-selection "선택 잘라내기"
-  :trace-image "이미지 추적"
   :toggle-handle-selection "Toggle handle selection"
   :combine "결합"
   :break-apart "분리"
+  :align-bottom "아래쪽 정렬"
+  :align-left "왼쪽 정렬"
+  :align-right "오른쪽 정렬"
+  :align-top "위쪽 정렬"
+  :animate "애니메이션"
+  :animate-motion "모션 애니메이션"
+  :animate-transform "변환 애니메이션"
+  :boolean-divide "나누기"
+  :boolean-exclude "제외"
+  :boolean-intersect "교집합"
+  :boolean-subtract "빼기"
+  :boolean-unite "합치기"
+  :center-horizontally "수평 중앙 정렬"
+  :center-vertically "수직 중앙 정렬"
+  :cut "잘라내기"
+  :delete "삭제"
+  :duplicate "복제"
+  :group "그룹"
+  :image-trace "추적"
+  :lock "잠금"
+  :lower "뒤로"
+  :lower-to-bottom "맨 뒤로"
+  :object-to-path "객체를 패스로"
+  :paste "붙여넣기"
+  :paste-in-place "제자리에 붙여넣기"
+  :paste-styles "스타일 붙여넣기"
+  :path-flatten "평면화"
+  :path-reverse "역방향"
+  :path-simplify "단순화"
+  :path-smooth "매끄럽게"
+  :raise "앞으로"
+  :raise-to-top "맨 앞으로"
+  :stroke-to-path "획을 패스로"
+  :ungroup "그룹 해제"
+  :unlock "잠금 해제"
   :add-motion-path "모션 패스 추가"}
 
  :renderer.element.impl.animation.animate
@@ -260,7 +275,7 @@
   :computed "계산됨"
   :percentages "백분율"
   :animatable "애니메이션 가능"
-  :animationType "애니메이션 유형"
+  :animation-type "애니메이션 유형"
   :syntax "구문"
   :mdn-info "MDN 정보"
   :attributes-title "%1 %2 요소"}
@@ -320,7 +335,6 @@
   :dur "dur 속성은 애니메이션의 단순 지속 시간을 나타냅니다."
   :min "min 속성은 활성 애니메이션 지속 시간의 최솟값을 지정합니다."
   :max "max 속성은 활성 애니메이션 지속 시간의 최댓값을 지정합니다."
-  :restart "restart 속성은 애니메이션을 다시 시작할 수 있는지 여부를 지정합니다."
   :repeat-count "repeatCount 속성은 애니메이션이 실행될 횟수를 나타냅니다."
   :repeat-dur "repeatDur 속성은 애니메이션을 반복하는 총 지속 시간을 지정합니다."
   :values "values 속성은 사용되는 컨텍스트에 따라 다른 의미를 가지며,
@@ -341,6 +355,9 @@
   :preserve-aspect-ratio "preserveAspectRatio 속성은 주어진 종횡비를 제공하는
                           viewBox가 있는 요소가 다른 종횡비를 가진 뷰포트에
                           어떻게 맞춰져야 하는지를 나타냅니다."}
+
+ :renderer.attribute.impl.restart
+ {:description "restart 속성은 애니메이션을 다시 시작할 수 있는지 여부를 지정합니다."}
 
  :renderer.attribute.impl.accumulate
  {:description "accumulate 속성은 애니메이션이 누적적인지 여부를 제어합니다."}
@@ -543,7 +560,7 @@
  {:help-idle [:div "핸들을 드래그하여 모양을 수정합니다. 요소를 클릭하여 선택을 변경합니다."]}
 
  :renderer.tool.impl.base.edit.select
- {:select-element "요소 선택"}
+ {:select-handles "핸들 선택"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "%1을 누르면 방향을 제한합니다."]
@@ -592,14 +609,12 @@
  :renderer.tool.impl.base.pan
  {:label "팬"
   :click-and-drag "클릭하고 드래그하여 팬합니다."
-  :release-to-stop "팬을 멈주려면 놓으세요."
-  :tool-pan "이동"}
+  :release-to-stop "팬을 멈주려면 놓으세요."}
 
  :renderer.tool.impl.base.zoom
  {:label "확대/축소"
   :help-idle [:div "클릭하거나 영역을 선택하여 확대합니다. %1을 누르면 축소합니다."]
-  :release-to-focus "영역에 집중하려면 놓으세요."
-  :tool-zoom "줌"}
+  :release-to-focus "영역에 집중하려면 놓으세요."}
 
  :renderer.tool.impl.draw.brush
  {:label "브러시"
@@ -676,8 +691,6 @@
 
  :renderer.history.views
  {:center-view "뷰 중앙"
-  :select-element "요소 선택"
-  :delete-selection "선택 삭제"
   :oldest "가장 오래된"
   :newest "가장 최신"}
 
@@ -740,6 +753,7 @@
  {:document "문서"
   :new "새로 만들기"
   :open "열기..."
+  :recent-clear "최근 항목 지우기"
   :print "인쇄"
   :save "저장"
   :save-as "다른 이름으로 저장..."
@@ -761,48 +775,7 @@
   :rulers "눈금자"}
 
  :renderer.element.core
- {:cut "잘라내기"
-  :copy "복사"
-  :paste "붙여넣기"
-  :paste-in-place "제자리에 붙여넣기"
-  :paste-styles "스타일 붙여넣기"
-  :duplicate "복제"
-  :select-all "모두 선택"
-  :deselect-all "모두 선택 해제"
-  :invert-selection "선택 반전"
-  :select-same-tags "같은 태그 선택"
-  :delete "삭제"
-  :object-to-path "객체를 패스로"
-  :stroke-to-path "획을 패스로"
-  :group "그룹"
-  :ungroup "그룹 해제"
-  :lock "잠금"
-  :unlock "잠금 해제"
-  :align-left "왼쪽 정렬"
-  :align-right "오른쪽 정렬"
-  :align-top "위쪽 정렬"
-  :align-bottom "아래쪽 정렬"
-  :center-vertically "수직 중앙 정렬"
-  :center-horizontally "수평 중앙 정렬"
-  :animate "애니메이션"
-  :animate-transform "변환 애니메이션"
-  :animate-motion "모션 애니메이션"
-  :boolean-exclude "제외"
-  :boolean-unite "합치기"
-  :boolean-intersect "교집합"
-  :boolean-subtract "빼기"
-  :boolean-divide "나누기"
-  :combine "결합"
-  :break-apart "분리"
-  :raise "앞으로"
-  :lower "뒤로"
-  :raise-to-top "맨 앞으로"
-  :lower-to-bottom "맨 뒤로"
-  :image-trace "추적"
-  :path-simplify "단순화"
-  :path-smooth "매끄럽게"
-  :path-flatten "평면화"
-  :path-reverse "역방향"
+ {:copy "복사"
   :index-operations "인덱스 작업"
   :boolean-operations "부울 작업"
   :horizontal-alignment "수평 정렬"
@@ -861,9 +834,6 @@
   :panel-history-tree "기록 트리"
   :panel-shell-history "쉘 기록"
   :panel-timeline-editor "타임라인 편집기"}
-
- :renderer.ruler.core
- {:rulers "눈금자"}
 
  :renderer.snap.core
  {:snap "스냅"

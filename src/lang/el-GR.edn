@@ -30,9 +30,6 @@
  {:hide-command-output "Απόκρυψη ιστορικού εντολών"
   :show-command-output "Εμφάνιση ιστορικού εντολών"}
 
- :renderer.app.events
- {:create-doc "Δημιουργία εγγράφου"}
-
  :renderer.dialog.events
  {:are-you-sure "Είστε βέβαιοι ότι θέλετε να συνεχίσετε;"
   :keybindings "Συντομεύσεις πληκτρολογίου"}
@@ -87,39 +84,57 @@
  {:modify-selection "Τροποποίηση επιλογής"
   :select-element "Επιλογή στοιχείου"
   :select-elements "Επιλογή στοιχείων"
-  :delete-selection "Διαγραφή επιλογής"
   :set-label "Ορισμός ετικέτας"
-  :lock-selection "Κλείδωμα επιλογής"
-  :unlock-selection "Ξεκλείδωμα επιλογής"
   :remove "Αφαίρεση %1"
   :update "Ενημέρωση %1"
   :deselect-all "Αποεπιλογή όλων"
   :select-all "Επιλογή όλων"
   :select-same-tags "Επιλογή κοινών ετικετών"
   :invert-selection "Αντιστροφή επιλογής"
-  :raise-selection "Ανύψωση επιλογής"
-  :lower-selection "Κατέβασμα επιλογής"
-  :raise-selection-top "Ανύψωση επιλογής στη κορυφή"
-  :lower-selection-bottom "Κατέβασμα επιλογής στη βάση"
-  :paste-selection "Επικόλληση επιλεγμένου"
-  :paste-selection-in-place "Επικόλληση επιλογής επί τόπου"
-  :paste-styles-to-selection "Επικόλληση στυλ στην επιλογή"
-  :duplicate-selection "Διπλότυπο επιλογής"
   :move-selection "Μετακίνηση επιλογής"
   :place-selection "Τοποθέτηση επιλογής"
   :scale-selection "Μεταβολή μεγέθους επιλογής"
-  :convert-selection-path "Μετατροπή επιλογής σε διαδρομή"
-  :convert-selection-stroke-path "Μετατροπή περιγράμματος επιλογής σε διαδρομή"
   :create "Δημιουργία %1"
   :import-svg "Εισαγωγή svg"
   :set-parent "Ορισμός γονέα"
-  :group-selection "Ομαδοποίηση επιλογής"
-  :ungroup-selection "Αποομαδοποίηση επιλογής"
-  :cut-selection "Αποκοπή επιλογής"
-  :trace-image "Ανίχνευση εικόνας"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Συνδυασμός"
   :break-apart "Διάσπαση"
+  :align-bottom "Στοίχιση στη βάση"
+  :align-left "Στοίχιση αριστερά"
+  :align-right "Στοίχιση δεξιά"
+  :align-top "Στοίχιση στη κορυφή"
+  :animate "Κίνηση"
+  :animate-motion "Κίνηση μετατόπισης"
+  :animate-transform "Κίνηση μετασχηματισμού"
+  :boolean-divide "Διαίρεση"
+  :boolean-exclude "Απόκλειση"
+  :boolean-intersect "Τομή"
+  :boolean-subtract "Αφαίρεση"
+  :boolean-unite "Ενωση"
+  :center-horizontally "Κέντρο οριζόντια"
+  :center-vertically "Κέντρο κάθετα"
+  :cut "Αποκοπή"
+  :delete "Διαγραφή"
+  :duplicate "Δημιουργία αντιγράφου"
+  :group "Ομαδοποίηση"
+  :image-trace "Ίχνος"
+  :lock "Κλείδωμα"
+  :lower "Κατέβασμα"
+  :lower-to-bottom "Μετακίνση προς τα κάτω"
+  :object-to-path "Μετατροπή αντικειμένου σε διαδρομή"
+  :paste "Επικόλληση"
+  :paste-in-place "Επικόλληση επί τόπου"
+  :paste-styles "Επικόλληση μορφοποιήσεων"
+  :path-flatten "Επιπεδοποίηση"
+  :path-reverse "Αντιστροφή"
+  :path-simplify "Απλοποίηση"
+  :path-smooth "Εξομάλυνση"
+  :raise "Ανέβασμα"
+  :raise-to-top "Μετακίνηση προς τα πάνω"
+  :stroke-to-path "Μετατροπή περιγράμματος σε διαδρομή"
+  :ungroup "Αποομαδοποίηση"
+  :unlock "Ξεκλείδωμα"
   :add-motion-path "Προσθήκη διαδρομής κίνησης"}
 
  :renderer.element.impl.animation.animate
@@ -128,7 +143,7 @@
                 ενός χαρακτηριστικού ενός στοιχείου με την πάροδο του χρόνου."}
 
  :renderer.element.impl.animation.animate-motion
- {:label "Κίνηση κίνησης"
+ {:label "Κίνηση μετατόπισης"
   :description "Το στοιχείο SVG <animateMotion> επιτρέπει τον ορισμό του πώς
                 ένα στοιχείο κινείται κατά μήκος μιας διαδρομής κίνησης."}
 
@@ -276,7 +291,7 @@
   :computed "Υπολογισμός"
   :percentages "Τιμές σε ποσοστά"
   :animatable "Δυνατότητα κίνησης"
-  :animationType "Τύπος κίνησης"
+  :animation-type "Τύπος κίνησης"
   :syntax "Σύνταξη"
   :mdn-info "Πληροφορίες MDN"
   :attributes-title "%1 %2 στοιχεία"}
@@ -359,8 +374,6 @@
         μιας κίνησης."
   :max "To χαρακτηριστικό max καθορίζει τη μέγιστη τιμή της ενεργής διάρκειας
         μιας κίνησης."
-  :restart "To χαρακτηριστικό restart καθορίζει εάν μια κίνηση μπορεί να
-            ξεκινήσει ξανά ή όχι."
   :repeat-count "To χαρακτηριστικό repeatCount καθορίζει τον αριθμό των φορών
                  που θα εκτελεστεί μια κίνηση."
   :repeat-dur "To χαρακτηριστικό repeatDur καθορίζει τη συνολική διάρκεια
@@ -463,6 +476,10 @@
   :lock-guides "Κλείδωμα οδηγών"
   :idle "Σύρετε τον χάρακα στον καμβά για να δημιουργήσετε έναν οδηγό."
   :create "Αφήστε για να οριστικοποιήσετε τον οδηγό."}
+
+ :renderer.attribute.impl.restart
+ {:description "To χαρακτηριστικό restart καθορίζει εάν μια κίνηση μπορεί να
+                ξεκινήσει ξανά ή όχι."}
 
  :renderer.attribute.impl.accumulate
  {:description "To χαρακτηριστικό accumulate καθορίζει εάν οι επαναλήψεις μιας
@@ -610,7 +627,7 @@
                     Κάντε κλικ σε ένα στοιχείο για αλλάξετε επιλογή."]}
 
  :renderer.tool.impl.base.edit.select
- {:select-element "Επιλογή στοιχείου"}
+ {:select-handles "Επιλογή λαβών"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Κρατήστε %1 για να περιορίσετε την κατεύθυνση."]
@@ -662,15 +679,13 @@
  :renderer.tool.impl.base.pan
  {:label "Μετατόπιση"
   :click-and-drag "Κάντε κλικ και σύρετε για μετατόπιση."
-  :release-to-stop "Αφήστε για να σταματήσετε τη μετατόπιση."
-  :tool-pan "Κύλιση"}
+  :release-to-stop "Αφήστε για να σταματήσετε τη μετατόπιση."}
 
  :renderer.tool.impl.base.zoom
  {:label "Μεγέθυνση"
   :help-idle [:div "Κάντε κλικ ή επιλέξτε μια περιοχή για μεγέθυνση.
                     Κρατήστε %1 για σμίκρυνση."]
-  :release-to-focus "Αφήστε για να εστιάσετε στην περιοχή."
-  :tool-zoom "Ζουμ"}
+  :release-to-focus "Αφήστε για να εστιάσετε στην περιοχή."}
 
  :renderer.tool.impl.draw.brush
  {:label "Πινέλο"
@@ -732,6 +747,7 @@
 
  :renderer.app.status-view
  {:select-zoom "Επιλέξτε επίπεδο μεγέθυνσης"
+  :zoom "Μεγέθυνση"
   :fill-color "Επιλέξτε χρώμα γεμίσματος"
   :stroke-color "Επιλέξτε χρώμα περιγράμματος"
   :swap-color "Ανταλλάξτε το γέμισμα με τη γραμμή"}
@@ -747,8 +763,6 @@
 
  :renderer.history.views
  {:center-view "Κεντρική προβολή"
-  :select-element "Επιλογή στοιχείου"
-  :delete-selection "Διαγραφή επιλεγμένου"
   :oldest "Παλαιότερο"
   :newest "Νεότερο"}
 
@@ -835,48 +849,7 @@
   :rulers "Χάρακες"}
 
  :renderer.element.core
- {:cut "Αποκοπή"
-  :copy "Αντιγραφή"
-  :paste "Επικόλληση"
-  :paste-in-place "Επικόλληση επί τόπου"
-  :paste-styles "Επικόλληση μορφοποιήσεων"
-  :duplicate "Δημιουργία αντιγράφου"
-  :select-all "Επιλογή όλων"
-  :deselect-all "Αποεπιλογή όλων"
-  :invert-selection "Αντιστροφή επιλογής"
-  :select-same-tags "Επιλογή ίδιων ετικετών"
-  :delete "Διαγραφή"
-  :object-to-path "Μετατροπή αντικειμένου σε διαδρομή"
-  :stroke-to-path "Μετατροπή περιγράμματος σε διαδρομή"
-  :group "Ομαδοποίηση"
-  :ungroup "Αποομαδοποίηση"
-  :lock "Κλείδωμα"
-  :unlock "Ξεκλείδωμα"
-  :align-left "Στοίχιση αριστερά"
-  :align-right "Στοίχιση δεξιά"
-  :align-top "Στοίχιση στη κορυφή"
-  :align-bottom "Στοίχιση στη βάση"
-  :center-vertically "Κέντρο κάθετα"
-  :center-horizontally "Κέντρο οριζόντια"
-  :animate "Κίνηση"
-  :animate-transform "Κινούμενη μετατροπή"
-  :animate-motion "Κινούμενη κίνηση"
-  :boolean-exclude "Απόκλειση"
-  :boolean-unite "Ενωση"
-  :boolean-intersect "Τομή"
-  :boolean-subtract "Αφαίρεση"
-  :boolean-divide "Διαίρεση"
-  :combine "Συνδυασμός"
-  :break-apart "Διάσπαση"
-  :raise "Ανέβασμα"
-  :lower "Κατέβασμα"
-  :raise-to-top "Μετακίνηση προς τα πάνω"
-  :lower-to-bottom "Μετακίνση προς τα κάτω"
-  :image-trace "Ίχνος"
-  :path-simplify "Απλοποίηση"
-  :path-smooth "Εξομάλυνση"
-  :path-flatten "Επιπεδοποίηση"
-  :path-reverse "Αντιστροφή"
+ {:copy "Αντιγραφή"
   :index-operations "Δημιουργία Ευρετηρίου"
   :boolean-operations "Λογικές Πράξεις"
   :horizontal-alignment "Οριζόντια Ευθυγράμμιση"
@@ -935,9 +908,6 @@
   :panel-history-tree "Δέντρο ιστορικού"
   :panel-shell-history "Ιστορικό γραμμής εντολών"
   :panel-timeline-editor "Επεξεργαστής χρονολόγιας"}
-
- :renderer.ruler.core
- {:rulers "Χάρακες"}
 
  :renderer.snap.core
  {:snap "Προσκόλληση"

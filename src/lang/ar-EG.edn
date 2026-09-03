@@ -30,9 +30,6 @@
  {:hide-command-output "إخفاء مخرجات الأمر"
   :show-command-output "إظهار مخرجات الأمر"}
 
- :renderer.app.events
- {:create-doc "إنشاء مستند"}
-
  :renderer.dialog.events
  {:are-you-sure "هل أنت متأكد أنك تريد المتابعة؟"
   :keybindings "اختصارات لوحة المفاتيح"}
@@ -87,39 +84,57 @@
  {:modify-selection "تعديل التحديد"
   :select-element "تحديد عنصر"
   :select-elements "تحديد عناصر"
-  :delete-selection "حذف التحديد"
   :set-label "تعيين تسمية"
-  :lock-selection "قفل التحديد"
-  :unlock-selection "إلغاء قفل التحديد"
   :remove "إزالة %1"
   :update "تحديث %1"
   :deselect-all "إلغاء تحديد الكل"
   :select-all "تحديد الكل"
   :select-same-tags "تحديد نفس العلامات"
   :invert-selection "عكس التحديد"
-  :raise-selection "رفع التحديد"
-  :lower-selection "خفض التحديد"
-  :raise-selection-top "رفع التحديد إلى الأعلى"
-  :lower-selection-bottom "خفض التحديد إلى الأسفل"
-  :paste-selection "لصق التحديد"
-  :paste-selection-in-place "لصق التحديد في المكان"
-  :paste-styles-to-selection "لصق الأنماط إلى التحديد"
-  :duplicate-selection "مضاعفة التحديد"
   :move-selection "تحريك التحديد"
   :place-selection "وضع التحديد"
   :scale-selection "تحجيم التحديد"
-  :convert-selection-path "تحويل التحديد إلى مسار"
-  :convert-selection-stroke-path "تحويل خط التحديد إلى مسار"
   :create "إنشاء %1"
   :import-svg "استيراد svg"
   :set-parent "تعيين الأصل"
-  :group-selection "تجميع التحديد"
-  :ungroup-selection "إلغاء تجميع التحديد"
-  :cut-selection "قص التحديد"
-  :trace-image "تتبع الصورة"
   :toggle-handle-selection "Toggle handle selection"
   :combine "دمج"
   :break-apart "فصل"
+  :align-bottom "محاذاة أسفل"
+  :align-left "محاذاة يسار"
+  :align-right "محاذاة يمين"
+  :align-top "محاذاة أعلى"
+  :animate "تحريك"
+  :animate-motion "تحريك الحركة"
+  :animate-transform "تحريك التحويل"
+  :boolean-divide "قسمة"
+  :boolean-exclude "استبعاد"
+  :boolean-intersect "تقاطع"
+  :boolean-subtract "طرح"
+  :boolean-unite "توحيد"
+  :center-horizontally "وسط أفقياً"
+  :center-vertically "وسط عمودياً"
+  :cut "قص"
+  :delete "حذف"
+  :duplicate "مضاعفة"
+  :group "تجميع"
+  :image-trace "تتبع"
+  :lock "قفل"
+  :lower "خفض"
+  :lower-to-bottom "خفض إلى الأسفل"
+  :object-to-path "كائن إلى مسار"
+  :paste "لصق"
+  :paste-in-place "لصق في المكان"
+  :paste-styles "لصق الأنماط"
+  :path-flatten "تسطيح"
+  :path-reverse "عكس"
+  :path-simplify "تبسيط"
+  :path-smooth "تنعيم"
+  :raise "رفع"
+  :raise-to-top "رفع إلى الأعلى"
+  :stroke-to-path "خط إلى مسار"
+  :ungroup "إلغاء التجميع"
+  :unlock "إلغاء القفل"
   :add-motion-path "إضافة مسار الحركة"}
 
  :renderer.element.impl.animation.animate
@@ -262,7 +277,7 @@
   :computed "محسوب"
   :percentages "النسب المئوية"
   :animatable "قابل للتحريك"
-  :animationType "نوع التحريك"
+  :animation-type "نوع التحريك"
   :syntax "بنية الجملة"
   :mdn-info "معلومات MDN"
   :attributes-title "%1 %2 عناصر"}
@@ -328,8 +343,6 @@
   :dur "خاصية dur تشير إلى المدة البسيطة للرسوم المتحركة."
   :min "خاصية min تحدد الحد الأدنى لقيمة مدة الرسوم المتحركة النشطة."
   :max "خاصية max تحدد الحد الأقصى لقيمة مدة الرسوم المتحركة النشطة."
-  :restart "خاصية restart تحدد ما إذا كان يمكن إعادة تشغيل الرسوم
-            المتحركة أم لا."
   :repeat-count "خاصية repeatCount تشير إلى عدد المرات التي ستحدث
                  فيها الرسوم المتحركة."
   :repeat-dur "خاصية repeatDur تحدد المدة الإجمالية لتكرار الرسوم
@@ -414,6 +427,10 @@
   :lock-guides "قفل الأدلة"
   :idle "اسحب المسطرة إلى اللوحة لإنشاء دليل."
   :create "أسقط لإتمام الدليل."}
+
+ :renderer.attribute.impl.restart
+ {:description "خاصية restart تحدد ما إذا كان يمكن إعادة تشغيل الرسوم
+                المتحركة أم لا."}
 
  :renderer.attribute.impl.accumulate
  {:description "خاصية accumulate تتحكم في ما إذا كانت الرسوم المتحركة تراكمية
@@ -563,7 +580,7 @@
  {:help-idle [:div "اسحب مقبضاً لتعديل شكلك .انقر على عنصر لتغيير التحديد."]}
 
  :renderer.tool.impl.base.edit.select
- {:select-element "تحديد عنصر"}
+ {:select-handles "تحديد مقابض"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "اضغط %1 لتقييد الاتجاه."]
@@ -612,14 +629,12 @@
  :renderer.tool.impl.base.pan
  {:label "تحريك"
   :click-and-drag "انقر واسحب للتحريك."
-  :release-to-stop "أفلت للتوقف عن التحريك."
-  :tool-pan "تحريك"}
+  :release-to-stop "أفلت للتوقف عن التحريك."}
 
  :renderer.tool.impl.base.zoom
  {:label "تكبير"
   :help-idle [:div "انقر أو حدد منطقة للتكبير .اضغط %1 للتصغير."]
-  :release-to-focus "أفلت للتركيز على المنطقة."
-  :tool-zoom "تكبير"}
+  :release-to-focus "أفلت للتركيز على المنطقة."}
 
  :renderer.tool.impl.draw.brush
  {:label "فرشاة"
@@ -696,8 +711,6 @@
 
  :renderer.history.views
  {:center-view "عرض المركز"
-  :select-element "تحديد عنصر"
-  :delete-selection "حذف التحديد"
   :oldest "الأقدم"
   :newest "الأحدث"}
 
@@ -783,48 +796,7 @@
   :rulers "المساطر"}
 
  :renderer.element.core
- {:cut "قص"
-  :copy "نسخ"
-  :paste "لصق"
-  :paste-in-place "لصق في المكان"
-  :paste-styles "لصق الأنماط"
-  :duplicate "مضاعفة"
-  :select-all "تحديد الكل"
-  :deselect-all "إلغاء تحديد الكل"
-  :invert-selection "عكس التحديد"
-  :select-same-tags "تحديد نفس العلامات"
-  :delete "حذف"
-  :object-to-path "كائن إلى مسار"
-  :stroke-to-path "خط إلى مسار"
-  :group "تجميع"
-  :ungroup "إلغاء التجميع"
-  :lock "قفل"
-  :unlock "إلغاء القفل"
-  :align-left "محاذاة يسار"
-  :align-right "محاذاة يمين"
-  :align-top "محاذاة أعلى"
-  :align-bottom "محاذاة أسفل"
-  :center-vertically "وسط عمودياً"
-  :center-horizontally "وسط أفقياً"
-  :animate "تحريك"
-  :animate-transform "تحريك التحويل"
-  :animate-motion "تحريك الحركة"
-  :boolean-exclude "استبعاد"
-  :boolean-unite "توحيد"
-  :boolean-intersect "تقاطع"
-  :boolean-subtract "طرح"
-  :boolean-divide "قسمة"
-  :combine "دمج"
-  :break-apart "فصل"
-  :raise "رفع"
-  :lower "خفض"
-  :raise-to-top "رفع إلى الأعلى"
-  :lower-to-bottom "خفض إلى الأسفل"
-  :image-trace "تتبع"
-  :path-simplify "تبسيط"
-  :path-smooth "تنعيم"
-  :path-flatten "تسطيح"
-  :path-reverse "عكس"
+ {:copy "نسخ"
   :index-operations "عمليات الفهرس"
   :boolean-operations "العمليات المنطقية"
   :horizontal-alignment "المحاذاة الأفقية"
@@ -883,9 +855,6 @@
   :panel-history-tree "شجرة التاريخ"
   :panel-shell-history "تاريخ الأوامر"
   :panel-timeline-editor "محرر الجدول الزمني"}
-
- :renderer.ruler.core
- {:rulers "المساطر"}
 
  :renderer.snap.core
  {:snap "التقاط"

@@ -30,9 +30,6 @@
  {:hide-command-output "Komut çıktısını gizle"
   :show-command-output "Komut çıktısını göster"}
 
- :renderer.app.events
- {:create-doc "Belge oluştur"}
-
  :renderer.dialog.events
  {:are-you-sure "Devam etmek istediğinizden emin misiniz?"
   :keybindings "Klavye kısayolları"}
@@ -87,39 +84,57 @@
  {:modify-selection "Seçimi değiştir"
   :select-element "Öğe seç"
   :select-elements "Öğeleri seç"
-  :delete-selection "Seçimi sil"
   :set-label "Etiket ayarla"
-  :lock-selection "Seçimi kilitle"
-  :unlock-selection "Seçim kilidini aç"
   :remove "%1 kaldır"
   :update "%1 güncelle"
   :deselect-all "Tüm seçimi kaldır"
   :select-all "Tümünü seç"
   :select-same-tags "Aynı etiketleri seç"
   :invert-selection "Seçimi ters çevir"
-  :raise-selection "Seçimi öne getir"
-  :lower-selection "Seçimi arkaya gönder"
-  :raise-selection-top "Seçimi en öne getir"
-  :lower-selection-bottom "Seçimi en arkaya gönder"
-  :paste-selection "Seçimi yapıştır"
-  :paste-selection-in-place "Seçimi yerinde yapıştır"
-  :paste-styles-to-selection "Seçime stilleri yapıştır"
-  :duplicate-selection "Seçimi çoğalt"
   :move-selection "Seçimi taşı"
   :place-selection "Seçimi yerleştir"
   :scale-selection "Seçimi ölçeklendir"
-  :convert-selection-path "Seçimi yola dönüştür"
-  :convert-selection-stroke-path "Seçim çizgisini yola dönüştür"
   :create "%1 oluştur"
   :import-svg "SVG içe aktar"
   :set-parent "Ebeveyn ayarla"
-  :group-selection "Seçimi grupla"
-  :ungroup-selection "Seçim grubunu çöz"
-  :cut-selection "Seçimi kes"
-  :trace-image "Resim izini sür"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Kombine"
   :break-apart "Parçalara Ayır"
+  :align-bottom "Aşağı hizala"
+  :align-left "Sola hizala"
+  :align-right "Sağa hizala"
+  :align-top "Yukarı hizala"
+  :animate "Animasyon"
+  :animate-motion "Hareket Animasyonu"
+  :animate-transform "Dönüşüm Animasyonu"
+  :boolean-divide "Böl"
+  :boolean-exclude "Dışla"
+  :boolean-intersect "Kesişim"
+  :boolean-subtract "Çıkar"
+  :boolean-unite "Birleştir"
+  :center-horizontally "Yatay ortala"
+  :center-vertically "Dikey ortala"
+  :cut "Kes"
+  :delete "Sil"
+  :duplicate "Çoğalt"
+  :group "Grupla"
+  :image-trace "İz sür"
+  :lock "Kilitle"
+  :lower "Arkaya gönder"
+  :lower-to-bottom "En arkaya gönder"
+  :object-to-path "Nesneyi yola dönüştür"
+  :paste "Yapıştır"
+  :paste-in-place "Yerinde yapıştır"
+  :paste-styles "Stilleri yapıştır"
+  :path-flatten "Düzleştir"
+  :path-reverse "Ters çevir"
+  :path-simplify "Basitleştir"
+  :path-smooth "Yumuşat"
+  :raise "Öne getir"
+  :raise-to-top "En öne getir"
+  :stroke-to-path "Çizgiyi yola dönüştür"
+  :ungroup "Grubu çöz"
+  :unlock "Kilidi aç"
   :add-motion-path "Hareket yolu ekle"}
 
  :renderer.element.impl.animation.animate
@@ -269,7 +284,7 @@
   :computed "Hesaplanan"
   :percentages "Yüzdeler"
   :animatable "Animasyon yapılabilir"
-  :animationType "Animasyon türü"
+  :animation-type "Animasyon türü"
   :syntax "Sözdizimi"
   :mdn-info "MDN Bilgisi"
   :attributes-title "%1 %2 öğeleri"}
@@ -341,8 +356,6 @@
   :dur "dur özniteliği, bir animasyonun basit süresini gösterir."
   :min "min özniteliği, etkin animasyon süresinin minimum değerini belirtir."
   :max "max özniteliği, etkin animasyon süresinin maksimum değerini belirtir."
-  :restart "restart özniteliği, bir animasyonun yeniden başlatılıp
-            başlatılamayacağını belirtir."
   :repeat-count "repeatCount özniteliği, bir animasyonun gerçekleşeceği
                  sayısını gösterir."
   :repeat-dur "repeatDur özniteliği, bir animasyonu tekrarlamanın toplam
@@ -371,6 +384,10 @@
                           oranı sağlayan viewBox'a sahip bir öğenin, farklı
                           en boy oranına sahip bir görünüm alanına nasıl
                           sığdırılması gerektiğini gösterir."}
+
+ :renderer.attribute.impl.restart
+ {:description "restart özniteliği, bir animasyonun yeniden başlatılıp
+                başlatılamayacağını belirtir."}
 
  :renderer.attribute.impl.accumulate
  {:description "accumulate özniteliği, bir animasyonun kümülatif olup olmadığını
@@ -582,7 +599,7 @@
                     Seçimi değiştirmek için bir öğeye tıklayın."]}
 
  :renderer.tool.impl.base.edit.select
- {:select-element "Eleman seç"}
+ {:select-handles "Tutamaçları seç"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Yönü kısıtlamak için %1 tuşunu basılı tutun."]
@@ -634,15 +651,13 @@
  :renderer.tool.impl.base.pan
  {:label "Kaydır"
   :click-and-drag "Kaydırmak için tıklayın ve sürükleyin."
-  :release-to-stop "Kaydırmayı durdurmak için bırakın."
-  :tool-pan "Kaydır"}
+  :release-to-stop "Kaydırmayı durdurmak için bırakın."}
 
  :renderer.tool.impl.base.zoom
  {:label "Yakınlaştır"
   :help-idle [:div "Yakınlaştırmak için tıklayın veya bir alan seçin.
                     Uzaklaştırmak için %1 tuşunu basılı tutun."]
-  :release-to-focus "Alana odaklanmak için bırakın."
-  :tool-zoom "Yakınlaştır"}
+  :release-to-focus "Alana odaklanmak için bırakın."}
 
  :renderer.tool.impl.draw.brush
  {:label "Fırça"
@@ -719,8 +734,6 @@
 
  :renderer.history.views
  {:center-view "Görünümü ortala"
-  :select-element "Öğe seç"
-  :delete-selection "Seçimi sil"
   :oldest "En eski"
   :newest "En yeni"}
 
@@ -807,48 +820,7 @@
   :rulers "Cetveller"}
 
  :renderer.element.core
- {:cut "Kes"
-  :copy "Kopyala"
-  :paste "Yapıştır"
-  :paste-in-place "Yerinde yapıştır"
-  :paste-styles "Stilleri yapıştır"
-  :duplicate "Çoğalt"
-  :select-all "Tümünü seç"
-  :deselect-all "Tüm seçimi kaldır"
-  :invert-selection "Seçimi ters çevir"
-  :select-same-tags "Aynı etiketleri seç"
-  :delete "Sil"
-  :object-to-path "Nesneyi yola dönüştür"
-  :stroke-to-path "Çizgiyi yola dönüştür"
-  :group "Grupla"
-  :ungroup "Grubu çöz"
-  :lock "Kilitle"
-  :unlock "Kilidi aç"
-  :align-left "Sola hizala"
-  :align-right "Sağa hizala"
-  :align-top "Yukarı hizala"
-  :align-bottom "Aşağı hizala"
-  :center-vertically "Dikey ortala"
-  :center-horizontally "Yatay ortala"
-  :animate "Animasyon"
-  :animate-transform "Dönüşüm Animasyonu"
-  :animate-motion "Hareket Animasyonu"
-  :boolean-exclude "Dışla"
-  :boolean-unite "Birleştir"
-  :boolean-intersect "Kesişim"
-  :boolean-subtract "Çıkar"
-  :boolean-divide "Böl"
-  :combine "Kombine"
-  :break-apart "Parçalara Ayır"
-  :raise "Öne getir"
-  :lower "Arkaya gönder"
-  :raise-to-top "En öne getir"
-  :lower-to-bottom "En arkaya gönder"
-  :image-trace "İz sür"
-  :path-simplify "Basitleştir"
-  :path-smooth "Yumuşat"
-  :path-flatten "Düzleştir"
-  :path-reverse "Ters çevir"
+ {:copy "Kopyala"
   :index-operations "İndeks İşlemleri"
   :boolean-operations "Boole İşlemleri"
   :horizontal-alignment "Yatay Hizalama"
@@ -907,9 +879,6 @@
   :panel-history-tree "Geçmiş ağacı"
   :panel-shell-history "Kabuk geçmişi"
   :panel-timeline-editor "Zaman çizelgesi düzenleyicisi"}
-
- :renderer.ruler.core
- {:rulers "Cetveller"}
 
  :renderer.snap.core
  {:snap "Yapış"

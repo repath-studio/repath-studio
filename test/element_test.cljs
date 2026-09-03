@@ -107,42 +107,42 @@
 
    (let [elements (rf/subscribe [::element.subs/selected])]
      (testing "align left"
-       (rf/dispatch [::element.events/align :left])
+       (rf/dispatch [::element.events/align-left])
        (is (= (-> @elements first :attrs) {:x "0"
                                            :y "50"
                                            :width "100"
                                            :height "100"})))
 
      (testing "align top"
-       (rf/dispatch [::element.events/align :top])
+       (rf/dispatch [::element.events/align-top])
        (is (= (-> @elements first :attrs) {:x "0"
                                            :y "0"
                                            :width "100"
                                            :height "100"})))
 
      (testing "align right"
-       (rf/dispatch [::element.events/align :right])
+       (rf/dispatch [::element.events/align-right])
        (is (= (-> @elements first :attrs) {:x "700"
                                            :y "0"
                                            :width "100"
                                            :height "100"})))
 
      (testing "align bottom"
-       (rf/dispatch [::element.events/align :bottom])
+       (rf/dispatch [::element.events/align-bottom])
        (is (= (-> @elements first :attrs) {:x "700"
                                            :y "500"
                                            :width "100"
                                            :height "100"})))
 
      (testing "align center vertical"
-       (rf/dispatch [::element.events/align :center-vertical])
+       (rf/dispatch [::element.events/center-vertically])
        (is (= (-> @elements first :attrs) {:x "700"
                                            :y "250"
                                            :width "100"
                                            :height "100"})))
 
      (testing "align center horizontal"
-       (rf/dispatch [::element.events/align :center-horizontal])
+       (rf/dispatch [::element.events/center-horizontally])
        (is (= (-> @elements first :attrs) {:x "350"
                                            :y "250"
                                            :width "100"
@@ -370,7 +370,7 @@
       (rf/dispatch [::element.events/boolean-operation :unite])
 
       (rf.test/wait-for
-       [::element.events/finalize-boolean-operation]
+       [::element.events/finalize-boolean-unite]
 
        (is (= (-> @selected first :tag) :path))
        (is (= (-> @selected first :attrs :fill) "red")))))))
@@ -402,7 +402,7 @@
                                                :height "100"}}])
    (let [selected (rf/subscribe [::element.subs/selected])
          id (-> @selected first :id)]
-     (rf/dispatch [::element.events/animate :animate {}])
+     (rf/dispatch [::element.events/animate {}])
      (is (= (-> @selected first :tag) :animate))
      (is (= (-> @selected first :parent) id)))))
 

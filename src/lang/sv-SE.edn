@@ -30,9 +30,6 @@
  {:hide-command-output "Dölj kommandoutdata"
   :show-command-output "Visa kommandoutdata"}
 
- :renderer.app.events
- {:create-doc "Skapa dokument"}
-
  :renderer.dialog.events
  {:are-you-sure "Är du säker på att du vill fortsätta?"
   :keybindings "Tangentbordsgenvägar"}
@@ -87,39 +84,57 @@
  {:modify-selection "Ändra markering"
   :select-element "Markera element"
   :select-elements "Markera element"
-  :delete-selection "Ta bort markering"
   :set-label "Sätt etikett"
-  :lock-selection "Lås markering"
-  :unlock-selection "Lås upp markering"
   :remove "Ta bort %1"
   :update "Uppdatera %1"
   :deselect-all "Avmarkera allt"
   :select-all "Markera allt"
   :select-same-tags "Markera samma taggar"
   :invert-selection "Invertera markering"
-  :raise-selection "Lyft fram markering"
-  :lower-selection "Lägg bak markering"
-  :raise-selection-top "Lyft markering till toppen"
-  :lower-selection-bottom "Lägg markering längst bak"
-  :paste-selection "Klistra in markering"
-  :paste-selection-in-place "Klistra in markering på plats"
-  :paste-styles-to-selection "Klistra in stilar till markering"
-  :duplicate-selection "Duplicera markering"
   :move-selection "Flytta markering"
   :place-selection "Placera markering"
   :scale-selection "Skala markering"
-  :convert-selection-path "Konvertera markering till bana"
-  :convert-selection-stroke-path "Konvertera markeringslinje till bana"
   :create "Skapa %1"
   :import-svg "Importera SVG"
   :set-parent "Sätt förälder"
-  :group-selection "Gruppera markering"
-  :ungroup-selection "Dela upp markeringsgrupp"
-  :cut-selection "Klipp ut markering"
-  :trace-image "Spåra bild"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Kombinera"
   :break-apart "Dela upp"
+  :align-bottom "Justera botten"
+  :align-left "Justera vänster"
+  :align-right "Justera höger"
+  :align-top "Justera topp"
+  :animate "Animera"
+  :animate-motion "Animera rörelse"
+  :animate-transform "Animera transformation"
+  :boolean-divide "Dela"
+  :boolean-exclude "Exkludera"
+  :boolean-intersect "Skära"
+  :boolean-subtract "Subtrahera"
+  :boolean-unite "Förena"
+  :center-horizontally "Centrera horisontellt"
+  :center-vertically "Centrera vertikalt"
+  :cut "Klipp ut"
+  :delete "Ta bort"
+  :duplicate "Duplicera"
+  :group "Gruppera"
+  :image-trace "Spåra"
+  :lock "Lås"
+  :lower "Lägg bak"
+  :lower-to-bottom "Lägg längst bak"
+  :object-to-path "Objekt till bana"
+  :paste "Klistra in"
+  :paste-in-place "Klistra in på plats"
+  :paste-styles "Klistra in stilar"
+  :path-flatten "Platta ut"
+  :path-reverse "Vänd"
+  :path-simplify "Förenkla"
+  :path-smooth "Jämna ut"
+  :raise "Lyft fram"
+  :raise-to-top "Lyft till toppen"
+  :stroke-to-path "Linje till bana"
+  :ungroup "Dela upp grupp"
+  :unlock "Lås upp"
   :add-motion-path "Lägg till rörelsebana"}
 
  :renderer.element.impl.animation.animate
@@ -271,7 +286,7 @@
   :computed "Beräknad"
   :percentages "Procentsatser"
   :animatable "Animerbar"
-  :animationType "Animationstyp"
+  :animation-type "Animationstyp"
   :syntax "Syntax"
   :mdn-info "MDN Info"
   :attributes-title "%1 %2 element"}
@@ -346,8 +361,6 @@
         animationsvaraktigheten."
   :max "Attributet max specificerar maximivärdet för den aktiva
         animationsvaraktigheten."
-  :restart "Attributet restart specificerar om en animation kan starta om
-            eller inte."
   :repeat-count "Attributet repeatCount indikerar antalet gånger en animation
                  kommer att äga rum."
   :repeat-dur "Attributet repeatDur specificerar den totala varaktigheten för
@@ -377,6 +390,10 @@
                           element med en viewBox som tillhandahåller ett givet
                           bildförhållande måste passa in i en viewport med ett
                           annat bildförhållande."}
+
+ :renderer.attribute.impl.restart
+ {:description "Attributet restart specificerar om en animation kan starta om
+                eller inte."}
 
  :renderer.attribute.impl.accumulate
  {:description "Attributet accumulate kontrollerar om en animation är kumulativ
@@ -590,7 +607,7 @@
                     Klicka på ett element för att ändra markering."]}
 
  :renderer.tool.impl.base.edit.select
- {:select-element "Välj element"}
+ {:select-handles "Välj handtag"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Håll %1 för att begränsa riktning."]
@@ -641,15 +658,13 @@
  :renderer.tool.impl.base.pan
  {:label "Panorera"
   :click-and-drag "Klicka och dra för att panorera."
-  :release-to-stop "Släpp för att sluta panorera."
-  :tool-pan "Panorera"}
+  :release-to-stop "Släpp för att sluta panorera."}
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
   :help-idle [:div "Klicka eller markera ett område för att zooma in.
                     Håll %1 för att zooma ut."]
-  :release-to-focus "Släpp för att fokusera på området."
-  :tool-zoom "Zooma"}
+  :release-to-focus "Släpp för att fokusera på området."}
 
  :renderer.tool.impl.draw.brush
  {:label "Pensel"
@@ -726,8 +741,6 @@
 
  :renderer.history.views
  {:center-view "Centrera vy"
-  :select-element "Markera element"
-  :delete-selection "Ta bort markering"
   :oldest "Äldsta"
   :newest "Nyaste"}
 
@@ -813,48 +826,7 @@
   :rulers "Linjaler"}
 
  :renderer.element.core
- {:cut "Klipp ut"
-  :copy "Kopiera"
-  :paste "Klistra in"
-  :paste-in-place "Klistra in på plats"
-  :paste-styles "Klistra in stilar"
-  :duplicate "Duplicera"
-  :select-all "Markera allt"
-  :deselect-all "Avmarkera allt"
-  :invert-selection "Invertera markering"
-  :select-same-tags "Markera samma taggar"
-  :delete "Ta bort"
-  :object-to-path "Objekt till bana"
-  :stroke-to-path "Linje till bana"
-  :group "Gruppera"
-  :ungroup "Dela upp grupp"
-  :lock "Lås"
-  :unlock "Lås upp"
-  :align-left "Justera vänster"
-  :align-right "Justera höger"
-  :align-top "Justera topp"
-  :align-bottom "Justera botten"
-  :center-vertically "Centrera vertikalt"
-  :center-horizontally "Centrera horisontellt"
-  :animate "Animera"
-  :animate-transform "Animera transformation"
-  :animate-motion "Animera rörelse"
-  :boolean-exclude "Exkludera"
-  :boolean-unite "Förena"
-  :boolean-intersect "Skära"
-  :boolean-subtract "Subtrahera"
-  :boolean-divide "Dela"
-  :combine "Kombinera"
-  :break-apart "Dela upp"
-  :raise "Lyft fram"
-  :lower "Lägg bak"
-  :raise-to-top "Lyft till toppen"
-  :lower-to-bottom "Lägg längst bak"
-  :image-trace "Spåra"
-  :path-simplify "Förenkla"
-  :path-smooth "Jämna ut"
-  :path-flatten "Platta ut"
-  :path-reverse "Vänd"
+ {:copy "Kopiera"
   :index-operations "Indexoperationer"
   :boolean-operations "Booleska Operationer"
   :horizontal-alignment "Horisontell Justering"
@@ -913,9 +885,6 @@
   :panel-history-tree "Historikträd"
   :panel-shell-history "Skalhistorik"
   :panel-timeline-editor "Tidslinjeeditor"}
-
- :renderer.ruler.core
- {:rulers "Linjaler"}
 
  :renderer.snap.core
  {:snap "Fäst"

@@ -30,9 +30,6 @@
  {:hide-command-output "Ocultar saída de comandos"
   :show-command-output "Mostrar saída de comandos"}
 
- :renderer.app.events
- {:create-doc "Criar documento"}
-
  :renderer.dialog.events
  {:are-you-sure "Tem a certeza de que pretende continuar?"
   :keybindings "Atalhos de teclado"}
@@ -87,39 +84,57 @@
  {:modify-selection "Modificar seleção"
   :select-element "Selecionar elemento"
   :select-elements "Selecionar elementos"
-  :delete-selection "Eliminar seleção"
   :set-label "Definir etiqueta"
-  :lock-selection "Bloquear seleção"
-  :unlock-selection "Desbloquear seleção"
   :remove "Remover %1"
   :update "Atualizar %1"
   :deselect-all "Desselecionar tudo"
   :select-all "Selecionar tudo"
   :select-same-tags "Selecionar mesmas etiquetas"
   :invert-selection "Inverter seleção"
-  :raise-selection "Subir seleção"
-  :lower-selection "Descer seleção"
-  :raise-selection-top "Subir seleção para frente"
-  :lower-selection-bottom "Enviar seleção para trás"
-  :paste-selection "Colar seleção"
-  :paste-selection-in-place "Colar seleção no local"
-  :paste-styles-to-selection "Colar estilos na seleção"
-  :duplicate-selection "Duplicar seleção"
   :move-selection "Mover seleção"
   :place-selection "Colocar seleção"
   :scale-selection "Escalar seleção"
-  :convert-selection-path "Converter seleção para caminho"
-  :convert-selection-stroke-path "Converter contorno da seleção para caminho"
   :create "Criar %1"
   :import-svg "Importar SVG"
   :set-parent "Definir pai"
-  :group-selection "Agrupar seleção"
-  :ungroup-selection "Desagrupar seleção"
-  :cut-selection "Cortar seleção"
-  :trace-image "Vetorizar imagem"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Combinar"
   :break-apart "Separar"
+  :align-bottom "Alinhar em baixo"
+  :align-left "Alinhar à esquerda"
+  :align-right "Alinhar à direita"
+  :align-top "Alinhar no topo"
+  :animate "Animar"
+  :animate-motion "Animar movimento"
+  :animate-transform "Animar transformação"
+  :boolean-divide "Dividir"
+  :boolean-exclude "Excluir"
+  :boolean-intersect "Intersetar"
+  :boolean-subtract "Subtrair"
+  :boolean-unite "Unir"
+  :center-horizontally "Centrar horizontalmente"
+  :center-vertically "Centrar verticalmente"
+  :cut "Cortar"
+  :delete "Eliminar"
+  :duplicate "Duplicar"
+  :group "Agrupar"
+  :image-trace "Vetorizar"
+  :lock "Bloquear"
+  :lower "Descer"
+  :lower-to-bottom "Enviar para trás"
+  :object-to-path "Objeto para caminho"
+  :paste "Colar"
+  :paste-in-place "Colar no local"
+  :paste-styles "Colar estilos"
+  :path-flatten "Achatar"
+  :path-reverse "Inverter"
+  :path-simplify "Simplificar"
+  :path-smooth "Suavizar"
+  :raise "Subir"
+  :raise-to-top "Subir para frente"
+  :stroke-to-path "Contorno para caminho"
+  :ungroup "Desagrupar"
+  :unlock "Desbloquear"
   :add-motion-path "Adicionar percurso de movimento"}
 
  :renderer.element.impl.animation.animate
@@ -272,7 +287,7 @@
   :computed "Calculado"
   :percentages "Percentagens"
   :animatable "Animável"
-  :animationType "Tipo de animação"
+  :animation-type "Tipo de animação"
   :syntax "Sintaxe"
   :mdn-info "Info MDN"
   :attributes-title "%1 %2 elementos"}
@@ -344,8 +359,6 @@
   :dur "O atributo dur indica a duração simples de uma animação."
   :min "O atributo min especifica o valor mínimo da duração de animação ativa."
   :max "O atributo max especifica o valor máximo da duração de animação ativa."
-  :restart "O atributo restart especifica se uma animação pode reiniciar ou
-            não."
   :repeat-count "O atributo repeatCount indica o número de vezes que uma
                  animação terá lugar."
   :repeat-dur "O atributo repeatDur especifica a duração total para repetir uma
@@ -375,6 +388,10 @@
                           com um viewBox que fornece uma dada proporção de
                           aspeto deve ajustar-se num viewport com uma proporção
                           de aspeto diferente."}
+
+ :renderer.attribute.impl.restart
+ {:description "O atributo restart especifica se uma animação pode reiniciar ou
+                não."}
 
  :renderer.attribute.impl.accumulate
  {:description "O atributo accumulate controla se uma animação é cumulativa ou
@@ -587,7 +604,7 @@
                     Clique num elemento para alterar a seleção."]}
 
  :renderer.tool.impl.base.edit.select
- {:select-element "Selecionar elemento"}
+ {:select-handles "Selecionar alças"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Mantenha %1 para restringir a direção."]
@@ -637,15 +654,13 @@
  :renderer.tool.impl.base.pan
  {:label "Panorâmica"
   :click-and-drag "Clique e arraste para fazer panorâmica."
-  :release-to-stop "Solte para parar a panorâmica."
-  :tool-pan "Deslocar"}
+  :release-to-stop "Solte para parar a panorâmica."}
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
   :help-idle [:div "Clique ou selecione uma área para ampliar.
                     Mantenha %1 para reduzir."]
-  :release-to-focus "Solte para focar na área."
-  :tool-zoom "Zoom"}
+  :release-to-focus "Solte para focar na área."}
 
  :renderer.tool.impl.draw.brush
  {:label "Pincel"
@@ -723,8 +738,6 @@
 
  :renderer.history.views
  {:center-view "Centrar vista"
-  :select-element "Selecionar elemento"
-  :delete-selection "Eliminar seleção"
   :oldest "Mais antigo"
   :newest "Mais recente"}
 
@@ -789,6 +802,7 @@
  {:document "Documento"
   :new "Novo"
   :open "Abrir..."
+  :recent-clear "Limpar recentes"
   :print "Imprimir"
   :save "Guardar"
   :save-as "Guardar como..."
@@ -810,48 +824,7 @@
   :rulers "Réguas"}
 
  :renderer.element.core
- {:cut "Cortar"
-  :copy "Copiar"
-  :paste "Colar"
-  :paste-in-place "Colar no local"
-  :paste-styles "Colar estilos"
-  :duplicate "Duplicar"
-  :select-all "Selecionar tudo"
-  :deselect-all "Desselecionar tudo"
-  :invert-selection "Inverter seleção"
-  :select-same-tags "Selecionar mesmas etiquetas"
-  :delete "Eliminar"
-  :object-to-path "Objeto para caminho"
-  :stroke-to-path "Contorno para caminho"
-  :group "Agrupar"
-  :ungroup "Desagrupar"
-  :lock "Bloquear"
-  :unlock "Desbloquear"
-  :align-left "Alinhar à esquerda"
-  :align-right "Alinhar à direita"
-  :align-top "Alinhar no topo"
-  :align-bottom "Alinhar em baixo"
-  :center-vertically "Centrar verticalmente"
-  :center-horizontally "Centrar horizontalmente"
-  :animate "Animar"
-  :animate-transform "Animar transformação"
-  :animate-motion "Animar movimento"
-  :boolean-exclude "Excluir"
-  :boolean-unite "Unir"
-  :boolean-intersect "Intersetar"
-  :boolean-subtract "Subtrair"
-  :boolean-divide "Dividir"
-  :combine "Combinar"
-  :break-apart "Separar"
-  :raise "Subir"
-  :lower "Descer"
-  :raise-to-top "Subir para frente"
-  :lower-to-bottom "Enviar para trás"
-  :image-trace "Vetorizar"
-  :path-simplify "Simplificar"
-  :path-smooth "Suavizar"
-  :path-flatten "Achatar"
-  :path-reverse "Inverter"
+ {:copy "Copiar"
   :index-operations "Operações de Índice"
   :boolean-operations "Operações Booleanas"
   :horizontal-alignment "Alinhamento Horizontal"
@@ -910,9 +883,6 @@
   :panel-history-tree "Árvore de histórico"
   :panel-shell-history "Histórico da consola"
   :panel-timeline-editor "Editor de cronologia"}
-
- :renderer.ruler.core
- {:rulers "Réguas"}
 
  :renderer.snap.core
  {:snap "Ajustar"

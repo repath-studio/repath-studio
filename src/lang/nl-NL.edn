@@ -30,9 +30,6 @@
  {:hide-command-output "Commando-uitvoer verbergen"
   :show-command-output "Commando-uitvoer tonen"}
 
- :renderer.app.events
- {:create-doc "Document aanmaken"}
-
  :renderer.dialog.events
  {:are-you-sure "Weet u zeker dat u wilt doorgaan?"
   :keybindings "Sneltoetsen"}
@@ -87,39 +84,57 @@
  {:modify-selection "Selectie wijzigen"
   :select-element "Element selecteren"
   :select-elements "Elementen selecteren"
-  :delete-selection "Selectie verwijderen"
   :set-label "Label instellen"
-  :lock-selection "Selectie vergrendelen"
-  :unlock-selection "Selectie ontgrendelen"
   :remove "Verwijder %1"
   :update "Update %1"
   :deselect-all "Alles deselecteren"
   :select-all "Alles selecteren"
   :select-same-tags "Zelfde tags selecteren"
   :invert-selection "Selectie omkeren"
-  :raise-selection "Selectie naar voren"
-  :lower-selection "Selectie naar achteren"
-  :raise-selection-top "Selectie naar voorgrond"
-  :lower-selection-bottom "Selectie naar achtergrond"
-  :paste-selection "Selectie plakken"
-  :paste-selection-in-place "Selectie plakken op locatie"
-  :paste-styles-to-selection "Stijlen plakken naar selectie"
-  :duplicate-selection "Selectie dupliceren"
   :move-selection "Selectie verplaatsen"
   :place-selection "Selectie plaatsen"
   :scale-selection "Selectie schalen"
-  :convert-selection-path "Selectie naar pad converteren"
-  :convert-selection-stroke-path "Selectielijn naar pad converteren"
   :create "Maak %1"
   :import-svg "SVG importeren"
   :set-parent "Ouder instellen"
-  :group-selection "Selectie groeperen"
-  :ungroup-selection "Selectiegroepering opheffen"
-  :cut-selection "Selectie knippen"
-  :trace-image "Afbeelding traceren"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Combineren"
   :break-apart "Opsplitsen"
+  :align-bottom "Onder uitlijnen"
+  :align-left "Links uitlijnen"
+  :align-right "Rechts uitlijnen"
+  :align-top "Boven uitlijnen"
+  :animate "Animeren"
+  :animate-motion "Beweging animeren"
+  :animate-transform "Transformatie animeren"
+  :boolean-divide "Verdelen"
+  :boolean-exclude "Uitsluiten"
+  :boolean-intersect "Doorsnede"
+  :boolean-subtract "Aftrekken"
+  :boolean-unite "Verenigen"
+  :center-horizontally "Horizontaal centreren"
+  :center-vertically "Verticaal centreren"
+  :cut "Knippen"
+  :delete "Verwijderen"
+  :duplicate "Dupliceren"
+  :group "Groeperen"
+  :image-trace "Traceren"
+  :lock "Vergrendelen"
+  :lower "Naar achteren"
+  :lower-to-bottom "Naar achtergrond"
+  :object-to-path "Object naar pad"
+  :paste "Plakken"
+  :paste-in-place "Plakken op locatie"
+  :paste-styles "Stijlen plakken"
+  :path-flatten "Afvlakken"
+  :path-reverse "Omkeren"
+  :path-simplify "Vereenvoudigen"
+  :path-smooth "Gladmaken"
+  :raise "Naar voren"
+  :raise-to-top "Naar voorgrond"
+  :stroke-to-path "Lijn naar pad"
+  :ungroup "Groepering opheffen"
+  :unlock "Ontgrendelen"
   :add-motion-path "Bewegingspad toevoegen"}
 
  :renderer.element.impl.animation.animate
@@ -273,7 +288,7 @@
   :computed "Berekend"
   :percentages "Percentages"
   :animatable "Animeerbaar"
-  :animationType "Animatietype"
+  :animation-type "Animatietype"
   :syntax "Syntaxis"
   :mdn-info "MDN Info"
   :attributes-title "%1 %2 elementen"}
@@ -355,8 +370,6 @@
         animatieduur."
   :max "Het max attribuut specificeert de maximumwaarde van de actieve
         animatieduur."
-  :restart "Het restart attribuut specificeert of een animatie opnieuw kan
-            starten of niet."
   :repeat-count "Het repeatCount attribuut geeft het aantal keren aan dat een
                  animatie zal plaatsvinden."
   :repeat-dur "Het repeatDur attribuut specificeert de totale duur voor het
@@ -388,6 +401,10 @@
                           element met een viewBox die een gegeven
                           beeldverhouding biedt moet passen in een viewport met
                           een andere beeldverhouding."}
+
+ :renderer.attribute.impl.restart
+ {:description "Het restart attribuut specificeert of een animatie opnieuw kan
+                starten of niet."}
 
  :renderer.attribute.impl.accumulate
  {:description "Het accumulate attribuut controleert of een animatie cumulatief
@@ -604,7 +621,7 @@
                     Klik op een element om selectie te wijzigen."]}
 
  :renderer.tool.impl.base.edit.select
- {:select-element "Selecteer element"}
+ {:select-handles "Selecteer handvatten"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Houd %1 ingedrukt om richting te beperken."]
@@ -656,15 +673,13 @@
  :renderer.tool.impl.base.pan
  {:label "Pannen"
   :click-and-drag "Klik en sleep om te pannen."
-  :release-to-stop "Loslaten om te stoppen met pannen."
-  :tool-pan "Pannen"}
+  :release-to-stop "Loslaten om te stoppen met pannen."}
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
   :help-idle [:div "Klik of selecteer een gebied om in te zoomen.
                     Houd %1 ingedrukt om uit te zoomen."]
-  :release-to-focus "Loslaten om op het gebied te focussen."
-  :tool-zoom "Zoomen"}
+  :release-to-focus "Loslaten om op het gebied te focussen."}
 
  :renderer.tool.impl.draw.brush
  {:label "Penseel"
@@ -741,8 +756,6 @@
 
  :renderer.history.views
  {:center-view "Weergave centreren"
-  :select-element "Element selecteren"
-  :delete-selection "Selectie verwijderen"
   :oldest "Oudste"
   :newest "Nieuwste"}
 
@@ -829,48 +842,7 @@
   :rulers "Linealen"}
 
  :renderer.element.core
- {:cut "Knippen"
-  :copy "Kopiëren"
-  :paste "Plakken"
-  :paste-in-place "Plakken op locatie"
-  :paste-styles "Stijlen plakken"
-  :duplicate "Dupliceren"
-  :select-all "Alles selecteren"
-  :deselect-all "Alles deselecteren"
-  :invert-selection "Selectie omkeren"
-  :select-same-tags "Zelfde tags selecteren"
-  :delete "Verwijderen"
-  :object-to-path "Object naar pad"
-  :stroke-to-path "Lijn naar pad"
-  :group "Groeperen"
-  :ungroup "Groepering opheffen"
-  :lock "Vergrendelen"
-  :unlock "Ontgrendelen"
-  :align-left "Links uitlijnen"
-  :align-right "Rechts uitlijnen"
-  :align-top "Boven uitlijnen"
-  :align-bottom "Onder uitlijnen"
-  :center-vertically "Verticaal centreren"
-  :center-horizontally "Horizontaal centreren"
-  :animate "Animeren"
-  :animate-transform "Transformatie animeren"
-  :animate-motion "Beweging animeren"
-  :boolean-exclude "Uitsluiten"
-  :boolean-unite "Verenigen"
-  :boolean-intersect "Doorsnede"
-  :boolean-subtract "Aftrekken"
-  :boolean-divide "Verdelen"
-  :combine "Combineren"
-  :break-apart "Opsplitsen"
-  :raise "Naar voren"
-  :lower "Naar achteren"
-  :raise-to-top "Naar voorgrond"
-  :lower-to-bottom "Naar achtergrond"
-  :image-trace "Traceren"
-  :path-simplify "Vereenvoudigen"
-  :path-smooth "Gladmaken"
-  :path-flatten "Afvlakken"
-  :path-reverse "Omkeren"
+ {:copy "Kopiëren"
   :index-operations "Indexbewerkingen"
   :boolean-operations "Booleaanse Bewerkingen"
   :horizontal-alignment "Horizontale Uitlijning"
@@ -929,9 +901,6 @@
   :panel-history-tree "Geschiedenisboom"
   :panel-shell-history "Shell-geschiedenis"
   :panel-timeline-editor "Tijdlijn-editor"}
-
- :renderer.ruler.core
- {:rulers "Linealen"}
 
  :renderer.snap.core
  {:snap "Uitlijnen"

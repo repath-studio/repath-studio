@@ -215,58 +215,51 @@
   []
   (rf/dispatch [::element.events/stroke->path]))
 
-(defn ^:export align
-  "Aligns the selected elements to the provided direction.
-   Accepted directions
-   :left :right :top :bottom :center-vertical :center-horizontal"
-  [direction]
-  (rf/dispatch [::element.events/align direction]))
-
-(defn ^:export al
+(defn ^:export align-left
   "Aligns the selected elements to the left."
   []
-  (align :left))
+  (rf/dispatch [::element.events/align-left]))
 
-(defn ^:export ar
+(defn ^:export align-right
   "Aligns the selected elements to the right."
   []
-  (align :right))
+  (rf/dispatch [::element.events/align-right]))
 
-(defn ^:export at
+(defn ^:export align-top
   "Aligns the selected elements to the top."
   []
-  (align :top))
+  (rf/dispatch [::element.events/align-top]))
 
-(defn ^:export ab
+(defn ^:export align-bottom
   "Aligns the selected elements to the bottom."
   []
-  (align :bottom))
+  (rf/dispatch [::element.events/align-bottom]))
 
-(defn ^:export acv
+(defn ^:export center-vertically
   "Aligns the selected elements to the vertical center."
   []
-  (align :center-vertical))
+  (rf/dispatch [::element.events/center-vertically]))
 
-(defn ^:export ach
+(defn ^:export center-horizontally
   "Aligns the selected elements to the horizontal center."
   []
-  (align :center-horizontal))
+  (rf/dispatch [::element.events/center-horizontally]))
 
 (defn ^:export animate
   "Animates an attribute of the selected elements over time."
   [& {:as attrs}]
-  (rf/dispatch [::element.events/animate :animate attrs]))
+  (rf/dispatch [::element.events/animate attrs]))
 
 (defn ^:export animate-transform
   "Animates a transformation attribute of the selected elements to control
    translation, scaling, rotation, and/or skewing."
   [& {:as attrs}]
-  (rf/dispatch [::element.events/animate :animateTransform attrs]))
+  (rf/dispatch [::element.events/animate-transform attrs]))
 
 (defn ^:export animate-motion
   "Animates the selected elements along a motion path."
   [& {:as attrs}]
-  (rf/dispatch [::element.events/animate :animateMotion attrs]))
+  (rf/dispatch [::element.events/animate-motion attrs]))
 
 (defn ^:export undo
   "Goes back in history."
@@ -285,27 +278,27 @@
 (defn ^:export unite
   "Unites the selected elements."
   []
-  (rf/dispatch [::element.events/boolean-operation :unite]))
+  (rf/dispatch [::element.events/boolean-unite]))
 
 (defn ^:export intersect
   "Intersects the selected elements."
   []
-  (rf/dispatch [::element.events/boolean-operation :intersect]))
+  (rf/dispatch [::element.events/boolean-intersect]))
 
 (defn ^:export subtract
   "Subtracts the selected elements."
   []
-  (rf/dispatch [::element.events/boolean-operation :subtract]))
+  (rf/dispatch [::element.events/boolean-subtract]))
 
 (defn ^:export exclude
   "Excludes the selected elements."
   []
-  (rf/dispatch [::element.events/boolean-operation :exclude]))
+  (rf/dispatch [::element.events/boolean-exclude]))
 
 (defn ^:export div
   "Divides the selected elements."
   []
-  (rf/dispatch [::element.events/boolean-operation :divide]))
+  (rf/dispatch [::element.events/boolean-divide]))
 
 (defn ^:export exit
   "Closes the application."

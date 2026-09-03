@@ -30,9 +30,6 @@
  {:hide-command-output "Hide command output"
   :show-command-output "Show command output"}
 
- :renderer.app.events
- {:create-doc "Create document"}
-
  :renderer.dialog.events
  {:are-you-sure "Are you sure you want to continue?"
   :keybindings "Keybindings"}
@@ -87,39 +84,57 @@
  {:modify-selection "Modify selection"
   :select-element "Select element"
   :select-elements "Select elements"
-  :delete-selection "Delete selection"
   :set-label "Set label"
-  :lock-selection "Lock selection"
-  :unlock-selection "Unlock selection"
   :remove "Remove %1"
   :update "Update %1"
   :deselect-all "Deselect all"
   :select-all "Select all"
   :select-same-tags "Select same tags"
   :invert-selection "Invert selection"
-  :raise-selection "Raise selection"
-  :lower-selection "Lower selection"
-  :raise-selection-top "Raise selection to top"
-  :lower-selection-bottom "Lower selection to bottom"
-  :paste-selection "Paste selection"
-  :paste-selection-in-place "Paste selection in place"
-  :paste-styles-to-selection "Paste styles to selection"
-  :duplicate-selection "Duplicate selection"
   :move-selection "Move selection"
   :place-selection "Place selection"
   :scale-selection "Scale selection"
-  :convert-selection-path "Convert selection to path"
-  :convert-selection-stroke-path "Convert selection's stroke to path"
   :create "Create %1"
   :import-svg "Import svg"
   :set-parent "Set parent"
-  :group-selection "Group selection"
-  :ungroup-selection "Ungroup selection"
-  :cut-selection "Cut selection"
-  :trace-image "Trace image"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Combine"
   :break-apart "Break apart"
+  :align-bottom "Align bottom"
+  :align-left "Align left"
+  :align-right "Align right"
+  :align-top "Align top"
+  :animate "Animate"
+  :animate-motion "Animate Motion"
+  :animate-transform "Animate Transform"
+  :boolean-divide "Divide"
+  :boolean-exclude "Exclude"
+  :boolean-intersect "Intersect"
+  :boolean-subtract "Subtract"
+  :boolean-unite "Unite"
+  :center-horizontally "Center horizontally"
+  :center-vertically "Center vertically"
+  :cut "Cut"
+  :delete "Delete"
+  :duplicate "Duplicate"
+  :group "Group"
+  :image-trace "Trace"
+  :lock "Lock"
+  :lower "Lower"
+  :lower-to-bottom "Lower to bottom"
+  :object-to-path "Object to path"
+  :paste "Paste"
+  :paste-in-place "Paste in place"
+  :paste-styles "Paste styles"
+  :path-flatten "Flatten"
+  :path-reverse "Reverse"
+  :path-simplify "Simplify"
+  :path-smooth "Smooth"
+  :raise "Raise"
+  :raise-to-top "Raise to top"
+  :stroke-to-path "Stroke to path"
+  :ungroup "Ungroup"
+  :unlock "Unlock"
   :add-motion-path "Add motion path"}
 
  :renderer.element.impl.animation.animate
@@ -266,7 +281,7 @@
   :computed "Computed"
   :percentages "Percentages"
   :animatable "Animatable"
-  :animationType "Animation type"
+  :animation-type "Animation type"
   :syntax "Syntax"
   :mdn-info "MDN Info"
   :attributes-title "%1 %2 elements"}
@@ -339,8 +354,6 @@
         duration."
   :max "The max attribute specifies the maximum value of the active animation
         duration."
-  :restart "The restart attribute specifies whether or not an animation can
-            restart."
   :repeat-count "The repeatCount attribute indicates the number of times an
                  animation will take place."
   :repeat-dur "The repeatDur attribute specifies the total duration for
@@ -370,6 +383,10 @@
                           element with a viewBox providing a given aspect ratio
                           must fit into a viewport with a different aspect
                           ratio."}
+
+ :renderer.attribute.impl.restart
+ {:description "The restart attribute specifies whether or not an animation can
+                restart."}
 
  :renderer.attribute.impl.accumulate
  {:description "The accumulate attribute controls whether or not an animation
@@ -579,7 +596,7 @@
                     Click on an element to change selection."]}
 
  :renderer.tool.impl.base.edit.select
- {:select-element "Select element"}
+ {:select-handles "Select handles"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Hold %1 to restrict direction."]
@@ -628,15 +645,13 @@
  :renderer.tool.impl.base.pan
  {:label "Pan"
   :click-and-drag "Click and drag to pan."
-  :release-to-stop "Release to stop panning."
-  :tool-pan "Pan"}
+  :release-to-stop "Release to stop panning."}
 
  :renderer.tool.impl.base.zoom
  {:label "Zoom"
   :help-idle [:div "Click or select an area to zoom in.
                     Hold %1 to zoom out."]
-  :release-to-focus "Release to focus on the area."
-  :tool-zoom "Zoom"}
+  :release-to-focus "Release to focus on the area."}
 
  :renderer.tool.impl.draw.brush
  {:label "Brush"
@@ -713,8 +728,6 @@
 
  :renderer.history.views
  {:center-view "Center view"
-  :select-element "Select element"
-  :delete-selection "Delete selection"
   :oldest "Oldest"
   :newest "Newest"}
 
@@ -800,48 +813,7 @@
   :rulers "Rulers"}
 
  :renderer.element.core
- {:cut "Cut"
-  :copy "Copy"
-  :paste "Paste"
-  :paste-in-place "Paste in place"
-  :paste-styles "Paste styles"
-  :duplicate "Duplicate"
-  :select-all "Select all"
-  :deselect-all "Deselect all"
-  :invert-selection "Invert selection"
-  :select-same-tags "Select same tags"
-  :delete "Delete"
-  :object-to-path "Object to path"
-  :stroke-to-path "Stroke to path"
-  :group "Group"
-  :ungroup "Ungroup"
-  :lock "Lock"
-  :unlock "Unlock"
-  :align-left "Align left"
-  :align-right "Align right"
-  :align-top "Align top"
-  :align-bottom "Align bottom"
-  :center-vertically "Center vertically"
-  :center-horizontally "Center horizontally"
-  :animate "Animate"
-  :animate-transform "Animate Transform"
-  :animate-motion "Animate Motion"
-  :boolean-exclude "Exclude"
-  :boolean-unite "Unite"
-  :boolean-intersect "Intersect"
-  :boolean-subtract "Subtract"
-  :boolean-divide "Divide"
-  :combine "Combine"
-  :break-apart "Break apart"
-  :raise "Raise"
-  :lower "Lower"
-  :raise-to-top "Raise to top"
-  :lower-to-bottom "Lower to bottom"
-  :image-trace "Trace"
-  :path-simplify "Simplify"
-  :path-smooth "Smooth"
-  :path-flatten "Flatten"
-  :path-reverse "Reverse"
+ {:copy "Copy"
   :index-operations "Index operations"
   :boolean-operations "Boolean operations"
   :horizontal-alignment "Horizontal alignment"
@@ -900,9 +872,6 @@
   :panel-history-tree "History tree"
   :panel-shell-history "Shell history"
   :panel-timeline-editor "Timeline editor"}
-
- :renderer.ruler.core
- {:rulers "Rulers"}
 
  :renderer.snap.core
  {:snap "Snap"
