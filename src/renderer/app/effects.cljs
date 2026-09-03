@@ -29,13 +29,6 @@
      (assoc :versions (js->clj js/window.api.versions)))))
 
 (rf/reg-cofx
- ::env
- (fn [coeffects _]
-   (cond-> coeffects
-     js/window.api
-     (assoc :env (js->clj js/window.api.env)))))
-
-(rf/reg-cofx
  ::user-agent
  (fn [coeffects _]
    (assoc coeffects :user-agent (.-userAgent js/navigator))))

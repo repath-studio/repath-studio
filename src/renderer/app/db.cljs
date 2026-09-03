@@ -92,7 +92,6 @@
    [:icons {:default icon.defaults/icons} Icons]
    [:platform {:optional true} Platform]
    [:versions {:optional true} [:maybe map?]]
-   [:env {:optional true} [:maybe map?]]
    [:standalone {:optional true} boolean?]
    [:menubar {:default {}} Menubar]
    [:install-prompt {:optional true} JS_Object]

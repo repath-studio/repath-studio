@@ -10,8 +10,7 @@
    :send (fn [channel args] (.send ipcRenderer channel args))
    :invoke (fn [channel args] (.invoke ipcRenderer channel args))
    :platform (.-platform js/process)
-   :versions (.-versions js/process)
-   :env (.-env js/process)})
+   :versions (.-versions js/process)})
 
 (defn ^:export init!
   "Expose protected ipcRenderer methods to the renderer process.

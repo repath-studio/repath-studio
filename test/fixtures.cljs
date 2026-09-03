@@ -65,11 +65,6 @@
  (fn [coeffects _]
    coeffects))
 
-(rf/reg-cofx
- ::app.effects/env
- (fn [coeffects _]
-   coeffects))
-
 (rf/reg-fx
  ::app.effects/persist
  (fn [coeffects _]
