@@ -6,7 +6,6 @@
    ["electron" :refer [app shell ipcMain BrowserWindow]]
    ["electron-log/main" :as log]
    ["electron-updater" :refer [autoUpdater]]
-   ["electron-window-state" :as window-state-keeper]
    ["os" :as os]
    ["path" :as path]
    ["url" :as url]
@@ -120,50 +119,46 @@
   (url/format #js {:pathname (.join path js/__dirname s)
                    :protocol "file"}))
 
-(defn init-main-window! []
-  (let [win-state (window-state-keeper #js {:defaultWidth 1920
-                                            :defaultHeight 1080})]
-    (reset! main-window
-            (BrowserWindow.
-             #js {:x (.-x win-state)
-                  :y (.-y win-state)
-                  :width (.-width win-state)
-                  :height (.-height win-state)
-                  :titleBarStyle (when (= (.platform os) "darwin") "hidden")
-                  :trafficLightPosition #js {:x 8
-                                             :y 10}
-                  :icon (resource-path "/public/img/icon.png")
-                  :frame false
-                  :show false
-                  :webPreferences
-                  #js {:sandbox false
-                       :preload (.join path js/__dirname "preload.js")}}))
+(defn init-main-window!
+  []
+  (reset! main-window
+          (BrowserWindow.
+           #js {:name "main-window"
+                :width 1920
+                :height 1080
+                :titleBarStyle (when (= (.platform os) "darwin") "hidden")
+                :trafficLightPosition #js {:x 8
+                                           :y 10}
+                :icon (resource-path "/public/img/icon.png")
+                :frame false
+                :show false
+                :windowStatePersistence true
+                :webPreferences
+                #js {:sandbox false
+                     :preload (.join path js/__dirname "preload.js")}}))
 
-    (when config/debug?
-      (.install devtron))
+  (when config/debug?
+    (.install devtron))
 
-    (.once ^js @main-window
-           "ready-to-show"
-           (fn []
-             (.show ^js @main-window)
-             (.manage win-state ^js @main-window)
-             ;; Fixes a bug on linux that blocks unmaximize after load.
-             (.restore ^js @main-window)
-             (.initialize log)))
+  (.once ^js @main-window
+         "ready-to-show"
+         (fn []
+           (.show ^js @main-window)
+           (.initialize log)))
 
-    (.on ^js @main-window "ready-to-show" #(on-ready-to-show @main-window))
+  (.on ^js @main-window "ready-to-show" #(on-ready-to-show @main-window))
 
-    (.loadURL ^js @main-window (if config/debug?
-                                 "http://localhost:8080"
-                                 (resource-path "/public/index.html")))
+  (.loadURL ^js @main-window (if config/debug?
+                               "http://localhost:8080"
+                               (resource-path "/public/index.html")))
 
-    (set-window-open-handler)
-    (register-web-contents-events)
-    (register-ipc-on-events)
-    (register-ipc-handle-events)
-    (register-window-events)
+  (set-window-open-handler)
+  (register-web-contents-events)
+  (register-ipc-on-events)
+  (register-ipc-handle-events)
+  (register-window-events)
 
-    (.checkForUpdatesAndNotify autoUpdater)))
+  (.checkForUpdatesAndNotify autoUpdater))
 
 (defn init-loading-window! []
   (set! (.-allowRendererProcessReuse app) false)
