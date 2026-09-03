@@ -51,7 +51,7 @@
 
 (m/=> handler! [:-> [:or Element Handle] JS_Object nil?])
 (defn handler!
-  "Gathers pointer event props and dispathces the corresponding event.
+  "Gathers pointer event props and dispatches the corresponding event.
    https://day8.github.io/re-frame/FAQs/Null-Dispatched-Events/"
   [el ^js/PointerEvent e]
   (.stopPropagation e)
