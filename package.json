@@ -133,7 +133,6 @@
     "blobs": "2.3.0-beta.2",
     "buffer": "6.0.3",
     "cmdk": "1.1.1",
-    "create-react-class": "15.7.0",
     "doc-link-checker-cli": "1.0.4",
     "electron": "44.0.0",
     "electron-builder": "26.15.3",
