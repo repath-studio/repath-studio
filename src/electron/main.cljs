@@ -148,11 +148,12 @@
 
   (.on ^js @main-window "ready-to-show" #(on-ready-to-show @main-window))
 
+  (set-window-open-handler)
+
   (.loadURL ^js @main-window (if config/debug?
                                "http://localhost:8080"
                                (resource-path "/public/index.html")))
 
-  (set-window-open-handler)
   (register-web-contents-events)
   (register-ipc-on-events)
   (register-ipc-handle-events)
@@ -161,7 +162,6 @@
   (.checkForUpdatesAndNotify autoUpdater))
 
 (defn init-loading-window! []
-  (set! (.-allowRendererProcessReuse app) false)
   (reset! loading-window
           (BrowserWindow.
            #js {:width 720
