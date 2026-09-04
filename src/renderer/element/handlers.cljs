@@ -1040,7 +1040,7 @@
        (reduce (fn [db attr]
                  (cond-> db
                    (attr attrs)
-                   (update-attr id attr #(if % (-> attrs attr) disj))))
+                   (update-attr id attr #(-> attrs attr))))
                db style-attrs)) db)))
 
 (m/=> inherit-attrs [:-> App Element ElementId App])
