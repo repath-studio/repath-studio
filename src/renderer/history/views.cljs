@@ -97,7 +97,7 @@
         [:text
          {:x 32
           :y 5
-          :font-size 10
+          :font-size 11
           :fill "var(--color-foreground-default)"
           :stroke-width "0"}
          title])])))
