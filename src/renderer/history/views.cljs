@@ -76,21 +76,30 @@
         active? (.-active datum)
         id (.-id datum)
         color (if active? "var(--color-accent)" (.-color datum))
-        title (apply i18n.views/t (.-name datum))]
+        title (apply i18n.views/t (.-name datum))
+        labels? @(rf/subscribe [::history.subs/labels?])]
     (reagent/as-element
-     [:circle.transition-fill
-      {:class "hover:stroke-accent"
-       :on-click #(rf/dispatch [::history.events/go-to id])
-       :on-pointer-enter #(when-not active?
-                            (rf/dispatch [::history.events/preview id]))
-       :on-pointer-leave #(rf/dispatch [::history.events/reset-state id])
-       :cx "0"
-       :cy "0"
-       :stroke color
-       :stroke-width 4
-       :fill color
-       :r 18}
-      [:title title]])))
+     [:g
+      [:circle.transition-fill
+       {:class "hover:stroke-accent"
+        :on-click #(rf/dispatch [::history.events/go-to id])
+        :on-pointer-enter #(when-not active?
+                             (rf/dispatch [::history.events/preview id]))
+        :on-pointer-leave #(rf/dispatch [::history.events/reset-state id])
+        :cx "0"
+        :cy "0"
+        :stroke color
+        :stroke-width 4
+        :fill color
+        :r 18}
+       (when-not labels? [:title title])]
+      (when labels?
+        [:text
+         {:x 32
+          :y 4
+          :fill "var(--color-foreground-default)"
+          :stroke-width "0"}
+         title])])))
 
 (defn on-update
   "https://bkrem.github.io/react-d3-tree/docs/interfaces/TreeProps.html#onupdate"
@@ -109,13 +118,13 @@
                  (.-clientHeight dom-el)] 2)))
 
 (defn tree
-  [ref]
+  [parent-ref]
   (let [tree-data @(rf/subscribe [::history.subs/tree-data])
         zoom @(rf/subscribe [::history.subs/zoom])
-        dom-el (.-current ref)
+        parent (.-current parent-ref)
         [x y] @(rf/subscribe [::history.subs/translate])
-        translate #js {:x (or x (when dom-el (/ (.-clientWidth dom-el) 2)))
-                       :y (or y (when dom-el (/ (.-clientHeight dom-el) 2)))}]
+        translate #js {:x (or x (when parent (/ (.-clientWidth parent) 2)))
+                       :y (or y (when parent (/ (.-clientHeight parent) 2)))}]
     [:> Tree
      {:data tree-data
       :collapsible false
@@ -160,10 +169,10 @@
        {:title (i18n.views/t [::center-view "Center view"])
         :on-click #(rf/dispatch [::history.events/tree-view-updated
                                  0.5 (center ref)])}]
+      [views/action-switch :history/toggle-labels]
       [:div.flex-1]
       (when md? [panel.views/close-button :history])]
      [:div.flex-1
-      {:ref ref
-       :on-pointer-move #(.stopPropagation %)}
+      {:ref ref}
       [tree ref]]
      [legend]]))

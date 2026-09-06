@@ -45,7 +45,7 @@ digraph {
   "Handle" [label="{Handle|:id [:ref \"HandleId\"]\l:label [:ref \"Translation\"]\l:action [:ref \"HandleAction\"]\l:type [:= :handle]\l:rounded boolean?\l:implied boolean?\l:cursor [:ref \"Cursor\"]\l:position [:ref \"Vec2\"]\l:size number?\l:stroke-width number?\l:parent [:ref \"ElementId\"]\l}", fillcolor="#fff0cd"]
   "HandleAction" [label="{HandleAction|[:enum :translate :scale :edit]\l}", fillcolor="#fff0cd"]
   "HandleId" [label="{HandleId|keyword?\l}", fillcolor="#fff0cd"]
-  "History" [label="{History|:zoom number?\l:translate [:ref \"Vec2\"]\l:position [:ref \"HistoryIndex\"]\l:states [:map-of [:ref \"HistoryIndex\"] [:ref \"HistoryState\"]]\l}", fillcolor="#fff0cd"]
+  "History" [label="{History|:zoom number?\l:labels boolean?\l:translate [:ref \"Vec2\"]\l:position [:ref \"HistoryIndex\"]\l:states [:map-of [:ref \"HistoryIndex\"] [:ref \"HistoryState\"]]\l}", fillcolor="#fff0cd"]
   "HistoryIndex" [label="{HistoryIndex|[:or pos-int? zero?]\l}", fillcolor="#fff0cd"]
   "HistoryState" [label="{HistoryState|:explanation [:ref \"Translation\"]\l:timestamp number?\l:index [:ref \"HistoryIndex\"]\l:elements [:map-of [:ref \"ElementId\"] [:ref \"Element\"]]\l:parent [:ref \"HistoryIndex\"]\l:children [:vector [:ref \"HistoryIndex\"]]\l}", fillcolor="#fff0cd"]
   "Icon" [label="{Icon|:id [:ref \"IconId\"]\l:path [:ref \"IconPath\"]\l}", fillcolor="#fff0cd"]

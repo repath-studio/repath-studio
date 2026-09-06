@@ -6,6 +6,11 @@
    [renderer.history.handlers :as history.handlers]))
 
 (rf/reg-event-db
+ ::toggle-labels
+ (fn [db _]
+   (history.handlers/toggle-labels db)))
+
+(rf/reg-event-db
  ::undo
  (fn [db _]
    (history.handlers/undo db)))
