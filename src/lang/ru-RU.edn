@@ -861,7 +861,8 @@
  {:undo "Отменить"
   :redo "Повторить"
   :history "История"
-  :clear-history "Очистить историю"}
+  :clear-history "Очистить историю"
+  :labels "Метки"}
 
  :renderer.menubar.core
  {:menubar "Строка меню"

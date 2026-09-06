@@ -872,7 +872,8 @@
  {:undo "Annuler"
   :redo "Refaire"
   :history "Historique"
-  :clear-history "Effacer l'historique"}
+  :clear-history "Effacer l'historique"
+  :labels "Étiquettes"}
 
  :renderer.menubar.core
  {:menubar "Barre de menu"

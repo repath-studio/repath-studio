@@ -847,7 +847,8 @@
  {:undo "Undo"
   :redo "Redo"
   :history "History"
-  :clear-history "Clear history"}
+  :clear-history "Clear history"
+  :labels "Labels"}
 
  :renderer.menubar.core
  {:menubar "Menu bar"

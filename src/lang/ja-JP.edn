@@ -815,7 +815,8 @@
  {:undo "元に戻す"
   :redo "やり直し"
   :history "履歴"
-  :clear-history "履歴をクリア"}
+  :clear-history "履歴をクリア"
+  :labels "ラベル"}
 
  :renderer.menubar.core
  {:menubar "メニューバー"

@@ -860,7 +860,8 @@
  {:undo "Ångra"
   :redo "Gör om"
   :history "Historik"
-  :clear-history "Rensa historik"}
+  :clear-history "Rensa historik"
+  :labels "Etiketter"}
 
  :renderer.menubar.core
  {:menubar "Menyrad"
