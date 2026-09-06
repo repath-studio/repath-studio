@@ -455,7 +455,7 @@
     [:> Drawer.Content
      {:class ["inset-0 fixed z-0 outline-none bg-secondary flex shadow-lg"
               "flex-col items-center top-auto px-safe pb-safe rounded-t-xl"
-              "h-[30dvh] overflow-hidden gap-px"]
+              "h-70 overflow-hidden gap-px"]
       :style {:margin "0 - env(safe-area-inset-right)
                        0 - env(safe-area-inset-left)"
               :box-shadow "0 -10px 15px -3px

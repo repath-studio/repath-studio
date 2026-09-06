@@ -174,6 +174,9 @@
       [:div.flex-1]
       (when md? [panel.views/close-button :history])]
      [:div.flex-1
-      {:ref ref}
+      {:ref ref
+       ;; Prevents moving/closing the drawer panel on mobile.
+       :on-pointer-move #(when (= (.-pointerType %) "touch")
+                           (.stopPropagation %))}
       [tree ref]]
      [legend]]))
