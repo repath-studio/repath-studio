@@ -96,7 +96,8 @@
       (when labels?
         [:text
          {:x 32
-          :y 4
+          :y 5
+          :font-size 10
           :fill "var(--color-foreground-default)"
           :stroke-width "0"}
          title])])))
