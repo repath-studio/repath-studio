@@ -883,7 +883,8 @@
  {:undo "Αναίρεση"
   :redo "Επαναφορά"
   :history "Ιστορικό"
-  :clear-history "Εκκαθάριση ιστορικού"}
+  :clear-history "Εκκαθάριση ιστορικού"
+  :labels "Ετικέτες"}
 
  :renderer.menubar.core
  {:menubar "Γραμμή μενού"

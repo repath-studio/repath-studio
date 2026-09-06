@@ -876,7 +876,8 @@
  {:undo "Ongedaan maken"
   :redo "Opnieuw"
   :history "Geschiedenis"
-  :clear-history "Geschiedenis wissen"}
+  :clear-history "Geschiedenis wissen"
+  :labels "Labels"}
 
  :renderer.menubar.core
  {:menubar "Menubalk"

@@ -830,7 +830,8 @@
  {:undo "تراجع"
   :redo "إعادة"
   :history "التاريخ"
-  :clear-history "مسح التاريخ"}
+  :clear-history "مسح التاريخ"
+  :labels "التسميات"}
 
  :renderer.menubar.core
  {:menubar "شريط القوائم"

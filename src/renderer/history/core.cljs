@@ -37,6 +37,13 @@
                        {:confirm-event [::history.events/clear]
                         :confirm-label [::clear-history "Clear history"]}]}])
 
+(rf/dispatch [::action.events/register-action
+              {:id :history/toggle-labels
+               :label [::labels "Labels"]
+               :icon "text"
+               :active [::history.subs/labels?]
+               :event [::history.events/toggle-labels]}])
+
 (rf/dispatch [::action.events/register-action-group
               {:id :edit/history
                :icon "history"

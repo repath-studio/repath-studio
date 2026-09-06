@@ -809,7 +809,8 @@
  {:undo "실행 취소"
   :redo "다시 실행"
   :history "기록"
-  :clear-history "기록 지우기"}
+  :clear-history "기록 지우기"
+  :labels "라벨"}
 
  :renderer.menubar.core
  {:menubar "메뉴 바"

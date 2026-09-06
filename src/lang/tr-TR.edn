@@ -854,7 +854,8 @@
  {:undo "Geri al"
   :redo "Yinele"
   :history "Geçmiş"
-  :clear-history "Geçmişi temizle"}
+  :clear-history "Geçmişi temizle"
+  :labels "Etiketler"}
 
  :renderer.menubar.core
  {:menubar "Menü çubuğu"

@@ -875,7 +875,8 @@
  {:undo "Annulla"
   :redo "Ripeti"
   :history "Cronologia"
-  :clear-history "Cancella cronologia"}
+  :clear-history "Cancella cronologia"
+  :labels "Etichette"}
 
  :renderer.menubar.core
  {:menubar "Barra dei menu"

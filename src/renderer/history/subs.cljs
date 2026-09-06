@@ -39,6 +39,11 @@
  :-> :zoom)
 
 (rf/reg-sub
+ ::labels?
+ :<- [::history]
+ :-> :labels)
+
+(rf/reg-sub
  ::translate
  :<- [::history]
  :-> :translate)

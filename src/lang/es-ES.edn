@@ -866,7 +866,8 @@
  {:undo "Deshacer"
   :redo "Rehacer"
   :history "Historia"
-  :clear-history "Limpiar historial"}
+  :clear-history "Limpiar historial"
+  :labels "Etiquetas"}
 
  :renderer.menubar.core
  {:menubar "Barra de menú"

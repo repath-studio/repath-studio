@@ -878,7 +878,8 @@
  {:undo "Rückgängig"
   :redo "Wiederholen"
   :history "Verlauf"
-  :clear-history "Verlauf löschen"}
+  :clear-history "Verlauf löschen"
+  :labels "Beschriftungen"}
 
  :renderer.menubar.core
  {:menubar "Menüleiste"

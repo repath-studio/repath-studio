@@ -184,6 +184,11 @@
   [db]
   (update-in db [:documents (:active-document db)] dissoc :preview-label))
 
+(m/=> toggle-labels [:-> App App])
+(defn toggle-labels
+  [db]
+  (update-in db (path db :labels) not))
+
 (m/=> create-state [:-> App HistoryIndex TimeStamp Translation HistoryState])
 (defn create-state
   [db index timestamp explanation]

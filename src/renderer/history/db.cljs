@@ -18,6 +18,7 @@
 (def History
   [:map {:closed true}
    [:zoom {:optional true} number?]
+   [:labels {:optional true} boolean?]
    [:translate {:optional true} Vec2]
    [:position {:optional true} HistoryIndex]
    [:states {:default {}} [:map-of HistoryIndex HistoryState]]])

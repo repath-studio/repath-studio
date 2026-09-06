@@ -769,7 +769,8 @@
  {:undo "撤销"
   :redo "重做"
   :history "历史"
-  :clear-history "清除历史"}
+  :clear-history "清除历史"
+  :labels "标签"}
 
  :renderer.menubar.core
  {:menubar "菜单栏"

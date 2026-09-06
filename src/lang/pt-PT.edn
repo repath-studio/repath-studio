@@ -858,7 +858,8 @@
  {:undo "Desfazer"
   :redo "Refazer"
   :history "Histórico"
-  :clear-history "Limpar histórico"}
+  :clear-history "Limpar histórico"
+  :labels "Etiquetas"}
 
  :renderer.menubar.core
  {:menubar "Barra de menu"
