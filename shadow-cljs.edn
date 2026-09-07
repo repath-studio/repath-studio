@@ -30,13 +30,11 @@
   :renderer {:target :browser
              :output-dir "resources/public/js"
              :build-hooks [(build.icon-generator/hook!)
-                           (build.schema-graph-generator/hook!)]
-             :compiler-options {;; Our embedded repl wont't work with :advanced
-                                ;; optimizations.
-                                :optimizations :simple
+                           (build.schema-graph-generator/hook!)
+                           (build.shell-dsl-generator/hook!)]
+             :compiler-options {:optimizations :advanced
                                 :output-wrapper false
                                 :pseudo-names true
-                                :pretty-print true
                                 :closure-defines
                                 {config/version :shadow-git-inject/version}}
 
@@ -59,7 +57,7 @@
 
              :closure-defines {config/SENTRY-DSN #shadow/env "SENTRY_DSN"}
 
-             :modules {:shared {:entries [shadow.cljs.bootstrap.env]}
+             :modules {:shared {:entries []}
 
                        :renderer {:entries [renderer.core]
                                   :depends-on #{:shared}
@@ -68,11 +66,6 @@
                        :worker {:init-fn worker.core/init!
                                 :web-worker true
                                 :depends-on #{:shared}}}}
-
-  :bootstrap {:target :bootstrap
-              :output-dir "resources/public/js/bootstrap"
-              :exclude #{cljs.js}
-              :entries [cljs.js user]}
 
   :browser-test {:target :browser-test
                  :runner-ns shadow.test.browser

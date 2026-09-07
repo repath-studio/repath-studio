@@ -9,9 +9,9 @@
 
 (defn show-str
   [v]
-  (if (string? v)
-    v
-    (pprint-str v)))
+  (cond-> v
+    (not (string? v))
+    (pprint-str)))
 
 (defn show-value-
   [v config showers]

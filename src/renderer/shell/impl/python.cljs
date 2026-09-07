@@ -10,7 +10,7 @@
    [renderer.hierarchy :as hierarchy]
    [renderer.shell.events :as-alias shell.events]
    [renderer.shell.hierarchy :as shell.hierarchy]
-   [renderer.shell.reepl.replumb :as shell.reepl.replumb]
+   [renderer.shell.reepl.sci :as shell.reepl.sci]
    [renderer.shell.subs :as-alias shell.subs]
    [user]))
 
@@ -25,7 +25,7 @@
                                             %)
                                           (js->clj :keywordize-keys true))
                                      args)))]
-    (.set pyodide.globals
+    (.set (.-globals ^js pyodide)
           (-> (:name (meta command))
               (camel-snake-kebab/->snake_case_string))
           wrapper)))
@@ -48,7 +48,7 @@
 
 (defmethod shell.hierarchy/init :python
   [params]
-  (let [loader (-> "/pyodide/pyodide.js"
+  (let [loader (-> "pyodide/pyodide.js"
                    (trustedResourceUrlFromString)
                    (safeLoad))]
     (.addCallback ^goog.net.jsloader loader #(load-pyodide params))))
@@ -87,7 +87,7 @@
 (defmethod shell.hierarchy/completions :python
   [_language s]
   (when (zero? (.indexOf s "js."))
-    (shell.reepl.replumb/js-completion (.slice s 3) "js.")))
+    (shell.reepl.sci/js-completion (.slice s 3) "js.")))
 
 (defmethod shell.hierarchy/show-error :python
   [_language v]

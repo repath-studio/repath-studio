@@ -6,7 +6,7 @@
    [renderer.hierarchy :as hierarchy]
    [renderer.shell.events :as-alias shell.events]
    [renderer.shell.hierarchy :as shell.hierarchy]
-   [renderer.shell.reepl.replumb :as shell.reepl.replumb]
+   [renderer.shell.reepl.sci :as shell.reepl.sci]
    [renderer.shell.subs :as-alias shell.subs]
    [user]))
 
@@ -43,13 +43,13 @@
 (defmethod shell.hierarchy/completions :cljs
   [_language s]
   (if (zero? (.indexOf s "js/"))
-    (shell.reepl.replumb/js-completion (.slice s 3) "js/")
-    (shell.reepl.replumb/cljs-completion s)))
+    (shell.reepl.sci/js-completion (.slice s 3) "js/")
+    (shell.reepl.sci/cljs-completion s)))
 
 (defmethod shell.hierarchy/docs :cljs
   [_language s]
   (when (symbol? s)
-    (shell.reepl.replumb/process-doc s)))
+    (shell.reepl.sci/process-doc s)))
 
 (defmethod shell.hierarchy/show-error :cljs
   [_language v]

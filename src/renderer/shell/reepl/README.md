@@ -6,6 +6,6 @@ Based on [reepl](https://github.com/jaredly/reepl) by Jared Forsyth under
 ## Changes
 
 - Shadow-cljs build
-- Conform with replumb [breaking changes](https://github.com/arichiardi/replumb#usage)
+- Replace replumb with sci
 - Parinfer removed
 - Multiple view and style changes

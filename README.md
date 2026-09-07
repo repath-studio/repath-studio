@@ -76,13 +76,6 @@ This project was funded through the
 - Interoperability with js and react.
 - Clean syntax.
 
-### What about performance?
-
-We are currently trying to optimize for hundreds of elements per document. We
-are also testing a canvas based implementation that can handle thousands of
-nodes on a single document, but that's not within the current scope of the
-project.
-
 ## How to build it locally
 
 ### System Requirements

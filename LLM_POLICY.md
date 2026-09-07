@@ -45,7 +45,7 @@ issues that we missed (bugs, typos, misleading naming etc). Although LLMs can
 produce a lot of false positives, they can also quickly identify problems that
 would normally require a very thorough pass to catch them.
 
-## Translations and dev tools
+## Translations and build tools
 
 **Those are the areas where we allow generating content using LLMs.**
 Translations make the project widely accessible, and we don't have the capacity
@@ -55,11 +55,11 @@ or add new languages under `src/lang` is allowed, but human intervention is
 required to validate that the changes don't break existing functionality, or
 reduce the quality of existing translations.
 
-The same is also true for our dev tools under `src/build`. They usually contain
-throw-away code, since we are mainly interested in the artifacts they produce.
-Those contributions should be reviewed and tested, regardless of the way they
-were generated, to make sure that they don't introduce any bugs, or reduce the
-quality of the code.
+The same is also true for our build tools under `src/build`. They usually
+contain throw-away code, since we are mainly interested in the artifacts they
+produce. Those contributions should be reviewed and tested, regardless of the
+way they were generated, to make sure that they don't introduce any bugs, or
+reduce the quality of the code.
 
 Since we did not produce those files for the most part, I don't think we are
 allowed to license them. Even marking them as public domain requires owning the
