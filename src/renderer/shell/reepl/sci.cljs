@@ -8,16 +8,15 @@
   (:require
    [clojure.edn]
    [clojure.string :as string]
-   [config :as config]
    [sci.core :as sci]
    [user])
   (:import goog.net.XhrIo))
 
 (def dsl-url "js/shell-dsl.edn")
 
-(defonce ^:private ctx (atom nil))
-(defonce ^:private current-ns-ref (atom 'user))
-(defonce ^:private dsl-data (atom nil))
+(defonce ctx (atom nil))
+(defonce current-ns-ref (atom 'user))
+(defonce dsl-data (atom nil))
 
 (defn fetch-file!
   "Very simple implementation of XMLHttpRequests that given a file path
@@ -184,58 +183,6 @@
          (filter #(not= -1 (.indexOf % completion)))
          (sort (partial compare-completion text))
          (map #(vector nil (prefix %) (prefix %))))))
-
-(defn- dsl-namespaces
-  []
-  (or (get @dsl-data :namespaces)
-      ;; Fallback: the compiler-inlined `user` namespace.
-      (let [publics (ns-publics 'user)]
-        {"user" (zipmap (map name (keys publics))
-                        (repeat (count publics) {}))})))
-
-(defn cljs-completion
-  "Completions are sourced from the build-time generated DSL data, falling
-   back to the compiler-inlined `user` namespace."
-  [text]
-  (let [text (str text)
-        [only-ns text] (if-not (= -1 (.indexOf text "/"))
-                         (.split text "/")
-                         [nil text])
-        matches? #(and
-                   (= -1 (.indexOf (str %) "t_cljs$core"))
-                   (< -1 (.indexOf (str %) text)))
-        current-ns-str (str @current-ns-ref)
-        namespaces (if (some? @dsl-data)
-                     (get @dsl-data :namespaces)
-                     (dsl-namespaces))
-        aliases (get-in @dsl-data [:aliases current-ns-str] {})
-        only-ns-str (when only-ns
-                      (or (get aliases only-ns)
-                          only-ns))
-        replace-name (fn [sym]
-                       (if (or (= "cljs.core" (namespace sym))
-                               (= current-ns-str (namespace sym)))
-                         (name sym)
-                         (str sym)))
-        sources (if only-ns-str
-                  [[only-ns-str only-ns-str]]
-                  (for [ns* (keys namespaces)]
-                    [(or (get aliases ns*) ns*) ns*]))
-        names (set (map str (keys namespaces)))
-        defs (->> sources
-                  (sort-by second (partial compare-ns current-ns-str))
-                  (mapcat (fn [[name* ns*]]
-                            (sort (map #(symbol name* (str %))
-                                       (filter matches?
-                                               (keys (get namespaces ns*)))))))
-                  (map #(vector % (replace-name %) (replace-name %)))
-                  (sort-by #(name (first %))
-                           (partial compare-completion text)))]
-    (vec (concat
-          (take config/max-shell-completions defs)
-          (map
-           #(vector % (str %) (str %))
-           (filter matches? names))))))
 
 (defn doc-from-sym
   [sym]
