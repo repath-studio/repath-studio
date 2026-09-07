@@ -3,10 +3,8 @@
    [clojure.string :as string]
    [re-frame.core :as rf]
    [renderer.shell.hierarchy :as shell.hierarchy]
-   [renderer.shell.reepl.replumb :as shell.reepl.replumb]
-   [renderer.utils.dom :as utils.dom]
-   [replumb.repl :as replumb.repl]
-   [shadow.cljs.bootstrap.browser :as bootstrap]))
+   [renderer.shell.reepl.sci :as shell.reepl.sci]
+   [renderer.utils.dom :as utils.dom]))
 
 (defn print-fn
   [log]
@@ -25,15 +23,10 @@
  ::init
  (fn [[event params]]
    (set-print! #(rf/dispatch (conj event :output %)))
-
-   ;; https://code.thheller.com/blog/shadow-cljs/2017/10/14/bootstrap-support.html
-   (bootstrap/init replumb.repl/st
-                   {:path "js/bootstrap"
-                    :load-on-init '[user]}
-                   #(shell.reepl.replumb/run-repl "(in-ns 'user)"
-                                                  (fn []
-                                                    (shell.hierarchy/init
-                                                     params))))))
+   (shell.reepl.sci/init! (fn [error]
+                            (if error
+                              (rf/dispatch (conj (get params :on-error) error))
+                              (shell.hierarchy/init params))))))
 
 (rf/reg-fx
  ::init-language
@@ -57,11 +50,11 @@
 (rf/reg-fx
  ::execute
  (fn [{:keys [text language verbose callback-event]}]
-   (try (shell.reepl.replumb/run-repl (shell.hierarchy/evaluate language text)
-                                      {:verbose verbose}
-                                      (fn [item-type result]
-                                        (rf/dispatch (conj callback-event
-                                                           item-type
-                                                           result))))
+   (try (shell.reepl.sci/execute (shell.hierarchy/evaluate language text)
+                                 verbose
+                                 (fn [item-type result]
+                                   (rf/dispatch (conj callback-event
+                                                      item-type
+                                                      result))))
         (catch :default e (rf/dispatch (->> (cljs.core/Throwable->map e)
                                             (conj callback-event :error)))))))

@@ -6,8 +6,8 @@
    [renderer.shell.db :as shell.db]
    [renderer.shell.effects :as-alias shell.effects]
    [renderer.shell.handlers :as shell.handlers]
-   [renderer.window.handlers :as window.handlers]
-   [replumb.repl :as repl]))
+   [renderer.shell.reepl.sci :as shell.reepl.sci]
+   [renderer.window.handlers :as window.handlers]))
 
 (rf/reg-event-fx
  ::focus
@@ -120,7 +120,8 @@
             (shell.handlers/add-to-history "")
             (shell.handlers/add-item {:type :input
                                       :value {:text text
-                                              :current-ns (repl/current-ns)
+                                              :current-ns
+                                              (shell.reepl.sci/current-ns)
                                               :num (-> db
                                                        shell.handlers/history
                                                        count)}}))

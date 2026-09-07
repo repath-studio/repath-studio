@@ -8,7 +8,7 @@
    [renderer.hierarchy :as hierarchy]
    [renderer.shell.events :as-alias shell.events]
    [renderer.shell.hierarchy :as shell.hierarchy]
-   [renderer.shell.reepl.replumb :as shell.utils.completion]
+   [renderer.shell.reepl.sci :as shell.reepl.sci]
    [renderer.shell.subs :as-alias shell.subs]
    [user]))
 
@@ -62,7 +62,7 @@
 
 (defmethod shell.hierarchy/completions :js
   [_language s]
-  (shell.utils.completion/js-completion s ""))
+  (shell.reepl.sci/js-completion s ""))
 
 (defmethod shell.hierarchy/show-error :js
   [_language v]

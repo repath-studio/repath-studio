@@ -125,7 +125,7 @@ the registrations multiple times.
 When you are not sure if you should add new state to the app db, the answer is
 usually yes, if the state is going to be used outside of the context of a single
 component view. If it also needs to be persisted to local storage, it should be
-serializable to json.
+serializable to JSON.
 
 If you need to reuse the result of a subscription within an event, add reusable
 functions to handlers, and use them in subs and events. If it's an expensive

@@ -32,13 +32,7 @@
    [:error
     [:map {:closed true}
      [:type [:= :error]]
-     [:value [:map {:closed true}
-              [:via {:optional true}
-               [:vector [:map {:optional true}
-                         [:type {:optional true} any?]
-                         [:message {:optional true} any?]
-                         [:data {:optional true} any?]
-                         [:at {:optional true} any?]]]]
+     [:value [:map
               [:trace {:optional true} any?]
               [:cause {:optional true} any?]
               [:data {:optional true} any?]

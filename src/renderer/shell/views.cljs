@@ -17,7 +17,7 @@
    [renderer.panel.views :as panel.views]
    [renderer.shell.events :as-alias shell.events]
    [renderer.shell.hierarchy :as shell.hierarchy]
-   [renderer.shell.reepl.replumb :as reepl.replumb]
+   [renderer.shell.reepl.sci :as shell.reepl.sci]
    [renderer.shell.reepl.show-devtools :as show-devtools]
    [renderer.shell.reepl.show-function :as show-function]
    [renderer.shell.reepl.show-value :refer [show-value]]
@@ -26,8 +26,7 @@
    [renderer.utils.codemirror :as utils.codemirror]
    [renderer.utils.dom :as utils.dom]
    [renderer.views :as views]
-   [renderer.window.subs :as-alias window.subs]
-   [replumb.core :as replumb])
+   [renderer.window.subs :as-alias window.subs])
   (:require-macros
    [reagent.ratom :refer [reaction]]))
 
@@ -72,7 +71,7 @@
           words (when-not (empty? text)
                   (->> (complete-word text)
                        ;; Remove core duplicates
-                       (remove #(string/includes? (second %) "cljs.core"))
+                       (remove #(string/includes? (second %) "clojure.core"))
                        (vec)))]
       (when-not (empty? words)
         {:words words
@@ -226,7 +225,7 @@
       [:div.flex.text-xs.self-start
        {:class "p-1.5 pr-1"}
        (if loaded?
-         (string/trim (replumb/get-prompt))
+         (str (shell.reepl.sci/current-ns) "=>")
          [:span.text-foreground-muted
           (i18n.views/t [::loading-language "Loading language..."])])]
       [:div.flex-1.py-px
@@ -276,10 +275,10 @@
 
 (defn maybe-fn-docs
   [f]
-  (let [doc (reepl.replumb/doc-from-sym f)]
+  (let [doc (shell.reepl.sci/doc-from-sym f)]
     (when (:forms doc)
       (with-out-str
-        (reepl.replumb/print-doc doc)))))
+        (shell.reepl.sci/print-doc doc)))))
 
 (defn repl-items
   []

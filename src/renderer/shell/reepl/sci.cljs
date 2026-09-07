@@ -1,0 +1,248 @@
+(ns renderer.shell.reepl.sci
+  "Evaluates shell forms with [sci](https://github.com/babashka/sci), a small
+   ClojureScript interpreter, against the app's own namespaces.
+
+   Completions and docs come from a build-time generated data file (see
+   build.shell-dsl-generator) and fall back to the compiler-inlined `user`
+   namespace metadata when that file is unavailable."
+  (:require
+   [clojure.edn]
+   [clojure.string :as string]
+   [sci.core :as sci]
+   [user])
+  (:import goog.net.XhrIo))
+
+(def dsl-url "js/shell-dsl.edn")
+
+(defonce ctx (atom nil))
+(defonce current-ns-ref (atom 'user))
+(defonce dsl-data (atom nil))
+
+(defn fetch-file!
+  "Very simple implementation of XMLHttpRequests that given a file path
+   calls src-cb with the string fetched or nil in case of error.
+   See doc at https://developers.google.com/closure/library/docs/xhrio"
+  [file-url src-cb]
+  (try
+    (.send XhrIo file-url
+           (fn [e]
+             (if (.isSuccess (.-target ^js e))
+               (src-cb (.. ^js e -target getResponseText))
+               (src-cb nil))))
+    (catch :default _err
+      (src-cb nil))))
+
+(defn- make-ctx
+  []
+  (sci/init
+   {:classes {'js js/globalThis
+              :allow :all}
+    :namespaces {'user (into {} (map (fn [[n v]] [n (deref v)])
+                                     (ns-publics 'user)))}
+    ;; sci has no built-in CLJS data readers, so support the #js literal by
+    ;; converting the read form to a JS value (keyword keys are preserved,
+    ;; mirroring the CLJS reader).
+    :readers (fn [tag]
+               (when (= tag 'js)
+                 clj->js))}))
+
+(defn context
+  "Returns the REPL context, creating it if necessary."
+  []
+  (if (nil? @ctx)
+    (reset! ctx (make-ctx))
+    @ctx))
+
+(defn current-ns
+  "The name of the namespace the REPL is currently in."
+  []
+  (str @current-ns-ref))
+
+(defn init!
+  "Initializes the REPL context (idempotent) and loads the docs/completions
+  data. Calls `cb` with nil when done or an error if initialization failed."
+  [cb]
+  (try
+    (let [done #(cb nil)]
+      (context)
+      (if (nil? @dsl-data)
+        (fetch-file! dsl-url
+                     (fn [text]
+                       (when text
+                         (try
+                           (reset! dsl-data (clojure.edn/read-string text))
+                           (catch :default err
+                             (js/console.warn
+                              "Failed to load the shell DSL data." err))))
+                       (done)))
+        (done)))
+    (catch :default e
+      (cb (cljs.core/Throwable->map e)))))
+
+(defn- eval-forms-verbose
+  "Evaluates `text` form by form in `sci-ctx`, starting in the namespace
+   `ns-sym`, printing the value of every form but the last (the last one
+   is returned for the regular `:output`). Returns `[last-value final-ns]`.
+   The
+   `:ns` option of `sci/eval-string+` threads the namespace across the
+   forms, so an `in-ns` in one form applies to the next."
+  [sci-ctx ns-sym text]
+  (let [reader (sci/source-reader text)]
+    (loop [results []
+           ns-sym* ns-sym]
+      (let [[form source] (sci/parse-next+string sci-ctx reader {:eof ::eof})]
+        (if (= ::eof form)
+          (do
+            (doseq [v (butlast results)]
+              (println (pr-str v)))
+            [(when (seq results) (last results))
+             ns-sym*])
+          (let [result (sci/eval-string+ sci-ctx source
+                                         {:ns (sci/create-ns ns-sym*)})]
+            (recur (conj results (:val result))
+                   (sci/ns-name (:ns result)))))))))
+
+(defn execute
+  "Evaluates `text` (one or more forms) in the REPL context, keeping state
+   between calls. When `verbose` is true, the value of every form but the
+   last is printed before the last one. Calls `cb` with `:output` and the
+   value of the last form, or `:error` and an error map on failure."
+  [text verbose cb]
+  (let [text (.trim (str text))]
+    (if-not (seq text)
+      (cb :output nil)
+      (try
+        (let [sci-ctx (context)
+              ns-obj (sci/create-ns @current-ns-ref)
+              [last-val final-ns] (if verbose
+                                    (eval-forms-verbose sci-ctx
+                                                        @current-ns-ref text)
+                                    (let [result
+                                          (sci/eval-string+ sci-ctx text
+                                                            {:ns ns-obj})]
+                                      [(:val result)
+                                       (sci/ns-name (:ns result))]))]
+          (reset! current-ns-ref final-ns)
+          (cb :output last-val))
+        (catch :default e
+          ;; The value :via might not be serializable to JSON.
+          (cb :error (dissoc (cljs.core/Throwable->map e) :via)))))))
+
+(defn compare-completion
+  "The comparison algo for completions
+
+   1. if one is exactly the text, then it goes first
+   2. if one *starts* with the text, then it goes first
+   3. otherwise leave in current order"
+  [text a b]
+  (cond
+    (and (= text a)
+         (= text b)) 0
+    (= text a) -1
+    (= text b) 1
+    :else
+    (let [a-starts (zero? (.indexOf a text))
+          b-starts (zero? (.indexOf b text))]
+      (cond
+        (and a-starts b-starts) 0
+        a-starts -1
+        b-starts 1
+        :else 0))))
+
+(defn compare-ns
+  "Sorting algo for namespaces.
+
+   The current ns comes first, then cljs.core, then anything else
+   alphabetically"
+  [current ns1 ns2]
+  (cond
+    (= ns1 current) -1
+    (= ns2 current) 1
+    (= ns1 "cljs.core") -1
+    (= ns2 "cljs.core") 1
+    :else (compare ns1 ns2)))
+
+(defn js-attrs [obj]
+  (if-not obj
+    []
+    (let [_constructor (.-constructor obj)
+          proto (js/Object.getPrototypeOf obj)]
+      (concat (js/Object.keys obj)
+              (when-not (= proto obj)
+                (js-attrs proto))))))
+
+(defn js-completion
+  [text prefix]
+  (let [parts (vec (.split text "."))
+        completion (or (last parts) "")
+        possibles (js-attrs (reduce aget js/window (butlast parts)))
+        prefix #(->> (conj (vec (butlast parts)) %)
+                     (string/join ".")
+                     (str prefix))]
+    (->> possibles
+         (filter #(not= -1 (.indexOf % completion)))
+         (sort (partial compare-completion text))
+         (map #(vector nil (prefix %) (prefix %))))))
+
+(defn doc-from-sym
+  [sym]
+  (let [ns* (or (namespace sym) (str @current-ns-ref))
+        name* (name sym)
+        ns* (or (get-in @dsl-data [:aliases (str @current-ns-ref) ns*]) ns*)
+        data (get-in @dsl-data [:namespaces ns* name*])
+        ;; Fallback: var metadata of the compiler-inlined `user`
+        ;; namespace.
+        var-meta (when (= ns* (str @current-ns-ref))
+                   (when-let [v (get (ns-publics 'user) (symbol name*))]
+                     (meta v)))]
+    (cond
+      (or (:doc data) (:arglists data))
+      {:name (str ns* "/" name*)
+       :type :normal
+       :forms (:arglists data)
+       :doc (:doc data)}
+
+      var-meta
+      {:name (str ns* "/" name*)
+       :type :normal
+       :forms (:arglists var-meta)
+       :doc (:doc var-meta)}
+
+      :else
+      nil)))
+
+(def type-name
+  {:protocol "Protocol"
+   :special-form "Special Form"
+   :macro "Macro"
+   :repl-special-function "REPL Special Function"})
+
+;; Copied & modified from cljs.repl/print-doc
+(defn print-doc
+  [doc]
+  (println (:name doc))
+  (println)
+  (when-not (= :normal (:type doc))
+    (println (type-name (:type doc))))
+  (when (:forms doc)
+    (prn (:forms doc)))
+  (when (:please-see doc)
+    (println (str "\n  Please see " (:please-see doc))))
+  (when (:doc doc)
+    (println)
+    (println (:doc doc)))
+  (when (:methods doc)
+    (doseq [[name* {:keys [doc arglists]}] (:methods doc)]
+      (println)
+      (println " " name*)
+      (println " " arglists)
+      (when doc
+        (println " " doc)))))
+
+(defn process-doc
+  "Get the documentation for a symbol."
+  [sym]
+  (when sym
+    (when-let [doc (doc-from-sym sym)]
+      (with-out-str
+        (print-doc doc)))))
