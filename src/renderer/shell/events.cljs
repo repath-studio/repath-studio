@@ -133,10 +133,11 @@
  ::activate-completion
  [persist]
  (fn [{:keys [db]} [_ index]]
-   (let [completion (-> db :shell :completion)
+   (let [db (shell.handlers/activate-completion db index)
+         completion (-> db :shell :completion)
          {:keys [words pos]} completion
          text (second (get words pos))]
-     {:db (shell.handlers/activate-completion db index)
+     {:db db
       ::shell.effects/replace-current-word text})))
 
 (rf/reg-event-fx

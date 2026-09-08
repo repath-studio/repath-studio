@@ -87,7 +87,7 @@
 (defmethod shell.hierarchy/codemirror-options :cljs
   [_language]
   {:extensions [(.of EditorState.languageData
-                     (fn [] #js [#js {:wordChars "/.+-=!"}]))
+                     (fn [] #js [#js {:wordChars "/.+-*=!<>?"}]))
                 (clojure)]})
 
 (defmethod shell.hierarchy/parser :cljs

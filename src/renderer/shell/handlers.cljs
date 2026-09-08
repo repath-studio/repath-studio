@@ -162,7 +162,7 @@
                 (when-not (empty? words)
                   {:words words
                    :num (count words)
-                   :active (= (get (first words) 2) text)
+                   :active (= (second (first words)) text)
                    :show-all false
                    :initial-text text
                    :pos 0
@@ -190,7 +190,7 @@
         text (if active
                (second (get words pos))
                initial-text)
-        initial-active (= initial-text (get (first words) 2))
+        initial-active (= initial-text (second (first words)))
         [active pos] (if active
                        (cycle-pos n pos go-back? initial-active)
                        [true (if go-back? (dec n) pos)])]

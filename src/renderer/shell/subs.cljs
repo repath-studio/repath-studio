@@ -122,4 +122,4 @@
        (and (seq words)
             (or (< 1 (count words))
                 (and (< 0 (count words))
-                     (not= initial-text (get (first words) 2)))))))
+                     (not= initial-text (second (first words))))))))

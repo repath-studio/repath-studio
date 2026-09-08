@@ -47,20 +47,16 @@
                  clj->js))}))
 
 (defn context
-  "Returns the REPL context, creating it if necessary."
   []
   (if (nil? @ctx)
     (reset! ctx (make-ctx))
     @ctx))
 
 (defn current-ns
-  "The name of the namespace the REPL is currently in."
   []
   (str @current-ns-ref))
 
 (defn init!
-  "Initializes the REPL context (idempotent) and loads the docs/completions
-  data. Calls `cb` with nil when done or an error if initialization failed."
   [cb]
   (try
     (let [done #(cb nil)]
@@ -80,12 +76,6 @@
       (cb (cljs.core/Throwable->map e)))))
 
 (defn- eval-forms-verbose
-  "Evaluates `text` form by form in `sci-ctx`, starting in the namespace
-   `ns-sym`, printing the value of every form but the last (the last one
-   is returned for the regular `:output`). Returns `[last-value final-ns]`.
-   The
-   `:ns` option of `sci/eval-string+` threads the namespace across the
-   forms, so an `in-ns` in one form applies to the next."
   [sci-ctx ns-sym text]
   (let [reader (sci/source-reader text)]
     (loop [results []
@@ -103,10 +93,6 @@
                    (sci/ns-name (:ns result)))))))))
 
 (defn execute
-  "Evaluates `text` (one or more forms) in the REPL context, keeping state
-   between calls. When `verbose` is true, the value of every form but the
-   last is printed before the last one. Calls `cb` with `:output` and the
-   value of the last form, or `:error` and an error map on failure."
   [text verbose cb]
   (let [text (.trim (str text))]
     (if-not (seq text)
