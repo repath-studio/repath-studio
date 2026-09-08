@@ -1,7 +1,8 @@
 (ns renderer.shell.impl.clojurescript
   (:require
+   ["@codemirror/state" :refer [EditorState]]
    ["@nextjournal/lang-clojure" :refer [clojure clojureLanguage]]
-   [config :as config]
+   [clojure.string :as string]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.hierarchy :as hierarchy]
@@ -54,12 +55,13 @@
                             (sort (map #(symbol name* (str %))
                                        (filter matches?
                                                (keys (get namespaces ns*)))))))
-                  (map #(vector % (replace-name %) (replace-name %)))
+                  (map #(vector % (replace-name %)))
+                  (remove #(string/includes? (second %) "clojure.core"))
                   (sort-by #(name (first %))
                            (partial shell.reepl.sci/compare-completion text)))]
     (->> (filter matches? names)
-         (map #(vector % (str %) (str %)))
-         (concat (take config/max-shell-completions defs))
+         (map #(vector % (str %)))
+         (concat defs)
          (vec))))
 
 (defmethod shell.hierarchy/init :cljs
@@ -84,7 +86,9 @@
 
 (defmethod shell.hierarchy/codemirror-options :cljs
   [_language]
-  {:extensions [(clojure)]})
+  {:extensions [(.of EditorState.languageData
+                     (fn [] #js [#js {:wordChars "/.+-=!"}]))
+                (clojure)]})
 
 (defmethod shell.hierarchy/parser :cljs
   [_language]

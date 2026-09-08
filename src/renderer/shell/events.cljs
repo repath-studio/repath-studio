@@ -3,16 +3,18 @@
    [re-frame.core :as rf]
    [renderer.app.effects :as-alias app.effects]
    [renderer.app.events :as-alias app.events :refer [persist]]
+   [renderer.effects :as-alias effects]
    [renderer.shell.db :as shell.db]
    [renderer.shell.effects :as-alias shell.effects]
    [renderer.shell.handlers :as shell.handlers]
    [renderer.shell.reepl.sci :as shell.reepl.sci]
+   [renderer.utils.dom :as utils.dom]
    [renderer.window.handlers :as window.handlers]))
 
 (rf/reg-event-fx
  ::focus
  (fn [_ _]
-   {::shell.effects/focus nil}))
+   {::effects/focus (utils.dom/get-shell-element)}))
 
 (rf/reg-event-fx
  ::init
@@ -108,6 +110,47 @@
  [persist]
  (fn [db [_ text]]
    (shell.handlers/set-text db text)))
+
+(rf/reg-event-db
+ ::clear-completion
+ [persist]
+ (fn [db _]
+   (shell.handlers/clear-completion db)))
+
+(rf/reg-event-db
+ ::complete-word
+ [persist]
+ (fn [db [_ inst]]
+   (shell.handlers/complete-word db inst)))
+
+(rf/reg-event-db
+ ::set-show-all-completions
+ [persist]
+ (fn [db [_ show-all?]]
+   (shell.handlers/set-show-all-completions db show-all?)))
+
+(rf/reg-event-fx
+ ::activate-completion
+ [persist]
+ (fn [{:keys [db]} [_ index]]
+   (let [completion (-> db :shell :completion)
+         {:keys [words pos]} completion
+         text (second (get words pos))]
+     {:db (shell.handlers/activate-completion db index)
+      ::shell.effects/replace-current-word text})))
+
+(rf/reg-event-fx
+ ::cycle-completions
+ [persist]
+ (fn [{:keys [db]} [_ go-back?]]
+   (let [db (shell.handlers/cycle-completions db go-back?)
+         completion (-> db :shell :completion)
+         {:keys [active words pos initial-text]} completion
+         text (if active
+                (second (get words pos))
+                initial-text)]
+     {:db db
+      ::shell.effects/replace-current-word text})))
 
 (rf/reg-event-fx
  ::execute

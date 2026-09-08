@@ -1,9 +1,11 @@
 (ns renderer.shell.effects
   (:require
+   ["@codemirror/view" :refer [EditorView]]
    [clojure.string :as string]
    [re-frame.core :as rf]
    [renderer.shell.hierarchy :as shell.hierarchy]
    [renderer.shell.reepl.sci :as shell.reepl.sci]
+   [renderer.utils.codemirror :as utils.codemirror]
    [renderer.utils.dom :as utils.dom]))
 
 (defn print-fn
@@ -42,12 +44,6 @@
    (shell.hierarchy/welcome language)))
 
 (rf/reg-fx
- ::focus
- (fn []
-   (some-> (.getElementById js/document utils.dom/shell-input-id)
-           (.focus))))
-
-(rf/reg-fx
  ::execute
  (fn [{:keys [text language verbose callback-event]}]
    (try (shell.reepl.sci/execute (shell.hierarchy/evaluate language text)
@@ -58,3 +54,13 @@
                                                       result))))
         (catch :default e (rf/dispatch (->> (cljs.core/Throwable->map e)
                                             (conj callback-event :error)))))))
+
+(rf/reg-fx
+ ::replace-current-word
+ (fn [s]
+   (when-let [inst (some-> (utils.dom/get-shell-element)
+                           (EditorView.findFromDOM))]
+     (let [current-word (utils.codemirror/current-word inst)]
+       (.dispatch inst #js {:changes #js {:from (.-from current-word)
+                                          :to (.-to current-word)
+                                          :insert s}})))))

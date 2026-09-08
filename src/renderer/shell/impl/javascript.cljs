@@ -1,6 +1,7 @@
 (ns renderer.shell.impl.javascript
   (:require
    ["@codemirror/lang-javascript" :refer [javascript]]
+   ["@codemirror/state" :refer [EditorState]]
    [camel-snake-kebab.core :as camel-snake-kebab]
    [clojure.string :as string]
    [re-frame.core :as rf]
@@ -54,7 +55,9 @@
 
 (defmethod shell.hierarchy/codemirror-options :js
   [_language]
-  {:extensions [(javascript)]})
+  {:extensions [(.of EditorState.languageData
+                     (fn [] #js [#js {:wordChars "."}]))
+                (javascript)]})
 
 (defmethod shell.hierarchy/parser :js
   [_language]

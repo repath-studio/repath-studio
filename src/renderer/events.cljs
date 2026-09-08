@@ -10,6 +10,11 @@
    {::effects/scroll-into-view dom-el}))
 
 (rf/reg-event-fx
+ ::blur
+ (fn [_ _]
+   {::effects/blur nil}))
+
+(rf/reg-event-fx
  ::scroll-to-bottom
  (fn [_ [_ dom-el]]
    {::effects/scroll-to-bottom dom-el}))

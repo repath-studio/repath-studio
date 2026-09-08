@@ -171,6 +171,32 @@
               (when-not (= proto obj)
                 (js-attrs proto))))))
 
+(def exclusions
+  ["module$"
+   "clojure$"
+   "cljs$"
+   "at_keyframes_styles_name$"
+   "as__QMARK_qname_"
+   "map_like_QMARK__"
+   "rewrite_clj$"
+   "sci$"
+   "factory_name"
+   "fipp$"
+   "shadow$"
+   "day8$"
+   "devtools$"
+   "re_frame$"
+   "reagent$"
+   "camel_snake_kebab$"
+   "malli$"
+   "taoensso$"
+   "get_default_error_fn_"
+   "clj_"
+   "_"
+   "g_"
+   "hickory$"
+   "temp__"])
+
 (defn js-completion
   [text prefix]
   (let [parts (vec (.split text "."))
@@ -182,7 +208,10 @@
     (->> possibles
          (filter #(not= -1 (.indexOf % completion)))
          (sort (partial compare-completion text))
-         (map #(vector nil (prefix %) (prefix %))))))
+         (map #(vector nil (prefix %)))
+         (remove #(or (string/includes? (second %) "_name$_")
+                      (some (fn [s] (string/starts-with? (second %) s))
+                            exclusions))))))
 
 (defn doc-from-sym
   [sym]

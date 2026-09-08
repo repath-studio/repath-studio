@@ -6,7 +6,10 @@
    [renderer.db :refer [LoadingState]]
    [renderer.shell.db
     :as shell.db
-    :refer [ShellHistory ShellItem ShellLanguageId]]
+    :refer [ShellCompletionPosition ShellCompletion ShellHistory ShellItem
+            ShellLanguageId]]
+   [renderer.shell.hierarchy :as shell.hierarchy]
+   [renderer.utils.codemirror :as utils.codemirror]
    [renderer.utils.math :as utils.math]))
 
 (m/=> active-language [:-> App ShellLanguageId])
@@ -125,3 +128,73 @@
   (let [max-pos (-> db history count dec)]
     (update-in db [:shell :languages (active-language db) :history-pos]
                (comp #(utils.math/clamp % 0 max-pos) f))))
+
+(m/=> clear-completion [:-> App App])
+(defn clear-completion
+  [db]
+  (update db :shell dissoc :completion))
+
+(m/=> set-show-all-completions [:-> App boolean? App])
+(defn set-show-all-completions
+  [db show-all?]
+  (assoc-in db [:shell :completion :show-all] show-all?))
+
+(m/=> activate-completion [:-> App ShellCompletionPosition App])
+(defn activate-completion
+  [db index]
+  (-> db
+      (assoc-in [:shell :completion :pos] index)
+      (assoc-in [:shell :completion :active] true)))
+
+(m/=> complete-word [:-> App App])
+(defn complete-word
+  [db ^js inst]
+  (when-let [result (utils.codemirror/current-word inst)]
+    (let [from (.-from result)
+          to (.-to result)
+          text (.sliceDoc (.-state inst) from to)
+          lang (-> db :shell :active-language)
+          words (when-not (empty? text)
+                  (->> (shell.hierarchy/completions lang text)
+                       (take config/max-shell-completions)
+                       (into [])))]
+      (assoc-in db [:shell :completion]
+                (when-not (empty? words)
+                  {:words words
+                   :num (count words)
+                   :active (= (get (first words) 2) text)
+                   :show-all false
+                   :initial-text text
+                   :pos 0
+                   :from from
+                   :to to})))))
+
+(m/=> cycle-pos [:-> ShellCompletion boolean?])
+(defn cycle-pos
+  [n current-pos go-back? initial-active?]
+  (if go-back?
+    (if (>= 0 current-pos)
+      (if initial-active?
+        [true (dec n)]
+        [false 0])
+      [true (dec current-pos)])
+    (if (>= current-pos (dec n))
+      [initial-active? 0]
+      [true (inc current-pos)])))
+
+(m/=> cycle-completions [:-> App boolean? any? App])
+(defn cycle-completions
+  [db go-back?]
+  (let [{:keys [initial-text from words pos active]} (-> db :shell :completion)
+        n (count words)
+        text (if active
+               (second (get words pos))
+               initial-text)
+        initial-active (= initial-text (get (first words) 2))
+        [active pos] (if active
+                       (cycle-pos n pos go-back? initial-active)
+                       [true (if go-back? (dec n) pos)])]
+    (-> db
+        (assoc-in [:shell :completion :pos] pos)
+        (assoc-in [:shell :completion :active] active)
+        (assoc-in [:shell :completion :to] (+ from (count text))))))

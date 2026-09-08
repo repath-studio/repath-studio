@@ -1,6 +1,7 @@
 (ns renderer.shell.impl.python
   (:require
    ["@codemirror/lang-python" :refer [python]]
+   ["@codemirror/state" :refer [EditorState]]
    [camel-snake-kebab.core :as camel-snake-kebab]
    [clojure.string :as string]
    [goog.html.legacyconversions :refer [trustedResourceUrlFromString]]
@@ -78,7 +79,9 @@
 
 (defmethod shell.hierarchy/codemirror-options :python
   [_language]
-  {:extensions [(python)]})
+  {:extensions [(.of EditorState.languageData
+                     (fn [] #js [#js {:wordChars "."}]))
+                (python)]})
 
 (defmethod shell.hierarchy/parser :python
   [_language]
