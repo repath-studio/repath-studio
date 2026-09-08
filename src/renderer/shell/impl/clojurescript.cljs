@@ -14,7 +14,7 @@
 
 (hierarchy/derive! :cljs ::shell.hierarchy/language)
 
-(defn dsl-namespaces
+(defn- dsl-namespaces
   []
   (or (get @shell.reepl.sci/dsl-data :namespaces)
       (let [publics (ns-publics 'user)]

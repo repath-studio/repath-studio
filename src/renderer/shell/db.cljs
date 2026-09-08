@@ -67,9 +67,7 @@
    [:show-all boolean?]
    [:initial-text string?]
    [:pos ShellCompletionPosition]
-   [:words {:default []} ShellCompletionWord]
-   [:from any?]
-   [:to any?]])
+   [:words {:default []} ShellCompletionWord]])
 
 (def Shell
   [:map {:closed true}

@@ -81,7 +81,7 @@ digraph {
   "PointerId" [label="{PointerId|number?\l}", fillcolor="#fff0cd"]
   "RecentDocument" [label="{RecentDocument|:any\l}", fillcolor="#fff0cd"]
   "Shell" [label="{Shell|:verbose boolean?\l:languages [:map-of [:ref \"ShellLanguageId\"] [:ref \"ShellLanguage\"]]\l:active-language keyword?\l:completion [:ref \"ShellCompletion\"]\l}", fillcolor="#fff0cd"]
-  "ShellCompletion" [label="{ShellCompletion|:active boolean?\l:show-all boolean?\l:initial-text string?\l:pos [:ref \"ShellCompletionPosition\"]\l:words [:ref \"ShellCompletionWord\"]\l:from any?\l:to any?\l}", fillcolor="#fff0cd"]
+  "ShellCompletion" [label="{ShellCompletion|:active boolean?\l:show-all boolean?\l:initial-text string?\l:pos [:ref \"ShellCompletionPosition\"]\l:words [:ref \"ShellCompletionWord\"]\l}", fillcolor="#fff0cd"]
   "ShellCompletionPosition" [label="{ShellCompletionPosition|[:or pos-int? zero?]\l}", fillcolor="#fff0cd"]
   "ShellCompletionWord" [label="{ShellCompletionWord|[:tuple [string? \{:title \"namespaced symbol\"\}] [string? \{:title \"name\"\}]]\l}", fillcolor="#fff0cd"]
   "ShellHistory" [label="{ShellHistory|[:vector string?]\l}", fillcolor="#fff0cd"]
