@@ -153,7 +153,7 @@
   (if-not obj
     []
     (let [proto (js/Object.getPrototypeOf obj)]
-      (concat (js/Object.keys obj)
+      (concat (js/Object.getOwnPropertyNames obj)
               (when (and proto
                          (not= proto (.-prototype js/Object))
                          (not= proto obj))
@@ -169,6 +169,7 @@
    "rewrite_clj$"
    "sci$"
    "factory_name"
+   "constructor"
    "fipp$"
    "shadow$"
    "day8$"
