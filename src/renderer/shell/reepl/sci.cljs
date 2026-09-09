@@ -263,10 +263,12 @@
       (when doc
         (println " " doc)))))
 
-(defn process-doc
-  "Get the documentation for a symbol."
-  [sym]
-  (when sym
-    (when-let [doc (doc-from-sym sym)]
-      (with-out-str
-        (print-doc doc)))))
+(defn print-language-doc
+  [doc render-arglist]
+  (println (:name doc))
+  (println)
+  (when-let [arglists (seq (:forms doc))]
+    (println (string/join " " (map render-arglist arglists))))
+  (println)
+  (when (:doc doc)
+    (println (:doc doc))))

@@ -131,7 +131,9 @@
 (defmethod shell.hierarchy/docs :cljs
   [_language s]
   (when (symbol? s)
-    (shell.reepl.sci/process-doc s)))
+    (when-let [doc (shell.reepl.sci/doc-from-sym s)]
+      (with-out-str
+        (shell.reepl.sci/print-doc doc)))))
 
 (defmethod shell.hierarchy/show-error :cljs
   [_language v]

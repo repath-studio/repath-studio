@@ -89,8 +89,48 @@
 
 (defmethod shell.hierarchy/completions :python
   [_language s]
-  (when (zero? (.indexOf s "js."))
-    (shell.reepl.sci/js-completion (.slice s 3) "js.")))
+  (if (zero? (.indexOf s "js."))
+    (shell.reepl.sci/js-completion (.slice s 3) "js.")
+    (->> (ns-publics 'user)
+         (map (fn [[sym _var]]
+                [sym (camel-snake-kebab/->snake_case_string (name sym))]))
+         (filter (fn [[_sym snake-name]] (string/starts-with? snake-name s)))
+         (sort-by second (partial shell.reepl.sci/compare-completion s))
+         (into []))))
+
+(defn- py-arg
+  [arg]
+  (cond (symbol? arg) (name arg)
+        (vector? arg) (str "[" (string/join ", " (map py-arg arg)) "]")
+        (and (map? arg) (:as arg)) (str "**" (name (:as arg)))
+        :else (pr-str arg)))
+
+(defn- py-arglist
+  "Converts a Clojure arglist to a Python-style signature.
+   E.g. `[[cx cy] r & {:as attrs}]` becomes `([cx, cy], r, **attrs)`."
+  [arglist]
+  (let [rest-pos (reduce-kv (fn [i k v] (or i (when (= '& v) k))) nil arglist)
+        args (take (or rest-pos (count arglist)) arglist)
+        rest-arg (when rest-pos (nth arglist (inc rest-pos)))]
+    (str "(" (string/join ", "
+                          (concat (map py-arg args)
+                                  (when (some? rest-arg)
+                                    [(if (map? rest-arg)
+                                       (py-arg rest-arg)
+                                       (str "*" (name rest-arg)))])))
+         ")")))
+
+(defmethod shell.hierarchy/docs :python
+  [_language s]
+  (when (symbol? s)
+    (when-let [f (get (ns-publics 'user) s)]
+      (let [m (meta f)]
+        (with-out-str
+          (shell.reepl.sci/print-language-doc
+           {:name (camel-snake-kebab/->snake_case_string (name s))
+            :forms (:arglists m)
+            :doc (:doc m)}
+           py-arglist))))))
 
 (defmethod shell.hierarchy/show-error :python
   [_language v]

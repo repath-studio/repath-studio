@@ -63,9 +63,52 @@
   [_language]
   (.. (javascript) -language -parser))
 
+(defn- command-sym
+  [text]
+  (when-not (string/includes? text ".")
+    (let [sym (symbol (camel-snake-kebab/->kebab-case-string text))]
+      (when (contains? (ns-publics 'user) sym)
+        sym))))
+
 (defmethod shell.hierarchy/completions :js
   [_language s]
-  (shell.reepl.sci/js-completion s ""))
+  (when-let [completions (shell.reepl.sci/js-completion s "")]
+    (mapv (fn [word]
+            (if-let [sym (command-sym (second word))]
+              [sym (second word)]
+              word))
+          completions)))
+
+(defn- js-arg
+  [arg]
+  (cond (symbol? arg) (name arg)
+        (vector? arg) (str "[" (string/join ", " (map js-arg arg)) "]")
+        (and (map? arg) (:as arg)) (name (:as arg))
+        :else (pr-str arg)))
+
+(defn- js-arglist
+  "Converts a Clojure arglist to a JavaScript style signature.
+   E.g. `[[cx cy] r & {:as attrs}]` becomes `([[cx, cy]], r, attrs)`."
+  [arglist]
+  (let [rest-pos (reduce-kv (fn [i k v] (or i (when (= '& v) k))) nil arglist)
+        args (take (or rest-pos (count arglist)) arglist)
+        rest-arg (when rest-pos (nth arglist (inc rest-pos)))]
+    (str "(" (string/join ", "
+                          (map js-arg
+                               (concat args
+                                       (when (some? rest-arg) [rest-arg]))))
+         ")")))
+
+(defmethod shell.hierarchy/docs :js
+  [_language s]
+  (when (symbol? s)
+    (when-let [doc (shell.reepl.sci/doc-from-sym
+                    (symbol "user" (name s)))]
+      (with-out-str
+        (shell.reepl.sci/print-language-doc
+         (assoc doc :name
+                (camel-snake-kebab/->camelCaseString (name s)))
+         js-arglist)))))
 
 (defmethod shell.hierarchy/show-error :js
   [_language v]
