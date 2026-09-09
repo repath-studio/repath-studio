@@ -96,13 +96,6 @@
         (when (= "clojure.core" ns*)
           (clj-core-docs)))))
 
-(defn- include-nss
-  "The namespaces to include in the generated file: `user`, the namespaces
-   it requires and `clojure.core`."
-  [namespaces]
-  (into (conj (into #{} (vals (ana-aliases (get namespaces 'user)))) "user")
-        '("clojure.core")))
-
 (defn- get-aliases
   [namespaces include]
   (into {}
@@ -118,7 +111,7 @@
   "Generates the DSL data file from the CLJS compiler env in `state`."
   [state]
   (let [namespaces (get-in state [:compiler-env :cljs.analyzer/namespaces])
-        include (include-nss namespaces)
+        include '("clojure.core" "user")
         ns-docs (into {}
                       (keep (fn [ns*]
                               (when-let [docs (ns-entry-docs

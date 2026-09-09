@@ -47,20 +47,16 @@
                  clj->js))}))
 
 (defn context
-  "Returns the REPL context, creating it if necessary."
   []
   (if (nil? @ctx)
     (reset! ctx (make-ctx))
     @ctx))
 
 (defn current-ns
-  "The name of the namespace the REPL is currently in."
   []
   (str @current-ns-ref))
 
 (defn init!
-  "Initializes the REPL context (idempotent) and loads the docs/completions
-  data. Calls `cb` with nil when done or an error if initialization failed."
   [cb]
   (try
     (let [done #(cb nil)]
@@ -80,12 +76,6 @@
       (cb (cljs.core/Throwable->map e)))))
 
 (defn- eval-forms-verbose
-  "Evaluates `text` form by form in `sci-ctx`, starting in the namespace
-   `ns-sym`, printing the value of every form but the last (the last one
-   is returned for the regular `:output`). Returns `[last-value final-ns]`.
-   The
-   `:ns` option of `sci/eval-string+` threads the namespace across the
-   forms, so an `in-ns` in one form applies to the next."
   [sci-ctx ns-sym text]
   (let [reader (sci/source-reader text)]
     (loop [results []
@@ -103,10 +93,6 @@
                    (sci/ns-name (:ns result)))))))))
 
 (defn execute
-  "Evaluates `text` (one or more forms) in the REPL context, keeping state
-   between calls. When `verbose` is true, the value of every form but the
-   last is printed before the last one. Calls `cb` with `:output` and the
-   value of the last form, or `:error` and an error map on failure."
   [text verbose cb]
   (let [text (.trim (str text))]
     (if-not (seq text)
@@ -162,27 +148,66 @@
     (= ns2 "cljs.core") 1
     :else (compare ns1 ns2)))
 
-(defn js-attrs [obj]
+(defn js-attrs
+  [obj]
   (if-not obj
     []
-    (let [_constructor (.-constructor obj)
-          proto (js/Object.getPrototypeOf obj)]
-      (concat (js/Object.keys obj)
-              (when-not (= proto obj)
+    (let [proto (js/Object.getPrototypeOf obj)]
+      (concat (js/Object.getOwnPropertyNames obj)
+              (when (and proto
+                         (not= proto (.-prototype js/Object))
+                         (not= proto obj))
                 (js-attrs proto))))))
+
+(def exclusions
+  ["module$"
+   "clojure$"
+   "cljs$"
+   "at_keyframes_styles_name$"
+   "as__QMARK_qname_"
+   "map_like_QMARK__"
+   "rewrite_clj$"
+   "sci$"
+   "factory_name"
+   "constructor"
+   "fipp$"
+   "shadow$"
+   "day8$"
+   "devtools$"
+   "re_frame$"
+   "reagent$"
+   "camel_snake_kebab$"
+   "malli$"
+   "taoensso$"
+   "get_default_error_fn_"
+   "clj_"
+   "_"
+   "g_"
+   "hickory$"
+   "temp__"])
 
 (defn js-completion
   [text prefix]
   (let [parts (vec (.split text "."))
-        completion (or (last parts) "")
-        possibles (js-attrs (reduce aget js/window (butlast parts)))
-        prefix #(->> (conj (vec (butlast parts)) %)
-                     (string/join ".")
-                     (str prefix))]
-    (->> possibles
-         (filter #(not= -1 (.indexOf % completion)))
-         (sort (partial compare-completion text))
-         (map #(vector nil (prefix %) (prefix %))))))
+        head (or (last parts) "")
+        obj (reduce (fn [acc k] (when-not (nil? acc) (aget acc k)))
+                    js/window
+                    (butlast parts))
+        excluded? (fn [name*]
+                    (or (string/includes? name* "_name$_")
+                        (some #(string/starts-with? name* %)
+                              exclusions)))]
+    (when obj
+      (->> (js-attrs obj)
+           (remove excluded?)
+           (distinct)
+           (filter #(not= -1 (.indexOf % head)))
+           (sort (partial compare-completion head))
+           (map (fn [name*]
+                  (vector nil
+                          (str prefix
+                               (string/join "." (conj (vec (butlast parts))
+                                                      name*))))))))))
 
 (defn doc-from-sym
   [sym]
@@ -239,10 +264,12 @@
       (when doc
         (println " " doc)))))
 
-(defn process-doc
-  "Get the documentation for a symbol."
-  [sym]
-  (when sym
-    (when-let [doc (doc-from-sym sym)]
-      (with-out-str
-        (print-doc doc)))))
+(defn print-language-doc
+  [doc render-arglist]
+  (println (:name doc))
+  (println)
+  (when-let [arglists (seq (:forms doc))]
+    (println (string/join " " (map render-arglist arglists))))
+  (println)
+  (when (:doc doc)
+    (println (:doc doc))))

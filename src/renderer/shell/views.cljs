@@ -8,7 +8,6 @@
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
    [clojure.string :as string]
    [re-frame.core :as rf]
-   [reagent.core :as reagent]
    [renderer.action.views :as action.views]
    [renderer.events :as-alias events]
    [renderer.i18n.views :as i18n.views]
@@ -26,9 +25,7 @@
    [renderer.utils.codemirror :as utils.codemirror]
    [renderer.utils.dom :as utils.dom]
    [renderer.views :as views]
-   [renderer.window.subs :as-alias window.subs])
-  (:require-macros
-   [reagent.ratom :refer [reaction]]))
+   [renderer.window.subs :as-alias window.subs]))
 
 (defn theme-highlighters
   [theme-mode]
@@ -62,99 +59,36 @@
       (and (not (.-shiftKey evt))
            (utils.codemirror/in-place? inst))))
 
-(defn repl-hint
-  [complete-word ^js inst _options]
-  (when-let [result (utils.codemirror/current-word inst)]
-    (let [from (.-from result)
-          to (.-to result)
-          text (.sliceDoc (.-state inst) from to)
-          words (when-not (empty? text)
-                  (->> (complete-word text)
-                       ;; Remove core duplicates
-                       (remove #(string/includes? (second %) "clojure.core"))
-                       (vec)))]
-      (when-not (empty? words)
-        {:words words
-         :num (count words)
-         :active (= (get (first words) 2) text)
-         :show-all false
-         :initial-text text
-         :pos 0
-         :from from
-         :to to}))))
-
-(defn cycle-pos
-  "Cycle through positions. Returns [active new-pos]."
-  [n current-pos go-back? initial-active?]
-  (if go-back?
-    (if (>= 0 current-pos)
-      (if initial-active?
-        [true (dec n)]
-        [false 0])
-      [true (dec current-pos)])
-    (if (>= current-pos (dec n))
-      [initial-active? 0]
-      [true (inc current-pos)])))
-
-(defn should-cycle?
-  [{:keys [words initial-text]
-    :as state}]
-  (and state
-       (or (< 1 (count words))
-           (and (< 0 (count words))
-                (not= initial-text (get (first words) 2))))))
-
-(defn cycle-completions
-  [{:keys [num pos active from to words initial-text]
-    :as state}
-   go-back? inst evt]
-  (when (should-cycle? state)
-    (.preventDefault evt)
-    (let [initial-active (= initial-text (get (first words) 2))
-          [active pos] (if active
-                         (cycle-pos num pos go-back? initial-active)
-                         [true (if go-back? (dec num) pos)])
-          text (if active
-                 (get (get words pos) 2)
-                 initial-text)]
-      (.dispatch inst #js {:changes #js {:from from
-                                         :to to
-                                         :insert text}})
-      (assoc state
-             :pos pos
-             :active active
-             :to (+ from (count text))))))
-
 (defn on-keyup-handler
   [options evt inst]
-  (let [{:keys [complete-atom complete-word]} options]
-    (.stopPropagation evt)
-    (case (.-key evt)
-      "Escape"
-      (if @complete-atom
-        (reset! complete-atom nil)
-        (some-> (.-activeElement js/document)
-                (.blur)))
+  (.stopPropagation evt)
+  (case (.-key evt)
+    "Escape"
+    (rf/dispatch (if @(:completion options)
+                   [::shell.events/clear-completion]
+                   [::events/blur]))
 
-      "Enter"
-      (reset! complete-atom nil)
+    "Enter"
+    (rf/dispatch [::shell.events/clear-completion])
 
-      ("Control" "Alt" "Meta" "ContextMenu")
-      (swap! complete-atom assoc :show-all false)
+    ("Control" "Alt" "Meta" "ContextMenu")
+    (rf/dispatch [::shell.events/set-show-all-completions false])
 
-      (when-not (contains? #{"Tab" "Shift"} (.-key evt))
-        (reset! complete-atom (repl-hint complete-word inst nil))))))
+    (when-not (contains? #{"Tab" "Shift"} (.-key evt))
+      (rf/dispatch [::shell.events/complete-word inst]))))
 
 (defn on-keydown-handler
   [options evt inst]
-  (let [{:keys [complete-atom on-eval on-up on-down]} options]
+  (let [{:keys [on-eval on-up on-down should-cycle]} options]
     (.stopPropagation evt)
     (case (.-key evt)
       ("Control" "Alt" "Meta" "ContextMenu")
-      (swap! complete-atom assoc :show-all true)
+      (rf/dispatch [::shell.events/set-show-all-completions true])
 
       "Tab"
-      (swap! complete-atom cycle-completions (.-shiftKey evt) inst evt)
+      (when should-cycle
+        (.preventDefault evt)
+        (rf/dispatch [::shell.events/cycle-completions (.-shiftKey evt)]))
 
       "Enter"
       (when (should-eval? inst evt)
@@ -208,15 +142,17 @@
                         #js {:id utils.dom/shell-input-id
                              :aria-label "Shell"})]
                       (:extensions options))
-    :on-blur #(reset! (:complete-atom options) nil)
+    :on-blur #(rf/dispatch [::shell.events/clear-completion])
     :on-change (:on-change options)
     :on-keyup (partial on-keyup-handler options)
     :on-keydown (partial on-keydown-handler options)}])
 
 (defn repl-input
-  [complete-atom]
+  []
   (let [lang @(rf/subscribe [::shell.subs/active-language])
         theme-mode @(rf/subscribe [::theme.subs/computed-mode])
+        cycle? @(rf/subscribe [::shell.subs/cycle-completions?])
+        completion (rf/subscribe [::shell.subs/completion])
         repl-history? @(rf/subscribe [::panel.subs/visible? :repl-history])
         loaded? @(rf/subscribe [::shell.subs/language-loaded?])
         current-text @(rf/subscribe [::shell.subs/current-text])]
@@ -233,13 +169,13 @@
          ^{:key lang}
          [code-mirror current-text
           (merge {:theme-mode theme-mode
+                  :should-cycle cycle?
+                  :completion completion
                   :on-eval #(rf/dispatch [::shell.events/execute %])
                   :on-change #(rf/dispatch [::shell.events/set-text
                                             (.. % -state -doc toString)])
-                  :complete-word #(shell.hierarchy/completions lang %)
                   :on-up #(rf/dispatch [::shell.events/go-up])
-                  :on-down #(rf/dispatch [::shell.events/go-down])
-                  :complete-atom complete-atom}
+                  :on-down #(rf/dispatch [::shell.events/go-down])}
                  (shell.hierarchy/codemirror-options lang))])]]
      [:div.self-start.h-full.flex.items-center
       [language-dropdown-button loaded?]
@@ -312,11 +248,12 @@
          [views/loading-indicator]])]]))
 
 (defn completion-item
-  [text selected active set-active]
+  [text selected active index]
   [:div.p-1.bg-secondary.text-nowrap.hover:bg-primary
    {:ref #(when selected (rf/dispatch [::events/scroll-into-view %]))
     :on-pointer-down #(do (.preventDefault %)
-                          (set-active %))
+                          (rf/dispatch [::shell.events/activate-completion
+                                        index]))
     :class (when selected (if active
                             "bg-accent! text-accent-foreground!"
                             "bg-primary!"))}
@@ -326,61 +263,51 @@
   [s]
   (let [theme-mode @(rf/subscribe [::theme.subs/computed-mode])
         lang @(rf/subscribe [::shell.subs/active-language])
-        [fn-name signature doc] (filter seq (string/split-lines s))]
+        lines (string/split-lines s)
+        signature (when (seq (nth lines 2 nil)) (nth lines 2 nil))
+        doc (string/join "\n" (drop-while string/blank? (drop 3 lines)))]
     [:div.bg-primary.drop-shadow.p-4.absolute.bottom-full.flex.flex-col.gap-4
-     [:div.font-semibold
-      [static-highlight (str fn-name) theme-mode lang]]
-     (when signature
+     [:div.font-semibold.text-normal.text-sm
+      [static-highlight (str (first lines)) theme-mode lang]]
+     (when (seq signature)
        [static-highlight signature theme-mode lang])
-     (when doc [:div doc])]))
+     (when (seq doc) [:div doc])]))
 
 (defn completion-list
-  [docs {:keys [pos words active show-all]} set-active]
-  (let [items (map-indexed #(vector completion-item
-                                    (get %2 2)
-                                    (= %1 pos)
-                                    active
-                                    (partial set-active %1)) words)]
+  []
+  (let [words @(rf/subscribe [::shell.subs/completion-words])
+        active? @(rf/subscribe [::shell.subs/completion-active?])
+        show-all? @(rf/subscribe [::shell.subs/completion-show-all?])
+        pos @(rf/subscribe [::shell.subs/completion-pos])
+        docs @(rf/subscribe [::shell.subs/docs])]
     [:div#completion-list.absolute.bottom-full.left-0.w-full.text-xs.mb-px
-     (when docs
-       [function-docs docs])
-     (into
-      [:div.overflow-hidden.flex
-       {:class (when show-all "flex-wrap")}]
-      items)]))
-
-(defn docs-reaction
-  [complete-atom]
-  (reaction
-   (let [lang @(rf/subscribe [::shell.subs/active-language])]
-     (when-let [state @complete-atom]
-       (let [{:keys [pos words]} state
-             sym (first (get words pos))]
-         (shell.hierarchy/docs lang sym))))))
+     (when docs [function-docs docs])
+     (->> words
+          (map-indexed (fn [index word]
+                         [completion-item
+                          (second word)
+                          (= index pos)
+                          active?
+                          index]))
+          (into [:div.overflow-hidden.flex
+                 {:class (when show-all? "flex-wrap")}]))]))
 
 (defn root
   []
   (let [repl-history? @(rf/subscribe [::panel.subs/visible? :repl-history])
         md? @(rf/subscribe [::window.subs/md?])]
-    (reagent/with-let [complete-atom (reagent/atom nil)
-                       docs (docs-reaction complete-atom)]
-      [:<>
-       (if md?
-         (when repl-history?
-           [panel.views/panel
-            {:id :repl-history
-             :class "relative"
-             :minSize 100
-             :defaultSize 300}
-            [repl-items]])
-         [repl-items])
+    [:<>
+     (if md?
+       (when repl-history?
+         [panel.views/panel
+          {:id :repl-history
+           :class "relative"
+           :minSize 100
+           :defaultSize 300}
+          [repl-items]])
+       [repl-items])
 
-       [:div.relative.whitespace-pre-wrap.font-mono.w-full
-        {:dir "ltr"}
-        [completion-list
-         @docs
-         @complete-atom
-         #(do (swap! complete-atom assoc :pos % :active true)
-              (rf/dispatch [::shell.events/set-text
-                            (get-in @complete-atom [:words % 1])]))]
-        [repl-input complete-atom]]])))
+     [:div.relative.whitespace-pre-wrap.font-mono.w-full
+      {:dir "ltr"}
+      [completion-list]
+      [repl-input]]]))

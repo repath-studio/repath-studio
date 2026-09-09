@@ -7,6 +7,10 @@
 (def frame-id "frame")
 (def shell-input-id "shell-input")
 
+(defn get-shell-element
+  []
+  (.getElementById js/document shell-input-id))
+
 (defn get-frame-document
   []
   (some->> frame-id

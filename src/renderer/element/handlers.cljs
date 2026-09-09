@@ -788,19 +788,22 @@
    (reduce (rpartial align direction) db (selected-ids db)))
   ([db id direction]
    (let [el-bbox (:bbox (entity db id))
-         center (utils.bounds/center el-bbox)
-         parent-bbox (:bbox (parent db id))
-         parent-center (utils.bounds/center parent-bbox)
-         [cx cy] (matrix/sub parent-center center)
-         delta-bbox (matrix/sub parent-bbox el-bbox)
-         [min-x-delta min-y-delta max-x-delta max-y-delta] delta-bbox]
-     (translate db id (case direction
-                        :top [0 min-y-delta]
-                        :center-vertical [0 cy]
-                        :bottom [0 max-y-delta]
-                        :left [min-x-delta 0]
-                        :center-horizontal [cx 0]
-                        :right [max-x-delta 0])))))
+         parent-bbox (:bbox (parent db id))]
+     (if-not (and el-bbox parent-bbox)
+       db
+       (let [center (utils.bounds/center el-bbox)
+             parent-bbox (:bbox (parent db id))
+             parent-center (utils.bounds/center parent-bbox)
+             [cx cy] (matrix/sub parent-center center)
+             delta-bbox (matrix/sub parent-bbox el-bbox)
+             [min-x-delta min-y-delta max-x-delta max-y-delta] delta-bbox]
+         (translate db id (case direction
+                            :top [0 min-y-delta]
+                            :center-vertical [0 cy]
+                            :bottom [0 max-y-delta]
+                            :left [min-x-delta 0]
+                            :center-horizontal [cx 0]
+                            :right [max-x-delta 0])))))))
 
 (m/=> stroke->path [:function
                     [:-> App App]

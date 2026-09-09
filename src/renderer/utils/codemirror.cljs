@@ -1,6 +1,4 @@
-(ns renderer.utils.codemirror
-  (:require
-   ["@codemirror/state" :refer [EditorSelection]]))
+(ns renderer.utils.codemirror)
 
 (defn get-head
   [^js inst]
@@ -43,12 +41,6 @@
              (= (get-head inst) (.-to line))))))
 
 (defn current-word
-  "Returns the current 'word' range according to CodeMirror's `wordChars' list.
-   Symbols are excluded from the default regex, so we return the last character
-   if it's not `/`."
   [^js inst]
   (let [head (get-head inst)]
-    (or (.wordAt (.-state inst) head)
-        (let [char-before (.sliceDoc (.-state inst) (dec head) head)]
-          (when-not (= char-before "/")
-            (.range EditorSelection (dec head) head))))))
+    (.wordAt (.-state inst) head)))

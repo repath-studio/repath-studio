@@ -53,11 +53,28 @@
    [:items {:max config/max-shell-history
             :default []} [:vector ShellItem]]])
 
+(def ShellCompletionPosition
+  [:or pos-int? zero?])
+
+(def ShellCompletionItem
+  [:tuple
+   [:or nil? string? symbol?]
+   [:or nil? string?]])
+
+(def ShellCompletion
+  [:map {:closed true}
+   [:active {:optional true} boolean?]
+   [:show-all {:optional true} boolean?]
+   [:initial-text {:optional true} string?]
+   [:pos {:optional true} ShellCompletionPosition]
+   [:words {:optional true} [:vector ShellCompletionItem]]])
+
 (def Shell
   [:map {:closed true}
    [:verbose {:default false} boolean?]
    [:languages {:default {}} [:map-of ShellLanguageId ShellLanguage]]
-   [:active-language {:default :cljs} keyword?]])
+   [:active-language {:default :cljs} keyword?]
+   [:completion {:optional true} [:maybe ShellCompletion]]])
 
 (def default-lang (m/decode ShellLanguage
                             {}

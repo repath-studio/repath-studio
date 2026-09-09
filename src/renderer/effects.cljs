@@ -16,6 +16,17 @@
  (fn [coeffects _]
    (assoc coeffects :now (.now js/performance))))
 
+(rf/reg-fx
+ ::focus
+ (fn [el-ref]
+   (some-> el-ref (.focus))))
+
+(rf/reg-fx
+ ::blur
+ (fn []
+   (some-> (.-activeElement js/document)
+           (.blur))))
+
 (rf/reg-cofx
  ::time-origin
  (fn [coeffects _]
