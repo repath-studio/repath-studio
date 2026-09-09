@@ -186,21 +186,38 @@
    "hickory$"
    "temp__"])
 
+(defn- excluded?
+  [name*]
+  (or (string/includes? name* "_name$_")
+      (some #(string/starts-with? name* %)
+            exclusions)))
+
+(defonce global-names (atom nil))
+
+(defn refresh-global-names!
+  []
+  (reset! global-names
+          (->> (js-attrs js/window)
+               (remove excluded?)
+               (distinct)
+               (vec))))
+
 (defn js-completion
   [text prefix]
   (let [parts (vec (.split text "."))
         head (or (last parts) "")
-        obj (reduce (fn [acc k] (when-not (nil? acc) (aget acc k)))
-                    js/window
-                    (butlast parts))
-        excluded? (fn [name*]
-                    (or (string/includes? name* "_name$_")
-                        (some #(string/starts-with? name* %)
-                              exclusions)))]
-    (when obj
-      (->> (js-attrs obj)
-           (remove excluded?)
-           (distinct)
+        names (if (seq (butlast parts))
+                (when-let [obj (reduce (fn [acc k]
+                                         (when-not (nil? acc)
+                                           (aget acc k)))
+                                       js/window
+                                       (butlast parts))]
+                  (->> (js-attrs obj)
+                       (remove excluded?)
+                       (distinct)))
+                (or @global-names (refresh-global-names!)))]
+    (when (seq names)
+      (->> names
            (filter #(not= -1 (.indexOf % head)))
            (sort (partial compare-completion head))
            (map (fn [name*]

@@ -30,6 +30,7 @@
   ;; Expose all user functions to global namespace.
   (doseq [command (vals (ns-publics 'user))]
     (expose-command-to-global-namespace command))
+  (shell.reepl.sci/refresh-global-names!)
 
   (rf/dispatch on-success))
 
@@ -64,20 +65,21 @@
   (.. (javascript) -language -parser))
 
 (defn- command-sym
-  [text]
+  [publics text]
   (when-not (string/includes? text ".")
     (let [sym (symbol (camel-snake-kebab/->kebab-case-string text))]
-      (when (contains? (ns-publics 'user) sym)
+      (when (contains? publics sym)
         sym))))
 
 (defmethod shell.hierarchy/completions :js
   [_language s]
   (when-let [completions (shell.reepl.sci/js-completion s "")]
-    (mapv (fn [word]
-            (if-let [sym (command-sym (second word))]
-              [sym (second word)]
-              word))
-          completions)))
+    (let [publics (ns-publics 'user)]
+      (mapv (fn [word]
+              (if-let [sym (command-sym publics (second word))]
+                [sym (second word)]
+                word))
+            completions))))
 
 (defn- js-arg
   [arg]
