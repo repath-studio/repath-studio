@@ -3,7 +3,7 @@
    [config :as config]
    [malli.core :as m]
    [renderer.app.db :refer [App]]
-   [renderer.db :refer [LoadingState]]
+   [renderer.db :refer [JS_Object LoadingState]]
    [renderer.shell.db
     :as shell.db
     :refer [ShellCompletionPosition ShellCompletion ShellHistory ShellItem
@@ -93,7 +93,7 @@
                           {}
                           langs))))
 
-(m/=> toggle-verbose [:-> App boolean? App])
+(m/=> toggle-verbose [:-> App App])
 (defn toggle-verbose
   [db]
   (update-in db [:shell :verbose] not))
@@ -146,10 +146,10 @@
       (assoc-in [:shell :completion :pos] index)
       (assoc-in [:shell :completion :active] true)))
 
-(m/=> complete-word [:-> App App])
+(m/=> complete-word [:-> App JS_Object App])
 (defn complete-word
   [db ^js inst]
-  (when-let [result (utils.codemirror/current-word inst)]
+  (if-let [result (utils.codemirror/current-word inst)]
     (let [from (.-from result)
           to (.-to result)
           text (.sliceDoc (.-state inst) from to)
@@ -164,7 +164,8 @@
                    :active (= (second (first words)) text)
                    :show-all false
                    :initial-text text
-                   :pos 0})))))
+                   :pos 0})))
+    (update db :shell dissoc :completion)))
 
 (m/=> cycle-pos [:-> ShellCompletion boolean?])
 (defn cycle-pos
@@ -179,7 +180,7 @@
       [initial-active? 0]
       [true (inc current-pos)])))
 
-(m/=> cycle-completions [:-> App boolean? any? App])
+(m/=> cycle-completions [:-> App boolean? App])
 (defn cycle-completions
   [db go-back?]
   (let [{:keys [initial-text words pos active]} (-> db :shell :completion)

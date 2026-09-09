@@ -21,48 +21,76 @@
         {"user" (zipmap (map name (keys publics))
                         (repeat (count publics) {}))})))
 
-(defn completion
+(defn- matches?
+  [s text]
+  (let [s (str s)]
+    (and (not (string/includes? s "t_cljs$core"))
+         (string/includes? s text))))
+
+(defn- ns-sources
+  [{:keys [namespaces local-names only-ns only-ns-str current-ns-str]}]
+  (let [local-name #(or (get local-names %) %)]
+    (->> (if only-ns-str
+           [[only-ns only-ns-str]]
+           (map (juxt local-name identity)
+                (keys namespaces)))
+         (sort-by second (partial shell.reepl.sci/compare-ns
+                                  current-ns-str)))))
+
+(defn- completion-name
+  [name* ns* nm current-ns-str]
+  (cond->> nm
+    (not (or (= current-ns-str ns*)
+             (#{"clojure.core" "cljs.core"} ns*)))
+    (str name* "/")))
+
+(defn- ns-completions
+  [namespaces text]
+  (->> (keys namespaces)
+       (remove #(= "clojure.core" %))
+       (filter #(matches? % text))
+       (sort)
+       (sort-by identity (partial shell.reepl.sci/compare-completion text))
+       (map #(vector % %))))
+
+(defn- var-completions
+  [namespaces sources text current-ns-str]
+  (->> sources
+       (mapcat (fn [[name* ns*]]
+                 (->> (keys (get namespaces ns*))
+                      (filter #(matches? % text))
+                      (sort)
+                      (map (fn [nm]
+                             (vector (symbol name* nm)
+                                     (completion-name name* ns* nm
+                                                      current-ns-str)))))))
+       (sort-by #(name (first %))
+                (partial shell.reepl.sci/compare-completion text))))
+
+(defn- completion
   [text]
   (let [text (str text)
-        [only-ns text] (if-not (= -1 (.indexOf text "/"))
-                         (.split text "/")
-                         [nil text])
-        matches? #(and
-                   (= -1 (.indexOf (str %) "t_cljs$core"))
-                   (< -1 (.indexOf (str %) text)))
-        current-ns-str (str @shell.reepl.sci/current-ns-ref)
-        namespaces (if (some? @shell.reepl.sci/dsl-data)
-                     (get @shell.reepl.sci/dsl-data :namespaces)
-                     (dsl-namespaces))
+        [only-ns text] (if (= -1 (.indexOf text "/"))
+                         [nil text]
+                         (let [parts (.split text "/")]
+                           [(first parts)
+                            (string/join "/" (rest parts))]))
+        only-ns (when (seq only-ns) only-ns)
+        current-ns-str (shell.reepl.sci/current-ns)
+        namespaces (dsl-namespaces)
         aliases (get-in @shell.reepl.sci/dsl-data [:aliases current-ns-str] {})
+        local-names (into {} (map (juxt second first) aliases))
         only-ns-str (when only-ns
                       (or (get aliases only-ns)
                           only-ns))
-        replace-name (fn [sym]
-                       (if (or (= "cljs.core" (namespace sym))
-                               (= current-ns-str (namespace sym)))
-                         (name sym)
-                         (str sym)))
-        sources (if only-ns-str
-                  [[only-ns-str only-ns-str]]
-                  (for [ns* (keys namespaces)]
-                    [(or (get aliases ns*) ns*) ns*]))
-        names (set (map str (keys namespaces)))
-        defs (->> sources
-                  (sort-by second (partial shell.reepl.sci/compare-ns
-                                           current-ns-str))
-                  (mapcat (fn [[name* ns*]]
-                            (sort (map #(symbol name* (str %))
-                                       (filter matches?
-                                               (keys (get namespaces ns*)))))))
-                  (map #(vector % (replace-name %)))
-                  (remove #(string/includes? (second %) "clojure.core"))
-                  (sort-by #(name (first %))
-                           (partial shell.reepl.sci/compare-completion text)))]
-    (->> (filter matches? names)
-         (map #(vector % (str %)))
-         (concat defs)
-         (vec))))
+        sources (ns-sources {:namespaces namespaces
+                             :local-names local-names
+                             :only-ns only-ns
+                             :only-ns-str only-ns-str
+                             :current-ns-str current-ns-str})
+        defs (var-completions namespaces sources text current-ns-str)
+        nss (ns-completions namespaces (or only-ns text))]
+    (vec (concat nss defs))))
 
 (defmethod shell.hierarchy/init :cljs
   [{:keys [on-success]}]

@@ -148,13 +148,15 @@
     (= ns2 "cljs.core") 1
     :else (compare ns1 ns2)))
 
-(defn js-attrs [obj]
+(defn js-attrs
+  [obj]
   (if-not obj
     []
-    (let [_constructor (.-constructor obj)
-          proto (js/Object.getPrototypeOf obj)]
+    (let [proto (js/Object.getPrototypeOf obj)]
       (concat (js/Object.keys obj)
-              (when-not (= proto obj)
+              (when (and proto
+                         (not= proto (.-prototype js/Object))
+                         (not= proto obj))
                 (js-attrs proto))))))
 
 (def exclusions
@@ -186,18 +188,25 @@
 (defn js-completion
   [text prefix]
   (let [parts (vec (.split text "."))
-        completion (or (last parts) "")
-        possibles (js-attrs (reduce aget js/window (butlast parts)))
-        prefix #(->> (conj (vec (butlast parts)) %)
-                     (string/join ".")
-                     (str prefix))]
-    (->> possibles
-         (filter #(not= -1 (.indexOf % completion)))
-         (sort (partial compare-completion text))
-         (map #(vector nil (prefix %)))
-         (remove #(or (string/includes? (second %) "_name$_")
-                      (some (fn [s] (string/starts-with? (second %) s))
-                            exclusions))))))
+        head (or (last parts) "")
+        obj (reduce (fn [acc k] (when-not (nil? acc) (aget acc k)))
+                    js/window
+                    (butlast parts))
+        excluded? (fn [name*]
+                    (or (string/includes? name* "_name$_")
+                        (some #(string/starts-with? name* %)
+                              exclusions)))]
+    (when obj
+      (->> (js-attrs obj)
+           (remove excluded?)
+           (distinct)
+           (filter #(not= -1 (.indexOf % head)))
+           (sort (partial compare-completion head))
+           (map (fn [name*]
+                  (vector nil
+                          (str prefix
+                               (string/join "." (conj (vec (butlast parts))
+                                                      name*))))))))))
 
 (defn doc-from-sym
   [sym]

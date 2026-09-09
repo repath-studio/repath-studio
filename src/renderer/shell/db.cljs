@@ -56,10 +56,10 @@
 (def ShellCompletionPosition
   [:or pos-int? zero?])
 
-(def ShellCompletionWord
+(def ShellCompletionItem
   [:tuple
-   [string? {:title "namespaced symbol"}]
-   [string? {:title "name"}]])
+   [:or nil? string? symbol?]
+   [string?]])
 
 (def ShellCompletion
   [:map {:closed true}
@@ -67,7 +67,7 @@
    [:show-all boolean?]
    [:initial-text string?]
    [:pos ShellCompletionPosition]
-   [:words {:default []} ShellCompletionWord]])
+   [:words {:default []} [:vector ShellCompletionItem]]])
 
 (def Shell
   [:map {:closed true}

@@ -1,6 +1,7 @@
 
 [default.extend-words]
 edn = "edn"
+juxt = "juxt"
 
 [files]
 extend-exclude = ["src/lang/*.edn", "SECURITY.md", "android", "ios"]
