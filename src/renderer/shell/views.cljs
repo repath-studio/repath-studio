@@ -263,13 +263,15 @@
   [s]
   (let [theme-mode @(rf/subscribe [::theme.subs/computed-mode])
         lang @(rf/subscribe [::shell.subs/active-language])
-        [fn-name signature doc] (filter seq (string/split-lines s))]
+        lines (string/split-lines s)
+        signature (when (seq (nth lines 2 nil)) (nth lines 2 nil))
+        doc (string/join "\n" (drop-while string/blank? (drop 3 lines)))]
     [:div.bg-primary.drop-shadow.p-4.absolute.bottom-full.flex.flex-col.gap-4
-     [:div.font-semibold
-      [static-highlight (str fn-name) theme-mode lang]]
-     (when signature
+     [:div.font-semibold.text-normal.text-sm
+      [static-highlight (str (first lines)) theme-mode lang]]
+     (when (seq signature)
        [static-highlight signature theme-mode lang])
-     (when doc [:div doc])]))
+     (when (seq doc) [:div doc])]))
 
 (defn completion-list
   []

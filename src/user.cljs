@@ -80,7 +80,12 @@
   (rf/dispatch [::element.events/add el]))
 
 (defn ^:export circle
-  "Creates a circle."
+  "Creates a circle.
+
+   Arguments:
+   - `cx`: The x-axis coordinate of the center point.
+   - `cy`: The y-axis coordinate of the center point.
+   - `r`: The radius of the circle."
   [[cx cy] r & {:as attrs}]
   (create {:tag :circle
            :attrs (merge {:cx cx
@@ -88,7 +93,13 @@
                           :r r} attrs)}))
 
 (defn ^:export rect
-  "Creates a rectangle."
+  "Creates a rectangle.
+
+   Arguments:
+   - `x`: The x-axis coordinate.
+   - `y`: The y-axis coordinate.
+   - `width`: The horizontal length of the rectangle.
+   - `height`: The vertical length of the rectangle."
   [x y width height & {:as attrs}]
   (create {:tag :rect
            :attrs (merge {:x x
@@ -97,7 +108,13 @@
                           :height height} attrs)}))
 
 (defn ^:export line
-  "Creates a line."
+  "Creates a line.
+
+   Arguments:
+   - `x1`: The first x-coordinate of the line.
+   - `y1`: The first y-coordinate of the line.
+   - `x2`: The second x-coordinate of the line.
+   - `y2`: The second y-coordinate of the line."
   [[x1 y1] [x2 y2] & {:as attrs}]
   (create {:tag :line
            :attrs (merge {:x1 x1
@@ -107,28 +124,46 @@
                           :stroke "#000000"} attrs)}))
 
 (defn ^:export polygon
-  "Creates a polygon."
+  "Creates a polygon.
+
+   Arguments:
+   - `points`: The list of points of the polygon. Each point is a
+               pair of X and Y coordinates in the user coordinate system."
   [points & {:as attrs}]
   (create {:tag :polygon
            :attrs (merge {:points (string/join " " (flatten points))}
                          attrs)}))
 
 (defn ^:export polyline
-  "Creates a polyline."
+  "Creates a polyline.
+
+   Arguments:
+   - `points`: The list of points of the polyline. Each point is a
+               pair of X and Y coordinates in the user coordinate system."
   [points & {:as attrs}]
   (create {:tag :polyline
            :attrs (merge {:points (string/join " " (flatten points))}
                          attrs)}))
 
 (defn ^:export path
-  "Creates a path."
+  "Creates a path.
+
+   Arguments:
+   - `path-commands`: The path commands that define the path to be drawn."
   [path-commands & {:as attrs}]
   (create {:tag :path
            :attrs (merge {:d (string/join " " (flatten path-commands))}
                          attrs)}))
 
 (defn ^:export image
-  "Creates an image."
+  "Creates an image.
+
+   Arguments:
+   - `x`: The x-axis coordinate.
+   - `y`: The y-axis coordinate.
+   - `width`: The horizontal length of the image.
+   - `height`: The vertical length of the image.
+   - `href`: The link to the image resource as a reference URL."
   [[x y] width height href & {:as attrs}]
   (create {:tag :image
            :attrs (merge {:x x
@@ -138,7 +173,12 @@
                           :href href} attrs)}))
 
 (defn ^:export text
-  "Creates a text element."
+  "Creates a text element.
+
+   Arguments:
+   - `x`: The x-axis coordinate.
+   - `y`: The y-axis coordinate.
+   - `content`: The text content."
   [[x y] content & {:as attrs}]
   (create {:tag :text
            :content content
