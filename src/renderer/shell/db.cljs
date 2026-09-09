@@ -63,11 +63,11 @@
 
 (def ShellCompletion
   [:map {:closed true}
-   [:active boolean?]
-   [:show-all boolean?]
-   [:initial-text string?]
-   [:pos ShellCompletionPosition]
-   [:words {:default []} [:vector ShellCompletionItem]]])
+   [:active {:optional true} boolean?]
+   [:show-all {:optional true} boolean?]
+   [:initial-text {:optional true} string?]
+   [:pos {:optional true} ShellCompletionPosition]
+   [:words {:optional true} [:vector ShellCompletionItem]]])
 
 (def Shell
   [:map {:closed true}
