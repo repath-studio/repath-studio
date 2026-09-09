@@ -58,8 +58,8 @@
 (rf/reg-fx
  ::replace-current-word
  (fn [s]
-   (when-let [inst (some-> (utils.dom/get-shell-element)
-                           (EditorView.findFromDOM))]
+   (when-let [inst (some->> (utils.dom/get-shell-element)
+                            (.findFromDOM EditorView))]
      (when-let [current-word (utils.codemirror/current-word inst)]
        (.dispatch inst #js {:changes #js {:from (.-from current-word)
                                           :to (.-to current-word)
