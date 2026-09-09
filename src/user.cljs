@@ -22,21 +22,35 @@
   (rf/dispatch [::shell.events/clear-items]))
 
 (defn ^:export translate
-  "Moves the selected elements."
+  "Moves the selected elements.
+
+   Arguments:
+   - `x`: The x-axis offset.
+   - `y`: The y-axis offset."
   ([offset]
    (rf/dispatch [::element.events/translate offset]))
   ([x y]
    (translate [x y])))
 
 (defn ^:export place
-  "Places the selected elements to a specific position."
+  "Places the selected elements to a specific position.
+
+   Arguments:
+   - `x`: The x-axis coordinate.
+   - `y`: The y-axis coordinate."
   ([pos]
    (rf/dispatch [::element.events/place pos]))
   ([x y]
    (place [x y])))
 
 (defn ^:export scale
-  "Scales the selected elements."
+  "Scales the selected elements.
+
+   Arguments:
+   - `ratio`: The scale ratio (for both axis).
+
+   - `x`: The x-axis ratio
+   - `y`: The y-axis ratio"
   ([ratio]
    (rf/dispatch [::element.events/scale (if (number? ratio)
                                           [ratio ratio]
@@ -45,7 +59,10 @@
    (rf/dispatch [::element.events/scale [x y]])))
 
 (defn ^:export fill
-  "Fills the selected elements."
+  "Fills the selected elements.
+
+   Arguments:
+   - `color`: The color of the fill."
   [color]
   (rf/dispatch [::element.events/set-attr :fill color]))
 
@@ -186,17 +203,27 @@
                           :y y} attrs)}))
 
 (defn ^:export set-attr
-  "Sets the attribute of the selected elements."
+  "Sets the attribute of the selected elements.
+
+   Arguments:
+   - `k`: The name (key) of the attribute.
+   - `v`: The value of the attribute."
   [k v]
   (rf/dispatch [::element.events/set-attr (keyword k) v]))
 
 (defn ^:export set-fill
-  "Sets the fill color of the editor."
+  "Sets the fill color of the editor.
+
+   Arguments:
+   - `color`: The color of the fill."
   [color]
   (rf/dispatch [::document.events/set-attr :fill color]))
 
 (defn ^:export set-stroke
-  "Sets the stroke color of the editor."
+  "Sets the stroke color of the editor.
+
+   Arguments:
+   - `color`: The color of the stroke."
   [color]
   (rf/dispatch [::document.events/set-attr :stroke color]))
 
