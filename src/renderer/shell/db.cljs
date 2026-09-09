@@ -59,7 +59,7 @@
 (def ShellCompletionItem
   [:tuple
    [:or nil? string? symbol?]
-   [string?]])
+   [:or nil? string?]])
 
 (def ShellCompletion
   [:map {:closed true}
@@ -74,7 +74,7 @@
    [:verbose {:default false} boolean?]
    [:languages {:default {}} [:map-of ShellLanguageId ShellLanguage]]
    [:active-language {:default :cljs} keyword?]
-   [:completion {:optional true} ShellCompletion]])
+   [:completion {:optional true} [:maybe ShellCompletion]]])
 
 (def default-lang (m/decode ShellLanguage
                             {}
