@@ -8,22 +8,14 @@
    [renderer.utils.codemirror :as utils.codemirror]
    [renderer.utils.dom :as utils.dom]))
 
-(defonce log-fn (atom nil))
-
 (defn log
   [& more]
-  (@log-fn more))
-(defn set-print!
-  [f]
-  (set! cljs.core/*print-newline* false)
-  (set-print-err-fn! f)
-  (set-print-fn! f)
-  (reset! log-fn f))
+  (@shell.reepl.sci/log-fn more))
 
 (rf/reg-fx
  ::init
  (fn [[event params]]
-   (set-print! #(rf/dispatch (conj event :info %)))
+   (shell.reepl.sci/set-print! #(rf/dispatch (conj event :info %)))
    (shell.reepl.sci/init! (fn [error]
                             (if error
                               (rf/dispatch (conj (get params :on-error) error))
@@ -45,8 +37,7 @@
  (fn [language]
    (log "Welcome to your " (string/upper-case (name language)) " shell!"
         "You can create or modify shapes using the command line.")
-   (log "See "
-        [:url "https://repath.studio/get-started/interactive-shell/"]
+   (log "See " [:url "https://repath.studio/get-started/interactive-shell/"]
         " for examples.")
    (println)
    (shell.hierarchy/welcome language)))

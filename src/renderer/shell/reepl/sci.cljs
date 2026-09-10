@@ -17,6 +17,14 @@
 (defonce ctx (atom nil))
 (defonce current-ns-ref (atom 'user))
 (defonce dsl-data (atom nil))
+(defonce log-fn (atom nil))
+
+(defn set-print!
+  [f]
+  (set! cljs.core/*print-newline* false)
+  (set-print-err-fn! f)
+  (set-print-fn! f)
+  (reset! log-fn f))
 
 (defn fetch-file!
   "Very simple implementation of XMLHttpRequests that given a file path
