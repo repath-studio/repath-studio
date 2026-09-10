@@ -9,6 +9,7 @@
   --error: lch(70% 70 30);
   --warning: lch(70% 70 85);
   --success: lch(70% 70 145);
+  --info: lch(70% 70 225);
 
   --backdrop: rgb(0 0 0 / 0.7);
 
@@ -26,6 +27,7 @@
   --error: lch(40% 70 30);
   --warning: lch(40% 70 85);
   --success: lch(40% 70 145);
+  --info: lch(40% 70 225);
 
   --backdrop: rgb(0 0 0 / 0.3);
 }

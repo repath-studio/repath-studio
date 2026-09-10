@@ -36,6 +36,7 @@
   --color-error: var(--error);
   --color-warning: var(--warning);
   --color-success: var(--success);
+  --color-info: var(--info);
 
   --color-backdrop: var(--backdrop);
 }

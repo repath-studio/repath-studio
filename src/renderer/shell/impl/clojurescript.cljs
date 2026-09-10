@@ -6,6 +6,7 @@
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.hierarchy :as hierarchy]
+   [renderer.shell.effects :refer [log]]
    [renderer.shell.events :as-alias shell.events]
    [renderer.shell.hierarchy :as shell.hierarchy]
    [renderer.shell.reepl.sci :as shell.reepl.sci]
@@ -99,14 +100,14 @@
 (defmethod shell.hierarchy/help :cljs
   [_language command]
   (if-let [f (get (ns-publics 'user) (symbol command))]
-    (print (:name (meta f)) " - " (:doc (meta f)))
-    (println "Command not found:" command)))
+    (log [:command (str (:name (meta f)))] " - " (:doc (meta f)))
+    (log "Command not found:" command)))
 
 (defmethod shell.hierarchy/welcome :cljs
   [_language]
-  (println "Global javascript objects and functions are accessible using the js"
-           "namespace (e.g. `js/document`).")
-  (println "Type `(help)` to see a list of commands."))
+  (log "Global javascript objects and functions are accessible using the `"
+       [:command "js/"] "` namespace (e.g. `" [:command "js/document"] "`).")
+  (log "Type `" [:command "(help)"] "` to see a list of commands."))
 
 (defmethod shell.hierarchy/evaluate :cljs
   [_language s]

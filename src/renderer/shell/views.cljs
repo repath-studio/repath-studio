@@ -1,10 +1,8 @@
 (ns renderer.shell.views
   (:require
    ["@codemirror/autocomplete" :refer [closeBrackets]]
-   ["@codemirror/language" :refer [bracketMatching defaultHighlightStyle]]
-   ["@codemirror/theme-one-dark" :refer [oneDarkHighlightStyle]]
+   ["@codemirror/language" :refer [bracketMatching]]
    ["@codemirror/view" :refer [EditorView]]
-   ["@lezer/highlight" :refer [highlightCode]]
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
    [clojure.string :as string]
    [re-frame.core :as rf]
@@ -26,32 +24,6 @@
    [renderer.utils.dom :as utils.dom]
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]))
-
-(defn theme-highlighters
-  [theme-mode]
-  (if (= theme-mode :light)
-    #js [defaultHighlightStyle]
-    #js [oneDarkHighlightStyle defaultHighlightStyle]))
-
-(defn highlight-piece
-  [i [text class]]
-  (cond->> text
-    (seq class)
-    (into [:span {:key i
-                  :class class}])))
-
-(defn static-highlight
-  "https://lezer.codemirror.net/examples/highlight/#running-a-highlighter"
-  [text theme-mode lang]
-  (let [parser (shell.hierarchy/parser lang)
-        tree (.parse parser text)
-        pieces (atom [])]
-    (highlightCode text tree (theme-highlighters theme-mode)
-                   (fn [piece classes]
-                     (swap! pieces conj [(str piece) (str classes)]))
-                   (fn [] (swap! pieces conj ["\n" nil])))
-    [:pre.p-0.m-0
-     (map-indexed highlight-piece @pieces)]))
 
 (defn should-eval?
   [inst evt]
@@ -189,15 +161,28 @@
            :on-click #(rf/dispatch [::panel.events/toggle :repl-history])}
           [views/icon (if repl-history? "chevron-down" "chevron-up")]]])]]))
 
+(defn- url
+  [s]
+  [:button.text-info.cursor-pointer.underline
+   {:on-click #(rf/dispatch [::events/open-remote-url s])}
+   s])
+
+(defn- command
+  [s {:keys [theme-mode language]}]
+  [views/static-highlight s theme-mode (shell.hierarchy/parser language)
+   {:class "inline cursor-pointer"
+    :on-click #(rf/dispatch [::shell.events/set-text s])}])
+
 (defmulti item (fn [i _opts] (:type i)))
 
 (defmethod item :input
   [{{:keys [current-ns text]} :value} {:keys [theme-mode language]}]
   [:div.flex.gap-2
    [:div.text-foreground-muted.font-bold (str current-ns "=>")]
-   [:div.flex-1.cursor-pointer.break-words
-    {:on-click #(rf/dispatch [::shell.events/set-text text])}
-    [static-highlight text theme-mode language]]])
+   [views/static-highlight text theme-mode
+    (shell.hierarchy/parser language)
+    {:class "flex-1 cursor-pointer break-words cursor-pointer"
+     :on-click #(rf/dispatch [::shell.events/set-text text])}]])
 
 (defmethod item :error
   [{:keys [value]} opts]
@@ -208,6 +193,19 @@
   [{:keys [value]} opts]
   [:div.flex-1.break-words.select-text
    [show-value value nil opts]])
+
+(defmethod item :info
+  [{:keys [value]} opts]
+  (->> value
+       (map (fn [segment]
+              (if (vector? segment)
+                (let [[protocol text] segment]
+                  (case protocol
+                    :url (url text)
+                    :command (command text opts)
+                    :else (str segment)))
+                (str segment))))
+       (into [:div.flex-1.break-words.select-text])))
 
 (defn maybe-fn-docs
   [f]
@@ -268,9 +266,11 @@
         doc (string/join "\n" (drop-while string/blank? (drop 3 lines)))]
     [:div.bg-primary.drop-shadow.p-4.absolute.bottom-full.flex.flex-col.gap-4
      [:div.font-semibold.text-normal.text-sm
-      [static-highlight (str (first lines)) theme-mode lang]]
+      [views/static-highlight (str (first lines)) theme-mode
+       (shell.hierarchy/parser lang)]]
      (when (seq signature)
-       [static-highlight signature theme-mode lang])
+       [views/static-highlight signature theme-mode
+        (shell.hierarchy/parser lang)])
      (when (seq doc) [:div doc])]))
 
 (defn completion-list

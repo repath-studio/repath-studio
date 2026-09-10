@@ -7,8 +7,9 @@
                                    insertNewlineAndIndent]]
    ["@codemirror/language" :refer [syntaxHighlighting defaultHighlightStyle]]
    ["@codemirror/state" :refer [Compartment Prec]]
-   ["@codemirror/theme-one-dark" :refer [oneDark]]
+   ["@codemirror/theme-one-dark" :refer [oneDark oneDarkHighlightStyle]]
    ["@codemirror/view" :refer [EditorView basicSetup keymap]]
+   ["@lezer/highlight" :refer [highlightCode]]
    ["@radix-ui/react-context-menu" :as ContextMenu]
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
    ["@radix-ui/react-hover-card" :as HoverCard]
@@ -390,6 +391,32 @@
       :reagent-render
       (fn [] [:div {:ref ref}])})))
 
+(defn theme-highlighters
+  [theme-mode]
+  (if (= theme-mode :light)
+    #js [defaultHighlightStyle]
+    #js [oneDarkHighlightStyle defaultHighlightStyle]))
+
+(defn highlight-piece
+  [i [text class]]
+  (cond->> text
+    (seq class)
+    (into [:span {:key i
+                  :class class}])))
+
+(defn static-highlight
+  "https://lezer.codemirror.net/examples/highlight/#running-a-highlighter"
+  [text theme-mode parser & {:as props}]
+  (let [tree (.parse parser text)
+        pieces (atom [])]
+    (highlightCode text tree (theme-highlighters theme-mode)
+                   (fn [piece classes]
+                     (swap! pieces conj [(str piece) (str classes)]))
+                   (fn [] (swap! pieces conj ["\n" nil])))
+    [:pre
+     (merge-with-class {:class "p-0 m-0"} props)
+     (map-indexed highlight-piece @pieces)]))
+
 (defn toaster
   [theme]
   [:> Toaster
@@ -469,3 +496,4 @@
       {:class "sr-only"}
       (i18n.views/t (:label props))]
      (into [:div.flex.flex-1.overflow-hidden.w-full] children)]]])
+

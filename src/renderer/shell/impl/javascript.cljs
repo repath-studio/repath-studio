@@ -7,6 +7,7 @@
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.hierarchy :as hierarchy]
+   [renderer.shell.effects :refer [log]]
    [renderer.shell.events :as-alias shell.events]
    [renderer.shell.hierarchy :as shell.hierarchy]
    [renderer.shell.reepl.sci :as shell.reepl.sci]
@@ -37,14 +38,14 @@
 (defmethod shell.hierarchy/help :js
   [_language command]
   (if-let [f (get (ns-publics 'user) (symbol command))]
-    (print (camel-snake-kebab/->camelCaseString (:name (meta f)))
-           " - "
-           (:doc (meta f)))
-    (println "Command not found:" command)))
+    (log [:command (camel-snake-kebab/->camelCaseString (:name (meta f)))]
+         " - "
+         (:doc (meta f)))
+    (log "Command not found:" command)))
 
 (defmethod shell.hierarchy/welcome :js
   [_language]
-  (println "Type `help()` to see a list of commands."))
+  (log "Type " [:command "help()"] " to see a list of commands."))
 
 (defmethod shell.hierarchy/evaluate :js
   [_language s]
