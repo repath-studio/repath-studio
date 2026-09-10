@@ -136,7 +136,7 @@
          (str (shell.reepl.sci/current-ns) "=>")
          [:span.text-foreground-muted
           (i18n.views/t [::loading-language "Loading language..."])])]
-      [:div.flex-1.py-px
+      [:div.flex-1.py-px.content-center
        (when loaded?
          ^{:key lang}
          [code-mirror current-text
@@ -191,7 +191,7 @@
 
 (defmethod item :output
   [{:keys [value]} opts]
-  [:div.flex-1.break-words.select-text
+  [:div.flex-1.whitespace-nowrap.select-text
    [show-value value nil opts]])
 
 (defmethod item :info
@@ -205,7 +205,7 @@
                     :command (command text opts)
                     :else (str segment)))
                 (str segment))))
-       (into [:div.flex-1.break-words.select-text])))
+       (into [:div.flex-1.whitespace-nowrap.select-text])))
 
 (defn maybe-fn-docs
   [f]
