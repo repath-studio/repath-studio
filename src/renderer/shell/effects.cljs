@@ -32,7 +32,7 @@
 (rf/reg-fx
  ::welcome
  (fn [language]
-   (log "Welcome to your " (string/upper-case (name language)) " shell!"
+   (log "Welcome to your " (string/upper-case (name language)) " shell! "
         "You can create or modify shapes using the command line.")
    (log "See " [:url "https://repath.studio/get-started/interactive-shell/"]
         " for examples.")
