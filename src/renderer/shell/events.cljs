@@ -3,18 +3,16 @@
    [re-frame.core :as rf]
    [renderer.app.effects :as-alias app.effects]
    [renderer.app.events :as-alias app.events :refer [persist]]
-   [renderer.effects :as-alias effects]
    [renderer.shell.db :as shell.db]
    [renderer.shell.effects :as-alias shell.effects]
    [renderer.shell.handlers :as shell.handlers]
    [renderer.shell.reepl.sci :as shell.reepl.sci]
-   [renderer.utils.dom :as utils.dom]
    [renderer.window.handlers :as window.handlers]))
 
 (rf/reg-event-fx
  ::focus
  (fn [_ _]
-   {::effects/focus (utils.dom/get-shell-element)}))
+   {::shell.effects/focus nil}))
 
 (rf/reg-event-fx
  ::init
@@ -64,11 +62,12 @@
                :on-success [::language-load-success]
                :on-error [::language-load-error]})))))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  ::clear-items
  [persist]
- (fn [db _]
-   (shell.handlers/clear-items db)))
+ (fn [{:keys [db]} _]
+   {:db (shell.handlers/clear-items db)
+    ::shell.effects/welcome (shell.handlers/active-language db)}))
 
 (rf/reg-event-db
  ::toggle-verbose
@@ -105,11 +104,12 @@
  (fn [db _]
    (shell.handlers/update-history-position db dec)))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  ::set-text
  [persist]
- (fn [db [_ text]]
-   (shell.handlers/set-text db text)))
+ (fn [{:keys [db]} [_ text]]
+   {:db (shell.handlers/set-text db text)
+    ::shell.effects/focus nil}))
 
 (rf/reg-event-db
  ::clear-completion

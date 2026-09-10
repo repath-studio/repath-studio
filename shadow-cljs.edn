@@ -33,8 +33,6 @@
                            (build.schema-graph-generator/hook!)
                            (build.shell-dsl-generator/hook!)]
              :compiler-options {:optimizations :advanced
-                                :output-wrapper false
-                                :pseudo-names true
                                 :closure-defines
                                 {config/version :shadow-git-inject/version}}
 

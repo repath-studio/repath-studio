@@ -17,6 +17,14 @@
 (defonce ctx (atom nil))
 (defonce current-ns-ref (atom 'user))
 (defonce dsl-data (atom nil))
+(defonce log-fn (atom nil))
+
+(defn set-print!
+  [f]
+  (set! cljs.core/*print-newline* false)
+  (set-print-err-fn! f)
+  (set-print-fn! f)
+  (reset! log-fn f))
 
 (defn fetch-file!
   "Very simple implementation of XMLHttpRequests that given a file path
@@ -159,62 +167,25 @@
                          (not= proto obj))
                 (js-attrs proto))))))
 
-(def exclusions
-  ["module$"
-   "clojure$"
-   "cljs$"
-   "at_keyframes_styles_name$"
-   "as__QMARK_qname_"
-   "map_like_QMARK__"
-   "rewrite_clj$"
-   "sci$"
-   "factory_name"
-   "constructor"
-   "fipp$"
-   "shadow$"
-   "day8$"
-   "devtools$"
-   "re_frame$"
-   "reagent$"
-   "camel_snake_kebab$"
-   "malli$"
-   "taoensso$"
-   "get_default_error_fn_"
-   "clj_"
-   "_"
-   "g_"
-   "hickory$"
-   "temp__"])
-
-(defn- excluded?
-  [name*]
-  (or (string/includes? name* "_name$_")
-      (some #(string/starts-with? name* %)
-            exclusions)))
-
 (defonce global-names (atom nil))
 
 (defn refresh-global-names!
   []
   (reset! global-names
           (->> (js-attrs js/window)
-               (remove excluded?)
                (distinct)
-               (vec))))
+               (into []))))
 
 (defn js-completion
   [text prefix]
   (let [parts (vec (.split text "."))
         head (or (last parts) "")
         names (if (seq (butlast parts))
-                (when-let [obj (reduce (fn [acc k]
-                                         (when-not (nil? acc)
-                                           (aget acc k)))
-                                       js/window
-                                       (butlast parts))]
-                  (->> (js-attrs obj)
-                       (remove excluded?)
-                       (distinct)))
+                (some->> (butlast parts)
+                         (reduce (fn [acc k] (when-not (nil? acc) (aget acc k)))
+                                 js/window)
+                         (js-attrs)
+                         (distinct))
                 (or @global-names (refresh-global-names!)))]
     (when (seq names)
       (->> names

@@ -16,6 +16,9 @@
                     (str value ", is not a supported language"))}
    shell-language?])
 
+(def ShellInfoItemProtocol
+  [:enum :url :command])
+
 (def ShellItem
   [:multi {:dispatch :type}
    [:input
@@ -29,6 +32,14 @@
     [:map {:closed true}
      [:type [:= :output]]
      [:value any?]]]
+   [:info
+    [:map {:closed true}
+     [:type [:= :info]]
+     [:value [:or
+              string?
+              [:sequential [:or
+                            string?
+                            [:tuple ShellInfoItemProtocol string?]]]]]]]
    [:error
     [:map {:closed true}
      [:type [:= :error]]

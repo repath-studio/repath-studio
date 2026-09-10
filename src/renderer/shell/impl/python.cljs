@@ -13,6 +13,7 @@
    [renderer.shell.hierarchy :as shell.hierarchy]
    [renderer.shell.reepl.sci :as shell.reepl.sci]
    [renderer.shell.subs :as-alias shell.subs]
+   [renderer.utils.extra :refer [log]]
    [user]))
 
 (hierarchy/derive! :python ::shell.hierarchy/language)
@@ -64,10 +65,10 @@
 
 (defmethod shell.hierarchy/welcome :python
   [_language]
-  (println "The JavaScript scope can be accessed from Python using the js"
-           "module. For example, you can access the document object using"
-           "`js.document`.")
-  (println "Type `help()` to see a list of commands."))
+  (log "The JavaScript scope can be accessed from Python using the js module."
+       "For example, you can access the document object using `"
+       [:command "js.document"] "`.")
+  (log "Type `" [:command "help()"] "` to see a list of commands."))
 
 (defmethod shell.hierarchy/evaluate :python
   [_language s]

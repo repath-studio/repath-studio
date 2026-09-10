@@ -7,7 +7,7 @@
         com.cognitect/transit-clj {:mvn/version "1.0.333"}
         com.taoensso/tempura {:mvn/version "1.5.4"}
         day8.re-frame/test {:mvn/version "0.1.7"}
-        day8.re-frame/tracing {:mvn/version "0.6.2"}
+        day8.re-frame/tracing {:mvn/version "0.9.2"}
         day8/shadow-git-inject {:mvn/version "0.0.10"}
         metosin/malli {:mvn/version "0.20.1"}
         net.mikera/core.matrix {:mvn/version "0.63.0"}
@@ -18,7 +18,7 @@
         re-frame/re-frame {:mvn/version "1.4.7"}
         re-pressed/re-pressed {:mvn/version "0.3.2"}
         reagent/reagent {:mvn/version "2.0.1"}
-        thheller/shadow-cljs {:mvn/version "3.5.0"}}
+        thheller/shadow-cljs {:mvn/version "3.5.1"}}
  :aliases
  {:dev {:extra-paths ["test" "portfolio/src"]
         :extra-deps {cider/cider-nrepl {:mvn/version "0.62.2"}

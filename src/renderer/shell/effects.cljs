@@ -6,29 +6,23 @@
    [renderer.shell.hierarchy :as shell.hierarchy]
    [renderer.shell.reepl.sci :as shell.reepl.sci]
    [renderer.utils.codemirror :as utils.codemirror]
-   [renderer.utils.dom :as utils.dom]))
-
-(defn print-fn
-  [log]
-  (fn [& args]
-    (if (= 1 (count args))
-      (log (first args))
-      (log args))))
-
-(defn set-print!
-  [log]
-  (set! cljs.core/*print-newline* false)
-  (set-print-err-fn! (print-fn log))
-  (set-print-fn! (print-fn log)))
+   [renderer.utils.dom :as utils.dom]
+   [renderer.utils.extra :refer [log]]))
 
 (rf/reg-fx
  ::init
  (fn [[event params]]
-   (set-print! #(rf/dispatch (conj event :output %)))
+   (shell.reepl.sci/set-print! #(rf/dispatch (conj event :info %)))
    (shell.reepl.sci/init! (fn [error]
                             (if error
                               (rf/dispatch (conj (get params :on-error) error))
                               (shell.hierarchy/init params))))))
+
+(rf/reg-fx
+ ::focus
+ (fn []
+   (some-> (utils.dom/get-shell-element)
+           (.focus))))
 
 (rf/reg-fx
  ::init-language
@@ -38,8 +32,10 @@
 (rf/reg-fx
  ::welcome
  (fn [language]
-   (println "Welcome to your " (string/upper-case (name language)) " shell!")
-   (println "You can create or modify shapes using the command line.")
+   (log "Welcome to your " (string/upper-case (name language)) " shell!"
+        "You can create or modify shapes using the command line.")
+   (log "See " [:url "https://repath.studio/get-started/interactive-shell/"]
+        " for examples.")
    (println)
    (shell.hierarchy/welcome language)))
 
