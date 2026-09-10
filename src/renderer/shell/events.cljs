@@ -62,11 +62,12 @@
                :on-success [::language-load-success]
                :on-error [::language-load-error]})))))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  ::clear-items
  [persist]
- (fn [db _]
-   (shell.handlers/clear-items db)))
+ (fn [{:keys [db]} _]
+   {:db (shell.handlers/clear-items db)
+    ::shell.effects/welcome (shell.handlers/active-language db)}))
 
 (rf/reg-event-db
  ::toggle-verbose
