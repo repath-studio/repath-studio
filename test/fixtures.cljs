@@ -212,6 +212,10 @@
  (fn [_]))
 
 (rf/reg-fx
+ ::shell.effects/focus
+ (fn [_]))
+
+(rf/reg-fx
  ::shell.effects/init
  (fn [[_event params]]
    (rf/dispatch (:on-success params))))

@@ -35,8 +35,10 @@
    [:info
     [:map {:closed true}
      [:type [:= :info]]
-     [:value [:or string?
-              [:sequential [:or string?
+     [:value [:or
+              string?
+              [:sequential [:or
+                            string?
                             [:tuple ShellInfoItemProtocol string?]]]]]]]
    [:error
     [:map {:closed true}

@@ -1,4 +1,6 @@
-(ns renderer.utils.extra)
+(ns renderer.utils.extra
+  (:require
+   [renderer.shell.reepl.sci :as shell.reepl.sci]))
 
 (defn rpartial
   "Like partial, takes a function f and fewer than the normal arguments to f,
@@ -7,3 +9,7 @@
   [f & bound-args]
   (fn [& args]
     (apply f (concat args bound-args))))
+
+(defn log
+  [& more]
+  (@shell.reepl.sci/log-fn more))

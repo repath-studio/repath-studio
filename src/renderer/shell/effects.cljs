@@ -6,11 +6,8 @@
    [renderer.shell.hierarchy :as shell.hierarchy]
    [renderer.shell.reepl.sci :as shell.reepl.sci]
    [renderer.utils.codemirror :as utils.codemirror]
-   [renderer.utils.dom :as utils.dom]))
-
-(defn log
-  [& more]
-  (@shell.reepl.sci/log-fn more))
+   [renderer.utils.dom :as utils.dom]
+   [renderer.utils.extra :refer [log]]))
 
 (rf/reg-fx
  ::init

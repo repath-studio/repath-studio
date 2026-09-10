@@ -6,11 +6,11 @@
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.hierarchy :as hierarchy]
-   [renderer.shell.effects :refer [log]]
    [renderer.shell.events :as-alias shell.events]
    [renderer.shell.hierarchy :as shell.hierarchy]
    [renderer.shell.reepl.sci :as shell.reepl.sci]
    [renderer.shell.subs :as-alias shell.subs]
+   [renderer.utils.extra :refer [log]]
    [user]))
 
 (hierarchy/derive! :cljs ::shell.hierarchy/language)
