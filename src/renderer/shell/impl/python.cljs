@@ -58,7 +58,7 @@
 (defmethod shell.hierarchy/help :python
   [_language command]
   (if-let [f (get (ns-publics 'user) (symbol command))]
-    (print (camel-snake-kebab/->snake_case_string (:name (meta f)))
+    (print [:command (camel-snake-kebab/->snake_case_string (:name (meta f)))]
            " - "
            (:doc (meta f)))
     (println "Command not found:" command)))
