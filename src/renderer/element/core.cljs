@@ -242,7 +242,7 @@
               {:id :boolean/exclude
                :label [::element.events/boolean-exclude]
                :icon "exclude"
-               :event [::element.events/boolean-exclude]
+               :event [::element.events/boolean-operation :exclude]
                :shortcuts [{:keyCode (utils.key/codes "E")
                             :ctrlKey true}]
                :enabled [::element.subs/multiple-selected?]}])
@@ -251,7 +251,7 @@
               {:id :boolean/unite
                :label [::element.events/boolean-unite]
                :icon "unite"
-               :event [::element.events/boolean-unite]
+               :event [::element.events/boolean-operation :unite]
                :shortcuts [{:keyCode (utils.key/codes "U")
                             :ctrlKey true}]
                :enabled [::element.subs/multiple-selected?]}])
@@ -260,7 +260,7 @@
               {:id :boolean/intersect
                :label [::element.events/boolean-intersect]
                :icon "intersect"
-               :event [::element.events/boolean-intersect]
+               :event [::element.events/boolean-operation :intersect]
                :shortcuts [{:keyCode (utils.key/codes "I")
                             :ctrlKey true}]
                :enabled [::element.subs/multiple-selected?]}])
@@ -269,7 +269,7 @@
               {:id :boolean/subtract
                :label [::element.events/boolean-subtract]
                :icon "subtract"
-               :event [::element.events/boolean-subtract]
+               :event [::element.events/boolean-operation :subtract]
                :shortcuts [{:keyCode (utils.key/codes "BACKSLASH")
                             :ctrlKey true}]
                :enabled [::element.subs/multiple-selected?]}])
@@ -278,7 +278,7 @@
               {:id :boolean/divide
                :label [::element.events/boolean-divide]
                :icon "divide"
-               :event [::element.events/boolean-divide]
+               :event [::element.events/boolean-operation :divide]
                :shortcuts [{:keyCode (utils.key/codes "D")
                             :ctrlKey true}]
                :enabled [::element.subs/multiple-selected?]}])
