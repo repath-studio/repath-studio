@@ -13,7 +13,6 @@
    [electron.file :as file]))
 
 (defonce main-window (atom nil))
-(defonce loading-window (atom nil))
 
 (defn send-to-renderer
   ([channel]
@@ -107,7 +106,6 @@
 (defn on-ready-to-show
   [^js window]
   (.show ^js @main-window)
-  (.close ^js @loading-window)
   (.initialize log)
 
   (send-to-renderer (if (.isMaximized window)
@@ -143,8 +141,7 @@
   (when config/debug?
     (.install devtron))
 
-  (.once ^js @main-window "persisted-state-restored"
-         #(on-ready-to-show @main-window))
+  (.on ^js @main-window "ready-to-show" #(on-ready-to-show @main-window))
 
   (set-window-open-handler)
 

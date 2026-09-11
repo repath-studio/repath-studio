@@ -5,7 +5,7 @@
 
 (def Window
   [:map {:closed true}
-   [:maximized {:default true} boolean?]
+   [:maximized {:default false} boolean?]
    [:minimized {:default false} boolean?]
    [:fullscreen {:default false} boolean?]
    [:focused {:default false} boolean?]
