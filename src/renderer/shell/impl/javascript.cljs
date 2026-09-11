@@ -41,7 +41,7 @@
     (log [:command (camel-snake-kebab/->camelCaseString (:name (meta f)))]
          " - "
          (:doc (meta f)))
-    (log "Command not found:" command)))
+    (log "Command not found: " command)))
 
 (defmethod shell.hierarchy/welcome :js
   [_language]

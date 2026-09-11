@@ -101,7 +101,7 @@
   [_language command]
   (if-let [f (get (ns-publics 'user) (symbol command))]
     (log [:command (str (:name (meta f)))] " - " (:doc (meta f)))
-    (log "Command not found:" command)))
+    (log "Command not found: " command)))
 
 (defmethod shell.hierarchy/welcome :cljs
   [_language]
