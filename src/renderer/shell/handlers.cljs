@@ -8,8 +8,6 @@
     :as shell.db
     :refer [ShellCompletionPosition ShellCompletion ShellHistory ShellItem
             ShellLanguageId]]
-   [renderer.shell.hierarchy :as shell.hierarchy]
-   [renderer.utils.codemirror :as utils.codemirror]
    [renderer.utils.math :as utils.math]))
 
 (m/=> active-language [:-> App ShellLanguageId])
@@ -146,26 +144,15 @@
       (assoc-in [:shell :completion :pos] index)
       (assoc-in [:shell :completion :active] true)))
 
-(m/=> complete-word [:-> App JS_Object App])
-(defn complete-word
-  [db ^js inst]
-  (if-let [result (utils.codemirror/current-word inst)]
-    (let [from (.-from result)
-          to (.-to result)
-          text (.sliceDoc (.-state inst) from to)
-          lang (-> db :shell :active-language)
-          words (when-not (empty? text)
-                  (->> (shell.hierarchy/completions lang text)
-                       (take config/max-shell-completions)
-                       (into [])))]
-      (assoc-in db [:shell :completion]
-                (when-not (empty? words)
-                  {:words words
-                   :active (= (second (first words)) text)
-                   :show-all false
-                   :initial-text text
-                   :pos 0})))
-    (update db :shell dissoc :completion)))
+(m/=> set-completions [:-> App JS_Object App])
+(defn set-completions
+  [db text words]
+  (assoc-in db [:shell :completion]
+            {:words words
+             :active (= (second (first words)) text)
+             :show-all false
+             :initial-text text
+             :pos 0}))
 
 (m/=> cycle-pos [:-> ShellCompletion boolean?])
 (defn cycle-pos

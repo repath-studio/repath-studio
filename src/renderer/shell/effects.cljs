@@ -2,6 +2,7 @@
   (:require
    ["@codemirror/view" :refer [EditorView]]
    [clojure.string :as string]
+   [config :as config]
    [re-frame.core :as rf]
    [renderer.shell.hierarchy :as shell.hierarchy]
    [renderer.shell.reepl.sci :as shell.reepl.sci]
@@ -51,12 +52,32 @@
         (catch :default e (rf/dispatch (->> (cljs.core/Throwable->map e)
                                             (conj callback-event :error)))))))
 
+(defn get-editor-from-dom
+  []
+  (some->> (utils.dom/get-shell-element)
+           (.findFromDOM EditorView)))
+
 (rf/reg-fx
  ::replace-current-word
  (fn [s]
-   (when-let [inst (some->> (utils.dom/get-shell-element)
-                            (.findFromDOM EditorView))]
+   (when-let [inst (get-editor-from-dom)]
      (when-let [current-word (utils.codemirror/current-word inst)]
        (.dispatch inst #js {:changes #js {:from (.-from current-word)
                                           :to (.-to current-word)
                                           :insert s}})))))
+
+(rf/reg-fx
+ ::complete-word
+ (fn [[lang {:keys [on-success on-error]}]]
+   (when-let [inst (get-editor-from-dom)]
+     (if-let [result (utils.codemirror/current-word inst)]
+       (let [from (.-from result)
+             to (.-to result)
+             text (.sliceDoc (.-state inst) from to)
+             words (when-not (empty? text)
+                     (->> (shell.hierarchy/completions lang text)
+                          (take config/max-shell-completions)
+                          (into [])))]
+         (rf/dispatch (conj on-success text words)))
+       (rf/dispatch on-error)))))
+

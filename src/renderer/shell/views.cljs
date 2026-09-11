@@ -32,7 +32,7 @@
            (utils.codemirror/in-place? inst))))
 
 (defn on-keyup-handler
-  [options evt inst]
+  [options evt _inst]
   (.stopPropagation evt)
   (case (.-key evt)
     "Escape"
@@ -47,7 +47,7 @@
     (rf/dispatch [::shell.events/set-show-all-completions false])
 
     (when-not (contains? #{"Tab" "Shift"} (.-key evt))
-      (rf/dispatch [::shell.events/complete-word inst]))))
+      (rf/dispatch [::shell.events/complete-word]))))
 
 (defn on-keydown-handler
   [options evt inst]

@@ -117,11 +117,18 @@
  (fn [db _]
    (shell.handlers/clear-completion db)))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  ::complete-word
+ (fn [{:keys [db]} _]
+   {::shell.effects/complete-word [(shell.handlers/active-language db)
+                                   {:on-success [::set-completions]
+                                    :on-error [::clear-completion]}]}))
+
+(rf/reg-event-db
+ ::set-completions
  [persist]
- (fn [db [_ inst]]
-   (shell.handlers/complete-word db inst)))
+ (fn [db [_ text words]]
+   (shell.handlers/set-completions db text words)))
 
 (rf/reg-event-db
  ::set-show-all-completions
