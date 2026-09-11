@@ -55,8 +55,7 @@
 (defn register-ipc-on-events []
   (doseq
    [[e f]
-    [["initialized" #(.close ^js @loading-window)]
-     ["relaunch" #(doto app (.relaunch) (.exit))]
+    [["relaunch" #(doto app (.relaunch) (.exit))]
      ["open-remote-url" open-external]
      ["open-directory" #(.showItemInFolder shell %)]
      ["minimize" #(.minimize ^js @main-window)]
@@ -107,6 +106,10 @@
 
 (defn on-ready-to-show
   [^js window]
+  (.show ^js @main-window)
+  (.close ^js @loading-window)
+  (.initialize log)
+
   (send-to-renderer (if (.isMaximized window)
                       "maximized"
                       "unmaximized"))
@@ -140,13 +143,8 @@
   (when config/debug?
     (.install devtron))
 
-  (.once ^js @main-window
-         "ready-to-show"
-         (fn []
-           (.show ^js @main-window)
-           (.initialize log)))
-
-  (.on ^js @main-window "ready-to-show" #(on-ready-to-show @main-window))
+  (.once ^js @main-window "persisted-state-restored"
+         #(on-ready-to-show @main-window))
 
   (set-window-open-handler)
 
@@ -161,22 +159,6 @@
 
   (.checkForUpdatesAndNotify autoUpdater))
 
-(defn init-loading-window! []
-  (reset! loading-window
-          (BrowserWindow.
-           #js {:width 720
-                :height 576
-                :icon (resource-path "/public/img/icon.png")
-                :show false
-                :alwaysOnTop true
-                :transparent true
-                :frame false}))
-  (.once ^js @loading-window "show" init-main-window!)
-  (.loadURL ^js @loading-window (resource-path "/public/loading.html"))
-  (.once ^js (.-webContents @loading-window)
-         "did-finish-load"
-         #(.show ^js @loading-window)))
-
 (def lock? (.requestSingleInstanceLock app))
 
 (defn ^:export init! []
@@ -184,7 +166,7 @@
     (do (sentry-electron-main/init config/sentry)
         (.on app "window-all-closed" #(when-not (= js/process.platform "darwin")
                                         (.quit app)))
-        (.on app "ready" init-loading-window!)
+        (.on app "ready" init-main-window!)
         (.on app "second-instance" (fn [_event argv _cwd]
                                      (when (.isMinimized ^js @main-window)
                                        (.restore @main-window))

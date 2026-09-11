@@ -33,8 +33,8 @@
   (let [user-agent @(rf/subscribe [::app.subs/user-agent])]
     [:div
      [:p
-      [:img.w-full.grayscale {:src "img/banner.png"
-                              :alt "Repath Studio banner"}]]
+      [:img.w-full {:src "img/banner.png"
+                    :alt "Repath Studio banner"}]]
      [:p.grid.grid-cols-2.gap-3
       {:style {:grid-template-columns "auto 1fr"}}
       [:strong (i18n.views/t [::version "Version:"])]
