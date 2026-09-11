@@ -100,7 +100,9 @@
 (defmethod shell.hierarchy/help :cljs
   [_language command]
   (if-let [f (get (ns-publics 'user) (symbol command))]
-    (log [:command (str (:name (meta f)))] " - " (:doc (meta f)))
+    (log [:command (str (:name (meta f)))]
+         " - "
+         (first (string/split-lines (:doc (meta f)))))
     (log "Command not found: " command)))
 
 (defmethod shell.hierarchy/welcome :cljs

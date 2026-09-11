@@ -60,7 +60,7 @@
   (if-let [f (get (ns-publics 'user) (symbol command))]
     (log [:command (camel-snake-kebab/->snake_case_string (:name (meta f)))]
          " - "
-         (:doc (meta f)))
+         (first (string/split-lines (:doc (meta f)))))
     (log "Command not found:" command)))
 
 (defmethod shell.hierarchy/welcome :python
