@@ -3,6 +3,25 @@
 All notable user facing changes to this project will be documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 0.4.21 (2026-09-11)
+
+**Added**
+
+- History tree labels toggle [#202](https://github.com/repath-studio/repath-studio/pull/202)
+- Clickable shell output items [#205](https://github.com/repath-studio/repath-studio/pull/205)
+
+**Changed**
+
+- Upgrade to CodeMirror 6 [#169](https://github.com/repath-studio/repath-studio/pull/169)
+- Internationalization enhancements [#201](https://github.com/repath-studio/repath-studio/pull/201)
+- Replace bootstrap build with sci [#203](https://github.com/repath-studio/repath-studio/pull/203)
+- Shell completions and docs enhancements [#204](https://github.com/repath-studio/repath-studio/pull/204)
+
+**Fixed**
+
+- Paste styles when attribute of target is not set
+- Python shell initialization on desktop app
+
 ## 0.4.20 (2026-08-30)
 
 **Added**
