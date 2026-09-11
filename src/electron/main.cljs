@@ -52,10 +52,23 @@
              (file/existing-file? (last argv)))
     (file/open (last argv))))
 
+(defn on-initialized
+  []
+  (.show ^js @main-window)
+  (.close ^js @loading-window)
+  (.initialize log)
+
+  (send-to-renderer (if (.isMaximized ^js @main-window)
+                      "maximized"
+                      "unmaximized"))
+  (send-to-renderer (if (.isFullScreen ^js @main-window)
+                      "entered-fullscreen"
+                      "leaved-fullscreen")))
+
 (defn register-ipc-on-events []
   (doseq
    [[e f]
-    [["initialized" #(.close ^js @loading-window)]
+    [["initialized" on-initialized]
      ["relaunch" #(doto app (.relaunch) (.exit))]
      ["open-remote-url" open-external]
      ["open-directory" #(.showItemInFolder shell %)]
@@ -105,15 +118,6 @@
                            (open-external (.-url details))
                            #js {:action "deny"})))
 
-(defn on-ready-to-show
-  [^js window]
-  (send-to-renderer (if (.isMaximized window)
-                      "maximized"
-                      "unmaximized"))
-  (send-to-renderer (if (.isFullScreen window)
-                      "entered-fullscreen"
-                      "leaved-fullscreen")))
-
 (defn resource-path
   [s]
   (url/format #js {:pathname (.join path js/__dirname s)
@@ -139,14 +143,6 @@
 
   (when config/debug?
     (.install devtron))
-
-  (.once ^js @main-window
-         "ready-to-show"
-         (fn []
-           (.show ^js @main-window)
-           (.initialize log)))
-
-  (.on ^js @main-window "ready-to-show" #(on-ready-to-show @main-window))
 
   (set-window-open-handler)
 
