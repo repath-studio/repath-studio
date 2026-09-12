@@ -99,12 +99,12 @@
         (boolean))))
 (rf/reg-sub
  ::some-selected-locked?
- :<- [::non-root-selected]
+ :<- [::selected]
  :-> (comp boolean (partial some :locked)))
 
 (rf/reg-sub
  ::every-selected-locked?
- :<- [::non-root-selected]
+ :<- [::selected]
  :-> (partial every? :locked))
 
 (rf/reg-sub
