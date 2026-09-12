@@ -136,8 +136,7 @@
                [:dispatch [::set-loading false]]
                [::app.effects/hide-splash-screen]
                ;; We flush to render once so we can get the canvas size.
-               [:dispatch ^:flush-dom [::document.events/center]]
-               [:dispatch [::window.events/update-focused]]
+               [:dispatch ^:flush-dom [::window.events/update-focused]]
                [::effects/ipc-send ["initialized"]]
                [::theme.effects/add-listener [::theme.events/set-native-mode]]
                [::app.effects/setup-paper]

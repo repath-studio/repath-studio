@@ -25,7 +25,7 @@
    [:grid {:optional true} boolean?]])
 
 (def Document
-  [:map {:closed true}
+  [:map
    [:id {:optional true
          :persist true} DocumentId]
    [:title {:optional true
@@ -43,7 +43,6 @@
    [:pan {:default [0 0]} Vec2]
    [:elements {:default {}
                :persist true} [:map-of ElementId Element]]
-   [:centered {:optional true} boolean?]
    [:attrs {:default {:fill "lightgray"
                       :stroke "black"
                       :stroke-width "1px"
