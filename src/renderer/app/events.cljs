@@ -110,6 +110,7 @@
   (->> [[js/document "keydown" [::input.events/keyboard] impl.keyboard/->clj]
         [js/document "keyup" [::input.events/keyboard] impl.keyboard/->clj]
         [js/document "fullscreenchange" [::window.events/update-fullscreen]]
+        [js/document "visibilitychange" [::window.events/update-visibility]]
         [js/window "focus" [::window.events/update-focused]]
         [js/window "blur" [::window.events/update-focused]]
         [js/window "resize" [::window.events/update-width]]
@@ -135,10 +136,9 @@
                [:dispatch [::document.events/open-from-args]]
                [:dispatch [::set-loading false]]
                [::app.effects/hide-splash-screen]
-               ;; We flush to render once so we can get the canvas size.
-               [:dispatch ^:flush-dom [::document.events/center]]
-               [:dispatch [::window.events/update-focused]]
                [::effects/ipc-send ["initialized"]]
+               ;; We flush to render once so we can get the canvas size.
+               [:dispatch ^:flush-dom [::window.events/update-focused]]
                [::theme.effects/add-listener [::theme.events/set-native-mode]]
                [::app.effects/setup-paper]
                ;; The status bar needs to be updated later for some reason.

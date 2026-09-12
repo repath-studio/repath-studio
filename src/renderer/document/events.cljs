@@ -457,9 +457,7 @@
  ::set-active
  [persist]
  (fn [db [_ id]]
-   (-> db
-       (document.handlers/set-active id)
-       (document.handlers/center))))
+   (document.handlers/set-active db id)))
 
 (rf/reg-event-db
  ::center

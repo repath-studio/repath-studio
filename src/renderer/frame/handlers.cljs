@@ -49,7 +49,7 @@
   (let [{:keys [document-tabs dom-rect]} db
         delta-rect (merge-with - dom-rect updated-dom-rect)
         offset (matrix/div [(:width delta-rect) (:height delta-rect)] 2)]
-    (if-not (-> db :window :focused)
+    (if-not (-> db :window :visible)
       db
       (reduce (rpartial pan-by offset) db document-tabs))))
 
