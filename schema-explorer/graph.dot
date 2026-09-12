@@ -111,7 +111,7 @@ digraph {
   "Vec2" [label="{Vec2|[:tuple number? number?]\l}", fillcolor="#fff0cd"]
   "Viewbox" [label="{Viewbox|[:tuple [number? \{:title \"x\"\}] [number? \{:title \"y\"\}] [number? \{:title \"width\"\}] [number? \{:title \"height\"\}]]\l}", fillcolor="#fff0cd"]
   "WheelEvent" [label="{WheelEvent|:target any?\l:type [:= \"wheel\"]\l:pointer-pos [:maybe [:ref \"Vec2\"]]\l:delta-x [:maybe number?]\l:delta-y [:maybe number?]\l:delta-z [:maybe number?]\l:alt-key boolean?\l:ctrl-key boolean?\l:meta-key boolean?\l:shift-key boolean?\l}", fillcolor="#fff0cd"]
-  "Window" [label="{Window|:maximized boolean?\l:minimized boolean?\l:fullscreen boolean?\l:focused boolean?\l:width int?\l}", fillcolor="#fff0cd"]
+  "Window" [label="{Window|:maximized boolean?\l:minimized boolean?\l:fullscreen boolean?\l:focused boolean?\l:visible boolean?\l:width int?\l}", fillcolor="#fff0cd"]
   "ZoomFactor" [label="{ZoomFactor|[:and number? [:\>= :any] [:\<= :any]]\l}", fillcolor="#fff0cd"]
  
   "A11y" -> "A11yFilterId" [arrowtail="odiamond"]

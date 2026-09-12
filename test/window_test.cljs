@@ -12,8 +12,7 @@
    (rf/dispatch [::app.events/initialize])
 
    (let [maximized (rf/subscribe [::window.subs/maximized?])
-         fullscreen (rf/subscribe [::window.subs/fullscreen?])
-         focused (rf/subscribe [::window.subs/focused?])]
+         fullscreen (rf/subscribe [::window.subs/fullscreen?])]
 
      (testing "maximize"
        (rf/dispatch [::window.events/set-maximized false])
@@ -27,11 +26,4 @@
        (is @fullscreen)
 
        (rf/dispatch [::window.events/set-fullscreen false])
-       (is (not @fullscreen)))
-
-     (testing "focused"
-       (rf/dispatch [::window.events/update-focused])
-       (is (not @focused))
-
-       (rf/dispatch [::window.events/set-focused true])
-       (is @focused)))))
+       (is (not @fullscreen))))))

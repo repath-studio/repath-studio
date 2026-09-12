@@ -22,11 +22,6 @@
  (fn [db [_ state]]
    (assoc-in db [:window :minimized] state)))
 
-(rf/reg-event-db
- ::set-focused
- (fn [db [_ state]]
-   (assoc-in db [:window :focused] state)))
-
 (rf/reg-event-fx
  ::update-focused
  [(rf/inject-cofx ::window.effects/focused)]
@@ -49,6 +44,12 @@
  [(rf/inject-cofx ::window.effects/fullscreen)]
  (fn [{:keys [db fullscreen]} _]
    {:db (assoc-in db [:window :fullscreen] fullscreen)}))
+
+(rf/reg-event-fx
+ ::update-visibility
+ [(rf/inject-cofx ::window.effects/visible)]
+ (fn [{:keys [db visible]} _]
+   {:db (assoc-in db [:window :visible] visible)}))
 
 (rf/reg-event-fx
  ::close
