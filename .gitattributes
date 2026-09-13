@@ -1,3 +1,2 @@
 src/lang/**                     linguist-generated=true
-src/renderer/icon/defaults.cljs linguist-generated=true
 schema-explorer/graph.dot       linguist-generated=true
