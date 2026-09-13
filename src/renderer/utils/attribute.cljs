@@ -1,9 +1,9 @@
 (ns renderer.utils.attribute
   (:require
-   ["@mdn/browser-compat-data" :as bcd]
    ["mdn-data" :as mdn]
    [camel-snake-kebab.core :as camel-snake-kebab]
    [clojure.string :as string]
+   [generated.attribute-data :as attribute-data]
    [malli.core :as m]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.element.db :as element.db :refer [ElementAttrs ElementTag]]
@@ -17,7 +17,7 @@
 
 (def svg-data
   "https://github.com/mdn/browser-compat-data"
-  (js->clj (.-svg bcd) :keywordize-keys true))
+  attribute-data/data)
 
 (def core #{:id :class :style})
 

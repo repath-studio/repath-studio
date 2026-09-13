@@ -1,15 +1,15 @@
 (ns pages.components
   (:require
+   [generated.icons :as icons]
    [portfolio.reagent-18 :refer-macros [defscene]]
    [re-frame.core :as rf]
    [renderer.i18n.subs]
-   [renderer.icon.defaults :as icon.defaults]
    [renderer.views :as views]))
 
 (rf/reg-sub
  :renderer.icon.subs/path-data
  (fn [_ [_ id]]
-   (get-in icon.defaults/icons [id :path])))
+   (get-in icons/defaults [id :path])))
 
 (defscene ^:export buttons
   :title "Buttons"
@@ -92,7 +92,7 @@
   []
   [:div.flex
    [:div.flex.flex-wrap.gap-2.p-3
-    (for [[k _v] icon.defaults/icons]
+    (for [[k _v] icons/defaults]
       ^{:key k}
       [:div {:title k}
        [views/icon k]])]

@@ -1,6 +1,7 @@
 (ns renderer.app.db
   (:require
    [config :as config]
+   [generated.icons :as icons]
    [malli.core :as m]
    [malli.transform :as m.transform]
    [renderer.a11y.db :refer [A11y]]
@@ -14,7 +15,6 @@
                              LanguageId
                              LanguageRegistry]]
    [renderer.icon.db :refer [Icons]]
-   [renderer.icon.defaults :as icon.defaults]
    [renderer.input.db :refer [PointerEvent PointerId]]
    [renderer.menubar.db :refer [Menubar]]
    [renderer.panel.db :as panel.db :refer [Panel PanelId]]
@@ -89,7 +89,7 @@
                 :persist true} LanguageId]
    [:system-lang {:optional true} LanguageCodeIdentifier]
    [:languages {:default {}} LanguageRegistry]
-   [:icons {:default icon.defaults/icons} Icons]
+   [:icons {:default icons/defaults} Icons]
    [:platform {:optional true} Platform]
    [:versions {:optional true} [:maybe map?]]
    [:standalone {:optional true} boolean?]
