@@ -1,4 +1,4 @@
-(ns build.schema-graph-generator
+(ns build.generator.schema-graph
   "Shadow-cljs build hook that watches src/renderer/**/db.cljs files and
    generates a DOT graph of the app's Malli schemas."
   (:require
@@ -18,7 +18,7 @@
   "LispReader$Resolver that returns namespace aliases unchanged so that
    ::alias/kw is read as :alias/kw rather than throwing."
   (reify clojure.lang.LispReader$Resolver
-    (currentNS [_] (symbol "build.schema-graph-generator"))
+    (currentNS [_] (symbol "build.generator.schema-graph"))
     (resolveClass [_ _sym] nil)
     (resolveAlias [_ sym] sym)
     (resolveVar [_ _sym] nil)))

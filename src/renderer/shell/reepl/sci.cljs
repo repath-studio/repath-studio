@@ -3,7 +3,7 @@
    ClojureScript interpreter, against the app's own namespaces.
 
    Completions and docs come from the build-time generated `shell-dsl` data
-   namespace (see build.shell-dsl-generator), falling back to the
+   namespace (see build.generator.shell-dsl), falling back to the
    compiler-inlined `user` namespace metadata for vars it does not document."
   (:require
    [clojure.string :as string]
