@@ -14,10 +14,7 @@
  ::init
  (fn [[event params]]
    (shell.reepl.sci/set-print! #(rf/dispatch (conj event :info %)))
-   (shell.reepl.sci/init! (fn [error]
-                            (if error
-                              (rf/dispatch (conj (get params :on-error) error))
-                              (shell.hierarchy/init params))))))
+   (shell.hierarchy/init params)))
 
 (rf/reg-fx
  ::focus

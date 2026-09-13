@@ -2,22 +2,18 @@
   "Evaluates shell forms with [sci](https://github.com/babashka/sci), a small
    ClojureScript interpreter, against the app's own namespaces.
 
-   Completions and docs come from a build-time generated data file (see
-   build.shell-dsl-generator) and fall back to the compiler-inlined `user`
-   namespace metadata when that file is unavailable."
+   Completions and docs come from the build-time generated `shell-dsl` data
+   namespace (see build.shell-dsl-generator), falling back to the
+   compiler-inlined `user` namespace metadata for vars it does not document."
   (:require
-   [clojure.edn]
    [clojure.string :as string]
+   [generated.shell-dsl :as shell-dsl]
    [sci.core :as sci]
-   [user])
-  (:import goog.net.XhrIo))
-
-(def dsl-url "js/shell-dsl.edn")
+   [user]))
 
 (defonce ctx (atom nil))
-(defonce current-ns-ref (atom 'user))
-(defonce dsl-data (atom nil))
 (defonce log-fn (atom nil))
+(defonce current-ns-ref (atom 'user))
 
 (defn set-print!
   [f]
@@ -25,20 +21,6 @@
   (set-print-err-fn! f)
   (set-print-fn! f)
   (reset! log-fn f))
-
-(defn fetch-file!
-  "Very simple implementation of XMLHttpRequests that given a file path
-   calls src-cb with the string fetched or nil in case of error.
-   See doc at https://developers.google.com/closure/library/docs/xhrio"
-  [file-url src-cb]
-  (try
-    (.send XhrIo file-url
-           (fn [e]
-             (if (.isSuccess (.-target ^js e))
-               (src-cb (.. ^js e -target getResponseText))
-               (src-cb nil))))
-    (catch :default _err
-      (src-cb nil))))
 
 (defn- make-ctx
   []
@@ -63,25 +45,6 @@
 (defn current-ns
   []
   (str @current-ns-ref))
-
-(defn init!
-  [cb]
-  (try
-    (let [done #(cb nil)]
-      (context)
-      (if (nil? @dsl-data)
-        (fetch-file! dsl-url
-                     (fn [text]
-                       (when text
-                         (try
-                           (reset! dsl-data (clojure.edn/read-string text))
-                           (catch :default err
-                             (js/console.warn
-                              "Failed to load the shell DSL data." err))))
-                       (done)))
-        (done)))
-    (catch :default e
-      (cb (cljs.core/Throwable->map e)))))
 
 (defn- eval-forms-verbose
   [sci-ctx ns-sym text]
@@ -201,8 +164,8 @@
   [sym]
   (let [ns* (or (namespace sym) (str @current-ns-ref))
         name* (name sym)
-        ns* (or (get-in @dsl-data [:aliases (str @current-ns-ref) ns*]) ns*)
-        data (get-in @dsl-data [:namespaces ns* name*])
+        ns* (or (get-in shell-dsl/aliases [(str @current-ns-ref) ns*]) ns*)
+        data (get-in shell-dsl/namespaces [ns* name*])
         ;; Fallback: var metadata of the compiler-inlined `user`
         ;; namespace.
         var-meta (when (= ns* (str @current-ns-ref))

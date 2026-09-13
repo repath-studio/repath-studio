@@ -137,6 +137,7 @@
                 :frame false
                 :show false
                 :windowStatePersistence true
+                :transparent true
                 :webPreferences
                 #js {:sandbox false
                      :preload (.join path js/__dirname "preload.js")}}))

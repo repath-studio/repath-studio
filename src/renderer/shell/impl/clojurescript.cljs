@@ -3,6 +3,7 @@
    ["@codemirror/state" :refer [EditorState]]
    ["@nextjournal/lang-clojure" :refer [clojure clojureLanguage]]
    [clojure.string :as string]
+   [generated.shell-dsl :as shell-dsl]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.hierarchy :as hierarchy]
@@ -14,13 +15,6 @@
    [user]))
 
 (hierarchy/derive! :cljs ::shell.hierarchy/language)
-
-(defn- dsl-namespaces
-  []
-  (or (get @shell.reepl.sci/dsl-data :namespaces)
-      (let [publics (ns-publics 'user)]
-        {"user" (zipmap (map name (keys publics))
-                        (repeat (count publics) {}))})))
 
 (defn- matches?
   [s text]
@@ -78,8 +72,8 @@
                             (string/join "/" (rest parts))]))
         only-ns (when (seq only-ns) only-ns)
         current-ns-str (shell.reepl.sci/current-ns)
-        namespaces (dsl-namespaces)
-        aliases (get-in @shell.reepl.sci/dsl-data [:aliases current-ns-str] {})
+        namespaces shell-dsl/namespaces
+        aliases (get shell-dsl/aliases current-ns-str {})
         local-names (into {} (map (juxt second first) aliases))
         only-ns-str (when only-ns
                       (or (get aliases only-ns)
@@ -118,7 +112,7 @@
 (defmethod shell.hierarchy/codemirror-options :cljs
   [_language]
   {:extensions [(.of EditorState.languageData
-                     (fn [] #js [#js {:wordChars "/.+-*=!<>?"}]))
+                     (fn [] #js [#js {:wordChars "/.+-*=!<>?'"}]))
                 (clojure)]})
 
 (defmethod shell.hierarchy/parser :cljs

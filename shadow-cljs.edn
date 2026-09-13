@@ -1,6 +1,10 @@
 {:deps {:aliases [:dev]}
 
- :build-defaults {:build-hooks [(shadow-git-inject.core/hook)]
+ :build-defaults {:build-hooks [(shadow-git-inject.core/hook)
+                                (build.icon-generator/hook!)
+                                (build.bcd-reducer/hook!)
+                                (build.shell-dsl-generator/hook!)
+                                (build.schema-graph-generator/hook!)]
                   :compiler-options {:source-map true
                                      :silence-optimizations-warning true
                                      :output-feature-set :es-unsupported
@@ -29,9 +33,6 @@
 
   :renderer {:target :browser
              :output-dir "resources/public/js"
-             :build-hooks [(build.icon-generator/hook!)
-                           (build.schema-graph-generator/hook!)
-                           (build.shell-dsl-generator/hook!)]
              :compiler-options {:optimizations :advanced
                                 :closure-defines
                                 {config/version :shadow-git-inject/version}}

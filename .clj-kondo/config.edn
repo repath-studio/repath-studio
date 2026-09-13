@@ -1,5 +1,5 @@
 {:hooks {:analyze-call {malli.core/=> hooks/=>}}
- :exclude-files "resources.*|.clj-kondo/imports/.*"
+ :exclude-files "resources.*|generated.*|.clj-kondo/imports/.*"
  :linters {:unsorted-required-namespaces {:level :warning}
            :unsorted-imports {:level :warning}
            :single-key-in {:level :warning}
