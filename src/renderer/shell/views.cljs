@@ -271,7 +271,10 @@
      (when (seq signature)
        [views/static-highlight signature theme-mode
         (shell.hierarchy/parser lang)])
-     (when (seq doc) [:div doc])]))
+     (when (seq doc)
+       [:div.max-h-40.overflow-hidden.flex
+        [views/scroll-area
+         doc]])]))
 
 (defn completion-list
   []
