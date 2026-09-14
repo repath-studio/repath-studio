@@ -10,7 +10,7 @@
     "upgrade": "npx npm-check-updates -u --cooldown 7d",
     "fonts:sans": "npx shx cp -r node_modules/@fontsource/noto-sans/files/. resources/public/css/files",
     "fonts:mono": "npx shx cp -r node_modules/@fontsource/noto-sans-mono/files/. resources/public/css/files",
-    "pyodide": "npx shx cp -r node_modules/pyodide/. resources/public/pyodide && npx shx cp -r resources/pyodide-wheels/. resources/public/pyodide",
+    "pyodide": "npx shx cp -r node_modules/pyodide/. resources/public/pyodide",
     "electron-deps": "npx electron-builder install-app-deps",
     "postinstall": "npx npm-run-all --parallel electron-deps fonts:sans fonts:mono pyodide",
     "tailwindtheme:build": "npx @tailwindcss/cli -i ./src/renderer/default-theme.css -o ./resources/public/css/default-theme.css --minify",
