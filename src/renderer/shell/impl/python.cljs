@@ -192,9 +192,8 @@
 
 (defmethod shell.hierarchy/welcome :python
   [_language]
-  (log "The JavaScript scope can be accessed from Python using the js module."
-       "For example, you can access the document object using `"
-       [:command "js.document"] "`.")
+  (log "The JavaScript scope can be accessed from Python using the "
+       [:command "js"] " module " "(e.g `" [:command "js.document"] "`).")
   (log "Type `" [:command "help()"] "` to see a list of commands."))
 
 (defmethod shell.hierarchy/evaluate :python
