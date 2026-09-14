@@ -264,17 +264,18 @@
         lines (string/split-lines s)
         signature (when (seq (nth lines 2 nil)) (nth lines 2 nil))
         doc (string/join "\n" (drop-while string/blank? (drop 3 lines)))]
-    [:div.bg-primary.drop-shadow.p-4.absolute.bottom-full.flex.flex-col.gap-4
-     [:div.font-semibold.text-normal.text-sm
-      [views/static-highlight (str (first lines)) theme-mode
-       (shell.hierarchy/parser lang)]]
-     (when (seq signature)
-       [views/static-highlight signature theme-mode
-        (shell.hierarchy/parser lang)])
-     (when (seq doc)
-       [:div.max-h-40.overflow-hidden.flex
-        [views/scroll-area
-         doc]])]))
+    [:div.bg-primary.drop-shadow.absolute.bottom-full.z-1
+     [:div.flex.flex-col.gap-4.p-4
+      [:div.font-semibold.text-normal.text-sm
+       [views/static-highlight (str (first lines)) theme-mode
+        (shell.hierarchy/parser lang)]]
+      (when (seq signature)
+        [views/static-highlight signature theme-mode
+         (shell.hierarchy/parser lang)])
+      (when (seq doc)
+        [:div.max-h-40.overflow-hidden.flex
+         [views/scroll-area
+          doc]])]]))
 
 (defn completion-list
   []
