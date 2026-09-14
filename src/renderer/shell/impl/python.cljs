@@ -18,6 +18,105 @@
 
 (hierarchy/derive! :python ::shell.hierarchy/language)
 
+(def shell-complete
+  (string/join "\n"
+               ["def _shell_complete(text):"
+                "    import sys, json, jedi, builtins"
+                "    p = text.split('.')"
+                "    f, pre = p[-1], p[:-1]"
+                "    g = dict(globals())"
+                "    if pre:"
+                "        root = pre[0]"
+                "        known = root in g or root in builtins.__dict__"
+                "        if not root or not known:"
+                "            return '[]'"
+                "        if root in builtins.__dict__:"
+                "            g[root] = builtins.__dict__[root]"
+                "    try:"
+                "        interp = jedi.Interpreter(text, [g])"
+                "        names = {c.name for c in interp.complete()}"
+                "    except Exception:"
+                "        names = set()"
+                "    if pre:"
+                "        names = {n for n in names"
+                "                 if n[:2] != '__' and n.startswith(f)}"
+                "    else:"
+                "        names = {n for n in names if n[:1] != '_'}"
+                "        names |= set(sys.stdlib_module_names)"
+                "        names = {n for n in names if n.startswith(f)}"
+                "    b = text[:len(text) - len(f)]"
+                "    return json.dumps(sorted(b + n for n in names))"]))
+
+(def doc-target
+  (string/join "\n"
+               ["def _doc_target(name, g):"
+                "    import sys, builtins, types"
+                "    root = name.split('.')[0]"
+                "    if not root:"
+                "        return None"
+                "    if root in builtins.__dict__:"
+                "        return builtins.__dict__[root]"
+                "    obj = g.get(root)"
+                "    if obj is None:"
+                "        obj = sys.modules.get(root)"
+                "    if isinstance(obj, types.ModuleType):"
+                "        return obj"
+                "    return None"]))
+
+(def doc-from-source
+  (string/join "\n"
+               ["def _doc_from_source(name):"
+                "    import importlib.util, ast"
+                "    try:"
+                "        spec = importlib.util.find_spec(name)"
+                "        src = None"
+                "        if spec and spec.loader:"
+                "            src = spec.loader.get_source(name)"
+                "        if isinstance(src, str):"
+                "            return ast.get_docstring(ast.parse(src)) or ''"
+                "    except Exception:"
+                "        pass"
+                "    return ''"]))
+
+(def shell-doc
+  (string/join "\n"
+               ["def _shell_doc(name):"
+                "    import json, jedi"
+                "    g = dict(globals())"
+                "    root = name.split('.')[0]"
+                "    obj = _doc_target(name, g)"
+                "    if obj is None:"
+                "        doc = ''"
+                "        if root and '.' not in name:"
+                "            doc = _doc_from_source(root)"
+                "        if not doc:"
+                "            return ''"
+                "        return json.dumps({'name': name,"
+                "                           'type': 'module',"
+                "                           'signature': name + '()',"
+                "                           'doc': doc})"
+                "    g[root] = obj"
+                "    try:"
+                "        interp = jedi.Interpreter(name, [g])"
+                "        names = interp.infer(1, len(name))"
+                "    except Exception:"
+                "        names = []"
+                "    if not names:"
+                "        return ''"
+                "    n = names[0]"
+                "    sig = ''"
+                "    try:"
+                "        sigs = n.get_signatures()"
+                "        if sigs:"
+                "            sig = sigs[0].to_string()"
+                "    except Exception:"
+                "        pass"
+                "    doc = n.docstring() or ''"
+                "    if sig and doc.startswith(sig + '\\n'):"
+                "        doc = doc[len(sig) + 1:].lstrip()"
+                "    return json.dumps({'name': name, 'type': n.type,"
+                "                       'signature': sig, 'doc': doc})"]))
+
 (defn expose-command-to-global-namespace
   [pyodide command]
   (let [fn-val @command
@@ -42,8 +141,19 @@
                (doseq [command (vals (ns-publics 'user))]
                  (expose-command-to-global-namespace pyodide command))
 
-               (-> (.runPythonAsync pyodide "import js")
-                   (.then #(rf/dispatch on-success)))))
+               (-> (.loadPackage ^js pyodide "jedi")
+                   (.then (fn []
+
+                            (-> (.runPythonAsync pyodide
+                                                 (->> ["import js"
+                                                       shell-complete
+                                                       doc-target
+                                                       doc-from-source
+                                                       shell-doc
+                                                       "_shell_complete('')"
+                                                       "_shell_doc('')"]
+                                                      (string/join "\n")))
+                                (.then #(rf/dispatch on-success))))))))
 
       (.catch (fn [error]
                 (rf/dispatch (conj on-error error))))))
@@ -81,22 +191,38 @@
 (defmethod shell.hierarchy/codemirror-options :python
   [_language]
   {:extensions [(.of EditorState.languageData
-                     (fn [] #js [#js {:wordChars "."}]))
+                     (fn [] #js [#js {:wordChars ".$"}]))
                 (python)]})
 
 (defmethod shell.hierarchy/parser :python
   [_language]
   (.. (python) -language -parser))
 
+(defn- user-by-snake-name
+  []
+  (->> (ns-publics 'user)
+       (map (fn [[sym _var]]
+              [(camel-snake-kebab/->snake_case_string (name sym)) sym]))
+       (into {})))
+
+(defn- pyodide-completions
+  [text]
+  (.set (.-globals js/pyodide) "_shell_text" text)
+  (some->> (.runPython js/pyodide "_shell_complete(_shell_text)")
+           (.parse js/JSON)
+           (js->clj)
+           (into [])))
+
 (defmethod shell.hierarchy/completions :python
   [_language s]
-  (if (zero? (.indexOf s "js."))
-    (shell.reepl.sci/js-completion (.slice s 3) "js.")
-    (->> (ns-publics 'user)
-         (map (fn [[sym _var]]
-                [sym (camel-snake-kebab/->snake_case_string (name sym))]))
-         (filter (fn [[_sym snake-name]] (string/starts-with? snake-name s)))
-         (sort-by second (partial shell.reepl.sci/compare-completion s))
+  (let [by-name (user-by-snake-name)
+        texts (or (pyodide-completions s)
+                  (->> (keys by-name)
+                       (filter #(string/starts-with? % s))))
+        cmp (partial shell.reepl.sci/compare-completion s)]
+    (->> texts
+         (map (fn [t] [(or (by-name t) t) t]))
+         (sort-by second cmp)
          (into []))))
 
 (defn- py-arg
@@ -121,9 +247,29 @@
                                        (str "*" (name rest-arg)))])))
          ")")))
 
+(defn- py-jedi-docs
+  [n]
+  (let [r (try (.runPython js/pyodide
+                           (str "_shell_doc(" (js/JSON.stringify n) ")"))
+               (catch :default _ nil))]
+    (when (and (string? r) (seq r))
+      (let [d (js->clj (.parse js/JSON r) :keywordize-keys true)]
+        (with-out-str
+          (shell.reepl.sci/print-language-doc
+           {:name (if (and (seq (:signature d))
+                           (= (:type d) "function"))
+                    (:signature d)
+                    (:name d))
+            :doc (:doc d)}
+           identity))))))
+
 (defmethod shell.hierarchy/docs :python
   [_language s]
-  (when (symbol? s)
+  (cond
+    (string? s)
+    (py-jedi-docs s)
+
+    (symbol? s)
     (when-let [f (get (ns-publics 'user) s)]
       (let [m (meta f)]
         (with-out-str
