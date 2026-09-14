@@ -217,10 +217,9 @@
 
 (defn print-language-doc
   [doc render-arglist]
-  (println (:name doc))
+  (println (str (:name doc) (when-let [arglists (seq (:forms doc))]
+                              (string/join " " (map render-arglist arglists)))))
   (println)
-  (when-let [arglists (seq (:forms doc))]
-    (println (string/join " " (map render-arglist arglists))))
   (println)
   (when (:doc doc)
     (println (:doc doc))))
