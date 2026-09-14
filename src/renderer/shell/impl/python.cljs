@@ -123,13 +123,13 @@
    "raise" "bring_forward"
    "lower" "send_forward"})
 
-(defn- js->py-name
+(defn- clj->py-name
   [name-str]
   (let [snake (camel-snake-kebab/->snake_case_string name-str)]
     (or (get aliases snake)
         snake)))
 
-(defn- py->js-name
+(defn- py->clj-name
   [name-str]
   (let [snake (camel-snake-kebab/->kebab-case-string name-str)]
     (or (get (set/map-invert aliases) snake)
@@ -145,7 +145,7 @@
                                           (js->clj :keywordize-keys true))
                                      args)))]
     (.set (.-globals ^js pyodide)
-          (js->py-name (:name (meta command)))
+          (clj->py-name (:name (meta command)))
           wrapper)))
 
 (defn load-pyodide
@@ -183,8 +183,8 @@
 
 (defmethod shell.hierarchy/help :python
   [_language command]
-  (if-let [f (get (ns-publics 'user) (symbol (py->js-name command)))]
-    (log [:command (js->py-name (:name (meta f)))]
+  (if-let [f (get (ns-publics 'user) (symbol (py->clj-name command)))]
+    (log [:command (clj->py-name (:name (meta f)))]
          " - "
          (first (string/split-lines (:doc (meta f)))))
     (log "Command not found:" command)))
@@ -216,7 +216,7 @@
 (defn- user-by-snake-name
   []
   (->> (ns-publics 'user)
-       (map (fn [[sym _var]] [(js->py-name (name sym)) sym]))
+       (map (fn [[sym _var]] [(clj->py-name (name sym)) sym]))
        (into {})))
 (defn- pyodide-completions
   [text]
@@ -287,7 +287,7 @@
       (let [m (meta f)]
         (with-out-str
           (shell.reepl.sci/print-language-doc
-           {:name (js->py-name (name s))
+           {:name (clj->py-name (name s))
             :forms (:arglists m)
             :doc (:doc m)}
            py-arglist))))))

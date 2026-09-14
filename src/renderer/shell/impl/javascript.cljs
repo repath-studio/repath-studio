@@ -37,7 +37,10 @@
 
 (defmethod shell.hierarchy/help :js
   [_language command]
-  (if-let [f (get (ns-publics 'user) (symbol command))]
+  (if-let [f (->> command
+                  camel-snake-kebab/->kebab-case-string
+                  symbol
+                  (get (ns-publics 'user)))]
     (log [:command (camel-snake-kebab/->camelCaseString (:name (meta f)))]
          " - "
          (first (string/split-lines (:doc (meta f)))))
