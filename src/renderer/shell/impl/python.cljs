@@ -160,7 +160,6 @@
 
                (-> (.loadPackage ^js pyodide "jedi")
                    (.then (fn []
-
                             (-> (.runPythonAsync pyodide
                                                  (->> ["import js"
                                                        shell-complete
