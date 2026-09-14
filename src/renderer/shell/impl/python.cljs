@@ -3,6 +3,7 @@
    ["@codemirror/lang-python" :refer [python]]
    ["@codemirror/state" :refer [EditorState]]
    [camel-snake-kebab.core :as camel-snake-kebab]
+   [clojure.set :as set]
    [clojure.string :as string]
    [goog.html.legacyconversions :refer [trustedResourceUrlFromString]]
    [goog.net.jsloader :refer [safeLoad]]
@@ -117,6 +118,23 @@
                 "    return json.dumps({'name': name, 'type': n.type,"
                 "                       'signature': sig, 'doc': doc})"]))
 
+(def aliases
+  {"del" "delete"
+   "raise" "bring_forward"
+   "lower" "send_forward"})
+
+(defn- js->py-name
+  [name-str]
+  (let [snake (camel-snake-kebab/->snake_case_string name-str)]
+    (or (get aliases snake)
+        snake)))
+
+(defn- py->js-name
+  [name-str]
+  (let [snake (camel-snake-kebab/->kebab-case-string name-str)]
+    (or (get (set/map-invert aliases) snake)
+        snake)))
+
 (defn expose-command-to-global-namespace
   [pyodide command]
   (let [fn-val @command
@@ -127,8 +145,7 @@
                                           (js->clj :keywordize-keys true))
                                      args)))]
     (.set (.-globals ^js pyodide)
-          (-> (:name (meta command))
-              (camel-snake-kebab/->snake_case_string))
+          (js->py-name (:name (meta command)))
           wrapper)))
 
 (defn load-pyodide
@@ -167,8 +184,8 @@
 
 (defmethod shell.hierarchy/help :python
   [_language command]
-  (if-let [f (get (ns-publics 'user) (symbol command))]
-    (log [:command (camel-snake-kebab/->snake_case_string (:name (meta f)))]
+  (if-let [f (get (ns-publics 'user) (symbol (py->js-name command)))]
+    (log [:command (js->py-name (:name (meta f)))]
          " - "
          (first (string/split-lines (:doc (meta f)))))
     (log "Command not found:" command)))
@@ -201,10 +218,8 @@
 (defn- user-by-snake-name
   []
   (->> (ns-publics 'user)
-       (map (fn [[sym _var]]
-              [(camel-snake-kebab/->snake_case_string (name sym)) sym]))
+       (map (fn [[sym _var]] [(js->py-name (name sym)) sym]))
        (into {})))
-
 (defn- pyodide-completions
   [text]
   (.set (.-globals js/pyodide) "_shell_text" text)
@@ -274,7 +289,7 @@
       (let [m (meta f)]
         (with-out-str
           (shell.reepl.sci/print-language-doc
-           {:name (camel-snake-kebab/->snake_case_string (name s))
+           {:name (js->py-name (name s))
             :forms (:arglists m)
             :doc (:doc m)}
            py-arglist))))))
