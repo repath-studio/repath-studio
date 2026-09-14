@@ -252,6 +252,16 @@
   []
   (rf/dispatch [::element.events/lower]))
 
+(defn ^:export raise-to-top
+  "Raises the selected elements to top."
+  []
+  (rf/dispatch [::element.events/raise-to-top]))
+
+(defn ^:export lower-to-bottom
+  "Lowers the selected elements to bottom."
+  []
+  (rf/dispatch [::element.events/lower-to-bottom]))
+
 (defn ^:export group
   "Groups the selected elements."
   []
