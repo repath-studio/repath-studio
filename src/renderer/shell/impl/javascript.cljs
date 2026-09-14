@@ -45,7 +45,7 @@
 
 (defmethod shell.hierarchy/welcome :js
   [_language]
-  (log "Type " [:command "help()"] " to see a list of commands."))
+  (log "Type `" [:command "help()"] "` to see a list of commands."))
 
 (defmethod shell.hierarchy/evaluate :js
   [_language s]
