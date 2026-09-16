@@ -112,7 +112,7 @@
 (defmethod shell.hierarchy/codemirror-options :cljs
   [_language]
   {:extensions [(.of EditorState.languageData
-                     (fn [] #js [#js {:wordChars "/.+-*=!<>?'"}]))
+                     (fn [] #js [#js {:wordChars "/.+-*=!<>?'$"}]))
                 (clojure)]})
 
 (defmethod shell.hierarchy/parser :cljs
@@ -127,10 +127,25 @@
 
 (defmethod shell.hierarchy/docs :cljs
   [_language s]
-  (when (symbol? s)
+  (cond
+    (and (string? s) (string/starts-with? s "js/"))
+    (shell.reepl.sci/js-built-in-docs (subs s 3))
+
+    (symbol? s)
     (when-let [doc (shell.reepl.sci/doc-from-sym s)]
-      (with-out-str
-        (shell.reepl.sci/print-doc doc)))))
+      (let [fn-name (name (keyword (:name doc)))]
+        (with-out-str
+          (println (if (seq (:forms doc))
+                     (->> (:forms doc)
+                          (map #(into [fn-name] %))
+                          (map #(string/join " " %))
+                          (map #(str "(" % ")"))
+                          (interpose "\n")
+                          (string/join))
+                     fn-name))
+          (when (:doc doc)
+            (println)
+            (println (:doc doc))))))))
 
 (defmethod shell.hierarchy/show-error :cljs
   [_language v]

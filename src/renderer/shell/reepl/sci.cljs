@@ -3,8 +3,7 @@
    ClojureScript interpreter, against the app's own namespaces.
 
    Completions and docs come from the build-time generated `shell-dsl` data
-   namespace (see build.generator.shell-dsl), falling back to the
-   compiler-inlined `user` namespace metadata for vars it does not document."
+   namespace (see build.generator.shell-dsl)."
   (:require
    [clojure.string :as string]
    [generated.shell-dsl :as shell-dsl]
@@ -12,15 +11,8 @@
    [user]))
 
 (defonce ctx (atom nil))
-(defonce log-fn (atom nil))
+(defonce log-fn (atom #()))
 (defonce current-ns-ref (atom 'user))
-
-(defn set-print!
-  [f]
-  (set! cljs.core/*print-newline* false)
-  (set-print-err-fn! f)
-  (set-print-fn! f)
-  (reset! log-fn f))
 
 (defn- make-ctx
   []
@@ -155,71 +147,26 @@
            (filter #(not= -1 (.indexOf % head)))
            (sort (partial compare-completion head))
            (map (fn [name*]
-                  (vector nil
-                          (str prefix
-                               (string/join "." (conj (vec (butlast parts))
-                                                      name*))))))))))
+                  (let [full (str prefix
+                                  (string/join "." (conj (vec (butlast parts))
+                                                         name*)))]
+                    (vector full full))))))))
 
 (defn doc-from-sym
   [sym]
   (let [ns* (or (namespace sym) (str @current-ns-ref))
         name* (name sym)
         ns* (or (get-in shell-dsl/aliases [(str @current-ns-ref) ns*]) ns*)
-        data (get-in shell-dsl/namespaces [ns* name*])
-        ;; Fallback: var metadata of the compiler-inlined `user`
-        ;; namespace.
-        var-meta (when (= ns* (str @current-ns-ref))
-                   (when-let [v (get (ns-publics 'user) (symbol name*))]
-                     (meta v)))]
-    (cond
-      (or (:doc data) (:arglists data))
+        data (get-in shell-dsl/namespaces [ns* name*])]
+    (when (or (:doc data) (:arglists data))
       {:name (str ns* "/" name*)
-       :type :normal
        :forms (:arglists data)
-       :doc (:doc data)}
+       :doc (:doc data)})))
 
-      var-meta
-      {:name (str ns* "/" name*)
-       :type :normal
-       :forms (:arglists var-meta)
-       :doc (:doc var-meta)}
+(defn js-built-in-docs
+  [s]
+  (when-let [entry (get-in shell-dsl/namespaces ["js" s])]
+    (let [signature (get entry "signature")
+          doc (get entry "doc")]
+      (str s signature "\n\n\n" (when doc doc)))))
 
-      :else
-      nil)))
-
-(def type-name
-  {:protocol "Protocol"
-   :special-form "Special Form"
-   :macro "Macro"
-   :repl-special-function "REPL Special Function"})
-
-;; Copied & modified from cljs.repl/print-doc
-(defn print-doc
-  [doc]
-  (println (:name doc))
-  (println)
-  (when-not (= :normal (:type doc))
-    (println (type-name (:type doc))))
-  (when (:forms doc)
-    (prn (:forms doc)))
-  (when (:please-see doc)
-    (println (str "\n  Please see " (:please-see doc))))
-  (when (:doc doc)
-    (println)
-    (println (:doc doc)))
-  (when (:methods doc)
-    (doseq [[name* {:keys [doc arglists]}] (:methods doc)]
-      (println)
-      (println " " name*)
-      (println " " arglists)
-      (when doc
-        (println " " doc)))))
-
-(defn print-language-doc
-  [doc render-arglist]
-  (println (str (:name doc) (when-let [arglists (seq (:forms doc))]
-                              (string/join " " (map render-arglist arglists)))))
-  (println)
-  (println)
-  (when (:doc doc)
-    (println (:doc doc))))

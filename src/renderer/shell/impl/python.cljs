@@ -5,6 +5,7 @@
    [camel-snake-kebab.core :as camel-snake-kebab]
    [clojure.set :as set]
    [clojure.string :as string]
+   [generated.shell-dsl :as shell-dsl]
    [goog.html.legacyconversions :refer [trustedResourceUrlFromString]]
    [goog.net.jsloader :refer [safeLoad]]
    [re-frame.core :as rf]
@@ -245,20 +246,51 @@
         (and (map? arg) (:as arg)) (str "**" (name (:as arg)))
         :else (pr-str arg)))
 
+(defn- py-type
+  [t]
+  (if (keyword? t) (name t) (pr-str t)))
+
+(defn- py-args
+  [args]
+  (loop [xs (seq args) acc ()]
+    (if-let [arg (first xs)]
+      (if (= (second xs) (keyword "-"))
+        (recur (nthnext xs 3)
+               (conj acc (str (py-arg arg) ": " (py-type (second (rest xs))))))
+        (recur (next xs) (conj acc (py-arg arg))))
+      (reverse acc))))
+
 (defn- py-arglist
   "Converts a Clojure arglist to a Python-style signature.
-   E.g. `[[cx cy] r & {:as attrs}]` becomes `([cx, cy], r, **attrs)`."
+   E.g. `[[cx cy] r & {:as attrs}]` becomes `([cx, cy], r, **attrs)` and
+   `[x :- :float y :- :float]` becomes `(x: float, y: float)`."
   [arglist]
-  (let [rest-pos (reduce-kv (fn [i k v] (or i (when (= '& v) k))) nil arglist)
+  (let [rest-pos (first
+                  (keep-indexed (fn [i v] (when (= '& v) i)) arglist))
         args (take (or rest-pos (count arglist)) arglist)
-        rest-arg (when rest-pos (nth arglist (inc rest-pos)))]
-    (str "(" (string/join ", "
-                          (concat (map py-arg args)
-                                  (when (some? rest-arg)
-                                    [(if (map? rest-arg)
-                                       (py-arg rest-arg)
-                                       (str "*" (name rest-arg)))])))
-         ")")))
+        rest* (when rest-pos (drop (inc rest-pos) arglist))
+        rest-arg (when rest*
+                   (let [name* (str (first rest*))
+                         t (when (= (keyword "-") (second rest*))
+                             (py-type (nth rest* 2)))]
+                     (cond (map? (first rest*)) (py-arg (first rest*))
+                           t (str "*" name* ": " t)
+                           :else (str "*" name*))))]
+    (string/join ", "
+                 (concat (py-args args)
+                         (when rest-arg [rest-arg])))))
+
+(defn print-doc
+  [doc]
+  (println (if-let [arglists (:forms doc)]
+             (->> (map py-arglist arglists)
+                  (map #(str (:name doc) "(" % ")"))
+                  (interpose "\n")
+                  (string/join))
+             (:name doc)))
+  (when (:doc doc)
+    (println)
+    (println (:doc doc))))
 
 (defn- py-jedi-docs
   [n]
@@ -268,29 +300,40 @@
     (when (and (string? r) (seq r))
       (let [d (js->clj (.parse js/JSON r) :keywordize-keys true)]
         (with-out-str
-          (shell.reepl.sci/print-language-doc
+          (print-doc
            {:name (if (and (seq (:signature d))
                            (= (:type d) "function"))
                     (:signature d)
                     (:name d))
-            :doc (:doc d)}
-           identity))))))
+            :doc (:doc d)}))))))
+
+(defn- meta-arglists
+  [m]
+  (let [arglists (or (:raw-arglists m) (:arglists m))
+        arglists (if (and (sequential? arglists)
+                          (= 'quote (first arglists)))
+                   (second arglists)
+                   arglists)]
+    (when (some? arglists)
+      (if (vector? arglists) [arglists] arglists))))
 
 (defmethod shell.hierarchy/docs :python
   [_language s]
   (cond
+    (and (string? s) (string/starts-with? s "js."))
+    (shell.reepl.sci/js-built-in-docs (subs s 3))
+
     (string? s)
     (py-jedi-docs s)
 
     (symbol? s)
-    (when-let [f (get (ns-publics 'user) s)]
-      (let [m (meta f)]
+    (when-let [d (get-in shell-dsl/namespaces ["user" (name s)])]
+      (let [arglists (meta-arglists d)]
         (with-out-str
-          (shell.reepl.sci/print-language-doc
+          (print-doc
            {:name (clj->py-name (name s))
-            :forms (:arglists m)
-            :doc (:doc m)}
-           py-arglist))))))
+            :forms arglists
+            :doc (:doc d)}))))))
 
 (defmethod shell.hierarchy/show-error :python
   [_language v]

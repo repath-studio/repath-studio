@@ -10,10 +10,17 @@
    [renderer.utils.dom :as utils.dom]
    [renderer.utils.extra :refer [log]]))
 
+(defn set-print!
+  [f]
+  (set! cljs.core/*print-newline* false)
+  (set-print-err-fn! f)
+  (set-print-fn! f)
+  (reset! shell.reepl.sci/log-fn f))
+
 (rf/reg-fx
  ::init
  (fn [[event params]]
-   (shell.reepl.sci/set-print! #(rf/dispatch (conj event :info %)))
+   (set-print! #(rf/dispatch (conj event :info %)))
    (shell.hierarchy/init params)))
 
 (rf/reg-fx

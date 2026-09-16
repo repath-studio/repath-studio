@@ -61,7 +61,7 @@
 (defmethod shell.hierarchy/codemirror-options :js
   [_language]
   {:extensions [(.of EditorState.languageData
-                     (fn [] #js [#js {:wordChars "."}]))
+                     (fn [] #js [#js {:wordChars ".$"}]))
                 (javascript)]})
 
 (defmethod shell.hierarchy/parser :js
@@ -82,7 +82,7 @@
       (mapv (fn [word]
               (if-let [sym (command-sym publics (second word))]
                 [sym (second word)]
-                word))
+                [(second word) (second word)]))
             completions))))
 
 (defn- js-arg
@@ -92,29 +92,59 @@
         (and (map? arg) (:as arg)) (name (:as arg))
         :else (pr-str arg)))
 
+(defn- js-type
+  [t]
+  (if (keyword? t) (name t) (pr-str t)))
+
+(defn js-args
+  [args]
+  (loop [xs (seq args) acc ()]
+    (if-let [arg (first xs)]
+      (if (= (second xs) (keyword "-"))
+        (recur (nthnext xs 3)
+               (conj acc (str (js-arg arg) ": " (js-type (second (rest xs))))))
+        (recur (next xs) (conj acc (js-arg arg))))
+      (reverse acc))))
+
 (defn- js-arglist
   "Converts a Clojure arglist to a JavaScript style signature.
-   E.g. `[[cx cy] r & {:as attrs}]` becomes `([[cx, cy]], r, attrs)`."
+   E.g. `[[cx cy] r & {:as attrs}]` becomes `([cx, cy], r, attrs)` and
+   `[x :- :float y :- :float]` becomes `(x: float, y: float)`."
   [arglist]
-  (let [rest-pos (reduce-kv (fn [i k v] (or i (when (= '& v) k))) nil arglist)
+  (let [rest-pos (first
+                  (keep-indexed (fn [i v] (when (= '& v) i)) arglist))
         args (take (or rest-pos (count arglist)) arglist)
-        rest-arg (when rest-pos (nth arglist (inc rest-pos)))]
-    (str "(" (string/join ", "
-                          (map js-arg
-                               (concat args
-                                       (when (some? rest-arg) [rest-arg]))))
-         ")")))
+        rest* (when rest-pos (drop (inc rest-pos) arglist))
+        rest-arg (when rest*
+                   (let [name* (str (first rest*))
+                         t (when (= (keyword "-") (second rest*))
+                             (js-type (nth rest* 2)))]
+                     (cond (map? (first rest*)) (js-arg (first rest*))
+                           t (str name* ": " t)
+                           :else name*)))]
+    (string/join ", "
+                 (concat (js-args args)
+                         (when rest-arg [rest-arg])))))
 
 (defmethod shell.hierarchy/docs :js
   [_language s]
-  (when (symbol? s)
-    (when-let [doc (shell.reepl.sci/doc-from-sym
-                    (symbol "user" (name s)))]
-      (with-out-str
-        (shell.reepl.sci/print-language-doc
-         (assoc doc :name
-                (camel-snake-kebab/->camelCaseString (name s)))
-         js-arglist)))))
+  (cond
+    (string? s)
+    (shell.reepl.sci/js-built-in-docs s)
+
+    (symbol? s)
+    (when-let [doc (shell.reepl.sci/doc-from-sym (symbol "user" (name s)))]
+      (let [fn-name (camel-snake-kebab/->camelCaseString (name s))]
+        (with-out-str
+          (println (if-let [arglists (:forms doc)]
+                     (->> (map js-arglist arglists)
+                          (map #(str fn-name "(" % ")"))
+                          (interpose "\n")
+                          (string/join))
+                     fn-name))
+          (when (:doc doc)
+            (println)
+            (println (:doc doc))))))))
 
 (defmethod shell.hierarchy/show-error :js
   [_language v]

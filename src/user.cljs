@@ -1,8 +1,11 @@
 (ns user
+  "This is the default REPL namespace.
+   We use function inline schemas that are parsed and displayed as docs."
   (:require
    [clojure.math]
    [clojure.string :as string]
    [config :as config]
+   [malli.experimental :as mx]
    [re-frame.core :as rf]
    [re-frame.db :as rf.db]
    [renderer.a11y.events :as-alias a11y.events]
@@ -16,193 +19,214 @@
    [renderer.shell.hierarchy :as shell.hierarchy]
    [renderer.window.events :as-alias window.events]))
 
-(defn ^:export clear
+(mx/defn clear
   "Clears the shell output."
   []
   (rf/dispatch [::shell.events/clear-items]))
 
-(defn ^:export translate
+(mx/defn translate
   "Moves the selected elements.
 
    Arguments:
    - `x`: The x-axis offset.
    - `y`: The y-axis offset."
-  ([offset]
-   (rf/dispatch [::element.events/translate offset]))
-  ([x y]
-   (translate [x y])))
+  [x :- :float y :- :float]
+  (rf/dispatch [::element.events/translate [x y]]))
 
-(defn ^:export place
+(mx/defn place
   "Places the selected elements to a specific position.
 
    Arguments:
    - `x`: The x-axis coordinate.
    - `y`: The y-axis coordinate."
-  ([pos]
-   (rf/dispatch [::element.events/place pos]))
-  ([x y]
-   (place [x y])))
+  [x :- :float y :- :float]
+  (rf/dispatch [::element.events/place [x y]]))
 
-(defn ^:export scale
+(mx/defn scale
   "Scales the selected elements.
 
    Arguments:
    - `ratio`: The scale ratio (for both axis).
-
    - `x`: The x-axis ratio
    - `y`: The y-axis ratio"
-  ([ratio]
+  ([ratio :- :float]
    (rf/dispatch [::element.events/scale (if (number? ratio)
                                           [ratio ratio]
                                           ratio)]))
-  ([x y]
+  ([x :- :float y :- :float]
    (rf/dispatch [::element.events/scale [x y]])))
 
-(defn ^:export fill
+(mx/defn fill
   "Fills the selected elements.
 
    Arguments:
    - `color`: The color of the fill."
-  [color]
+  [color :- :string]
   (rf/dispatch [::element.events/set-attr :fill color]))
 
-(defn ^:export del
+(mx/defn del
   "Deletes the selected elements."
   []
   (rf/dispatch [::element.events/delete]))
 
-(defn ^:export copy
+(mx/defn copy
   "Copies the selected elements."
   []
   (rf/dispatch [::element.events/copy]))
 
-(defn ^:export paste
+(mx/defn paste
   "Pastes the selected elements."
   []
   (rf/dispatch [::element.events/paste]))
 
-(defn ^:export paste-in-place
+(mx/defn paste-in-place
   "Pastes the selected elements in place."
   []
   (rf/dispatch [::element.events/paste-in-place]))
 
-(defn ^:export duplicate
+(mx/defn duplicate
   "Duplicates the selected elements."
   []
   (rf/dispatch [::element.events/duplicate]))
 
-(defn ^:export create
+(mx/defn create
   "Creates a new element."
   [el]
   (rf/dispatch [::element.events/add el]))
 
-(defn ^:export circle
+(mx/defn circle
   "Creates a circle.
 
    Arguments:
-   - `cx`: The x-axis coordinate of the center point.
-   - `cy`: The y-axis coordinate of the center point.
-   - `r`: The radius of the circle."
-  [[cx cy] r & {:as attrs}]
-  (create {:tag :circle
-           :attrs (merge {:cx cx
-                          :cy cy
-                          :r r} attrs)}))
+   - `cx`:    The x-axis coordinate of the center point.
+   - `cy`:    The y-axis coordinate of the center point.
+   - `r`:     The radius of the circle.
+   - `attrs`: Optional map of attributes."
+  ([cx :- :float cy :- :float r :- :float]
+   (circle cx cy r {}))
+  ([cx :- :float cy :- :float r :- :float attrs :- :map]
+   (create {:tag :circle
+            :attrs (merge {:cx cx
+                           :cy cy
+                           :r r} attrs)})))
 
-(defn ^:export rect
+(mx/defn rect
   "Creates a rectangle.
 
    Arguments:
-   - `x`: The x-axis coordinate.
-   - `y`: The y-axis coordinate.
-   - `width`: The horizontal length of the rectangle.
-   - `height`: The vertical length of the rectangle."
-  [x y width height & {:as attrs}]
-  (create {:tag :rect
-           :attrs (merge {:x x
-                          :y y
-                          :width width
-                          :height height} attrs)}))
+   - `x`:      The x-axis coordinate.
+   - `y`:      The y-axis coordinate.
+   - `width`:  The horizontal length of the rectangle.
+   - `height`: The vertical length of the rectangle.
+   - `attrs`:  Optional map of attributes."
+  ([x :- :float y :- :float width :- :float height :- :float]
+   (rect x y width height {}))
+  ([x :- :float y :- :float width :- :float height :- :float attrs :- :map]
+   (create {:tag :rect
+            :attrs (merge {:x x
+                           :y y
+                           :width width
+                           :height height} attrs)})))
 
-(defn ^:export line
+(mx/defn line
   "Creates a line.
 
    Arguments:
-   - `x1`: The first x-coordinate of the line.
-   - `y1`: The first y-coordinate of the line.
-   - `x2`: The second x-coordinate of the line.
-   - `y2`: The second y-coordinate of the line."
-  [[x1 y1] [x2 y2] & {:as attrs}]
-  (create {:tag :line
-           :attrs (merge {:x1 x1
-                          :y1 y1
-                          :x2 x2
-                          :y2 y2
-                          :stroke "#000000"} attrs)}))
+   - `x1`:    The first x-coordinate of the line.
+   - `y1`:    The first y-coordinate of the line.
+   - `x2`:    The second x-coordinate of the line.
+   - `y2`:    The second y-coordinate of the line.
+   - `attrs`: Optional map of attributes."
+  ([x1 :- :float y1 :- :float x2 :- :float y2 :- :float]
+   (line x1 y1 x2 y2 {}))
+  ([x1 :- :float y1 :- :float x2 :- :float y2 :- :float attrs :- :map]
+   (create {:tag :line
+            :attrs (merge {:x1 x1
+                           :y1 y1
+                           :x2 x2
+                           :y2 y2
+                           :stroke "#000000"} attrs)})))
 
-(defn ^:export polygon
+(mx/defn polygon
   "Creates a polygon.
 
    Arguments:
    - `points`: The list of points of the polygon. Each point is a
-               pair of X and Y coordinates in the user coordinate system."
-  [points & {:as attrs}]
-  (create {:tag :polygon
-           :attrs (merge {:points (string/join " " (flatten points))}
-                         attrs)}))
+               pair of X and Y coordinates in the user coordinate system.
+   - `attrs`:  Optional map of attributes."
+  ([points :- [:vector :float]]
+   (polygon points {}))
+  ([points :- [:vector :float] attrs :- :map]
+   (create {:tag :polygon
+            :attrs (merge {:points (string/join " " (flatten points))}
+                          attrs)})))
 
-(defn ^:export polyline
+(mx/defn polyline
   "Creates a polyline.
 
    Arguments:
    - `points`: The list of points of the polyline. Each point is a
-               pair of X and Y coordinates in the user coordinate system."
-  [points & {:as attrs}]
-  (create {:tag :polyline
-           :attrs (merge {:points (string/join " " (flatten points))}
-                         attrs)}))
+               pair of X and Y coordinates in the user coordinate system.
+   - `attrs`:  Optional map of attributes."
+  ([points :- [:vector :float]]
+   (polyline points {}))
+  ([points :- [:vector :float] attrs :- :map]
+   (create {:tag :polyline
+            :attrs (merge {:points (string/join " " (flatten points))}
+                          attrs)})))
 
-(defn ^:export path
+(mx/defn path
   "Creates a path.
 
    Arguments:
-   - `path-commands`: The path commands that define the path to be drawn."
-  [path-commands & {:as attrs}]
-  (create {:tag :path
-           :attrs (merge {:d (string/join " " (flatten path-commands))}
-                         attrs)}))
+   - `path-commands`: The path commands that define the path to be drawn.
+   - `attrs`:         Optional map of attributes."
+  ([path-commands :- [:vector :string]]
+   (path path-commands {}))
+  ([path-commands :- [:vector :string] attrs :- :map]
+   (create {:tag :path
+            :attrs (merge {:d (string/join " " (flatten path-commands))}
+                          attrs)})))
 
-(defn ^:export image
+(mx/defn image
   "Creates an image.
 
    Arguments:
-   - `x`: The x-axis coordinate.
-   - `y`: The y-axis coordinate.
-   - `width`: The horizontal length of the image.
+   - `x`:      The x-axis coordinate.
+   - `y`:      The y-axis coordinate.
+   - `width`:  The horizontal length of the image.
    - `height`: The vertical length of the image.
-   - `href`: The link to the image resource as a reference URL."
-  [[x y] width height href & {:as attrs}]
-  (create {:tag :image
-           :attrs (merge {:x x
-                          :y y
-                          :width width
-                          :height height
-                          :href href} attrs)}))
+   - `href`:   The link to the image resource as a reference URL.
+   - `attrs`:  Optional map of attributes."
+  ([x :- :float y :- :float width :- :float height :- :float
+    href :- :string]
+   (image [x y] width height href {}))
+  ([x :- :float y :- :float width :- :float height :- :float href :- :string
+    attrs :- :map]
+   (create {:tag :image
+            :attrs (merge {:x x
+                           :y y
+                           :width width
+                           :height height
+                           :href href} attrs)})))
 
-(defn ^:export text
+(mx/defn text
   "Creates a text element.
 
    Arguments:
-   - `x`: The x-axis coordinate.
-   - `y`: The y-axis coordinate.
-   - `content`: The text content."
-  [[x y] content & {:as attrs}]
-  (create {:tag :text
-           :content content
-           :attrs (merge {:x x
-                          :y y} attrs)}))
+   - `x`:       The x-axis coordinate.
+   - `y`:       The y-axis coordinate.
+   - `content`: The text content.
+   - `attrs`:   Optional map of attributes."
+  ([x :- :float y :- :float content :- :string]
+   (text [x y] content {}))
+  ([x :- :float y :- :float content :- :string attrs :- :map]
+   (create {:tag :text
+            :content content
+            :attrs (merge {:x x
+                           :y y} attrs)})))
 
-(defn ^:export set-attr
+(mx/defn set-attr
   "Sets the attribute of the selected elements.
 
    Arguments:
@@ -211,7 +235,7 @@
   [k v]
   (rf/dispatch [::element.events/set-attr (keyword k) v]))
 
-(defn ^:export set-fill
+(mx/defn set-fill
   "Sets the fill color of the editor.
 
    Arguments:
@@ -219,7 +243,7 @@
   [color]
   (rf/dispatch [::document.events/set-attr :fill color]))
 
-(defn ^:export set-stroke
+(mx/defn set-stroke
   "Sets the stroke color of the editor.
 
    Arguments:
@@ -227,255 +251,261 @@
   [color]
   (rf/dispatch [::document.events/set-attr :stroke color]))
 
-(defn ^:export db
+(mx/defn db
   "Returns the application database."
   []
   @rf.db/app-db)
 
-(defn ^:export document
+(mx/defn document
   "Returns the active document."
   []
   (get-in (db) [:documents (:active-document (db))]))
 
-(defn ^:export elements
+(mx/defn elements
   "Returns the elements of the active document."
   []
   (:elements (document)))
 
-(defn ^:export raise
+(mx/defn raise
   "Raises the selected elements."
   []
   (rf/dispatch [::element.events/raise]))
 
-(defn ^:export lower
+(mx/defn lower
   "Lowers the selected elements."
   []
   (rf/dispatch [::element.events/lower]))
 
-(defn ^:export raise-to-top
+(mx/defn raise-to-top
   "Raises the selected elements to top."
   []
   (rf/dispatch [::element.events/raise-to-top]))
 
-(defn ^:export lower-to-bottom
+(mx/defn lower-to-bottom
   "Lowers the selected elements to bottom."
   []
   (rf/dispatch [::element.events/lower-to-bottom]))
 
-(defn ^:export group
+(mx/defn group
   "Groups the selected elements."
   []
   (rf/dispatch [::element.events/group]))
 
-(defn ^:export ungroup
+(mx/defn ungroup
   "Ungroups the selected elements."
   []
   (rf/dispatch [::element.events/ungroup]))
 
-(defn ^:export select-all
+(mx/defn select-all
   "Selects all elements."
   []
   (rf/dispatch [::element.events/select-all]))
 
-(defn ^:export deselect-all
+(mx/defn deselect-all
   "Deselects all elements."
   []
   (rf/dispatch [::element.events/deselect-all]))
 
-(defn ^:export element-to-path
+(mx/defn element-to-path
   "Converts the selected elements to paths."
   []
   (rf/dispatch [::element.events/->path]))
 
-(defn ^:export stroke-to-path
+(mx/defn stroke-to-path
   "Converts the selected elements' stroke to paths."
   []
   (rf/dispatch [::element.events/stroke->path]))
 
-(defn ^:export align-left
+(mx/defn align-left
   "Aligns the selected elements to the left."
   []
   (rf/dispatch [::element.events/align-left]))
 
-(defn ^:export align-right
+(mx/defn align-right
   "Aligns the selected elements to the right."
   []
   (rf/dispatch [::element.events/align-right]))
 
-(defn ^:export align-top
+(mx/defn align-top
   "Aligns the selected elements to the top."
   []
   (rf/dispatch [::element.events/align-top]))
 
-(defn ^:export align-bottom
+(mx/defn align-bottom
   "Aligns the selected elements to the bottom."
   []
   (rf/dispatch [::element.events/align-bottom]))
 
-(defn ^:export center-vertically
+(mx/defn center-vertically
   "Aligns the selected elements to the vertical center."
   []
   (rf/dispatch [::element.events/center-vertically]))
 
-(defn ^:export center-horizontally
+(mx/defn center-horizontally
   "Aligns the selected elements to the horizontal center."
   []
   (rf/dispatch [::element.events/center-horizontally]))
 
-(defn ^:export animate
+(mx/defn animate
   "Animates an attribute of the selected elements over time."
-  [& {:as attrs}]
-  (rf/dispatch [::element.events/animate attrs]))
+  ([]
+   (animate {}))
+  ([attrs :- :map]
+   (rf/dispatch [::element.events/animate attrs])))
 
-(defn ^:export animate-transform
+(mx/defn animate-transform
   "Animates a transformation attribute of the selected elements to control
    translation, scaling, rotation, and/or skewing."
-  [& {:as attrs}]
-  (rf/dispatch [::element.events/animate-transform attrs]))
+  ([]
+   (animate-transform {}))
+  ([attrs :- :map]
+   (rf/dispatch [::element.events/animate-transform attrs])))
 
-(defn ^:export animate-motion
+(mx/defn animate-motion
   "Animates the selected elements along a motion path."
-  [& {:as attrs}]
-  (rf/dispatch [::element.events/animate-motion attrs]))
+  ([]
+   (animate-motion {}))
+  ([attrs :- :map]
+   (rf/dispatch [::element.events/animate-motion attrs])))
 
-(defn ^:export undo
+(mx/defn undo
   "Goes back in history."
   ([]
    (rf/dispatch [::history.events/undo]))
   ([steps]
    (rf/dispatch [::history.events/undo-by steps])))
 
-(defn ^:export redo
+(mx/defn redo
   "Goes forward in history."
   ([]
    (rf/dispatch [::history.events/redo]))
   ([steps]
    (rf/dispatch [::history.events/redo-by steps])))
 
-(defn ^:export unite
+(mx/defn unite
   "Unites the selected elements."
   []
   (rf/dispatch [::element.events/boolean-unite]))
 
-(defn ^:export intersect
+(mx/defn intersect
   "Intersects the selected elements."
   []
   (rf/dispatch [::element.events/boolean-intersect]))
 
-(defn ^:export subtract
+(mx/defn subtract
   "Subtracts the selected elements."
   []
   (rf/dispatch [::element.events/boolean-subtract]))
 
-(defn ^:export exclude
+(mx/defn exclude
   "Excludes the selected elements."
   []
   (rf/dispatch [::element.events/boolean-exclude]))
 
-(defn ^:export div
+(mx/defn div
   "Divides the selected elements."
   []
   (rf/dispatch [::element.events/boolean-divide]))
 
-(defn ^:export exit
+(mx/defn exit
   "Closes the application."
   []
   (rf/dispatch [::window.events/close]))
 
-(defn ^:export register-icon
+(mx/defn register-icon
   "Registers an icon."
   [icon]
   (rf/dispatch [::icon.events/register-icon icon]))
 
-(defn ^:export deregister-icon
+(mx/defn deregister-icon
   "Deregisters an icon."
   [id]
   (rf/dispatch [::icon.events/deregister-icon id]))
 
-(defn ^:export register-accessibility-filter
+(mx/defn register-accessibility-filter
   "Registers an accessibility filter."
   [a11y-filter]
   (rf/dispatch [::a11y.events/register-filter a11y-filter]))
 
-(defn ^:export deregister-accessibility-filter
+(mx/defn deregister-accessibility-filter
   "Deregisters an accessibility filter."
   [id]
   (rf/dispatch [::a11y.events/deregister-filter id]))
 
-(defn ^:export languages
+(mx/defn languages
   "Returns the registered languages."
   []
   (-> (db) :languages keys sort))
 
-(defn ^:export register-language
+(mx/defn register-language
   "Registers a language."
   [language]
   (rf/dispatch [::i18n.events/register-language language]))
 
-(defn ^:export set-translation
+(mx/defn set-translation
   "Sets a translation for a language."
   [lang-id k v]
   (rf/dispatch [::i18n.events/set-translation lang-id (keyword k) v]))
 
-(defn ^:export deregister-language
+(mx/defn deregister-language
   "Deregisters a language."
   [id]
   (rf/dispatch [::i18n.events/deregister-language (keyword id)]))
 
-(defn ^:export actions
+(mx/defn actions
   "Returns the registered actions."
   []
   (-> (db) :actions keys sort))
 
-(defn ^:export register-action
+(mx/defn register-action
   "Registers an action."
   [action]
   (rf/dispatch [::action.events/register-action action]))
 
-(defn ^:export deregister-action
+(mx/defn deregister-action
   "Deregisters an action."
   [id]
   (rf/dispatch [::action.events/deregister-action id]))
 
-(defn ^:export action-groups
+(mx/defn action-groups
   "Returns the registered action groups."
   []
   (-> (db) :action-groups keys sort))
 
-(defn ^:export register-action-group
+(mx/defn register-action-group
   "Registers an action group."
   [action-group]
   (rf/dispatch [::action.events/register-action-group action-group]))
 
-(defn ^:export deregister-action-group
+(mx/defn deregister-action-group
   "Deregisters an action group."
   [id]
   (rf/dispatch [::action.events/deregister-action-group id]))
 
-(defn ^:export add-action-to-group
+(mx/defn add-action-to-group
   "Adds an action to an action group."
   [group-id action-id]
   (rf/dispatch [::action.events/add-action-to-group
                 (keyword group-id)
                 (keyword action-id)]))
 
-(defn ^:export remove-action-from-group
+(mx/defn remove-action-from-group
   "Removes an action from an action group."
   [group-id action-id]
   (rf/dispatch [::action.events/remove-action-from-group
                 (keyword group-id)
                 (keyword action-id)]))
 
-(defn ^:export help
+(mx/defn help
   "Lists the available functions or returns help for a specific command."
   ([]
    (doseq [x (sort-by str (vals (ns-publics 'user)))]
      (help (:name (meta x)))))
-  ([command]
+  ([command :- :string]
    (let [lang (-> (db) :shell :active-language)]
      (shell.hierarchy/help lang command))))
 
-(defn ^:export version
+(mx/defn version
   "The application version."
   []
   config/version)

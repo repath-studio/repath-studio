@@ -1,5 +1,6 @@
 {:hooks {:analyze-call {malli.core/=> hooks/=>}}
  :exclude-files "resources.*|generated.*|.clj-kondo/imports/.*"
+ :config-in-ns {user {:linters {:clojure-lsp/unused-public-var {:level :off}}}}
  :linters {:unsorted-required-namespaces {:level :warning}
            :unsorted-imports {:level :warning}
            :single-key-in {:level :warning}

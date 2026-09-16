@@ -1,5 +1,6 @@
 (ns renderer.shell.subs
   (:require
+   [clojure.string :as string]
    [re-frame.core :as rf]
    [renderer.shell.hierarchy :as shell.hierarchy]))
 
@@ -112,7 +113,16 @@
  :<- [::active-language]
  :<- [::active-completion]
  :-> (fn [[active-language active-completion] _]
-       (shell.hierarchy/docs active-language (first active-completion))))
+       (when-let [docs (some->> (first active-completion)
+                                (shell.hierarchy/docs active-language))]
+         (let [sections (string/split docs "\n\n")]
+           {:head (first sections)
+            :body (->> (rest sections)
+                       (map #(->> (string/split-lines %)
+                                  (remove empty?)
+                                  (map string/trim)
+                                  (string/join "\n")))
+                       (string/join "\n\n"))}))))
 
 (rf/reg-sub
  ::cycle-completions?

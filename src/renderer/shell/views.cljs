@@ -207,13 +207,6 @@
                 (str segment))))
        (into [:div.flex-1.whitespace-nowrap.select-text])))
 
-(defn maybe-fn-docs
-  [f]
-  (let [doc (shell.reepl.sci/doc-from-sym f)]
-    (when (:forms doc)
-      (with-out-str
-        (shell.reepl.sci/print-doc doc)))))
-
 (defn repl-items
   []
   (let [loaded? @(rf/subscribe [::shell.subs/language-loaded?])
@@ -225,7 +218,7 @@
               :language lang
               :showers [show-devtools/show-devtools
                         (partial show-function/show-fn-with-docs
-                                 maybe-fn-docs)]}]
+                                 shell.hierarchy/docs lang)]}]
     [:div.flex-1.h-full.overflow-hidden.flex.flex-col
      [views/toolbar
       {:class "bg-primary"}
@@ -258,24 +251,17 @@
    text])
 
 (defn function-docs
-  [s]
+  [{:keys [head body]}]
   (let [theme-mode @(rf/subscribe [::theme.subs/computed-mode])
         lang @(rf/subscribe [::shell.subs/active-language])
-        lines (string/split-lines s)
-        signature (when (seq (nth lines 2 nil)) (nth lines 2 nil))
-        doc (string/join "\n" (drop-while string/blank? (drop 3 lines)))]
+        parser (shell.hierarchy/parser lang)]
     [:div.bg-primary.drop-shadow.absolute.bottom-full.z-1
      [:div.flex.flex-col.gap-4.p-4
       [:div.font-semibold.text-normal.text-sm
-       [views/static-highlight (str (first lines)) theme-mode
-        (shell.hierarchy/parser lang)]]
-      (when (seq signature)
-        [views/static-highlight signature theme-mode
-         (shell.hierarchy/parser lang)])
-      (when (seq doc)
+       [views/static-highlight head theme-mode parser]]
+      (when body
         [:div.max-h-40.overflow-hidden.flex
-         [views/scroll-area
-          doc]])]]))
+         [views/scroll-area body]])]]))
 
 (defn completion-list
   []
