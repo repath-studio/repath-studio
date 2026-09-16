@@ -26,6 +26,15 @@
   :show "Anzeigen"
   :hide "Verbergen"}
 
+ :renderer.shell.events
+ {:paste-warning-title "Möchten Sie hier wirklich einfügen?"
+  :paste-warning-message "Das Einfügen von Code, den Sie nicht verstehen, kann
+                          äußerst gefährlich sein. Selbst wenn Sie den
+                          angezeigten Code verstehen, können aus nicht
+                          vertrauenswürdigen Quellen kopierte Befehle bösartige
+                          Inhalte verbergen."
+  :confirm-paste "Ich verstehe, bitte einfügen"}
+
  :renderer.shell.views
  {:hide-command-output "Befehlsausgabe verbergen"
   :show-command-output "Befehlsausgabe anzeigen"}

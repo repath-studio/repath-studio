@@ -74,19 +74,19 @@
 
 (defn reporting-confirmation-dialog
   [db]
-  {:title (i18n.handlers/t db [::are-you-sure-you-want-to-paste
+  {:title (i18n.handlers/t db [::paste-warning-title
                                "Are you sure you want to paste here?"])
    :content [dialog.views/confirmation
              {:content (i18n.handlers/t
                         db
-                        [::danger
+                        [::paste-warning-message
                          "Pasting code that you don't understand can be
                           extremely dangarous. Event if you understand the code
                           that you see, commands copied from untrusted sources
                           might hide malicious content."])
               :cancel-event [::focus]
               :confirm-event [::allow-paste]
-              :confirm-label [::i-understand "I understand, let me paste"]}]})
+              :confirm-label [::confirm-paste "I understand, let me paste"]}]})
 
 (rf/reg-event-fx
  ::paste

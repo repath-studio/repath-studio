@@ -26,6 +26,15 @@
   :show "Afficher"
   :hide "Masquer"}
 
+ :renderer.shell.events
+ {:paste-warning-title "Voulez-vous vraiment coller ici ?"
+  :paste-warning-message "Coller du code que vous ne comprenez pas peut être
+                          extrêmement dangereux. Même si vous comprenez le code
+                          que vous voyez, des commandes copiées depuis des
+                          sources non fiables peuvent cacher un contenu
+                          malveillant."
+  :confirm-paste "Je comprends, laissez-moi coller"}
+
  :renderer.shell.views
  {:hide-command-output "Masquer la sortie de commande"
   :show-command-output "Afficher la sortie de commande"}

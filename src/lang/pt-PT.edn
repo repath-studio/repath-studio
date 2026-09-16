@@ -26,6 +26,14 @@
   :show "Mostrar"
   :hide "Ocultar"}
 
+ :renderer.shell.events
+ {:paste-warning-title "Tem a certeza de que quer colar aqui?"
+  :paste-warning-message "Colar código que não compreende pode ser extremamente
+                          perigoso. Mesmo que compreenda o código que vê,
+                          comandos copiados de fontes não fiáveis podem ocultar
+                          conteúdo malicioso."
+  :confirm-paste "Compreendo, deixa-me colar"}
+
  :renderer.shell.views
  {:hide-command-output "Ocultar saída de comandos"
   :show-command-output "Mostrar saída de comandos"}

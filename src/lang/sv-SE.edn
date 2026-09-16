@@ -26,6 +26,14 @@
   :show "Visa"
   :hide "Dölj"}
 
+ :renderer.shell.events
+ {:paste-warning-title "Är du säker på att du vill klistra in här?"
+  :paste-warning-message "Att klistra in kod som du inte förstår kan vara
+                          extremt farligt. Även om du förstår koden som du ser
+                          kan kommandon som kopierats från opålitliga källor
+                          dölja skadligt innehåll."
+  :confirm-paste "Jag förstår, låt mig klistra in"}
+
  :renderer.shell.views
  {:hide-command-output "Dölj kommandoutdata"
   :show-command-output "Visa kommandoutdata"}

@@ -26,6 +26,14 @@
   :show "Mostra"
   :hide "Nascondi"}
 
+ :renderer.shell.events
+ {:paste-warning-title "Sei sicuro di voler incollare qui?"
+  :paste-warning-message "Incollare codice che non capisci può essere
+                          estremamente pericoloso. Anche se capisci il codice
+                          che vedi, i comandi copiati da fonti non fidate
+                          potrebbero nascondere contenuto malevolo."
+  :confirm-paste "Ho capito, lascia che incolli"}
+
  :renderer.shell.views
  {:hide-command-output "Nascondi output comando"
   :show-command-output "Mostra output comando"}

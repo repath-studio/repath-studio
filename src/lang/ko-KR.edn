@@ -26,6 +26,14 @@
   :show "보이기"
   :hide "숨기기"}
 
+ :renderer.shell.events
+ {:paste-warning-title "여기에 붙여 넣으시겠습니까?"
+  :paste-warning-message "이해하지 못하는 코드를 붙여 넣으면 매우 위험할 수
+                          있습니다. 보이는 코드를 이해하더라도 신뢰할 수 없는
+                          출처에서 복사한 명령에 악성 내용이 숨겨져 있을 수
+                          있습니다."
+  :confirm-paste "이해했습니다. 붙여 넣겠습니다"}
+
  :renderer.shell.views
  {:hide-command-output "명령 출력 숨기기"
   :show-command-output "명령 출력 보이기"}

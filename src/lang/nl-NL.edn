@@ -26,6 +26,14 @@
   :show "Tonen"
   :hide "Verbergen"}
 
+ :renderer.shell.events
+ {:paste-warning-title "Weet u zeker dat u hier wilt plakken?"
+  :paste-warning-message "Code plakken die u niet begrijpt, kan uiterst
+                          gevaarlijk zijn. Zelfs als u de code begrijpt die u
+                          ziet, kunnen commando's die zijn gekopieerd van
+                          onbetrouwbare bronnen kwaadaardige inhoud verbergen."
+  :confirm-paste "Ik begrijp het, laat me plakken"}
+
  :renderer.shell.views
  {:hide-command-output "Commando-uitvoer verbergen"
   :show-command-output "Commando-uitvoer tonen"}

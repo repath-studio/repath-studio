@@ -26,6 +26,15 @@
   :show "表示"
   :hide "非表示"}
 
+ :renderer.shell.events
+ {:paste-warning-title "ここに貼り付けてよろしいですか？"
+  :paste-warning-message "理解していないコードを貼り付けることは極めて危険であ
+                          る可能性があります。表示されているコードを理解してい
+                          る場合でも、信頼できないソースからコピーされたコマン
+                          ドが悪意のあるコンテンツを隠している可能性があります
+                          。"
+  :confirm-paste "理解しました、貼り付けてください"}
+
  :renderer.shell.views
  {:hide-command-output "コマンド出力を非表示"
   :show-command-output "コマンド出力を表示"}

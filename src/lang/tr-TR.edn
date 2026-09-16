@@ -26,6 +26,14 @@
   :show "Göster"
   :hide "Gizle"}
 
+ :renderer.shell.events
+ {:paste-warning-title "Buraya yapıştırmak istediğinizden emin misiniz?"
+  :paste-warning-message "Anlamadığınız kodu yapıştırmak son derece tehlikeli
+                          olabilir. Gördüğünüz kodu anlasanız bile, güvenilir
+                          olmayan kaynaklardan kopyalanan komutlar zararlı
+                          içerik barındırabilir."
+  :confirm-paste "Anlıyorum, yapıştırayım"}
+
  :renderer.shell.views
  {:hide-command-output "Komut çıktısını gizle"
   :show-command-output "Komut çıktısını göster"}

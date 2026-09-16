@@ -26,6 +26,14 @@
   :show "Show"
   :hide "Hide"}
 
+ :renderer.shell.events
+ {:paste-warning-title "Are you sure you want to paste here?"
+  :paste-warning-message "Pasting code that you don't understand can be
+                          extremely dangarous. Event if you understand the code
+                          that you see, commands copied from untrusted sources
+                          might hide malicious content."
+  :confirm-paste "I understand, let me paste"}
+
  :renderer.shell.views
  {:hide-command-output "Hide command output"
   :show-command-output "Show command output"}

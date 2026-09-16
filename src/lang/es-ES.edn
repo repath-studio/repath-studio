@@ -26,6 +26,14 @@
   :show "Mostrar"
   :hide "Ocultar"}
 
+ :renderer.shell.events
+ {:paste-warning-title "¿Está seguro de que quiere pegar aquí?"
+  :paste-warning-message "Pegar código que no entiende puede ser extremadamente
+                          peligroso. Incluso si entiende el código que ve, los
+                          comandos copiados de fuentes no confiables pueden
+                          ocultar contenido malicioso."
+  :confirm-paste "Lo entiendo, déjame pegar"}
+
  :renderer.shell.views
  {:hide-command-output "Ocultar salida de comandos"
   :show-command-output "Mostrar salida de comandos"}

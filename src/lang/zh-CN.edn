@@ -26,6 +26,12 @@
   :show "显示"
   :hide "隐藏"}
 
+ :renderer.shell.events
+ {:paste-warning-title "确定要在此处粘贴吗？"
+  :paste-warning-message "粘贴您不理解的代码可能极其危险。即使您理解看到的代码
+                          ，从不可信来源复制的命令也可能隐藏恶意内容。"
+  :confirm-paste "我明白了，请粘贴"}
+
  :renderer.shell.views
  {:hide-command-output "隐藏命令输出"
   :show-command-output "显示命令输出"}

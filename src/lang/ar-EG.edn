@@ -26,6 +26,13 @@
   :show "إظهار"
   :hide "إخفاء"}
 
+ :renderer.shell.events
+ {:paste-warning-title "هل تريد حقًا اللصق هنا؟"
+  :paste-warning-message "يمكن أن يكون لصق الكود الذي لا تفهمه خطيرًا للغاية.
+                          حتى لو كنت تفهم الكود الذي تراه، فقد تخفي الأوامر
+                          المنسوخة من مصادر غير موثوقة محتوى خبيثًا."
+  :confirm-paste "أفهم، دعني ألصق"}
+
  :renderer.shell.views
  {:hide-command-output "إخفاء مخرجات الأمر"
   :show-command-output "إظهار مخرجات الأمر"}
