@@ -22,14 +22,14 @@
     [:div.flex.max-h-dvh.overflow-hidden
      [views/scroll-area
       [:div.flex.w-full.justify-center.items-center
-       [:div.w-full.max-w-md.bg-primary.p-8.m-2
+       [:div.w-full.max-w-xl.bg-primary.p-8.md:m-8.m-2
         [:div.text-xl.pr-10.pb-5 "The following unhandled error was thrown"]
 
         [:p.text-error error-message]
         (when stack
           [:details.mb-5
            [:summary "Stacktrace"]
-           [:pre.border.mt-2.p-2.border-border.text-wrap.text-2xs
+           [:pre.border.mt-2.p-2.border-border.text-wrap.text-2xs.select-text
             {:class "overflow-hidden"}
             stack]])
 
