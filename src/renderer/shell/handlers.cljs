@@ -15,6 +15,16 @@
   [db]
   (get-in db [:shell :active-language]))
 
+(m/=> paste-allowed? [:-> App boolean?])
+(defn paste-allowed?
+  [db]
+  (boolean (get-in db [:shell :paste-allowed])))
+
+(m/=> allow-paste [:-> App App])
+(defn allow-paste
+  [db]
+  (assoc-in db [:shell :paste-allowed] true))
+
 (m/=> set-language [:-> App ShellLanguageId App])
 (defn set-language
   [db lang]

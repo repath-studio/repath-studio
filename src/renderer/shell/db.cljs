@@ -85,7 +85,8 @@
    [:verbose {:default false} boolean?]
    [:languages {:default {}} [:map-of ShellLanguageId ShellLanguage]]
    [:active-language {:default :cljs} keyword?]
-   [:completion {:optional true} [:maybe ShellCompletion]]])
+   [:completion {:optional true} [:maybe ShellCompletion]]
+   [:paste-allowed {:default false} boolean?]])
 
 (def default-lang (m/decode ShellLanguage
                             {}

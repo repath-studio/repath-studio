@@ -26,8 +26,9 @@
 (rf/reg-fx
  ::focus
  (fn []
-   (some-> (utils.dom/get-shell-element)
-           (.focus))))
+   (js/requestAnimationFrame
+    #(some-> (utils.dom/get-shell-element)
+             (.focus)))))
 
 (rf/reg-fx
  ::init-language
@@ -60,6 +61,21 @@
   []
   (some->> (utils.dom/get-shell-element)
            (.findFromDOM EditorView)))
+
+(rf/reg-fx
+ ::paste
+ (fn []
+   (-> (js/navigator.clipboard.readText)
+       (.then (fn [text]
+                (when-let [inst (get-editor-from-dom)]
+                  (let [selection (utils.codemirror/get-selection inst)
+                        from (.-from selection)
+                        to (.-to selection)
+                        end (+ from (.-length text))]
+                    (.dispatch inst #js {:changes #js {:from from
+                                                       :to to
+                                                       :insert text}
+                                         :selection #js {:anchor end}}))))))))
 
 (rf/reg-fx
  ::replace-current-word

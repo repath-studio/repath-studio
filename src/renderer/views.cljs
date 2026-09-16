@@ -340,7 +340,8 @@
                     :run insertNewlineAndIndent})])
 
 (defn cm-editor
-  [value {:keys [extensions theme-mode on-blur on-change on-keyup on-keydown]}]
+  [value {:keys [extensions theme-mode
+                 on-blur on-change on-keyup on-keydown on-paste]}]
   (let [cm (reagent/atom nil)
         updating? (atom false)
         ref (react/createRef)
@@ -358,7 +359,8 @@
                                          EditorView
                                          #js {:keydown on-keydown
                                               :keyup on-keyup
-                                              :blur on-blur}))]]
+                                              :blur on-blur
+                                              :paste on-paste}))]]
     (reagent/create-class
      {:component-did-mount
       (fn [_this]

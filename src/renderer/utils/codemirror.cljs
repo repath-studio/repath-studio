@@ -9,6 +9,10 @@
   (->> (get-head inst)
        (.lineAt (.. inst -state -doc))))
 
+(defn get-selection
+  [^js inst]
+  (.. inst -state -selection -main))
+
 (defn get-lines
   [^js inst]
   (.. inst -state -doc -lines))

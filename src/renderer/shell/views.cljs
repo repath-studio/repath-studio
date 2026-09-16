@@ -117,7 +117,9 @@
     :on-blur #(rf/dispatch [::shell.events/clear-completion])
     :on-change (:on-change options)
     :on-keyup (partial on-keyup-handler options)
-    :on-keydown (partial on-keydown-handler options)}])
+    :on-keydown (partial on-keydown-handler options)
+    :on-paste #(do (.preventDefault %)
+                   (rf/dispatch [::shell.events/paste]))}])
 
 (defn repl-input
   []
@@ -240,7 +242,7 @@
 
 (defn completion-item
   [text selected active index]
-  [:div.p-1.bg-secondary.text-nowrap.hover:bg-primary
+  [:div.p-1.bg-secondary.text-nowrap.hover:bg-primary.border.border-border
    {:ref #(when selected (rf/dispatch [::events/scroll-into-view %]))
     :on-pointer-down #(do (.preventDefault %)
                           (rf/dispatch [::shell.events/activate-completion
@@ -255,7 +257,7 @@
   (let [theme-mode @(rf/subscribe [::theme.subs/computed-mode])
         lang @(rf/subscribe [::shell.subs/active-language])
         parser (shell.hierarchy/parser lang)]
-    [:div.bg-primary.drop-shadow.absolute.bottom-full.z-1
+    [:div.bg-primary.drop-shadow.absolute.bottom-full.z-1.border.border-border
      [:div.flex.flex-col.gap-4.p-4
       [:div.font-semibold.text-normal.text-sm
        [views/static-highlight head theme-mode parser]]
@@ -270,7 +272,7 @@
         show-all? @(rf/subscribe [::shell.subs/completion-show-all?])
         pos @(rf/subscribe [::shell.subs/completion-pos])
         docs @(rf/subscribe [::shell.subs/docs])]
-    [:div#completion-list.absolute.bottom-full.left-0.w-full.text-xs.mb-px
+    [:div.absolute.bottom-full.left-0.w-full.text-xs.mb-px
      (when docs [function-docs docs])
      (->> words
           (map-indexed (fn [index word]

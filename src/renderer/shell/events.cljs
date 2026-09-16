@@ -3,6 +3,9 @@
    [re-frame.core :as rf]
    [renderer.app.effects :as-alias app.effects]
    [renderer.app.events :as-alias app.events :refer [persist]]
+   [renderer.dialog.handlers :as dialog.handlers]
+   [renderer.dialog.views :as dialog.views]
+   [renderer.i18n.handlers :as i18n.handlers]
    [renderer.shell.db :as shell.db]
    [renderer.shell.effects :as-alias shell.effects]
    [renderer.shell.handlers :as shell.handlers]
@@ -68,6 +71,36 @@
  (fn [{:keys [db]} _]
    {:db (shell.handlers/clear-items db)
     ::shell.effects/welcome (shell.handlers/active-language db)}))
+
+(defn reporting-confirmation-dialog
+  [db]
+  {:title (i18n.handlers/t db [::are-you-sure-you-want-to-paste
+                               "Are you sure you want to paste here?"])
+   :content [dialog.views/confirmation
+             {:content (i18n.handlers/t
+                        db
+                        [::danger
+                         "Pasting code that you don't understand can be
+                          extremely dangarous. Event if you understand the code
+                          that you see, commands copied from untrusted sources
+                          might hide malicious content."])
+              :cancel-event [::focus]
+              :confirm-event [::allow-paste]
+              :confirm-label [::i-understand "I understand, let me paste"]}]})
+
+(rf/reg-event-fx
+ ::paste
+ (fn [{:keys [db]} _]
+   (if (shell.handlers/paste-allowed? db)
+     {::shell.effects/paste nil}
+     {:db (dialog.handlers/create db (reporting-confirmation-dialog db))})))
+
+(rf/reg-event-fx
+ ::allow-paste
+ [persist]
+ (fn [{:keys [db]} _]
+   {:db (shell.handlers/allow-paste db)
+    ::shell.effects/paste nil}))
 
 (rf/reg-event-db
  ::toggle-verbose
