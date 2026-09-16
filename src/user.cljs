@@ -47,8 +47,8 @@
 
    Arguments:
    - `ratio`: The scale ratio (for both axis).
-   - `x`: The x-axis ratio
-   - `y`: The y-axis ratio"
+   - `x`:     The x-axis ratio
+   - `y`:     The y-axis ratio"
   ([ratio :- :float]
    (rf/dispatch [::element.events/scale (if (number? ratio)
                                           [ratio ratio]
