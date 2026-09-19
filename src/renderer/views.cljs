@@ -498,4 +498,3 @@
       {:class "sr-only"}
       (i18n.views/t (:label props))]
      (into [:div.flex.flex-1.overflow-hidden.w-full] children)]]])
-

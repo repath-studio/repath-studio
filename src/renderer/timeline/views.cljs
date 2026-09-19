@@ -53,7 +53,6 @@
          {:style {:min-width "50px"}}
          [:span (str speed "x")]
          [:> Select/Icon
-          {:class "select-icon"}
           [views/icon "chevron-down"]]]]]
       [:> Select/Portal
        [:> Select/Content
