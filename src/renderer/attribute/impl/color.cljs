@@ -40,12 +40,9 @@
          :class "popover-content"
          :align "end"
          :on-escape-key-down #(.stopPropagation %)}
-        [:div.p-2
-         {:dir "ltr"
-          :tab-index 0}
-         [color-picker-view/root
-          {:value color
-           :dropper dropper?
-           :on-change #(rf/dispatch [::element.events/preview-attr k %])
-           :on-change-complete #(rf/dispatch [::element.events/set-attr k %])}]]
+        [color-picker-view/root
+         {:value color
+          :dropper dropper?
+          :on-change #(rf/dispatch [::element.events/preview-attr k %])
+          :on-commit #(rf/dispatch [::element.events/set-attr k %])}]
         [views/popover-arrow]]]]]))

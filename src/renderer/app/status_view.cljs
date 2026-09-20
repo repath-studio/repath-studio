@@ -123,10 +123,7 @@
       :side "top"
       :align-offset (:align-offset props)
       :on-escape-key-down #(.stopPropagation %)}
-     [:div.p-2
-      {:dir "ltr"
-       :tab-index 0}
-      [color-picker-view/root props]]
+     [color-picker-view/root props]
      [views/popover-arrow]]]])
 
 (defn color-selectors
@@ -139,7 +136,7 @@
      [color-picker
       {:value fill
        :dropper dropper
-       :on-change-complete #(rf/dispatch [::document.events/set-attr :fill %])
+       :on-commit #(rf/dispatch [::document.events/set-attr :fill %])
        :on-change #(rf/dispatch [::document.events/preview-attr :fill %])}
 
       [:button.button.border.border-border.button-size.rounded
@@ -155,7 +152,7 @@
      [color-picker
       {:value stroke
        :dropper dropper
-       :on-change-complete #(rf/dispatch [::document.events/set-attr :stroke %])
+       :on-commit #(rf/dispatch [::document.events/set-attr :stroke %])
        :on-change #(rf/dispatch [::document.events/preview-attr :stroke %])}
       [:button.relative.border.border-border.button-size.rounded-sm
        {:title (i18n.views/t [::stroke-color "Pick stroke color"])

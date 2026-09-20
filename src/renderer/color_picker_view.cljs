@@ -1,5 +1,6 @@
 (ns renderer.color-picker-view
   (:require
+   ["@radix-ui/react-select" :as Select]
    ["@radix-ui/react-slider" :as Slider]
    ["chroma-js" :as chroma]
    ["react" :as react]
@@ -14,7 +15,7 @@
    [renderer.views :as views]))
 
 (def supported-types
-  ["hex" "rgb" "hsl" "lab" "lch"])
+  ["hex" "rgb" "hsl" "lab" "lch" "oklch" "oklab"])
 
 (defn ->css
   [^js color mode]
@@ -50,7 +51,7 @@
                     (.alpha alpha)
                     (->css mode)
                     (cb)))))]
-      [:div.relative.size-full.cursor-crosshair.touch-none.rounded.h-50
+      [:div.relative.size-full.cursor-crosshair.touch-none.h-40
        {:ref node
         :style {:background
                 (str "linear-gradient(0deg, rgba(0,0,0,1), rgba(0,0,0,0)), "
@@ -90,29 +91,27 @@
 (defn hue-slider
   [^js color mode on-change on-commit]
   [:> Slider/Root
-   {:class "relative flex h-4 w-full touch-none"
+   {:class "relative flex h-4 w-full touch-none px-2"
     :max 359
     :step 1
     :value [(first (.hsl color))]
-    :on-value-change (fn [[v]] (-> (.set color "hsl.h" v)
-                                   (->css mode)
-                                   (on-change)))
-    :on-value-commit (fn [[v]] (-> (.set color "hsl.h" v)
-                                   (->css mode)
-                                   (on-commit)))
+    :on-value-change (fn [[v]]
+                       (-> (.set color "hsl.h" v) (->css mode) on-change))
+    :on-value-commit (fn [[v]]
+                       (-> (.set color "hsl.h" v) (->css mode) on-commit))
     :on-pointer-move #(.stopPropagation %)}
    [:> Slider/Track
-    {:class "relative my-0.5 h-3 grow rounded-full"
+    {:class "relative my-0.5 h-3 grow"
      :style {:background (str "linear-gradient(90deg, "
                               (string/join ", " track-colors)
                               ")")}}]
    [:> Slider/Thumb
-    {:class "block h-4 w-4 rounded-full bg-foreground-hovered shadow-sm"}]])
+    {:class "block h-4 w-4 rounded-full bg-primary border border-border"}]])
 
 (defn alpha-slider
   [^js color mode on-change on-commit]
   [:> Slider/Root
-   {:class "relative flex h-4 w-full touch-none"
+   {:class "relative flex h-4 w-full touch-none px-2"
     :max 1
     :step 0.01
     :value [(.alpha color)]
@@ -120,21 +119,22 @@
     :on-value-commit (fn [[v]] (-> (.alpha color v) (->css mode) (on-commit)))
     :on-pointer-move #(.stopPropagation %)}
    [:> Slider/Track
-    {:class "relative my-0.5 h-3 grow rounded-full"
+    {:class "relative my-0.5 h-3 grow"
      :style {:background (str "url(\"" alpha-checkerboard "\") left center")}}
-    [:div.absolute.inset-0.rounded-full
+    [:div.absolute.inset-0
      {:style {:background (str "linear-gradient(90deg, transparent, "
-                               (.css color)
+                               (.css (.alpha color 1))
                                ")")}}]
     [:> Slider/Range
      {:class "absolute h-full rounded-full bg-transparent"}]]
    [:> Slider/Thumb
-    {:class "block h-4 w-4 rounded-full bg-foreground-hovered shadow-sm"}]])
+    {:class "block h-4 w-4 rounded-full bg-primary border border-border"}]])
 
 (defn eye-dropper-button
   [mode on-pick]
   [views/icon-button "eye-dropper"
-   {:on-click #(-> (js/EyeDropper.)
+   {:class "my-1!"
+    :on-click #(-> (js/EyeDropper.)
                    (.open)
                    (.then (fn [^js result]
                             (some-> (.-sRGBHex result)
@@ -145,47 +145,78 @@
 
 (defn mode-select
   [color mode on-value-change]
-  [views/icon-button "chevron-down"
-   {:on-click #(let [i (.indexOf supported-types mode)
-                     next-i (if (= i (dec (count supported-types))) 0 (inc i))]
-                 (->> (get supported-types next-i)
-                      (->css color)
-                      (on-value-change)))}])
+  [:> Select/Root
+   {:value mode
+    :on-value-change (fn [mode] (on-value-change (->css color mode)))}
+   [:> Select/Trigger
+    {:class "button px-2 rounded-sm shrink-0"}
+    [:div
+     [:> Select/Value ""]
+     [:> Select/Icon [views/icon "chevron-down"]]]]
+   [:> Select/Portal
+    [:> Select/Content
+     {:class "menu-content rounded-sm select-content"
+      :on-key-down #(.stopPropagation %)
+      :on-escape-key-down #(.stopPropagation %)}
+     [:> Select/ScrollUpButton
+      {:class "select-scroll-button"}
+      [views/icon "chevron-up"]]
+     (->> supported-types
+          (map (fn [format]
+                 [:> Select/Item
+                  {:value format
+                   :class "menu-item px-2!"}
+                  [:> Select/ItemText
+                   (string/upper-case format)]]))
+          (into [:> Select/Viewport {:class "select-viewport"}]))
+     [:> Select/ScrollDownButton
+      {:class "select-scroll-button"}
+      [views/icon "chevron-down"]]]]])
+
+(defn valid-channel-value?
+  [channel value]
+  (if (= channel "hex")
+    (chroma/valid value)
+    (not (js/isNaN value))))
 
 (defn set-value
-  [e v color mode channel on-commit]
-  (let [new-v (-> (.. e -target -value) js/parseFloat)]
-    (js/console.log channel)
-    (if (js/isNaN new-v)
-      (set! (.. e -target -value) v)
-      (-> (if channel
-            (.set color (str mode "." channel) v)
-            (.alpha color v))
+  [e {:keys [value color mode channel on-commit]}]
+  (let [new-value (.. e -target -value)]
+    (if-not (valid-channel-value? channel new-value)
+      (set! (.. e -target -value) value)
+      (-> (case channel
+            "alpha" (.alpha color new-value)
+            "hex" (chroma/Color. new-value)
+            (.set color (str mode "." channel) new-value))
           (->css mode)
           (on-commit)))))
 
+(defn index->channel
+  [index mode]
+  (or (if (= mode "hex")
+        "hex"
+        (get (vec (take-last 3 mode)) index))
+      "alpha"))
+
 (defn channel-input
-  [v index color mode on-commit]
-  (let [channel (if (= mode "hex")
-                  "hex"
-                  (get mode index))
-        value (cond-> v
-                (number? v)
+  [{:keys [value index mode]
+    :as options}]
+  (let [channel (index->channel index mode)
+        value (cond-> value
+                (number? value)
                 (-> (js/parseFloat)
-                    (utils.attribute/->fixed)))]
-    [:div.flex.flex-col.items-center.w-full
-     [:input.form-element.text-center
-      {:dir "ltr"
-       :id channel
+                    (utils.attribute/->fixed)))
+        options (merge options {:value value
+                                :channel channel})]
+    [:div.flex.flex-col.items-center.w-full.text-2xs
+     [:input.form-element.text-center.p-0!
+      {:id channel
        :default-value value
-       :on-blur #(set-value % value color mode channel on-commit)
-       :on-key-down #(utils.key/down-handler % value
-                                             set-value
-                                             value color mode channel
-                                             on-commit)}]
-     [:label
+       :on-blur #(set-value % options)
+       :on-key-down #(utils.key/down-handler % value set-value options)}]
+     [:label.text-foreground-muted
       {:for channel}
-      (string/upper-case (or channel "a"))]]))
+      (string/upper-case channel)]]))
 
 (defn channel-values
   [^js color mode]
@@ -194,7 +225,21 @@
     "rgb" (.rgba color)
     "hsl" (.hsl color)
     "lab" (.lab color)
-    "lch" (.lch color)))
+    "lch" (.lch color)
+    "oklch" (.oklch color)
+    "oklab" (.oklab color)))
+
+(defn channels
+  [color mode on-commit]
+  (->> (channel-values color mode)
+       (map-indexed (fn [index value]
+                      ^{:key (str mode index value)}
+                      [channel-input {:value value
+                                      :index index
+                                      :color color
+                                      :mode mode
+                                      :on-commit on-commit}]))
+       (into [:div.flex.w-full.items-center.rounded-sm.gap-1])))
 
 (defn color-url
   [mode]
@@ -212,25 +257,24 @@
                    [(string/upper-case mode)])]))
 
 (defn root
-  [{:keys [value on-change on-change-complete dropper]}]
+  [{:keys [value on-change on-commit dropper]}]
   (let [color (if (chroma/valid value)
                 (chroma/Color. value)
                 (chroma/Color. "black"))
         value (string/lower-case (str value))
         mode (or (some #(when (string/starts-with? value %) %) supported-types)
                  "hex")]
-    [:dev.flex.flex-col.gap-4.w-70
+    [:div.flex.flex-col.gap-4.w-70.p-2
+     {:dir "ltr"}
      [:div.flex.flex-col.gap-4
-      [selection-input color mode on-change on-change-complete]
-      [hue-slider color mode on-change on-change-complete]
-      [alpha-slider color mode on-change on-change-complete]
-      [:div.flex.items-center.gap-2
+      [selection-input color mode on-change on-commit]
+      [:div.flex.items-center.gap-1.justify-center
        (when dropper
-         [eye-dropper-button mode on-change-complete])
-       [mode-select color mode on-change-complete]
-       (->> (channel-values color mode)
-            (map-indexed (fn [i v]
-                           ^{:key (str mode i v)}
-                           [channel-input v i color mode on-change-complete]))
-            (into [:div.flex.w-full.items-center.rounded-sm.gap-px]))]]
+         [eye-dropper-button mode on-commit])
+       [:div.flex.flex-col.flex-1.space-between.gap-1
+        [hue-slider color mode on-change on-commit]
+        [alpha-slider color mode on-change on-commit]]]
+      [:div.flex.items-center.gap-2
+       [mode-select color mode on-commit]
+       [channels color mode on-commit]]]
      [mdn-button mode]]))
