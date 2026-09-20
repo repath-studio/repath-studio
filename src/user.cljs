@@ -200,7 +200,7 @@
    - `attrs`:  Optional map of attributes."
   ([x :- :float y :- :float width :- :float height :- :float
     href :- :string]
-   (image [x y] width height href {}))
+   (image x y width height href {}))
   ([x :- :float y :- :float width :- :float height :- :float href :- :string
     attrs :- :map]
    (create {:tag :image
@@ -219,7 +219,7 @@
    - `content`: The text content.
    - `attrs`:   Optional map of attributes."
   ([x :- :float y :- :float content :- :string]
-   (text [x y] content {}))
+   (text x y content {}))
   ([x :- :float y :- :float content :- :string attrs :- :map]
    (create {:tag :text
             :content content
