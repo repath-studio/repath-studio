@@ -7,7 +7,7 @@
   "license": "AGPL-3.0",
   "version": "0.4.21",
   "scripts": {
-    "upgrade": "npx npm-check-updates -u --cooldown 7d",
+    "upgrade": "npx npm-check-updates -u -x 'typescript' --cooldown 7d",
     "fonts:sans": "npx shx cp -r node_modules/@fontsource/noto-sans/files/. resources/public/css/files",
     "fonts:mono": "npx shx cp -r node_modules/@fontsource/noto-sans-mono/files/. resources/public/css/files",
     "pyodide": "npx shx cp -r node_modules/pyodide/. resources/public/pyodide",
@@ -91,10 +91,10 @@
   },
   "main": "resources/main.js",
   "devDependencies": {
-    "@capacitor/android": "8.5.1",
-    "@capacitor/cli": "8.5.1",
-    "@capacitor/core": "8.5.1",
-    "@capacitor/ios": "8.5.1",
+    "@capacitor/android": "8.5.2",
+    "@capacitor/cli": "8.5.2",
+    "@capacitor/core": "8.5.2",
+    "@capacitor/ios": "8.5.2",
     "@capacitor/splash-screen": "8.0.2",
     "@capacitor/status-bar": "8.0.3",
     "@codemirror/autocomplete": "6.20.3",
@@ -110,7 +110,7 @@
     "@fontsource/noto-sans": "5.3.0",
     "@fontsource/noto-sans-mono": "5.3.0",
     "@lezer/highlight": "1.2.3",
-    "@mdn/browser-compat-data": "8.1.0",
+    "@mdn/browser-compat-data": "8.1.2",
     "@nextjournal/lang-clojure": "1.0.0",
     "@radix-ui/react-context-menu": "2.3.7",
     "@radix-ui/react-dialog": "1.1.23",
@@ -135,7 +135,7 @@
     "cmdk": "1.1.1",
     "chroma-js": "3.2.0",
     "doc-link-checker-cli": "1.0.4",
-    "electron": "44.2.0",
+    "electron": "44.3.0",
     "electron-builder": "26.15.3",
     "electron-builder-notarize": "1.5.2",
     "highlight.js": "11.12.0",
@@ -156,13 +156,13 @@
     "path-browserify": "1.0.1",
     "perfect-freehand": "1.2.3",
     "process": "0.11.10",
-    "puppeteer": "25.10.0",
-    "pyodide": "314.0.6",
-    "react": "19.2.8",
+    "puppeteer": "25.11.0",
+    "pyodide": "314.0.7",
+    "react": "19.3.0",
     "react-d3-tree": "3.6.6",
-    "react-dom": "19.2.8",
+    "react-dom": "19.3.0",
     "react-frame-component": "5.3.2",
-    "react-resizable-panels": "4.12.3",
+    "react-resizable-panels": "4.13.1",
     "shadow-cljs": "3.5.1",
     "shx": "0.4.0",
     "snabbdom": "3.6.4",
@@ -172,10 +172,10 @@
     "style-to-object": "2.0.2",
     "svg-path-bbox": "2.1.0",
     "svgpath": "2.6.0",
-    "tailwind-merge": "3.6.0",
+    "tailwind-merge": "3.7.0",
     "tailwindcss": "4.3.3",
     "tw-animate-css": "1.4.0",
-    "typescript": "5.9.2",
+    "typescript": "6.0.3",
     "vaul": "1.1.2"
   },
   "dependencies": {
@@ -185,14 +185,14 @@
     "electron-updater": "6.8.9"
   },
   "overrides": {
-    "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
   },
   "allowScripts": {
     "@parcel/watcher@2.5.1": true,
     "@sentry/capacitor@4.3.0": true,
     "@sentry/cli@3.7.0": true,
     "electron-winstaller@5.4.0": true,
-    "puppeteer@25.10.0": true
+    "puppeteer@25.11.0": true
   }
 }
