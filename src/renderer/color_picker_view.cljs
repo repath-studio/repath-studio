@@ -19,7 +19,6 @@
 
 (defn ->css
   [color mode]
-  (js/console.log mode)
   (if (= mode "hex")
     (.hex color)
     (.css color mode)))
@@ -133,7 +132,7 @@
     {:class "block h-4 w-4 rounded-full bg-primary border border-border"}]])
 
 (defn eye-dropper-button
-  [mode on-pick]
+  [{:keys [mode on-commit]}]
   [views/icon-button "eye-dropper"
    {:class "my-1!"
     :on-click #(-> (js/EyeDropper.)
@@ -142,7 +141,7 @@
                             (some-> (.-sRGBHex result)
                                     (chroma/Color.)
                                     (->css mode)
-                                    (on-pick))))
+                                    (on-commit))))
                    (.catch (fn [_])))}])
 
 (defn mode-select
@@ -179,13 +178,16 @@
   [channel value]
   (if (= channel "hex")
     (chroma/valid value)
-    (not (js/isNaN value))))
+    (and (seq (string/trim value))
+         (not (js/isNaN value)))))
 
 (defn set-value
   [e {:keys [value color mode channel on-commit]}]
-  (let [new-value (.. e -target -value)]
-    (js/console.log channel)
-    (if-not (valid-channel-value? channel new-value)
+  (let [raw (.. e -target -value)
+        new-value (cond-> raw
+                    (not= channel "hex")
+                    (js/parseFloat raw))]
+    (if-not (valid-channel-value? channel raw)
       (set! (.. e -target -value) value)
       (-> (case channel
             "alpha" (.alpha color new-value)
@@ -207,8 +209,7 @@
   (let [channel (index->channel index mode)
         value (cond-> value
                 (number? value)
-                (-> (js/parseFloat)
-                    (utils.attribute/->fixed)))
+                (utils.attribute/->fixed 2))
         options (merge options {:value value
                                 :channel channel})]
     [:div.flex.flex-col.items-center.w-full.text-2xs
