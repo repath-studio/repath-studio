@@ -93,22 +93,24 @@
 
 (defn hue-slider
   [{:keys [color mode on-change on-commit]}]
-  [:> Slider/Root
-   {:class "relative flex h-4 w-full touch-none px-2"
-    :max 359
-    :step 1
-    :value [(first (.hsl color))]
-    :on-value-change (fn [[v]] (on-change (set-hue color mode v)))
-    :on-value-commit (fn [[v]] (on-commit (set-hue color mode v)))
-    :on-pointer-move #(.stopPropagation %)}
-   [:> Slider/Track
-    {:class "relative my-0.5 h-3 grow"
-     :style {:background (str "linear-gradient(90deg, "
-                              (string/join ", " track-colors)
-                              ")")}}]
-   [:> Slider/Thumb
-    {:class "block h-4 w-4 rounded-full bg-primary border border-border"
-     :title (i18n.views/t [::adjust-hue "Adjust hue"])}]])
+  (let [hue (first (.hsl color))]
+    [:> Slider/Root
+     {:class "relative flex h-4 w-full touch-none px-2 data-disabled:opacity-50"
+      :max 359
+      :disabled (js/isNaN hue)
+      :step 1
+      :value [(first (.hsl color))]
+      :on-value-change (fn [[v]] (on-change (set-hue color mode v)))
+      :on-value-commit (fn [[v]] (on-commit (set-hue color mode v)))
+      :on-pointer-move #(.stopPropagation %)}
+     [:> Slider/Track
+      {:class "relative my-0.5 h-3 grow"
+       :style {:background (str "linear-gradient(90deg, "
+                                (string/join ", " track-colors)
+                                ")")}}]
+     [:> Slider/Thumb
+      {:class "block h-4 w-4 rounded-full bg-primary border border-border"
+       :title (i18n.views/t [::adjust-hue "Adjust hue"])}]]))
 
 (defn alpha-slider
   [{:keys [color mode on-change on-commit]}]
