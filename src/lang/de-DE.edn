@@ -961,4 +961,11 @@
 
  :renderer.views
  {:remove "Entfernen"
-  :resize-thumb "Bereichsgröße ändern"}}
+  :resize-thumb "Bereichsgröße ändern"}
+
+ :renderer.color-picker-view
+ {:adjust-hue "Farbton anpassen"
+  :adjust-opecity "Deckkraft anpassen"
+  :pick-color "Farbe auswählen"
+  :select-color-type "Farbtyp auswählen"
+  :learn-more "Mehr über %1 erfahren"}}

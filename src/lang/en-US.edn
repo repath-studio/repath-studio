@@ -929,4 +929,11 @@
 
  :renderer.views
  {:remove "Remove"
-  :resize-thumb "Resize panel thumb"}}
+  :resize-thumb "Resize panel thumb"}
+
+ :renderer.color-picker-view
+ {:adjust-hue "Adjust hue"
+  :adjust-opecity "Adjust opecity"
+  :pick-color "Pick color"
+  :select-color-type "Select color type"
+  :learn-more "Learn more about %1"}}

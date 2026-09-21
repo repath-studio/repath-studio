@@ -948,4 +948,11 @@
 
  :renderer.views
  {:remove "Eliminar"
-  :resize-thumb "Redimensionar panel"}}
+  :resize-thumb "Redimensionar panel"}
+
+ :renderer.color-picker-view
+ {:adjust-hue "Ajustar el tono"
+  :adjust-opecity "Ajustar la opacidad"
+  :pick-color "Elegir un color"
+  :select-color-type "Seleccionar tipo de color"
+  :learn-more "Saber más sobre %1"}}

@@ -936,4 +936,11 @@
 
  :renderer.views
  {:remove "Kaldır"
-  :resize-thumb "Panel boyutunu değiştir"}}
+  :resize-thumb "Panel boyutunu değiştir"}
+
+ :renderer.color-picker-view
+ {:adjust-hue "Tonu ayarla"
+  :adjust-opecity "Saydamlığı ayarla"
+  :pick-color "Renk seç"
+  :select-color-type "Renk türünü seç"
+  :learn-more "%1 hakkında daha fazla öğren"}}

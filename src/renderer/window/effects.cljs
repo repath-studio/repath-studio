@@ -17,11 +17,6 @@
    (assoc coeffects :fullscreen (boolean (.-fullscreenElement js/document)))))
 
 (rf/reg-cofx
- ::visible
- (fn [coeffects _]
-   (assoc coeffects :visible (boolean (.-visibilityState js/document)))))
-
-(rf/reg-cofx
  ::width
  (fn [coeffects _]
    (assoc coeffects :width (.-innerWidth js/window))))

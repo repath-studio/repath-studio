@@ -100,4 +100,3 @@
                           (into [])))]
          (rf/dispatch (conj on-success text words)))
        (rf/dispatch on-error)))))
-

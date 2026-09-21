@@ -958,4 +958,11 @@
 
  :renderer.views
  {:remove "Verwijderen"
-  :resize-thumb "Paneel formaat wijzigen"}}
+  :resize-thumb "Paneel formaat wijzigen"}
+
+ :renderer.color-picker-view
+ {:adjust-hue "Tint aanpassen"
+  :adjust-opecity "Deckkracht aanpassen"
+  :pick-color "Kleur kiezen"
+  :select-color-type "Kleurentype kiezen"
+  :learn-more "Meer over %1 leren"}}

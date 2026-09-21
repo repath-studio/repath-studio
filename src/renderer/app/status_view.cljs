@@ -2,10 +2,10 @@
   (:require
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
    ["@radix-ui/react-popover" :as Popover]
-   ["@repath-studio/react-color" :refer [ChromePicker PhotoshopPicker]]
    [re-frame.core :as rf]
    [renderer.action.views :as action.views]
    [renderer.app.subs :as-alias app.subs]
+   [renderer.color-picker-view :as color-picker-view]
    [renderer.document.events :as-alias document.events]
    [renderer.document.subs :as-alias document.subs]
    [renderer.frame.events :as-alias frame.events]
@@ -17,8 +17,7 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.key :as utils.key]
-   [renderer.views :as views]
-   [renderer.window.subs :as-alias window.subs]))
+   [renderer.views :as views]))
 
 (defn coordinates
   []
@@ -114,38 +113,31 @@
 
 (defn color-picker
   [props & children]
-  (let [sm? @(rf/subscribe [::window.subs/sm?])]
-    [:> Popover/Root {:modal true}
-     (into [:> Popover/Trigger {:as-child true}]
-           children)
-     [:> Popover/Portal
-      [:> Popover/Content
-       {:class "popover-content max-w-fit!"
-        :align "start"
-        :side "top"
-        :align-offset (:align-offset props)
-        :on-escape-key-down #(.stopPropagation %)}
-       [:div.p-2
-        {:dir "ltr"
-         :tab-index 0}
-        (if sm?
-          [:> PhotoshopPicker props]
-          [:> ChromePicker props])]
-       [views/popover-arrow]]]]))
+  [:> Popover/Root {:modal true}
+   (into [:> Popover/Trigger {:as-child true}]
+         children)
+   [:> Popover/Portal
+    [:> Popover/Content
+     {:class "popover-content max-w-fit!"
+      :align "start"
+      :side "top"
+      :align-offset (:align-offset props)
+      :on-escape-key-down #(.stopPropagation %)}
+     [color-picker-view/root props]
+     [views/popover-arrow]]]])
 
 (defn color-selectors
   []
   (let [fill @(rf/subscribe [::document.subs/attr :fill])
         stroke @(rf/subscribe [::document.subs/attr :stroke])
-        get-hex #(:hex (js->clj % :keywordize-keys true))]
+        dropper @(rf/subscribe [::app.subs/supported-feature? :eye-dropper])]
     [:div.flex
      {:class "gap-0.5"}
      [color-picker
-      {:color fill
-       :on-change-complete #(rf/dispatch [::document.events/set-attr :fill
-                                          (get-hex %)])
-       :on-change #(rf/dispatch [::document.events/preview-attr :fill
-                                 (get-hex %)])}
+      {:value fill
+       :dropper dropper
+       :on-commit #(rf/dispatch [::document.events/set-attr :fill %])
+       :on-change #(rf/dispatch [::document.events/preview-attr :fill %])}
 
       [:button.button.border.border-border.button-size.rounded
        {:title (i18n.views/t [::fill-color "Pick fill color"])
@@ -158,13 +150,10 @@
        :on-click #(rf/dispatch [::document.events/swap-colors])}]
 
      [color-picker
-      {:color stroke
-       :on-change-complete #(rf/dispatch [::document.events/set-attr
-                                          :stroke
-                                          (get-hex %)])
-       :on-change #(rf/dispatch [::document.events/preview-attr
-                                 :stroke
-                                 (get-hex %)])}
+      {:value stroke
+       :dropper dropper
+       :on-commit #(rf/dispatch [::document.events/set-attr :stroke %])
+       :on-change #(rf/dispatch [::document.events/preview-attr :stroke %])}
       [:button.relative.border.border-border.button-size.rounded-sm
        {:title (i18n.views/t [::stroke-color "Pick stroke color"])
         :style {:background stroke}}

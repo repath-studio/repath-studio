@@ -891,4 +891,11 @@
 
  :renderer.views
  {:remove "제거"
-  :resize-thumb "패널 크기 조정"}}
+  :resize-thumb "패널 크기 조정"}
+
+ :renderer.color-picker-view
+ {:adjust-hue "색조 조정"
+  :adjust-opecity "불투명도 조정"
+  :pick-color "색상 선택"
+  :select-color-type "색상 유형 선택"
+  :learn-more "%1에 대해 더 알아보기"}}
