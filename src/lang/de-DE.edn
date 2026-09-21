@@ -961,4 +961,7 @@
 
  :renderer.views
  {:remove "Entfernen"
-  :resize-thumb "Bereichsgröße ändern"}}
+  :resize-thumb "Bereichsgröße ändern"}
+
+ :renderer.color-picker-view
+ {:learn-more "Mehr über %1 erfahren"}}

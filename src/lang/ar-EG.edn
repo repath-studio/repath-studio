@@ -911,4 +911,7 @@
 
  :renderer.views
  {:remove "إزالة"
-  :resize-thumb "تغيير حجم لوح التحكم"}}
+  :resize-thumb "تغيير حجم لوح التحكم"}
+
+ :renderer.color-picker-view
+ {:learn-more "تعلم المزيد عن %1"}}

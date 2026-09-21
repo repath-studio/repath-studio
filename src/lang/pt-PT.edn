@@ -940,4 +940,7 @@
 
  :renderer.views
  {:remove "Remover"
-  :resize-thumb "Redimensionar painel"}}
+  :resize-thumb "Redimensionar painel"}
+
+ :renderer.color-picker-view
+ {:learn-more "Saber mais sobre %1"}}

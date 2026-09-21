@@ -929,4 +929,7 @@
 
  :renderer.views
  {:remove "Remove"
-  :resize-thumb "Resize panel thumb"}}
+  :resize-thumb "Resize panel thumb"}
+
+ :renderer.color-picker-view
+ {:learn-more "Learn more about %1"}}

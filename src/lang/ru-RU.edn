@@ -943,4 +943,7 @@
 
  :renderer.views
  {:remove "Удалить"
-  :resize-thumb "Изменить размер панели"}}
+  :resize-thumb "Изменить размер панели"}
+
+ :renderer.color-picker-view
+ {:learn-more "Узнать больше о %1"}}

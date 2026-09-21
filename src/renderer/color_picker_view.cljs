@@ -254,7 +254,7 @@
   (let [url (color-url mode)]
     [:button.button.px-3.flex-1.rounded
      {:on-click #(rf/dispatch [::events/open-remote-url url])}
-     (i18n.views/t [:learn-more ["Learn more about %1"]]
+     (i18n.views/t [::learn-more "Learn more about %1"]
                    [(string/upper-case mode)])]))
 
 (defn root

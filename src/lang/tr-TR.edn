@@ -936,4 +936,7 @@
 
  :renderer.views
  {:remove "Kaldır"
-  :resize-thumb "Panel boyutunu değiştir"}}
+  :resize-thumb "Panel boyutunu değiştir"}
+
+ :renderer.color-picker-view
+ {:learn-more "%1 hakkında daha fazla öğren"}}

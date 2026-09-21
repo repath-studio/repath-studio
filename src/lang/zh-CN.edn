@@ -849,4 +849,7 @@
 
  :renderer.views
  {:remove "删除"
-  :resize-thumb "调整面板大小"}}
+  :resize-thumb "调整面板大小"}
+
+ :renderer.color-picker-view
+ {:learn-more "了解更多关于 %1"}}

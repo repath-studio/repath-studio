@@ -891,4 +891,7 @@
 
  :renderer.views
  {:remove "제거"
-  :resize-thumb "패널 크기 조정"}}
+  :resize-thumb "패널 크기 조정"}
+
+ :renderer.color-picker-view
+ {:learn-more "%1에 대해 더 알아보기"}}

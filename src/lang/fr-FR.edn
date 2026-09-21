@@ -955,4 +955,7 @@
 
  :renderer.views
  {:remove "Supprimer"
-  :resize-thumb "Redimensionner le panneau"}}
+  :resize-thumb "Redimensionner le panneau"}
+
+ :renderer.color-picker-view
+ {:learn-more "En savoir plus sur %1"}}

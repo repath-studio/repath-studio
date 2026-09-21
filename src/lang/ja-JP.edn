@@ -898,4 +898,7 @@
 
  :renderer.views
  {:remove "削除"
-  :resize-thumb "パネルのサイズ変更"}}
+  :resize-thumb "パネルのサイズ変更"}
+
+ :renderer.color-picker-view
+ {:learn-more "%1の詳細を学ぶ"}}

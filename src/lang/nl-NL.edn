@@ -958,4 +958,7 @@
 
  :renderer.views
  {:remove "Verwijderen"
-  :resize-thumb "Paneel formaat wijzigen"}}
+  :resize-thumb "Paneel formaat wijzigen"}
+
+ :renderer.color-picker-view
+ {:learn-more "Meer over %1 leren"}}

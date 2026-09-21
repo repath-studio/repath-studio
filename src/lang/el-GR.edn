@@ -966,4 +966,7 @@
 
  :renderer.views
  {:remove "Αφαίρεση"
-  :resize-thumb "Αλλαγή μεγέθους πάνελ"}}
+  :resize-thumb "Αλλαγή μεγέθους πάνελ"}
+
+ :renderer.color-picker-view
+ {:learn-more "Μάθετε περισσότερα για %1"}}

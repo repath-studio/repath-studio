@@ -942,4 +942,7 @@
 
  :renderer.views
  {:remove "Ta bort"
-  :resize-thumb "Ändra storlek på panel"}}
+  :resize-thumb "Ändra storlek på panel"}
+
+ :renderer.color-picker-view
+ {:learn-more "Lär dig mer om %1"}}
