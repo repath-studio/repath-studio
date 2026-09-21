@@ -254,7 +254,7 @@
   (let [url (color-url mode)]
     [:button.button.px-3.flex-1.rounded
      {:on-click #(rf/dispatch [::events/open-remote-url url])}
-     (i18n.views/t [::learn-more "Learn more about %1"]
+     (i18n.views/t [:learn-more "Learn more about %1"]
                    [(string/upper-case mode)])]))
 
 (defn root
@@ -269,7 +269,7 @@
                  :mode mode
                  :on-change on-change
                  :on-commit on-commit}]
-    [:div.flex.flex-col.gap-4.w-70.p-2
+    [:div.flex.flex-col.gap-4.w-70.p-2.bg-primary
      {:dir "ltr"}
      [:div.flex.flex-col.gap-4
       [selection-input options]

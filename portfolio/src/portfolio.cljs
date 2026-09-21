@@ -13,7 +13,7 @@
                                  :background/document-data {:theme "light"}}}
                         {:id :dark-mode
                          :title "Dark mode"
-                         :value {:background/background-color "#111"
+                         :value {:background/background-color "#222"
                                  :background/document-data {:theme "dark"}}}]
    :background/default-option-id :dark-mode
    :viewport/defaults {:viewport/padding [0]

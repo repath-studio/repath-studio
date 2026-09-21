@@ -3,6 +3,7 @@
    [generated.icons :as icons]
    [portfolio.reagent-18 :refer-macros [defscene]]
    [re-frame.core :as rf]
+   [renderer.color-picker-view :as color-picker-view]
    [renderer.i18n.subs]
    [renderer.views :as views]))
 
@@ -65,27 +66,37 @@
 
 (defscene ^:export slider
   :title "Slider"
-  :params (atom [25])
+  :params (atom 25)
   [store]
   [views/toolbar
-   {:class "bg-primary flex gap-2 px-2"}
+   {:class "bg-primary gap-2 px-2"}
    [:div.w-64.h-8
     [views/slider
      {:min 0
       :max 50
       :step 1
-      :default-value @store
-      :on-value-commit (fn [v] (reset! store v))}]]
+      :default-value [@store]
+      :on-value-commit (fn [[v]] (reset! store v))}]]
    [:div.w-64.h-8
     [views/slider
      {:min 0
       :max 50
       :step 1
       :disabled true
-      :default-value @store
-      :on-value-commit (fn [v] (reset! store v))}]]
+      :default-value [@store]
+      :on-value-commit (fn [[v]] (reset! store v))}]]
    [:span.v-divider]
-   [:div (first @store)]])
+   [:div @store]])
+
+(defscene ^:export color-picker
+  :title "Color picker"
+  :params (atom "red")
+  [store]
+  [color-picker-view/root
+   {:value @store
+    :dropper true
+    :on-commit (fn [v] (reset! store v))
+    :on-change (fn [v] (reset! store v))}])
 
 (defscene ^:export default
   :title "Icons"
