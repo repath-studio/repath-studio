@@ -945,4 +945,8 @@
   :resize-thumb "Ändra storlek på panel"}
 
  :renderer.color-picker-view
- {:learn-more "Lär dig mer om %1"}}
+ {:adjust-hue "Justera nyans"
+  :adjust-opecity "Justera opacitet"
+  :pick-color "Välj färg"
+  :select-color-type "Välj färgtyp"
+  :learn-more "Lär dig mer om %1"}}

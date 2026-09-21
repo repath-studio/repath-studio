@@ -914,4 +914,8 @@
   :resize-thumb "تغيير حجم لوح التحكم"}
 
  :renderer.color-picker-view
- {:learn-more "تعلم المزيد عن %1"}}
+ {:adjust-hue "ضبط درجة اللون"
+  :adjust-opecity "ضبط الشفافية"
+  :pick-color "اختيار لون"
+  :select-color-type "اختيار نوع اللون"
+  :learn-more "تعلم المزيد عن %1"}}

@@ -852,4 +852,8 @@
   :resize-thumb "调整面板大小"}
 
  :renderer.color-picker-view
- {:learn-more "了解更多关于 %1"}}
+ {:adjust-hue "调整色调"
+  :adjust-opecity "调整不透明度"
+  :pick-color "选择颜色"
+  :select-color-type "选择颜色类型"
+  :learn-more "了解更多关于 %1"}}

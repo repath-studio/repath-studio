@@ -901,4 +901,8 @@
   :resize-thumb "パネルのサイズ変更"}
 
  :renderer.color-picker-view
- {:learn-more "%1の詳細を学ぶ"}}
+ {:adjust-hue "色相を調整"
+  :adjust-opecity "不透明度を調整"
+  :pick-color "色を選ぶ"
+  :select-color-type "カラータイプの選択"
+  :learn-more "%1の詳細を学ぶ"}}

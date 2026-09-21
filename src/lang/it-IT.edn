@@ -960,4 +960,8 @@
   :resize-thumb "Ridimensiona pannello"}
 
  :renderer.color-picker-view
- {:learn-more "Scopri di più su %1"}}
+ {:adjust-hue "Regola la tonalità"
+  :adjust-opecity "Regola l'opacità"
+  :pick-color "Scegli un colore"
+  :select-color-type "Seleziona il tipo di colore"
+  :learn-more "Scopri di più su %1"}}

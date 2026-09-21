@@ -969,4 +969,8 @@
   :resize-thumb "Αλλαγή μεγέθους πάνελ"}
 
  :renderer.color-picker-view
- {:learn-more "Μάθετε περισσότερα για %1"}}
+ {:adjust-hue "Ρύθμιση απόχρωσης"
+  :adjust-opecity "Ρύθμιση διαφάνειας"
+  :pick-color "Επιλογή χρώματος"
+  :select-color-type "Επιλογή τύπου χρώματος"
+  :learn-more "Μάθετε περισσότερα για %1"}}

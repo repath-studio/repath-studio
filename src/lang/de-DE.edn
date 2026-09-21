@@ -964,4 +964,8 @@
   :resize-thumb "Bereichsgröße ändern"}
 
  :renderer.color-picker-view
- {:learn-more "Mehr über %1 erfahren"}}
+ {:adjust-hue "Farbton anpassen"
+  :adjust-opecity "Deckkraft anpassen"
+  :pick-color "Farbe auswählen"
+  :select-color-type "Farbtyp auswählen"
+  :learn-more "Mehr über %1 erfahren"}}

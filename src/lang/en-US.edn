@@ -932,4 +932,8 @@
   :resize-thumb "Resize panel thumb"}
 
  :renderer.color-picker-view
- {:learn-more "Learn more about %1"}}
+ {:adjust-hue "Adjust hue"
+  :adjust-opecity "Adjust opecity"
+  :pick-color "Pick color"
+  :select-color-type "Select color type"
+  :learn-more "Learn more about %1"}}

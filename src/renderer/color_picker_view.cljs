@@ -107,7 +107,8 @@
                               (string/join ", " track-colors)
                               ")")}}]
    [:> Slider/Thumb
-    {:class "block h-4 w-4 rounded-full bg-primary border border-border"}]])
+    {:class "block h-4 w-4 rounded-full bg-primary border border-border"
+     :title (i18n.views/t [::adjust-hue "Adjust hue"])}]])
 
 (defn alpha-slider
   [{:keys [color mode on-change on-commit]}]
@@ -129,12 +130,14 @@
     [:> Slider/Range
      {:class "absolute h-full rounded-full bg-transparent"}]]
    [:> Slider/Thumb
-    {:class "block h-4 w-4 rounded-full bg-primary border border-border"}]])
+    {:class "block h-4 w-4 rounded-full bg-primary border border-border"
+     :title (i18n.views/t [::adjust-opecity "Adjust opecity"])}]])
 
 (defn eye-dropper-button
   [{:keys [mode on-commit]}]
   [views/icon-button "eye-dropper"
    {:class "my-1!"
+    :title (i18n.views/t [::pick-color "Pick color"])
     :on-click #(-> (js/EyeDropper.)
                    (.open)
                    (.then (fn [^js result]
@@ -150,7 +153,8 @@
    {:value mode
     :on-value-change (fn [mode] (on-change (->css color mode)))}
    [:> Select/Trigger
-    {:class "button px-2 rounded-sm shrink-0"}
+    {:class "button px-2 rounded-sm shrink-0"
+     :title (i18n.views/t [::select-color-type "Select color type"])}
     [:div
      [:> Select/Value ""]
      [:> Select/Icon [views/icon "chevron-down"]]]]
@@ -254,7 +258,7 @@
   (let [url (color-url mode)]
     [:button.button.px-3.flex-1.rounded
      {:on-click #(rf/dispatch [::events/open-remote-url url])}
-     (i18n.views/t [:learn-more "Learn more about %1"]
+     (i18n.views/t [::learn-more "Learn more about %1"]
                    [(string/upper-case mode)])]))
 
 (defn root

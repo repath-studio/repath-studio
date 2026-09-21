@@ -946,4 +946,8 @@
   :resize-thumb "Изменить размер панели"}
 
  :renderer.color-picker-view
- {:learn-more "Узнать больше о %1"}}
+ {:adjust-hue "Настроить оттенок"
+  :adjust-opecity "Настроить непрозрачность"
+  :pick-color "Выбрать цвет"
+  :select-color-type "Выбрать тип цвета"
+  :learn-more "Узнать больше о %1"}}

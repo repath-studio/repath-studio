@@ -939,4 +939,8 @@
   :resize-thumb "Panel boyutunu değiştir"}
 
  :renderer.color-picker-view
- {:learn-more "%1 hakkında daha fazla öğren"}}
+ {:adjust-hue "Tonu ayarla"
+  :adjust-opecity "Saydamlığı ayarla"
+  :pick-color "Renk seç"
+  :select-color-type "Renk türünü seç"
+  :learn-more "%1 hakkında daha fazla öğren"}}

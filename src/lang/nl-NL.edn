@@ -961,4 +961,8 @@
   :resize-thumb "Paneel formaat wijzigen"}
 
  :renderer.color-picker-view
- {:learn-more "Meer over %1 leren"}}
+ {:adjust-hue "Tint aanpassen"
+  :adjust-opecity "Deckkracht aanpassen"
+  :pick-color "Kleur kiezen"
+  :select-color-type "Kleurentype kiezen"
+  :learn-more "Meer over %1 leren"}}
