@@ -97,8 +97,8 @@ namespace.
 ### Effects ns
 
 Registers all re-frame effects. Although we could use the events ns for this, we
-prefer using dedicated ns to isolate all side effects and make stabbing easier on
-tests.
+prefer using dedicated ns to isolate all side effects and make stubbing easier
+on tests.
 
 ### Hierarchy ns
 

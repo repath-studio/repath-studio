@@ -21,7 +21,7 @@ A common misconception is that vector icons look good regardless of their
 rendered size. Although they behave a lot better than rasterized images when
 resized, they can also end up slightly blurry. That is why we need to design the
 icons in the exact size that they are going to be rendered. We also need to use
-a pixel grid and make sure that we follow it as much us we can.
+a pixel grid and make sure that we follow it as much as we can.
 
 You can take a look at the icon-template.svg below
 
