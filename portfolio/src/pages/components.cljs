@@ -3,7 +3,6 @@
    [generated.icons :as icons]
    [portfolio.reagent-18 :refer-macros [defscene]]
    [re-frame.core :as rf]
-   [renderer.color-picker-view :as color-picker-view]
    [renderer.i18n.subs]
    [renderer.views :as views]))
 
@@ -92,7 +91,7 @@
   :title "Color picker"
   :params (atom "red")
   [store]
-  [color-picker-view/root
+  [views/color-picker
    {:value @store
     :dropper true
     :on-commit (fn [v] (reset! store v))

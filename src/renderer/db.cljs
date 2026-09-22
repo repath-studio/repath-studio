@@ -59,3 +59,15 @@
 (def PathSegment JS_Array)
 
 (def PathSegments JS_Array)
+
+(def ColorNotation
+  [:enum "hex" "rgb" "hsl" "lab" "lch" "oklch" "oklab"])
+
+(def ColorChannel
+  [:enum
+   "hex"
+   "r" "g" "b"
+   "h" "s" "l"
+   "l" "a" "b"
+   "l" "c" "h"
+   "alpha"])
