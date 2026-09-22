@@ -7,7 +7,7 @@
   "license": "AGPL-3.0",
   "version": "0.4.21",
   "scripts": {
-    "upgrade": "npx npm-check-updates -u -x 'typescript' --cooldown 7d",
+    "upgrade": "npx npm-check-updates -u -x 'typescript, pyodide' --cooldown 7d",
     "fonts:sans": "npx shx cp -r node_modules/@fontsource/noto-sans/files/. resources/public/css/files",
     "fonts:mono": "npx shx cp -r node_modules/@fontsource/noto-sans-mono/files/. resources/public/css/files",
     "pyodide": "npx shx cp -r node_modules/pyodide/. resources/public/pyodide",
@@ -157,7 +157,7 @@
     "perfect-freehand": "1.2.3",
     "process": "0.11.10",
     "puppeteer": "25.11.0",
-    "pyodide": "314.0.7",
+    "pyodide": "314.0.6",
     "react": "19.3.0",
     "react-d3-tree": "3.6.6",
     "react-dom": "19.3.0",
