@@ -21,7 +21,6 @@
       :dispatch-n [[::action.events/register-action
                     {:id id
                      :label label
-                     :icon "a11y"
                      :active [::a11y.subs/filter-active? id]
                      :event [::toggle-active-filter id]}]
                    [::action.events/add-action-to-group :a11y/filter id]]})))

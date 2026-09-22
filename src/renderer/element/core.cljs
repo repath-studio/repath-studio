@@ -39,7 +39,6 @@
 (rf/dispatch [::action.events/register-action
               {:id :clipboard/paste-in-place
                :label [::element.events/paste-in-place]
-               :icon "paste"
                :event [::element.events/paste-in-place]
                :enabled [::document.subs/some-entities?]
                :shortcuts [{:keyCode (utils.key/codes "V")
@@ -49,7 +48,6 @@
 (rf/dispatch [::action.events/register-action
               {:id :clipboard/paste-styles
                :label [::element.events/paste-styles]
-               :icon "paste"
                :event [::element.events/paste-styles]
                :enabled [::element.subs/some-non-root-selected?]
                :shortcuts [{:keyCode (utils.key/codes "V")
@@ -109,7 +107,6 @@
 (rf/dispatch [::action.events/register-action
               {:id :object/to-path
                :label [::element.events/object-to-path]
-               :icon "bezier-curve"
                :event [::element.events/->path]
                :shortcuts [{:keyCode (utils.key/codes "P")
                             :ctrlKey true
@@ -119,7 +116,6 @@
 (rf/dispatch [::action.events/register-action
               {:id :object/stroke-to-path
                :label [::element.events/stroke-to-path]
-               :icon "bezier-curve"
                :event [::element.events/stroke->path]
                :shortcuts [{:keyCode (utils.key/codes "P")
                             :ctrlKey true
@@ -293,7 +289,6 @@
 (rf/dispatch [::action.events/register-action
               {:id :animate/transform
                :label [::element.events/animate-transform]
-               :icon "animation"
                :event [::element.events/animate-transform]
                :enabled [::element.subs/some-allow-content?
                          :animateTransform]}])
@@ -301,42 +296,36 @@
 (rf/dispatch [::action.events/register-action
               {:id :animate/motion
                :label [::element.events/animate-motion]
-               :icon "animation"
                :event [::element.events/animate-motion]
                :enabled [::element.subs/some-allow-content? :animateMotion]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :animate/add-mpath
                :label [::element.events/add-motion-path]
-               :icon "bezier-curve"
                :event [::element.events/add-mpath]
                :enabled [::element.subs/some-selected-tag? :animateMotion]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :path/simplify
                :label [::element.events/path-simplify]
-               :icon "bezier-curve"
                :event [::element.events/path-simplify]
                :enabled [::element.subs/some-selected-tag? :path]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :path/smooth
                :label [::element.events/path-smooth]
-               :icon "bezier-curve"
                :event [::element.events/path-smooth]
                :enabled [::element.subs/some-selected-tag? :path]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :path/flatten
                :label [::element.events/path-flatten]
-               :icon "bezier-curve"
                :event [::element.events/path-flatten]
                :enabled [::element.subs/some-selected-tag? :path]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :path/reverse
                :label [::element.events/path-reverse]
-               :icon "bezier-curve"
                :event [::element.events/path-reverse]
                :enabled [::element.subs/some-selected-tag? :path]}])
 

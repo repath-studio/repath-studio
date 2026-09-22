@@ -16,14 +16,12 @@
 (rf/dispatch [::action.events/register-action
               {:id :timeline/toggle-grid-snap
                :label [::grid-snap "Grid snap"]
-               :icon "magnet"
                :active [::timeline.subs/grid-snap?]
                :event [::timeline.events/toggle-grid-snap]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :timeline/toggle-guide-snap
                :label [::guide-snap "Guide snap"]
-               :icon "magnet"
                :active [::timeline.subs/guide-snap?]
                :event [::timeline.events/toggle-guide-snap]}])
 

@@ -11,7 +11,6 @@
 (rf/dispatch [::action.events/register-action
               {:id :menubar/activate-file
                :label [::menubar-file "File menu"]
-               :icon "file"
                :event [::menubar.events/activate :file]
                :available [::window.subs/md?]
                :shortcuts [{:keyCode (utils.key/codes "F")
@@ -20,7 +19,6 @@
 (rf/dispatch [::action.events/register-action
               {:id :menubar/activate-edit
                :label [::menubar-edit "Edit menu"]
-               :icon "pencil"
                :event [::menubar.events/activate :edit]
                :available [::window.subs/md?]
                :shortcuts [{:keyCode (utils.key/codes "E")
@@ -29,7 +27,6 @@
 (rf/dispatch [::action.events/register-action
               {:id :menubar/activate-object
                :label [::menubar-object "Object menu"]
-               :icon "circle"
                :event [::menubar.events/activate :object]
                :available [::window.subs/md?]
                :shortcuts [{:keyCode (utils.key/codes "O")
@@ -38,7 +35,6 @@
 (rf/dispatch [::action.events/register-action
               {:id :menubar/activate-view
                :label [::menubar-view "View menu"]
-               :icon "eye"
                :event [::menubar.events/activate :view]
                :available [::window.subs/md?]
                :shortcuts [{:keyCode (utils.key/codes "V")
@@ -47,7 +43,6 @@
 (rf/dispatch [::action.events/register-action
               {:id :menubar/activate-help
                :label [::menubar-help "Help menu"]
-               :icon "help"
                :event [::menubar.events/activate :help]
                :available [::window.subs/md?]
                :shortcuts [{:keyCode (utils.key/codes "H")

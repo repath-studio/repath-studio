@@ -10,6 +10,5 @@
 (rf/dispatch [::action.events/register-action
               {:id :tool/cancel
                :label [::cancel "Cancel"]
-               :icon "window-close"
                :event [::tool.events/cancel]
                :shortcuts [{:keyCode (utils.key/codes "ESC")}]}])

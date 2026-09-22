@@ -109,7 +109,6 @@
       :disabled disabled?}
      [:div.flex.items-center.gap-2.min-w-0
       [:div.w-7.h-7.rounded.flex.justify-center.items-center.shrink-0
-       {:class ["line-height-6" (when icon "bg-overlay")]}
        [views/icon icon]]
       [:div.truncate
        [:span.sr-only (i18n.views/t parent-label)]
@@ -151,7 +150,6 @@
        :placeholder (i18n.views/t [::search-command "Search for a command"])}]
      [views/scroll-area
       (->> (vals action-groups)
-           (sort-by (comp i18n.views/t :label))
            (keep cmdk-group)
            (into [:> Command/CommandList
                   {:class "p-1 max-h-[50dvh]"}

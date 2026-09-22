@@ -25,8 +25,8 @@
   [:map {:closed true}
    [:id ActionId]
    [:label Translation]
-   [:icon string?]
    [:event vector?]
+   [:icon {:optional true} string?]
    [:shortcuts {:optional true} [:vector Shortcut]]
    [:enabled {:optional true} vector?]
    [:available {:optional true} vector?]

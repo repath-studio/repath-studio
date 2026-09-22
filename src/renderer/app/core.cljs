@@ -10,14 +10,12 @@
 (rf/dispatch [::action.events/register-action
               {:id :help-view/toggle-help-bar
                :label [::help-bar "Help bar"]
-               :icon "info"
                :active [::app.subs/help-bar]
                :event [::app.events/toggle-help-bar]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :help-view/toggle-debug-info
                :label [::debug-info "Debug info"]
-               :icon "bug"
                :event [::app.events/toggle-debug-info]
                :active [::app.subs/debug-info]
                :shortcuts [{:keyCode (utils.key/codes "D")

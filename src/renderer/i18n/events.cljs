@@ -36,7 +36,6 @@
       :dispatch-n [[::action.events/register-action
                     {:id (action-id id)
                      :label [(action-id id) locale]
-                     :icon "language"
                      :event [::i18n.events/set-user-lang id]
                      :active [::i18n.subs/selected-lang? id]}]
                    [::action.events/add-action-to-group

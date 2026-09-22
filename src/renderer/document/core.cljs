@@ -66,7 +66,6 @@
 (rf/dispatch [::action.events/register-action
               {:id :document/close-all
                :label [::close-all "Close all"]
-               :icon "window-close"
                :event [::document.events/close-all]
                :enabled [::document.subs/some-entities?]
                :shortcuts [{:keyCode (utils.key/codes "W")
@@ -87,7 +86,6 @@
 (rf/dispatch [::action.events/register-action
               {:id :document/close-saved
                :label [::close-saved "Close saved"]
-               :icon "window-close"
                :event [::document.events/close-saved]
                :enabled [::document.subs/some-saved?]}])
 
@@ -136,7 +134,6 @@
 (rf/dispatch [::action.events/register-action
               {:id :document/reopen-last-closed
                :label [::reopen-last-closed "Reopen last closed"]
-               :icon "folder"
                :event [::document.events/reopen-last-closed]
                :enabled [::document.subs/some-recently-closed?]
                :available [::app.subs/supported-feature? :file-system]
