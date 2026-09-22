@@ -108,7 +108,7 @@
       :disabled disabled?}
      [:div.flex.items-center.gap-2.min-w-0
       [:div.w-7.h-7.flex.justify-center.items-center.shrink-0
-       [views/icon icon {:class "text-foreground-muted"}]]
+       [views/icon icon {:class (when disabled? "text-foreground-disabled")}]]
       [:div.truncate
        {:class (when disabled? "text-foreground-disabled")}
        [:span.sr-only (i18n.views/t parent-label)]
