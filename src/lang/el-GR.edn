@@ -541,7 +541,8 @@
   :auto "Αυτόματο"}
 
  :renderer.attribute.impl.color
- {:pick-color "Επιλέξτε χρώμα"}
+ {:pick-color "Επιλέξτε χρώμα"
+  :learn-more "Μάθετε περισσότερα για %1"}
 
  :renderer.attribute.impl.d
  {:description "To χαρακτηριστικό d καθορίζει τη διαδρομή που θα σχεδιαστεί."
@@ -966,11 +967,8 @@
 
  :renderer.views
  {:remove "Αφαίρεση"
-  :resize-thumb "Αλλαγή μεγέθους πάνελ"}
-
- :renderer.color-picker-view
- {:adjust-hue "Ρύθμιση απόχρωσης"
+  :resize-thumb "Αλλαγή μεγέθους πάνελ"
+  :adjust-hue "Ρύθμιση απόχρωσης"
   :adjust-opecity "Ρύθμιση διαφάνειας"
   :pick-color "Επιλογή χρώματος"
-  :select-color-type "Επιλογή τύπου χρώματος"
-  :learn-more "Μάθετε περισσότερα για %1"}}
+  :select-color-type "Επιλογή τύπου χρώματος"}}

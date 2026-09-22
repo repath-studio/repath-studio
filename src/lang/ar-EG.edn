@@ -501,7 +501,8 @@
   :auto "تلقائي"}
 
  :renderer.attribute.impl.color
- {:pick-color "اختيار لون"}
+ {:pick-color "اختيار لون"
+  :learn-more "تعلم المزيد عن %1"}
 
  :renderer.attribute.impl.d
  {:description "خاصية d تحدد مساراً ليتم رسمه."
@@ -911,11 +912,8 @@
 
  :renderer.views
  {:remove "إزالة"
-  :resize-thumb "تغيير حجم لوح التحكم"}
-
- :renderer.color-picker-view
- {:adjust-hue "ضبط درجة اللون"
+  :resize-thumb "تغيير حجم لوح التحكم"
+  :adjust-hue "ضبط درجة اللون"
   :adjust-opecity "ضبط الشفافية"
   :pick-color "اختيار لون"
-  :select-color-type "اختيار نوع اللون"
-  :learn-more "تعلم المزيد عن %1"}}
+  :select-color-type "اختيار نوع اللون"}}

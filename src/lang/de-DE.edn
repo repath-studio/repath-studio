@@ -538,7 +538,8 @@
   :auto "Automatisch"}
 
  :renderer.attribute.impl.color
- {:pick-color "Farbe wählen"}
+ {:pick-color "Farbe wählen"
+  :learn-more "Mehr über %1 erfahren"}
 
  :renderer.attribute.impl.d
  {:description "Das d-Attribut definiert einen zu zeichnenden Pfad."
@@ -961,11 +962,8 @@
 
  :renderer.views
  {:remove "Entfernen"
-  :resize-thumb "Bereichsgröße ändern"}
-
- :renderer.color-picker-view
- {:adjust-hue "Farbton anpassen"
+  :resize-thumb "Bereichsgröße ändern"
+  :adjust-hue "Farbton anpassen"
   :adjust-opecity "Deckkraft anpassen"
   :pick-color "Farbe auswählen"
-  :select-color-type "Farbtyp auswählen"
-  :learn-more "Mehr über %1 erfahren"}}
+  :select-color-type "Farbtyp auswählen"}}

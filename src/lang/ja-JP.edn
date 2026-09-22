@@ -486,7 +486,8 @@
   :auto "自動"}
 
  :renderer.attribute.impl.color
- {:pick-color "色を選択"}
+ {:pick-color "色を選択"
+  :learn-more "%1の詳細を学ぶ"}
 
  :renderer.attribute.impl.d
  {:description "d属性は描画するパスを定義します。"
@@ -898,11 +899,8 @@
 
  :renderer.views
  {:remove "削除"
-  :resize-thumb "パネルのサイズ変更"}
-
- :renderer.color-picker-view
- {:adjust-hue "色相を調整"
+  :resize-thumb "パネルのサイズ変更"
+  :adjust-hue "色相を調整"
   :adjust-opecity "不透明度を調整"
   :pick-color "色を選ぶ"
-  :select-color-type "カラータイプの選択"
-  :learn-more "%1の詳細を学ぶ"}}
+  :select-color-type "カラータイプの選択"}}

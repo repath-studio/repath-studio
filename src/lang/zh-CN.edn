@@ -449,7 +449,8 @@
   :auto "自动"}
 
  :renderer.attribute.impl.color
- {:pick-color "选择颜色"}
+ {:pick-color "选择颜色"
+  :learn-more "了解更多关于 %1"}
 
  :renderer.attribute.impl.d
  {:description "d 属性定义要绘制的路径。"
@@ -849,11 +850,8 @@
 
  :renderer.views
  {:remove "删除"
-  :resize-thumb "调整面板大小"}
-
- :renderer.color-picker-view
- {:adjust-hue "调整色调"
+  :resize-thumb "调整面板大小"
+  :adjust-hue "调整色调"
   :adjust-opecity "调整不透明度"
   :pick-color "选择颜色"
-  :select-color-type "选择颜色类型"
-  :learn-more "了解更多关于 %1"}}
+  :select-color-type "选择颜色类型"}}

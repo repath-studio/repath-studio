@@ -517,7 +517,8 @@
   :auto "Otomatik"}
 
  :renderer.attribute.impl.color
- {:pick-color "Renk seç"}
+ {:pick-color "Renk seç"
+  :learn-more "%1 hakkında daha fazla öğren"}
 
  :renderer.attribute.impl.d
  {:description "d özniteliği çizilecek yolu tanımlar."
@@ -936,11 +937,9 @@
 
  :renderer.views
  {:remove "Kaldır"
-  :resize-thumb "Panel boyutunu değiştir"}
-
- :renderer.color-picker-view
- {:adjust-hue "Tonu ayarla"
+  :resize-thumb "Panel boyutunu değiştir"
+  :adjust-hue "Tonu ayarla"
   :adjust-opecity "Saydamlığı ayarla"
   :pick-color "Renk seç"
-  :select-color-type "Renk türünü seç"
-  :learn-more "%1 hakkında daha fazla öğren"}}
+  :select-color-type "Renk türünü seç"}
+}
