@@ -534,7 +534,8 @@
   :auto "Automatico"}
 
  :renderer.attribute.impl.color
- {:pick-color "Preleva colore"}
+ {:pick-color "Preleva colore"
+  :learn-more "Scopri di più su %1"}
 
  :renderer.attribute.impl.d
  {:description "L'attributo d definisce un tracciato da disegnare."
@@ -957,11 +958,8 @@
 
  :renderer.views
  {:remove "Rimuovi"
-  :resize-thumb "Ridimensiona pannello"}
-
- :renderer.color-picker-view
- {:adjust-hue "Regola la tonalità"
+  :resize-thumb "Ridimensiona pannello"
+  :adjust-hue "Regola la tonalità"
   :adjust-opecity "Regola l'opacità"
   :pick-color "Scegli un colore"
-  :select-color-type "Seleziona il tipo di colore"
-  :learn-more "Scopri di più su %1"}}
+  :select-color-type "Seleziona il tipo di colore"}}

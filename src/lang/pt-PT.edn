@@ -522,7 +522,8 @@
   :auto "Automático"}
 
  :renderer.attribute.impl.color
- {:pick-color "Escolher cor"}
+ {:pick-color "Escolher cor"
+  :learn-more "Saber mais sobre %1"}
 
  :renderer.attribute.impl.d
  {:description "O atributo d define um caminho a desenhar."
@@ -940,11 +941,8 @@
 
  :renderer.views
  {:remove "Remover"
-  :resize-thumb "Redimensionar painel"}
-
- :renderer.color-picker-view
- {:adjust-hue "Ajustar o tom"
+  :resize-thumb "Redimensionar painel"
+  :adjust-hue "Ajustar o tom"
   :adjust-opecity "Ajustar a opacidade"
   :pick-color "Escolher uma cor"
-  :select-color-type "Selecionar tipo de cor"
-  :learn-more "Saber mais sobre %1"}}
+  :select-color-type "Selecionar tipo de cor"}}

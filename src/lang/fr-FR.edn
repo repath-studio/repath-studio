@@ -531,7 +531,8 @@
   :auto "Automatique"}
 
  :renderer.attribute.impl.color
- {:pick-color "Choisir une couleur"}
+ {:pick-color "Choisir une couleur"
+  :learn-more "En savoir plus sur %1"}
 
  :renderer.attribute.impl.d
  {:description "L'attribut d définit un chemin à dessiner."
@@ -955,11 +956,8 @@
 
  :renderer.views
  {:remove "Supprimer"
-  :resize-thumb "Redimensionner le panneau"}
-
- :renderer.color-picker-view
- {:adjust-hue "Ajuster la teinte"
+  :resize-thumb "Redimensionner le panneau"
+  :adjust-hue "Ajuster la teinte"
   :adjust-opecity "Ajuster l'opacité"
   :pick-color "Choisir une couleur"
-  :select-color-type "Sélectionner le type de couleur"
-  :learn-more "En savoir plus sur %1"}}
+  :select-color-type "Sélectionner le type de couleur"}}

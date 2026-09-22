@@ -521,7 +521,8 @@
   :auto "Автоматически"}
 
  :renderer.attribute.impl.color
- {:pick-color "Выбрать цвет"}
+ {:pick-color "Выбрать цвет"
+  :learn-more "Узнать больше о %1"}
 
  :renderer.attribute.impl.d
  {:description "Атрибут d определяет контур для рисования."
@@ -943,11 +944,8 @@
 
  :renderer.views
  {:remove "Удалить"
-  :resize-thumb "Изменить размер панели"}
-
- :renderer.color-picker-view
- {:adjust-hue "Настроить оттенок"
+  :resize-thumb "Изменить размер панели"
+  :adjust-hue "Настроить оттенок"
   :adjust-opecity "Настроить непрозрачность"
   :pick-color "Выбрать цвет"
-  :select-color-type "Выбрать тип цвета"
-  :learn-more "Узнать больше о %1"}}
+  :select-color-type "Выбрать тип цвета"}}

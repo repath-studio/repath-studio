@@ -5,7 +5,6 @@
    [re-frame.core :as rf]
    [renderer.action.views :as action.views]
    [renderer.app.subs :as-alias app.subs]
-   [renderer.color-picker-view :as color-picker-view]
    [renderer.document.events :as-alias document.events]
    [renderer.document.subs :as-alias document.subs]
    [renderer.frame.events :as-alias frame.events]
@@ -123,7 +122,7 @@
       :side "top"
       :align-offset (:align-offset props)
       :on-escape-key-down #(.stopPropagation %)}
-     [color-picker-view/root props]
+     [views/color-picker props]
      [views/popover-arrow]]]])
 
 (defn color-selectors

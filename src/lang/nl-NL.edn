@@ -536,7 +536,8 @@
   :auto "Automatisch"}
 
  :renderer.attribute.impl.color
- {:pick-color "Kleur kiezen"}
+ {:pick-color "Kleur kiezen"
+  :learn-more "Meer over %1 leren"}
 
  :renderer.attribute.impl.d
  {:description "Het d attribuut definieert een pad om te tekenen."
@@ -958,11 +959,8 @@
 
  :renderer.views
  {:remove "Verwijderen"
-  :resize-thumb "Paneel formaat wijzigen"}
-
- :renderer.color-picker-view
- {:adjust-hue "Tint aanpassen"
+  :resize-thumb "Paneel formaat wijzigen"
+  :adjust-hue "Tint aanpassen"
   :adjust-opecity "Deckkracht aanpassen"
   :pick-color "Kleur kiezen"
-  :select-color-type "Kleurentype kiezen"
-  :learn-more "Meer over %1 leren"}}
+  :select-color-type "Kleurentype kiezen"}}

@@ -23,13 +23,17 @@
    ["sonner" :refer [Toaster]]
    ["tailwind-merge" :refer [twMerge]]
    ["vaul" :refer [Drawer]]
+   [clojure.string :as string]
    [reagent.core :as reagent]
    [renderer.action.views :as action.views]
    [renderer.i18n.views :as i18n.views]
    [renderer.icon.views :as icon.views]
+   [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.codemirror :as utils.codemirror]
+   [renderer.utils.color :as utils.color]
    [renderer.utils.extra :refer [rpartial]]
-   [renderer.utils.key :as utils.key]))
+   [renderer.utils.key :as utils.key]
+   [renderer.utils.math :as utils.math]))
 
 (defn merge-with-class
   [& props]
@@ -381,9 +385,9 @@
               options (last (reagent/argv this))
               {:keys [theme-mode]} options]
           (when (and @cm (not= (.. @cm -state -doc toString) value))
-            (reset! updating? true)
+            #_(reset! updating? true)
             (utils.codemirror/set-value @cm value)
-            (reset! updating? false)
+            #_(reset! updating? false)
             (.dispatch @cm #js {:selection
                                 #js {:anchor (utils.codemirror/get-length
                                               @cm)}}))
@@ -498,3 +502,227 @@
       {:class "sr-only"}
       (i18n.views/t (:label props))]
      (into [:div.flex.flex-1.overflow-hidden.w-full] children)]]])
+
+(defn color-selection-gradient
+  [hue]
+  (str "linear-gradient(0deg, rgba(0,0,0,1), rgba(0,0,0,0)), "
+       "linear-gradient(90deg, rgba(255,255,255,1), rgba(2, 2, 2, 0)), "
+       (-> (utils.color/hsl->color hue 1 0.5)
+           (utils.color/->css))))
+
+(defn color-selection
+  [{:keys [color notation on-change on-commit]}]
+  (reagent/with-let [dragging? (atom false)]
+    (let [[hue saturation lightness] (.hsl color)
+          hue (if (js/isNaN hue) 0 hue)
+          alpha (.alpha color)
+          top-lightness (fn [x] (+ 0.5 (* 0.5 (- 1 x))))
+          position [saturation lightness]
+          node (react/createRef)
+          update-position
+          (fn [event cb]
+            (when-let [^js rect (.getBoundingClientRect (.-current node))]
+              (let [x (utils.math/clamp (/ (- (.-clientX event) (.-left rect))
+                                           (.-width rect))
+                                        0 1)
+                    y (utils.math/clamp (/ (- (.-clientY event) (.-top rect))
+                                           (.-height rect))
+                                        0 1)]
+                (-> (utils.color/hsl->color hue x (* (top-lightness x) (- 1 y)))
+                    (utils.color/set-alpha notation alpha)
+                    (cb)))))]
+      [:div.relative.size-full.cursor-crosshair.touch-none.h-40
+       {:ref node
+        :style {:background (color-selection-gradient hue)}
+        :on-pointer-down (fn [e]
+                           (.preventDefault e)
+                           (.setPointerCapture (.-current node) (.-pointerId e))
+                           (reset! dragging? true)
+                           (update-position e on-change))
+        :on-pointer-move (fn [e]
+                           (when @dragging?
+                             (update-position e on-change)))
+        :on-pointer-up (fn [e]
+                         (reset! dragging? false)
+                         (update-position e on-commit))
+        :on-pointer-cancel (fn [e]
+                             (reset! dragging? false)
+                             (update-position e on-commit))}
+       [:div.absolute.h-4.w-4.rounded-full.border-2.border-white
+        {:class "-translate-x-1/2 -translate-y-1/2 pointer-events-none"
+         :style {:left (str (* 100 (first position)) "%")
+                 :top (str (* 100 (- 1 (/ lightness
+                                          (top-lightness saturation)))) "%")
+                 :box-shadow "0 0 0 1px rgba(0,0,0,0.5)"}}]])))
+
+(def hue-track-colors
+  ["#ff0000"
+   "#ffff00"
+   "#00ff00"
+   "#00ffff"
+   "#0000ff"
+   "#ff00ff"
+   "#ff0000"])
+
+(defn hue-slider
+  [{:keys [color notation on-change on-commit]}]
+  (let [hue (first (.hsl color))]
+    [:> Slider/Root
+     {:class "relative flex h-4 w-full touch-none px-1 data-disabled:opacity-50"
+      :max 359
+      :disabled (js/isNaN hue)
+      :step 1
+      :value [(first (.hsl color))]
+      :on-value-change (fn [[v]]
+                         (on-change (utils.color/set-hue color notation v)))
+      :on-value-commit (fn [[v]]
+                         (on-commit (utils.color/set-hue color notation v)))
+      :on-pointer-move #(.stopPropagation %)}
+     [:> Slider/Track
+      {:class "relative my-0.5 h-3 grow"
+       :style {:background (str "linear-gradient(90deg, "
+                                (string/join ", " hue-track-colors)
+                                ")")}}]
+     [:> Slider/Thumb
+      {:class "block h-4 w-2 bg-foreground-hovered"
+       :title (i18n.views/t [::adjust-hue "Adjust hue"])}]]))
+
+(defn alpha-slider
+  [{:keys [color notation on-change on-commit]}]
+  [:> Slider/Root
+   {:class "relative flex h-4 w-full touch-none px-1"
+    :max 1
+    :step 0.01
+    :value [(.alpha color)]
+    :on-value-change (fn [[v]]
+                       (on-change (utils.color/set-alpha color notation v)))
+    :on-value-commit (fn [[v]]
+                       (on-commit (utils.color/set-alpha color notation v)))
+    :on-pointer-move #(.stopPropagation %)}
+   [:> Slider/Track
+    {:class "relative my-0.5 h-3 grow"
+     :style {:background (str "repeating-conic-gradient(transparent 0 25%,"
+                              "var(--foreground-disabled) 0 50%)"
+                              "50% / 12px 12px")}}
+    [:div.absolute.inset-0
+     {:style {:background (str "linear-gradient(90deg, transparent, "
+                               (.css (.alpha color 1)) ")")}}]
+    [:> Slider/Range
+     {:class "absolute h-full bg-transparent"}]]
+   [:> Slider/Thumb
+    {:class "block h-4 w-2 bg-foreground-hovered"
+     :title (i18n.views/t [::adjust-opecity "Adjust opecity"])}]])
+
+(defn eye-dropper-button
+  [{:keys [notation on-commit value]}]
+  [icon-button "eye-dropper"
+   {:class "my-1!"
+    :title (i18n.views/t [::pick-color "Pick color"])
+    :on-click #(-> (js/EyeDropper.)
+                   (.open)
+                   (.then (fn [^js result]
+                            (some-> (.-sRGBHex result)
+                                    (utils.color/string->color value)
+                                    (utils.color/->css notation)
+                                    (on-commit))))
+                   (.catch (fn [_])))}])
+
+(defn color-notation-select
+  [{:keys [color notation on-change]}]
+  [:> Select/Root
+   {:value notation
+    :on-value-change (fn [notation]
+                       (on-change (utils.color/->css color notation)))}
+   [:> Select/Trigger
+    {:class "button px-2 rounded-sm shrink-0"
+     :title (i18n.views/t [::select-color-type "Select color type"])}
+    [:div
+     [:> Select/Value ""]
+     [:> Select/Icon [icon "chevron-down"]]]]
+   [:> Select/Portal
+    [:> Select/Content
+     {:class "menu-content rounded-sm select-content"
+      :on-key-down #(.stopPropagation %)
+      :on-escape-key-down #(.stopPropagation %)}
+     [:> Select/ScrollUpButton
+      {:class "select-scroll-button"}
+      [icon "chevron-up"]]
+     (->> utils.color/supported-notations
+          (map (fn [format]
+                 [:> Select/Item
+                  {:value format
+                   :class "menu-item px-2!"}
+                  [:> Select/ItemText
+                   (string/upper-case format)]]))
+          (into [:> Select/Viewport {:class "select-viewport"}]))
+     [:> Select/ScrollDownButton
+      {:class "select-scroll-button"}
+      [icon "chevron-down"]]]]])
+
+(defn set-color-channel-value
+  [e {:keys [value color notation channel on-commit]}]
+  (let [raw (.. e -target -value)
+        new-value (cond-> raw
+                    (not= channel "hex")
+                    (js/parseFloat raw))]
+    (if-not (utils.color/valid-channel-value? channel raw)
+      (set! (.. e -target -value) value)
+      (-> (case channel
+            "alpha" (.alpha color new-value)
+            "hex" (utils.color/string->color new-value value)
+            (.set color (str notation "." channel) new-value))
+          (utils.color/->css notation)
+          (on-commit)))))
+
+(defn color-channel-input
+  [{:keys [value index notation]
+    :as options}]
+  (let [channel (utils.color/index->channel index notation)
+        value (cond-> value
+                (number? value)
+                (utils.attribute/->fixed 2))
+        options (merge options {:value value
+                                :channel channel})]
+    [:div.flex.flex-col.items-center.w-full.text-2xs
+     [:input.form-element.text-center.p-0!
+      {:id channel
+       :default-value value
+       :on-blur #(set-color-channel-value % options)
+       :on-key-down #(utils.key/down-handler % value
+                                             set-color-channel-value options)}]
+     [:label.text-foreground-muted.uppercase
+      {:for channel}
+      channel]]))
+
+(defn color-channels
+  [{:keys [color notation]
+    :as options}]
+  (->> (utils.color/channel-values color notation)
+       (map-indexed (fn [index value]
+                      ^{:key (str index value)}
+                      [color-channel-input (merge options {:value value
+                                                           :index index})]))
+       (into [:div.flex.w-full.items-center.rounded-sm.gap-1])))
+
+(defn color-picker
+  [{:keys [value on-change on-commit dropper]} & children]
+  (let [color (utils.color/string->color value)
+        notation (utils.color/string->notation (str value))
+        options {:color color
+                 :notation notation
+                 :on-change on-change
+                 :on-commit on-commit}]
+    (into [:div.flex.flex-col.gap-4.w-70.p-2.bg-primary
+           {:dir "ltr"}
+           [:div.flex.flex-col.gap-4
+            [color-selection options]
+            [:div.flex.items-center.gap-1.justify-center
+             (when dropper
+               [eye-dropper-button options])
+             [:div.flex.flex-col.flex-1.space-between.gap-1
+              [hue-slider options]
+              [alpha-slider options]]]
+            [:div.flex.items-center.gap-2
+             [color-notation-select options]
+             [color-channels options]]]]
+          children)))

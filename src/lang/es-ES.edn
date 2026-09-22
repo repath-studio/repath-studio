@@ -526,7 +526,8 @@
   :auto "Automático"}
 
  :renderer.attribute.impl.color
- {:pick-color "Elegir color"}
+ {:pick-color "Elegir color"
+  :learn-more "Saber más sobre %1"}
 
  :renderer.attribute.impl.d
  {:description "El atributo d define un trazado a dibujar."
@@ -948,11 +949,8 @@
 
  :renderer.views
  {:remove "Eliminar"
-  :resize-thumb "Redimensionar panel"}
-
- :renderer.color-picker-view
- {:adjust-hue "Ajustar el tono"
+  :resize-thumb "Redimensionar panel"
+  :adjust-hue "Ajustar el tono"
   :adjust-opecity "Ajustar la opacidad"
   :pick-color "Elegir un color"
-  :select-color-type "Seleccionar tipo de color"
-  :learn-more "Saber más sobre %1"}}
+  :select-color-type "Seleccionar tipo de color"}}

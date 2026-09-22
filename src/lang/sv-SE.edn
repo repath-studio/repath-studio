@@ -525,7 +525,8 @@
   :auto "Automatisk"}
 
  :renderer.attribute.impl.color
- {:pick-color "Välj färg"}
+ {:pick-color "Välj färg"
+  :learn-more "Lär dig mer om %1"}
 
  :renderer.attribute.impl.d
  {:description "Attributet d definierar en bana att rita."
@@ -942,11 +943,8 @@
 
  :renderer.views
  {:remove "Ta bort"
-  :resize-thumb "Ändra storlek på panel"}
-
- :renderer.color-picker-view
- {:adjust-hue "Justera nyans"
+  :resize-thumb "Ändra storlek på panel"
+  :adjust-hue "Justera nyans"
   :adjust-opecity "Justera opacitet"
   :pick-color "Välj färg"
-  :select-color-type "Välj färgtyp"
-  :learn-more "Lär dig mer om %1"}}
+  :select-color-type "Välj färgtyp"}}

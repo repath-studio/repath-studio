@@ -516,7 +516,8 @@
   :auto "Auto"}
 
  :renderer.attribute.impl.color
- {:pick-color "Pick color"}
+ {:pick-color "Pick color"
+  :learn-more "Learn more about %1"}
 
  :renderer.attribute.impl.d
  {:description "The d attribute defines a path to be drawn."
@@ -929,11 +930,8 @@
 
  :renderer.views
  {:remove "Remove"
-  :resize-thumb "Resize panel thumb"}
-
- :renderer.color-picker-view
- {:adjust-hue "Adjust hue"
+  :resize-thumb "Resize panel thumb"
+  :adjust-hue "Adjust hue"
   :adjust-opecity "Adjust opecity"
   :pick-color "Pick color"
-  :select-color-type "Select color type"
-  :learn-more "Learn more about %1"}}
+  :select-color-type "Select color type"}}
