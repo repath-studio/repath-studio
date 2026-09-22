@@ -104,13 +104,13 @@
     [:> Command/CommandItem
      {:on-select #(rf/dispatch [::dialog.events/close event])
       :class ["flex p-2 rounded-md items-center justify-between gap-2 group"
-              "data-[selected=true]:bg-overlay"
-              (when disabled? "opacity-50")]
+              "data-[selected=true]:bg-overlay"]
       :disabled disabled?}
      [:div.flex.items-center.gap-2.min-w-0
-      [:div.w-7.h-7.rounded.flex.justify-center.items-center.shrink-0
-       [views/icon icon]]
+      [:div.w-7.h-7.flex.justify-center.items-center.shrink-0
+       [views/icon icon {:class "text-foreground-muted"}]]
       [:div.truncate
+       {:class (when disabled? "text-foreground-disabled")}
        [:span.sr-only (i18n.views/t parent-label)]
        (i18n.views/t label)]]
      [:div.flex.items-center.gap-2.shrink-0
