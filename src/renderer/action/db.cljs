@@ -16,8 +16,8 @@
 (def ActionGroup
   [:map {:closed true}
    [:id ActionGroupId]
-   [:icon string?]
    [:label Translation]
+   [:icon {:optional true} string?]
    [:enabled {:optional true} vector?]
    [:actions [:vector ActionId]]])
 
