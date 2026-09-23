@@ -39,7 +39,7 @@
    (assoc coeffects
           :standalone
           (or (.-standalone js/navigator)
-              (.-matches (js/matchMedia "(display-mode: standalone"))))))
+              (.-matches (js/matchMedia "(display-mode: standalone)"))))))
 
 (rf/reg-cofx
  ::features
