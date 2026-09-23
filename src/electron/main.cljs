@@ -174,10 +174,8 @@
          "did-finish-load"
          #(.show ^js @loading-window)))
 
-(def lock? (.requestSingleInstanceLock app))
-
 (defn ^:export init! []
-  (if lock?
+  (if (.requestSingleInstanceLock app)
     (do (sentry-electron-main/init config/sentry)
         (.on app "window-all-closed" #(when-not (= js/process.platform "darwin")
                                         (.quit app)))
