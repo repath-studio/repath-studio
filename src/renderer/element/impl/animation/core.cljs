@@ -14,11 +14,11 @@
 
 (defmethod element.hierarchy/render ::element.hierarchy/animation
   [el]
-  (let [{:keys [children tag attrs id]} el
+  (let [{:keys [children tag attrs]} el
         child-elements @(rf/subscribe [::element.subs/filter-visible children])]
     [tag attrs
-     (for [el child-elements]
-       ^{:key id}
+     (for [child child-elements]
+       ^{:key (:id child)}
        [element.hierarchy/render el])]))
 
 (defmethod element.hierarchy/permitted-content ::element.hierarchy/animation
