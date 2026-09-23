@@ -10,7 +10,8 @@
 (m/=> string->notation [:-> string? ColorNotation])
 (defn string->notation
   [s]
-  (or (some #(when (string/starts-with? (string/lower-case s) %) %)
+  (or (some #(when (-> (string/lower-case s)
+                       (string/starts-with? %)) %)
             supported-notations)
       "hex"))
 

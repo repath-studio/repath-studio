@@ -62,5 +62,5 @@
           :dropper dropper?
           :on-change #(rf/dispatch [::element.events/preview-attr k %])
           :on-commit #(rf/dispatch [::element.events/set-attr k %])}
-         [mdn-color-button (utils.color/string->notation v)]]
+         [mdn-color-button (utils.color/string->notation (str v))]]
         [views/popover-arrow]]]]]))
