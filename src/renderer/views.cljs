@@ -243,18 +243,20 @@
      [shortcuts action]]))
 
 (defn dropdown-menu-item
-  [action]
+  [action & {:as props}]
   (cond
     (= :separator (:type action))
-    [:> DropdownMenu/Separator {:class "menu-separator"}]
+    [:> DropdownMenu/Separator (merge-with-class {:class "menu-separator"}
+                                                 props)]
 
     (:active action)
     [:> DropdownMenu/CheckboxItem
-     {:class "menu-checkbox-item inset"
-      :on-click #(.stopPropagation %)
-      :on-select (action.views/dispatch action)
-      :checked (action.views/checked? action)
-      :disabled (action.views/disabled? action)}
+     (merge-with-class {:class "menu-checkbox-item inset"
+                        :on-click #(.stopPropagation %)
+                        :on-select (action.views/dispatch action)
+                        :checked (action.views/checked? action)
+                        :disabled (action.views/disabled? action)}
+                       props)
      [:> DropdownMenu/ItemIndicator
       {:class "menu-item-indicator"}
       [icon "checkmark"]]
@@ -266,9 +268,10 @@
 
     :else
     [:> DropdownMenu/Item
-     {:class "menu-item"
-      :onSelect (action.views/dispatch action)
-      :disabled (action.views/disabled? action)}
+     (merge-with-class {:class "menu-item"
+                        :onSelect (action.views/dispatch action)
+                        :disabled (action.views/disabled? action)}
+                       props)
      [:div.flex.items-center.gap-2
       (when (:icon action)
         [icon (:icon action)])

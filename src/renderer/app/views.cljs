@@ -336,7 +336,7 @@
    [views/drawer
     {:icon "shell"
      :label [::shell "Shell"]}
-    [:div.flex.flex-col.flex-1
+    [:div.flex.flex-col.flex-1.overflow-hidden
      [shell.views/root]]]
 
    [views/drawer

@@ -144,7 +144,7 @@
    (some #(when (= tool-id (tool-action %)) %) actions)))
 
 (defn button
-  [action bordered]
+  [action]
   (let [active (action.views/checked? action)
         cached-tool @(rf/subscribe [::tool.subs/cached])
         primary (= cached-tool (tool-action action))]
@@ -153,8 +153,7 @@
       {:as-child true}
       [:span
        [views/radio-icon-button (:icon action) active
-        {:class [(when primary "outline outline-inset outline-accent")
-                 (when bordered "border border-border")]
+        {:class (when primary "outline outline-inset outline-accent")
          :aria-label (action.views/label action)
          :on-click (action.views/dispatch action)}]]]
      [:> Tooltip/Portal
@@ -168,10 +167,10 @@
         [views/shortcuts action]]]]]))
 
 (defn button-group
-  [action-group]
+  [action-group & {:as props}]
   (some->> (:actions action-group)
-           (map (fn [action] [button action false]))
-           (into [:div {:class "flex justify-center md:gap-1 gap-0.5"}])))
+           (map button)
+           (into [:div (views/merge-with-class {:class "flex gap-1"} props)])))
 
 (defn dropdown-button
   [group]
@@ -191,7 +190,7 @@
            {:as-child true}
            [:button.button.flex.items-center.justify-center.px-2.font-mono
             {:aria-label (i18n.views/t label)
-             :class ["rounded-sm gap-1 border border-border"
+             :class ["rounded-sm gap-1"
                      (when cached-action "outline outline-inset outline-accent")
                      (when active-action
                        "bg-accent text-accent-foreground! hover:bg-accent-light
@@ -209,23 +208,41 @@
 
        [:> DropdownMenu/Portal
         (->> actions
-             (map views/dropdown-menu-item)
+             (map #(views/dropdown-menu-item % {:class "px-2!"}))
              (into [:> DropdownMenu/Content
                     {:side "bottom"
-                     :align "middle"
+                     :align "center"
                      :class "menu-content rounded-sm"
                      :on-key-down #(.stopPropagation %)
                      :on-escape-key-down #(.stopPropagation %)}
                     [views/dropdownmenu-arrow]]))]]
-      [button (first actions) true])))
+      [button (first actions)])))
 
 (def action-groups
   [:tools/transform
    :tools/containers
    :tools/elements
    :tools/draw
-   :tools/misc
-   :tools/extensions])
+   :tools/misc])
+
+(defn mini-toolbar
+  []
+  (->> (conj [(button-group {:actions (mapv action.views/deref-action
+                                            [:tool/transform
+                                             :tool/edit])}
+                            {:class "gap-2"})]
+             (->> (action.views/deref-action-group :tools/containers)
+                  (:actions)
+                  (partial into)
+                  (update (action.views/deref-action-group :tools/elements)
+                          :actions)
+                  (dropdown-button))
+             (->> [:tools/draw
+                   :tools/misc]
+                  (keep action.views/deref-action-group)
+                  (map dropdown-button)))
+       (into [views/toolbar
+              {:class "bg-primary justify-center gap-2 max-md:py-2"}])))
 
 (defn toolbar
   []
@@ -253,12 +270,9 @@
                        {:ref measure-ref
                         :class "absolute invisible w-full overflow-hidden"}]))
            (if @overflow?
-             (->> groups
-                  (map dropdown-button)
-                  (into [views/toolbar
-                         {:class "bg-primary justify-center gap-2"}]))
+             [mini-toolbar]
              (->> groups
                   (map button-group)
                   (interpose [:span.v-divider])
                   (into [views/toolbar
-                         {:class "bg-primary justify-center "}])))]))})))
+                         {:class "bg-primary justify-center"}])))]))})))
