@@ -85,8 +85,10 @@
   [enabled?]
   (let [active-language @(rf/subscribe [::shell.subs/active-language])
         action-group (action.views/deref-action-group :shell/languages)
+        md? @(rf/subscribe [::window.subs/md?])
         {:keys [actions label]} action-group]
     [:> DropdownMenu/Root
+     {:modal md?}
      [:> DropdownMenu/Trigger
       {:as-child true}
       [:button.form-control-button.font-mono.px-2!.bg-transparent!

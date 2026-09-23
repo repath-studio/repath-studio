@@ -19,7 +19,8 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.dom :as utils.dom]
-   [renderer.views :as views]))
+   [renderer.views :as views]
+   [renderer.window.subs :as-alias window.subs]))
 
 (m/=> handle [:-> Handle any?])
 (defn handle
@@ -177,11 +178,13 @@
   (let [{:keys [label actions icon]} group
         active-tool @(rf/subscribe [::tool.subs/active])
         cached-tool @(rf/subscribe [::tool.subs/cached])
+        md? @(rf/subscribe [::window.subs/md?])
         active-action (tool-action actions active-tool)
         cached-action (tool-action actions cached-tool)
         active-or-cached-action (or active-action cached-action)]
     (if (second actions)
       [:> DropdownMenu/Root
+       {:modal md?}
        [:> DropdownMenu/Trigger
         {:as-child true}
         [:div
