@@ -84,7 +84,7 @@
   [:map {:closed true}
    [:verbose {:default false} boolean?]
    [:languages {:default {}} [:map-of ShellLanguageId ShellLanguage]]
-   [:active-language {:default :js} keyword?]
+   [:active-language {:default :cljs} keyword?]
    [:completion {:optional true} [:maybe ShellCompletion]]
    [:paste-allowed {:default false} boolean?]])
 
