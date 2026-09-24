@@ -535,9 +535,8 @@
   :xxx-large "XXX大"}
 
  :renderer.attribute.impl.font-style
- {:description "font-size属性は、マルチライン配置環境で複数行のテキストを
-                隙間なく設定する際の、ベースラインからベースラインまでの
-                フォントサイズを指します。"
+ {:description "font-style属性は、テキストが通常、イタリック、または
+                オブリークのフォントでレンダリングされるかを指定します。"
   :normal "標準"
   :italic "イタリック"
   :oblique "オブリーク"}

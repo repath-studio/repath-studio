@@ -571,9 +571,8 @@
   :xxx-large "XXX-Grande"}
 
  :renderer.attribute.impl.font-style
- {:description "O atributo font-size refere-se ao tamanho da fonte de linha de
-                base a linha de base quando múltiplas linhas de texto são
-                definidas sólidas num ambiente de layout multilinha."
+ {:description "O atributo font-style especifica se o texto deve ser
+                renderizado usando uma fonte normal, itálica ou oblíqua."
   :normal "Normal"
   :italic "Itálico"
   :oblique "Oblíquo"}

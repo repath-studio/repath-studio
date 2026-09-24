@@ -587,10 +587,9 @@
   :xxx-large "XXX-Groot"}
 
  :renderer.attribute.impl.font-style
- {:description "Het font-size attribuut verwijst naar de grootte van het
-                lettertype van baseline tot baseline wanneer meerdere regels
-                tekst vast ingesteld zijn in een meerregelige lay-out
-                omgeving."
+ {:description "Het font-style attribuut geeft aan of de tekst met een
+                normaal, cursief of schuin lettertype gerenderd moet
+                worden."
   :normal "Normaal"
   :italic "Cursief"
   :oblique "Schuin"}

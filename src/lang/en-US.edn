@@ -565,9 +565,8 @@
   :xxx-large "XXX-Large"}
 
  :renderer.attribute.impl.font-style
- {:description "The font-size attribute refers to the size of the font from
-                 baseline to baseline when multiple lines of text are set solid
-                 in a multiline layout environment."
+ {:description "The font-style attribute specifies whether the text is to be
+                rendered using a normal, italic, or oblique face."
   :normal "Normal"
   :italic "Italic"
   :oblique "Oblique"}

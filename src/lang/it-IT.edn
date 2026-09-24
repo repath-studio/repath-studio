@@ -585,10 +585,9 @@
   :xxx-large "XXX-Grande"}
 
  :renderer.attribute.impl.font-style
- {:description "L'attributo font-size si riferisce alla dimensione del font
-                dalla linea di base alla linea di base quando più righe di
-                testo sono impostate solide in un ambiente di layout
-                multilinea."
+ {:description "L'attributo font-style specifica se il testo deve essere
+                renderizzato usando un carattere normale, corsivo o
+                obliquo."
   :normal "Normale"
   :italic "Corsivo"
   :oblique "Obliquo"}

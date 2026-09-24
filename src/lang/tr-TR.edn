@@ -566,9 +566,8 @@
   :xxx-large "XXX-Büyük"}
 
  :renderer.attribute.impl.font-style
- {:description "font-size özniteliği, çok satırlı metin çok satırlı düzen
-                ortamında katı olarak ayarlandığında taban çizgisinden
-                taban çizgisine yazı tipi boyutunu ifade eder."
+ {:description "font-style özniteliği, metnin normal, italik veya eğik
+                bir yazı tipiyle mi oluşturulacağını belirtir."
   :normal "Normal"
   :italic "İtalik"
   :oblique "Eğik"}

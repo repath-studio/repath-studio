@@ -575,9 +575,8 @@
   :xxx-large "XXX-Stor"}
 
  :renderer.attribute.impl.font-style
- {:description "Attributet font-size refererar till storleken på typsnittet
-                från baslinje till baslinje när flera textrader är satta fast i
-                en flerradig layoutmiljö."
+ {:description "Attributet font-style anger om texten ska renderas med
+                ett normalt, kursivt eller snett typsnitt."
   :normal "Normal"
   :italic "Kursiv"
   :oblique "Sned"}

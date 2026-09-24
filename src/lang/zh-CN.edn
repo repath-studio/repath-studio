@@ -496,8 +496,8 @@
   :xxx-large "XXX大"}
 
  :renderer.attribute.impl.font-style
- {:description "font-size 属性是指在多行布局环境中设置多行文本时从基线到
-                基线的字体大小。"
+ {:description "font-style 属性指定文本是使用常规、斜体还是倾斜字体
+                进行渲染。"
   :normal "正常"
   :italic "斜体"
   :oblique "倾斜"}

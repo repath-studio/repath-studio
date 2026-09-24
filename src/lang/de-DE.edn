@@ -588,9 +588,9 @@
   :xxx-large "XXX-Groß"}
 
  :renderer.attribute.impl.font-style
- {:description "Das font-size-Attribut bezieht sich auf die Größe der Schrift
-                von Grundlinie zu Grundlinie, wenn mehrere Textzeilen in einer
-                mehrzeiligen Layout-Umgebung gesetzt werden."
+ {:description "Das font-style-Attribut bestimmt, ob der Text mit einer
+                normalen, kursiven oder schiefen Schriftart gerendert
+                werden soll."
   :normal "Normal"
   :italic "Kursiv"
   :oblique "Schräg"}

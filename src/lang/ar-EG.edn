@@ -550,9 +550,8 @@
   :xxx-large "XXX-كبير"}
 
  :renderer.attribute.impl.font-style
- {:description "خاصية font-size تشير إلى حجم الخط من الخط الأساسي
-                إلى الخط الأساسي عندما يتم تعيين خطوط متعددة من النص
-                صلبة في بيئة تخطيط متعدد الأسطر."
+ {:description "تحدد خاصية font-style ما إذا كان النص سيُعرض بخط عادي أو
+                مائل أو منحرف."
   :normal "عادي"
   :italic "مائل"
   :oblique "منحرف"}

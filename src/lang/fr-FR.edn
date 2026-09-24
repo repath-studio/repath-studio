@@ -582,10 +582,9 @@
   :xxx-large "XXX-Grand"}
 
  :renderer.attribute.impl.font-style
- {:description "L'attribut font-size fait référence à la taille de la police de
-                la ligne de base à la ligne de base lorsque plusieurs lignes de
-                texte sont définies solides dans un environnement de mise en
-                page multiligne."
+ {:description "L'attribut font-style spécifie si le texte doit être
+                rendu en utilisant une police normale, italique ou
+                oblique."
   :normal "Normal"
   :italic "Italique"
   :oblique "Oblique"}
