@@ -11,7 +11,6 @@
 /resources/public/css/
 /resources/public/src/
 /resources/public/pyodide/*
-!resources/public/pyodide/*.whl
 /resources/*.js
 /resources/*.js.map
 
