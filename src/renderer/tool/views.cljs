@@ -230,17 +230,18 @@
 
 (defn mini-toolbar
   []
-  (->> (conj [(button-group {:actions (mapv action.views/deref-action
-                                            [:tool/transform
-                                             :tool/edit])}
-                            {:class "gap-2"})]
-             (->> (action.views/deref-action-group :tools/containers)
-                  (:actions)
-                  (partial into)
-                  (update (action.views/deref-action-group :tools/elements)
-                          :actions)
-                  (dropdown-button))
-             (->> [:tools/draw
+  (->> [[button-group
+         {:actions (mapv action.views/deref-action
+                         [:tool/transform
+                          :tool/edit])}
+         {:class "gap-2"}]]
+       (into [(->> (action.views/deref-action-group :tools/containers)
+                   (:actions)
+                   (partial into)
+                   (update (action.views/deref-action-group :tools/elements)
+                           :actions)
+                   (dropdown-button))])
+       (into (->> [:tools/draw
                    :tools/misc]
                   (keep action.views/deref-action-group)
                   (map dropdown-button)))
