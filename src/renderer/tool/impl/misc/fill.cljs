@@ -51,9 +51,9 @@
 
 (defmethod tool.hierarchy/on-pointer-down [::fill :idle]
   [db e]
-  (-> db
-      (assoc :clicked-element (:element e))
-      (history.handlers/reset-state)))
+  (cond-> (history.handlers/reset-state db)
+    (not (utils.element/root? (:element e)))
+    (assoc :clicked-element (:element e))))
 
 (rf/dispatch [::action.events/register-action
               {:id :tool/fill
