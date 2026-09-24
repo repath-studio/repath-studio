@@ -174,6 +174,15 @@
          "did-finish-load"
          #(.show ^js @loading-window)))
 
+(defn on-second-instance
+  [argv]
+  (when (.isMinimized ^js @main-window)
+    (.restore @main-window))
+  (.focus @main-window)
+  (some->> (open-arg-document argv)
+           (send-to-renderer
+            "document-opened-from-args")))
+
 (defn ^:export init! []
   (if (.requestSingleInstanceLock app)
     (do (sentry-electron-main/init config/sentry)
@@ -181,10 +190,6 @@
                                         (.quit app)))
         (.on app "ready" init-loading-window!)
         (.on app "second-instance" (fn [_event argv _cwd]
-                                     (when (.isMinimized ^js @main-window)
-                                       (.restore @main-window))
-                                     (.focus @main-window)
-                                     (some->> (open-arg-document argv)
-                                              (send-to-renderer
-                                               "document-opened-from-args")))))
+                                     (when @main-window
+                                       (on-second-instance argv)))))
     (.quit app)))
