@@ -38,7 +38,7 @@
       (selectable? clicked-element)
       (element.handlers/toggle-selection (:id clicked-element) additive))))
 
-(m/=> hovered? [:-> Element boolean? boolean?])
+(m/=> hovered? [:-> Element boolean? Element boolean?])
 (defn hovered?
   [db intersecting? el]
   (let [selection-bbox (element.hierarchy/bbox (:select-box db))
