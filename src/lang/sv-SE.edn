@@ -492,9 +492,7 @@
   :help "Klicka för att börja skriva."}
 
  :renderer.tool.impl.misc.guide
- {:label "Guide"
-  :guides "Stödlinjer"
-  :lock-guides "Lås stödlinjer"
+ {:lock-guides "Lås stödlinjer"
   :idle "Dra linjalen till duken för att skapa en guide."
   :create "Släpp för att slutföra guiden."}
 

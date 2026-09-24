@@ -12,10 +12,8 @@
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
    [renderer.input.impl.pointer :as input.impl.pointer]
-   [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
-   [renderer.tool.hierarchy :as tool.hierarchy]
-   [renderer.tool.subs :as-alias tool.subs]))
+   [renderer.tool.hierarchy :as tool.hierarchy]))
 
 (hierarchy/derive! ::guide ::tool.hierarchy/tool)
 
@@ -107,22 +105,8 @@
   (element.handlers/visible db))
 
 (rf/dispatch [::action.events/register-action
-              {:id :tool/guide
-               :label [::label "Guide"]
-               :icon "ruler-straight"
-               :event [::tool.events/activate ::guide]
-               :active [::tool.subs/active? ::guide]}])
-
-(rf/dispatch [::action.events/register-action
               {:id :guides/toggle-locked
                :label [::lock-guides "Lock guides"]
                :icon "lock"
                :event [::document.events/toggle-attr :guides-locked]
                :active [::document.subs/attr :guides-locked]}])
-
-(rf/dispatch [::action.events/register-action-group
-              {:id :guides
-               :icon "ruler-straight"
-               :label [::guides "Guides"]
-               :actions [:tool/guide
-                         :guides/toggle-locked]}])

@@ -503,9 +503,7 @@
   :help "Klik om te beginnen met typen."}
 
  :renderer.tool.impl.misc.guide
- {:label "Gids"
-  :guides "Hulplijnen"
-  :lock-guides "Hulplijnen vergrendelen"
+ {:lock-guides "Hulplijnen vergrendelen"
   :idle "Sleep de liniaal naar het canvas om een gids te maken."
   :create "Laat los om de gids te voltooien."}
 

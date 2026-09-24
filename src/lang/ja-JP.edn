@@ -438,9 +438,7 @@
   :help "クリックして入力を開始。"}
 
  :renderer.tool.impl.misc.guide
- {:label "ガイド"
-  :guides "ガイド"
-  :lock-guides "ガイドをロック"
+ {:lock-guides "ガイドをロック"
   :idle "定規をキャンバスにドラッグしてガイドを作成します。"
   :create "ガイドを確定するにはドロップしてください。"}
 

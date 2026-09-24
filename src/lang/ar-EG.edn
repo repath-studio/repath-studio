@@ -429,9 +429,7 @@
   :help "انقر لبدء الكتابة."}
 
  :renderer.tool.impl.misc.guide
- {:label "دليل"
-  :guides "أدلة"
-  :lock-guides "قفل الأدلة"
+ {:lock-guides "قفل الأدلة"
   :idle "اسحب المسطرة إلى اللوحة لإنشاء دليل."
   :create "أسقط لإتمام الدليل."}
 

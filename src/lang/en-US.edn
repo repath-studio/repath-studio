@@ -484,9 +484,7 @@
   :help "Click to start typing."}
 
  :renderer.tool.impl.misc.guide
- {:label "Guide"
-  :guides "Guides"
-  :lock-guides "Lock guides"
+ {:lock-guides "Lock guides"
   :idle "Drag the ruler to the canvas to create a guide."
   :create "Drop to finalize the guide."}
 

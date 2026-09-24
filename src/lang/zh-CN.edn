@@ -403,9 +403,7 @@
   :help "点击开始输入."}
 
  :renderer.tool.impl.misc.guide
- {:label "参考线"
-  :guides "参考线"
-  :lock-guides "锁定参考线"
+ {:lock-guides "锁定参考线"
   :idle "将标尺拖到画布上以创建参考线。"
   :create "放下以完成参考线。"}
 

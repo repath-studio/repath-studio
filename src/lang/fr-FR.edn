@@ -479,9 +479,7 @@
   :help "Cliquez pour commencer à taper."}
 
  :renderer.tool.impl.misc.guide
- {:label "Guide"
-  :guides "Guides"
-  :lock-guides "Verrouiller les guides"
+ {:lock-guides "Verrouiller les guides"
   :idle "Faites glisser la règle sur le canevas pour créer un guide."
   :create "Déposez pour finaliser le guide."}
 

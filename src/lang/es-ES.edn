@@ -474,9 +474,7 @@
   :help "Haga clic para comenzar a escribir."}
 
  :renderer.tool.impl.misc.guide
- {:label "Guía"
-  :guides "Guías"
-  :lock-guides "Bloquear guías"
+ {:lock-guides "Bloquear guías"
   :idle "Arrastra la regla al lienzo para crear una guía."
   :create "Suelta para finalizar la guía."}
 

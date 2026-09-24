@@ -485,9 +485,7 @@
   :help "Yazmaya başlamak için tıklayın."}
 
  :renderer.tool.impl.misc.guide
- {:label "Kılavuz"
-  :guides "Kılavuzlar"
-  :lock-guides "Kılavuzları kilitle"
+ {:lock-guides "Kılavuzları kilitle"
   :idle "Kılavuz oluşturmak için cetveli tuval üzerine sürükleyin."
   :create "Kılavuzu tamamlamak için bırakın."}
 
