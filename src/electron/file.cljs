@@ -44,8 +44,7 @@
   [options]
   (-> (.showSaveDialog dialog (clj->js options))
       (.then (fn [^js/Object result]
-               (if (.-canceled result)
-                 (js/Promise.reject)
+               (when-not (.-canceled result)
                  (-> result js->clj (get "filePath")))))))
 
 (defn save-as
@@ -78,8 +77,7 @@
     (array (read file-path))
     (-> (.showOpenDialog dialog (clj->js dialog-options))
         (.then (fn [^js/Object result]
-                 (if (.-canceled result)
-                   (js/Promise.reject)
+                 (when-not (.-canceled result)
                    (->> (.-filePaths result)
                         (mapv read)
                         (clj->js)

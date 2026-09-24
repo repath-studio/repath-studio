@@ -421,7 +421,7 @@
  ::saved
  [persist]
  (fn [{:keys [db]} [_ close? info]]
-   (let [{:keys [id file-handle]} info]
+   (when-let [{:keys [id file-handle]} info]
      {:db (cond-> db
             :always
             (-> (update-in [:documents id] merge (dissoc info :file-handle))
