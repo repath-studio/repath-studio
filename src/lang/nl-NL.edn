@@ -636,6 +636,10 @@
  :renderer.tool.impl.base.edit.type
  {:help-type [:div "Voer uw tekst in."]}
 
+ :renderer.element.impl.custom.guide
+ {:vertical "Verticaal"
+  :horizontal "Horizontaal"}
+
  :renderer.tool.impl.base.transform.core
  {:label "Transformeren"
   :pivot-point "draaipunt"

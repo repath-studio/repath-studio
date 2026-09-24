@@ -638,6 +638,10 @@
  :renderer.tool.impl.base.edit.type
  {:help-type [:div "Geben Sie Ihren Text ein."]}
 
+ :renderer.element.impl.custom.guide
+ {:vertical "Vertikal"
+  :horizontal "Horizontal"}
+
  :renderer.tool.impl.base.transform.core
  {:label "Transformieren"
   :pivot-point "Drehpunkt"

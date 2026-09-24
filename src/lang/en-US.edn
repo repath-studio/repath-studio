@@ -261,6 +261,10 @@
                      which means that it will be determined by the current theme
                      of the application."}
 
+ :renderer.element.impl.custom.guide
+ {:vertical "Vertical"
+  :horizontal "Horizontal"}
+
  :renderer.element.impl.container.group
  {:label "Group"
   :description "The <g> SVG element is a container used to group other SVG

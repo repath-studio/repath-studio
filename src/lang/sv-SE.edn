@@ -622,6 +622,10 @@
  :renderer.tool.impl.base.edit.type
  {:help-type [:div "Ange din text."]}
 
+ :renderer.element.impl.custom.guide
+ {:vertical "Vertikal"
+  :horizontal "Horisontal"}
+
  :renderer.tool.impl.base.transform.core
  {:label "Transformera"
   :pivot-point "rotationspunkt"

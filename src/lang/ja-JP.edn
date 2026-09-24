@@ -580,6 +580,10 @@
  :renderer.tool.impl.base.edit.type
  {:help-type [:div "テキストを入力してください。"]}
 
+ :renderer.element.impl.custom.guide
+ {:vertical "垂直"
+  :horizontal "水平"}
+
  :renderer.tool.impl.base.transform.core
  {:label "変形"
   :pivot-point "ピボットポイント"

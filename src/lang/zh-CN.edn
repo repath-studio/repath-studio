@@ -537,6 +537,10 @@
  :renderer.tool.impl.base.edit.type
  {:help-type [:div "输入您的文本。"]}
 
+ :renderer.element.impl.custom.guide
+ {:vertical "垂直"
+  :horizontal "水平"}
+
  :renderer.tool.impl.base.transform.core
  {:label "变换"
   :pivot-point "旋转中心点"

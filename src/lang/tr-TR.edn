@@ -614,6 +614,10 @@
  :renderer.tool.impl.base.edit.type
  {:help-type [:div "Metninizi girin."]}
 
+ :renderer.element.impl.custom.guide
+ {:vertical "Dikey"
+  :horizontal "Yatay"}
+
  :renderer.tool.impl.base.transform.core
  {:label "Dönüştür"
   :pivot-point "pivot noktası"

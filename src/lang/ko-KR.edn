@@ -575,6 +575,10 @@
  :renderer.tool.impl.base.edit.type
  {:help-type [:div "텍스트를 입력하세요."]}
 
+ :renderer.element.impl.custom.guide
+ {:vertical "수직"
+  :horizontal "수평"}
+
  :renderer.tool.impl.base.transform.core
  {:label "변환"
   :pivot-point "피벗 포인트"

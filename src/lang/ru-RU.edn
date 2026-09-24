@@ -620,6 +620,10 @@
  :renderer.tool.impl.base.edit.type
  {:help-type [:div "Введите ваш текст."]}
 
+ :renderer.element.impl.custom.guide
+ {:vertical "Вертикальная"
+  :horizontal "Горизонтальная"}
+
  :renderer.tool.impl.base.transform.core
  {:label "Трансформация"
   :pivot-point "точка поворота"

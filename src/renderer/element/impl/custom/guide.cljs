@@ -35,12 +35,12 @@
 (defn default-attrs
   [attrs viewbox-bounds]
   (let [{:keys [x y orientation]} attrs
-        [b-x b-y b-w b-h] viewbox-bounds
+        [min-x min-y max-x max-y] viewbox-bounds
         vertical (= orientation "vertical")]
-    {:x1 (if vertical x b-x)
-     :y1 (if vertical b-y y)
-     :x2 (if vertical x b-w)
-     :y2 (if vertical b-h y)}))
+    {:x1 (if vertical x min-x)
+     :y1 (if vertical min-y y)
+     :x2 (if vertical x max-x)
+     :y2 (if vertical max-y y)}))
 
 (defmethod element.hierarchy/render :guide
   [el]
@@ -112,10 +112,10 @@
    (merge attrs
           {:default-value "vertical"
            :items [{:id :vertical
-                    :label [::normal "Vertical"]
+                    :label [::vertical "Vertical"]
                     :value "vertical"}
                    {:id :horizontal
-                    :label [::italic "Horizontal"]
+                    :label [::horizontal "Horizontal"]
                     :value "horizontal"}]})])
 
 (defmethod attribute.hierarchy/initial [:guide :orientation] [] "vertical")

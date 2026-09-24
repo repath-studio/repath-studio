@@ -643,6 +643,10 @@
  :renderer.tool.impl.base.edit.type
  {:help-type [:div "Εισάγετε κείμενο."]}
 
+ :renderer.element.impl.custom.guide
+ {:vertical "Κάθετος"
+  :horizontal "Οριζόντιος"}
+
  :renderer.tool.impl.base.transform.core
  {:label "Μετασχηματισμός"
   :pivot-point "σημείο περιστροφής"
