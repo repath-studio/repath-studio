@@ -3,10 +3,13 @@
   (:require
    [clojure.pprint :refer (pprint)]
    [clojure.string :as string]
+   [day8.re-frame-10x]
    [malli.dev.cljs :as malli.dev]
    [malli.dev.pretty :as pretty]
    [re-frame.core :as rf]
    [renderer.app.events :as app.events]))
+
+(day8.re-frame-10x/show-panel! false)
 
 (comment
   ;; Full db validation
