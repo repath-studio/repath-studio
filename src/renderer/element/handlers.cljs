@@ -355,10 +355,7 @@
 (m/=> non-selected-visible [:-> App [:vector Element]])
 (defn non-selected-visible
   [db]
-  (into []
-        (comp (filter (complement :selected))
-              (visible))
-        (entities db)))
+  (filterv :visible (entities db (vec (non-selected-ids db)))))
 
 (m/=> top-selected-ancestors [:-> App [:vector Element]])
 (defn top-selected-ancestors
