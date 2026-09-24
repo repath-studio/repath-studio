@@ -103,12 +103,13 @@
   (let [disabled? (action.views/disabled? action)]
     [:> Command/CommandItem
      {:on-select #(rf/dispatch [::dialog.events/close event])
-      :class ["flex p-2 rounded-md items-center justify-between gap-2 group"
-              "data-[selected=true]:bg-overlay"]
+      :class ["flex px-2 py-1.5 rounded-md items-center justify-between gap-2"
+              "group data-[selected=true]:bg-overlay"]
       :disabled disabled?}
      [:div.flex.items-center.gap-2.min-w-0
-      [:div.w-7.h-7.flex.justify-center.items-center.shrink-0
-       [views/icon icon {:class (when disabled? "text-foreground-disabled")}]]
+      [:div.flex.justify-center.items-center.shrink-0
+       {:class "w-[17px] h-[17px]"}
+       [views/icon icon {:class "text-foreground-disabled"}]]
       [:div.truncate
        {:class (when disabled? "text-foreground-disabled")}
        [:span.sr-only (i18n.views/t parent-label)]
@@ -117,7 +118,7 @@
       [views/tooltip-icon-button "pencil"
        (i18n.views/t [::edit-shortcuts "Edit shortcuts"])
        {:class ["opacity-0 group-hover:opacity-100 focus:opacity-100"
-                "h-5 w-5 text-foreground-muted"]
+                "text-foreground-muted bg-transparent! button-size-small"]
         :on-pointer-down #(.stopPropagation %)
         :on-click (fn [e]
                     (.stopPropagation e)
