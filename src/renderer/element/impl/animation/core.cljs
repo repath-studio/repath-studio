@@ -19,7 +19,7 @@
     [tag attrs
      (for [child child-elements]
        ^{:key (:id child)}
-       [element.hierarchy/render el])]))
+       [element.hierarchy/render child])]))
 
 (defmethod element.hierarchy/permitted-content ::element.hierarchy/animation
   [_el]
