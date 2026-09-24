@@ -33,7 +33,7 @@
         {:keys [id parent]} (:clicked-element db)
         db (history.handlers/reset-state db)
         handle-selected? (element.handlers/handle-selected? db parent id)
-        db (cond-> (history.handlers/reset-state db)
+        db (cond-> db
              (not handle-selected?)
              (element.handlers/toggle-handle-selection parent id
                                                        shift-key))
