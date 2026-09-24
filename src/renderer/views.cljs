@@ -433,7 +433,7 @@
     :closeButton true
     :duration js/Infinity
     :toastOptions {:classNames {:toast "bg-primary! border! border-border!
-                                        shadow-md! p-4! rounded-md!"
+                                        shadow-md! p-4! rounded-md! select-text"
                                 :closeButton "right-0! left-auto! bg-primary!
                                               h-6! w-6! transform-none!
                                               translate-x-1/2! -translate-y-1/2!
