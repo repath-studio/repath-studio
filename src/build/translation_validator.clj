@@ -193,8 +193,7 @@
         (println (str "  Extra keys (not in " base-lang ".edn):"))
         (doseq [k extra] (println "  -" k)))
       (println)
-      true)
-    false))
+      true)))
 
 (defn base-file [] (io/file (lang-dir) (str base-lang ".edn")))
 
@@ -210,7 +209,8 @@
         other-files (other-lang-files)]
     (println "Missing keys relative to" (str base-lang ".edn") ":")
     (println)
-    (if (some #(print-file-report base-dictionary %) other-files)
+    (if (some true?
+              (doall (map #(print-file-report base-dictionary %) other-files)))
       (println "Add the reported keys to the corresponding language files.")
       (println (str "All " (count other-files) " language files match "
                     base-lang ".edn: nothing to translate.")))))
