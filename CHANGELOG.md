@@ -3,6 +3,38 @@
 All notable user facing changes to this project will be documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 0.4.22 (2026-09-25)
+
+**Added**
+
+- Python completions and docs through Jedi [#210](https://github.com/repath-studio/repath-studio/pull/210)
+- JavaScript docs through typescript [#211](https://github.com/repath-studio/repath-studio/pull/211)
+- Confirmation dialog on shell paste [#212](https://github.com/repath-studio/repath-studio/pull/212)
+- Custom color picker component [#213](https://github.com/repath-studio/repath-studio/pull/213)
+- Missing translations
+
+**Removed**
+
+- User scalable meta tag
+- Action icon duplicates
+- Guide toll action and action group
+
+**Changed**
+
+- Improve initialization process [#208](https://github.com/repath-studio/repath-studio/pull/208)
+- Color picker enhancements [#214](https://github.com/repath-studio/repath-studio/pull/214)
+- Command dialog style improvements
+- Mobile toolbar enhancements
+- Make text selectable on toaster
+
+**Fixed**
+
+- Drop to open file
+- Terminate worker after trace
+- Prevent snapping to children of selected parents and enable snapping by default
+- Font-style description and update method
+- Ignore canvas on fill
+
 ## 0.4.21 (2026-09-11)
 
 **Added**
