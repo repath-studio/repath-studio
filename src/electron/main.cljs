@@ -3,7 +3,7 @@
   (:require
    ["@electron/devtron" :refer [devtron]]
    ["@sentry/electron/main" :as sentry-electron-main]
-   ["electron" :refer [app shell ipcMain BrowserWindow]]
+   ["electron" :refer [app shell ipcMain BrowserWindow Menu]]
    ["electron-log/main" :as log]
    ["electron-updater" :refer [autoUpdater]]
    ["os" :as os]
@@ -20,6 +20,12 @@
    (send-to-renderer channel nil))
   ([channel data]
    (.send (.-webContents ^js @main-window) channel (clj->js data))))
+
+(def context-menu
+  (.buildFromTemplate Menu #js [#js {:role "copy"}
+                                #js {:role "cut"}
+                                #js {:role "paste"}
+                                #js {:role "selectall"}]))
 
 (def allowed-urls
   #{"repath.studio"
@@ -109,7 +115,11 @@
     (doseq
      [[web-contents-event f]
       [["will-frame-navigate" #(.preventDefault %)]
-       ["closed" #(reset! main-window nil)]]]
+       ["closed" #(reset! main-window nil)]
+       ["context-menu" (fn [_e ^js params]
+                         (when (or (.-isEditable params)
+                                   (seq (.-selectionText params)))
+                           (.popup ^js context-menu)))]]]
       (.on web-contents web-contents-event f))))
 
 (defn set-window-open-handler []
