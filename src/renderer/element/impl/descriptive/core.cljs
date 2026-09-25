@@ -10,6 +10,6 @@
 (hierarchy/derive! :metadata ::element.hierarchy/descriptive)
 (hierarchy/derive! :title ::element.hierarchy/descriptive)
 
-(defmethod element.hierarchy/permitted-content :element.hierarchy/descriptive
+(defmethod element.hierarchy/permitted-content ::element.hierarchy/descriptive
   [_el]
   #{::element.hierarchy/descriptive})
