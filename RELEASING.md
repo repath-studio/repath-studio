@@ -2,9 +2,12 @@
 
 Those are the steps to release a new desktop and mobile version. The web
 application follows the `main` branch, and always includes the latest changes.
+We usually cut a new release biweekly, but critical fixes should be releases
+as soon as possible.
 
 ## Update version
 
+- Checkout to main branch `git checkout main`.
 - Update the `version` top level key of `package.json`.
 - Run `npm install` to also update `package-lock.json`.
 - Update the `versionName` and increase the `versionCode` on `android/app/build.gradle`.
