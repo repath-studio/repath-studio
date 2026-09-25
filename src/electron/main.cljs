@@ -117,7 +117,8 @@
       [["will-frame-navigate" #(.preventDefault %)]
        ["closed" #(reset! main-window nil)]
        ["context-menu" (fn [_e ^js params]
-                         (when (seq (.-selectionText params))
+                         (when (or (.-isEditable params)
+                                   (seq (.-selectionText params)))
                            (.popup ^js context-menu)))]]]
       (.on web-contents web-contents-event f))))
 
