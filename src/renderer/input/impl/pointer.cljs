@@ -1,6 +1,5 @@
 (ns renderer.input.impl.pointer
   (:require
-   [clojure.core.matrix :as matrix]
    [malli.core :as m]
    [re-frame.core :as rf]
    [renderer.app.db :refer [App]]
@@ -18,7 +17,8 @@
    [renderer.tool.db :refer [Handle]]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
-   [renderer.tool.impl.base.pan :as-alias tool.impl.base.pan]))
+   [renderer.tool.impl.base.pan :as-alias tool.impl.base.pan]
+   [renderer.utils.math :as utils.math]))
 
 (m/=> button->key [:-> [:enum -1 0 1 2 3 4] [:maybe PointerButton]])
 (defn button->key
@@ -91,9 +91,9 @@
         [pos1 pos2] (->> (vals active-pointers)
                          (take 2)
                          (map :pointer-pos))
-        distance (matrix/distance pos1 pos2)
-        midpoint (-> (matrix/add pos1 pos2)
-                     (matrix/div 2))
+        distance (utils.math/distance pos1 pos2)
+        midpoint (-> (utils.math/v-add pos1 pos2)
+                     (utils.math/v-div 2))
         adjusted-midpoint (input.handlers/adjusted-pos db midpoint)]
     (cond-> db
       :always
@@ -102,7 +102,7 @@
              :pinch-midpoint midpoint)
 
       pinch-distance
-      (-> (frame.handlers/pan-by (matrix/sub pinch-midpoint midpoint))
+      (-> (frame.handlers/pan-by (utils.math/v-sub pinch-midpoint midpoint))
           (frame.handlers/zoom-at-position (/ distance pinch-distance)
                                            adjusted-midpoint)))))
 
@@ -127,7 +127,7 @@
   [db e]
   (let [{:keys [pointer-offset drag-threshold]} db
         {:keys [pointer-pos]} e]
-    (> (matrix/distance pointer-offset pointer-pos)
+    (> (utils.math/distance pointer-offset pointer-pos)
        drag-threshold)))
 
 (m/=> drag? [:-> App PointerEvent boolean?])

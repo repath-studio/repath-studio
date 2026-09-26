@@ -1,6 +1,5 @@
 (ns renderer.tool.handlers
   (:require
-   [clojure.core.matrix :as matrix]
    [malli.core :as m]
    [renderer.app.db :refer [App]]
    [renderer.db :refer [Vec2]]
@@ -13,7 +12,8 @@
    [renderer.tool.db :refer [Tool State Cursor]]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.edit.core :as-alias tool.impl.base.edit]
-   [renderer.tool.impl.base.transform.core :as-alias tool.impl.base.transform]))
+   [renderer.tool.impl.base.transform.core :as-alias tool.impl.base.transform]
+   [renderer.utils.math :as utils.math]))
 
 (m/=> set-state [:-> App State App])
 (defn set-state
@@ -62,8 +62,8 @@
 (m/=> pointer-delta [:-> App Vec2])
 (defn pointer-delta
   [db]
-  (matrix/sub (:adjusted-pointer-pos db)
-              (:adjusted-pointer-offset db)))
+  (utils.math/v-sub (:adjusted-pointer-pos db)
+                    (:adjusted-pointer-offset db)))
 
 (m/=> snapped-offset [:-> App Vec2])
 (defn snapped-offset

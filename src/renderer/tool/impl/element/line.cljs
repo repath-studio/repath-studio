@@ -1,7 +1,6 @@
 (ns renderer.tool.impl.element.line
   "https://www.w3.org/TR/SVG/shapes.html#LineElement"
   (:require
-   [clojure.core.matrix :as matrix]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.document.handlers :as document.handlers]
@@ -15,7 +14,8 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.key :as utils.key]
-   [renderer.utils.length :as utils.length]))
+   [renderer.utils.length :as utils.length]
+   [renderer.utils.math :as utils.math]))
 
 (hierarchy/derive! ::line ::tool.hierarchy/element)
 
@@ -37,7 +37,8 @@
 (defn update-el
   [db e]
   (let [pointer-pos (tool.handlers/snapped-position db)
-        end-pos (matrix/sub pointer-pos (element.handlers/parent-offset db))
+        parent-offset (element.handlers/parent-offset db)
+        end-pos (utils.math/v-sub pointer-pos parent-offset)
         {:keys [x1 y1]} (->> db element.handlers/selected first :attrs)
         start-pos (mapv utils.length/unit->px [x1 y1])
         end-pos (cond->> end-pos

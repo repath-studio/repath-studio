@@ -3,7 +3,6 @@
   (:require
    ["blobs/v2" :as blobs]
    ["svgpath" :as svgpath]
-   [clojure.core.matrix :as matrix]
    [re-frame.core :as rf]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.impl.length :as attribute.impl.length]
@@ -16,6 +15,7 @@
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
+   [renderer.utils.math :as utils.math]
    [renderer.utils.svg :as utils.svg]
    [renderer.views :as views]))
 
@@ -136,7 +136,7 @@
   (let [offset (utils.element/offset el)
         {{:keys [x y size]} :attrs} el
         [x y size] (mapv utils.length/unit->px [x y size])]
-    (matrix/add [x y] (/ size 2) offset)))
+    (utils.math/v-add [x y] (/ size 2) offset)))
 
 (defmethod element.hierarchy/path :blob
   [el]
@@ -168,12 +168,12 @@
         offset (utils.element/offset el)
         [x1 y1] (cond->> [x y]
                   (not (utils.element/svg? el))
-                  (matrix/add offset))]
+                  (utils.math/v-add offset))]
     [{:type :handle
       :action :edit
       :label [::size-handle "size handle"]
       :parent (:id el)
-      :position (matrix/add [x1 y1] size)
+      :position (utils.math/v-add [x1 y1] size)
       :id :size}]))
 
 (defmethod element.hierarchy/render-edit :blob
@@ -183,8 +183,8 @@
         offset (utils.element/offset el)
         [x1 y1] (cond->> [x y]
                   (not (utils.element/svg? el))
-                  (matrix/add offset))
-        [x2 y2] (matrix/add [x1 y1] size)]
+                  (utils.math/v-add offset))
+        [x2 y2] (utils.math/v-add [x1 y1] size)]
     [:<>
      [utils.svg/line [x1 y1] [x2 y2]]
      [utils.svg/times [x1 y1]]]))

@@ -1,6 +1,5 @@
 (ns renderer.tool.impl.base.pan
   (:require
-   [clojure.core.matrix :as matrix]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.app.effects :as-alias app.effects]
@@ -12,7 +11,8 @@
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
-   [renderer.tool.subs :as-alias tool.subs]))
+   [renderer.tool.subs :as-alias tool.subs]
+   [renderer.utils.math :as utils.math]))
 
 (hierarchy/derive! ::pan ::tool.hierarchy/tool)
 
@@ -42,8 +42,8 @@
 
 (defmethod tool.hierarchy/on-drag [::pan :pan]
   [db e]
-  (frame.handlers/pan-by db (matrix/sub (:pointer-pos db)
-                                        (:pointer-pos e))))
+  (frame.handlers/pan-by db (utils.math/v-sub (:pointer-pos db)
+                                              (:pointer-pos e))))
 
 (defmethod tool.hierarchy/on-drag-end [::pan :pan]
   [db _e]

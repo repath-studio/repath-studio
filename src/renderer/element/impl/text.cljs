@@ -2,7 +2,6 @@
   "https://www.w3.org/TR/SVG/text.html
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/text"
   (:require
-   [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [re-frame.core :as rf]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
@@ -20,7 +19,8 @@
    [renderer.utils.element :as utils.element]
    [renderer.utils.font :as utils.font]
    [renderer.utils.key :as utils.key]
-   [renderer.utils.length :as utils.length]))
+   [renderer.utils.length :as utils.length]
+   [renderer.utils.math :as utils.math]))
 
 (hierarchy/derive! :text ::element.hierarchy/shape)
 
@@ -56,7 +56,7 @@
         y-attr (utils.length/unit->px (get-in el [:attrs :y]))
         ascent (- y-attr (second bounds))
         descent (- h ascent)
-        pivot-point (matrix/sub pivot-point [0 ascent])
+        pivot-point (utils.math/v-sub pivot-point [0 ascent])
         [offset-x offset-y] (utils.element/scale-offset ratio pivot-point)
         ratio (apply min ratio)
         offset [(+ offset-x (min 0 (* w ratio)))
@@ -98,7 +98,7 @@
   (let [{:keys [id content]} el
         offset (utils.element/offset el)
         el-bbox (element.hierarchy/bbox el)
-        [x y] (matrix/add (take 2 el-bbox) offset)
+        [x y] (utils.math/v-add (take 2 el-bbox) offset)
         [_w h] (utils.bounds/->dimensions el-bbox)
         attrs (utils.element/attributes el)
         {:keys [fill font-family font-size font-weight font-style]} attrs

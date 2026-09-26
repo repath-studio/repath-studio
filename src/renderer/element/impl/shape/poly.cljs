@@ -1,7 +1,6 @@
 (ns renderer.element.impl.shape.poly
   "An abstraction for polygons and polylines that have similar behavior."
   (:require
-   [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
@@ -9,6 +8,7 @@
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
+   [renderer.utils.math :as utils.math]
    [renderer.utils.vec]))
 
 (hierarchy/derive! ::element.hierarchy/poly ::element.hierarchy/shape)
@@ -46,11 +46,11 @@
                      (transduce
                       partition-to-px
                       (fn [points point]
-                        (let [rel-point (matrix/sub bounds-min point)
+                        (let [rel-point (utils.math/v-sub bounds-min point)
                               offset (->> ratio
-                                          (matrix/mul rel-point)
-                                          (matrix/sub rel-point)
-                                          (matrix/add offset))]
+                                          (utils.math/v-mul rel-point)
+                                          (utils.math/v-sub rel-point)
+                                          (utils.math/v-add offset))]
                           (translate offset points point))) [])
                      (string/join " ")
                      (string/trim)))))
@@ -60,7 +60,7 @@
   (let [offset (utils.element/offset el)
         position (->> point
                       (mapv utils.length/unit->px)
-                      (matrix/add offset))]
+                      (utils.math/v-add offset))]
     {:id (keyword (str index))
      :position position
      :label [::point "point"]
@@ -133,8 +133,8 @@
                            [0 0 0]
                            vertices)
         denom (* 3 cross-sum)]
-    (matrix/add [(/ cx denom) (/ cy denom)]
-                offset)))
+    (utils.math/v-add [(/ cx denom) (/ cy denom)]
+                      offset)))
 
 (defmethod element.hierarchy/snapping-points ::element.hierarchy/poly
   [el]

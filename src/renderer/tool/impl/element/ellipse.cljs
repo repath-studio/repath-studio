@@ -1,7 +1,6 @@
 (ns renderer.tool.impl.element.ellipse
   "https://www.w3.org/TR/SVG/shapes.html#EllipseElement"
   (:require
-   [clojure.core.matrix :as matrix]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.document.handlers :as document.handlers]
@@ -14,7 +13,8 @@
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.attribute :as utils.attribute]
-   [renderer.utils.length :as utils.length]))
+   [renderer.utils.length :as utils.length]
+   [renderer.utils.math :as utils.math]))
 
 (hierarchy/derive! ::ellipse ::tool.hierarchy/element)
 
@@ -38,13 +38,14 @@
 (defn update-el
   [db e]
   (let [pointer-pos (tool.handlers/snapped-position db)
-        position (matrix/sub pointer-pos (element.handlers/parent-offset db))
+        parent-offset (element.handlers/parent-offset db)
+        position (utils.math/v-sub pointer-pos parent-offset)
         {:keys [cx cy]} (->> db element.handlers/selected first :attrs)
         center (mapv utils.length/unit->px [cx cy])
         position (cond->> position
                    (input.handlers/snap-to-angle? db e)
                    (input.handlers/snap-angle center))
-        radius (matrix/sub center position)
+        radius (utils.math/v-sub center position)
         [rx ry] (mapv (comp utils.attribute/->fixed abs) radius)]
     (element.handlers/update-selected db #(-> %
                                               (assoc-in [:attrs :rx] rx)

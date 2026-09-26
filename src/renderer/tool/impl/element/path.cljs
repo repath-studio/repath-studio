@@ -2,7 +2,6 @@
   "Pen/bezier path drawing tool.
    Click to place anchor points; click and drag to pull out bezier handles."
   (:require
-   [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [malli.core :as m]
    [re-frame.core :as rf]
@@ -24,6 +23,7 @@
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.key :as utils.key]
    [renderer.utils.length :as utils.length]
+   [renderer.utils.math :as utils.math]
    [renderer.utils.path :as utils.path]
    [renderer.utils.svg :as utils.svg]))
 
@@ -130,7 +130,8 @@
   (let [anchor (adjusted-pointer-offset db)
         drag-pos (->> (tool.handlers/snapped-position db)
                       (element.handlers/adjusted-point db))
-        [cp2-x cp2-y] (->> (matrix/sub (matrix/mul anchor 2) drag-pos)
+        [cp2-x cp2-y] (->> (utils.math/v-sub (utils.math/v-mul anchor 2)
+                                             drag-pos)
                            (mapv utils.attribute/->fixed))]
     (update-path db #(let [segments (utils.path/string->segments %)]
                        (if (> (count segments) 1)

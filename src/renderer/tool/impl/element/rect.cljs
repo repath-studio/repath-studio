@@ -1,7 +1,6 @@
 (ns renderer.tool.impl.element.rect
   "https://www.w3.org/TR/SVG/shapes.html#RectElement"
   (:require
-   [clojure.core.matrix :as matrix]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.document.handlers :as document.handlers]
@@ -14,7 +13,8 @@
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.attribute :as utils.attribute]
-   [renderer.utils.key :as utils.key]))
+   [renderer.utils.key :as utils.key]
+   [renderer.utils.math :as utils.math]))
 
 (hierarchy/derive! ::rect ::tool.hierarchy/element)
 
@@ -43,12 +43,12 @@
   [db e]
   (let [pointer-pos (tool.handlers/snapped-position db)
         parent-offset (element.handlers/parent-offset db)
-        position (matrix/sub pointer-pos parent-offset)
-        origin (matrix/sub (:last-origin db) parent-offset)
+        position (utils.math/v-sub pointer-pos parent-offset)
+        origin (utils.math/v-sub (:last-origin db) parent-offset)
         position (cond->> position
                    (input.handlers/snap-to-angle? db e)
                    (input.handlers/snap-angle origin))
-        size (matrix/sub position origin)
+        size (utils.math/v-sub position origin)
         [w h] (mapv (comp utils.attribute/->fixed abs) size)
         new-x (cond-> (first origin)
                 (neg? (first size))

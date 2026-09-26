@@ -2,7 +2,6 @@
   "https://www.w3.org/TR/SVG/shapes.html#RectElement
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/rect"
   (:require
-   [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.element.hierarchy :as element.hierarchy]
@@ -113,7 +112,7 @@
         [x y width height rx ry] (->> [x y width height rx ry]
                                       (mapv utils.length/unit->px))
         offset (utils.element/offset el)
-        [x y] (matrix/add [x y] offset)
+        [x y] (utils.math/v-add [x y] offset)
         max-x (+ x width)]
     [{:type :handle
       :action :edit
@@ -153,9 +152,9 @@
         curved? (and (> rx 0) (> ry 0))
         y2-full (+ y height)
         x2-full (+ x width)
-        [x1 y1] (matrix/add [x y] [rx ry])
-        [x2 y2] (matrix/sub [x2-full y2-full] [rx ry])
-        [krx kry] (matrix/mul [rx ry] utils.math/KAPPA)]
+        [x1 y1] (utils.math/v-add [x y] [rx ry])
+        [x2 y2] (utils.math/v-sub [x2-full y2-full] [rx ry])
+        [krx kry] (utils.math/v-mul [rx ry] utils.math/KAPPA)]
     (cond-> []
       :always (conj "M" x1 y
                     "L" x2 y)

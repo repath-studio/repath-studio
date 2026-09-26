@@ -1,6 +1,5 @@
 (ns renderer.input.handlers
   (:require
-   [clojure.core.matrix :as matrix]
    [malli.core :as m]
    [renderer.app.db :refer [App]]
    [renderer.db :refer [Vec2]]
@@ -22,8 +21,8 @@
   [db pos]
   (let [{:keys [zoom pan]} (get-in db [:documents (:active-document db)])]
     (-> pos
-        (matrix/div zoom)
-        (matrix/add pan))))
+        (utils.math/v-div zoom)
+        (utils.math/v-add pan))))
 
 (defn multi-touch?
   [db]
@@ -42,7 +41,7 @@
   [start end]
   (let [degrees (utils.math/angle start end)
         snapped (* (Math/round (/ degrees 15)) 15)
-        r (matrix/distance start end)
+        r (utils.math/distance start end)
         [x1 y1] start]
     [(+ x1 (utils.math/angle-dx snapped r))
      (+ y1 (utils.math/angle-dy snapped r))]))

@@ -1,6 +1,5 @@
 (ns renderer.tool.impl.base.edit.edit
   (:require
-   [clojure.core.matrix :as matrix]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.history.handlers :as history.handlers]
@@ -11,6 +10,7 @@
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.edit.core :as-alias edit]
    [renderer.utils.extra :refer [rpartial]]
+   [renderer.utils.math :as utils.math]
    [renderer.views :as views]))
 
 (defmethod tool.hierarchy/help [::edit/edit :edit]
@@ -37,8 +37,8 @@
              (not handle-selected?)
              (element.handlers/toggle-handle-selection parent id
                                                        shift-key))
-        offset (matrix/add (tool.handlers/pointer-delta db)
-                           (snap.handlers/nearest-delta db))]
+        offset (utils.math/v-add (tool.handlers/pointer-delta db)
+                                 (snap.handlers/nearest-delta db))]
     (->> (element.handlers/selected db)
          (reduce (rpartial update-element offset lock?) db))))
 
@@ -54,7 +54,7 @@
   (when-let [{:keys [position label]
               :as el} (:clicked-element db)]
     [(with-meta
-       (matrix/add position (tool.handlers/pointer-delta db))
+       (utils.math/v-add position (tool.handlers/pointer-delta db))
        {:label (when (= (:type el) :handle)
                  (or label [::handle "handle"]))})]))
 

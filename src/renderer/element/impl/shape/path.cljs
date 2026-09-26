@@ -4,7 +4,6 @@
   (:require
    ["svg-path-bbox" :refer [svgPathBbox]]
    ["svgpath" :as svgpath]
-   [clojure.core.matrix :as matrix]
    [malli.core :as m]
    [renderer.attribute.impl.d :as attribute.impl.d]
    [renderer.db :refer [PathSegment PathSegments PathPointType Vec2]]
@@ -13,6 +12,7 @@
    [renderer.input.handlers :as input.handlers]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
+   [renderer.utils.math :as utils.math]
    [renderer.utils.path :as utils.path]
    [renderer.utils.svg :as utils.svg]))
 
@@ -49,8 +49,8 @@
   (let [[scale-x scale-y] ratio
         offset (utils.element/scale-offset ratio pivot-point)
         [x y] (element.hierarchy/bbox el)
-        [x y] (-> (matrix/add [x y] offset)
-                  (matrix/sub (matrix/mul ratio [x y])))]
+        [x y] (-> (utils.math/v-add [x y] offset)
+                  (utils.math/v-sub (utils.math/v-mul ratio [x y])))]
     (update-path el #(-> %
                          (.scale scale-x scale-y)
                          (.translate x y)))))
@@ -67,16 +67,17 @@
 
 (defn render-arms
   [{:keys [endpoints segments offset]} index segment]
-  (let [prev-ep (some-> endpoints (get (dec index)) (matrix/add offset))
+  (let [prev-ep (some-> endpoints (get (dec index)) (utils.math/v-add offset))
         cp0 (some-> segment
                     (->px-point :start-control-point)
-                    (matrix/add offset))
+                    (utils.math/v-add offset))
         ep (some-> segment
                    (->px-point :end-point)
-                   (matrix/add offset))]
+                   (utils.math/v-add offset))]
     (case (utils.path/segment->command segment)
       "C"
-      (let [cp1 (matrix/add (->px-point segment :end-control-point) offset)]
+      (let [cp1 (utils.math/v-add (->px-point segment :end-control-point)
+                                  offset)]
         [:<>
          (when prev-ep [utils.svg/arm prev-ep cp0])
          [utils.svg/arm cp1 ep]])
@@ -85,7 +86,7 @@
       [:<>
        (when-let [implied-cp1 (some-> (aget segments (dec index))
                                       (utils.path/outgoing-cp)
-                                      (matrix/add offset))]
+                                      (utils.math/v-add offset))]
          [utils.svg/arm prev-ep implied-cp1])
        [utils.svg/arm cp0 ep]]
 
@@ -165,7 +166,7 @@
                                  (attribute.impl.d/path-commands)
                                  :label)]
                    (cond-> {:id (keyword index point-type)
-                            :position (matrix/add offset pos)
+                            :position (utils.math/v-add offset pos)
                             :label label
                             :type :handle
                             :action :edit
@@ -297,9 +298,9 @@
                  (get endpoints (dec index))
                  (get endpoints index))
         cp-pos (->px-point (aget segments index) point-type)
-        new-cp-pos (matrix/add cp-pos offset)
+        new-cp-pos (utils.math/v-add cp-pos offset)
         snapped (input.handlers/snap-angle anchor new-cp-pos)]
-    (matrix/sub snapped cp-pos)))
+    (utils.math/v-sub snapped cp-pos)))
 
 (defmethod element.hierarchy/handle-drag :path
   [el offset handle lock?]

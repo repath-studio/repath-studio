@@ -1,6 +1,5 @@
 (ns renderer.tool.impl.draw.pencil
   (:require
-   [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
@@ -14,6 +13,7 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
+   [renderer.utils.math :as utils.math]
    [renderer.utils.path :as utils.path]
    [renderer.views :as views]))
 
@@ -54,7 +54,7 @@
 (defmethod tool.hierarchy/on-drag [::pencil :create]
   [db _e]
   (let [[min-x min-y] (element.handlers/parent-offset db)
-        point (matrix/sub (:adjusted-pointer-pos db) [min-x min-y])
+        point (utils.math/v-sub (:adjusted-pointer-pos db) [min-x min-y])
         point (string/join " " point)]
     (element.handlers/update-selected db
                                       update-in [:attrs :d]

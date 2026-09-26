@@ -2,7 +2,6 @@
   "https://www.w3.org/TR/SVG/shapes.html#CircleElement
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/circle"
   (:require
-   [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.element.hierarchy :as element.hierarchy]
@@ -41,8 +40,8 @@
   (let [{{:keys [stroke-width]} :attrs} el
         padding (/ (utils.length/unit->px stroke-width) 2)
         dimensions (-> el element.hierarchy/bbox utils.bounds/->dimensions)
-        pivot-point (->> (matrix/div dimensions 2)
-                         (matrix/sub pivot-point))
+        pivot-point (->> (utils.math/v-div dimensions 2)
+                         (utils.math/v-sub pivot-point))
         offset (utils.element/scale-offset ratio pivot-point)
         ratio (apply min ratio)]
     (-> el
@@ -90,7 +89,7 @@
   (let [{{:keys [cx cy r]} :attrs} el
         [cx cy r] (map utils.length/unit->px [cx cy r])
         offset (utils.element/offset el)
-        [cx cy] (matrix/add [cx cy] offset)]
+        [cx cy] (utils.math/v-add [cx cy] offset)]
     [{:position [(+ cx r) cy]
       :id :r
       :label [::r-handle "radius handle"]
@@ -104,7 +103,7 @@
   (let [{{:keys [cx cy r]} :attrs} el
         [cx cy r] (map utils.length/unit->px [cx cy r])
         offset (utils.element/offset el)
-        [cx cy] (matrix/add [cx cy] offset)]
+        [cx cy] (utils.math/v-add [cx cy] offset)]
     [:g
      [utils.svg/line [cx cy] [(+ cx r) cy] :stroke "var(--accent-foreground)"]
      [utils.svg/line [cx cy] [(+ cx r) cy] :stroke-dasharray 5]

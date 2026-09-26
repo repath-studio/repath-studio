@@ -1,7 +1,6 @@
 (ns renderer.snap.views
   (:require
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
-   [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
@@ -9,6 +8,7 @@
    [renderer.document.subs :as-alias document.subs]
    [renderer.i18n.views :as i18n.views]
    [renderer.snap.subs :as-alias snap.subs]
+   [renderer.utils.math :as utils.math]
    [renderer.utils.svg :as utils.svg]
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]))
@@ -58,7 +58,7 @@
         point-label (-> nearest-neighbor meta :label)
         base-label (-> nearest-neighbor :base-point meta :label)
         point (:point nearest-neighbor)
-        [x y] (matrix/add point margin)
+        [x y] (utils.math/v-add point margin)
         label (->> [base-label point-label]
                    (remove nil?)
                    (map i18n.views/t)

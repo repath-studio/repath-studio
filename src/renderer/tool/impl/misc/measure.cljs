@@ -1,6 +1,5 @@
 (ns renderer.tool.impl.misc.measure
   (:require
-   [clojure.core.matrix :as matrix]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
    [renderer.action.events :as-alias action.events]
@@ -37,7 +36,7 @@
          end-pos (cond->> end-pos
                    snap-to-angle?
                    (input.handlers/snap-angle start-pos))
-         [adjacent opposite] (matrix/sub start-pos end-pos)
+         [adjacent opposite] (utils.math/v-sub start-pos end-pos)
          hypotenuse (Math/hypot adjacent opposite)]
      (swap! measure-attrs
             assoc

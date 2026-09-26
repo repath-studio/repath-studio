@@ -1,6 +1,5 @@
 (ns renderer.tool.impl.base.transform.edit
   (:require
-   [clojure.core.matrix :as matrix]
    [malli.core :as m]
    [renderer.app.db :refer [App]]
    [renderer.db :refer [BBox Orientation Vec2]]
@@ -12,6 +11,7 @@
    [renderer.tool.impl.base.transform.core :as-alias transform]
    [renderer.tool.impl.base.transform.translate :as transform.translate]
    [renderer.utils.bounds :as utils.bounds]
+   [renderer.utils.math :as utils.math]
    [renderer.views :as views]))
 
 (defmethod tool.hierarchy/help [::transform/transform :edit]
@@ -28,7 +28,7 @@
                        :horizontal [(/ delta-x w) 0]
                        :vertical [0 (/ delta-y h)]
                        [(/ delta-x w) (/ delta-y h)])]
-    (update db :anchor-offset matrix/add factor-delta)))
+    (update db :anchor-offset utils.math/v-add factor-delta)))
 
 (defmethod tool.hierarchy/on-drag [::transform/transform :edit]
   [db e]
@@ -51,7 +51,7 @@
   [db]
   (when-let [{:keys [position]} (:clicked-element db)]
     [(with-meta
-       (matrix/add position (tool.handlers/pointer-delta db))
+       (utils.math/v-add position (tool.handlers/pointer-delta db))
        {:label [::pivot-handle "pivot handle"]})]))
 
 (defmethod tool.hierarchy/snapping-elements [::transform/transform :edit]

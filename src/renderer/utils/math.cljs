@@ -49,3 +49,44 @@
     (-> (Math/atan2 delta-y delta-x)
         (normalize-angle)
         (math/to-degrees))))
+
+(m/=> distance [:-> Vec2 Vec2 number?])
+(defn distance
+  [[x1 y1] [x2 y2]]
+  (math/hypot (- x2 x1) (- y2 y1)))
+
+(m/=> mean [:-> [:+ number?] number?])
+(defn mean
+  [& n]
+  (/ (apply + n)
+     (count n)))
+
+(m/=> elementwise [:-> fn? vector? [:or [:vector number?] number?] vector?])
+(defn elementwise
+  ([f v x]
+   (if (number? x)
+     (mapv f v (repeat x))
+     (mapv f v x)))
+  ([op v x & more]
+   (apply mapv op (map #(cond-> % (number? %) repeat)
+                       (cons v (cons x more))))))
+
+(m/=> v-sub [:-> vector? [:+ [:or [:vector number?] number?]] Vec2])
+(defn v-add
+  ([v x] (elementwise + v x))
+  ([v x & more] (apply elementwise + v x more)))
+
+(m/=> v-sub [:-> vector? [:+ [:or [:vector number?] number?]] Vec2])
+(defn v-sub
+  ([v x] (elementwise - v x))
+  ([v x & more] (apply elementwise - v x more)))
+
+(m/=> v-mul [:-> vector? [:+ [:or [:vector number?] number?]] Vec2])
+(defn v-mul
+  ([v x] (elementwise * v x))
+  ([v x & more] (apply elementwise * v x more)))
+
+(m/=> v-div [:-> vector? [:+ [:or [:vector number?] number?]] Vec2])
+(defn v-div
+  ([v x] (elementwise / v x))
+  ([v x & more] (apply elementwise / v x more)))

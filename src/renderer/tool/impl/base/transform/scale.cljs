@@ -1,6 +1,5 @@
 (ns renderer.tool.impl.base.transform.scale
   (:require
-   [clojure.core.matrix :as matrix]
    [malli.core :as m]
    [renderer.app.db :refer [App]]
    [renderer.db :refer [BBox Vec2]]
@@ -14,6 +13,7 @@
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.transform.core :as-alias transform]
    [renderer.utils.bounds :as utils.bounds]
+   [renderer.utils.math :as utils.math]
    [renderer.views :as views]))
 
 (defmethod tool.hierarchy/help [::transform/transform :scale]
@@ -102,7 +102,7 @@
                    (/ h (- max-y py))
 
                    1)]
-    (matrix/mul offset [x-factor y-factor])))
+    (utils.math/v-mul offset [x-factor y-factor])))
 
 (m/=> scale [:-> App Vec2 ScaleOptions App])
 (defn scale
@@ -121,7 +121,7 @@
         offset (cond-> offset
                  in-place
                  (pivot-offset handle bbox pivot-point))
-        ratio (matrix/div (matrix/add dimensions offset) dimensions)
+        ratio (utils.math/v-div (utils.math/v-add dimensions offset) dimensions)
         ratio (cond-> ratio ratio-locked (lock-ratio handle))]
     (-> db
         (assoc :pivot-point pivot-point)
@@ -146,7 +146,7 @@
     (-> db
         (history.handlers/reset-state)
         (tool.handlers/set-cursor (if locked? "not-allowed" "default"))
-        (scale (matrix/add delta (snap.handlers/nearest-delta db))
+        (scale (utils.math/v-add delta (snap.handlers/nearest-delta db))
                {:ratio-locked (ratio-locked? db e)
                 :in-place (or shift-key in-place?)
                 :recursive (or alt-key recursive?)}))))
@@ -163,7 +163,7 @@
   [db]
   (when-let [{:keys [position]} (:clicked-element db)]
     [(with-meta
-       (matrix/add position (tool.handlers/pointer-delta db))
+       (utils.math/v-add position (tool.handlers/pointer-delta db))
        {:label [::scale-handle "scale handle"]})]))
 
 (defmethod tool.hierarchy/snapping-elements [::transform/transform :scale]

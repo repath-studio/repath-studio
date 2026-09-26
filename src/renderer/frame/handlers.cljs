@@ -1,6 +1,5 @@
 (ns renderer.frame.handlers
   (:require
-   [clojure.core.matrix :as matrix]
    [config :as config]
    [malli.core :as m]
    [renderer.app.db :refer [App]]
@@ -24,13 +23,13 @@
               (viewbox zoom pan))))
   ([zoom pan dom-rect]
    (let [{:keys [width height]} dom-rect]
-     (->> (matrix/div [width height] zoom)
+     (->> (utils.math/v-div [width height] zoom)
           (into pan)))))
 
 (m/=> viewbox->bounds [:-> Viewbox BBox])
 (defn viewbox->bounds
   [[x y w h]]
-  (let [[x2 y2] (matrix/add [w h] [x y])]
+  (let [[x2 y2] (utils.math/v-add [w h] [x y])]
     [x y x2 y2]))
 
 (m/=> pan-by [:function
@@ -41,16 +40,17 @@
    (pan-by db (:active-document db) offset))
   ([db id offset]
    (let [zoom (get-in db [:documents id :zoom])]
-     (update-in db [:documents id :pan] matrix/add (matrix/div offset zoom)))))
+     (update-in db [:documents id :pan]
+                utils.math/v-add (utils.math/v-div offset zoom)))))
 
 (m/=> recenter-to-dom-rect [:-> App DomRect App])
 (defn recenter-to-dom-rect
-  [db updated-dom-rect]
+  [db rect]
   (let [{:keys [document-tabs dom-rect]} db]
     (if-not dom-rect
       db
-      (let [delta-rect (merge-with - dom-rect updated-dom-rect)
-            offset (matrix/div [(:width delta-rect) (:height delta-rect)] 2)]
+      (let [{:keys [width height]} (merge-with - dom-rect rect)
+            offset (utils.math/v-div [width height] 2)]
         (reduce (rpartial pan-by offset) db document-tabs)))))
 
 (m/=> zoom-at-position [:-> App number? Vec2 App])
@@ -61,9 +61,9 @@
         updated-zoom (-> (* zoom factor)
                          (utils.math/clamp config/min-zoom config/max-zoom))
         updated-factor (/ updated-zoom zoom)
-        updated-pan (matrix/sub (matrix/div pan updated-factor)
-                                (matrix/sub (matrix/div pos updated-factor)
-                                            pos))]
+        delta (utils.math/v-sub (utils.math/v-div pos updated-factor) pos)
+        updated-pan (utils.math/v-sub (utils.math/v-div pan updated-factor)
+                                      delta)]
     (-> db
         (assoc-in [:documents active-document :zoom] updated-zoom)
         (assoc-in [:documents active-document :pan] updated-pan))))
@@ -78,12 +78,13 @@
   [db factor]
   (let [{:keys [active-document dom-rect]} db
         {:keys [zoom pan]} (get-in db [:documents active-document])
-        {:keys [width height]} dom-rect]
+        {:keys [w h]} dom-rect]
     (cond-> db
       active-document
-      (zoom-at-position factor (matrix/add pan (matrix/div [width height]
-                                                           2
-                                                           zoom))))))
+      (zoom-at-position factor (utils.math/v-add pan
+                                                 (utils.math/v-div [w h]
+                                                                   2
+                                                                   zoom))))))
 
 (m/=> pan-to-bbox [:-> App BBox App])
 (defn pan-to-bbox
@@ -93,9 +94,9 @@
         rect-dimensions [(:width dom-rect) (:height dom-rect)]
         [min-x min-y] bbox
         pan (-> (utils.bounds/->dimensions bbox)
-                (matrix/sub (matrix/div rect-dimensions zoom))
-                (matrix/div 2)
-                (matrix/add [min-x min-y]))]
+                (utils.math/v-sub (utils.math/v-div rect-dimensions zoom))
+                (utils.math/v-div 2)
+                (utils.math/v-add [min-x min-y]))]
     (assoc-in db [:documents active-document :pan] pan)))
 
 (m/=> focus-bbox [:function

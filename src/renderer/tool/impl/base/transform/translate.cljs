@@ -1,6 +1,5 @@
 (ns renderer.tool.impl.base.transform.translate
   (:require
-   [clojure.core.matrix :as matrix]
    [malli.core :as m]
    [renderer.app.db :refer [App]]
    [renderer.db :refer [Orientation Vec2]]
@@ -16,6 +15,7 @@
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.extra :refer [rpartial]]
+   [renderer.utils.math :as utils.math]
    [renderer.views :as views]))
 
 (defmethod tool.hierarchy/help [::transform/transform :translate]
@@ -41,7 +41,8 @@
     (element.handlers/translate id (start-point container-el))
 
     (:bbox hovered-svg)
-    (element.handlers/translate id (matrix/mul (start-point hovered-svg) -1))))
+    (element.handlers/translate id (utils.math/v-mul (start-point hovered-svg)
+                                                     -1))))
 
 (m/=> translate-el [:-> App ElementId map? App])
 (defn translate-el
