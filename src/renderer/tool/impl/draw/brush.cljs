@@ -132,6 +132,10 @@
       (history.handlers/finalize (:timestamp e) [::draw-brush "Brush"])
       (tool.handlers/deactivate)))
 
+(defmethod tool.hierarchy/on-deactivate ::brush
+  [db]
+  (app.handlers/add-fx db [::set-brush nil]))
+
 (defmethod tool.hierarchy/render ::brush
   []
   (let [state @(rf/subscribe [::tool.subs/state])]
