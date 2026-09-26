@@ -14,7 +14,7 @@ as soon as possible.
 
 ## Update changelog
 
-Update `CHANGELOG.md` following by following the preexisting format.
+Update `CHANGELOG.md` by following the preexisting format.
 Also see [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## Git commit, tag and push
