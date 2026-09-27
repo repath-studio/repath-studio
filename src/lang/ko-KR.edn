@@ -34,10 +34,6 @@
                           있습니다."
   :confirm-paste "이해했습니다. 붙여 넣겠습니다"}
 
- :renderer.shell.views
- {:hide-command-output "명령 출력 숨기기"
-  :show-command-output "명령 출력 보이기"}
-
  :renderer.dialog.events
  {:are-you-sure "계속하시겠습니까?"
   :keybindings "키 바인딩"}
@@ -843,7 +839,7 @@
   :panel-attributes "속성"
   :panel-xml-view "XML 보기"
   :panel-history-tree "기록 트리"
-  :panel-shell-history "쉘 기록"
+  :panel-shell-output "쉘 출력"
   :panel-timeline-editor "타임라인 편집기"}
 
  :renderer.snap.core

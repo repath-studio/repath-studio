@@ -46,12 +46,12 @@
                             :ctrlKey true}]}])
 
 (rf/dispatch [::action.events/register-action
-              {:id :panel/toggle-repl-history
-               :label [::panel-shell-history "Shell history"]
+              {:id :panel/toggle-shell-output
+               :label [::panel-shell-output "Shell output"]
                :icon "shell"
-               :event [::panel.events/toggle :repl-history]
+               :event [::panel.events/toggle :shell-output]
                :available [::window.subs/md?]
-               :active [::panel.subs/visible? :repl-history]
+               :active [::panel.subs/visible? :shell-output]
                :shortcuts [{:keyCode (utils.key/codes "SLASH")
                             :ctrlKey true}]}])
 
@@ -70,6 +70,6 @@
                :actions [:panel/toggle-tree
                          :panel/toggle-xml
                          :panel/toggle-timeline
-                         :panel/toggle-repl-history
+                         :panel/toggle-shell-output
                          :panel/toggle-history
                          :panel/toggle-attributes]}])

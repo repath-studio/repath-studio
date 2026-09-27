@@ -119,7 +119,7 @@
 
      (and value
           (= item-type :error)
-          (not (get-in db [:panels :repl-history :visible]))
+          (not (get-in db [:panels :shell-output :visible]))
           (window.handlers/breakpoint? (-> db :window :width) :md))
      (assoc ::app.effects/toast [:error
                                  "Error evaluating expression"

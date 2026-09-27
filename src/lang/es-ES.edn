@@ -34,10 +34,6 @@
                           ocultar contenido malicioso."
   :confirm-paste "Lo entiendo, déjame pegar"}
 
- :renderer.shell.views
- {:hide-command-output "Ocultar salida de comandos"
-  :show-command-output "Mostrar salida de comandos"}
-
  :renderer.dialog.events
  {:are-you-sure "¿Seguro que quieres continuar?"
   :keybindings "Atajos de teclado"}
@@ -900,7 +896,7 @@
   :panel-attributes "Atributos"
   :panel-xml-view "Vista XML"
   :panel-history-tree "Árbol de historial"
-  :panel-shell-history "Historial de terminal"
+  :panel-shell-output "Salida de terminal"
   :panel-timeline-editor "Editor de línea de tiempo"}
 
  :renderer.snap.core

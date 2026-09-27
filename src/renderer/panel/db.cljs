@@ -5,7 +5,7 @@
    [:visible boolean?]])
 
 (def PanelId
-  [:enum :tree :attributes :timeline :xml :history :repl-history])
+  [:enum :tree :attributes :timeline :xml :history :shell-output])
 
 (def default
   {:tree {:visible true}
@@ -13,4 +13,4 @@
    :timeline {:visible false}
    :xml {:visible false}
    :history {:visible false}
-   :repl-history {:visible false}})
+   :shell-output {:visible false}})

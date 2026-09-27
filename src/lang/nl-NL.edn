@@ -34,10 +34,6 @@
                           onbetrouwbare bronnen kwaadaardige inhoud verbergen."
   :confirm-paste "Ik begrijp het, laat me plakken"}
 
- :renderer.shell.views
- {:hide-command-output "Commando-uitvoer verbergen"
-  :show-command-output "Commando-uitvoer tonen"}
-
  :renderer.dialog.events
  {:are-you-sure "Weet u zeker dat u wilt doorgaan?"
   :keybindings "Sneltoetsen"}
@@ -910,7 +906,7 @@
   :panel-attributes "Attributen"
   :panel-xml-view "XML-weergave"
   :panel-history-tree "Geschiedenisboom"
-  :panel-shell-history "Shell-geschiedenis"
+  :panel-shell-output "Shell-uitvoer"
   :panel-timeline-editor "Tijdlijn-editor"}
 
  :renderer.snap.core

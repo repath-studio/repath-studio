@@ -35,10 +35,6 @@
                           περιεχόμενο."
   :confirm-paste "Το καταλαβαίνω, αφήστε με να κάνω επικόλληση"}
 
- :renderer.shell.views
- {:hide-command-output "Απόκρυψη ιστορικού εντολών"
-  :show-command-output "Εμφάνιση ιστορικού εντολών"}
-
  :renderer.dialog.events
  {:are-you-sure "Είστε βέβαιοι ότι θέλετε να συνεχίσετε;"
   :keybindings "Συντομεύσεις πληκτρολογίου"}
@@ -918,7 +914,7 @@
   :panel-attributes "Χαρακτηριστικά"
   :panel-xml-view "Προβολή XML"
   :panel-history-tree "Δέντρο ιστορικού"
-  :panel-shell-history "Ιστορικό γραμμής εντολών"
+  :panel-shell-output "Έξοδος γραμμής εντολών"
   :panel-timeline-editor "Επεξεργαστής χρονολόγιας"}
 
  :renderer.snap.core

@@ -33,10 +33,6 @@
                           المنسوخة من مصادر غير موثوقة محتوى خبيثًا."
   :confirm-paste "أفهم، دعني ألصق"}
 
- :renderer.shell.views
- {:hide-command-output "إخفاء مخرجات الأمر"
-  :show-command-output "إظهار مخرجات الأمر"}
-
  :renderer.dialog.events
  {:are-you-sure "هل أنت متأكد أنك تريد المتابعة؟"
   :keybindings "اختصارات لوحة المفاتيح"}
@@ -863,7 +859,7 @@
   :panel-attributes "الخصائص"
   :panel-xml-view "عرض XML"
   :panel-history-tree "شجرة التاريخ"
-  :panel-shell-history "تاريخ الأوامر"
+  :panel-shell-output "مخرجات الأوامر"
   :panel-timeline-editor "محرر الجدول الزمني"}
 
  :renderer.snap.core

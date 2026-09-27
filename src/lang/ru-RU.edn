@@ -34,10 +34,6 @@
                           могут скрывать вредоносное содержимое."
   :confirm-paste "Я понимаю, позвольте вставить"}
 
- :renderer.shell.views
- {:hide-command-output "Скрыть вывод команд"
-  :show-command-output "Показать вывод команд"}
-
  :renderer.dialog.events
  {:are-you-sure "Вы уверены, что хотите продолжить?"
   :keybindings "Горячие клавиши"}
@@ -896,7 +892,7 @@
   :panel-attributes "Атрибуты"
   :panel-xml-view "XML вид"
   :panel-history-tree "Дерево истории"
-  :panel-shell-history "История консоли"
+  :panel-shell-output "Вывод консоли"
   :panel-timeline-editor "Редактор временной шкалы"}
 
  :renderer.snap.core
