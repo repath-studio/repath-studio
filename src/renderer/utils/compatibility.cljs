@@ -45,15 +45,14 @@
    introduced to the document schema)."
   [m version]
   (or (not (:version m))
-      (-> (version->vec (:version m))
-          (-requires-migration? version))))
+      (and (not= (:version m) "unknown")
+           (-> (version->vec (:version m))
+               (-requires-migration? version)))))
 
-(m/=> migrate [:function
-               [:-> map? map?]
-               [:-> map? [:tuple SemanticVersion ifn?] map?]])
+(m/=> migrate [:-> map? [:vector [:tuple SemanticVersion ifn?]] map?])
 (defn migrate
-  ([m migrations]
-   (reduce (fn [m [version f]]
-             (cond-> m
-               (requires-migration? m version)
-               (f))) m migrations)))
+  [m migrations]
+  (reduce (fn [m [version f]]
+            (cond-> m
+              (and m (requires-migration? m version))
+              (f))) m migrations))

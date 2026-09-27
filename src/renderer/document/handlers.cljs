@@ -256,7 +256,7 @@
   (-> (apply dissoc document config/save-info-keys)
       (pr-str)))
 
-(m/=> migrate [:-> map? Document])
+(m/=> migrate [:-> map? map?])
 (defn migrate
   [document]
   (utils.compatibility/migrate document document.migrations/migrations))
