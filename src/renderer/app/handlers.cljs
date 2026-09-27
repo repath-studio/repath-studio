@@ -2,6 +2,8 @@
   (:require
    [malli.core :as m]
    [renderer.app.db :refer [App Feature]]
+   [renderer.app.migrations :as app.migrations]
+   [renderer.utils.compatibility :as utils.compatibility]
    [renderer.utils.platform :as utils.platform]))
 
 (m/=> add-fx [:-> App vector? App])
@@ -23,3 +25,8 @@
 (defn mobile?
   [db]
   (-> db :platform utils.platform/mobile?))
+
+(m/=> migrate [:-> map? App])
+(defn migrate
+  [db]
+  (utils.compatibility/migrate db app.migrations/migrations))

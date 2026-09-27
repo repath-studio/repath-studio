@@ -24,8 +24,8 @@
               (map js/parseInt))
         (re-find ver-regex s)))
 
-(m/=> requires-migration? [:-> SemanticVersion SemanticVersion boolean?])
-(defn requires-migration?
+(m/=> -requires-migration? [:-> SemanticVersion SemanticVersion boolean?])
+(defn -requires-migration?
   [from-version to-version]
   (let [[m-major m-minor m-patch] to-version
         [d-major d-minor d-patch] from-version]
@@ -35,3 +35,25 @@
         (and (= d-major m-major)
              (= d-minor m-minor)
              (< d-patch m-patch)))))
+
+(m/=> requires-migration? [:-> map? SemanticVersion boolean?])
+(defn requires-migration?
+  "Checks if the provided map requires migration to the given version.
+
+   Returns true if the map's version is older than the given version,
+   or if the map has no version (e.g. a document created before versioning was
+   introduced to the document schema)."
+  [m version]
+  (or (not (:version m))
+      (-> (version->vec (:version m))
+          (-requires-migration? version))))
+
+(m/=> migrate [:function
+               [:-> map? map?]
+               [:-> map? [:tuple SemanticVersion ifn?] map?]])
+(defn migrate
+  ([m migrations]
+   (reduce (fn [m [version f]]
+             (cond-> m
+               (requires-migration? m version)
+               (f))) m migrations)))
