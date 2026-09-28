@@ -6,4 +6,4 @@
   [[[0 4 23] (fn [app]
                (update app :panels
                        update-vals
-                       #(set/rename-keys % {:repl-history :shell-outpput})))]])
+                       #(set/rename-keys % {:repl-history :shell-output})))]])
