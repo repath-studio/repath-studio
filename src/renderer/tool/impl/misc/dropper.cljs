@@ -26,12 +26,12 @@
 (defmethod tool.hierarchy/on-activate ::eye-dropper
   [db]
   (if (contains? (:features db) :eye-dropper)
-    (app.handlers/add-fx db [::effects/eye-dropper {:on-success [::success]
-                                                    :on-error [::error]}])
+    (app.handlers/enqueue-fx db [::effects/eye-dropper {:on-success [::success]
+                                                        :on-error [::error]}])
     (-> db
         (tool.handlers/deactivate)
-        (app.handlers/add-fx [::app.effects/toast
-                              [:error ["Eye Dropper is not available in this
+        (app.handlers/enqueue-fx [::app.effects/toast
+                                  [:error ["Eye Dropper is not available in this
                                         environment."]]]))))
 
 (rf/reg-event-fx
@@ -50,7 +50,7 @@
  (fn [db [_ error]]
    (-> db
        (tool.handlers/deactivate)
-       (app.handlers/add-fx [:dispatch [::app.events/toast-error error]]))))
+       (app.handlers/enqueue-fx [:dispatch [::app.events/toast-error error]]))))
 
 (rf/dispatch [::action.events/register-action
               {:id :tool/eye-dropper

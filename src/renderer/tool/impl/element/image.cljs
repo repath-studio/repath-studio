@@ -26,7 +26,7 @@
 
 (defmethod tool.hierarchy/on-pointer-up [::image :idle]
   [db _e]
-  (app.handlers/add-fx
+  (app.handlers/enqueue-fx
    db
    [::effects/file-open
     {:options {:startIn "pictures"

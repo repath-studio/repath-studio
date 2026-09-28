@@ -30,4 +30,5 @@
   [db e]
   (let [{:keys [data-transfer pointer-pos]} e
         position (input.handlers/adjusted-pos db pointer-pos)]
-    (app.handlers/add-fx db [::input.effects/drop [position data-transfer]])))
+    (app.handlers/enqueue-fx db [::input.effects/drop
+                                 [position data-transfer]])))

@@ -61,15 +61,15 @@
   [db _e]
   (-> db
       (tool.handlers/set-state :create)
-      (app.handlers/add-fx [::create-measure
-                            (tool.handlers/snapped-position db)])))
+      (app.handlers/enqueue-fx [::create-measure
+                                (tool.handlers/snapped-position db)])))
 
 (defmethod tool.hierarchy/on-pointer-up [::measure :idle]
   [db _e]
   (-> db
       (tool.handlers/set-state :create)
-      (app.handlers/add-fx [::create-measure
-                            (tool.handlers/snapped-position db)])))
+      (app.handlers/enqueue-fx [::create-measure
+                                (tool.handlers/snapped-position db)])))
 
 (defmethod tool.hierarchy/on-pointer-up [::measure :create]
   [db _e]
@@ -81,15 +81,15 @@
 
 (defmethod tool.hierarchy/on-drag [::measure :create]
   [db e]
-  (app.handlers/add-fx db [::update-measure-end-point
-                           [(tool.handlers/snapped-position db)
-                            (input.handlers/snap-to-angle? db e)]]))
+  (app.handlers/enqueue-fx db [::update-measure-end-point
+                               [(tool.handlers/snapped-position db)
+                                (input.handlers/snap-to-angle? db e)]]))
 
 (defmethod tool.hierarchy/on-pointer-move [::measure :create]
   [db e]
-  (app.handlers/add-fx db [::update-measure-end-point
-                           [(tool.handlers/snapped-position db)
-                            (input.handlers/snap-to-angle? db e)]]))
+  (app.handlers/enqueue-fx db [::update-measure-end-point
+                               [(tool.handlers/snapped-position db)
+                                (input.handlers/snap-to-angle? db e)]]))
 
 (defmethod tool.hierarchy/render ::measure
   []

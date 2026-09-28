@@ -80,7 +80,8 @@
   (-> db
       (assoc :drag-pointer pointer-id)
       (tool.hierarchy/on-drag-start e)
-      (app.handlers/add-fx [::input.effects/set-pointer-capture pointer-id])))
+      (app.handlers/enqueue-fx [::input.effects/set-pointer-capture
+                                pointer-id])))
 
 (m/=> on-pinch [:-> App PointerEvent App])
 (defn on-pinch
@@ -181,7 +182,7 @@
       (or (= button :middle)
           (empty? active-pointers))
       (-> (tool.hierarchy/on-pointer-down e)
-          (app.handlers/add-fx [::effects/focus-canvas nil])))))
+          (app.handlers/enqueue-fx [::effects/focus-canvas nil])))))
 
 (m/=> db-click? [:-> App PointerEvent boolean?])
 (defn db-click?
@@ -198,8 +199,8 @@
   (-> db
       (tool.hierarchy/on-drag-end e)
       (input.handlers/clear-pointer-data)
-      (app.handlers/add-fx [::input.effects/release-pointer-capture
-                            pointer-id])))
+      (app.handlers/enqueue-fx [::input.effects/release-pointer-capture
+                                pointer-id])))
 
 (m/=> on-pointer-up [:-> App PointerEvent App])
 (defn on-pointer-up

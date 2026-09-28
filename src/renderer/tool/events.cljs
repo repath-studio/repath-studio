@@ -33,14 +33,3 @@
             (seq (element.handlers/selected db)))
      {:dispatch [::element.events/deselect-all]}
      {:db (tool.handlers/cancel db)})))
-
-(rf/reg-global-interceptor
- (rf/->interceptor
-  :id ::custom-fx
-  :after (fn [context]
-           (let [db (rf/get-effect context :db)
-                 fx (rf/get-effect context :fx)]
-             (cond-> context
-               db
-               (-> (rf/assoc-effect :fx (apply conj (or fx []) (:fx db)))
-                   (rf/assoc-effect :db (assoc db :fx []))))))))

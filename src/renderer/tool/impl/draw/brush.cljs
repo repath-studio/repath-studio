@@ -46,7 +46,7 @@
 (defn update-brush-size
   [db]
   (let [brush-size (document.handlers/attr db ::size)]
-    (app.handlers/add-fx db [::set-brush-size brush-size])))
+    (app.handlers/enqueue-fx db [::set-brush-size brush-size])))
 
 (defmethod tool.hierarchy/help [::brush :idle]
   []
@@ -76,12 +76,12 @@
   (let [size (or (document.handlers/attr db ::size) default-size)
         [x y] (:adjusted-pointer-pos db)
         fill (document.handlers/attr db :fill)]
-    (app.handlers/add-fx db [::set-brush {:type :element
-                                          :tag :circle
-                                          :attrs {:cx (str x)
-                                                  :cy (str y)
-                                                  :r (str (/ size 2))
-                                                  :fill fill}}])))
+    (app.handlers/enqueue-fx db [::set-brush {:type :element
+                                              :tag :circle
+                                              :attrs {:cx (str x)
+                                                      :cy (str y)
+                                                      :r (str (/ size 2))
+                                                      :fill fill}}])))
 
 (defmethod tool.hierarchy/on-drag-start [::brush :idle]
   [db e]
@@ -134,7 +134,7 @@
 
 (defmethod tool.hierarchy/on-deactivate ::brush
   [db]
-  (app.handlers/add-fx db [::set-brush nil]))
+  (app.handlers/enqueue-fx db [::set-brush nil]))
 
 (defmethod tool.hierarchy/render ::brush
   []

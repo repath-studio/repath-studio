@@ -43,4 +43,4 @@
             (frame.handlers/zoom-at-pointer db factor))
           (frame.handlers/pan-by db [delta-x delta-y]))
         (snap.handlers/update-viewport-tree)
-        (app.handlers/add-fx [::app.effects/persist]))))
+        (app.handlers/enqueue-fx [::app.effects/persist]))))

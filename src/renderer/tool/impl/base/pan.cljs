@@ -51,7 +51,7 @@
       (tool.handlers/set-state :idle)
       (tool.handlers/set-cursor "grab")
       (snap.handlers/update-viewport-tree)
-      (app.handlers/add-fx [::app.effects/persist])))
+      (app.handlers/enqueue-fx [::app.effects/persist])))
 
 (rf/dispatch [::action.events/register-action
               {:id :tool/pan

@@ -42,7 +42,7 @@
 
 (defmethod tool.hierarchy/on-deactivate ::zoom
   [db]
-  (app.handlers/add-fx db [::set-select-box nil]))
+  (app.handlers/enqueue-fx db [::set-select-box nil]))
 
 (defmethod tool.hierarchy/on-key-down [::zoom :idle]
   [db e]
@@ -62,7 +62,7 @@
 
 (defmethod tool.hierarchy/on-drag [::zoom :select]
   [db _e]
-  (app.handlers/add-fx db [::set-select-box (tool.handlers/select-box db)]))
+  (app.handlers/enqueue-fx db [::set-select-box (tool.handlers/select-box db)]))
 
 (defmethod tool.hierarchy/on-drag-end [::zoom :select]
   [db e]
@@ -78,13 +78,13 @@
         factor (if (:shift-key e) zoom-sensitivity (/ zoom current-zoom))
         cursor (if (:shift-key e) "zoom-out" "zoom-in")]
     (-> db
-        (app.handlers/add-fx [::set-select-box nil])
+        (app.handlers/enqueue-fx [::set-select-box nil])
         (tool.handlers/set-state :idle)
         (tool.handlers/set-cursor cursor)
         (frame.handlers/zoom-in-place factor)
         (frame.handlers/pan-to-bbox [x y offset-x offset-y])
         (snap.handlers/update-viewport-tree)
-        (app.handlers/add-fx [::app.effects/persist]))))
+        (app.handlers/enqueue-fx [::app.effects/persist]))))
 
 (defmethod tool.hierarchy/on-pointer-up [::zoom :idle]
   [db e]
@@ -94,7 +94,7 @@
     (-> db
         (frame.handlers/zoom-at-pointer factor)
         (snap.handlers/update-viewport-tree)
-        (app.handlers/add-fx [::app.effects/persist]))))
+        (app.handlers/enqueue-fx [::app.effects/persist]))))
 
 (defmethod tool.hierarchy/render ::zoom
   []
