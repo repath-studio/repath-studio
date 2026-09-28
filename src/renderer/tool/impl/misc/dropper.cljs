@@ -15,7 +15,8 @@
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
-   [renderer.tool.subs :as-alias tool.subs]))
+   [renderer.tool.subs :as-alias tool.subs]
+   [renderer.utils.platform :as utils.platform]))
 
 (hierarchy/derive! ::eye-dropper ::tool.hierarchy/tool)
 
@@ -48,9 +49,15 @@
 (rf/reg-event-db
  ::error
  (fn [db [_ error]]
-   (-> db
-       (tool.handlers/deactivate)
-       (app.handlers/enqueue-fx [:dispatch [::app.events/toast-error error]]))))
+   (cond-> db
+     :always
+     (tool.handlers/deactivate)
+
+     (or (not= (.-name error) "AbortError")
+         ;; EyeDropper is not working properly on Linux Wayland, but returns an
+         ;; AbortError. We show the error on Linux to avoid failing silently.
+         (utils.platform/linux? (:platform db)))
+     (app.handlers/enqueue-fx [:dispatch [::app.events/toast-error error]]))))
 
 (rf/dispatch [::action.events/register-action
               {:id :tool/eye-dropper
