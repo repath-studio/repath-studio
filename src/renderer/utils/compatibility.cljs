@@ -45,9 +45,8 @@
    introduced to the document schema)."
   [m version]
   (or (not (:version m))
-      (and (not= (:version m) "unknown")
-           (-> (version->vec (:version m))
-               (-requires-migration? version)))))
+      (-> (version->vec (:version m))
+          (-requires-migration? version))))
 
 (m/=> migrate [:-> map? [:vector [:tuple SemanticVersion ifn?]] map?])
 (defn migrate
