@@ -575,7 +575,7 @@
       :max 359
       :disabled (js/isNaN hue)
       :step 1
-      :value [(first (.hsl color))]
+      :value [(if (js/isNaN hue) 0 hue)]
       :on-value-change (fn [[v]]
                          (on-change (utils.color/set-hue color notation v)))
       :on-value-commit (fn [[v]]
