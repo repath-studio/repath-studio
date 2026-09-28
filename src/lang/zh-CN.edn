@@ -32,10 +32,6 @@
                           ，从不可信来源复制的命令也可能隐藏恶意内容。"
   :confirm-paste "我明白了，请粘贴"}
 
- :renderer.shell.views
- {:hide-command-output "隐藏命令输出"
-  :show-command-output "显示命令输出"}
-
  :renderer.dialog.events
  {:are-you-sure "您确定要继续吗？"
   :keybindings "键盘快捷键"}
@@ -802,7 +798,7 @@
   :panel-attributes "属性"
   :panel-xml-view "XML 视图"
   :panel-history-tree "历史树"
-  :panel-shell-history "终端历史"
+  :panel-shell-output "终端输出"
   :panel-timeline-editor "时间轴编辑器"}
 
  :renderer.snap.core

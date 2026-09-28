@@ -35,10 +35,6 @@
                           。"
   :confirm-paste "理解しました、貼り付けてください"}
 
- :renderer.shell.views
- {:hide-command-output "コマンド出力を非表示"
-  :show-command-output "コマンド出力を表示"}
-
  :renderer.dialog.events
  {:are-you-sure "続行してもよろしいですか？"
   :keybindings "キーバインド"}
@@ -850,7 +846,7 @@
   :panel-attributes "属性"
   :panel-xml-view "XML表示"
   :panel-history-tree "履歴ツリー"
-  :panel-shell-history "シェル履歴"
+  :panel-shell-output "シェル出力"
   :panel-timeline-editor "タイムラインエディタ"}
 
  :renderer.snap.core

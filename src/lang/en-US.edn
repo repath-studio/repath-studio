@@ -34,10 +34,6 @@
                           might hide malicious content."
   :confirm-paste "I understand, let me paste"}
 
- :renderer.shell.views
- {:hide-command-output "Hide command output"
-  :show-command-output "Show command output"}
-
  :renderer.dialog.events
  {:are-you-sure "Are you sure you want to continue?"
   :keybindings "Keybindings"}
@@ -881,7 +877,7 @@
   :panel-attributes "Attributes"
   :panel-xml-view "XML view"
   :panel-history-tree "History tree"
-  :panel-shell-history "Shell history"
+  :panel-shell-output "Shell output"
   :panel-timeline-editor "Timeline editor"}
 
  :renderer.snap.core

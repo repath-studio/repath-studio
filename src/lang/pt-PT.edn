@@ -34,10 +34,6 @@
                           conteúdo malicioso."
   :confirm-paste "Compreendo, deixa-me colar"}
 
- :renderer.shell.views
- {:hide-command-output "Ocultar saída de comandos"
-  :show-command-output "Mostrar saída de comandos"}
-
  :renderer.dialog.events
  {:are-you-sure "Tem a certeza de que pretende continuar?"
   :keybindings "Atalhos de teclado"}
@@ -892,7 +888,7 @@
   :panel-attributes "Atributos"
   :panel-xml-view "Vista XML"
   :panel-history-tree "Árvore de histórico"
-  :panel-shell-history "Histórico da consola"
+  :panel-shell-output "Saída da consola"
   :panel-timeline-editor "Editor de cronologia"}
 
  :renderer.snap.core

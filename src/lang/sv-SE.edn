@@ -34,10 +34,6 @@
                           dölja skadligt innehåll."
   :confirm-paste "Jag förstår, låt mig klistra in"}
 
- :renderer.shell.views
- {:hide-command-output "Dölj kommandoutdata"
-  :show-command-output "Visa kommandoutdata"}
-
  :renderer.dialog.events
  {:are-you-sure "Är du säker på att du vill fortsätta?"
   :keybindings "Tangentbordsgenvägar"}
@@ -894,7 +890,7 @@
   :panel-attributes "Attribut"
   :panel-xml-view "XML-vy"
   :panel-history-tree "Historikträd"
-  :panel-shell-history "Skalhistorik"
+  :panel-shell-output "Skalutdata"
   :panel-timeline-editor "Tidslinjeeditor"}
 
  :renderer.snap.core

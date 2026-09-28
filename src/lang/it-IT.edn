@@ -34,10 +34,6 @@
                           potrebbero nascondere contenuto malevolo."
   :confirm-paste "Ho capito, lascia che incolli"}
 
- :renderer.shell.views
- {:hide-command-output "Nascondi output comando"
-  :show-command-output "Mostra output comando"}
-
  :renderer.dialog.events
  {:are-you-sure "Sei sicuro di voler continuare?"
   :keybindings "Tasti di scelta rapida"}
@@ -909,7 +905,7 @@
   :panel-attributes "Attributi"
   :panel-xml-view "Vista XML"
   :panel-history-tree "Albero cronologia"
-  :panel-shell-history "Cronologia shell"
+  :panel-shell-output "Output shell"
   :panel-timeline-editor "Editor timeline"}
 
  :renderer.snap.core

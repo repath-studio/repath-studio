@@ -35,10 +35,6 @@
                           malveillant."
   :confirm-paste "Je comprends, laissez-moi coller"}
 
- :renderer.shell.views
- {:hide-command-output "Masquer la sortie de commande"
-  :show-command-output "Afficher la sortie de commande"}
-
  :renderer.dialog.events
  {:are-you-sure "Êtes-vous sûr de vouloir continuer ?"
   :keybindings "Raccourcis clavier"}
@@ -907,7 +903,7 @@
   :panel-attributes "Attributs"
   :panel-xml-view "Vue XML"
   :panel-history-tree "Arbre d'historique"
-  :panel-shell-history "Historique du terminal"
+  :panel-shell-output "Sortie du terminal"
   :panel-timeline-editor "Éditeur de chronologie"}
 
  :renderer.snap.core

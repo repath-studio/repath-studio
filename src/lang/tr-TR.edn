@@ -34,10 +34,6 @@
                           içerik barındırabilir."
   :confirm-paste "Anlıyorum, yapıştırayım"}
 
- :renderer.shell.views
- {:hide-command-output "Komut çıktısını gizle"
-  :show-command-output "Komut çıktısını göster"}
-
  :renderer.dialog.events
  {:are-you-sure "Devam etmek istediğinizden emin misiniz?"
   :keybindings "Klavye kısayolları"}
@@ -888,7 +884,7 @@
   :panel-attributes "Özellikler"
   :panel-xml-view "XML görünümü"
   :panel-history-tree "Geçmiş ağacı"
-  :panel-shell-history "Kabuk geçmişi"
+  :panel-shell-output "Kabuk çıktısı"
   :panel-timeline-editor "Zaman çizelgesi düzenleyicisi"}
 
  :renderer.snap.core

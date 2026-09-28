@@ -35,10 +35,6 @@
                           Inhalte verbergen."
   :confirm-paste "Ich verstehe, bitte einfügen"}
 
- :renderer.shell.views
- {:hide-command-output "Befehlsausgabe verbergen"
-  :show-command-output "Befehlsausgabe anzeigen"}
-
  :renderer.dialog.events
  {:are-you-sure "Sind Sie sicher, dass Sie fortfahren möchten?"
   :keybindings "Tastenkombinationen"}
@@ -914,7 +910,7 @@
   :panel-attributes "Attribute"
   :panel-xml-view "XML-Ansicht"
   :panel-history-tree "Verlaufsbaum"
-  :panel-shell-history "Shell-Verlauf"
+  :panel-shell-output "Shell-Ausgabe"
   :panel-timeline-editor "Timeline-Editor"}
 
  :renderer.snap.core

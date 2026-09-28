@@ -9,7 +9,6 @@
    [renderer.action.views :as action.views]
    [renderer.events :as-alias events]
    [renderer.i18n.views :as i18n.views]
-   [renderer.panel.events :as-alias panel.events]
    [renderer.panel.subs :as-alias panel.subs]
    [renderer.panel.views :as panel.views]
    [renderer.shell.events :as-alias shell.events]
@@ -129,9 +128,10 @@
         theme-mode @(rf/subscribe [::theme.subs/computed-mode])
         cycle? @(rf/subscribe [::shell.subs/cycle-completions?])
         completion (rf/subscribe [::shell.subs/completion])
-        repl-history? @(rf/subscribe [::panel.subs/visible? :repl-history])
+        repl-history? @(rf/subscribe [::panel.subs/visible? :shell-output])
         loaded? @(rf/subscribe [::shell.subs/language-loaded?])
-        current-text @(rf/subscribe [::shell.subs/current-text])]
+        current-text @(rf/subscribe [::shell.subs/current-text])
+        action (action.views/deref-action :panel/toggle-shell-output)]
     [:div.flex.items-center
      [:div.flex.self-start.flex-1
       [:div.flex.text-xs.self-start
@@ -157,13 +157,9 @@
       [language-dropdown-button loaded?]
       (when @(rf/subscribe [::window.subs/md?])
         [:div.self-start.flex
-         [:button.form-control-button.bg-transparent!
-          {:title (i18n.views/t
-                   (if repl-history?
-                     [::hide-command-output "Hide command output"]
-                     [::show-command-output "Show command output"]))
-           :on-click #(rf/dispatch [::panel.events/toggle :repl-history])}
-          [views/icon (if repl-history? "chevron-down" "chevron-up")]]])]]))
+         [views/action-icon-button
+          (assoc action :icon (if repl-history? "chevron-down" "chevron-up"))
+          {:class "form-control-button bg-transparent!"}]])]]))
 
 (defn- url
   [s]
@@ -230,7 +226,7 @@
       [views/action-switch :shell/toggle-verbose]
       [:div.grow]
       [:div.flex-1]
-      (when md? [panel.views/close-button :repl-history])]
+      (when md? [panel.views/close-button :shell-output])]
      [:div.flex.flex-1.h-full.overflow-hidden.border-b..border-border
       (if loaded?
         [views/scroll-area
@@ -288,13 +284,13 @@
 
 (defn root
   []
-  (let [repl-history? @(rf/subscribe [::panel.subs/visible? :repl-history])
+  (let [repl-history? @(rf/subscribe [::panel.subs/visible? :shell-output])
         md? @(rf/subscribe [::window.subs/md?])]
     [:<>
      (if md?
        (when repl-history?
          [panel.views/panel
-          {:id :repl-history
+          {:id :shell-output
            :class "relative"
            :minSize 100
            :defaultSize 300}

@@ -11,7 +11,12 @@
 
 (deftest test-requires-migration?
   (testing "migration requirement"
-    (is (true? (utils.compatibility/requires-migration? [0 3 3] [0 4 0])))
-    (is (true? (utils.compatibility/requires-migration? [0 3 3] [0 3 4])))
-    (is (false? (utils.compatibility/requires-migration? [1 3 3] [0 3 4])))
-    (is (false? (utils.compatibility/requires-migration? [1 3 3] [1 3 3])))))
+    (is (true? (utils.compatibility/requires-migration? {} [0 4 0])))
+    (is (true? (utils.compatibility/requires-migration? {:version "0.3.3"}
+                                                        [0 4 0])))
+    (is (true? (utils.compatibility/requires-migration? {:version "0.3.3"}
+                                                        [0 3 4])))
+    (is (false? (utils.compatibility/requires-migration? {:version "1.3.3"}
+                                                         [0 3 4])))
+    (is (false? (utils.compatibility/requires-migration? {:version "1.3.3"}
+                                                         [1 3 3])))))

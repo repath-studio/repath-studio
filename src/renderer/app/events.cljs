@@ -8,7 +8,9 @@
    [renderer.app.db :as app.db]
    [renderer.app.effects :as-alias app.effects]
    [renderer.app.events :as-alias app.events]
+   [renderer.app.handlers :as app.handlers]
    [renderer.document.events :as-alias document.events]
+   [renderer.document.handlers :as document.handlers]
    [renderer.effects :as-alias effects]
    [renderer.error.events :as-alias error.events]
    [renderer.i18n.effects :as-alias i18n.effects]
@@ -77,16 +79,20 @@
 (rf/reg-event-fx
  ::load-local-db
  (fn [{:keys [db]} [_ persisted-db]]
-   (let [app-db (merge db persisted-db)]
+   (let [app-db (-> (merge db persisted-db)
+                    (app.handlers/migrate)
+                    (update :documents update-vals
+                            (fn [document]
+                              (-> document
+                                  (assoc :version (:version persisted-db))
+                                  (document.handlers/migrate)))))]
      (if (app.db/valid? app-db)
        {:db app-db}
-       {::app.effects/clear-local-store nil
-        ;; Suppress until app db migrations
-        ;; land https://github.com/repath-studio/repath-studio/issues/160
-        #_{:on-success [::app.events/toast
-                        :error
-                        "Invalid configuration"
-                        {:description "Your local configuration was invalid and
+       {::app.effects/clear-local-store
+        {:on-success [::app.events/toast
+                      :error
+                      "Invalid configuration"
+                      {:description "Your local configuration was invalid and
                                      has been reset."}]}}))))
 
 (rf/reg-event-db
