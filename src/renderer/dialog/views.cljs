@@ -202,15 +202,11 @@
 
 (defn shortcut-tag
   [action-id shortcut]
-  (let [default? @(rf/subscribe [::action.subs/default-shortcut?
-                                 action-id
-                                 shortcut])]
-    [views/tag
-     [views/format-shortcut shortcut default?]
-     {:class (when-not default? "bg-accent! text-accent-foreground!")
-      :on-remove #(rf/dispatch [::action.events/remove-shortcut
-                                action-id
-                                shortcut])}]))
+  [views/tag
+   [views/format-shortcut action-id shortcut]
+   {:on-remove #(rf/dispatch [::action.events/remove-shortcut
+                              action-id
+                              shortcut])}])
 
 (defn edit-shortcut
   [action-id label]

@@ -69,9 +69,9 @@
    [icon icon-name]])
 
 (defn tag
-  [content & {:keys [class on-remove remove-label]}]
+  [content & {:keys [on-remove remove-label]}]
   [:div.flex.items-center.gap-2.bg-overlay.rounded.py-1
-   {:class ["px-1.5" class]}
+   {:class "px-1.5"}
    content
    (when on-remove
      [icon-button "times"
@@ -135,38 +135,36 @@
                                                 "Resize panel thumb"])}]])
 
 (defn format-shortcut
-  [shortcut default?]
-  (into [:div.flex.gap-1.items-center
-         {:dir "ltr"}]
-        (comp (map #(kbd % {:class (when-not default?
-                                     ["bg-accent-light"
-                                      "text-accent-foreground"])}))
-              (interpose [:span "+"]))
-        (cond-> []
-          (:ctrlKey shortcut)
-          (conj "Ctrl")
+  [action-id shortcut]
+  (let [default? @(rf/subscribe [::action.subs/default-shortcut?
+                                 action-id
+                                 shortcut])]
+    (into [:div.flex.gap-1.items-center
+           {:dir "ltr"}]
+          (comp (map #(kbd % {:class (when-not default?
+                                       "text-foreground-hovered")}))
+                (interpose [:span "+"]))
+          (cond-> []
+            (:ctrlKey shortcut)
+            (conj "Ctrl")
 
-          (:shiftKey shortcut)
-          (conj "⇧")
+            (:shiftKey shortcut)
+            (conj "⇧")
 
-          (:altKey shortcut)
-          (conj "Alt")
+            (:altKey shortcut)
+            (conj "Alt")
 
-          (:metaKey shortcut)
-          (conj "⌘")
+            (:metaKey shortcut)
+            (conj "⌘")
 
-          (:keyCode shortcut)
-          (conj (utils.key/code->key (:keyCode shortcut))))))
+            (:keyCode shortcut)
+            (conj (utils.key/code->key (:keyCode shortcut)))))))
 
 (defn shortcuts
   [action-id v truncated?]
   (cond->> v
     :always
-    (into [] (comp (map #(format-shortcut
-                          %
-                          @(rf/subscribe [::action.subs/default-shortcut?
-                                          action-id
-                                          %])))
+    (into [] (comp (map (partial format-shortcut action-id))
                    (interpose [:span])))
 
     truncated?
