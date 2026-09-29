@@ -5,7 +5,7 @@
 
 (defn shortcut-modifier-count
   [shortcut]
-  (->> [:ctrlKey :shiftKey :altKey]
+  (->> [:ctrlKey :shiftKey :altKey :metaKey]
        (filter shortcut)
        (count)))
 
