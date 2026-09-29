@@ -181,18 +181,25 @@
        (remove nil?)
        (string/join " + ")))
 
+(defn shortcut-tag
+  [action-id shortcut]
+  [views/tag
+   [views/format-shortcut shortcut]
+   {:class (when-not (:default shortcut) "bg-accent! text-accent-foreground!")
+    :on-remove #(rf/dispatch [::action.events/remove-shortcut
+                              action-id
+                              shortcut])}])
+
 (defn edit-shortcut
-  [id label]
+  [action-id label]
   (reagent/with-let [pending (reagent/atom nil)]
-    (let [shortcuts @(rf/subscribe [::action.subs/action-shortcuts id])
+    (let [shortcuts @(rf/subscribe [::action.subs/action-shortcuts action-id])
           label (i18n.views/t label)
           add! (fn [_]
                  (when @pending
-                   (rf/dispatch [::action.events/add-shortcut id @pending]))
-                 (reset! pending nil))
-          remove! (fn [shortcut]
-                    (rf/dispatch
-                     [::action.events/remove-shortcut id shortcut]))]
+                   (rf/dispatch [::action.events/add-shortcut
+                                 action-id @pending]))
+                 (reset! pending nil))]
       [:div.flex.flex-col.gap-4
        [:div (i18n.views/t [::customize-shortcuts-for
                             [:div "Customize shortcuts for %1"]]
@@ -205,22 +212,17 @@
           :on-key-down (fn [e]
                          (.preventDefault e)
                          (.stopPropagation e)
-                         (when-let [shortcut (keydown->shortcut e)]
-                           (reset! pending shortcut)))}]
+                         (some->> (keydown->shortcut e)
+                                  (reset! pending)))}]
         [:button.button.px-3.rounded.bg-overlay
          {:disabled (nil? @pending)
           :on-click add!}
          (i18n.views/t [::add "Add"])]]
        (into [:div.flex.flex-wrap.gap-2.min-h-8]
-             (map (fn [shortcut]
-                    ^{:key (str shortcut)}
-                    [views/tag
-                     [views/format-shortcut shortcut]
-                     #(remove! shortcut)])
-                  shortcuts))
+             (map (partial shortcut-tag action-id) shortcuts))
        [button-bar
         [button
-         {:on-click #(rf/dispatch [::action.events/reset-shortcuts id])}
+         {:on-click #(rf/dispatch [::action.events/reset-shortcuts action-id])}
          (i18n.views/t [::reset-shortcuts "Reset to defaults"])]
         [button
          {:on-click #(rf/dispatch [::dialog.events/close nil])

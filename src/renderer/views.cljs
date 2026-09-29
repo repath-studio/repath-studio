@@ -53,9 +53,10 @@
      path]))
 
 (defn kbd
-  [k]
-  [:span {:class ["p-1 text-2xs bg-overlay rounded-sm font-bold uppercase"
-                  "text-foreground-muted"]} k])
+  [k & {:as props}]
+  [:span (merge-with-class {:class ["p-1 text-2xs bg-overlay rounded-sm
+                                     font-bold uppercase text-foreground-muted"]}
+                           props) k])
 
 (defn icon-button
   [icon-name props]
@@ -66,14 +67,15 @@
    [icon icon-name]])
 
 (defn tag
-  [content on-remove & {:keys [remove-label]}]
+  [content & {:keys [class on-remove remove-label]}]
   [:div.flex.items-center.gap-2.bg-overlay.rounded.py-1
-   {:class "px-1.5"}
+   {:class ["px-1.5" class]}
    content
-   [icon-button "times"
-    {:on-click on-remove
-     :title (or remove-label (i18n.views/t [::remove "Remove"]))
-     :class "button-size-sm text-foreground-muted"}]])
+   (when on-remove
+     [icon-button "times"
+      {:on-click on-remove
+       :title (or remove-label (i18n.views/t [::remove "Remove"]))
+       :class "button-size-sm text-foreground-muted"}])])
 
 (defn action-icon-button
   [action & {:as props}]
@@ -132,8 +134,11 @@
 
 (defn format-shortcut
   [shortcut]
-  (into [:div.flex.gap-1.items-center {:dir "ltr"}]
-        (comp (map kbd)
+  (into [:div.flex.gap-1.items-center
+         {:dir "ltr"}]
+        (comp (map #(kbd % {:class (when-not (:default shortcut)
+                                     ["bg-accent-light"
+                                      "text-accent-foreground"])}))
               (interpose [:span "+"]))
         (cond-> []
           (:ctrlKey shortcut)
@@ -154,8 +159,8 @@
     (when (seq event-shortcuts)
       (let [truncated? (and limit (> (count event-shortcuts) limit))
             shown (cond->> event-shortcuts limit (take limit))]
-        (into [:span.text-foreground-muted.hidden.lg:inline-flex.items-center
-               {:class "gap-1.5"}]
+        (into [:span {:class ["text-foreground-muted hidden lg:inline-flex"
+                              "items-center gap-2"]}]
               (cond-> (into []
                             (comp (map format-shortcut)
                                   (interpose [:span]))

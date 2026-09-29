@@ -11,7 +11,8 @@
    [:keyCode {:optional true} number?]
    [:ctrlKey {:optional true} boolean?]
    [:shiftKey {:optional true} boolean?]
-   [:altKey {:optional true} boolean?]])
+   [:altKey {:optional true} boolean?]
+   [:default {:optional true} boolean?]])
 
 (def ActionGroup
   [:map {:closed true}

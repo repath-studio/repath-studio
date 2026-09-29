@@ -23,9 +23,10 @@
  :<- [::actions]
  :<- [::key-bindings]
  (fn [[actions key-bindings] [_ id]]
-   (if (contains? key-bindings id)
-     (get key-bindings id)
-     (set (get-in actions [id :shortcuts])))))
+   (let [default-shortcuts (get-in actions [id :shortcuts])]
+     (->> (or (get key-bindings id)
+              (set default-shortcuts))
+          (map #(assoc % :default (boolean (some #{%} default-shortcuts))))))))
 
 (rf/reg-sub
  ::action-groups
