@@ -14,6 +14,9 @@
    [:altKey {:optional true} boolean?]
    [:metaKey {:optional true} boolean?]])
 
+(def Shortcuts
+  [:map-of [:enum "Mac" "Win" "Linux" "All"] [:vector Shortcut]])
+
 (def ActionGroup
   [:map {:closed true}
    [:id ActionGroupId]
@@ -28,7 +31,7 @@
    [:label Translation]
    [:event vector?]
    [:icon {:optional true} string?]
-   [:shortcuts {:optional true} [:vector Shortcut]]
+   [:shortcuts {:optional true} Shortcuts]
    [:enabled {:optional true} vector?]
    [:available {:optional true} vector?]
    [:active {:optional true} vector?]])

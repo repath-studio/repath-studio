@@ -14,8 +14,10 @@
                :event [::panel.events/toggle :tree]
                :active [::panel.subs/visible? :tree]
                :available [::window.subs/md?]
-               :shortcuts [{:keyCode (utils.key/codes "T")
-                            :ctrlKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "T")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "T")
+                                   :metaKey true}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :panel/toggle-attributes
@@ -24,8 +26,10 @@
                :event [::panel.events/toggle :attributes]
                :active [::panel.subs/visible? :attributes]
                :available [::window.subs/md?]
-               :shortcuts [{:keyCode (utils.key/codes "P")
-                            :ctrlKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "P")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "P")
+                                   :metaKey true}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :panel/toggle-xml
@@ -42,8 +46,10 @@
                :event [::panel.events/toggle :history]
                :active [::panel.subs/visible? :history]
                :available [::window.subs/md?]
-               :shortcuts [{:keyCode (utils.key/codes "H")
-                            :ctrlKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "H")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "H")
+                                   :metaKey true}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :panel/toggle-shell-output
@@ -52,8 +58,10 @@
                :event [::panel.events/toggle :shell-output]
                :available [::window.subs/md?]
                :active [::panel.subs/visible? :shell-output]
-               :shortcuts [{:keyCode (utils.key/codes "SLASH")
-                            :ctrlKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "SLASH")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "SLASH")
+                                   :metaKey true}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :panel/toggle-timeline

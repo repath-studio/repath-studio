@@ -2,15 +2,24 @@
   (:require
    [malli.core :as m]
    [malli.error :as m.error]
+   [malli.util :as mu]
    [renderer.action.db
     :as action.db
-    :refer [Action ActionGroup ActionGroupId ActionId Shortcut]]
-   [renderer.app.db :refer [App]]))
+    :refer [Action ActionGroup ActionGroupId ActionId Shortcut Shortcuts]]
+   [renderer.app.db :refer [App WebPlatform]]))
 
 (m/=> entities [:-> App [:vector Action]])
 (defn entities
   [db]
   (-> db :actions vals vec))
+
+(m/=> shortcuts-for
+      [:-> [:maybe Shortcuts] [:maybe WebPlatform] [:vector Shortcut]])
+(defn shortcuts-for
+  [shortcuts platform]
+  (or (get shortcuts platform)
+      (get shortcuts "All")
+      []))
 
 (m/=> effective-shortcuts [:-> App ActionId [:set Shortcut]])
 (defn effective-shortcuts
@@ -18,9 +27,13 @@
   (let [key-bindings (:key-bindings db)]
     (if (contains? key-bindings id)
       (get key-bindings id)
-      (set (get-in db [:actions id :shortcuts])))))
+      (set (shortcuts-for (get-in db [:actions id :shortcuts])
+                          (:web-platform db))))))
 
-(m/=> actions-with-shortcuts [:-> App [:vector Action]])
+(def ResolvedAction
+  (mu/assoc-in Action [:shortcuts] [:vector Shortcut]))
+
+(m/=> actions-with-shortcuts [:-> App [:vector ResolvedAction]])
 (defn actions-with-shortcuts
   [db]
   (mapv (fn [{:keys [id]

@@ -11,4 +11,4 @@
               {:id :tool/cancel
                :label [::cancel "Cancel"]
                :event [::tool.events/cancel]
-               :shortcuts [{:keyCode (utils.key/codes "ESC")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "ESC")}]}}])

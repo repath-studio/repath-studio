@@ -51,4 +51,4 @@
                :icon "edit"
                :event [::tool.events/activate ::edit]
                :active [::tool.subs/active? ::edit]
-               :shortcuts [{:keyCode (utils.key/codes "E")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "E")}]}}])

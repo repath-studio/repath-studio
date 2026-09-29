@@ -52,4 +52,4 @@
                :icon "image"
                :event [::tool.events/activate ::image]
                :active [::tool.subs/active? ::image]
-               :shortcuts [{:keyCode (utils.key/codes "I")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "I")}]}}])

@@ -92,4 +92,4 @@
                :icon "circle-tool"
                :event [::tool.events/activate ::circle]
                :active [::tool.subs/active? ::circle]
-               :shortcuts [{:keyCode (utils.key/codes "C")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "C")}]}}])

@@ -14,8 +14,10 @@
                :label [::element.events/cut]
                :icon "cut"
                :event [::element.events/cut]
-               :shortcuts [{:keyCode (utils.key/codes "X")
-                            :ctrlKey true}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "X")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "X")
+                                   :metaKey true}]}
                :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
@@ -23,8 +25,10 @@
                :label [::copy "Copy"]
                :icon "copy"
                :event [::element.events/copy]
-               :shortcuts [{:keyCode (utils.key/codes "C")
-                            :ctrlKey true}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "C")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "C")
+                                   :metaKey true}]}
                :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
@@ -33,33 +37,41 @@
                :icon "paste"
                :event [::element.events/paste]
                :enabled [::document.subs/some-entities?]
-               :shortcuts [{:keyCode (utils.key/codes "V")
-                            :ctrlKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "V")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "V")
+                                   :metaKey true}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :clipboard/paste-in-place
                :label [::element.events/paste-in-place]
                :event [::element.events/paste-in-place]
                :enabled [::document.subs/some-entities?]
-               :shortcuts [{:keyCode (utils.key/codes "V")
-                            :ctrlKey true
-                            :altKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "V")
+                                   :ctrlKey true
+                                   :altKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "V")
+                                   :metaKey true
+                                   :altKey true}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :clipboard/paste-styles
                :label [::element.events/paste-styles]
                :event [::element.events/paste-styles]
                :enabled [::element.subs/some-non-root-selected?]
-               :shortcuts [{:keyCode (utils.key/codes "V")
-                            :ctrlKey true
-                            :shiftKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "V")
+                                   :ctrlKey true
+                                   :shiftKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "V")
+                                   :metaKey true
+                                   :shiftKey true}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :element/duplicate
                :label [::element.events/duplicate]
                :icon "copy"
                :event [::element.events/duplicate]
-               :shortcuts [{:keyCode (utils.key/codes "D")}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "D")}]}
                :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
@@ -67,8 +79,8 @@
                :label [::element.events/delete]
                :icon "delete"
                :event [::element.events/delete]
-               :shortcuts [{:keyCode (utils.key/codes "DELETE")}
-                           {:keyCode (utils.key/codes "BACKSPACE")}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "DELETE")}
+                                  {:keyCode (utils.key/codes "BACKSPACE")}]}
                :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
@@ -77,8 +89,10 @@
                :icon "select-all"
                :event [::element.events/select-all]
                :enabled [::document.subs/some-entities?]
-               :shortcuts [{:keyCode (utils.key/codes "A")
-                            :ctrlKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "A")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "A")
+                                   :metaKey true}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :element/deselect-all
@@ -99,27 +113,36 @@
                :label [::element.events/select-same-tags]
                :icon "select-same"
                :event [::element.events/select-same-tags]
-               :shortcuts [{:keyCode (utils.key/codes "A")
-                            :ctrlKey true
-                            :shiftKey true}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "A")
+                                   :ctrlKey true
+                                   :shiftKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "A")
+                                   :metaKey true
+                                   :shiftKey true}]}
                :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :object/to-path
                :label [::element.events/object-to-path]
                :event [::element.events/->path]
-               :shortcuts [{:keyCode (utils.key/codes "P")
-                            :ctrlKey true
-                            :shiftKey true}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "P")
+                                   :ctrlKey true
+                                   :shiftKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "P")
+                                   :metaKey true
+                                   :shiftKey true}]}
                :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :object/stroke-to-path
                :label [::element.events/stroke-to-path]
                :event [::element.events/stroke->path]
-               :shortcuts [{:keyCode (utils.key/codes "P")
-                            :ctrlKey true
-                            :altKey true}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "P")
+                                   :ctrlKey true
+                                   :altKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "P")
+                                   :metaKey true
+                                   :altKey true}]}
                :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
@@ -127,8 +150,10 @@
                :label [::element.events/group]
                :icon "group"
                :event [::element.events/group]
-               :shortcuts [{:keyCode (utils.key/codes "G")
-                            :ctrlKey true}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "G")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "G")
+                                   :metaKey true}]}
                :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
@@ -136,9 +161,12 @@
                :label [::element.events/ungroup]
                :icon "ungroup"
                :event [::element.events/ungroup]
-               :shortcuts [{:keyCode (utils.key/codes "G")
-                            :ctrlKey true
-                            :shiftKey true}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "G")
+                                   :ctrlKey true
+                                   :shiftKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "G")
+                                   :metaKey true
+                                   :shiftKey true}]}
                :enabled [::element.subs/some-selected-tag? :g]}])
 
 (rf/dispatch [::action.events/register-action
@@ -146,8 +174,10 @@
                :label [::element.events/lock]
                :icon "lock"
                :event [::element.events/lock]
-               :shortcuts [{:keyCode (utils.key/codes "L")
-                            :ctrlKey true}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "L")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "L")
+                                   :metaKey true}]}
                :enabled [::element.subs/some-selected-unlocked?]}])
 
 (rf/dispatch [::action.events/register-action
@@ -155,9 +185,12 @@
                :label [::element.events/unlock]
                :icon "unlock"
                :event [::element.events/unlock]
-               :shortcuts [{:keyCode (utils.key/codes "L")
-                            :ctrlKey true
-                            :shiftKey true}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "L")
+                                   :ctrlKey true
+                                   :shiftKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "L")
+                                   :metaKey true
+                                   :shiftKey true}]}
                :enabled [::element.subs/some-selected-locked?]}])
 
 (rf/dispatch [::action.events/register-action
@@ -165,7 +198,7 @@
                :label [::element.events/raise]
                :icon "bring-forward"
                :event [::element.events/raise]
-               :shortcuts [{:keyCode (utils.key/codes "PAGE_UP")}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "PAGE_UP")}]}
                :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
@@ -173,7 +206,7 @@
                :label [::element.events/lower]
                :icon "send-backward"
                :event [::element.events/lower]
-               :shortcuts [{:keyCode (utils.key/codes "PAGE_DOWN")}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "PAGE_DOWN")}]}
                :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
@@ -181,7 +214,7 @@
                :label [::element.events/raise-to-top]
                :icon "bring-front"
                :event [::element.events/raise-to-top]
-               :shortcuts [{:keyCode (utils.key/codes "HOME")}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "HOME")}]}
                :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
@@ -189,7 +222,7 @@
                :label [::element.events/lower-to-bottom]
                :icon "send-back"
                :event [::element.events/lower-to-bottom]
-               :shortcuts [{:keyCode (utils.key/codes "END")}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "END")}]}
                :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
@@ -239,8 +272,10 @@
                :label [::element.events/boolean-exclude]
                :icon "exclude"
                :event [::element.events/boolean-operation :exclude]
-               :shortcuts [{:keyCode (utils.key/codes "E")
-                            :ctrlKey true}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "E")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "E")
+                                   :metaKey true}]}
                :enabled [::element.subs/multiple-selected?]}])
 
 (rf/dispatch [::action.events/register-action
@@ -248,8 +283,10 @@
                :label [::element.events/boolean-unite]
                :icon "unite"
                :event [::element.events/boolean-operation :unite]
-               :shortcuts [{:keyCode (utils.key/codes "U")
-                            :ctrlKey true}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "U")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "U")
+                                   :metaKey true}]}
                :enabled [::element.subs/multiple-selected?]}])
 
 (rf/dispatch [::action.events/register-action
@@ -257,8 +294,10 @@
                :label [::element.events/boolean-intersect]
                :icon "intersect"
                :event [::element.events/boolean-operation :intersect]
-               :shortcuts [{:keyCode (utils.key/codes "I")
-                            :ctrlKey true}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "I")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "I")
+                                   :metaKey true}]}
                :enabled [::element.subs/multiple-selected?]}])
 
 (rf/dispatch [::action.events/register-action
@@ -266,8 +305,10 @@
                :label [::element.events/boolean-subtract]
                :icon "subtract"
                :event [::element.events/boolean-operation :subtract]
-               :shortcuts [{:keyCode (utils.key/codes "BACKSLASH")
-                            :ctrlKey true}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "BACKSLASH")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "BACKSLASH")
+                                   :metaKey true}]}
                :enabled [::element.subs/multiple-selected?]}])
 
 (rf/dispatch [::action.events/register-action
@@ -275,8 +316,10 @@
                :label [::element.events/boolean-divide]
                :icon "divide"
                :event [::element.events/boolean-operation :divide]
-               :shortcuts [{:keyCode (utils.key/codes "D")
-                            :ctrlKey true}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "D")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "D")
+                                   :metaKey true}]}
                :enabled [::element.subs/multiple-selected?]}])
 
 (rf/dispatch [::action.events/register-action
@@ -335,8 +378,10 @@
                :icon "group"
                :event [::element.events/combine]
                :enabled [::element.subs/some-selected-tag? :path]
-               :shortcuts [{:keyCode (utils.key/codes "M")
-                            :ctrlKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "M")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "M")
+                                   :metaKey true}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :path/break-apart
@@ -344,9 +389,12 @@
                :icon "ungroup"
                :event [::element.events/break-apart]
                :enabled [::element.subs/some-selected-tag? :path]
-               :shortcuts [{:keyCode (utils.key/codes "M")
-                            :ctrlKey true
-                            :shiftKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "M")
+                                   :ctrlKey true
+                                   :shiftKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "M")
+                                   :metaKey true
+                                   :shiftKey true}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :image/trace

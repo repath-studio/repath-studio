@@ -12,8 +12,10 @@
                :label [::undo "Undo"]
                :icon "undo"
                :event [::history.events/undo]
-               :shortcuts [{:keyCode (utils.key/codes "Z")
-                            :ctrlKey true}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "Z")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "Z")
+                                   :metaKey true}]}
                :enabled [::history.subs/undos?]}])
 
 (rf/dispatch [::action.events/register-action
@@ -21,11 +23,16 @@
                :label [::redo "Redo"]
                :icon "redo"
                :event [::history.events/redo]
-               :shortcuts [{:keyCode (utils.key/codes "Z")
-                            :ctrlKey true
-                            :shiftKey true}
-                           {:keyCode (utils.key/codes "Y")
-                            :ctrlKey true}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "Z")
+                                   :ctrlKey true
+                                   :shiftKey true}
+                                  {:keyCode (utils.key/codes "Y")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "Z")
+                                   :metaKey true
+                                   :shiftKey true}
+                                  {:keyCode (utils.key/codes "Y")
+                                   :metaKey true}]}
                :enabled [::history.subs/redos?]}])
 
 (rf/dispatch [::action.events/register-action

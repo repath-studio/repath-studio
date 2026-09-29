@@ -106,4 +106,4 @@
                :icon "magnifier"
                :event [::tool.events/activate ::zoom]
                :active [::tool.subs/active? ::zoom]
-               :shortcuts [{:keyCode (utils.key/codes "Z")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "Z")}]}}])

@@ -148,4 +148,4 @@
                :icon "brush"
                :event [::tool.events/activate ::brush]
                :active [::tool.subs/active? ::brush]
-               :shortcuts [{:keyCode (utils.key/codes "B")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "B")}]}}])

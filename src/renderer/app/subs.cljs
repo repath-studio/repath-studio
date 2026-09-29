@@ -40,6 +40,10 @@
  :-> :platform)
 
 (rf/reg-sub
+ ::web-platform
+ :-> :web-platform)
+
+(rf/reg-sub
  ::web?
  :<- [::platform]
  :-> utils.platform/web?)
