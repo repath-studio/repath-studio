@@ -12,6 +12,7 @@
    [:ctrlKey {:optional true} boolean?]
    [:shiftKey {:optional true} boolean?]
    [:altKey {:optional true} boolean?]
+   [:metaKey {:optional true} boolean?]
    [:default {:optional true} boolean?]])
 
 (def ActionGroup

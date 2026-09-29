@@ -150,6 +150,9 @@
           (:altKey shortcut)
           (conj "Alt")
 
+          (:metaKey shortcut)
+          (conj "⌘")
+
           (:keyCode shortcut)
           (conj (utils.key/code->key (:keyCode shortcut))))))
 

@@ -170,13 +170,15 @@
       (cond-> {:keyCode key-code}
         (.-ctrlKey e) (assoc :ctrlKey true)
         (.-shiftKey e) (assoc :shiftKey true)
-        (.-altKey e) (assoc :altKey true)))))
+        (.-altKey e) (assoc :altKey true)
+        (.-metaKey e) (assoc :metaKey true)))))
 
 (defn shortcut->string
   [shortcut]
   (->> [(when (:ctrlKey shortcut) "Ctrl")
         (when (:shiftKey shortcut) "Shift")
         (when (:altKey shortcut) "Alt")
+        (when (:metaKey shortcut) "Meta")
         (some-> (:keyCode shortcut) utils.key/code->key)]
        (remove nil?)
        (string/join " + ")))
