@@ -165,7 +165,7 @@
         :on-escape-key-down #(.stopPropagation %)}
        [:div.flex.gap-2.items-center
         [action.views/label action]
-        [views/shortcuts action]]]]]))
+        [views/action-shortcuts action]]]]]))
 
 (defn button-group
   [action-group & {:as props}]

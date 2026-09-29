@@ -123,7 +123,7 @@
         :on-click (fn [e]
                     (.stopPropagation e)
                     (rf/dispatch [::dialog.events/show-edit-shortcut id]))}]
-      [views/shortcuts action :limit 3]]]))
+      [views/action-shortcuts action :limit 3]]]))
 
 (defn cmdk-group
   [{:keys [label actions]}]
@@ -185,17 +185,21 @@
 
 (defn shortcut-tag
   [action-id shortcut]
-  [views/tag
-   [views/format-shortcut shortcut]
-   {:class (when-not (:default shortcut) "bg-accent! text-accent-foreground!")
-    :on-remove #(rf/dispatch [::action.events/remove-shortcut
-                              action-id
-                              shortcut])}])
+  (let [default? @(rf/subscribe [::action.subs/default-shortcut?
+                                 action-id
+                                 shortcut])]
+    [views/tag
+     [views/format-shortcut shortcut default?]
+     {:class (when-not default? "bg-accent! text-accent-foreground!")
+      :on-remove #(rf/dispatch [::action.events/remove-shortcut
+                                action-id
+                                shortcut])}]))
 
 (defn edit-shortcut
   [action-id label]
   (reagent/with-let [pending (reagent/atom nil)]
     (let [shortcuts @(rf/subscribe [::action.subs/action-shortcuts action-id])
+          conflict @(rf/subscribe [::action.subs/conflicting-action @pending])
           label (i18n.views/t label)
           add! (fn [_]
                  (when @pending
@@ -217,9 +221,15 @@
                          (some->> (keydown->shortcut e)
                                   (reset! pending)))}]
         [:button.button.px-3.rounded.bg-overlay
-         {:disabled (nil? @pending)
+         {:disabled (or (nil? @pending) conflict)
           :on-click add!}
          (i18n.views/t [::add "Add"])]]
+       (when conflict
+         (let [conflict-label (i18n.views/t (:label conflict))]
+           [:div.text-error
+            (i18n.views/t [::shortcut-in-use
+                           [:div "This shortcut is already in use by %1."]]
+                          [[:strong conflict-label]])]))
        (into [:div.flex.flex-wrap.gap-2.min-h-8]
              (map (partial shortcut-tag action-id) shortcuts))
        [button-bar

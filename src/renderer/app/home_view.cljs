@@ -82,7 +82,7 @@
    [button-link
     {:on-click (action.views/dispatch action)}
     [action.views/label action]]
-   [views/shortcuts action]])
+   [views/action-shortcuts action]])
 
 (defn root
   [recent-documents]

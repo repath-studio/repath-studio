@@ -62,6 +62,11 @@
    (assoc coeffects :platform "web")))
 
 (rf/reg-cofx
+ ::app.effects/web-platform
+ (fn [coeffects _]
+   (assoc coeffects :web-platform "Linux")))
+
+(rf/reg-cofx
  ::app.effects/versions
  (fn [coeffects _]
    coeffects))

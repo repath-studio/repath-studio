@@ -175,7 +175,7 @@
     {:class "menu-item-indicator"}
     [views/icon "checkmark"]]
    [:div [action.views/label action]]
-   [views/shortcuts action]])
+   [views/action-shortcuts action]])
 
 (defmethod menu-item :sub-menu
   [action]
@@ -238,7 +238,7 @@
     :on-select (action.views/dispatch action)
     :disabled (action.views/disabled? action)}
    [:div [action.views/label action]]
-   [views/shortcuts action]])
+   [views/action-shortcuts action]])
 
 (defn submenus
   []

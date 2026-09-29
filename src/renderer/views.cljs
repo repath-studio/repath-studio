@@ -24,7 +24,9 @@
    ["tailwind-merge" :refer [twMerge]]
    ["vaul" :refer [Drawer]]
    [clojure.string :as string]
+   [re-frame.core :as rf]
    [reagent.core :as reagent]
+   [renderer.action.subs :as action.subs]
    [renderer.action.views :as action.views]
    [renderer.i18n.views :as i18n.views]
    [renderer.icon.views :as icon.views]
@@ -133,10 +135,10 @@
                                                 "Resize panel thumb"])}]])
 
 (defn format-shortcut
-  [shortcut]
+  [shortcut default?]
   (into [:div.flex.gap-1.items-center
          {:dir "ltr"}]
-        (comp (map #(kbd % {:class (when-not (:default shortcut)
+        (comp (map #(kbd % {:class (when-not default?
                                      ["bg-accent-light"
                                       "text-accent-foreground"])}))
               (interpose [:span "+"]))
@@ -157,18 +159,30 @@
           (conj (utils.key/code->key (:keyCode shortcut))))))
 
 (defn shortcuts
+  [action-id v truncated?]
+  (cond->> v
+    :always
+    (into [] (comp (map #(format-shortcut
+                          %
+                          @(rf/subscribe [::action.subs/default-shortcut?
+                                          action-id
+                                          %])))
+                   (interpose [:span])))
+
+    truncated?
+    (conj [:span "…"])
+
+    :always
+    (into [:span {:class ["text-foreground-muted hidden lg:inline-flex"
+                          "flex-wrap items-center gap-2"]}])))
+
+(defn action-shortcuts
   [action & {:keys [limit]}]
   (let [event-shortcuts (:shortcuts action)]
     (when (seq event-shortcuts)
       (let [truncated? (and limit (> (count event-shortcuts) limit))
             shown (cond->> event-shortcuts limit (take limit))]
-        (into [:span {:class ["text-foreground-muted hidden lg:inline-flex"
-                              "flex-wrap items-center gap-2"]}]
-              (cond-> (into []
-                            (comp (map format-shortcut)
-                                  (interpose [:span]))
-                            shown)
-                truncated? (conj [:span "…"])))))))
+        [shortcuts (:id action) shown truncated?]))))
 
 (defn radio-icon-button
   [icon-name active props]
@@ -214,7 +228,7 @@
               content-props)
        [:div.flex.gap-2.items-center
         [action.views/label action]
-        [shortcuts action]]]]]))
+        [action-shortcuts action]]]]]))
 
 (defn action-button-group
   [action-group & {:as content-props}]
@@ -240,7 +254,7 @@
       {:class "menu-item-indicator"}
       [icon "checkmark"]]
      [:div [action.views/label action]]
-     [shortcuts action]]
+     [action-shortcuts action]]
 
     :else
     [:> ContextMenu/Item
@@ -248,7 +262,7 @@
       :onSelect (action.views/dispatch action)
       :disabled (action.views/disabled? action)}
      [:div [action.views/label action]]
-     [shortcuts action]]))
+     [action-shortcuts action]]))
 
 (defn dropdown-menu-item
   [action & {:as props}]
@@ -272,7 +286,7 @@
       (when (:icon action)
         [icon (:icon action)])
       [action.views/label action]]
-     [shortcuts action]]
+     [action-shortcuts action]]
 
     :else
     [:> DropdownMenu/Item
@@ -284,7 +298,7 @@
       (when (:icon action)
         [icon (:icon action)])
       [action.views/label action]]
-     [shortcuts action]]))
+     [action-shortcuts action]]))
 
 (defn scroll-area
   [& more]

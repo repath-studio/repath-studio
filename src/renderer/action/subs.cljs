@@ -23,10 +23,27 @@
  :<- [::actions]
  :<- [::key-bindings]
  (fn [[actions key-bindings] [_ id]]
-   (let [default-shortcuts (get-in actions [id :shortcuts])]
-     (->> (or (get key-bindings id)
-              (set default-shortcuts))
-          (map #(assoc % :default (boolean (some #{%} default-shortcuts))))))))
+   (or (get key-bindings id)
+       (set (get-in actions [id :shortcuts])))))
+
+(rf/reg-sub
+ ::default-shortcut?
+ :<- [::actions]
+ (fn [actions [_ id shortcut]]
+   (boolean (some #{shortcut} (get-in actions [id :shortcuts])))))
+
+(rf/reg-sub
+ ::conflicting-action
+ :<- [::actions]
+ :<- [::key-bindings]
+ (fn [[actions key-bindings] [_ shortcut]]
+   (when shortcut
+     (some (fn [action]
+             (when (some #{shortcut}
+                         (or (get key-bindings (:id action))
+                             (set (:shortcuts action))))
+               action))
+           (vals actions)))))
 
 (rf/reg-sub
  ::action-groups
