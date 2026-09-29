@@ -47,6 +47,8 @@
   :shortcut-in-use [:div "This shortcut is already in use by %1."]
   :reset-shortcuts "Reset to defaults"
   :search-command "Search for a command"
+  :hide-disabled "Hide disabled"
+  :hide-shortcutless "Hide shortcutless"
   :no-results "No results found."
   :version "Version: "
   :browser "Browser: "

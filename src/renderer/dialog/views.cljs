@@ -126,37 +126,54 @@
       [views/action-shortcuts action :limit 3]]]))
 
 (defn cmdk-group
-  [{:keys [label actions]}]
-  (->> actions
-       (keep action.views/deref-action)
-       (map (partial cmdk-item label))
-       (into [:> Command/CommandGroup
-              {:heading (i18n.views/t label)}])))
+  [{:keys [label actions]} hide-disabled? hide-shortcutless?]
+  (let [actions (cond->> (keep action.views/deref-action actions)
+                  hide-disabled? (remove action.views/disabled?)
+                  hide-shortcutless? (filter :shortcuts))]
+    (when (seq actions)
+      (->> actions
+           (map (partial cmdk-item label))
+           (into [:> Command/CommandGroup
+                  {:heading (i18n.views/t label)}])))))
 
 (defn cmdk
   []
-  (let [action-groups @(rf/subscribe [::action.subs/action-groups])
-        groupless-actions @(rf/subscribe [::action.subs/groupless-actions])
-        action-groups (cond-> action-groups
-                        (seq groupless-actions)
-                        (assoc :other-actions
-                               {:id :other-actions
-                                :label [::other-actions "Other Actions"]
-                                :actions (keys groupless-actions)}))]
-    [:> Command/Command
-     {:label "Command Menu"
-      :on-key-down #(.stopPropagation %)}
-     [:> Command/CommandInput
-      {:class "p-3 bg-primary border-b border-border w-full"
-       :placeholder (i18n.views/t [::search-command "Search for a command"])}]
-     [views/scroll-area
-      (->> (vals action-groups)
-           (keep cmdk-group)
-           (into [:> Command/CommandList
-                  {:class "p-1 max-h-[50dvh]"}
-                  [:> Command/CommandEmpty
-                   {:class "p-2"}
-                   (i18n.views/t [::no-results "No results found."])]]))]]))
+  (reagent/with-let [hide-disabled? (reagent/atom false)
+                     hide-shortcutless? (reagent/atom false)]
+    (let [action-groups @(rf/subscribe [::action.subs/action-groups])
+          groupless-actions @(rf/subscribe [::action.subs/groupless-actions])
+          action-groups (cond-> action-groups
+                          (seq groupless-actions)
+                          (assoc :other-actions
+                                 {:id :other-actions
+                                  :label [::other-actions "Other Actions"]
+                                  :actions (keys groupless-actions)}))]
+      [:> Command/Command
+       {:label "Command Menu"
+        :on-key-down #(.stopPropagation %)}
+       [:> Command/CommandInput
+        {:class "p-3 bg-primary w-full"
+         :placeholder (i18n.views/t [::search-command "Search for a command"])}]
+       [views/toolbar
+        {:class "gap-4 bg-secondary p-2"}
+        [views/switch
+         (i18n.views/t [::hide-disabled "Hide disabled"])
+         {:id "hide-disabled"
+          :default-checked @hide-disabled?
+          :on-checked-change #(reset! hide-disabled? %)}]
+        [views/switch
+         (i18n.views/t [::hide-shortcutless "Hide shortcutless"])
+         {:id "hide-shortcutless"
+          :default-checked @hide-shortcutless?
+          :on-checked-change #(reset! hide-shortcutless? %)}]]
+       [views/scroll-area
+        (->> (vals action-groups)
+             (keep #(cmdk-group % @hide-disabled? @hide-shortcutless?))
+             (into [:> Command/CommandList
+                    {:class "p-1 max-h-[50dvh]"}
+                    [:> Command/CommandEmpty
+                     {:class "p-2"}
+                     (i18n.views/t [::no-results "No results found."])]]))]])))
 
 (def modifier-key-codes
   "keyCodes for keys that are modifiers on their own and shouldn't be captured
