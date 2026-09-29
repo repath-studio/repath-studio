@@ -160,7 +160,7 @@
       (let [truncated? (and limit (> (count event-shortcuts) limit))
             shown (cond->> event-shortcuts limit (take limit))]
         (into [:span {:class ["text-foreground-muted hidden lg:inline-flex"
-                              "items-center gap-2"]}]
+                              "flex-wrap items-center gap-2"]}]
               (cond-> (into []
                             (comp (map format-shortcut)
                                   (interpose [:span]))
