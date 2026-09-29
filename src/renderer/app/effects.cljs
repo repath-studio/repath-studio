@@ -5,6 +5,7 @@
    ["localforage" :as localforage]
    ["paper" :refer [paper]]
    ["sonner" :refer [toast]]
+   [clojure.string :as string]
    [cognitect.transit :as transit]
    [config :as config]
    [goog.functions :as goog.functions]
@@ -32,6 +33,13 @@
  ::user-agent
  (fn [coeffects _]
    (assoc coeffects :user-agent (.-userAgent js/navigator))))
+
+(rf/reg-cofx
+ ::web-platform
+ (fn [coeffects _]
+   (assoc coeffects :web-platform
+          (some #(when (string/starts-with? (.-platform js/navigator) %) %)
+                ["Mac" "Win" "Linux" "iPhone" "iPad" "Android"]))))
 
 (rf/reg-cofx
  ::standalone

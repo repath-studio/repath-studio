@@ -54,8 +54,8 @@
 
 (defn kbd
   [k & {:as props}]
-  [:span (merge-with-class {:class ["p-1 text-2xs bg-overlay rounded-sm
-                                     font-bold uppercase text-foreground-muted"]}
+  [:span (merge-with-class {:class ["font-bold text-2xs bg-overlay rounded-sm
+                                     p-1 uppercase text-foreground-muted"]}
                            props) k])
 
 (defn icon-button

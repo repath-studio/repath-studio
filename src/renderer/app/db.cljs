@@ -29,6 +29,9 @@
 (def Platform
   [:enum "darwin" "linux" "win32" "ios" "android" "web"])
 
+(def WebPlatform
+  [:enum "Mac" "Win" "Linux" "iPhone" "iPad" "Android"])
+
 (def Font
   [:map-of {:title "style"} string? [:map
                                      [:postscript-name string?]
@@ -91,6 +94,7 @@
    [:languages {:default {}} LanguageRegistry]
    [:icons {:default icons/defaults} Icons]
    [:platform {:optional true} Platform]
+   [:web-platform {:optional true} [:maybe WebPlatform]]
    [:versions {:optional true} [:maybe map?]]
    [:standalone {:optional true} boolean?]
    [:menubar {:default {}} Menubar]
