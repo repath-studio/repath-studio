@@ -34,7 +34,7 @@
  ::remove-shortcut
  [persist]
  (fn [{:keys [db]} [_ id shortcut]]
-   (let [db (action.handlers/remove-shortcut db id shortcut)]
+   (let [db (action.handlers/remove-shortcut db id (dissoc shortcut :default))]
      {:db db
       ::action.effects/update-keydown-rules
       (action.handlers/actions-with-shortcuts db)})))
