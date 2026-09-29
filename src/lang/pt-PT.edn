@@ -46,6 +46,7 @@
   :add "Adicionar"
   :reset-shortcuts "Repor predefinições"
   :search-command "Procurar comando"
+  :shortcut-in-use [:div "Este atalho já está em uso por %1."]
   :no-results "Nenhum resultado encontrado."
   :version "Versão: "
   :browser "Navegador: "

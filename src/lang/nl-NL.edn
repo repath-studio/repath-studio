@@ -46,6 +46,7 @@
   :add "Toevoegen"
   :reset-shortcuts "Standaardinstellingen herstellen"
   :search-command "Zoek naar een commando"
+  :shortcut-in-use [:div "Deze sneltoets wordt al gebruikt door %1."]
   :no-results "Geen resultaten gevonden."
   :version "Versie: "
   :browser "Browser: "

@@ -47,6 +47,7 @@
   :add "Hinzufügen"
   :reset-shortcuts "Auf Standard zurücksetzen"
   :search-command "Nach einem Befehl suchen"
+  :shortcut-in-use [:div "Dieses Tastenkürzel wird bereits von %1 verwendet."]
   :no-results "Keine Ergebnisse gefunden."
   :version "Version: "
   :browser "Browser: "

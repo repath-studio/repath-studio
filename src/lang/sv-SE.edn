@@ -46,6 +46,7 @@
   :add "Lägg till"
   :reset-shortcuts "Återställ till standard"
   :search-command "Sök efter ett kommando"
+  :shortcut-in-use [:div "Denna genväg används redan av %1."]
   :no-results "Inga resultat hittades."
   :version "Version: "
   :browser "Webbläsare: "

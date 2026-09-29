@@ -44,6 +44,7 @@
   :customize-shortcuts-for [:div "Customize shortcuts for %1"]
   :press-keys "Press a key combination"
   :add "Add"
+  :shortcut-in-use [:div "This shortcut is already in use by %1."]
   :reset-shortcuts "Reset to defaults"
   :search-command "Search for a command"
   :no-results "No results found."

@@ -47,6 +47,7 @@
   :add "Ajouter"
   :reset-shortcuts "Réinitialiser les valeurs par défaut"
   :search-command "Rechercher une commande"
+  :shortcut-in-use [:div "Ce raccourci est déjà utilisé par %1."]
   :no-results "Aucun résultat trouvé."
   :version "Version : "
   :browser "Navigateur : "

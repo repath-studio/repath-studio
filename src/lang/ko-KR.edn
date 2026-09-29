@@ -46,6 +46,7 @@
   :add "추가"
   :reset-shortcuts "기본값으로 재설정"
   :search-command "명령 검색"
+  :shortcut-in-use [:div "이 단축키는 이미 %1에서 사용되고 있습니다."]
   :no-results "검색 결과가 없습니다."
   :version "버전: "
   :browser "브라우저: "

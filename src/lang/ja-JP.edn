@@ -47,6 +47,7 @@
   :add "追加"
   :reset-shortcuts "デフォルトにリセット"
   :search-command "コマンドを検索"
+  :shortcut-in-use [:div "このショートカットは %1 で既に使用されています。"]
   :no-results "結果が見つかりません。"
   :version "バージョン: "
   :browser "ブラウザ: "

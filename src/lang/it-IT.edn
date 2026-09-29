@@ -46,6 +46,7 @@
   :add "Aggiungi"
   :reset-shortcuts "Ripristina impostazioni predefinite"
   :search-command "Cerca un comando"
+  :shortcut-in-use [:div "Questa scorciatoia è già in uso da parte di %1."]
   :no-results "Nessun risultato trovato."
   :version "Versione: "
   :browser "Browser: "

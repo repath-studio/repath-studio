@@ -44,6 +44,7 @@
   :add "添加"
   :reset-shortcuts "恢复默认设置"
   :search-command "搜索命令"
+  :shortcut-in-use [:div "此快捷键已被 %1 使用。"]
   :no-results "未找到结果。"
   :version "版本："
   :browser "浏览器："

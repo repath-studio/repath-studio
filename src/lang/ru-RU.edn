@@ -46,6 +46,7 @@
   :add "Добавить"
   :reset-shortcuts "Сбросить до стандартных"
   :search-command "Поиск команды"
+  :shortcut-in-use [:div "Эта горячая клавиша уже используется в %1."]
   :no-results "Результаты не найдены."
   :version "Версия: "
   :browser "Браузер: "
