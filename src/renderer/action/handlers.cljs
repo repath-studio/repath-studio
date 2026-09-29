@@ -39,7 +39,8 @@
 (m/=> remove-shortcut [:-> App ActionId Shortcut App])
 (defn remove-shortcut
   [db id shortcut]
-  (assoc-in db [:key-bindings id] (disj (effective-shortcuts db id) shortcut)))
+  (assoc-in db [:key-bindings id] (disj (effective-shortcuts db id)
+                                        (dissoc shortcut :default))))
 
 (m/=> reset-shortcuts [:-> App ActionId App])
 (defn reset-shortcuts
