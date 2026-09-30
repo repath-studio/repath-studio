@@ -212,11 +212,12 @@
                        (every? #(> (matrix/distance point %) 1e-3)
                                [(:start edge) (:end edge)]))
         index (inc (:index edge))
-        pts (utils.attribute/points->vec (get-in el [:attrs :points]))
-        fixed-pts (mapv utils.attribute/->fixed point)
-        new-pts (string/join " "
-                             (flatten (utils.vec/add pts index fixed-pts)))]
+        points (utils.attribute/points->vec (get-in el [:attrs :points]))
+        new-points (->> (mapv utils.attribute/->fixed point)
+                        (utils.vec/add points index)
+                        (flatten)
+                        (string/join " "))]
     (if inserted?
-      [(assoc-in el [:attrs :points] new-pts)
+      [(assoc-in el [:attrs :points] new-points)
        (keyword (str index))]
       [el nil])))

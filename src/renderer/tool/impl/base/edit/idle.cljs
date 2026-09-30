@@ -63,12 +63,17 @@
            (contains? (element.handlers/selected-ids db) id)
            (insertion-candidate db element (:adjusted-pointer-pos db)))
       (let [pos (:adjusted-pointer-pos db)
-            [new-el handle-id] (element.hierarchy/insert-point element pos)
-            db (dissoc db :clicked-element :insertion-point)
-            db (element.handlers/update-el db id (constantly new-el))
-            db (cond-> db handle-id
-                       (element.handlers/select-handle handle-id id))]
-        (history.handlers/finalize db (:timestamp e) [::edit/label "Edit"]))
+            [new-el handle-id] (element.hierarchy/insert-point element pos)]
+        (cond-> db
+          :always
+          (-> (dissoc :clicked-element :insertion-point)
+              (element.handlers/update-el id (constantly new-el)))
+
+          handle-id
+          (element.handlers/select-handle handle-id id)
+
+          :always
+          (history.handlers/finalize (:timestamp e) [::edit/label "Edit"])))
 
       :else
       db)))
