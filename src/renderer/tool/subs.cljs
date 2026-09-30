@@ -63,3 +63,7 @@
  :<- [::active]
  :<- [::state]
  :-> (partial apply tool.handlers/help))
+
+(rf/reg-sub
+ ::insertion-point
+ :-> :insertion-point)

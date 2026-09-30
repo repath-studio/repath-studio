@@ -1,6 +1,6 @@
 (ns renderer.utils.path
   (:require
-   ["paper" :refer [Path]]
+   ["paper" :refer [Point Path]]
    ["svgpath" :as svgpath]
    [clojure.string :as string]
    [malli.core :as m]
@@ -10,7 +10,8 @@
                         PathCommand
                         PathManipulation
                         PathPointType
-                        Vec2]]))
+                        Vec2
+                        JS_Object]]))
 
 (m/=> get-d [:-> any? string?])
 (defn get-d
@@ -226,3 +227,26 @@
              :subtract (.subtract path-a path-b)
              :exclude (.exclude path-a path-b)
              :divide (.divide path-a path-b)))))
+
+(m/=> nearest-location [:-> JS_Object Vec2 [:maybe any?]])
+(defn nearest-location
+  [path [x y]]
+  (.getNearestLocation path (Point. x y)))
+
+(m/=> closest-point [:-> string? Vec2 [:maybe Vec2]])
+(defn closest-point
+  [d position]
+  (let [path (Path. d)
+        loc (nearest-location path position)]
+    (when loc
+      (let [point (.getPoint loc)]
+        [(.-x point) (.-y point)]))))
+
+(m/=> insert-point [:-> string? Vec2 [:maybe [:tuple string? int?]]])
+(defn insert-point
+  [d position]
+  (let [path (Path. d)]
+    (when-let [loc (nearest-location path position)]
+      (when (.divide loc)
+        [(get-d path)
+         (.getIndex (.getSegment loc))]))))

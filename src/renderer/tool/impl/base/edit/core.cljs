@@ -26,13 +26,16 @@
 
 (defmethod tool.hierarchy/on-deactivate ::edit
   [db]
-  (element.handlers/clear-selected-handles db))
+  (-> db
+      (element.handlers/clear-selected-handles)
+      (dissoc :insertion-point)))
 
 (defmethod tool.hierarchy/render ::edit
   []
   (let [selected-elements @(rf/subscribe [::element.subs/selected])
-        select-box @(rf/subscribe [::tool.subs/select-box])]
-    (when (seq selected-elements)
+        select-box @(rf/subscribe [::tool.subs/select-box])
+        insertion-point @(rf/subscribe [::tool.subs/insertion-point])]
+    (when (or (seq selected-elements) insertion-point)
       (->> selected-elements
            (map (fn [el]
                   [:g
@@ -43,7 +46,10 @@
                    (when-let [centroid (element.hierarchy/centroid el)]
                      [utils.svg/dot centroid
                       [:title (i18n.views/t [::centroid "Centroid"])]])]))
-           (into [:g [element.hierarchy/render select-box]])))))
+           (into [:g [element.hierarchy/render select-box]
+                  (when insertion-point
+                    [:g {:pointer-events "none"}
+                     [utils.svg/dot insertion-point]])])))))
 
 (rf/dispatch [::action.events/register-action
               {:id :tool/edit

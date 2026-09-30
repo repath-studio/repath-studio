@@ -119,6 +119,7 @@
    [:anchor-offset {:default [0.5 0.5]} Vec2]
    [:select-box {:optional true} [:maybe Element]]
    [:clicked-element {:optional true} [:or Element Handle]]
+   [:insertion-point {:optional true} Vec2]
    [:clipboard {:default {}} [:map {:closed true}
                               [:bbox {:optional true} BBox]
                               [:elements {:optional true} [:* Element]]]]
