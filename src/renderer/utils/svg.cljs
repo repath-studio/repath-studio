@@ -15,9 +15,11 @@
   (let [zoom @(rf/subscribe [::document.subs/zoom])]
     (into [:circle {:cx x
                     :cy y
-                    :stroke-width 0
+                    :stroke-width (/ 1 zoom)
                     :fill "var(--accent)"
-                    :r (/ 3 zoom)}] children)))
+                    :stroke "var(--accent-foreground)"
+                    :stroke-opacity ".5"
+                    :r (/ 4 zoom)}] children)))
 
 (m/=> line [:-> Vec2 Vec2 [:* any?] any?])
 (defn line
