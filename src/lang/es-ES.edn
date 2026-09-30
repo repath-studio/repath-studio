@@ -611,7 +611,8 @@
 
  :renderer.tool.impl.base.edit.idle
  {:help-idle [:div "Arrastre un asa para modificar su forma.
-                    Haga clic en un elemento para cambiar la selección."]}
+                    Haga clic en un elemento para cambiar la selección.
+                    Haga doble clic cerca de un trazado para añadir un punto."]}
 
  :renderer.tool.impl.base.edit.select
  {:select-handles "Seleccionar controladores"}

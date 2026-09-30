@@ -202,6 +202,24 @@
                           (cycle-segment index)
                           (utils.path/segments->string))))))
 
+(defmethod element.hierarchy/closest-point :path
+  [el pos]
+  (let [offset (utils.element/offset el)]
+    (some-> (get-in el [:attrs :d])
+            (utils.path/closest-point (matrix/sub pos offset))
+            (matrix/add offset))))
+
+(defmethod element.hierarchy/insert-point :path
+  [el pos]
+  (let [offset (utils.element/offset el)
+        inserted (some-> (get-in el [:attrs :d])
+                         (utils.path/insert-point (matrix/sub pos offset)))]
+    (if inserted
+      (let [[d seg-idx] inserted]
+        [(assoc-in el [:attrs :d] d)
+         (keyword (str seg-idx) :end-point)])
+      [el nil])))
+
 (defn segment-props
   [el segments]
   (let [endpoints (utils.path/acc-endpoints segments)

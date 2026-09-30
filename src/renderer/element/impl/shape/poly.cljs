@@ -9,7 +9,8 @@
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
-   [renderer.utils.vec]))
+   [renderer.utils.math :as utils.math]
+   [renderer.utils.vec :as utils.vec]))
 
 (hierarchy/derive! ::element.hierarchy/poly ::element.hierarchy/shape)
 
@@ -155,3 +156,68 @@
     (-> el
         (assoc :selected-handles #{})
         (assoc-in [:attrs :points] updated-points))))
+
+(defn edge-endpoints
+  [el vertices]
+  (let [n (count vertices)
+        closed? (= :polygon (:tag el))
+        end-idx (if closed?
+                  (fn [i] (mod (inc i) n))
+                  (fn [i] (inc i)))]
+    (map (fn [i] [i (vertices i) (vertices (end-idx i))])
+         (range (if closed? n (dec n))))))
+
+(defn closest-point-on-segment
+  [point start end]
+  (let [direction (matrix/sub end start)
+        squared-length (matrix/dot direction direction)
+        fraction (if (zero? squared-length)
+                   0
+                   (-> (matrix/sub point start)
+                       (matrix/dot direction)
+                       (/ squared-length)
+                       (utils.math/clamp 0 1)))
+        projection (matrix/add start (matrix/mul fraction direction))]
+    {:position projection
+     :distance (matrix/distance point projection)}))
+
+(defn closest-edge
+  [el pos]
+  (reduce (fn [best [i start end]]
+            (let [edge (assoc (closest-point-on-segment pos start end)
+                              :index i
+                              :start start
+                              :end end)]
+              (if (and best (< (:distance best) (:distance edge)))
+                best
+                edge)))
+          nil
+          (edge-endpoints el (->vertices el))))
+
+(defmethod element.hierarchy/closest-point ::element.hierarchy/poly
+  [el position]
+  (let [offset (utils.element/offset el)
+        pos (matrix/sub position offset)]
+    (some-> (closest-edge el pos)
+            :position
+            (matrix/add offset))))
+
+(defmethod element.hierarchy/insert-point ::element.hierarchy/poly
+  [el position]
+  (let [offset (utils.element/offset el)
+        pos (matrix/sub position offset)
+        edge (closest-edge el pos)
+        point (:position edge)
+        inserted? (and point
+                       (every? #(> (matrix/distance point %) 1e-3)
+                               [(:start edge) (:end edge)]))
+        index (inc (:index edge))
+        points (utils.attribute/points->vec (get-in el [:attrs :points]))
+        new-points (->> (mapv utils.attribute/->fixed point)
+                        (utils.vec/add points index)
+                        (flatten)
+                        (string/join " "))]
+    (if inserted?
+      [(assoc-in el [:attrs :points] new-points)
+       (keyword (str index))]
+      [el nil])))

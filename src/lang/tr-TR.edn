@@ -601,7 +601,8 @@
 
  :renderer.tool.impl.base.edit.idle
  {:help-idle [:div "Şeklinizi değiştirmek için bir tutamacı sürükleyin.
-                    Seçimi değiştirmek için bir öğeye tıklayın."]}
+                    Seçimi değiştirmek için bir öğeye tıklayın.
+                    Bir yolun yakınına çift tıklayarak bir nokta ekleyin."]}
 
  :renderer.tool.impl.base.edit.select
  {:select-handles "Tutamaçları seç"}
