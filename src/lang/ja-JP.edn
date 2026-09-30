@@ -567,7 +567,9 @@
   :label "編集"}
 
  :renderer.tool.impl.base.edit.idle
- {:help-idle [:div "ハンドルをドラッグして形状を変更。要素をクリックして選択を変更。"]}
+ {:help-idle [:div "ハンドルをドラッグして形状を変更。
+                    要素をクリックして選択を変更。
+                    パスの近くをダブルクリックすると、点を追加できます。"]}
 
  :renderer.tool.impl.base.edit.select
  {:select-handles "ハンドルを選択"}

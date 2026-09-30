@@ -486,8 +486,8 @@
  {:click-to-start "Cliquez pour ajouter le premier point."
   :help-create "Cliquez pour ajouter un segment, ou cliquez et faites glisser
                 pour ajouter une courbe. Double-cliquez ou clic droit pour
-                finaliser le chemin."
-  :create-path "Créer un chemin"
+                finaliser le tracé."
+  :create-path "Créer un tracé"
   :label "Tracé"}
 
  :renderer.tool.impl.element.polyline
@@ -532,8 +532,8 @@
   :learn-more "En savoir plus sur %1"}
 
  :renderer.attribute.impl.d
- {:description "L'attribut d définit un chemin à dessiner."
-  :edit "Éditer le chemin"
+ {:description "L'attribut d définit un tracé à dessiner."
+  :edit "Éditer le tracé"
   :absolute "Absolu"
   :relative "Relatif"
   :move-to "Déplacer vers"
@@ -545,7 +545,7 @@
   :quadratic-bezier-curve "Courbe de Bézier quadratique"
   :shortcut-quadratic "Raccourci Bézier quadratique"
   :elliptical-arc-curve "Courbe d'arc elliptique"
-  :close-path "Fermer le chemin"
+  :close-path "Fermer le tracé"
   :remove-segment "Supprimer le segment"
   :add-segment "Ajouter un segment"
   :convert-segment "Convertir le segment"
@@ -617,7 +617,8 @@
 
  :renderer.tool.impl.base.edit.idle
  {:help-idle [:div "Faites glisser une poignée pour modifier votre forme.
-                    Cliquez sur un élément pour changer la sélection."]}
+                    Cliquez sur un élément pour changer la sélection.
+                    Double-cliquez près d'un tracé pour ajouter un point."]}
 
  :renderer.tool.impl.base.edit.select
  {:select-handles "Sélectionner les poignées"}

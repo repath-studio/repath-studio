@@ -623,7 +623,8 @@
 
  :renderer.tool.impl.base.edit.idle
  {:help-idle [:div "Sleep een handvat om uw vorm te wijzigen.
-                    Klik op een element om selectie te wijzigen."]}
+                    Klik op een element om selectie te wijzigen.
+                    Dubbelklik nabij een pad om een punt toe te voegen."]}
 
  :renderer.tool.impl.base.edit.select
  {:select-handles "Selecteer handvatten"}

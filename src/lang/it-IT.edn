@@ -435,8 +435,8 @@
  {:click-to-start "Clicca per aggiungere il primo punto."
   :help-create "Clicca per aggiungere un segmento, o clicca e trascina per
                 aggiungere una curva. Doppio clic o clic destro per finalizzare
-                il percorso."
-  :create-path "Crea percorso"
+                il tracciato."
+  :create-path "Crea tracciato"
   :label "Tracciato"}
 
  :renderer.tool.impl.element.polyline
@@ -621,7 +621,8 @@
 
  :renderer.tool.impl.base.edit.idle
  {:help-idle [:div "Trascina una maniglia per modificare la tua forma.
-                    Clicca su un elemento per cambiare selezione."]}
+                    Clicca su un elemento per cambiare selezione.
+                    Fai doppio clic su un tracciato per aggiungere un punto."]}
 
  :renderer.tool.impl.base.edit.select
  {:select-handles "Seleziona maniglie"}

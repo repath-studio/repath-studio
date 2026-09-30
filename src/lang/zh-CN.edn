@@ -524,7 +524,7 @@
   :label "编辑"}
 
  :renderer.tool.impl.base.edit.idle
- {:help-idle [:div "拖动控制柄修改您的形状。点击元素更改选择。"]}
+ {:help-idle [:div "拖动控制柄修改您的形状。点击元素更改选择。在路径附近双击以添加一个点。"]}
 
  :renderer.tool.impl.base.edit.select
  {:select-handles "选择控制点"}

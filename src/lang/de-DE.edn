@@ -625,7 +625,8 @@
 
  :renderer.tool.impl.base.edit.idle
  {:help-idle [:div "Ziehen Sie einen Griff, um Ihre Form zu ändern.
-                    Klicken Sie auf ein Element, um die Auswahl zu ändern."]}
+                    Klicken Sie auf ein Element, um die Auswahl zu ändern.
+                    Doppelklicken Sie auf den Pfad, um Punkte einzufügen."]}
 
  :renderer.tool.impl.base.edit.select
  {:select-handles "Anfasser auswählen"}

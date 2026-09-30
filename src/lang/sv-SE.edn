@@ -609,7 +609,8 @@
 
  :renderer.tool.impl.base.edit.idle
  {:help-idle [:div "Dra ett handtag för att ändra din form.
-                    Klicka på ett element för att ändra markering."]}
+                    Klicka på ett element för att ändra markering.
+                    Dubbklicka nära en kurva för att lägga till en punkt."]}
 
  :renderer.tool.impl.base.edit.select
  {:select-handles "Välj handtag"}

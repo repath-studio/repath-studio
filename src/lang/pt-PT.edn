@@ -606,7 +606,8 @@
 
  :renderer.tool.impl.base.edit.idle
  {:help-idle [:div "Arraste uma pega para modificar a sua forma.
-                    Clique num elemento para alterar a seleção."]}
+                    Clique num elemento para alterar a seleção.
+                    Clique duplo perto de um traçado para adicionar um ponto."]}
 
  :renderer.tool.impl.base.edit.select
  {:select-handles "Selecionar alças"}
