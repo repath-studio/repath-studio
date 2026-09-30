@@ -15,7 +15,8 @@
    [renderer.document.events :as-alias document.events]
    [renderer.i18n.views :as i18n.views]
    [renderer.utils.key :as utils.key]
-   [renderer.views :as views]))
+   [renderer.views :as views]
+   [renderer.window.subs :as-alias window.subs]))
 
 (defn button
   [props & children]
@@ -142,6 +143,7 @@
                      hide-shortcutless? (reagent/atom false)]
     (let [action-groups @(rf/subscribe [::action.subs/action-groups])
           groupless-actions @(rf/subscribe [::action.subs/groupless-actions])
+          lg? @(rf/subscribe [::window.subs/lg?])
           action-groups (cond-> action-groups
                           (seq groupless-actions)
                           (assoc :other-actions
@@ -161,11 +163,12 @@
          {:id "hide-disabled"
           :default-checked @hide-disabled?
           :on-checked-change #(reset! hide-disabled? %)}]
-        [views/switch
-         (i18n.views/t [::hide-shortcutless "Hide shortcutless"])
-         {:id "hide-shortcutless"
-          :default-checked @hide-shortcutless?
-          :on-checked-change #(reset! hide-shortcutless? %)}]]
+        (when lg?
+          [views/switch
+           (i18n.views/t [::hide-shortcutless "Hide shortcutless"])
+           {:id "hide-shortcutless"
+            :default-checked @hide-shortcutless?
+            :on-checked-change #(reset! hide-shortcutless? %)}])]
        [views/scroll-area
         (->> (vals action-groups)
              (keep #(cmdk-group % @hide-disabled? @hide-shortcutless?))
