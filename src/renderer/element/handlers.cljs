@@ -14,6 +14,7 @@
     :as element.db
     :refer [ElementAttrs Element ElementId ElementTag AnimationTag Direction]]
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.snap.db :refer [SnapOptions]]
    [renderer.tool.db :refer [Handle HandleId]]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.bounds :as utils.bounds]
@@ -1123,14 +1124,44 @@
     (-> (add db svg)
         (collapse-all))))
 
+(m/=> add-to-cache [:-> SnapOptions map? Element map?])
+(defn add-to-cache
+  [options cache el]
+  (let [[cached-points cached-el cached-options] (get cache (:id el))]
+    (if (and cached-points
+             (= cached-el el)
+             (= cached-options options))
+      cache
+      (assoc cache (:id el) [(utils.element/acc-snapping-points el options)
+                             el options]))))
+
+(m/=> update-snapping-points-cache [:->
+                                    App [:maybe [:sequential Element]]
+                                    App])
+(defn update-snapping-points-cache
+  [db els]
+  (let [options (-> db :snap :options)]
+    (assoc db :snapping-points-cache
+           (reduce (partial add-to-cache options)
+                   (or (:snapping-points-cache db) {})
+                   els))))
+
 (m/=> snapping-points [:-> App [:maybe [:sequential Element]] [:vector Vec2]])
 (defn snapping-points
   [db els]
   (if (-> db :snap :active)
-    (let [options (-> db :snap :options)]
+    (let [options (-> db :snap :options)
+          cache (:snapping-points-cache db)]
       (into []
-            (mapcat #(utils.element/acc-snapping-points-memo % options))
-            els))
+            (mapcat (fn [el]
+                      (let [[cached-points cached-el cached-options]
+                            (get cache (:id el))]
+                        (if (and cached-points
+                                 (= cached-el el)
+                                 (= cached-options options))
+                          cached-points
+                          (utils.element/acc-snapping-points el options))))
+                    els)))
     []))
 
 (m/=> handles [:function

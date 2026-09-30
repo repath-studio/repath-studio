@@ -124,6 +124,7 @@
                               [:elements {:optional true} [:* Element]]]]
    [:kdtree {:optional true} [:maybe map?]]
    [:viewbox-kdtree {:optional true} [:maybe map?]]
+   [:snapping-points-cache {:optional true} map?]
    [:actions {:default {}} ActionRegistry]
    [:action-groups {:default {}} ActionGroupRegistry]
    [:key-bindings {:default {}

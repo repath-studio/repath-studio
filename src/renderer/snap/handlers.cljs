@@ -62,13 +62,16 @@
   [db]
   (if (active? db)
     (let [elements (tool.hierarchy/snapping-elements db)
+          db (element.handlers/update-snapping-points-cache
+              (assoc db :snapping-points-cache {})
+              elements)
           points (element.handlers/snapping-points db elements)
           points (cond-> points
                    (contains? (-> db :snap :options) :grid)
                    (into (ruler.handlers/steps-intersections db)))]
       (-> (assoc db :kdtree (kdtree/build-tree points))
           (update-viewport-tree)))
-    (dissoc db :kdtree :viewbox-kdtree)))
+    (dissoc db :kdtree :viewbox-kdtree :snapping-points-cache)))
 
 (m/=> update-tree [:-> App ifn? [:vector Vec2] App])
 (defn update-tree
