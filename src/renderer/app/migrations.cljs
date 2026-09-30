@@ -4,5 +4,7 @@
 
 (def migrations
   [[[0 4 23] (fn [app]
-               (update app :panels
-                       set/rename-keys {:repl-history :shell-output}))]])
+               (-> app
+                   (update :snap dissoc :transient-active)
+                   (update :panels set/rename-keys
+                           {:repl-history :shell-output})))]])
