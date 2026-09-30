@@ -141,8 +141,9 @@
                                  shortcut])]
     (into [:div.flex.gap-1.items-center
            {:dir "ltr"
-            :class (when-not default? "text-foreground-hovered font-bold")}]
-          (comp (map kbd)
+            :class (when-not default? "text-foreground-hovered")}]
+          (comp (map #(kbd % {:class (when-not default?
+                                       "text-foreground-hovered")}))
                 (interpose [:span "+"]))
           (cond-> []
             (:ctrlKey shortcut)
