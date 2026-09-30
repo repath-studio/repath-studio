@@ -228,25 +228,16 @@
              :exclude (.exclude path-a path-b)
              :divide (.divide path-a path-b)))))
 
-(m/=> nearest-location [:-> JS_Object Vec2 [:maybe any?]])
-(defn nearest-location
-  [path [x y]]
-  (.getNearestLocation path (Point. x y)))
-
 (m/=> closest-point [:-> string? Vec2 [:maybe Vec2]])
 (defn closest-point
-  [d position]
-  (let [path (Path. d)
-        loc (nearest-location path position)]
-    (when loc
-      (let [point (.getPoint loc)]
-        [(.-x point) (.-y point)]))))
+  [d [x y]]
+  (when-let [point (.getNearestPoint (Path. d) (Point. x y))]
+    [(.-x point) (.-y point)]))
 
 (m/=> insert-point [:-> string? Vec2 [:maybe [:tuple string? int?]]])
 (defn insert-point
-  [d position]
+  [d [x y]]
   (let [path (Path. d)]
-    (when-let [loc (nearest-location path position)]
+    (when-let [loc (.getNearestLocation path (Point. x y))]
       (when (.divide loc)
-        [(get-d path)
-         (.getIndex (.getSegment loc))]))))
+        [(get-d path) (.getIndex (.getSegment loc))]))))
