@@ -11,7 +11,7 @@
  (fn [db [_ title]]
    (dialog.handlers/create db {:title [:div.sr-only (i18n.handlers/t db title)]
                                :content [dialog.views/cmdk]
-                               :attrs {:class ["top-5 md:top-10 translate-y-0"
+                               :attrs {:class ["top-5 md:top-20 translate-y-0"
                                                "p-0 w-150"]}})))
 
 (rf/reg-event-db

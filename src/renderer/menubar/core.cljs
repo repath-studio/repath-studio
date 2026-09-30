@@ -13,40 +13,40 @@
                :label [::menubar-file "File menu"]
                :event [::menubar.events/activate :file]
                :available [::window.subs/md?]
-               :shortcuts [{:keyCode (utils.key/codes "F")
-                            :altKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "F")
+                                   :altKey true}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :menubar/activate-edit
                :label [::menubar-edit "Edit menu"]
                :event [::menubar.events/activate :edit]
                :available [::window.subs/md?]
-               :shortcuts [{:keyCode (utils.key/codes "E")
-                            :altKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "E")
+                                   :altKey true}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :menubar/activate-object
                :label [::menubar-object "Object menu"]
                :event [::menubar.events/activate :object]
                :available [::window.subs/md?]
-               :shortcuts [{:keyCode (utils.key/codes "O")
-                            :altKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "O")
+                                   :altKey true}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :menubar/activate-view
                :label [::menubar-view "View menu"]
                :event [::menubar.events/activate :view]
                :available [::window.subs/md?]
-               :shortcuts [{:keyCode (utils.key/codes "V")
-                            :altKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "V")
+                                   :altKey true}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :menubar/activate-help
                :label [::menubar-help "Help menu"]
                :event [::menubar.events/activate :help]
                :available [::window.subs/md?]
-               :shortcuts [{:keyCode (utils.key/codes "H")
-                            :altKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "H")
+                                   :altKey true}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :help/website

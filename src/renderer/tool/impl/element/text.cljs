@@ -46,4 +46,4 @@
                :icon "text"
                :event [::tool.events/activate ::text]
                :active [::tool.subs/active? ::text]
-               :shortcuts [{:keyCode (utils.key/codes "T")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "T")}]}}])

@@ -45,10 +45,13 @@
   :add "إضافة"
   :reset-shortcuts "إعادة الضبط إلى الافتراضي"
   :search-command "البحث عن أمر"
+  :shortcut-in-use [:div "هذا الاختصار قيد الاستخدام من قبل %1."]
   :no-results "لا توجد نتائج."
   :version "الإصدار: "
   :browser "المتصفح: "
+  :hide-shortcutless "إخفاء بدون اختصار"
   :save "حفظ"
+  :hide-disabled "إخفاء المعطَّل"
   :dont-save "عدم الحفظ"
   :cancel "إلغاء"
   :ok "موافق"

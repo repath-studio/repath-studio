@@ -47,10 +47,13 @@
   :add "Ajouter"
   :reset-shortcuts "Réinitialiser les valeurs par défaut"
   :search-command "Rechercher une commande"
+  :shortcut-in-use [:div "Ce raccourci est déjà utilisé par %1."]
   :no-results "Aucun résultat trouvé."
   :version "Version : "
   :browser "Navigateur : "
+  :hide-shortcutless "Masquer sans raccourci"
   :save "Enregistrer"
+  :hide-disabled "Masquer les désactivés"
   :dont-save "Ne pas enregistrer"
   :cancel "Annuler"
   :ok "OK"

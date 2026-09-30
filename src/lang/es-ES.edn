@@ -46,10 +46,13 @@
   :add "Añadir"
   :reset-shortcuts "Restablecer valores predeterminados"
   :search-command "Buscar un comando"
+  :shortcut-in-use [:div "Este atajo ya está en uso por %1."]
   :no-results "No se encontraron resultados."
   :version "Versión: "
   :browser "Navegador: "
+  :hide-shortcutless "Ocultar sin atajo"
   :save "Guardar"
+  :hide-disabled "Ocultar desactivados"
   :dont-save "No guardar"
   :cancel "Cancelar"
   :ok "Aceptar"

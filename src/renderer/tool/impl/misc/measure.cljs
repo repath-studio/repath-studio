@@ -157,4 +157,4 @@
                :icon "ruler-triangle"
                :event [::tool.events/activate ::measure]
                :active [::tool.subs/active? ::measure]
-               :shortcuts [{:keyCode (utils.key/codes "M")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "M")}]}}])

@@ -46,10 +46,13 @@
   :add "Ekle"
   :reset-shortcuts "Varsayılanlara sıfırla"
   :search-command "Komut ara"
+  :shortcut-in-use [:div "Bu kısayol zaten %1 tarafından kullanılıyor."]
   :no-results "Sonuç bulunamadı."
   :version "Sürüm: "
   :browser "Tarayıcı: "
+  :hide-shortcutless "Kısayolsuzları gizle"
   :save "Kaydet"
+  :hide-disabled "Devre dışı bırakılanları gizle"
   :dont-save "Kaydetme"
   :cancel "İptal"
   :ok "Tamam"

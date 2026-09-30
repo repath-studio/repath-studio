@@ -102,4 +102,4 @@
                :icon "svg"
                :event [::tool.events/activate ::svg]
                :active [::tool.subs/active? ::svg]
-               :shortcuts [{:keyCode (utils.key/codes "S")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "S")}]}}])

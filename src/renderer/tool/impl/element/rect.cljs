@@ -104,4 +104,4 @@
                :icon "rectangle-tool"
                :event [::tool.events/activate ::rect]
                :active [::tool.subs/active? ::rect]
-               :shortcuts [{:keyCode (utils.key/codes "R")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "R")}]}}])

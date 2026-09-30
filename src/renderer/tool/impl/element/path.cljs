@@ -172,4 +172,4 @@
                :icon "bezier-curve"
                :event [::tool.events/activate ::path]
                :active [::tool.subs/active? ::path]
-               :shortcuts [{:keyCode (utils.key/codes "P")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "P")}]}}])

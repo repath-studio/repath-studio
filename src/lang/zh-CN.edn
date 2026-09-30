@@ -44,10 +44,13 @@
   :add "添加"
   :reset-shortcuts "恢复默认设置"
   :search-command "搜索命令"
+  :shortcut-in-use [:div "此快捷键已被 %1 使用。"]
   :no-results "未找到结果。"
   :version "版本："
   :browser "浏览器："
+  :hide-shortcutless "隐藏无快捷键的命令"
   :save "保存"
+  :hide-disabled "隐藏禁用的命令"
   :dont-save "不保存"
   :cancel "取消"
   :ok "确定"

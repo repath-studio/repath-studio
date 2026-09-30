@@ -47,10 +47,13 @@
   :add "追加"
   :reset-shortcuts "デフォルトにリセット"
   :search-command "コマンドを検索"
+  :shortcut-in-use [:div "このショートカットは %1 で既に使用されています。"]
   :no-results "結果が見つかりません。"
   :version "バージョン: "
   :browser "ブラウザ: "
+  :hide-shortcutless "ショートカットなしを非表示"
   :save "保存"
+  :hide-disabled "無効を非表示"
   :dont-save "保存しない"
   :cancel "キャンセル"
   :ok "OK"

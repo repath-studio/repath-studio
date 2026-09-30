@@ -56,13 +56,16 @@
  ::initialize
  [(rf/inject-cofx ::app.effects/user-agent)
   (rf/inject-cofx ::app.effects/platform)
+  (rf/inject-cofx ::app.effects/web-platform)
   (rf/inject-cofx ::app.effects/versions)
   (rf/inject-cofx ::app.effects/standalone)
   (rf/inject-cofx ::app.effects/features)
   (rf/inject-cofx ::i18n.effects/language)]
- (fn [{:keys [user-agent platform versions standalone features language]} _]
+ (fn [{:keys [user-agent platform web-platform versions standalone features
+              language]} _]
    {:db (assoc app.db/default
                :platform platform
+               :web-platform web-platform
                :versions versions
                :standalone standalone
                :user-agent user-agent

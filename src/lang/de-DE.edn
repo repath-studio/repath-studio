@@ -47,10 +47,13 @@
   :add "Hinzufügen"
   :reset-shortcuts "Auf Standard zurücksetzen"
   :search-command "Nach einem Befehl suchen"
+  :shortcut-in-use [:div "Dieses Tastenkürzel wird bereits von %1 verwendet."]
   :no-results "Keine Ergebnisse gefunden."
   :version "Version: "
   :browser "Browser: "
+  :hide-shortcutless "Ohne Tastenkürzel ausblenden"
   :save "Speichern"
+  :hide-disabled "Deaktivierte ausblenden"
   :dont-save "Nicht speichern"
   :cancel "Abbrechen"
   :ok "OK"

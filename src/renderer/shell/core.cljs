@@ -13,7 +13,7 @@
                :label [::focus-shell "Focus shell"]
                :icon "shell"
                :event [::shell.events/focus]
-               :shortcuts [{:keyCode (utils.key/codes "SLASH")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "SLASH")}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :shell/clear-output

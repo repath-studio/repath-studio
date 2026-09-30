@@ -24,7 +24,9 @@
    ["tailwind-merge" :refer [twMerge]]
    ["vaul" :refer [Drawer]]
    [clojure.string :as string]
+   [re-frame.core :as rf]
    [reagent.core :as reagent]
+   [renderer.action.subs :as action.subs]
    [renderer.action.views :as action.views]
    [renderer.i18n.views :as i18n.views]
    [renderer.icon.views :as icon.views]
@@ -53,9 +55,10 @@
      path]))
 
 (defn kbd
-  [k]
-  [:span {:class ["p-1 text-2xs bg-overlay rounded-sm font-bold uppercase"
-                  "text-foreground-muted"]} k])
+  [k & {:as props}]
+  [:span (merge-with-class {:class ["font-bold text-2xs bg-overlay rounded-sm
+                                     p-1 uppercase text-foreground-muted"]}
+                           props) k])
 
 (defn icon-button
   [icon-name props]
@@ -66,14 +69,15 @@
    [icon icon-name]])
 
 (defn tag
-  [content on-remove & {:keys [remove-label]}]
+  [content & {:keys [on-remove remove-label]}]
   [:div.flex.items-center.gap-2.bg-overlay.rounded.py-1
    {:class "px-1.5"}
    content
-   [icon-button "times"
-    {:on-click on-remove
-     :title (or remove-label (i18n.views/t [::remove "Remove"]))
-     :class "button-size-sm text-foreground-muted"}]])
+   (when on-remove
+     [icon-button "times"
+      {:on-click on-remove
+       :title (or remove-label (i18n.views/t [::remove "Remove"]))
+       :class "button-size-sm text-foreground-muted"}])])
 
 (defn action-icon-button
   [action & {:as props}]
@@ -131,36 +135,53 @@
                                                 "Resize panel thumb"])}]])
 
 (defn format-shortcut
-  [shortcut]
-  (into [:div.flex.gap-1.items-center {:dir "ltr"}]
-        (comp (map kbd)
-              (interpose [:span "+"]))
-        (cond-> []
-          (:ctrlKey shortcut)
-          (conj "Ctrl")
+  [action-id shortcut]
+  (let [default? @(rf/subscribe [::action.subs/default-shortcut?
+                                 action-id
+                                 shortcut])]
+    (into [:div.flex.gap-1.items-center
+           {:dir "ltr"
+            :class (when-not default? "text-foreground-hovered")}]
+          (comp (map #(kbd % {:class (when-not default?
+                                       "text-foreground-hovered")}))
+                (interpose [:span "+"]))
+          (cond-> []
+            (:ctrlKey shortcut)
+            (conj "Ctrl")
 
-          (:shiftKey shortcut)
-          (conj "⇧")
+            (:shiftKey shortcut)
+            (conj "⇧")
 
-          (:altKey shortcut)
-          (conj "Alt")
+            (:altKey shortcut)
+            (conj "Alt")
 
-          (:keyCode shortcut)
-          (conj (utils.key/code->key (:keyCode shortcut))))))
+            (:metaKey shortcut)
+            (conj "⌘")
+
+            (:keyCode shortcut)
+            (conj (utils.key/code->key (:keyCode shortcut)))))))
 
 (defn shortcuts
+  [action-id v truncated?]
+  (cond->> v
+    :always
+    (into [] (comp (map (partial format-shortcut action-id))
+                   (interpose [:span])))
+
+    truncated?
+    (conj [:span "…"])
+
+    :always
+    (into [:span {:class ["text-foreground-muted hidden lg:inline-flex"
+                          "flex-wrap items-center gap-2"]}])))
+
+(defn action-shortcuts
   [action & {:keys [limit]}]
   (let [event-shortcuts (:shortcuts action)]
     (when (seq event-shortcuts)
       (let [truncated? (and limit (> (count event-shortcuts) limit))
             shown (cond->> event-shortcuts limit (take limit))]
-        (into [:span.text-foreground-muted.hidden.lg:inline-flex.items-center
-               {:class "gap-1.5"}]
-              (cond-> (into []
-                            (comp (map format-shortcut)
-                                  (interpose [:span]))
-                            shown)
-                truncated? (conj [:span "…"])))))))
+        [shortcuts (:id action) shown truncated?]))))
 
 (defn radio-icon-button
   [icon-name active props]
@@ -206,7 +227,7 @@
               content-props)
        [:div.flex.gap-2.items-center
         [action.views/label action]
-        [shortcuts action]]]]]))
+        [action-shortcuts action]]]]]))
 
 (defn action-button-group
   [action-group & {:as content-props}]
@@ -232,7 +253,7 @@
       {:class "menu-item-indicator"}
       [icon "checkmark"]]
      [:div [action.views/label action]]
-     [shortcuts action]]
+     [action-shortcuts action]]
 
     :else
     [:> ContextMenu/Item
@@ -240,7 +261,7 @@
       :onSelect (action.views/dispatch action)
       :disabled (action.views/disabled? action)}
      [:div [action.views/label action]]
-     [shortcuts action]]))
+     [action-shortcuts action]]))
 
 (defn dropdown-menu-item
   [action & {:as props}]
@@ -264,7 +285,7 @@
       (when (:icon action)
         [icon (:icon action)])
       [action.views/label action]]
-     [shortcuts action]]
+     [action-shortcuts action]]
 
     :else
     [:> DropdownMenu/Item
@@ -276,7 +297,7 @@
       (when (:icon action)
         [icon (:icon action)])
       [action.views/label action]]
-     [shortcuts action]]))
+     [action-shortcuts action]]))
 
 (defn scroll-area
   [& more]

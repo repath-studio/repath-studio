@@ -46,10 +46,13 @@
   :add "Toevoegen"
   :reset-shortcuts "Standaardinstellingen herstellen"
   :search-command "Zoek naar een commando"
+  :shortcut-in-use [:div "Deze sneltoets wordt al gebruikt door %1."]
   :no-results "Geen resultaten gevonden."
   :version "Versie: "
   :browser "Browser: "
+  :hide-shortcutless "Zonder sneltoets verbergen"
   :save "Opslaan"
+  :hide-disabled "Uitgeschakelde verbergen"
   :dont-save "Niet opslaan"
   :cancel "Annuleren"
   :ok "OK"

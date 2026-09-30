@@ -88,4 +88,4 @@
                :icon "line-tool"
                :event [::tool.events/activate ::line]
                :active [::tool.subs/active? ::line]
-               :shortcuts [{:keyCode (utils.key/codes "L")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "L")}]}}])

@@ -46,10 +46,13 @@
   :add "Lägg till"
   :reset-shortcuts "Återställ till standard"
   :search-command "Sök efter ett kommando"
+  :shortcut-in-use [:div "Denna genväg används redan av %1."]
   :no-results "Inga resultat hittades."
   :version "Version: "
   :browser "Webbläsare: "
+  :hide-shortcutless "Dölj utan genväg"
   :save "Spara"
+  :hide-disabled "Dölj inaktiverade"
   :dont-save "Spara inte"
   :cancel "Avbryt"
   :ok "OK"
