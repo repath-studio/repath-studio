@@ -10,8 +10,7 @@
                         PathCommand
                         PathManipulation
                         PathPointType
-                        Vec2
-                        JS_Object]]))
+                        Vec2]]))
 
 (m/=> get-d [:-> any? string?])
 (defn get-d
