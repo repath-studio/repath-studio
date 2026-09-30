@@ -49,6 +49,11 @@
  :-> identity)
 
 (rf/reg-sub
+ ::sm?
+ :<- [::breakpoint? :sm]
+ :-> identity)
+
+(rf/reg-sub
  ::window-controls?
  :<- [::app.subs/desktop?]
  :<- [::fullscreen?]

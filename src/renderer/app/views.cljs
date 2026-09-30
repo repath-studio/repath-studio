@@ -143,12 +143,21 @@
   (let [backdrop @(rf/subscribe [::app.subs/backdrop])
         read-only? @(rf/subscribe [::document.subs/read-only?])
         debug-info? @(rf/subscribe [::app.subs/debug-info])
-        worker-active? @(rf/subscribe [::worker.subs/some-active?])]
+        active-tool @(rf/subscribe [::tool.subs/cached-or-active])
+        worker-active? @(rf/subscribe [::worker.subs/some-active?])
+        sm? @(rf/subscribe [::window.subs/sm?])]
     [:div.grow.flex.relative
      {:data-theme "light"
       :style {:background "var(--secondary)"}}
      [frame.views/root]
      [:div.absolute.inset-0.pointer-events-none.inset-shadow]
+     (when-not sm?
+       (when-let [options (tool.hierarchy/tool-options active-tool)]
+         [views/toolbar
+          {:class ["bg-primary absolute top-2 left-1/2 -translate-x-1/2 p-1"
+                   "rounded-md"]}
+          options]))
+
      (when read-only? [read-only-overlay])
      (when debug-info? [debug-info])
      (when worker-active?
@@ -188,7 +197,7 @@
        (into [:<>])
        (conj more)
        (into [views/toolbar
-              {:class "flex-col px-2 md:px-1 gap-2 md:gap-1"}])))
+              {:class "flex-col px-1 gap-2 md:gap-1"}])))
 
 (defn frame-panel
   []
@@ -219,7 +228,8 @@
       [:div.relative.grow.flex
        [frame]
        (when-not md?
-         [:div.bg-primary.flex.items-center
+         [:div.bg-primary.flex.items-center.absolute.right-2.rounded-md
+          {:class "bottom-2"}
           [action-toolbar
            [:object/index-operations
             :object/horizontal-alignment

@@ -57,7 +57,7 @@
 (defmethod tool.hierarchy/tool-options ::brush
   []
   (let [size (or @(rf/subscribe [::document.subs/attr ::size]) default-size)]
-    [:div.flex.items-center.gap-2
+    [:div.flex.items-center.gap-2.p-1
      [:span
       size]
      [views/slider

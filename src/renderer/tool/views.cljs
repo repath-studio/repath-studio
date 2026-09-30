@@ -246,7 +246,7 @@
                   (keep action.views/deref-action-group)
                   (map dropdown-button)))
        (into [views/toolbar
-              {:class "bg-primary justify-center gap-2 max-md:py-2"}])))
+              {:class "bg-primary justify-center gap-2"}])))
 
 (defn toolbar
   []
