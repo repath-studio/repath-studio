@@ -303,7 +303,7 @@
   [& more]
   (let [children (if (map? (first more)) (rest more) more)]
     [:> ScrollArea/Root
-     {:class "overflow-hidden w-full"}
+     {:class "overflow-hidden w-full h-full"}
      (into [:> ScrollArea/Viewport
             {:ref (:ref (first more))
              :class "w-full h-full [&>div]:block!"}] children)
@@ -500,32 +500,41 @@
 
 (defn drawer
   [props & children]
-  [:> Drawer.Root
-   {:direction "bottom"
-    :modal false}
-   [:> Drawer.Trigger
-    {:class ["button p-1 rounded h-auto flex flex-col flex-1 text-2xs gap-1"
-             "overflow-hidden items-center"]}
-    [icon (:icon props)]
-    [:span.truncate.w-full (i18n.views/t (:label props))]]
-   [:> Drawer.Portal
-    [:> Drawer.Content
-     {:class ["inset-0 fixed z-0 outline-none bg-secondary flex shadow-lg"
-              "flex-col items-center top-auto px-safe pb-safe rounded-t-xl"
-              "h-70 overflow-hidden gap-px"]
-      :style {:margin "0 - env(safe-area-inset-right)
-                       0 - env(safe-area-inset-left)"
-              :box-shadow "0 -10px 15px -3px
-                           var(--tw-shadow-color, rgb(0 0 0 / 0.1)),
-                           0 -4px 6px -4px
-                           var(--tw-shadow-color, rgb(0 0 0 / 0.1))"}}
-     [:div.bg-primary.w-full
-      [:> Drawer.Handle
-       {:class "mx-auto my-3! w-12! h-1.5! rounded-full bg-overlay!"}]]
-     [:> Drawer.Title
-      {:class "sr-only"}
-      (i18n.views/t (:label props))]
-     (into [:div.flex.flex-1.overflow-hidden.w-full] children)]]])
+  (reagent/with-let [snap (reagent/atom "320px")]
+    [:> Drawer.Root
+     {:direction "bottom"
+      :modal false
+      :snapPoints #js ["320px" "640px"]
+      :activeSnapPoint @snap
+      :setActiveSnapPoint #(reset! snap %)}
+     [:> Drawer.Trigger
+      {:class ["button p-1 rounded h-auto flex flex-col flex-1 text-2xs gap-1"
+               "overflow-hidden items-center"]}
+      [icon (:icon props)]
+      [:span.truncate.w-full (i18n.views/t (:label props))]]
+     [:> Drawer.Portal
+      [:> Drawer.Content
+       {:class ["inset-0 fixed z-0 outline-none bg-secondary flex shadow-lg"
+                "flex-col items-center top-auto px-safe pb-safe rounded-t-xl"
+                "h-full overflow-hidden gap-px"]
+        :style {:margin (str "0 - env(safe-area-inset-right) "
+                             "0 - env(safe-area-inset-left)")
+                :box-shadow (str "0 -10px 15px -3px "
+                                 "var(--tw-shadow-color, rgb(0 0 0 / 0.1)), "
+                                 "0 -4px 6px -4px "
+                                 "var(--tw-shadow-color, rgb(0 0 0 / 0.1))")}}
+       [:div.bg-primary.w-full
+        [:> Drawer.Handle
+         {:class "mx-auto my-3! w-12! h-1.5! rounded-full bg-overlay!"}]]
+       [:> Drawer.Title
+        {:class "sr-only"}
+        (i18n.views/t (:label props))]
+       (let [height (str (- (js/parseInt @snap) 31) "px")
+             style {:height height
+                    :transition "height 0.5s cubic-bezier(0.32, 0.72, 0, 1)"}]
+         (into [:div.flex.overflow-hidden.w-full
+                {:style style}]
+               children))]]]))
 
 (defn color-selection-gradient
   [hue]
