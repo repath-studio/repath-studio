@@ -503,15 +503,19 @@
   (reagent/with-let [snap (reagent/atom "320px")]
     [:> Drawer.Root
      {:direction "bottom"
-      :modal false
+      :modal (= @snap "640px")
       :snapPoints #js ["320px" "640px"]
       :activeSnapPoint @snap
+      :handleOnly true
       :setActiveSnapPoint #(reset! snap %)}
      [:> Drawer.Trigger
       {:class ["button p-1 rounded h-auto flex flex-col flex-1 text-2xs gap-1"
                "overflow-hidden items-center"]}
       [icon (:icon props)]
       [:span.truncate.w-full (i18n.views/t (:label props))]]
+     (when (= @snap "640px")
+       [:> Drawer.Overlay
+        {:class "fixed inset-0 bg-backdrop animate-in fade-in"}])
      [:> Drawer.Portal
       [:> Drawer.Content
        {:class ["inset-0 fixed z-0 outline-none bg-secondary flex shadow-lg"
@@ -523,9 +527,11 @@
                                  "var(--tw-shadow-color, rgb(0 0 0 / 0.1)), "
                                  "0 -4px 6px -4px "
                                  "var(--tw-shadow-color, rgb(0 0 0 / 0.1))")}}
-       [:div.bg-primary.w-full
+       [:div
         [:> Drawer.Handle
-         {:class "mx-auto my-3! w-12! h-1.5! rounded-full bg-overlay!"}]]
+         {:class "bg-primary! w-dvh! h-7! flex! items-center m-0! rounded-none!
+                  after:mx-auto after:my-3 after:w-12 after:h-1.5
+                  after:rounded-full after:bg-overlay"}]]
        [:> Drawer.Title
         {:class "sr-only"}
         (i18n.views/t (:label props))]
