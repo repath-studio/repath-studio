@@ -1,6 +1,7 @@
 (ns renderer.snap.handlers
   (:require
    [clojure.core.matrix :as matrix]
+   [config :as config]
    [kdtree :as kdtree]
    [malli.core :as m]
    [renderer.app.db :refer [App]]
@@ -38,8 +39,7 @@
   (if-not (active? db)
     db
     (let [zoom (get-in db [:documents (:active-document db) :zoom])
-          threshold (-> db :snap :threshold)
-          threshold (Math/pow (/ threshold zoom) 2)
+          threshold (Math/pow (/ config/snap-threshold zoom) 2)
           nneighbors (nearest-neighbors db)
           nneighbors (filter #(< (:dist-squared %) threshold) nneighbors)]
       (assoc db

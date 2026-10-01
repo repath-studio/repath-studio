@@ -20,7 +20,7 @@
                  :shape-rendering "optimizeSpeed"
                  :fill "transparent"
                  :stroke "transparent"
-                 :stroke-width handle-size})
+                 :stroke-width (* handle-size 2)})
      content]))
 
 (defn render-to-dom

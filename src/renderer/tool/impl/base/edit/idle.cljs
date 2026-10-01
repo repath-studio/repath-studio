@@ -1,6 +1,7 @@
 (ns renderer.tool.impl.base.edit.idle
   (:require
    [clojure.core.matrix :as matrix]
+   [config :as config]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.history.handlers :as history.handlers]
@@ -19,7 +20,7 @@
 (defn insertion-candidate
   [db el position]
   (let [zoom (get-in db [:documents (:active-document db) :zoom])
-        threshold (/ (-> db :snap :threshold) zoom)]
+        threshold (/ config/snap-threshold zoom)]
     (when-let [closest (element.hierarchy/closest-point el position)]
       (when (<= (matrix/distance closest position) threshold)
         closest))))
