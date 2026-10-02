@@ -1,6 +1,4 @@
-(ns renderer.element.impl.text
-  "https://www.w3.org/TR/SVG/text.html
-   https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/text"
+(ns renderer.element.impl.text-content.core
   (:require
    [clojure.core.matrix :as matrix]
    [clojure.string :as string]
@@ -9,47 +7,36 @@
    [renderer.effects :as-alias effects]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
-   [renderer.element.subs :as-alias element.subs]
-   [renderer.element.views :as element.views]
+   [renderer.element.impl.text-content.text]
+   [renderer.element.impl.text-content.tspan]
    [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
-   [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.font :as utils.font]
    [renderer.utils.key :as utils.key]
    [renderer.utils.length :as utils.length]))
 
-(hierarchy/derive! :text ::element.hierarchy/shape)
+(hierarchy/derive! ::element.hierarchy/text-content ::element.hierarchy/shape)
+(hierarchy/derive! ::element.hierarchy/text-content-child
+                   ::element.hierarchy/text-content)
 
-(defmethod element.hierarchy/properties :text
-  []
-  {:icon "text"
-   :label [::label "Text"]
-   :description [::description
-                 "The SVG <text> element draws a graphics element consisting
-                  of text. It's possible to apply a gradient, pattern,
-                  clipping path, mask, or filter to <text>, like any other
-                  SVG graphics element."]
-   :ratio-locked true
-   :attrs [:font-family
-           :font-size
-           :font-weight
-           :font-style
-           :stroke
-           :stroke-width
-           :stroke-dasharray
-           :opacity]})
+(defmethod element.hierarchy/permitted-content ::element.hierarchy/text-content
+  [_el]
+  #{::element.hierarchy/animation
+    ::element.hierarchy/descriptive
+    ::element.hierarchy/text-content-child
+    :a})
 
-(defmethod element.hierarchy/translate :text
+(defmethod element.hierarchy/translate ::element.hierarchy/text-content
   [el [x y]]
   (-> el
       (attribute.hierarchy/update-attr :x + x)
       (attribute.hierarchy/update-attr :y + y)))
 
-(defmethod element.hierarchy/scale :text
+(defmethod element.hierarchy/scale ::element.hierarchy/text-content
   [el ratio pivot-point]
   (let [bounds (element.hierarchy/bbox el)
         [w h] (utils.bounds/->dimensions bounds)
@@ -75,7 +62,8 @@
  ::set-text
  [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ id s]]
-   {:db (-> (if (empty? s)
+   {:db (-> (if (and (empty? s)
+                     (empty? (:children (element.handlers/entity db id))))
               (-> (element.handlers/delete db id)
                   (history.handlers/finalize now [::remove-text "Remove text"]))
               (-> (element.handlers/assoc-prop db id :content s)
@@ -84,16 +72,7 @@
             (tool.handlers/deactivate))
     ::effects/focus-canvas nil}))
 
-(defmethod element.hierarchy/render :text
-  [el]
-  (let [child-els @(rf/subscribe [::element.subs/filter-visible (:children el)])
-        idle? @(rf/subscribe [::tool.subs/idle?])
-        editing? @(rf/subscribe [::tool.subs/editing?])]
-    (when-not (and editing? (:selected el))
-      [:g {:cursor (when editing? "text")}
-       [element.views/render-to-dom el child-els idle?]])))
-
-(defmethod element.hierarchy/render-edit :text
+(defmethod element.hierarchy/render-edit ::element.hierarchy/text-content
   [el]
   (let [{:keys [id content]} el
         offset (utils.element/offset el)
@@ -137,7 +116,7 @@
                :font-size font-size
                :font-weight font-weight}}]]))
 
-(defmethod element.hierarchy/path :text
+(defmethod element.hierarchy/path ::element.hierarchy/text-content
   [el]
   (let [{:keys [attrs content]} el
         {:keys [x y font-family]} attrs

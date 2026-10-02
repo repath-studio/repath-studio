@@ -154,6 +154,13 @@
   :description "O elemento SVG <animateMotion> permite definir como um elemento
                 se move ao longo de um caminho de movimento."}
 
+ :renderer.element.impl.text-content.text-path
+ {:label "Percurso de texto"
+  :description "O elemento SVG <textPath> é utilizado para representar texto ao
+                longo da forma de um elemento <path>. O texto deve estar
+                contido no elemento <textPath> e o seu atributo href é usado
+                para referenciar o elemento <path> pretendido."}
+
  :renderer.element.impl.animation.animate-transform
  {:label "Animar transformação"
   :description "O elemento <animateTransform> anima um atributo de
@@ -276,14 +283,12 @@
                 documentos SVG, mas também pode ser usado para incorporar um
                 fragmento SVG dentro de um documento SVG ou HTML."}
 
- :renderer.element.impl.text
+ :renderer.element.impl.text-content.text
  {:description "O elemento SVG <text> desenha um elemento gráfico que consiste
                 em texto. É possível aplicar um gradiente, padrão, caminho de
                 recorte, máscara ou filtro a <text>, como qualquer outro
                 elemento gráfico SVG."
-  :label "Texto"
-  :remove-text "Remover texto"
-  :set-text "Definir texto"}
+  :label "Texto"}
 
  :renderer.attribute.views
  {:all "tudo"
@@ -578,6 +583,16 @@
  {:description "O atributo font-weight refere-se à espessura ou leveza dos
                 glifos usados para renderizar o texto, relativo a outras fontes
                 na mesma família de fontes."}
+
+ :renderer.element.impl.text-content.tspan
+ {:label "TSpan"
+  :description "O elemento SVG <tspan> define um subtexto dentro de um elemento
+                <text> ou de outro elemento <tspan>. Permite ajustar o estilo
+                e/ou a posição desse subtexto conforme necessário."}
+
+ :renderer.element.impl.text-content.core
+ {:remove-text "Remover texto"
+  :set-text "Definir texto"}
 
  :renderer.attribute.impl.crossorigin
  {:description "O atributo crossorigin, válido nos elementos <image> e

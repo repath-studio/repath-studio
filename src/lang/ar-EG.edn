@@ -152,6 +152,12 @@
   :description "يتيح عنصر SVG <animateMotion> تحديد كيفية تحرك عنصر على
                 طول مسار الحركة."}
 
+ :renderer.element.impl.text-content.text-path
+ {:label "مسار النص"
+  :description "يُستخدم عنصر SVG <textPath> لرسم النص على طول شكل عنصر <path>.
+                يجب أن يكون النص محصورا داخل عنصر <textPath> ويُستخدم سمة href
+                الخاصة به للإشارة إلى عنصر <path> المطلوب."}
+
  :renderer.element.impl.animation.animate-transform
  {:label "تحريك التحويل"
   :description "يقوم عنصر <animateTransform> بتحريك سمة التحويل على العنصر
@@ -266,13 +272,11 @@
                 يُستخدم كالعنصر الخارجي لمستندات SVG، ولكن يمكن أيضاً
                 استخدامه لتضمين جزء SVG داخل مستند SVG أو HTML."}
 
- :renderer.element.impl.text
+ :renderer.element.impl.text-content.text
  {:description "عنصر SVG <text> يرسم عنصراً رسومياً يتكون من نص. من
                 الممكن تطبيق تدرج، نمط، مسار قطع، قناع، أو مرشح على
                 <text>، مثل أي عنصر رسومي SVG آخر."
-  :label "نص"
-  :remove-text "إزالة النص"
-  :set-text "تعيين النص"}
+  :label "نص"}
 
  :renderer.attribute.views
  {:all "الكل"
@@ -557,6 +561,16 @@
  {:description "خاصية font-weight تشير إلى جرأة أو خفة الرموز
                 المستخدمة لعرض النص، نسبة إلى الخطوط الأخرى في نفس
                 عائلة الخط."}
+
+ :renderer.element.impl.text-content.tspan
+ {:label "TSpan"
+  :description "يحدد عنصر SVG <tspan> نصا فرعيا داخل عنصر <text> أو عنصر
+                <tspan> آخر. ويتيح تعديل نمط ذلك النص الفرعي و/أو موقعه حسب
+                الحاجة."}
+
+ :renderer.element.impl.text-content.core
+ {:remove-text "إزالة النص"
+  :set-text "تعيين النص"}
 
  :renderer.attribute.impl.crossorigin
  {:description "خاصية crossorigin، صالحة على عناصر <image> و

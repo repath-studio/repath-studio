@@ -155,6 +155,13 @@
   :description "Das SVG-Element <animateMotion> ermöglicht die Definition, wie
                 sich ein Element entlang eines Bewegungspfads bewegt."}
 
+ :renderer.element.impl.text-content.text-path
+ {:label "Textpfad"
+  :description "Das SVG-Element <textPath> wird verwendet, um Text entlang der
+                Form eines <path>-Elements darzustellen. Der Text muss im
+                <textPath>-Element enthalten sein, und sein href-Attribut
+                referenziert das gewünschte <path>-Element."}
+
  :renderer.element.impl.animation.animate-transform
  {:label "Transform animieren"
   :description "Das Element <animateTransform> animiert ein
@@ -281,14 +288,12 @@
                 verwendet werden, um ein SVG-Fragment in ein SVG- oder
                 HTML-Dokument einzubetten."}
 
- :renderer.element.impl.text
+ :renderer.element.impl.text-content.text
  {:description "Das SVG-Element <text> zeichnet ein Grafikelement, das aus Text
                 besteht. Es ist möglich, einen Verlauf, ein Muster, einen
                 Beschneidungspfad, eine Maske oder einen Filter auf <text>
                 anzuwenden, wie bei jedem anderen SVG-Grafikelement."
-  :label "Text"
-  :remove-text "Text entfernen"
-  :set-text "Text setzen"}
+  :label "Text"}
 
  :renderer.attribute.views
  {:all "alle"
@@ -597,6 +602,17 @@
                 Leichtigkeit der Glyphen, die zum Rendern des Textes verwendet
                 werden, relativ zu anderen Schriften in derselben
                 Schriftfamilie."}
+
+ :renderer.element.impl.text-content.tspan
+ {:label "TSpan"
+  :description "Das SVG-Element <tspan> definiert einen Teiltext innerhalb
+                eines <text>-Elements oder eines anderen <tspan>-Elements.
+                Damit lässt sich der Stil und/oder die Position dieses
+                Teiltexts nach Bedarf anpassen."}
+
+ :renderer.element.impl.text-content.core
+ {:remove-text "Text entfernen"
+  :set-text "Text setzen"}
 
  :renderer.attribute.impl.crossorigin
  {:description "Das crossorigin-Attribut, gültig für <image> und <feImage>

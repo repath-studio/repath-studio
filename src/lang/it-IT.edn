@@ -155,6 +155,14 @@
   :description "L'elemento SVG <animateMotion> consente di definire come un
                 elemento si muove lungo un percorso di movimento."}
 
+ :renderer.element.impl.text-content.text-path
+ {:label "Percorso di testo"
+  :description "L'elemento SVG <textPath> viene utilizzato per rendere il
+                testo lungo la forma di un elemento <path>. Il testo deve
+                essere incluso nell'elemento <textPath> e il suo attributo
+                href è utilizzato per fare riferimento all'elemento <path>
+                desiderato."}
+
  :renderer.element.impl.animation.animate-transform
  {:label "Anima trasformazione"
   :description "L'elemento <animateTransform> anima un attributo di
@@ -278,14 +286,12 @@
                 incorporare un frammento SVG all'interno di un documento SVG o
                 HTML."}
 
- :renderer.element.impl.text
+ :renderer.element.impl.text-content.text
  {:description "L'elemento SVG <text> disegna un elemento grafico costituito da
                 testo. È possibile applicare un gradiente, pattern, clipping
                 path, maschera o filtro a <text>, come qualsiasi altro elemento
                 grafico SVG."
-  :label "Testo"
-  :remove-text "Rimuovi testo"
-  :set-text "Imposta testo"}
+  :label "Testo"}
 
  :renderer.attribute.views
  {:all "tutto"
@@ -593,6 +599,17 @@
  {:description "L'attributo font-weight si riferisce al grassetto o alla
                 leggerezza dei glifi utilizzati per renderizzare il testo,
                 relativo ad altri font nella stessa famiglia di font."}
+
+ :renderer.element.impl.text-content.tspan
+ {:label "TSpan"
+  :description "L'elemento SVG <tspan> definisce un sottotesto all'interno di
+                un elemento <text> o di un altro elemento <tspan>. Consente di
+                regolare lo stile e/o la posizione di quel sottotesto in base
+                alle esigenze."}
+
+ :renderer.element.impl.text-content.core
+ {:remove-text "Rimuovi testo"
+  :set-text "Imposta testo"}
 
  :renderer.attribute.impl.crossorigin
  {:description "L'attributo crossorigin, valido sugli elementi <image> e

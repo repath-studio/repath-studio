@@ -155,6 +155,14 @@
                 definiëren hoe een element zich langs een bewegingspad
                 beweegt."}
 
+ :renderer.element.impl.text-content.text-path
+ {:label "Tekstpad"
+  :description "Het SVG <textPath> element wordt gebruikt om tekst weer te
+                geven langs de vorm van een <path> element. De tekst moet
+                binnen het <textPath> element staan en de href-attribute
+                ervan wordt gebruikt om te verwijzen naar het gewenste <path>
+                element."}
+
  :renderer.element.impl.animation.animate-transform
  {:label "Transformatie animeren"
   :description "Het <animateTransform> element animeert een
@@ -277,14 +285,12 @@
                 gebruikt worden om een SVG fragment in te bedden binnen een SVG
                 of HTML document."}
 
- :renderer.element.impl.text
+ :renderer.element.impl.text-content.text
  {:description "Het SVG <text> element tekent een grafisch element bestaande
                 uit tekst. Het is mogelijk om een verloop, patroon, clipping
                 path, masker of filter toe te passen op <text>, zoals elk ander
                 SVG grafisch element."
-  :label "Tekst"
-  :remove-text "Tekst verwijderen"
-  :set-text "Tekst instellen"}
+  :label "Tekst"}
 
  :renderer.attribute.views
  {:all "alle"
@@ -595,6 +601,17 @@
  {:description "Het font-weight attribuut verwijst naar de dikte of lichtheid
                 van de glyphs gebruikt om de tekst te renderen, relatief aan
                 andere lettertypen in dezelfde lettertypefamilie."}
+
+ :renderer.element.impl.text-content.tspan
+ {:label "TSpan"
+  :description "Het SVG <tspan> element definieert een subtekst binnen een
+                <text> element of een ander <tspan> element. Hiermee kan de
+                stijl en/of positie van die subtekst naar wens worden
+                aangepast."}
+
+ :renderer.element.impl.text-content.core
+ {:remove-text "Tekst verwijderen"
+  :set-text "Tekst instellen"}
 
  :renderer.attribute.impl.crossorigin
  {:description "Het crossorigin attribuut, geldig op de <image> en <feImage>

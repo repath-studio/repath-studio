@@ -71,3 +71,21 @@
    "l" "a" "b"
    "l" "c" "h"
    "alpha"])
+
+(def DomRect
+  [:map {:closed true}
+   [:x number?]
+   [:y number?]
+   [:width number?]
+   [:height number?]
+   [:top number?]
+   [:right number?]
+   [:bottom number?]
+   [:left number?]])
+
+(def Viewbox
+  [:tuple
+   [number? {:title "x"}]
+   [number? {:title "y"}]
+   [number? {:title "width"}]
+   [number? {:title "height"}]])
