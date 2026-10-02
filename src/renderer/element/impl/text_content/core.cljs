@@ -9,13 +9,10 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.impl.text-content.text]
    [renderer.element.impl.text-content.tspan]
-   [renderer.element.subs :as-alias element.subs]
-   [renderer.element.views :as element.views]
    [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
-   [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.font :as utils.font]
@@ -74,15 +71,6 @@
                   (history.handlers/finalize now [::set-text "Set text"])))
             (tool.handlers/deactivate))
     ::effects/focus-canvas nil}))
-
-(defmethod element.hierarchy/render ::element.hierarchy/text-content
-  [el]
-  (let [child-els @(rf/subscribe [::element.subs/filter-visible (:children el)])
-        idle? @(rf/subscribe [::tool.subs/idle?])
-        editing? @(rf/subscribe [::tool.subs/editing?])]
-    (when-not (and editing? (:selected el))
-      [:g {:cursor (when editing? "text")}
-       [element.views/render-to-dom el child-els idle?]])))
 
 (defmethod element.hierarchy/render-edit ::element.hierarchy/text-content
   [el]
