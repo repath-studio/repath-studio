@@ -6,11 +6,10 @@
    [malli.transform :as m.transform]
    [renderer.a11y.db :refer [A11y]]
    [renderer.action.db :refer [ActionRegistry ActionGroupRegistry KeyBindings]]
-   [renderer.db :refer [BBox Vec2 JS_Object]]
+   [renderer.db :refer [BBox Vec2 JS_Object DomRect]]
    [renderer.dialog.db :refer [Dialog]]
    [renderer.document.db :refer [Document DocumentId RecentDocument]]
    [renderer.element.db :refer [Element]]
-   [renderer.frame.db :refer [DomRect]]
    [renderer.i18n.db :refer [LanguageCodeIdentifier
                              LanguageId
                              LanguageRegistry]]
