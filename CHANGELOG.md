@@ -3,6 +3,33 @@
 All notable user facing changes to this project will be documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 0.4.23 (2026-10-02)
+
+**Added**
+
+- Native context menu on desktop for editable areas and highlighted text [#216](https://github.com/repath-studio/repath-studio/pull/216)
+- App db migrations [#217](https://github.com/repath-studio/repath-studio/pull/217)
+- Keyboard shortcut enhancements [#218](https://github.com/repath-studio/repath-studio/pull/218)
+- Path as title on mouse over document tab when available
+- Snap points to mobile drawer
+
+**Removed**
+
+- Short name from app manifest
+
+**Changed**
+
+- Improved snapping point caching strategy
+- Show tool options on mobile
+- Mobile drawer is draggable by its handle only
+
+**Fixed**
+
+- Permitted content of descriptive elements
+- Print on desktop by encoding content
+- Clear brush on deactivate
+- Add default hue slider value
+
 ## 0.4.22 (2026-09-25)
 
 **Added**
