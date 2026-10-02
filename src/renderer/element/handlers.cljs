@@ -850,11 +850,15 @@
     (cond
       (not (element.db/valid? new-el))
       (let [error (-> el element.db/explain m.error/humanize)]
-        (throw (ex-info (str "Invalid element: " error) {:element new-el})))
+        (throw (ex-info (str "Invalid " (:tag new-el) " element: " error)
+                        {:element new-el})))
 
       (and parent-el
            (not (utils.element/permitted-content? parent-el (:tag new-el))))
-      (throw (js/Error. "Invalid parent"))
+      (throw (ex-info (str "Invalid parent " (:tag parent-el)
+                           " of " (:tag new-el) " element: ")
+                      {:element new-el
+                       :parent parent-el}))
 
       :else
       (cond-> db

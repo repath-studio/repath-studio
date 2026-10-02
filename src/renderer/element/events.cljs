@@ -315,11 +315,12 @@
  (fn [db [_ el]]
    (element.handlers/add db el)))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  ::import-svg
  [(finalize [::import-svg "Import svg"])]
- (fn [db [_ data]]
-   (element.handlers/import-svg db data)))
+ (fn [{:keys [db]} [_ data]]
+   (try (let [db (element.handlers/import-svg db data)] {:db db})
+        (catch :default err {:dispatch [::app.events/toast-error err]}))))
 
 (rf/reg-event-db
  ::animate
