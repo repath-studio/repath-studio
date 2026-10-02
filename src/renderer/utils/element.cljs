@@ -258,15 +258,23 @@
 (m/=> normalize [:-> map? Element])
 (defn normalize
   [props]
-  (cond-> props
-    (not (string? (:content props)))
-    (dissoc :content)
+  (-> (update props :content
+              (fn [content]
+                (cond
+                  (string? content)
+                  content
 
-    :always
-    (-> (utils.map/remove-nils)
-        (normalize-attrs)
-        (dissoc :locked)
-        (merge element.db/default))))
+                  (sequential? content)
+                  (let [joined (apply str (filter string? content))]
+                    (when (not (string/blank? joined))
+                      joined))
+
+                  :else
+                  nil)))
+      (utils.map/remove-nils)
+      (normalize-attrs)
+      (dissoc :locked)
+      (merge element.db/default)))
 
 (defn find-svg
   [zipper]
