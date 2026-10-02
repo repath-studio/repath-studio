@@ -275,13 +275,28 @@
                 documents, but it can also be used to embed an SVG fragment
                 inside an SVG or HTML document."}
 
- :renderer.element.impl.text
+ :renderer.element.impl.text-content.text
  {:description "The SVG <text> element draws a graphics element consisting of
                 text. It's possible to apply a gradient, pattern, clipping path,
                 mask, or filter to <text>, like any other SVG graphics element."
-  :label "Text"
-  :remove-text "Remove text"
+  :label "Text"}
+
+ :renderer.element.impl.text-content.core
+ {:remove-text "Remove text"
   :set-text "Set text"}
+
+ :renderer.element.impl.text-content.tspan
+ {:label "TSpan"
+  :description "The <tspan> SVG element defines a subtext within a <text>
+                element or another <tspan> element. It allows for adjustment
+                of the style and/or position of that subtext as needed."}
+
+ :renderer.element.impl.text-content.text-path
+ {:label "Text path"
+  :description "The <textPath> SVG element is used to render text along the
+                shape of a <path> element. The text must be enclosed in the
+                <textPath> element and its href attribute is used to reference
+                the desired <path>."}
 
  :renderer.attribute.views
  {:all "all"

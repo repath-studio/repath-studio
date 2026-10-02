@@ -154,6 +154,13 @@
   :description "SVG-elementet <animateMotion> låter dig definiera hur ett
                 element rör sig längs en rörelseväg."}
 
+ :renderer.element.impl.text-content.text-path
+ {:label "Textbana"
+  :description "SVG-elementet <textPath> används för att rendera text längs
+                formen på ett <path>-element. Texten måste vara innesluten i
+                <textPath>-elementet och dess href-attribut används för att
+                referera till det önskade <path>-elementet."}
+
  :renderer.element.impl.animation.animate-transform
  {:label "Animera transformation"
   :description "Elementet <animateTransform> animerar ett
@@ -275,14 +282,12 @@
                 att bädda in ett SVG fragment inuti ett SVG eller HTML
                 dokument."}
 
- :renderer.element.impl.text
+ :renderer.element.impl.text-content.text
  {:description "SVG <text> elementet ritar ett grafiskt element bestående av
                 text. Det är möjligt att applicera en gradient, mönster,
                 klippbana, mask eller filter på <text>, som vilket annat SVG
                 grafiskt element som helst."
-  :label "Text"
-  :remove-text "Ta bort text"
-  :set-text "Sätt text"}
+  :label "Text"}
 
  :renderer.attribute.views
  {:all "alla"
@@ -582,6 +587,17 @@
  {:description "Attributet font-weight refererar till tjockleken eller
                 lättheten hos glyfer som används för att rendera texten, i
                 förhållande till andra typsnitt i samma typsnittsfamilj."}
+
+ :renderer.element.impl.text-content.tspan
+ {:label "TSpan"
+  :description "SVG-elementet <tspan> definierar en undertext inom ett
+                <text>-element eller ett annat <tspan>-element. Det gör det
+                möjligt att justera stilen och/eller positionen för
+                undertexten efter behov."}
+
+ :renderer.element.impl.text-content.core
+ {:remove-text "Ta bort text"
+  :set-text "Sätt text"}
 
  :renderer.attribute.impl.crossorigin
  {:description "Attributet crossorigin, giltigt på <image> och <feImage>
