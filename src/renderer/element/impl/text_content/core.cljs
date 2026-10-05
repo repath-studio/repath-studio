@@ -73,11 +73,10 @@
     ::effects/focus-canvas nil}))
 
 (defmethod element.hierarchy/render-edit ::element.hierarchy/text-content
-  [el]
+  [el _scale]
   (let [{:keys [id content]} el
-        offset (utils.element/offset el)
         el-bbox (element.hierarchy/bbox el)
-        [x y] (matrix/add (take 2 el-bbox) offset)
+        [x y] el-bbox
         [_w h] (utils.bounds/->dimensions el-bbox)
         attrs (utils.element/attributes el)
         {:keys [fill font-family font-size font-weight font-style]} attrs

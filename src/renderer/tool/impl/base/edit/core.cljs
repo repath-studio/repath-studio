@@ -33,19 +33,22 @@
 (defmethod tool.hierarchy/render ::edit
   []
   (let [selected-elements @(rf/subscribe [::element.subs/selected])
+        transforms @(rf/subscribe [::element.subs/selected-transforms])
         select-box @(rf/subscribe [::tool.subs/select-box])
         insertion-point @(rf/subscribe [::tool.subs/insertion-point])]
     (when (or (seq selected-elements) insertion-point)
       (->> selected-elements
            (map (fn [el]
-                  [:g
-                   [element.hierarchy/render-edit el]
-                   (->> (element.hierarchy/handles el)
-                        (map (fn [handle] [tool.views/handle handle]))
-                        (into [:g]))
-                   (when-let [centroid (element.hierarchy/centroid el)]
-                     [utils.svg/dot centroid
-                      [:title (i18n.views/t [::centroid "Centroid"])]])]))
+                  (let [transform (get transforms (:id el))]
+                    [:g {:transform (element.handlers/transform->str transform)}
+                     [element.hierarchy/render-edit el (first transform)]
+                     (->> (element.hierarchy/handles el)
+                          (map (fn [handle]
+                                 [tool.views/handle handle (first transform)]))
+                          (into [:g]))
+                     (when-let [centroid (element.hierarchy/centroid el)]
+                       [utils.svg/dot centroid (first transform)
+                        [:title (i18n.views/t [::centroid "Centroid"])]])])))
            (into [:g [element.hierarchy/render select-box]
                   (when insertion-point
                     [:g {:pointer-events "none"}

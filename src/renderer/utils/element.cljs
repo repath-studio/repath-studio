@@ -9,7 +9,7 @@
    [malli.core :as m]
    [malli.transform :as m.transform]
    [reagent.dom.server :as dom.server]
-   [renderer.db :refer [BBox Vec2 JS_Element]]
+   [renderer.db :refer [BBox Vec2 JS_Element Transform]]
    [renderer.element.db
     :as element.db
     :refer [Element ElementAttrs ElementTag PersistedElement]]
@@ -36,6 +36,56 @@
 (defn container?
   [el]
   (or (svg? el) (root? el)))
+
+(m/=> compose-transforms [:-> Transform Transform Transform])
+(defn compose-transforms
+  [[sx-out sy-out ox-out oy-out] [sx-in sy-in ox-in oy-in]]
+  [(* sx-out sx-in)
+   (* sy-out sy-in)
+   (+ (* sx-out ox-in) ox-out)
+   (+ (* sy-out oy-in) oy-out)])
+
+(m/=> transform [:-> Element Transform])
+(defn transform
+  [el]
+  (cond
+    (svg? el)
+    (let [{:keys [viewBox preserveAspectRatio]} (:attrs el)
+          [x y width height] (->> [:x :y :width :height]
+                                  (select-keys (:attrs el))
+                                  (mapv (fn [[k v]]
+                                          (utils.length/unit->px v :svg k))))
+          [vb-x vb-y vb-w vb-h] (some-> viewBox (utils.attribute/view-box))
+          preserve-none? (some-> preserveAspectRatio
+                                 (string/trim)
+                                 (string/lower-case)
+                                 #(string/starts-with? % "none"))]
+      (if-not (every? #(and (pos? %) (js/isFinite %)) [vb-w vb-h width height])
+        [1 1 x y]
+        (if preserve-none?
+          (let [sx (/ width vb-w)
+                sy (/ height vb-h)]
+            [sx sy (- x (* vb-x sx)) (- y (* vb-y sy))])
+
+          (let [s (min (/ width vb-w) (/ height vb-h))
+                ox (+ x (/ (- width (* s vb-w)) 2) (- (* vb-x s)))
+                oy (+ y (/ (- height (* s vb-h)) 2) (- (* vb-y s)))]
+            [s s ox oy]))))
+
+    :else
+    [1 1 0 0]))
+
+(m/=> transform-point [:-> Transform Vec2 Vec2])
+(defn transform-point
+  [[sx sy ox oy] [x y]]
+  [(+ (* x sx) ox)
+   (+ (* y sy) oy)])
+
+(m/=> untransform-point [:-> Transform Vec2 Vec2])
+(defn untransform-point
+  [[sx sy ox oy] [x y]]
+  [(/ (- x ox) sx)
+   (/ (- y oy) sy)])
 
 (def properties-memo (memoize element.hierarchy/properties))
 
@@ -71,24 +121,13 @@
   [els]
   (reduce #(+ %1 (element.hierarchy/area %2)) 0 els))
 
-(m/=> offset [:-> Element Vec2])
-(defn offset
-  [el]
-  (let [el-bbox (:bbox el)
-        local-bbox (element.hierarchy/bbox el)]
-    (or (some->> local-bbox
-                 (matrix/sub el-bbox)
-                 (take 2)
-                 (into []))
-        [0 0])))
-
-(m/=> acc-snapping-points [:-> Element SnapOptions [:* Vec2]])
+(m/=> acc-snapping-points [:-> Element Transform SnapOptions [:* Vec2]])
 (defn acc-snapping-points
-  [el options]
+  [el el-transform options]
   (let [points (or (when (contains? options :nodes)
                      (let [centroid (element.hierarchy/centroid el)]
                        (mapv #(with-meta
-                                (matrix/add % (offset el))
+                                (transform-point el-transform %)
                                 (merge (meta %) {:id (:id el)}))
                              (cond-> (element.hierarchy/snapping-points el)
                                centroid

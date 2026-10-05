@@ -35,14 +35,15 @@
            [min-x min-y] local-bbox
            [w h] (utils.bounds/->dimensions bbox)
            pointer-handler (partial input.impl.pointer/handler! el)
-           handle-size @(rf/subscribe [::document.subs/handle-size])]
+           handle-size @(rf/subscribe [::document.subs/handle-size])
+           [sx] @(rf/subscribe [::element.subs/transform id])]
        [:rect {:x min-x
                :y min-y
                :width w
                :height h
                :fill "transparent"
                :stroke "transparent"
-               :stroke-width handle-size
+               :stroke-width (/ handle-size sx)
                :pointer-events (when ignored? "none")
                :on-pointer-up pointer-handler
                :on-pointer-down pointer-handler

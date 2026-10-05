@@ -11,7 +11,8 @@
    [renderer.element.subs :as-alias element.subs]
    [renderer.hierarchy :as hierarchy]
    [renderer.i18n.views :as i18n.views]
-   [renderer.input.impl.pointer :as input.impl.pointer]))
+   [renderer.input.impl.pointer :as input.impl.pointer]
+   [renderer.utils.attribute :as utils.attribute]))
 
 (hierarchy/derive! :svg ::element.hierarchy/container)
 (hierarchy/derive! :svg ::element.hierarchy/box)
@@ -54,7 +55,9 @@
               active-filter @(rf/subscribe [::a11y.subs/active-filter])
               zoom @(rf/subscribe [::document.subs/zoom])
               pointer-handler (partial input.impl.pointer/handler! el)
-              shadow-size (/ 2 zoom)]
+              shadow-size (/ 2 zoom)
+              [x y w h] (or (some-> (:viewBox attrs) (utils.attribute/view-box))
+                            [0 0 (:width attrs) (:height attrs)])]
           [:g
            [:text
             (merge
@@ -78,15 +81,15 @@
               active-filter
               (assoc :filter (str "url(#" (name active-filter) ")")))
             [:rect
-             (merge
-              rect-attrs
-              {:x 0
-               :y 0
-               :fill "white"
-               :on-pointer-up pointer-handler
-               :on-pointer-move #(when selected (pointer-handler %))
-               :on-pointer-down #(when (or selected (= (.-button %) 2))
-                                   (pointer-handler %))})]
+             {:x x
+              :y y
+              :width w
+              :height h
+              :fill "white"
+              :on-pointer-up pointer-handler
+              :on-pointer-move #(when selected (pointer-handler %))
+              :on-pointer-down #(when (or selected (= (.-button %) 2))
+                                  (pointer-handler %))}]
             (for [el child-els]
               ^{:key (:id el)}
               [element.hierarchy/render el])]]))})))

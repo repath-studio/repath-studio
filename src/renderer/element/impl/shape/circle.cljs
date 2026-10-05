@@ -88,9 +88,7 @@
 (defmethod element.hierarchy/handles :circle
   [el]
   (let [{{:keys [cx cy r]} :attrs} el
-        [cx cy r] (map utils.length/unit->px [cx cy r])
-        offset (utils.element/offset el)
-        [cx cy] (matrix/add [cx cy] offset)]
+        [cx cy r] (map utils.length/unit->px [cx cy r])]
     [{:position [(+ cx r) cy]
       :id :r
       :label [::r-handle "radius handle"]
@@ -100,17 +98,21 @@
       :parent (:id el)}]))
 
 (defmethod element.hierarchy/render-edit :circle
-  [el]
+  [el scale]
   (let [{{:keys [cx cy r]} :attrs} el
-        [cx cy r] (map utils.length/unit->px [cx cy r])
-        offset (utils.element/offset el)
-        [cx cy] (matrix/add [cx cy] offset)]
+        [cx cy r] (map utils.length/unit->px [cx cy r])]
     [:g
-     [utils.svg/line [cx cy] [(+ cx r) cy] :stroke "var(--accent-foreground)"]
-     [utils.svg/line [cx cy] [(+ cx r) cy] :stroke-dasharray 5]
-     [utils.svg/label (utils.attribute/->fixed r 2 false) {:x (+ cx (/ r 2))
-                                                           :y cy}]
-     [utils.svg/times [cx cy]]]))
+     [utils.svg/line [cx cy] [(+ cx r) cy]
+      :stroke "var(--accent-foreground)"
+      :scale scale]
+     [utils.svg/line [cx cy] [(+ cx r) cy]
+      :stroke-dasharray 5
+      :scale scale]
+     [utils.svg/label (utils.attribute/->fixed r 2 false)
+      {:x (+ cx (/ r 2))
+       :y cy
+       :scale scale}]
+     [utils.svg/times [cx cy] scale]]))
 
 (defmethod element.hierarchy/snapping-points :circle
   [el]

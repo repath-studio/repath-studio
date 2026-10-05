@@ -58,10 +58,7 @@
 
 (defn handle
   [el index point]
-  (let [offset (utils.element/offset el)
-        position (->> point
-                      (mapv utils.length/unit->px)
-                      (matrix/add offset))]
+  (let [position (mapv utils.length/unit->px point)]
     {:id (keyword (str index))
      :position position
      :label [::point "point"]
@@ -119,8 +116,7 @@
   ;; Calculates the centroid of a polygon using an extension of the Shoelace
   ;; Formula. This method works for both convex and concave polygons, but not
   ;; for self-intersecting ones.
-  (let [offset (utils.element/offset el)
-        vertices (->vertices el)
+  (let [vertices (->vertices el)
         count-v (count vertices)
         [cx cy cross-sum] (reduce-kv
                            (fn [[cx cy s] index [x1 y1]]
@@ -134,8 +130,7 @@
                            [0 0 0]
                            vertices)
         denom (* 3 cross-sum)]
-    (matrix/add [(/ cx denom) (/ cy denom)]
-                offset)))
+    [(/ cx denom) (/ cy denom)]))
 
 (defmethod element.hierarchy/snapping-points ::element.hierarchy/poly
   [el]
@@ -195,17 +190,15 @@
           (edge-endpoints el (->vertices el))))
 
 (defmethod element.hierarchy/closest-point ::element.hierarchy/poly
-  [el position]
-  (let [offset (utils.element/offset el)
-        pos (matrix/sub position offset)]
-    (some-> (closest-edge el pos)
-            :position
-            (matrix/add offset))))
+  [el transform position]
+  (let [pos (utils.element/untransform-point transform position)
+        closest (some-> (closest-edge el pos) :position)]
+    (when closest
+      (utils.element/transform-point transform closest))))
 
 (defmethod element.hierarchy/insert-point ::element.hierarchy/poly
-  [el position]
-  (let [offset (utils.element/offset el)
-        pos (matrix/sub position offset)
+  [el transform position]
+  (let [pos (utils.element/untransform-point transform position)
         edge (closest-edge el pos)
         point (:position edge)
         inserted? (and point

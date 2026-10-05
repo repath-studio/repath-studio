@@ -89,3 +89,10 @@
    [number? {:title "y"}]
    [number? {:title "width"}]
    [number? {:title "height"}]])
+
+(def Transform
+  [:tuple
+   [number? {:title "scale-x"}]
+   [number? {:title "scale-y"}]
+   [number? {:title "offset-x"}]
+   [number? {:title "offset-y"}]])

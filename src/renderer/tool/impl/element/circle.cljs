@@ -19,8 +19,10 @@
 
 (defn create-el
   [db]
-  (let [offset (tool.handlers/snapped-offset db)
-        position (tool.handlers/snapped-position db)
+  (let [parent-id (:id (element.handlers/hovered-svg db))
+        to-local (partial element.handlers/container-local-point db parent-id)
+        offset (to-local (tool.handlers/snapped-offset db))
+        position (to-local (tool.handlers/snapped-position db))
         radius (matrix/distance position offset)
         [cx cy] offset
         attrs (-> (document.handlers/attrs db)
@@ -29,16 +31,18 @@
         (tool.handlers/set-state :create)
         (element.handlers/add {:type :element
                                :tag :circle
+                               :parent parent-id
                                :attrs (merge attrs {:cx cx
                                                     :cy cy
                                                     :r radius})}))))
 
 (defn update-el
   [db]
-  (let [position (tool.handlers/snapped-position db)
-        {:keys [cx cy]} (->> db element.handlers/selected first :attrs)
+  (let [{:keys [id attrs]} (first (element.handlers/selected db))
+        position (->> (tool.handlers/snapped-position db)
+                      (element.handlers/local-point db id))
+        {:keys [cx cy]} attrs
         radius (-> position
-                   (matrix/sub (element.handlers/parent-offset db))
                    (matrix/distance [cx cy])
                    (utils.attribute/->fixed))]
     (element.handlers/update-selected db #(assoc-in % [:attrs :r] radius))))

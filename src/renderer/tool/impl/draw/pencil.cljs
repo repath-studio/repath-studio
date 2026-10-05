@@ -1,6 +1,5 @@
 (ns renderer.tool.impl.draw.pencil
   (:require
-   [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
@@ -41,20 +40,24 @@
 (defmethod tool.hierarchy/on-drag-start [::pencil :idle]
   [db _e]
   (let [stroke (document.handlers/attr db :stroke)
-        point-1 (string/join " " (:adjusted-pointer-offset db))
-        point-2 (string/join " " (:adjusted-pointer-pos db))]
+        parent-id (:id (element.handlers/hovered-svg db))
+        to-local (partial element.handlers/container-local-point db parent-id)
+        point-1 (string/join " " (to-local (:adjusted-pointer-offset db)))
+        point-2 (string/join " " (to-local (:adjusted-pointer-pos db)))]
     (-> db
         (tool.handlers/set-state :create)
         (element.handlers/add {:type :element
                                :tag :path
+                               :parent parent-id
                                :attrs {:d (str "M " point-1 " Q " point-2)
                                        :stroke stroke
                                        :fill "transparent"}}))))
 
 (defmethod tool.hierarchy/on-drag [::pencil :create]
   [db _e]
-  (let [[min-x min-y] (element.handlers/parent-offset db)
-        point (matrix/sub (:adjusted-pointer-pos db) [min-x min-y])
+  (let [{:keys [adjusted-pointer-pos]} db
+        id (-> db element.handlers/selected first :id)
+        point (element.handlers/local-point db id adjusted-pointer-pos)
         point (string/join " " point)]
     (element.handlers/update-selected db
                                       update-in [:attrs :d]

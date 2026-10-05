@@ -38,7 +38,7 @@
   [db e]
   (cond->> (tool.handlers/snapped-position db)
     :always
-    (element.handlers/adjusted-point db)
+    (element.handlers/local-point db)
 
     (input.handlers/snap-to-angle? db e)
     (input.handlers/snap-angle (->> (element.handlers/selected db)

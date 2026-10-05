@@ -22,47 +22,51 @@
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]))
 
-(m/=> handle [:-> Handle any?])
+(m/=> handle [:fucntion
+              [:-> Handle any?]
+              [:-> Handle number? any?]])
 (defn handle
-  [el]
-  (let [{:keys [position id cursor label rounded implied parent]} el
-        clicked-element @(rf/subscribe [::app.subs/clicked-element])
-        handle-size @(rf/subscribe [::document.subs/handle-size])
-        zoom @(rf/subscribe [::document.subs/zoom])
-        selected @(rf/subscribe [::element.subs/handle-selected? parent id])
-        selected (or selected (and (= (:id clicked-element) (:id el))
-                                   (= (:parent clicked-element) (:parent el))))
-        hovered @(rf/subscribe [::element.subs/hovered? id])
-        pointer-handler (partial input.impl.pointer/handler! el)
-        active (or selected hovered)
-        [x y] position
-        scale (if hovered 1.3 1)
-        half-size (/ handle-size 2)]
-    [:g
-     [:rect {:style {:transition "transform 0.1s ease-out"}
-             :transform (str "scale(" scale ")")
-             :transform-origin (string/join " " position)
-             :x (- x half-size)
-             :y (- y half-size)
-             :rx (when rounded half-size)
-             :width handle-size
-             :height handle-size
-             :stroke-opacity ".5"
-             :stroke-width (/ 1 zoom)
-             :cursor (or cursor "move")
-             :pointer-events (when implied "none")
-             :on-pointer-up pointer-handler
-             :on-pointer-down pointer-handler
-             :on-pointer-move pointer-handler
-             :fill (cond
-                     selected "var(--accent)"
-                     implied "lightgray"
-                     :else "var(--accent-foreground)")
-             :stroke (cond
-                       active "var(--accent)"
-                       implied "var(--border)"
-                       :else "var(--foreground-muted)")}
-      (when label [:title (i18n.views/t label)])]]))
+  ([el]
+   (handle el 1))
+  ([el sx]
+   (let [{:keys [position id cursor label rounded implied parent]} el
+         clicked-element @(rf/subscribe [::app.subs/clicked-element])
+         handle-size @(rf/subscribe [::document.subs/handle-size])
+         zoom @(rf/subscribe [::document.subs/zoom])
+         selected @(rf/subscribe [::element.subs/handle-selected? parent id])
+         selected (or selected (and (= (:id clicked-element) (:id el))
+                                    (= (:parent clicked-element) (:parent el))))
+         hovered @(rf/subscribe [::element.subs/hovered? id])
+         pointer-handler (partial input.impl.pointer/handler! el)
+         active (or selected hovered)
+         [x y] position
+         scale (if hovered 1.3 1)
+         half-size (/ handle-size sx 2)]
+     [:g
+      [:rect {:style {:transition "transform 0.1s ease-out"}
+              :transform (str "scale(" scale ")")
+              :transform-origin (string/join " " position)
+              :x (- x half-size)
+              :y (- y half-size)
+              :rx (when rounded half-size)
+              :width (/ handle-size sx)
+              :height (/ handle-size sx)
+              :stroke-opacity ".5"
+              :stroke-width (/ 1 (* zoom sx))
+              :cursor (or cursor "move")
+              :pointer-events (when implied "none")
+              :on-pointer-up pointer-handler
+              :on-pointer-down pointer-handler
+              :on-pointer-move pointer-handler
+              :fill (cond
+                      selected "var(--accent)"
+                      implied "lightgray"
+                      :else "var(--accent-foreground)")
+              :stroke (cond
+                        active "var(--accent)"
+                        implied "var(--border)"
+                        :else "var(--foreground-muted)")}
+       (when label [:title (i18n.views/t label)])]])))
 
 (m/=> selected-bbox [:-> BBox any?])
 (defn selected-bbox

@@ -20,20 +20,24 @@
 
 (defn create-el
   [db]
-  (let [attrs (-> (document.handlers/attrs db)
+  (let [parent-id (:id (element.handlers/hovered-svg db))
+        to-local (partial element.handlers/container-local-point db parent-id)
+        attrs (-> (document.handlers/attrs db)
                   (select-keys [:stroke :fill :stroke-width]))
-        [offset-x offset-y] (tool.handlers/snapped-offset db)
-        [x y] (tool.handlers/snapped-position db)
+        offset (tool.handlers/snapped-offset db)
+        [offset-x offset-y] (to-local offset)
+        [x y] (to-local (tool.handlers/snapped-position db))
         [width height] (mapv (comp utils.attribute/->fixed abs)
                              [(- x offset-x) (- y offset-y)])
         origin [(cond-> offset-x (< x offset-x) (- width))
                 (cond-> offset-y (< y offset-y) (- height))]
         [x y] (mapv utils.attribute/->fixed origin)]
     (-> db
-        (assoc :last-origin origin)
+        (assoc :last-origin offset)
         (tool.handlers/set-state :create)
         (element.handlers/add {:type :element
                                :tag :rect
+                               :parent parent-id
                                :attrs (merge attrs {:x x
                                                     :y y
                                                     :width width
@@ -41,10 +45,10 @@
 
 (defn update-el
   [db e]
-  (let [pointer-pos (tool.handlers/snapped-position db)
-        parent-offset (element.handlers/parent-offset db)
-        position (matrix/sub pointer-pos parent-offset)
-        origin (matrix/sub (:last-origin db) parent-offset)
+  (let [{:keys [id]} (first (element.handlers/selected db))
+        position (->> (tool.handlers/snapped-position db)
+                      (element.handlers/local-point db id))
+        origin (element.handlers/local-point db id (:last-origin db))
         position (cond->> position
                    (input.handlers/snap-to-angle? db e)
                    (input.handlers/snap-angle origin))

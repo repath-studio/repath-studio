@@ -44,7 +44,7 @@
   [db e]
   (cond->> (tool.handlers/snapped-position db)
     :always
-    (element.handlers/adjusted-point db)
+    (element.handlers/local-point db)
 
     (input.handlers/snap-to-angle? db e)
     (input.handlers/snap-angle (->> (element.handlers/selected db)
@@ -58,7 +58,7 @@
 (defn adjusted-pointer-offset
   [db]
   (->> (tool.handlers/snapped-offset db)
-       (element.handlers/adjusted-point db)))
+       (element.handlers/local-point db)))
 
 (m/=> update-path [:-> App fn? [:* any?] App])
 (defn update-path
@@ -75,8 +75,10 @@
 (m/=> create-el [:-> App App])
 (defn create-el
   [db]
-  (let [path (->> (tool.handlers/snapped-offset db)
-                  (mapv utils.attribute/->fixed)
+  (let [parent-id (:id (element.handlers/hovered-svg db))
+        to-local (partial element.handlers/container-local-point db parent-id)
+        point (to-local (tool.handlers/snapped-offset db))
+        path (->> (mapv utils.attribute/->fixed point)
                   (into ["M"])
                   (string/join " "))
         attrs (-> (document.handlers/attrs db)
@@ -85,6 +87,7 @@
         (tool.handlers/set-state :create)
         (element.handlers/add {:type :element
                                :tag :path
+                               :parent parent-id
                                :attrs (assoc attrs :d path)}))))
 
 (defmethod tool.hierarchy/on-pointer-up [::path :idle]
@@ -129,7 +132,7 @@
   [db _e]
   (let [anchor (adjusted-pointer-offset db)
         drag-pos (->> (tool.handlers/snapped-position db)
-                      (element.handlers/adjusted-point db))
+                      (element.handlers/local-point db))
         [cp2-x cp2-y] (->> (matrix/sub (matrix/mul anchor 2) drag-pos)
                            (mapv utils.attribute/->fixed))]
     (update-path db #(let [segments (utils.path/string->segments %)]

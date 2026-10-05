@@ -133,10 +133,9 @@
 
 (defmethod element.hierarchy/centroid :blob
   [el]
-  (let [offset (utils.element/offset el)
-        {{:keys [x y size]} :attrs} el
+  (let [{{:keys [x y size]} :attrs} el
         [x y size] (mapv utils.length/unit->px [x y size])]
-    (matrix/add [x y] (/ size 2) offset)))
+    (matrix/add [x y] (/ size 2))))
 
 (defmethod element.hierarchy/path :blob
   [el]
@@ -164,27 +163,19 @@
 (defmethod element.hierarchy/handles :blob
   [el]
   (let [{{:keys [x y size]} :attrs} el
-        [x y size] (mapv utils.length/unit->px [x y size])
-        offset (utils.element/offset el)
-        [x1 y1] (cond->> [x y]
-                  (not (utils.element/svg? el))
-                  (matrix/add offset))]
+        [x y size] (mapv utils.length/unit->px [x y size])]
     [{:type :handle
       :action :edit
       :label [::size-handle "size handle"]
       :parent (:id el)
-      :position (matrix/add [x1 y1] size)
+      :position (matrix/add [x y] size)
       :id :size}]))
 
 (defmethod element.hierarchy/render-edit :blob
-  [el]
+  [el scale]
   (let [{{:keys [x y size]} :attrs} el
         [x y size] (mapv utils.length/unit->px [x y size])
-        offset (utils.element/offset el)
-        [x1 y1] (cond->> [x y]
-                  (not (utils.element/svg? el))
-                  (matrix/add offset))
-        [x2 y2] (matrix/add [x1 y1] size)]
+        [x2 y2] (matrix/add [x y] size)]
     [:<>
-     [utils.svg/line [x1 y1] [x2 y2]]
-     [utils.svg/times [x1 y1]]]))
+     [utils.svg/line [x y] [x2 y2] :scale scale]
+     [utils.svg/times [x y] scale]]))

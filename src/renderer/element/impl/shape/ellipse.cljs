@@ -97,9 +97,7 @@
 (defmethod element.hierarchy/handles :ellipse
   [el]
   (let [{{:keys [cx cy rx ry]} :attrs} el
-        [cx cy rx ry] (mapv utils.length/unit->px [cx cy rx ry])
-        offset (utils.element/offset el)
-        [cx cy] (matrix/add [cx cy] offset)]
+        [cx cy rx ry] (mapv utils.length/unit->px [cx cy rx ry])]
     [{:type :handle
       :action :edit
       :parent (:id el)
@@ -116,28 +114,37 @@
       :label [::ry-handle "y radius handle"]}]))
 
 (defmethod element.hierarchy/render-edit :ellipse
-  [el]
+  [el scale]
   (let [{{:keys [cx cy rx ry]} :attrs} el
         [cx cy rx ry] (mapv utils.length/unit->px [cx cy rx ry])
-        offset (utils.element/offset el)
-        [cx cy] (matrix/add [cx cy] offset)
         line-end-x (+ cx rx)
         line-end-y (- cy ry)]
     [:g ::edit-handles
-     [utils.svg/times [cx cy]]
+     [utils.svg/times [cx cy] scale]
 
-     [utils.svg/line [cx cy] [line-end-x cy] :stroke "var(--accent-foreground)"]
-     [utils.svg/line [cx cy] [cx line-end-y] :stroke "var(--accent-foreground)"]
+     [utils.svg/line [cx cy] [line-end-x cy]
+      :stroke "var(--accent-foreground)"
+      :scale scale]
+     [utils.svg/line [cx cy] [cx line-end-y]
+      :stroke "var(--accent-foreground)"
+      :scale scale]
 
-     [utils.svg/line [cx cy] [line-end-x cy] :stroke-dasharray 5]
-     [utils.svg/line [cx cy] [cx line-end-y] :stroke-dasharray 5]
+     [utils.svg/line [cx cy] [line-end-x cy]
+      :stroke-dasharray 5
+      :scale scale]
+     [utils.svg/line [cx cy] [cx line-end-y]
+      :stroke-dasharray 5
+      :scale scale]
 
-     [utils.svg/label (utils.attribute/->fixed rx 2 false) {:x (+ cx (/ rx 2))
-                                                            :y cy}]
+     [utils.svg/label (utils.attribute/->fixed rx 2 false)
+      {:x (+ cx (/ rx 2))
+       :y cy
+       :scale scale}]
 
-     [utils.svg/label (utils.attribute/->fixed ry 2 false) {:x cx
-                                                            :y (- cy
-                                                                  (/ ry 2))}]]))
+     [utils.svg/label (utils.attribute/->fixed ry 2 false)
+      {:x cx
+       :y (- cy (/ ry 2))
+       :scale scale}]]))
 
 (defmethod element.hierarchy/snapping-points :ellipse
   [el]

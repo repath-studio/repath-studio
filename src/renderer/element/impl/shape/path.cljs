@@ -66,33 +66,28 @@
            (mapv utils.length/unit->px)))
 
 (defn render-arms
-  [{:keys [endpoints segments offset]} index segment]
-  (let [prev-ep (some-> endpoints (get (dec index)) (matrix/add offset))
-        cp0 (some-> segment
-                    (->px-point :start-control-point)
-                    (matrix/add offset))
-        ep (some-> segment
-                   (->px-point :end-point)
-                   (matrix/add offset))]
+  [{:keys [endpoints segments]} index segment scale]
+  (let [prev-ep (some-> endpoints (get (dec index)))
+        cp0 (some-> segment (->px-point :start-control-point))
+        ep (some-> segment (->px-point :end-point))]
     (case (utils.path/segment->command segment)
       "C"
-      (let [cp1 (matrix/add (->px-point segment :end-control-point) offset)]
+      (let [cp1 (->px-point segment :end-control-point)]
         [:<>
-         (when prev-ep [utils.svg/arm prev-ep cp0])
-         [utils.svg/arm cp1 ep]])
+         (when prev-ep [utils.svg/arm prev-ep cp0 scale])
+         [utils.svg/arm cp1 ep scale]])
 
       "S"
       [:<>
        (when-let [implied-cp1 (some-> (aget segments (dec index))
-                                      (utils.path/outgoing-cp)
-                                      (matrix/add offset))]
-         [utils.svg/arm prev-ep implied-cp1])
-       [utils.svg/arm cp0 ep]]
+                                      (utils.path/outgoing-cp))]
+         [utils.svg/arm prev-ep implied-cp1 scale])
+       [utils.svg/arm cp0 ep scale]]
 
       "Q"
       [:<>
-       (when prev-ep [utils.svg/arm prev-ep cp0])
-       [utils.svg/arm cp0 ep]]
+       (when prev-ep [utils.svg/arm prev-ep cp0 scale])
+       [utils.svg/arm cp0 ep scale]]
 
       nil)))
 
@@ -156,7 +151,7 @@
       nil)))
 
 (defn segment-handles
-  [{:keys [parent endpoints segments offset cp-indices]} index segment]
+  [{:keys [parent endpoints segments cp-indices]} index segment]
   (->> (handles endpoints segments index segment)
        (keep (fn [{:keys [point-type pos rounded implied cursor]}]
                (when (or (= point-type :end-point)
@@ -165,7 +160,7 @@
                                  (attribute.impl.d/path-commands)
                                  :label)]
                    (cond-> {:id (keyword index point-type)
-                            :position (matrix/add offset pos)
+                            :position pos
                             :label label
                             :type :handle
                             :action :edit
@@ -203,17 +198,18 @@
                           (utils.path/segments->string))))))
 
 (defmethod element.hierarchy/closest-point :path
-  [el pos]
-  (let [offset (utils.element/offset el)]
-    (some-> (get-in el [:attrs :d])
-            (utils.path/closest-point (matrix/sub pos offset))
-            (matrix/add offset))))
+  [el transform pos]
+  (let [d (get-in el [:attrs :d])
+        local (utils.element/untransform-point transform pos)
+        closest (some-> d (utils.path/closest-point local))]
+    (when closest
+      (utils.element/transform-point transform closest))))
 
 (defmethod element.hierarchy/insert-point :path
-  [el pos]
-  (let [offset (utils.element/offset el)
+  [el transform pos]
+  (let [local (utils.element/untransform-point transform pos)
         inserted (some-> (get-in el [:attrs :d])
-                         (utils.path/insert-point (matrix/sub pos offset)))]
+                         (utils.path/insert-point local))]
     (if inserted
       (let [[d seg-idx] inserted]
         [(assoc-in el [:attrs :d] d)
@@ -223,7 +219,6 @@
 (defn segment-props
   [el segments]
   (let [endpoints (utils.path/acc-endpoints segments)
-        offset (utils.element/offset el)
         selected (->> (:selected-handles el)
                       (keep #(some-> (namespace %) js/parseInt))
                       (into #{}))
@@ -231,7 +226,6 @@
     {:parent (:id el)
      :endpoints endpoints
      :segments segments
-     :offset offset
      :cp-indices cp-indices}))
 
 (defmethod element.hierarchy/handles :path
@@ -244,13 +238,13 @@
          (into []))))
 
 (defmethod element.hierarchy/render-edit :path
-  [el]
+  [el scale]
   (let [segments (->> el :attrs :d utils.path/string->segments)
         props (segment-props el segments)]
     (->> segments
          (map-indexed (fn [index segment]
                         (when (contains? (:cp-indices props) index)
-                          (render-arms props index segment))))
+                          (render-arms props index segment scale))))
          (into [:g]))))
 
 (m/=> translate-point [:-> number? Vec2 PathPointType PathSegments PathSegment])
