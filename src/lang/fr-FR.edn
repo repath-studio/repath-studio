@@ -155,6 +155,13 @@
   :description "L'élément SVG <animateMotion> permet de définir comment un
                 élément se déplace le long d'un chemin de mouvement."}
 
+ :renderer.element.impl.text-content.text-path
+ {:label "Chemin de texte"
+  :description "L'élément SVG <textPath> est utilisé pour afficher du texte le
+                long de la forme d'un élément <path>. Le texte doit être
+                inclus dans l'élément <textPath> et son attribut href est
+                utilisé pour référencer l'élément <path> souhaité."}
+
  :renderer.element.impl.animation.animate-transform
  {:label "Animer la transformation"
   :description "L'élément <animateTransform> anime un attribut de
@@ -279,14 +286,12 @@
                 être utilisé pour incorporer un fragment SVG dans un document
                 SVG ou HTML."}
 
- :renderer.element.impl.text
+ :renderer.element.impl.text-content.text
  {:description "L'élément SVG <text> dessine un élément graphique constitué de
                 texte. Il est possible d'appliquer un dégradé, un motif, un
                 chemin de découpage, un masque ou un filtre à <text>, comme tout
                 autre élément graphique SVG."
-  :label "Texte"
-  :remove-text "Supprimer le texte"
-  :set-text "Définir le texte"}
+  :label "Texte"}
 
  :renderer.attribute.views
  {:all "tout"
@@ -590,6 +595,17 @@
  {:description "L'attribut font-weight fait référence à la graisse ou à la
                 légèreté des glyphes utilisés pour rendre le texte, par rapport
                 aux autres polices de la même famille de polices."}
+
+ :renderer.element.impl.text-content.tspan
+ {:label "TSpan"
+  :description "L'élément SVG <tspan> définit un sous-texte au sein d'un
+                élément <text> ou d'un autre élément <tspan>. Il permet
+                d'ajuster le style et/ou la position de ce sous-texte si
+                besoin."}
+
+ :renderer.element.impl.text-content.core
+ {:remove-text "Supprimer le texte"
+  :set-text "Définir le texte"}
 
  :renderer.attribute.impl.crossorigin
  {:description "L'attribut crossorigin, valide sur les éléments <image> et

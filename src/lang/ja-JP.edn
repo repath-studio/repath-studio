@@ -155,6 +155,13 @@
   :description "SVG <animateMotion> 要素は、要素がモーションパスに沿ってどの
                 ように移動するかを定義できます。"}
 
+ :renderer.element.impl.text-content.text-path
+ {:label "テキストパス"
+  :description "SVG <textPath> 要素は、<path> 要素の形状に沿ってテキストをレンダ
+                リングするために使用されます。テキストは <textPath> 要素内に含
+                め、その href 属性を使用して、参照したい <path> 要素を指定しま
+                す。"}
+
  :renderer.element.impl.animation.animate-transform
  {:label "トランスフォームアニメーション"
   :description "<animateTransform> 要素は、ターゲット要素のトランスフォーム
@@ -264,13 +271,11 @@
                 SVGドキュメントの最も外側の要素として使用されますが、SVGまたは
                 HTMLドキュメント内にSVGフラグメントを埋め込むためにも使用できます。"}
 
- :renderer.element.impl.text
+ :renderer.element.impl.text-content.text
  {:description "SVG <text>要素は、テキストで構成されるグラフィック要素を描画します。
                 他のSVGグラフィック要素と同様に、<text>にグラデーション、パターン、
                 クリッピングパス、マスク、またはフィルターを適用することが可能です。"
-  :label "テキスト"
-  :remove-text "テキストを削除"
-  :set-text "テキストを設定"}
+  :label "テキスト"}
 
  :renderer.attribute.views
  {:all "すべて"
@@ -542,6 +547,16 @@
  {:description "font-weight属性は、同じフォントファミリーの他のフォントと
                 比較して、テキストのレンダリングに使用されるグリフの太さや
                 細さを指します。"}
+
+ :renderer.element.impl.text-content.tspan
+ {:label "TSpan"
+  :description "SVG <tspan> 要素は、<text> 要素または別の <tspan> 要素内のサブテ
+                キストを定義します。必要に応じて、そのサブテキストのスタイルま
+                たは位置を調整できます。"}
+
+ :renderer.element.impl.text-content.core
+ {:remove-text "テキストを削除"
+  :set-text "テキストを設定"}
 
  :renderer.attribute.impl.crossorigin
  {:description "crossorigin属性は、<image>および<feImage>要素で有効で、

@@ -154,6 +154,13 @@
   :description "SVG <animateMotion> öğesi, bir öğenin bir hareket yolu boyunca
                 nasıl hareket ettiğini tanımlamanıza olanak tanır."}
 
+ :renderer.element.impl.text-content.text-path
+ {:label "Metin yolu"
+  :description "SVG <textPath> öğesi, bir <path> öğesinin şeklini izleyerek
+                metni çizmek için kullanılır. Metnin <textPath> öğesi içinde
+                yer alması gerekir ve href özniteliği, istenen <path> öğesine
+                referans vermek için kullanılır."}
+
  :renderer.element.impl.animation.animate-transform
  {:label "Dönüşüm animasyonu"
   :description "<animateTransform> öğesi, hedef öğesinde bir dönüşüm
@@ -274,13 +281,11 @@
                 olarak kullanılır, ancak bir SVG parçasını bir SVG veya HTML
                 belgesi içine gömmek için de kullanılabilir."}
 
- :renderer.element.impl.text
+ :renderer.element.impl.text-content.text
  {:description "SVG <text> öğesi, metinden oluşan bir grafik öğesi çizer.
                 Diğer SVG grafik öğeleri gibi <text>'e de gradyan, desen,
                 kırpma yolu, maske veya filtre uygulamak mümkündür."
-  :label "Metin"
-  :remove-text "Metni kaldır"
-  :set-text "Metin ayarla"}
+  :label "Metin"}
 
  :renderer.attribute.views
  {:all "tümü"
@@ -573,6 +578,17 @@
  {:description "font-weight özniteliği, aynı yazı tipi ailesindeki diğer
                 yazı tiplerine göre metni oluşturmak için kullanılan
                 gliflerin kalınlığını veya hafifliğini ifade eder."}
+
+ :renderer.element.impl.text-content.tspan
+ {:label "TSpan"
+  :description "SVG <tspan> öğesi, bir <text> öğesi içinde veya başka bir
+                <tspan> öğesi içinde alt metin tanımlar. Bu alt metnin
+                stilinin ve/veya konumunun gerektiğinde ayarlanmasına olanak
+                tanır."}
+
+ :renderer.element.impl.text-content.core
+ {:remove-text "Metni kaldır"
+  :set-text "Metin ayarla"}
 
  :renderer.attribute.impl.crossorigin
  {:description "crossorigin özniteliği, <image> ve <feImage> öğelerinde
@@ -942,5 +958,4 @@
   :adjust-hue "Tonu ayarla"
   :adjust-opecity "Saydamlığı ayarla"
   :pick-color "Renk seç"
-  :select-color-type "Renk türünü seç"}
-}
+  :select-color-type "Renk türünü seç"}}

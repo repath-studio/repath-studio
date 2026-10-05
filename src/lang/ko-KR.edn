@@ -154,6 +154,12 @@
   :description "SVG <animateMotion> 요소는 요소가 모션 경로를 따라 어떻게
                 이동하는지 정의할 수 있습니다."}
 
+ :renderer.element.impl.text-content.text-path
+ {:label "텍스트 경로"
+  :description "SVG <textPath> 요소는 <path> 요소의 모양을 따라 텍스트를 렌더링
+                하는 데 사용됩니다. 텍스트는 <textPath> 요소 안에 포함되어야
+                하며, href 속성을 사용하여 원하는 <path>를 참조합니다."}
+
  :renderer.element.impl.animation.animate-transform
  {:label "변환 애니메이션"
   :description "<animateTransform> 요소는 대상 요소의 변환 속성을 애니메이션하여
@@ -265,13 +271,11 @@
                 SVG 문서의 가장 바깥쪽 요소로 사용되지만, SVG나 HTML 문서 내에
                 SVG 조각을 포함하는 데도 사용할 수 있습니다."}
 
- :renderer.element.impl.text
+ :renderer.element.impl.text-content.text
  {:description "SVG <text> 요소는 텍스트로 구성된 그래픽 요소를 그립니다.
                 다른 SVG 그래픽 요소와 마찬가지로 <text>에도 그래디언트, 패턴,
                 클리핑 패스, 마스크 또는 필터를 적용할 수 있습니다."
-  :label "텍스트"
-  :remove-text "텍스트 제거"
-  :set-text "텍스트 설정"}
+  :label "텍스트"}
 
  :renderer.attribute.views
  {:all "모두"
@@ -537,6 +541,16 @@
  {:description "font-weight 속성은 같은 글꼴 패밀리의 다른 글꼴과 비교하여
                 텍스트를 렌더링하는 데 사용되는 글리프의 굵기나 가벼움을
                 나타냅니다."}
+
+ :renderer.element.impl.text-content.tspan
+ {:label "TSpan"
+  :description "SVG <tspan> 요소는 <text> 요소나 다른 <tspan> 요소 안의 부분 텍
+                스트를 정의합니다. 필요에 따라 해당 부분 텍스트의 스타일 또는
+                위치를 조정할 수 있습니다."}
+
+ :renderer.element.impl.text-content.core
+ {:remove-text "텍스트 제거"
+  :set-text "텍스트 설정"}
 
  :renderer.attribute.impl.crossorigin
  {:description "crossorigin 속성은 <image> 및 <feImage> 요소에서

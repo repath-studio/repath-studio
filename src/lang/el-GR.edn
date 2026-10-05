@@ -155,6 +155,14 @@
   :description "Το στοιχείο SVG <animateMotion> επιτρέπει τον ορισμό του πώς
                 ένα στοιχείο κινείται κατά μήκος μιας διαδρομής κίνησης."}
 
+ :renderer.element.impl.text-content.text-path
+ {:label "Διαδρομή κειμένου"
+  :description "Το στοιχείο SVG <textPath> χρησιμοποιείται για την απόδοση
+                κειμένου κατά μήκος του σχήματος ενός στοιχείου <path>. Το
+                κείμενο πρέπει να περιλαμβάνεται στο στοιχείο <textPath>, και
+                το χαρακτηριστικό href του χρησιμοποιείται για να αναφέρεται
+                το επιθυμητό στοιχείο <path>."}
+
  :renderer.element.impl.animation.animate-transform
  {:label "Κίνηση μετασχηματισμού"
   :description "Το στοιχείο <animateTransform> κινεί ένα χαρακτηριστικό
@@ -281,14 +289,12 @@
                 εγγράφων SVG, αλλά μπορεί επίσης να χρησιμοποιηθεί για την
                 ενσωμάτωση ενός SVG τμήματος μέσα σε ένα SVG ή έγγραφο HTML."}
 
- :renderer.element.impl.text
+ :renderer.element.impl.text-content.text
  {:description "Το στοιχείο SVG <text> δημιουργεί ένα γραφικό στοιχείο που
                 αποτελείται από κείμενο. Είναι δυνατόν να εφαρμοστεί διαβάθμιση,
                 πατρόν, διαδρομή αποκοπής, μάσκα ή φίλτρο στο <text>, όπως σε
                 οποιοδήποτε άλλο γραφικό στοιχείο SVG."
-  :label "Κείμενο"
-  :remove-text "Διαφραφή κειμένου"
-  :set-text "Ορισμός κειμένου"}
+  :label "Κείμενο"}
 
  :renderer.attribute.views
  {:all "όλες"
@@ -601,6 +607,17 @@
                 ελαφρότητα των συμβόλων που χρησιμοποιούνται για την απεικόνιση
                 του κειμένου, σε σχέση με άλλες γραμματοσειρές της ίδιας
                 οικογένειας."}
+
+ :renderer.element.impl.text-content.tspan
+ {:label "TSpan"
+  :description "Το στοιχείο SVG <tspan> ορίζει ένα δευτερεύον κείμενο μέσα σε
+                ένα στοιχείο <text> ή σε ένα άλλο στοιχείο <tspan>. Επιτρέπει
+                τη ρύθμιση του στυλ και/ή της θέσης αυτού του κειμένου ανάλογα
+                με τις ανάγκες."}
+
+ :renderer.element.impl.text-content.core
+ {:remove-text "Διαφραφή κειμένου"
+  :set-text "Ορισμός κειμένου"}
 
  :renderer.attribute.impl.crossorigin
  {:description "Το χαρακτηριστικό crossorigin, έγκυρο στα στοιχεία <image> και
