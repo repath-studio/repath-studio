@@ -50,11 +50,11 @@
   [el]
   (cond
     (svg? el)
-    (let [{:keys [viewBox preserveAspectRatio]} (:attrs el)
-          [x y width height] (->> [:x :y :width :height]
-                                  (select-keys (:attrs el))
-                                  (mapv (fn [[k v]]
-                                          (utils.length/unit->px v :svg k))))
+    (let [{:keys [x y width height viewBox preserveAspectRatio]} (:attrs el)
+          [x y width height] [(utils.length/unit->px x :svg :x)
+                              (utils.length/unit->px y :svg :y)
+                              (utils.length/unit->px width :svg :width)
+                              (utils.length/unit->px height :svg :height)]
           [vb-x vb-y vb-w vb-h] (some-> viewBox (utils.attribute/view-box))
           preserve-none? (some-> preserveAspectRatio
                                  (string/trim)
