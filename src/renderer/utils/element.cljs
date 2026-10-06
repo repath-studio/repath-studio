@@ -9,7 +9,7 @@
    [malli.core :as m]
    [malli.transform :as m.transform]
    [reagent.dom.server :as dom.server]
-   [renderer.db :refer [BBox Vec2 JS_Element Transform]]
+   [renderer.db :refer [BBox Vec2 JS_Element Transform Viewbox]]
    [renderer.element.db
     :as element.db
     :refer [Element ElementAttrs ElementTag PersistedElement]]
@@ -45,16 +45,22 @@
    (+ (* sx-out ox-in) ox-out)
    (+ (* sy-out oy-in) oy-out)])
 
+(m/=> viewbox [:-> Element Viewbox])
+(defn viewbox
+  [el]
+  (let [{:keys [x y width height]} (:attrs el)]
+    [(utils.length/unit->px x :svg :x)
+     (utils.length/unit->px y :svg :y)
+     (utils.length/unit->px width :svg :width)
+     (utils.length/unit->px height :svg :height)]))
+
 (m/=> transform [:-> Element Transform])
 (defn transform
   [el]
   (cond
     (svg? el)
-    (let [{:keys [x y width height viewBox preserveAspectRatio]} (:attrs el)
-          [x y width height] [(utils.length/unit->px x :svg :x)
-                              (utils.length/unit->px y :svg :y)
-                              (utils.length/unit->px width :svg :width)
-                              (utils.length/unit->px height :svg :height)]
+    (let [{:keys [viewBox preserveAspectRatio]} (:attrs el)
+          [x y width height] (viewbox el)
           [vb-x vb-y vb-w vb-h] (some-> viewBox (utils.attribute/view-box))
           preserve-none? (some-> preserveAspectRatio
                                  (string/trim)
@@ -252,13 +258,12 @@
   [els]
   (let [bbox (united-bbox els)
         [min-x min-y _max-x _max-y] bbox
-        [w h] (utils.bounds/->dimensions bbox)
-        viewbox (string/join " " [min-x min-y w h])]
+        [w h] (utils.bounds/->dimensions bbox)]
     (->string [{:tag :svg
                 :children (mapv :id els)
                 :attrs {:width (str w)
                         :height (str h)
-                        :viewBox viewbox
+                        :viewBox (string/join " " [min-x min-y w h])
                         :xmlns "http://www.w3.org/2000/svg"}}])))
 
 (m/=> style->map [:-> ElementAttrs ElementAttrs])

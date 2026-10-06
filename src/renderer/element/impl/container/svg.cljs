@@ -12,7 +12,7 @@
    [renderer.hierarchy :as hierarchy]
    [renderer.i18n.views :as i18n.views]
    [renderer.input.impl.pointer :as input.impl.pointer]
-   [renderer.utils.attribute :as utils.attribute]))
+   [renderer.utils.element :as utils.element]))
 
 (hierarchy/derive! :svg ::element.hierarchy/container)
 (hierarchy/derive! :svg ::element.hierarchy/box)
@@ -38,6 +38,15 @@
                  :transform (str "translate(" shadow-size " " shadow-size ")")
                  :style {:filter (str "blur(" shadow-size "px)")}})])
 
+(defn viewport-rect
+  [el]
+  (let [[sx sy ox oy] (utils.element/transform el)
+        [x y w h] (utils.element/viewbox el)]
+    [(/ (- x ox) sx)
+     (/ (- y oy) sy)
+     (/ w sx)
+     (/ h sy)]))
+
 (defmethod element.hierarchy/render :svg
   [_el]
   (let [ref (react/createRef)]
@@ -56,8 +65,7 @@
               zoom @(rf/subscribe [::document.subs/zoom])
               pointer-handler (partial input.impl.pointer/handler! el)
               shadow-size (/ 2 zoom)
-              [x y w h] (or (some-> (:viewBox attrs) (utils.attribute/view-box))
-                            [0 0 (:width attrs) (:height attrs)])]
+              [x y w h] (viewport-rect el)]
           [:g
            [:text
             (merge
