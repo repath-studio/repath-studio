@@ -9,17 +9,17 @@
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.math :as utils.math]))
 
-(m/=> dot [:-> Vec2 any?])
+(m/=> dot [:-> Vec2 any? any?])
 (defn dot
-  ([[x y] & children]
-   (let [zoom @(rf/subscribe [::document.subs/zoom])]
-     (into [:circle {:cx x
-                     :cy y
-                     :stroke-width (/ 1 zoom)
-                     :fill "var(--accent)"
-                     :stroke "var(--accent-foreground)"
-                     :stroke-opacity ".5"
-                     :r (/ 4 zoom)}] children))))
+  [[x y] & children]
+  (let [zoom @(rf/subscribe [::document.subs/zoom])]
+    (into [:circle {:cx x
+                    :cy y
+                    :stroke-width (/ 1 zoom)
+                    :fill "var(--accent)"
+                    :stroke "var(--accent-foreground)"
+                    :stroke-opacity ".5"
+                    :r (/ 4 zoom)}] children)))
 
 (m/=> line [:-> Vec2 Vec2 [:* any?] any?])
 (defn line
