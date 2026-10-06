@@ -10,6 +10,7 @@
    [renderer.attribute.views :as attribute.views]
    [renderer.element.events :as-alias element.events]
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.element.subs :as-alias element.subs]
    [renderer.hierarchy :as hierarchy]
    [renderer.i18n.views :as i18n.views]
    [renderer.input.impl.pointer :as input.impl.pointer]
@@ -172,10 +173,13 @@
       :id :size}]))
 
 (defmethod element.hierarchy/render-edit :blob
-  [el scale]
-  (let [{{:keys [x y size]} :attrs} el
+  [el]
+  (let [transform @(rf/subscribe [::element.subs/transform (:id el)])
+        {{:keys [x y size]} :attrs} el
         [x y size] (mapv utils.length/unit->px [x y size])
-        [x2 y2] (matrix/add [x y] size)]
+        wpoint (partial utils.element/transform-point transform)
+        start (wpoint [x y])
+        end (wpoint (matrix/add [x y] size))]
     [:<>
-     [utils.svg/line [x y] [x2 y2] :scale scale]
-     [utils.svg/times [x y] scale]]))
+     [utils.svg/line start end]
+     [utils.svg/times start]]))

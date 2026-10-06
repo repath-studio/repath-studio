@@ -6,9 +6,11 @@
    ["svgpath" :as svgpath]
    [clojure.core.matrix :as matrix]
    [malli.core :as m]
+   [re-frame.core :as rf]
    [renderer.attribute.impl.d :as attribute.impl.d]
    [renderer.db :refer [PathSegment PathSegments PathPointType Vec2]]
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.element.subs :as-alias element.subs]
    [renderer.hierarchy :as hierarchy]
    [renderer.input.handlers :as input.handlers]
    [renderer.utils.element :as utils.element]
@@ -66,28 +68,30 @@
            (mapv utils.length/unit->px)))
 
 (defn render-arms
-  [{:keys [endpoints segments]} index segment scale]
-  (let [prev-ep (some-> endpoints (get (dec index)))
-        cp0 (some-> segment (->px-point :start-control-point))
-        ep (some-> segment (->px-point :end-point))]
+  [{:keys [endpoints segments]} index segment transform]
+  (let [wpoint (partial utils.element/transform-point transform)
+        prev-ep (some-> endpoints (get (dec index)) wpoint)
+        cp0 (some-> segment (->px-point :start-control-point) wpoint)
+        ep (some-> segment (->px-point :end-point) wpoint)]
     (case (utils.path/segment->command segment)
       "C"
-      (let [cp1 (->px-point segment :end-control-point)]
+      (let [cp1 (wpoint (->px-point segment :end-control-point))]
         [:<>
-         (when prev-ep [utils.svg/arm prev-ep cp0 scale])
-         [utils.svg/arm cp1 ep scale]])
+         (when prev-ep [utils.svg/arm prev-ep cp0])
+         [utils.svg/arm cp1 ep]])
 
       "S"
       [:<>
        (when-let [implied-cp1 (some-> (aget segments (dec index))
-                                      (utils.path/outgoing-cp))]
-         [utils.svg/arm prev-ep implied-cp1 scale])
-       [utils.svg/arm cp0 ep scale]]
+                                      (utils.path/outgoing-cp)
+                                      wpoint)]
+         [utils.svg/arm prev-ep implied-cp1])
+       [utils.svg/arm cp0 ep]]
 
       "Q"
       [:<>
-       (when prev-ep [utils.svg/arm prev-ep cp0 scale])
-       [utils.svg/arm cp0 ep scale]]
+       (when prev-ep [utils.svg/arm prev-ep cp0])
+       [utils.svg/arm cp0 ep]]
 
       nil)))
 
@@ -238,13 +242,14 @@
          (into []))))
 
 (defmethod element.hierarchy/render-edit :path
-  [el scale]
-  (let [segments (->> el :attrs :d utils.path/string->segments)
+  [el]
+  (let [transform @(rf/subscribe [::element.subs/transform (:id el)])
+        segments (->> el :attrs :d utils.path/string->segments)
         props (segment-props el segments)]
     (->> segments
          (map-indexed (fn [index segment]
                         (when (contains? (:cp-indices props) index)
-                          (render-arms props index segment scale))))
+                          (render-arms props index segment transform))))
          (into [:g]))))
 
 (m/=> translate-point [:-> number? Vec2 PathPointType PathSegments PathSegment])

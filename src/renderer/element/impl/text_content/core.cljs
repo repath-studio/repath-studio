@@ -73,7 +73,7 @@
     ::effects/focus-canvas nil}))
 
 (defmethod element.hierarchy/render-edit ::element.hierarchy/text-content
-  [el _scale]
+  [el]
   (let [{:keys [id content]} el
         el-bbox (element.hierarchy/bbox el)
         [x y] el-bbox

@@ -35,7 +35,7 @@
 
 (defmethod render :default [_el])
 (defmethod render-to-string :default [el] [render el])
-(defmethod render-edit :default [_el _scale])
+(defmethod render-edit :default [_el])
 (defmethod handles :default [_el])
 (defmethod bbox :default [_el])
 (defmethod delete-segments :default [el] el)

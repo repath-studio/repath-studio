@@ -9,18 +9,17 @@
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.math :as utils.math]))
 
-(m/=> dot [:-> Vec2 any? any?])
+(m/=> dot [:-> Vec2 any?])
 (defn dot
-  ([point] (dot point 1))
-  ([[x y] scale & children]
+  ([[x y] & children]
    (let [zoom @(rf/subscribe [::document.subs/zoom])]
      (into [:circle {:cx x
                      :cy y
-                     :stroke-width (/ 1 zoom scale)
+                     :stroke-width (/ 1 zoom)
                      :fill "var(--accent)"
                      :stroke "var(--accent-foreground)"
                      :stroke-opacity ".5"
-                     :r (/ 4 zoom scale)}] children))))
+                     :r (/ 4 zoom)}] children))))
 
 (m/=> line [:-> Vec2 Vec2 [:* any?] any?])
 (defn line
@@ -28,13 +27,11 @@
                              stroke-width
                              stroke-linecap
                              stroke-opacity
-                             stroke-dasharray
-                             scale]
+                             stroke-dasharray]
                       :or {stroke "var(--accent)"
                            stroke-width 1
                            stroke-opacity 1
-                           stroke-linecap "round"
-                           scale 1}}]
+                           stroke-linecap "round"}}]
   (let [zoom @(rf/subscribe [::document.subs/zoom])]
     [:line {:x1 x1
             :y1 y1
@@ -42,9 +39,9 @@
             :y2 y2
             :stroke stroke
             :stroke-opacity stroke-opacity
-            :stroke-width (/ stroke-width zoom scale)
+            :stroke-width (/ stroke-width zoom)
             :stroke-linecap stroke-linecap
-            :stroke-dasharray (/ stroke-dasharray zoom scale)}]))
+            :stroke-dasharray (/ stroke-dasharray zoom)}]))
 
 (m/=> cross [:-> Vec2 number? any?])
 (defn cross
@@ -64,16 +61,13 @@
      [line start-b end-b]]))
 
 (defn arm
-  ([start end] (arm start end 1))
-  ([start end scale]
-   [:g {:pointer-events "none"}
-    [line start end
-     :stroke "var(--primary)"
-     :scale scale]
-    [line start end
-     :stroke "var(--foreground-muted)"
-     :stroke-dasharray 4
-     :scale scale]]))
+  [start end]
+  [:g {:pointer-events "none"}
+   [line start end
+    :stroke "var(--primary)"]
+   [line start end
+    :stroke "var(--foreground-muted)"
+    :stroke-dasharray 4]])
 
 (m/=> arc [:-> Vec2 number? number? number? any?])
 (defn arc
@@ -97,36 +91,33 @@
 
 (m/=> times [:-> Vec2 any?])
 (defn times
-  ([point] (times point 1))
-  ([[x y] scale]
-   (let [handle-size @(rf/subscribe [::document.subs/handle-size])
-         mid (/ handle-size Math/PI scale)
-         x1 (- x mid)
-         x2 (+ x mid)
-         y1 (- y mid)
-         y2 (+ y mid)
-         bg-attrs {:stroke "var(--accent-foreground)"
-                   :stroke-opacity ".5"
-                   :stroke-width 3
-                   :scale scale}]
-     [:g {:pointer-events "none"}
-      [line [x1 y1] [x2 y2] bg-attrs]
-      [line [x2 y1] [x1 y2] bg-attrs]
-      [line [x1 y1] [x2 y2] {:scale scale}]
-      [line [x2 y1] [x1 y2] {:scale scale}]])))
+  [[x y]]
+  (let [handle-size @(rf/subscribe [::document.subs/handle-size])
+        mid (/ handle-size Math/PI)
+        x1 (- x mid)
+        x2 (+ x mid)
+        y1 (- y mid)
+        y2 (+ y mid)
+        bg-attrs {:stroke "var(--accent-foreground)"
+                  :stroke-opacity ".5"
+                  :stroke-width 3}]
+    [:g {:pointer-events "none"}
+     [line [x1 y1] [x2 y2] bg-attrs]
+     [line [x2 y1] [x1 y2] bg-attrs]
+     [line [x1 y1] [x2 y2]]
+     [line [x2 y1] [x1 y2]]]))
 
 (m/=> label [:-> string? map? any?])
 (defn label
   [text attrs]
-  (let [{:keys [x y text-anchor font-size font-family scale]
-         :or {scale 1}} attrs
+  (let [{:keys [x y text-anchor font-size font-family]} attrs
         rect-ref (react/createRef)
         zoom @(rf/subscribe [::document.subs/zoom])
         text-anchor (or text-anchor "middle")
-        font-size (/ (or font-size 10) zoom scale)
+        font-size (/ (or font-size 10) zoom)
         font-family (or font-family "var(--mono)")
-        padding (/ 8 zoom scale)
-        stroke-width (/ 1 zoom scale)
+        padding (/ 8 zoom)
+        stroke-width (/ 1 zoom)
         label-height (+ font-size padding)]
     [:g {:pointer-events "none"}
      [:rect {:ref rect-ref
@@ -135,7 +126,7 @@
              :stroke "var(--accent-foreground)"
              :stroke-width stroke-width
              :stroke-opacity ".5"
-             :rx (/ 4 zoom scale)
+             :rx (/ 4 zoom)
              :height label-height} text]
      [:text {:ref (fn [this]
                     (when (and this rect-ref)

@@ -160,11 +160,6 @@
               (parent-container db (:id container)))
        default-transform))))
 
-(m/=> transform->str [:-> Transform string?])
-(defn transform->str
-  [[sx sy ox oy]]
-  (str "translate(" ox " " oy ") scale(" sx " " sy ")"))
-
 (m/=> container-local-point [:-> App ElementId Vec2 Vec2])
 (defn container-local-point
   [db container-id point]
