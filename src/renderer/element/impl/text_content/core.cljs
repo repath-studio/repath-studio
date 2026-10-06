@@ -9,6 +9,7 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.impl.text-content.text]
    [renderer.element.impl.text-content.tspan]
+   [renderer.element.subs :as-alias element.subs]
    [renderer.hierarchy :as hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.tool.events :as-alias tool.events]
@@ -75,6 +76,7 @@
 (defmethod element.hierarchy/render-edit ::element.hierarchy/text-content
   [el]
   (let [{:keys [id content]} el
+        [sx sy ox oy] @(rf/subscribe [::element.subs/transform (:id el)])
         el-bbox (element.hierarchy/bbox el)
         [x y] el-bbox
         [_w h] (utils.bounds/->dimensions el-bbox)
@@ -87,7 +89,9 @@
     [:foreignObject {:x x
                      :y y
                      :width "1000vw"
-                     :height h}
+                     :height h
+                     :transform (str "translate(" ox " " oy ") "
+                                     "scale(" sx " " sy ")")}
      [:input
       {:key id
        :default-value content
