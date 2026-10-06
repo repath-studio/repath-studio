@@ -44,7 +44,7 @@
      :on-success [::element.events/add]
      :on-error [::app.events/toast-error]
      :position (or (:point (:nearest-neighbor db))
-                   (:adjusted-pointer-pos db))}}))
+                   (:local-pointer-pos db))}}))
 
 (rf/dispatch [::action.events/register-action
               {:id :tool/image

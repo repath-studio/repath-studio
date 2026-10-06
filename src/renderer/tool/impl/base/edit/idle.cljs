@@ -53,7 +53,7 @@
 
 (defmethod tool.hierarchy/on-double-click [::edit/edit :idle]
   [db e]
-  (let [{:keys [adjusted-pointer-pos]} db
+  (let [{:keys [local-pointer-pos]} db
         {:keys [element]} e
         {:keys [parent id]} element]
     (cond
@@ -64,11 +64,11 @@
 
       (and (= (:type element) :element)
            (contains? (element.handlers/selected-ids db) id)
-           (insertion-candidate db element adjusted-pointer-pos))
+           (insertion-candidate db element local-pointer-pos))
       (let [[new-el handle-id] (element.hierarchy/insert-point
                                 element
                                 (element.handlers/transform db id)
-                                adjusted-pointer-pos)]
+                                local-pointer-pos)]
         (cond-> db
           :always
           (-> (dissoc :clicked-element :insertion-point)

@@ -706,7 +706,7 @@
 (defn hovered-svg
   [db]
   (let [svgs (reverse (root-svgs db))
-        pointer-pos (:adjusted-pointer-pos db)]
+        pointer-pos (:local-pointer-pos db)]
     (or (some #(when (utils.bounds/contained-point? (:bbox %) pointer-pos) %)
               svgs)
         (root db))))
@@ -1026,7 +1026,7 @@
          offset (matrix/sub el-center center)
          el (dissoc el :bbox)
          [s-x1 s-y1] (:bbox parent-el)
-         pointer-pos (:adjusted-pointer-pos db)
+         pointer-pos (:local-pointer-pos db)
          el (cond-> el
               (not (utils.element/top-level? el))
               (assoc :parent (:id parent-el)))]

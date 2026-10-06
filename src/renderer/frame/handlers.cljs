@@ -70,7 +70,7 @@
 (m/=> zoom-at-pointer [:-> App number? App])
 (defn zoom-at-pointer
   [db factor]
-  (zoom-at-position db factor (:adjusted-pointer-pos db)))
+  (zoom-at-position db factor (:local-pointer-pos db)))
 
 (m/=> zoom-in-place [:-> App number? App])
 (defn zoom-in-place

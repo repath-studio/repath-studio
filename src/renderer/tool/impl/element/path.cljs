@@ -39,8 +39,8 @@
                  "Click to add a segment, or click and drag to add a curve.
                   Double or right click to finalize the path."]))
 
-(m/=> adjusted-pointer-position [:-> App PointerEvent Vec2])
-(defn adjusted-pointer-position
+(m/=> local-pointer-position [:-> App PointerEvent Vec2])
+(defn local-pointer-position
   [db e]
   (cond->> (tool.handlers/snapped-position db)
     :always
@@ -54,8 +54,8 @@
                                     (apply utils.path/abs-endpoint)
                                     (mapv utils.length/unit->px)))))
 
-(m/=> adjusted-pointer-offset [:-> App Vec2])
-(defn adjusted-pointer-offset
+(m/=> local-pointer-offset [:-> App Vec2])
+(defn local-pointer-offset
   [db]
   (->> (tool.handlers/snapped-offset db)
        (element.handlers/local-point db)))
@@ -100,7 +100,7 @@
 
 (defmethod tool.hierarchy/on-pointer-move [::path :create]
   [db e]
-  (let [[x y] (->> (adjusted-pointer-position db e)
+  (let [[x y] (->> (local-pointer-position db e)
                    (mapv utils.attribute/->fixed))]
     (update-path
      db
@@ -119,7 +119,7 @@
 
 (defmethod tool.hierarchy/on-pointer-up [::path :create]
   [db e]
-  (let [[x y] (->> (adjusted-pointer-position db e)
+  (let [[x y] (->> (local-pointer-position db e)
                    (mapv utils.attribute/->fixed))]
     (update-path db (fn [d]
                       (let [segments (utils.path/string->segments d)
@@ -130,7 +130,7 @@
 
 (defmethod tool.hierarchy/on-drag [::path :create]
   [db _e]
-  (let [anchor (adjusted-pointer-offset db)
+  (let [anchor (local-pointer-offset db)
         drag-pos (->> (tool.handlers/snapped-position db)
                       (element.handlers/local-point db))
         [cp2-x cp2-y] (->> (matrix/sub (matrix/mul anchor 2) drag-pos)
@@ -145,7 +145,7 @@
 
 (defmethod tool.hierarchy/on-drag-end [::path :create]
   [db e]
-  (let [[x y] (adjusted-pointer-offset db)]
+  (let [[x y] (local-pointer-offset db)]
     (-> (update-path db add-to-path "L" x y)
         (tool.hierarchy/on-pointer-move db e))))
 

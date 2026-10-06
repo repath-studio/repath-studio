@@ -64,9 +64,9 @@
         active-pointers @(rf/subscribe [::input.subs/active-pointers])
         pinch-distance @(rf/subscribe [::input.subs/pinch-distance])
         pointer-pos @(rf/subscribe [::input.subs/pointer-pos])
-        adjusted-pos @(rf/subscribe [::input.subs/adjusted-pointer-pos])
+        local-pointer-pos @(rf/subscribe [::input.subs/local-pointer-pos])
         pointer-offset @(rf/subscribe [::input.subs/pointer-offset])
-        adjusted-offset @(rf/subscribe [::input.subs/adjusted-pointer-offset])
+        local-pointer-offset @(rf/subscribe [::input.subs/local-pointer-offset])
         drag? @(rf/subscribe [::input.subs/drag?])
         pan @(rf/subscribe [::document.subs/pan])
         active-tool @(rf/subscribe [::tool.subs/active])
@@ -79,9 +79,9 @@
      ["Active pointers" (coll->str (keys active-pointers))]
      ["Pinch distance" (str pinch-distance)]
      ["Pointer position" (coll->str pointer-pos)]
-     ["Adjusted pointer position" (coll->str adjusted-pos)]
+     ["Adjusted pointer position" (coll->str local-pointer-pos)]
      ["Pointer offset" (coll->str pointer-offset)]
-     ["Adjusted pointer offset" (coll->str adjusted-offset)]
+     ["Adjusted pointer offset" (coll->str local-pointer-offset)]
      ["Pointer drag?" (str drag?)]
      ["Pan" (coll->str pan)]
      ["Active tool" active-tool]

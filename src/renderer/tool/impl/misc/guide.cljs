@@ -97,7 +97,7 @@
 (defmethod tool.hierarchy/snapping-points [::guide :create]
   [db]
   [(with-meta
-     (:adjusted-pointer-pos db)
+     (:local-pointer-pos db)
      {:label [::guide-position "guide position"]})])
 
 (defmethod tool.hierarchy/snapping-elements [::guide :create]

@@ -153,9 +153,9 @@
 
         (or (drag-pointer? db e) (not drag-pointer))
         (assoc :pointer-pos pointer-pos
-               :adjusted-pointer-pos (input.handlers/adjusted-pos
-                                      db
-                                      pointer-pos))))))
+               :local-pointer-pos (input.handlers/adjusted-pos
+                                   db
+                                   pointer-pos))))))
 
 (defmethod input.hierarchy/pointer "pointerdown"
   [db e]
@@ -171,10 +171,9 @@
       (or (= button :middle)
           (and (= button :left) (empty? active-pointers)))
       (assoc :pointer-pos pointer-pos
-             :adjusted-pointer-pos (input.handlers/adjusted-pos db pointer-pos)
+             :local-pointer-pos (input.handlers/adjusted-pos db pointer-pos)
              :pointer-offset pointer-pos
-             :adjusted-pointer-offset (input.handlers/adjusted-pos db
-                                                                   pointer-pos))
+             :local-pointer-offset (input.handlers/adjusted-pos db pointer-pos))
 
       (not (touch? e))
       (assoc :nearest-neighbor-offset (:point nearest-neighbor))

@@ -34,7 +34,7 @@
                           (flatten)
                           (string/join " "))))
 
-(defn adjusted-pointer-position
+(defn local-pointer-position
   [db e]
   (cond->> (tool.handlers/snapped-position db)
     :always
@@ -52,7 +52,7 @@
 
 (defmethod tool.hierarchy/on-pointer-up [::tool.hierarchy/poly :create]
   [db e]
-  (update-points db #(->> (adjusted-pointer-position db e)
+  (update-points db #(->> (local-pointer-position db e)
                           (into [%])
                           (string/join " "))))
 
@@ -66,7 +66,7 @@
 
 (defmethod tool.hierarchy/on-pointer-move [::tool.hierarchy/poly :create]
   [db e]
-  (let [point (adjusted-pointer-position db e)]
+  (let [point (local-pointer-position db e)]
     (cond-> db
       (= (:state db) :create)
       (update-points #(let [point-vector (utils.attribute/points->vec %)

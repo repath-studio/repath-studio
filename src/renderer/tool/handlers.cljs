@@ -61,20 +61,20 @@
 (m/=> pointer-delta [:-> App Vec2])
 (defn pointer-delta
   [db]
-  (matrix/sub (:adjusted-pointer-pos db)
-              (:adjusted-pointer-offset db)))
+  (matrix/sub (:local-pointer-pos db)
+              (:local-pointer-offset db)))
 
 (m/=> snapped-offset [:-> App Vec2])
 (defn snapped-offset
   [db]
   (or (:nearest-neighbor-offset db)
-      (:adjusted-pointer-offset db)))
+      (:local-pointer-offset db)))
 
 (m/=> snapped-position [:-> App Vec2])
 (defn snapped-position
   [db]
   (or (:point (:nearest-neighbor db))
-      (:adjusted-pointer-pos db)))
+      (:local-pointer-pos db)))
 
 (m/=> axis-pan-offset [:-> number? number? number? number?])
 (defn axis-pan-offset
@@ -142,8 +142,8 @@
 (defn select-box
   [db]
   (let [zoom (get-in db [:documents (:active-document db) :zoom])
-        [pos-x pos-y] (:adjusted-pointer-pos db)
-        [offset-x offset-y] (:adjusted-pointer-offset db)]
+        [pos-x pos-y] (:local-pointer-pos db)
+        [offset-x offset-y] (:local-pointer-offset db)]
     {:tag :rect
      :attrs {:x (str (min pos-x offset-x))
              :y (str (min pos-y offset-y))

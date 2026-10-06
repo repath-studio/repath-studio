@@ -28,14 +28,14 @@
 (m/=> swap-parent [:-> App ElementId Element App])
 (defn swap-parent
   [db id hovered-svg]
-  (let [{:keys [adjusted-pointer-pos]} db
-        el-transform (element.handlers/transform db id)
+  (let [{:keys [local-pointer-pos]} db
+        transform (element.handlers/transform db id)
         db (element.handlers/set-parent db id (:id hovered-svg))
-        offset (->> (utils.element/untransform-point el-transform
-                                                     adjusted-pointer-pos)
+        offset (->> local-pointer-pos
+                    (utils.element/untransform-point transform)
                     (utils.element/transform-point
                      (element.handlers/transform db id))
-                    (matrix/sub adjusted-pointer-pos)
+                    (matrix/sub local-pointer-pos)
                     (element.handlers/container-scale-offset db id))]
     (element.handlers/translate db id offset)))
 

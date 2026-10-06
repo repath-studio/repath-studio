@@ -81,7 +81,7 @@
 (defmethod tool.hierarchy/on-pointer-move [::brush :idle]
   [db _e]
   (let [size (or (document.handlers/attr db ::size) default-size)
-        [x y] (:adjusted-pointer-pos db)
+        [x y] (:local-pointer-pos db)
         fill (document.handlers/attr db :fill)
         radius (str (/ (* size (hovered-scale db)) 2))]
     (app.handlers/enqueue-fx db [::set-brush {:type :element
@@ -96,7 +96,7 @@
   (let [brush-size (or (document.handlers/attr db ::size) default-size)
         parent-id (:id (element.handlers/hovered-svg db))
         to-local (partial element.handlers/container-local-point db parent-id)
-        point (string/join " " (conj (to-local (:adjusted-pointer-pos db))
+        point (string/join " " (conj (to-local (:local-pointer-pos db))
                                      (:pressure e)))
         fill (document.handlers/attr db :fill)]
     (if (:shift-key e)
@@ -131,10 +131,9 @@
 
 (defmethod tool.hierarchy/on-drag [::brush :create]
   [db e]
-  (let [{:keys [adjusted-pointer-pos]} db
+  (let [{:keys [local-pointer-pos]} db
         selected (first (element.handlers/selected db))
-        point (element.handlers/local-point db (:id selected)
-                                            adjusted-pointer-pos)
+        point (element.handlers/local-point db (:id selected) local-pointer-pos)
         point (string/join " " (conj point (:pressure e)))]
     (element.handlers/update-selected db
                                       update-in [:attrs :points]

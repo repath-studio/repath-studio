@@ -42,8 +42,8 @@
   (let [stroke (document.handlers/attr db :stroke)
         parent-id (:id (element.handlers/hovered-svg db))
         to-local (partial element.handlers/container-local-point db parent-id)
-        point-1 (string/join " " (to-local (:adjusted-pointer-offset db)))
-        point-2 (string/join " " (to-local (:adjusted-pointer-pos db)))]
+        point-1 (string/join " " (to-local (:local-pointer-offset db)))
+        point-2 (string/join " " (to-local (:local-pointer-pos db)))]
     (-> db
         (tool.handlers/set-state :create)
         (element.handlers/add {:type :element
@@ -55,9 +55,9 @@
 
 (defmethod tool.hierarchy/on-drag [::pencil :create]
   [db _e]
-  (let [{:keys [adjusted-pointer-pos]} db
+  (let [{:keys [local-pointer-pos]} db
         id (-> db element.handlers/selected first :id)
-        point (element.handlers/local-point db id adjusted-pointer-pos)
+        point (element.handlers/local-point db id local-pointer-pos)
         point (string/join " " point)]
     (element.handlers/update-selected db
                                       update-in [:attrs :d]

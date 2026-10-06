@@ -85,7 +85,7 @@
 (defmethod tool.hierarchy/snapping-points [::circle :create]
   [db]
   [(with-meta
-     (:adjusted-pointer-pos db)
+     (:local-pointer-pos db)
      {:label (if (= (:state db) :create)
                [::circle-radius "circle radius"]
                [::circle-center "circle center"])})])

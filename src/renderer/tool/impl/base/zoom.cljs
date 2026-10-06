@@ -67,8 +67,8 @@
 (defmethod tool.hierarchy/on-drag-end [::zoom :select]
   [db e]
   (let [{:keys [dom-rect zoom-sensitivity active-document]} db
-        [offset-x offset-y] (:adjusted-pointer-offset db)
-        [x y] (:adjusted-pointer-pos db)
+        [offset-x offset-y] (:local-pointer-offset db)
+        [x y] (:local-pointer-pos db)
         width (abs (- x offset-x))
         height (abs (- y offset-y))
         width-ratio (/ (:width dom-rect) width)
