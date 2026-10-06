@@ -188,18 +188,17 @@
 
 (defmethod element.hierarchy/handles :brush
   [el]
-  (let [offset (utils.element/offset el)]
-    (->> el :attrs :points
-         (points->vec)
-         (map-indexed (fn [index point]
-                        (let [point (mapv utils.length/unit->px (take 2 point))]
-                          {:id (keyword (str index))
-                           :type :handle
-                           :label [::brush-point "brush point"]
-                           :action :edit
-                           :parent (:id el)
-                           :position (matrix/add offset point)})))
-         (into []))))
+  (->> el :attrs :points
+       (points->vec)
+       (map-indexed (fn [index point]
+                      (let [point (mapv utils.length/unit->px (take 2 point))]
+                        {:id (keyword (str index))
+                         :type :handle
+                         :label [::brush-point "brush point"]
+                         :action :edit
+                         :parent (:id el)
+                         :position point})))
+       (into [])))
 
 (defmethod element.hierarchy/handle-drag :brush
   [el offset handle lock?]

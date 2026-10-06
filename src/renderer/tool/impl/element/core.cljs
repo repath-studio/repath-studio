@@ -77,7 +77,7 @@
 (defn snap-point
   [db]
   [(with-meta
-     (:adjusted-pointer-pos db)
+     (:local-pointer-pos db)
      {:label [::edge "edge"]})])
 
 (defmethod tool.hierarchy/snapping-points [::tool.hierarchy/element :idle]

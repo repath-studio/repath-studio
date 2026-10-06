@@ -130,7 +130,7 @@
 (defn snap-point
   [db]
   [(with-meta
-     (:adjusted-pointer-pos db)
+     (:local-pointer-pos db)
      {:label (if @measure-attrs
                [::measure-end "measure end"]
                [::measure-start "measure start"])})])

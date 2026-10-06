@@ -26,7 +26,9 @@
 
 (defmethod tool.hierarchy/on-pointer-up [::polyline :idle]
   [db _e]
-  (let [initial-point (tool.handlers/snapped-position db)
+  (let [parent-id (:id (element.handlers/hovered-svg db))
+        to-local (partial element.handlers/container-local-point db parent-id)
+        initial-point (to-local (tool.handlers/snapped-position db))
         attrs (-> (document.handlers/attrs db)
                   (select-keys [:stroke :fill :stroke-width])
                   (assoc :points (string/join " " initial-point)))]
@@ -34,6 +36,7 @@
         (tool.handlers/set-state :create)
         (element.handlers/add {:type :element
                                :tag :polyline
+                               :parent parent-id
                                :attrs attrs}))))
 
 (rf/dispatch [::action.events/register-action

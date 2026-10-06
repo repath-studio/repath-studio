@@ -25,9 +25,13 @@
 
 (defmethod tool.hierarchy/on-pointer-up [::text :idle]
   [db _e]
-  (let [[offset-x offset-y] (tool.handlers/snapped-offset db)
+  (let [parent-id (:id (element.handlers/hovered-svg db))
+        [offset-x offset-y] (->> (tool.handlers/snapped-offset db)
+                                 (element.handlers/container-local-point
+                                  db parent-id))
         el {:type :element
             :tag :text
+            :parent parent-id
             :attrs {:x offset-x
                     :y offset-y}}]
     (-> db

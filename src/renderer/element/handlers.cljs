@@ -9,7 +9,7 @@
    [malli.error :as m.error]
    [renderer.app.db :refer [App]]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
-   [renderer.db :refer [BBox BooleanOperation PathManipulation Vec2]]
+   [renderer.db :refer [BBox BooleanOperation PathManipulation Vec2 Transform]]
    [renderer.element.db
     :as element.db
     :refer [ElementAttrs Element ElementId ElementTag AnimationTag Direction]]
@@ -143,22 +143,48 @@
       parent-el
       (recur db (:id parent-el)))))
 
-(m/=> parent-offset [:-> App Vec2])
-(defn parent-offset
+(m/=> transform [:function
+                 [:-> App Transform]
+                 [:-> App ElementId Transform]])
+(defn transform
+  "The cumulative transform of the element's parent containers."
   ([db]
-   (parent-offset db (first (selected-ids db))))
+   (transform db (first (selected-ids db))))
   ([db id]
-   (or (some->> (parent-container db id)
-                (element.hierarchy/bbox)
-                (take 2)
-                (into []))
-       [0 0])))
+   (loop [default-transform [1 1 0 0]
+          container (parent-container db id)]
+     (if container
+       (recur (utils.element/compose-transforms
+               (utils.element/transform container)
+               default-transform)
+              (parent-container db (:id container)))
+       default-transform))))
 
-(m/=> adjusted-point [:-> App Vec2 Vec2])
-(defn adjusted-point
-  [db point]
-  (->> (parent-offset db)
-       (matrix/sub point)))
+(m/=> container-local-point [:-> App ElementId Vec2 Vec2])
+(defn container-local-point
+  [db container-id point]
+  (let [container (entity db container-id)]
+    (utils.element/untransform-point (utils.element/compose-transforms
+                                      (transform db container-id)
+                                      (utils.element/transform container))
+                                     point)))
+
+(m/=> local-point [:function
+                   [:-> App Vec2 Vec2]
+                   [:-> App ElementId Vec2 Vec2]])
+(defn local-point
+  ([db point]
+   (local-point db (first (selected-ids db)) point))
+  ([db id point]
+   (let [container (parent-container db id)]
+     (container-local-point db (:id container) point))))
+
+(m/=> container-scale-offset [:-> App ElementId Vec2 Vec2])
+(defn container-scale-offset
+  [db id offset]
+  (let [[sx sy _ _] (transform db id)
+        [x y] offset]
+    [(/ x sx) (/ y sy)]))
 
 (m/=> local-bbox [:-> App ElementId [:maybe BBox]])
 (defn local-bbox
@@ -177,17 +203,16 @@
 (m/=> world-bbox [:-> App ElementId [:maybe BBox]])
 (defn world-bbox
   [db id]
-  (loop [container (parent-container db id)
-         bbox (local-bbox db id)]
-    (if-not (and container bbox)
+  (let [bbox (local-bbox db id)]
+    (if-not bbox
       bbox
-      (let [[offset-x offset-y _ _] (element.hierarchy/bbox container)
-            [min-x min-y max-x max-y] bbox]
-        (recur (parent-container db (:id container))
-               [(+ min-x offset-x)
-                (+ min-y offset-y)
-                (+ max-x offset-x)
-                (+ max-y offset-y)])))))
+      (let [el-transform (transform db id)
+            [min-x min-y max-x max-y] bbox
+            [min-x' min-y'] (utils.element/transform-point el-transform
+                                                           [min-x min-y])
+            [max-x' max-y'] (utils.element/transform-point el-transform
+                                                           [max-x max-y])]
+        [min-x' min-y' max-x' max-y']))))
 
 (declare refresh-bbox)
 
@@ -681,7 +706,7 @@
 (defn hovered-svg
   [db]
   (let [svgs (reverse (root-svgs db))
-        pointer-pos (:adjusted-pointer-pos db)]
+        pointer-pos (:local-pointer-pos db)]
     (or (some #(when (utils.bounds/contained-point? (:bbox %) pointer-pos) %)
               svgs)
         (root db))))
@@ -732,7 +757,9 @@
         child-origins (->> children
                            (keep (fn [child-id]
                                    (when-let [bb (:bbox (entity db child-id))]
-                                     [child-id (into [] (take 2 bb))])))
+                                     [child-id (local-point
+                                                db child-id
+                                                (into [] (take 2 bb)))])))
                            (into {}))]
     (-> (reduce (fn [db child-id]
                   (let [child-origin (get child-origins child-id)
@@ -764,11 +791,13 @@
                      (into {}))
         get-pivot (scale-pivot pivot-point origins top-ids)]
     (reduce (fn [db id]
-              (let [pivot (get-pivot db id)
+              (let [pivot (some->> (get-pivot db id)
+                                   (container-scale-offset db id))
                     {:keys [tag locked]} (entity db id)]
                 (cond
                   (and (= tag :g) (not locked) pivot)
-                  (scale-group db id ratio pivot-point ids-to-scale)
+                  (scale-group db id ratio (local-point db id pivot-point)
+                               ids-to-scale)
 
                   pivot
                   (update-el db id element.hierarchy/scale ratio pivot)
@@ -997,7 +1026,7 @@
          offset (matrix/sub el-center center)
          el (dissoc el :bbox)
          [s-x1 s-y1] (:bbox parent-el)
-         pointer-pos (:adjusted-pointer-pos db)
+         pointer-pos (:local-pointer-pos db)
          el (cond-> el
               (not (utils.element/top-level? el))
               (assoc :parent (:id parent-el)))]
@@ -1128,16 +1157,17 @@
     (-> (add db svg)
         (collapse-all))))
 
-(m/=> add-to-cache [:-> SnapOptions map? Element map?])
+(m/=> add-to-cache [:-> App SnapOptions map? Element map?])
 (defn add-to-cache
-  [options cache el]
+  [db options cache el]
   (let [[cached-points cached-el cached-options] (get cache (:id el))]
     (if (and cached-points
              (= cached-el el)
              (= cached-options options))
       cache
-      (assoc cache (:id el) [(utils.element/acc-snapping-points el options)
-                             el options]))))
+      (let [points (utils.element/acc-snapping-points
+                    el (transform db (:id el)) options)]
+        (assoc cache (:id el) [points el options])))))
 
 (m/=> update-snapping-points-cache [:->
                                     App [:maybe [:sequential Element]]
@@ -1146,7 +1176,7 @@
   [db els]
   (let [options (-> db :snap :options)]
     (assoc db :snapping-points-cache
-           (reduce (partial add-to-cache options)
+           (reduce (partial add-to-cache db options)
                    (or (:snapping-points-cache db) {})
                    els))))
 
@@ -1164,7 +1194,8 @@
                                  (= cached-el el)
                                  (= cached-options options))
                           cached-points
-                          (utils.element/acc-snapping-points el options))))
+                          (utils.element/acc-snapping-points
+                           el (transform db (:id el)) options))))
                     els)))
     []))
 

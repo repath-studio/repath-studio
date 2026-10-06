@@ -10,6 +10,7 @@
    [renderer.attribute.views :as attribute.views]
    [renderer.element.events :as-alias element.events]
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.element.subs :as-alias element.subs]
    [renderer.hierarchy :as hierarchy]
    [renderer.i18n.views :as i18n.views]
    [renderer.input.impl.pointer :as input.impl.pointer]
@@ -133,10 +134,9 @@
 
 (defmethod element.hierarchy/centroid :blob
   [el]
-  (let [offset (utils.element/offset el)
-        {{:keys [x y size]} :attrs} el
+  (let [{{:keys [x y size]} :attrs} el
         [x y size] (mapv utils.length/unit->px [x y size])]
-    (matrix/add [x y] (/ size 2) offset)))
+    (matrix/add [x y] (/ size 2))))
 
 (defmethod element.hierarchy/path :blob
   [el]
@@ -164,27 +164,22 @@
 (defmethod element.hierarchy/handles :blob
   [el]
   (let [{{:keys [x y size]} :attrs} el
-        [x y size] (mapv utils.length/unit->px [x y size])
-        offset (utils.element/offset el)
-        [x1 y1] (cond->> [x y]
-                  (not (utils.element/svg? el))
-                  (matrix/add offset))]
+        [x y size] (mapv utils.length/unit->px [x y size])]
     [{:type :handle
       :action :edit
       :label [::size-handle "size handle"]
       :parent (:id el)
-      :position (matrix/add [x1 y1] size)
+      :position (matrix/add [x y] size)
       :id :size}]))
 
 (defmethod element.hierarchy/render-edit :blob
   [el]
-  (let [{{:keys [x y size]} :attrs} el
+  (let [transform @(rf/subscribe [::element.subs/transform (:id el)])
+        {{:keys [x y size]} :attrs} el
         [x y size] (mapv utils.length/unit->px [x y size])
-        offset (utils.element/offset el)
-        [x1 y1] (cond->> [x y]
-                  (not (utils.element/svg? el))
-                  (matrix/add offset))
-        [x2 y2] (matrix/add [x1 y1] size)]
+        wpoint (partial utils.element/transform-point transform)
+        start (wpoint [x y])
+        end (wpoint (matrix/add [x y] size))]
     [:<>
-     [utils.svg/line [x1 y1] [x2 y2]]
-     [utils.svg/times [x1 y1]]]))
+     [utils.svg/line start end]
+     [utils.svg/times start]]))

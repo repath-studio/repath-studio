@@ -133,6 +133,18 @@
    (element.handlers/local-bbox db id)))
 
 (rf/reg-sub
+ ::transform
+ (fn [db [_ id]]
+   (element.handlers/transform db id)))
+
+(rf/reg-sub
+ ::selected-transforms
+ (fn [db [_]]
+   (->> (element.handlers/selected-ids db)
+        (map (fn [id] [id (element.handlers/transform db id)]))
+        (into {}))))
+
+(rf/reg-sub
  ::area
  :<- [::non-root-selected]
  :-> utils.element/area)

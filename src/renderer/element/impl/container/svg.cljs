@@ -11,7 +11,8 @@
    [renderer.element.subs :as-alias element.subs]
    [renderer.hierarchy :as hierarchy]
    [renderer.i18n.views :as i18n.views]
-   [renderer.input.impl.pointer :as input.impl.pointer]))
+   [renderer.input.impl.pointer :as input.impl.pointer]
+   [renderer.utils.element :as utils.element]))
 
 (hierarchy/derive! :svg ::element.hierarchy/container)
 (hierarchy/derive! :svg ::element.hierarchy/box)
@@ -37,6 +38,15 @@
                  :transform (str "translate(" shadow-size " " shadow-size ")")
                  :style {:filter (str "blur(" shadow-size "px)")}})])
 
+(defn viewport-rect
+  [el]
+  (let [[sx sy ox oy] (utils.element/transform el)
+        [x y w h] (utils.element/viewbox el)]
+    [(/ (- x ox) sx)
+     (/ (- y oy) sy)
+     (/ w sx)
+     (/ h sy)]))
+
 (defmethod element.hierarchy/render :svg
   [_el]
   (let [ref (react/createRef)]
@@ -54,7 +64,8 @@
               active-filter @(rf/subscribe [::a11y.subs/active-filter])
               zoom @(rf/subscribe [::document.subs/zoom])
               pointer-handler (partial input.impl.pointer/handler! el)
-              shadow-size (/ 2 zoom)]
+              shadow-size (/ 2 zoom)
+              [x y w h] (viewport-rect el)]
           [:g
            [:text
             (merge
@@ -78,15 +89,15 @@
               active-filter
               (assoc :filter (str "url(#" (name active-filter) ")")))
             [:rect
-             (merge
-              rect-attrs
-              {:x 0
-               :y 0
-               :fill "white"
-               :on-pointer-up pointer-handler
-               :on-pointer-move #(when selected (pointer-handler %))
-               :on-pointer-down #(when (or selected (= (.-button %) 2))
-                                   (pointer-handler %))})]
+             {:x x
+              :y y
+              :width w
+              :height h
+              :fill "white"
+              :on-pointer-up pointer-handler
+              :on-pointer-move #(when selected (pointer-handler %))
+              :on-pointer-down #(when (or selected (= (.-button %) 2))
+                                  (pointer-handler %))}]
             (for [el child-els]
               ^{:key (:id el)}
               [element.hierarchy/render el])]]))})))

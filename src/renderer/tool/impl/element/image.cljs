@@ -9,6 +9,7 @@
    [renderer.effects :as-alias effects]
    [renderer.element.effects :as-alias element.effects]
    [renderer.element.events :as-alias element.events]
+   [renderer.element.handlers :as element.handlers]
    [renderer.hierarchy :as hierarchy]
    [renderer.tool.events :as-alias tool.events]
    [renderer.tool.handlers :as tool.handlers]
@@ -38,13 +39,17 @@
 (rf/reg-event-fx
  ::success
  (fn [{:keys [db]} [_ _file-handle file]]
-   {:db (tool.handlers/deactivate db)
-    ::element.effects/import-image
-    {:file file
-     :on-success [::element.events/add]
-     :on-error [::app.events/toast-error]
-     :position (or (:point (:nearest-neighbor db))
-                   (:adjusted-pointer-pos db))}}))
+   (let [parent-id (:id (element.handlers/hovered-svg db))
+         to-local (partial element.handlers/container-local-point db parent-id)
+         {:keys [nearest-neighbor local-pointer-pos]} db
+         position (to-local (or (:point nearest-neighbor) local-pointer-pos))]
+     {:db (tool.handlers/deactivate db)
+      ::element.effects/import-image
+      {:file file
+       :on-success [::element.events/add]
+       :on-error [::app.events/toast-error]
+       :parent parent-id
+       :position position}})))
 
 (rf/dispatch [::action.events/register-action
               {:id :tool/image

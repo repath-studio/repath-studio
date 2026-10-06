@@ -16,8 +16,8 @@
  :-> :pointer-pos)
 
 (rf/reg-sub
- ::adjusted-pointer-pos
- :-> :adjusted-pointer-pos)
+ ::local-pointer-pos
+ :-> :local-pointer-pos)
 
 (rf/reg-sub
  ::pointer-offset
@@ -28,8 +28,8 @@
  :-> :drag-pointer)
 
 (rf/reg-sub
- ::adjusted-pointer-offset
- :-> :adjusted-pointer-offset)
+ ::local-pointer-offset
+ :-> :local-pointer-offset)
 
 (rf/reg-sub
  ::drag?
