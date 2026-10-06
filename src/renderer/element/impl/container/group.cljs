@@ -8,6 +8,8 @@
    [renderer.element.subs :as-alias element.subs]
    [renderer.hierarchy :as hierarchy]
    [renderer.input.impl.pointer :as input.impl.pointer]
+   [renderer.tool.impl.base.transform.core :as-alias tool.impl.base.transform]
+   [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]))
 
@@ -36,15 +38,18 @@
            [w h] (utils.bounds/->dimensions bbox)
            pointer-handler (partial input.impl.pointer/handler! el)
            handle-size @(rf/subscribe [::document.subs/handle-size])
-           [sx] @(rf/subscribe [::element.subs/transform id])]
-       [:rect {:x min-x
-               :y min-y
-               :width w
-               :height h
-               :fill "transparent"
-               :stroke "transparent"
-               :stroke-width (/ handle-size sx)
-               :pointer-events (when ignored? "none")
-               :on-pointer-up pointer-handler
-               :on-pointer-down pointer-handler
-               :on-pointer-move pointer-handler}])]))
+           [sx] @(rf/subscribe [::element.subs/transform id])
+           transform? @(rf/subscribe [::tool.subs/active?
+                                      ::tool.impl.base.transform/transform])]
+       (when transform?
+         [:rect {:x min-x
+                 :y min-y
+                 :width w
+                 :height h
+                 :fill "transparent"
+                 :stroke "transparent"
+                 :stroke-width (/ handle-size sx)
+                 :pointer-events (when ignored? "none")
+                 :on-pointer-up pointer-handler
+                 :on-pointer-down pointer-handler
+                 :on-pointer-move pointer-handler}]))]))
