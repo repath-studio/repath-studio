@@ -49,7 +49,7 @@
         (element.handlers/add {:type :element
                                :tag :path
                                :parent parent-id
-                               :attrs {:d (str "M " point-1 " Q " point-2)
+                               :attrs {:d (str "M " point-1 " L " point-2)
                                        :stroke stroke
                                        :fill "transparent"}}))))
 
@@ -61,7 +61,7 @@
         point (string/join " " point)]
     (element.handlers/update-selected db
                                       update-in [:attrs :d]
-                                      str " " point)))
+                                      str " L " point)))
 
 (defmethod tool.hierarchy/on-drag-end [::pencil :create]
   [db e]
