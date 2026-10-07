@@ -47,7 +47,7 @@
           (document.handlers/assoc-attr :guides true)
           (document.handlers/assoc-attr :guides-locked false)
           (tool.handlers/set-cursor (cursor orientation))
-          (app.handlers/add-fx [::set-orientation orientation]))
+          (app.handlers/enqueue-fx [::set-orientation orientation]))
       (tool.handlers/deactivate db))))
 
 (defmethod tool.hierarchy/on-pointer-move [::guide :idle]
@@ -97,7 +97,7 @@
 (defmethod tool.hierarchy/snapping-points [::guide :create]
   [db]
   [(with-meta
-     (:adjusted-pointer-pos db)
+     (:local-pointer-pos db)
      {:label [::guide-position "guide position"]})])
 
 (defmethod tool.hierarchy/snapping-elements [::guide :create]

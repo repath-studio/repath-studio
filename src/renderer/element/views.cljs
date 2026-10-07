@@ -5,14 +5,16 @@
    [reagent.core :as reagent]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.element.subs :as-alias element.subs]
    [renderer.input.impl.pointer :as input.impl.pointer]))
 
 (defn ghost-element
   "Renders a ghost element on top of the actual element to ensure that the user
    can interact with it."
   [el pointer-handler]
-  (let [{:keys [attrs tag content]} el
-        handle-size @(rf/subscribe [::document.subs/handle-size])]
+  (let [{:keys [attrs tag content id]} el
+        handle-size @(rf/subscribe [::document.subs/handle-size])
+        [sx] @(rf/subscribe [::element.subs/transform id])]
     [tag (merge (dissoc attrs :style)
                 {:on-pointer-up pointer-handler
                  :on-pointer-down pointer-handler
@@ -20,7 +22,7 @@
                  :shape-rendering "optimizeSpeed"
                  :fill "transparent"
                  :stroke "transparent"
-                 :stroke-width handle-size})
+                 :stroke-width (/ (* handle-size 2) sx)})
      content]))
 
 (defn render-to-dom

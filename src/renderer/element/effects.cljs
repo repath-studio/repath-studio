@@ -42,23 +42,23 @@
              :on-success on-success}])))))))
 
 (defn- decode-image
-  [data-url {:keys [^js/File file position on-success on-error]}]
+  [data-url {:keys [^js/File file parent position on-success on-error]}]
   (let [[x y] position
         image (js/Image.)]
     (set! (.-src image) data-url)
     (-> (.decode image)
         (.then #(let [w (.-width image)
-                      h (.-height image)]
-                  (some-> on-success
-                          (conj {:type :element
-                                 :tag :image
-                                 :label (.-name file)
-                                 :attrs {:x x
-                                         :y y
-                                         :width w
-                                         :height h
-                                         :href data-url}})
-                          rf/dispatch)))
+                      h (.-height image)
+                      el {:type :element
+                          :tag :image
+                          :label (.-name file)
+                          :attrs {:x x
+                                  :y y
+                                  :width w
+                                  :height h
+                                  :href data-url}}
+                      el (cond-> el parent (assoc :parent parent))]
+                  (some-> on-success (conj el) rf/dispatch)))
         (.catch #(some-> on-error (conj %) rf/dispatch)))))
 
 (rf/reg-fx

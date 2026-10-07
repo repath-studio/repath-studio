@@ -6,6 +6,7 @@
    [generated.attribute-data :as attribute-data]
    [malli.core :as m]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
+   [renderer.db :refer [Viewbox]]
    [renderer.element.db :as element.db :refer [ElementAttrs ElementTag]]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
@@ -377,3 +378,12 @@
    (cond-> (.toFixed v precision)
      remove-trailing-zeros
      (-> js/parseFloat str))))
+
+(m/=> view-box [:-> string? [:maybe Viewbox]])
+(defn view-box
+  [s]
+  (let [parsed (->> (string/split (string/trim s) #"[,\s]+")
+                    (mapv js/parseFloat))]
+    (when (and (= (count parsed) 4)
+               (every? js/isFinite parsed))
+      parsed)))

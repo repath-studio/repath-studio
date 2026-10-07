@@ -18,9 +18,12 @@
                :label [::debug-info "Debug info"]
                :event [::app.events/toggle-debug-info]
                :active [::app.subs/debug-info]
-               :shortcuts [{:keyCode (utils.key/codes "D")
-                            :ctrlKey true
-                            :shiftKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "D")
+                                   :ctrlKey true
+                                   :shiftKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "D")
+                                   :metaKey true
+                                   :shiftKey true}]}}])
 
 (rf/dispatch [::action.events/register-action-group
               {:id :help-view

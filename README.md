@@ -1,6 +1,6 @@
 # Repath Studio
 
- :construction: **This project is in alpha stage!**
+ :construction: **This project is in beta stage!**
 
 [![GitHub Downloads (all assets, latest release)](https://img.shields.io/github/downloads/repath-studio/repath-studio/latest/total?style=for-the-badge)](https://github.com/repath-studio/repath-studio/releases/latest/)
 

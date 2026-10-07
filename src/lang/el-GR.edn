@@ -35,10 +35,6 @@
                           περιεχόμενο."
   :confirm-paste "Το καταλαβαίνω, αφήστε με να κάνω επικόλληση"}
 
- :renderer.shell.views
- {:hide-command-output "Απόκρυψη ιστορικού εντολών"
-  :show-command-output "Εμφάνιση ιστορικού εντολών"}
-
  :renderer.dialog.events
  {:are-you-sure "Είστε βέβαιοι ότι θέλετε να συνεχίσετε;"
   :keybindings "Συντομεύσεις πληκτρολογίου"}
@@ -51,10 +47,13 @@
   :add "Προσθήκη"
   :reset-shortcuts "Επαναφορά στις προεπιλογές"
   :search-command "Αναζήτηση εντολής"
+  :shortcut-in-use [:div "Η συντόμευση αυτή χρησιμοποιείται ήδη από %1."]
   :no-results "Δεν βρέθηκαν αποτελέσματα."
   :version "Έκδοση: "
   :browser "Πρόγραμμα περιήγησης: "
+  :hide-shortcutless "Απόκρυψη χωρίς συντόμευση"
   :save "Αποθήκευση"
+  :hide-disabled "Απόκρυψη ανενεργών"
   :dont-save "Μη αποθήκευση"
   :cancel "Ακύρωση"
   :ok "Εντάξει"
@@ -156,6 +155,14 @@
   :description "Το στοιχείο SVG <animateMotion> επιτρέπει τον ορισμό του πώς
                 ένα στοιχείο κινείται κατά μήκος μιας διαδρομής κίνησης."}
 
+ :renderer.element.impl.text-content.text-path
+ {:label "Διαδρομή κειμένου"
+  :description "Το στοιχείο SVG <textPath> χρησιμοποιείται για την απόδοση
+                κειμένου κατά μήκος του σχήματος ενός στοιχείου <path>. Το
+                κείμενο πρέπει να περιλαμβάνεται στο στοιχείο <textPath>, και
+                το χαρακτηριστικό href του χρησιμοποιείται για να αναφέρεται
+                το επιθυμητό στοιχείο <path>."}
+
  :renderer.element.impl.animation.animate-transform
  {:label "Κίνηση μετασχηματισμού"
   :description "Το στοιχείο <animateTransform> κινεί ένα χαρακτηριστικό
@@ -207,7 +214,7 @@
   :ending-point "τελικό σημείο"}
 
  :renderer.element.impl.shape.path
- {:label "Μονοπάτι"
+ {:label "Διαδρομή"
   :end-point "Σημείο τέλους"
   :description "Το στοιχείο <path> στο SVG είναι το γενικό στοιχείο για τον
                 ορισμό ενός σχήματος. Όλα τα βασικά σχήματα μπορούν να
@@ -282,14 +289,12 @@
                 εγγράφων SVG, αλλά μπορεί επίσης να χρησιμοποιηθεί για την
                 ενσωμάτωση ενός SVG τμήματος μέσα σε ένα SVG ή έγγραφο HTML."}
 
- :renderer.element.impl.text
+ :renderer.element.impl.text-content.text
  {:description "Το στοιχείο SVG <text> δημιουργεί ένα γραφικό στοιχείο που
                 αποτελείται από κείμενο. Είναι δυνατόν να εφαρμοστεί διαβάθμιση,
                 πατρόν, διαδρομή αποκοπής, μάσκα ή φίλτρο στο <text>, όπως σε
                 οποιοδήποτε άλλο γραφικό στοιχείο SVG."
-  :label "Κείμενο"
-  :remove-text "Διαφραφή κειμένου"
-  :set-text "Ορισμός κειμένου"}
+  :label "Κείμενο"}
 
  :renderer.attribute.views
  {:all "όλες"
@@ -513,9 +518,9 @@
  {:click-to-start "Κάντε κλικ για να προσθέσετε το πρώτο σημείο."
   :help-create "Κάντε κλικ για να προσθέσετε τμήμα, ή κάντε κλικ και σύρετε
                 για να προσθέσετε καμπύλη. Διπλό κλικ ή δεξί κλικ για να
-                οριστικοποιήσετε το μονοπάτι"
-  :create-path "Δημιουργία μονοπατιού"
-  :label "Μονοπάτι"}
+                οριστικοποιήσετε τη διαδρομή"
+  :create-path "Δημιουργία διαδρομής"
+  :label "Διαδρομή"}
 
  :renderer.tool.impl.element.polyline
  {:label "Πολύγραμμο"
@@ -603,6 +608,17 @@
                 του κειμένου, σε σχέση με άλλες γραμματοσειρές της ίδιας
                 οικογένειας."}
 
+ :renderer.element.impl.text-content.tspan
+ {:label "TSpan"
+  :description "Το στοιχείο SVG <tspan> ορίζει ένα δευτερεύον κείμενο μέσα σε
+                ένα στοιχείο <text> ή σε ένα άλλο στοιχείο <tspan>. Επιτρέπει
+                τη ρύθμιση του στυλ και/ή της θέσης αυτού του κειμένου ανάλογα
+                με τις ανάγκες."}
+
+ :renderer.element.impl.text-content.core
+ {:remove-text "Διαφραφή κειμένου"
+  :set-text "Ορισμός κειμένου"}
+
  :renderer.attribute.impl.crossorigin
  {:description "Το χαρακτηριστικό crossorigin, έγκυρο στα στοιχεία <image> και
                 <feImage>, παρέχει υποστήριξη για τη διαμόρφωση των αιτημάτων
@@ -631,7 +647,8 @@
 
  :renderer.tool.impl.base.edit.idle
  {:help-idle [:div "Σύρετε μια λαβή για να τροποποιήσετε το σχήμα σας.
-                    Κάντε κλικ σε ένα στοιχείο για αλλάξετε επιλογή."]}
+                    Κάντε κλικ σε ένα στοιχείο για αλλάξετε επιλογή.
+                    Κάντε διπλό κλικ σε διαδρομή για να προσθέσετε σημείο."]}
 
  :renderer.tool.impl.base.edit.select
  {:select-handles "Επιλογή λαβών"}
@@ -918,7 +935,7 @@
   :panel-attributes "Χαρακτηριστικά"
   :panel-xml-view "Προβολή XML"
   :panel-history-tree "Δέντρο ιστορικού"
-  :panel-shell-history "Ιστορικό γραμμής εντολών"
+  :panel-shell-output "Έξοδος γραμμής εντολών"
   :panel-timeline-editor "Επεξεργαστής χρονολόγιας"}
 
  :renderer.snap.core

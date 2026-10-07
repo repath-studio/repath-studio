@@ -19,8 +19,10 @@
 
 (defn create-el
   [db]
-  (let [offset (tool.handlers/snapped-offset db)
-        position (tool.handlers/snapped-position db)
+  (let [parent-id (:id (element.handlers/hovered-svg db))
+        to-local (partial element.handlers/container-local-point db parent-id)
+        offset (to-local (tool.handlers/snapped-offset db))
+        position (to-local (tool.handlers/snapped-position db))
         radius (utils.math/distance position offset)
         [cx cy] offset
         attrs (-> (document.handlers/attrs db)
@@ -29,16 +31,18 @@
         (tool.handlers/set-state :create)
         (element.handlers/add {:type :element
                                :tag :circle
+                               :parent parent-id
                                :attrs (merge attrs {:cx cx
                                                     :cy cy
                                                     :r radius})}))))
 
 (defn update-el
   [db]
-  (let [position (tool.handlers/snapped-position db)
-        {:keys [cx cy]} (->> db element.handlers/selected first :attrs)
+  (let [{:keys [id attrs]} (first (element.handlers/selected db))
+        position (->> (tool.handlers/snapped-position db)
+                      (element.handlers/local-point db id))
+        {:keys [cx cy]} attrs
         radius (-> position
-                   (utils.math/v-sub (element.handlers/parent-offset db))
                    (utils.math/distance [cx cy])
                    (utils.attribute/->fixed))]
     (element.handlers/update-selected db #(assoc-in % [:attrs :r] radius))))
@@ -81,7 +85,7 @@
 (defmethod tool.hierarchy/snapping-points [::circle :create]
   [db]
   [(with-meta
-     (:adjusted-pointer-pos db)
+     (:local-pointer-pos db)
      {:label (if (= (:state db) :create)
                [::circle-radius "circle radius"]
                [::circle-center "circle center"])})])
@@ -92,4 +96,4 @@
                :icon "circle-tool"
                :event [::tool.events/activate ::circle]
                :active [::tool.subs/active? ::circle]
-               :shortcuts [{:keyCode (utils.key/codes "C")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "C")}]}}])

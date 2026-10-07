@@ -14,21 +14,23 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.key :as utils.key]
-   [renderer.utils.length :as utils.length]
-   [renderer.utils.math :as utils.math]))
+   [renderer.utils.length :as utils.length]))
 
 (hierarchy/derive! ::line ::tool.hierarchy/element)
 
 (defn create-el
   [db]
-  (let [[offset-x offset-y] (tool.handlers/snapped-offset db)
-        [x y] (tool.handlers/snapped-position db)
+  (let [parent-id (:id (element.handlers/hovered-svg db))
+        to-local (partial element.handlers/container-local-point db parent-id)
+        [offset-x offset-y] (to-local (tool.handlers/snapped-offset db))
+        [x y] (to-local (tool.handlers/snapped-position db))
         attrs (-> (document.handlers/attrs db)
                   (select-keys [:stroke :stroke-width]))]
     (-> db
         (tool.handlers/set-state :create)
         (element.handlers/add {:type :element
                                :tag :line
+                               :parent parent-id
                                :attrs (merge attrs {:x1 offset-x
                                                     :y1 offset-y
                                                     :x2 x
@@ -36,10 +38,10 @@
 
 (defn update-el
   [db e]
-  (let [pointer-pos (tool.handlers/snapped-position db)
-        parent-offset (element.handlers/parent-offset db)
-        end-pos (utils.math/v-sub pointer-pos parent-offset)
-        {:keys [x1 y1]} (->> db element.handlers/selected first :attrs)
+  (let [{:keys [attrs id]} (first (element.handlers/selected db))
+        end-pos (->> (tool.handlers/snapped-position db)
+                     (element.handlers/local-point db id))
+        {:keys [x1 y1]} attrs
         start-pos (mapv utils.length/unit->px [x1 y1])
         end-pos (cond->> end-pos
                   (input.handlers/snap-to-angle? db e)
@@ -89,4 +91,4 @@
                :icon "line-tool"
                :event [::tool.events/activate ::line]
                :active [::tool.subs/active? ::line]
-               :shortcuts [{:keyCode (utils.key/codes "L")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "L")}]}}])

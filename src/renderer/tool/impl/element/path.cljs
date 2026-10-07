@@ -39,12 +39,12 @@
                  "Click to add a segment, or click and drag to add a curve.
                   Double or right click to finalize the path."]))
 
-(m/=> adjusted-pointer-position [:-> App PointerEvent Vec2])
-(defn adjusted-pointer-position
+(m/=> local-pointer-position [:-> App PointerEvent Vec2])
+(defn local-pointer-position
   [db e]
   (cond->> (tool.handlers/snapped-position db)
     :always
-    (element.handlers/adjusted-point db)
+    (element.handlers/local-point db)
 
     (input.handlers/snap-to-angle? db e)
     (input.handlers/snap-angle (->> (element.handlers/selected db)
@@ -54,11 +54,11 @@
                                     (apply utils.path/abs-endpoint)
                                     (mapv utils.length/unit->px)))))
 
-(m/=> adjusted-pointer-offset [:-> App Vec2])
-(defn adjusted-pointer-offset
+(m/=> local-pointer-offset [:-> App Vec2])
+(defn local-pointer-offset
   [db]
   (->> (tool.handlers/snapped-offset db)
-       (element.handlers/adjusted-point db)))
+       (element.handlers/local-point db)))
 
 (m/=> update-path [:-> App fn? [:* any?] App])
 (defn update-path
@@ -75,8 +75,10 @@
 (m/=> create-el [:-> App App])
 (defn create-el
   [db]
-  (let [path (->> (tool.handlers/snapped-offset db)
-                  (mapv utils.attribute/->fixed)
+  (let [parent-id (:id (element.handlers/hovered-svg db))
+        to-local (partial element.handlers/container-local-point db parent-id)
+        point (to-local (tool.handlers/snapped-offset db))
+        path (->> (mapv utils.attribute/->fixed point)
                   (into ["M"])
                   (string/join " "))
         attrs (-> (document.handlers/attrs db)
@@ -85,6 +87,7 @@
         (tool.handlers/set-state :create)
         (element.handlers/add {:type :element
                                :tag :path
+                               :parent parent-id
                                :attrs (assoc attrs :d path)}))))
 
 (defmethod tool.hierarchy/on-pointer-up [::path :idle]
@@ -97,7 +100,7 @@
 
 (defmethod tool.hierarchy/on-pointer-move [::path :create]
   [db e]
-  (let [[x y] (->> (adjusted-pointer-position db e)
+  (let [[x y] (->> (local-pointer-position db e)
                    (mapv utils.attribute/->fixed))]
     (update-path
      db
@@ -116,7 +119,7 @@
 
 (defmethod tool.hierarchy/on-pointer-up [::path :create]
   [db e]
-  (let [[x y] (->> (adjusted-pointer-position db e)
+  (let [[x y] (->> (local-pointer-position db e)
                    (mapv utils.attribute/->fixed))]
     (update-path db (fn [d]
                       (let [segments (utils.path/string->segments d)
@@ -127,11 +130,11 @@
 
 (defmethod tool.hierarchy/on-drag [::path :create]
   [db _e]
-  (let [anchor (adjusted-pointer-offset db)
+  (let [anchor (local-pointer-offset db)
         drag-pos (->> (tool.handlers/snapped-position db)
-                      (element.handlers/adjusted-point db))
-        [cp2-x cp2-y] (->> (utils.math/v-sub (utils.math/v-mul anchor 2)
-                                             drag-pos)
+                      (element.handlers/local-point db))
+        [cp2-x cp2-y] (->> drag-pos
+                           (utils.math/v-sub (utils.math/v-mul anchor 2))
                            (mapv utils.attribute/->fixed))]
     (update-path db #(let [segments (utils.path/string->segments %)]
                        (if (> (count segments) 1)
@@ -143,7 +146,7 @@
 
 (defmethod tool.hierarchy/on-drag-end [::path :create]
   [db e]
-  (let [[x y] (adjusted-pointer-offset db)]
+  (let [[x y] (local-pointer-offset db)]
     (-> (update-path db add-to-path "L" x y)
         (tool.hierarchy/on-pointer-move db e))))
 
@@ -173,4 +176,4 @@
                :icon "bezier-curve"
                :event [::tool.events/activate ::path]
                :active [::tool.subs/active? ::path]
-               :shortcuts [{:keyCode (utils.key/codes "P")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "P")}]}}])

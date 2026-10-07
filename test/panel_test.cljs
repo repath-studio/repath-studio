@@ -15,7 +15,7 @@
          attributes (rf/subscribe [::panel.subs/visible? :attributes])
          xml (rf/subscribe [::panel.subs/visible? :xml])
          history (rf/subscribe [::panel.subs/visible? :history])
-         repl-history (rf/subscribe [::panel.subs/visible? :repl-history])
+         repl-history (rf/subscribe [::panel.subs/visible? :shell-output])
          timeline (rf/subscribe [::panel.subs/visible? :timeline])]
      (testing "initial state"
        (is (true? @tree))

@@ -16,15 +16,15 @@
 
 (hierarchy/derive! ::blob ::tool.hierarchy/element)
 
-(defn pointer-delta
-  [db]
-  (utils.math/distance (tool.handlers/snapped-position db)
-                       (tool.handlers/snapped-offset db)))
-
 (defn attributes
   [db]
-  (let [[offset-x offset-y] (tool.handlers/snapped-offset db)
-        radius (pointer-delta db)
+  (let [{:keys [id]} (first (element.handlers/selected db))
+        position (-> (tool.handlers/snapped-position db)
+                     (element.handlers/local-point db id))
+        offset (->> (tool.handlers/snapped-offset db)
+                    (element.handlers/local-point db id))
+        radius (utils.math/distance offset position)
+        [offset-x offset-y] offset
         attrs (-> (document.handlers/attrs db)
                   (select-keys [:stroke :fill :stroke-width]))]
     (merge attrs {:x (utils.attribute/->fixed (- offset-x radius))
@@ -45,11 +45,8 @@
 (defmethod tool.hierarchy/on-drag [::blob :create]
   [db _e]
   (let [attrs (attributes db)
-        assoc-attr (fn [el [k v]] (assoc-in el [:attrs k] (str v)))
-        [min-x min-y] (element.handlers/parent-offset db)]
-    (-> db
-        (element.handlers/update-selected #(reduce assoc-attr % attrs))
-        (element.handlers/translate [(- min-x) (- min-y)]))))
+        assoc-attr (fn [el [k v]] (assoc-in el [:attrs k] (str v)))]
+    (element.handlers/update-selected db #(reduce assoc-attr % attrs))))
 
 (defmethod tool.hierarchy/on-drag-end [::blob :create]
   [db e]

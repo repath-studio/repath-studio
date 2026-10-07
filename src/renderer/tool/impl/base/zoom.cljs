@@ -42,7 +42,7 @@
 
 (defmethod tool.hierarchy/on-deactivate ::zoom
   [db]
-  (app.handlers/add-fx db [::set-select-box nil]))
+  (app.handlers/enqueue-fx db [::set-select-box nil]))
 
 (defmethod tool.hierarchy/on-key-down [::zoom :idle]
   [db e]
@@ -62,13 +62,13 @@
 
 (defmethod tool.hierarchy/on-drag [::zoom :select]
   [db _e]
-  (app.handlers/add-fx db [::set-select-box (tool.handlers/select-box db)]))
+  (app.handlers/enqueue-fx db [::set-select-box (tool.handlers/select-box db)]))
 
 (defmethod tool.hierarchy/on-drag-end [::zoom :select]
   [db e]
   (let [{:keys [dom-rect zoom-sensitivity active-document]} db
-        [offset-x offset-y] (:adjusted-pointer-offset db)
-        [x y] (:adjusted-pointer-pos db)
+        [offset-x offset-y] (:local-pointer-offset db)
+        [x y] (:local-pointer-pos db)
         width (abs (- x offset-x))
         height (abs (- y offset-y))
         width-ratio (/ (:width dom-rect) width)
@@ -78,13 +78,13 @@
         factor (if (:shift-key e) zoom-sensitivity (/ zoom current-zoom))
         cursor (if (:shift-key e) "zoom-out" "zoom-in")]
     (-> db
-        (app.handlers/add-fx [::set-select-box nil])
+        (app.handlers/enqueue-fx [::set-select-box nil])
         (tool.handlers/set-state :idle)
         (tool.handlers/set-cursor cursor)
         (frame.handlers/zoom-in-place factor)
         (frame.handlers/pan-to-bbox [x y offset-x offset-y])
         (snap.handlers/update-viewport-tree)
-        (app.handlers/add-fx [::app.effects/persist]))))
+        (app.handlers/enqueue-fx [::app.effects/persist]))))
 
 (defmethod tool.hierarchy/on-pointer-up [::zoom :idle]
   [db e]
@@ -94,7 +94,7 @@
     (-> db
         (frame.handlers/zoom-at-pointer factor)
         (snap.handlers/update-viewport-tree)
-        (app.handlers/add-fx [::app.effects/persist]))))
+        (app.handlers/enqueue-fx [::app.effects/persist]))))
 
 (defmethod tool.hierarchy/render ::zoom
   []
@@ -106,4 +106,4 @@
                :icon "magnifier"
                :event [::tool.events/activate ::zoom]
                :active [::tool.subs/active? ::zoom]
-               :shortcuts [{:keyCode (utils.key/codes "Z")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "Z")}]}}])

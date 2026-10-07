@@ -35,10 +35,6 @@
                           malveillant."
   :confirm-paste "Je comprends, laissez-moi coller"}
 
- :renderer.shell.views
- {:hide-command-output "Masquer la sortie de commande"
-  :show-command-output "Afficher la sortie de commande"}
-
  :renderer.dialog.events
  {:are-you-sure "Êtes-vous sûr de vouloir continuer ?"
   :keybindings "Raccourcis clavier"}
@@ -51,10 +47,13 @@
   :add "Ajouter"
   :reset-shortcuts "Réinitialiser les valeurs par défaut"
   :search-command "Rechercher une commande"
+  :shortcut-in-use [:div "Ce raccourci est déjà utilisé par %1."]
   :no-results "Aucun résultat trouvé."
   :version "Version : "
   :browser "Navigateur : "
+  :hide-shortcutless "Masquer sans raccourci"
   :save "Enregistrer"
+  :hide-disabled "Masquer les désactivés"
   :dont-save "Ne pas enregistrer"
   :cancel "Annuler"
   :ok "OK"
@@ -155,6 +154,13 @@
  {:label "Animer le mouvement"
   :description "L'élément SVG <animateMotion> permet de définir comment un
                 élément se déplace le long d'un chemin de mouvement."}
+
+ :renderer.element.impl.text-content.text-path
+ {:label "Chemin de texte"
+  :description "L'élément SVG <textPath> est utilisé pour afficher du texte le
+                long de la forme d'un élément <path>. Le texte doit être
+                inclus dans l'élément <textPath> et son attribut href est
+                utilisé pour référencer l'élément <path> souhaité."}
 
  :renderer.element.impl.animation.animate-transform
  {:label "Animer la transformation"
@@ -280,14 +286,12 @@
                 être utilisé pour incorporer un fragment SVG dans un document
                 SVG ou HTML."}
 
- :renderer.element.impl.text
+ :renderer.element.impl.text-content.text
  {:description "L'élément SVG <text> dessine un élément graphique constitué de
                 texte. Il est possible d'appliquer un dégradé, un motif, un
                 chemin de découpage, un masque ou un filtre à <text>, comme tout
                 autre élément graphique SVG."
-  :label "Texte"
-  :remove-text "Supprimer le texte"
-  :set-text "Définir le texte"}
+  :label "Texte"}
 
  :renderer.attribute.views
  {:all "tout"
@@ -487,8 +491,8 @@
  {:click-to-start "Cliquez pour ajouter le premier point."
   :help-create "Cliquez pour ajouter un segment, ou cliquez et faites glisser
                 pour ajouter une courbe. Double-cliquez ou clic droit pour
-                finaliser le chemin."
-  :create-path "Créer un chemin"
+                finaliser le tracé."
+  :create-path "Créer un tracé"
   :label "Tracé"}
 
  :renderer.tool.impl.element.polyline
@@ -533,8 +537,8 @@
   :learn-more "En savoir plus sur %1"}
 
  :renderer.attribute.impl.d
- {:description "L'attribut d définit un chemin à dessiner."
-  :edit "Éditer le chemin"
+ {:description "L'attribut d définit un tracé à dessiner."
+  :edit "Éditer le tracé"
   :absolute "Absolu"
   :relative "Relatif"
   :move-to "Déplacer vers"
@@ -546,7 +550,7 @@
   :quadratic-bezier-curve "Courbe de Bézier quadratique"
   :shortcut-quadratic "Raccourci Bézier quadratique"
   :elliptical-arc-curve "Courbe d'arc elliptique"
-  :close-path "Fermer le chemin"
+  :close-path "Fermer le tracé"
   :remove-segment "Supprimer le segment"
   :add-segment "Ajouter un segment"
   :convert-segment "Convertir le segment"
@@ -592,6 +596,17 @@
                 légèreté des glyphes utilisés pour rendre le texte, par rapport
                 aux autres polices de la même famille de polices."}
 
+ :renderer.element.impl.text-content.tspan
+ {:label "TSpan"
+  :description "L'élément SVG <tspan> définit un sous-texte au sein d'un
+                élément <text> ou d'un autre élément <tspan>. Il permet
+                d'ajuster le style et/ou la position de ce sous-texte si
+                besoin."}
+
+ :renderer.element.impl.text-content.core
+ {:remove-text "Supprimer le texte"
+  :set-text "Définir le texte"}
+
  :renderer.attribute.impl.crossorigin
  {:description "L'attribut crossorigin, valide sur les éléments <image> et
                 <feImage>, fournit un support pour la configuration des requêtes
@@ -618,7 +633,8 @@
 
  :renderer.tool.impl.base.edit.idle
  {:help-idle [:div "Faites glisser une poignée pour modifier votre forme.
-                    Cliquez sur un élément pour changer la sélection."]}
+                    Cliquez sur un élément pour changer la sélection.
+                    Double-cliquez près d'un tracé pour ajouter un point."]}
 
  :renderer.tool.impl.base.edit.select
  {:select-handles "Sélectionner les poignées"}
@@ -907,7 +923,7 @@
   :panel-attributes "Attributs"
   :panel-xml-view "Vue XML"
   :panel-history-tree "Arbre d'historique"
-  :panel-shell-history "Historique du terminal"
+  :panel-shell-output "Sortie du terminal"
   :panel-timeline-editor "Éditeur de chronologie"}
 
  :renderer.snap.core

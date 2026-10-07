@@ -34,10 +34,6 @@
                           conteúdo malicioso."
   :confirm-paste "Compreendo, deixa-me colar"}
 
- :renderer.shell.views
- {:hide-command-output "Ocultar saída de comandos"
-  :show-command-output "Mostrar saída de comandos"}
-
  :renderer.dialog.events
  {:are-you-sure "Tem a certeza de que pretende continuar?"
   :keybindings "Atalhos de teclado"}
@@ -50,10 +46,13 @@
   :add "Adicionar"
   :reset-shortcuts "Repor predefinições"
   :search-command "Procurar comando"
+  :shortcut-in-use [:div "Este atalho já está em uso por %1."]
   :no-results "Nenhum resultado encontrado."
   :version "Versão: "
   :browser "Navegador: "
+  :hide-shortcutless "Ocultar sem atalho"
   :save "Guardar"
+  :hide-disabled "Ocultar desativados"
   :dont-save "Não guardar"
   :cancel "Cancelar"
   :ok "OK"
@@ -154,6 +153,13 @@
  {:label "Animar movimento"
   :description "O elemento SVG <animateMotion> permite definir como um elemento
                 se move ao longo de um caminho de movimento."}
+
+ :renderer.element.impl.text-content.text-path
+ {:label "Percurso de texto"
+  :description "O elemento SVG <textPath> é utilizado para representar texto ao
+                longo da forma de um elemento <path>. O texto deve estar
+                contido no elemento <textPath> e o seu atributo href é usado
+                para referenciar o elemento <path> pretendido."}
 
  :renderer.element.impl.animation.animate-transform
  {:label "Animar transformação"
@@ -277,14 +283,12 @@
                 documentos SVG, mas também pode ser usado para incorporar um
                 fragmento SVG dentro de um documento SVG ou HTML."}
 
- :renderer.element.impl.text
+ :renderer.element.impl.text-content.text
  {:description "O elemento SVG <text> desenha um elemento gráfico que consiste
                 em texto. É possível aplicar um gradiente, padrão, caminho de
                 recorte, máscara ou filtro a <text>, como qualquer outro
                 elemento gráfico SVG."
-  :label "Texto"
-  :remove-text "Remover texto"
-  :set-text "Definir texto"}
+  :label "Texto"}
 
  :renderer.attribute.views
  {:all "tudo"
@@ -580,6 +584,16 @@
                 glifos usados para renderizar o texto, relativo a outras fontes
                 na mesma família de fontes."}
 
+ :renderer.element.impl.text-content.tspan
+ {:label "TSpan"
+  :description "O elemento SVG <tspan> define um subtexto dentro de um elemento
+                <text> ou de outro elemento <tspan>. Permite ajustar o estilo
+                e/ou a posição desse subtexto conforme necessário."}
+
+ :renderer.element.impl.text-content.core
+ {:remove-text "Remover texto"
+  :set-text "Definir texto"}
+
  :renderer.attribute.impl.crossorigin
  {:description "O atributo crossorigin, válido nos elementos <image> e
                 <feImage>, fornece suporte para configuração de pedidos
@@ -607,7 +621,8 @@
 
  :renderer.tool.impl.base.edit.idle
  {:help-idle [:div "Arraste uma pega para modificar a sua forma.
-                    Clique num elemento para alterar a seleção."]}
+                    Clique num elemento para alterar a seleção.
+                    Clique duplo perto de um traçado para adicionar um ponto."]}
 
  :renderer.tool.impl.base.edit.select
  {:select-handles "Selecionar alças"}
@@ -892,7 +907,7 @@
   :panel-attributes "Atributos"
   :panel-xml-view "Vista XML"
   :panel-history-tree "Árvore de histórico"
-  :panel-shell-history "Histórico da consola"
+  :panel-shell-output "Saída da consola"
   :panel-timeline-editor "Editor de cronologia"}
 
  :renderer.snap.core

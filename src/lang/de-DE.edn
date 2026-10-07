@@ -35,10 +35,6 @@
                           Inhalte verbergen."
   :confirm-paste "Ich verstehe, bitte einfügen"}
 
- :renderer.shell.views
- {:hide-command-output "Befehlsausgabe verbergen"
-  :show-command-output "Befehlsausgabe anzeigen"}
-
  :renderer.dialog.events
  {:are-you-sure "Sind Sie sicher, dass Sie fortfahren möchten?"
   :keybindings "Tastenkombinationen"}
@@ -51,10 +47,13 @@
   :add "Hinzufügen"
   :reset-shortcuts "Auf Standard zurücksetzen"
   :search-command "Nach einem Befehl suchen"
+  :shortcut-in-use [:div "Dieses Tastenkürzel wird bereits von %1 verwendet."]
   :no-results "Keine Ergebnisse gefunden."
   :version "Version: "
   :browser "Browser: "
+  :hide-shortcutless "Ohne Tastenkürzel ausblenden"
   :save "Speichern"
+  :hide-disabled "Deaktivierte ausblenden"
   :dont-save "Nicht speichern"
   :cancel "Abbrechen"
   :ok "OK"
@@ -155,6 +154,13 @@
  {:label "Bewegung animieren"
   :description "Das SVG-Element <animateMotion> ermöglicht die Definition, wie
                 sich ein Element entlang eines Bewegungspfads bewegt."}
+
+ :renderer.element.impl.text-content.text-path
+ {:label "Textpfad"
+  :description "Das SVG-Element <textPath> wird verwendet, um Text entlang der
+                Form eines <path>-Elements darzustellen. Der Text muss im
+                <textPath>-Element enthalten sein, und sein href-Attribut
+                referenziert das gewünschte <path>-Element."}
 
  :renderer.element.impl.animation.animate-transform
  {:label "Transform animieren"
@@ -282,14 +288,12 @@
                 verwendet werden, um ein SVG-Fragment in ein SVG- oder
                 HTML-Dokument einzubetten."}
 
- :renderer.element.impl.text
+ :renderer.element.impl.text-content.text
  {:description "Das SVG-Element <text> zeichnet ein Grafikelement, das aus Text
                 besteht. Es ist möglich, einen Verlauf, ein Muster, einen
                 Beschneidungspfad, eine Maske oder einen Filter auf <text>
                 anzuwenden, wie bei jedem anderen SVG-Grafikelement."
-  :label "Text"
-  :remove-text "Text entfernen"
-  :set-text "Text setzen"}
+  :label "Text"}
 
  :renderer.attribute.views
  {:all "alle"
@@ -599,6 +603,17 @@
                 werden, relativ zu anderen Schriften in derselben
                 Schriftfamilie."}
 
+ :renderer.element.impl.text-content.tspan
+ {:label "TSpan"
+  :description "Das SVG-Element <tspan> definiert einen Teiltext innerhalb
+                eines <text>-Elements oder eines anderen <tspan>-Elements.
+                Damit lässt sich der Stil und/oder die Position dieses
+                Teiltexts nach Bedarf anpassen."}
+
+ :renderer.element.impl.text-content.core
+ {:remove-text "Text entfernen"
+  :set-text "Text setzen"}
+
  :renderer.attribute.impl.crossorigin
  {:description "Das crossorigin-Attribut, gültig für <image> und <feImage>
                 Elemente, bietet Unterstützung für die Konfiguration von
@@ -626,7 +641,8 @@
 
  :renderer.tool.impl.base.edit.idle
  {:help-idle [:div "Ziehen Sie einen Griff, um Ihre Form zu ändern.
-                    Klicken Sie auf ein Element, um die Auswahl zu ändern."]}
+                    Klicken Sie auf ein Element, um die Auswahl zu ändern.
+                    Doppelklicken Sie auf den Pfad, um Punkte einzufügen."]}
 
  :renderer.tool.impl.base.edit.select
  {:select-handles "Anfasser auswählen"}
@@ -914,7 +930,7 @@
   :panel-attributes "Attribute"
   :panel-xml-view "XML-Ansicht"
   :panel-history-tree "Verlaufsbaum"
-  :panel-shell-history "Shell-Verlauf"
+  :panel-shell-output "Shell-Ausgabe"
   :panel-timeline-editor "Timeline-Editor"}
 
  :renderer.snap.core

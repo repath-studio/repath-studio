@@ -60,15 +60,15 @@
   [db _e]
   (-> db
       (tool.handlers/set-state :create)
-      (app.handlers/add-fx [::create-measure
-                            (tool.handlers/snapped-position db)])))
+      (app.handlers/enqueue-fx [::create-measure
+                                (tool.handlers/snapped-position db)])))
 
 (defmethod tool.hierarchy/on-pointer-up [::measure :idle]
   [db _e]
   (-> db
       (tool.handlers/set-state :create)
-      (app.handlers/add-fx [::create-measure
-                            (tool.handlers/snapped-position db)])))
+      (app.handlers/enqueue-fx [::create-measure
+                                (tool.handlers/snapped-position db)])))
 
 (defmethod tool.hierarchy/on-pointer-up [::measure :create]
   [db _e]
@@ -80,15 +80,15 @@
 
 (defmethod tool.hierarchy/on-drag [::measure :create]
   [db e]
-  (app.handlers/add-fx db [::update-measure-end-point
-                           [(tool.handlers/snapped-position db)
-                            (input.handlers/snap-to-angle? db e)]]))
+  (app.handlers/enqueue-fx db [::update-measure-end-point
+                               [(tool.handlers/snapped-position db)
+                                (input.handlers/snap-to-angle? db e)]]))
 
 (defmethod tool.hierarchy/on-pointer-move [::measure :create]
   [db e]
-  (app.handlers/add-fx db [::update-measure-end-point
-                           [(tool.handlers/snapped-position db)
-                            (input.handlers/snap-to-angle? db e)]]))
+  (app.handlers/enqueue-fx db [::update-measure-end-point
+                               [(tool.handlers/snapped-position db)
+                                (input.handlers/snap-to-angle? db e)]]))
 
 (defmethod tool.hierarchy/render ::measure
   []
@@ -129,7 +129,7 @@
 (defn snap-point
   [db]
   [(with-meta
-     (:adjusted-pointer-pos db)
+     (:local-pointer-pos db)
      {:label (if @measure-attrs
                [::measure-end "measure end"]
                [::measure-start "measure start"])})])
@@ -156,4 +156,4 @@
                :icon "ruler-triangle"
                :event [::tool.events/activate ::measure]
                :active [::tool.subs/active? ::measure]
-               :shortcuts [{:keyCode (utils.key/codes "M")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "M")}]}}])

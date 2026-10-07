@@ -14,24 +14,30 @@
                :label [::new "New"]
                :icon "file"
                :event [::document.events/new]
-               :shortcuts [{:keyCode (utils.key/codes "N")
-                            :ctrlKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "N")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "N")
+                                   :metaKey true}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :document/open
                :label [::open "Open…"]
                :icon "folder"
                :event [::document.events/open]
-               :shortcuts [{:keyCode (utils.key/codes "O")
-                            :ctrlKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "O")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "O")
+                                   :metaKey true}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :document/save
                :label [::save "Save"]
                :icon "save"
                :event [::document.events/save]
-               :shortcuts [{:keyCode (utils.key/codes "S")
-                            :ctrlKey true}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "S")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "S")
+                                   :metaKey true}]}
                :enabled [::document.subs/saveable?]
                :available [::app.subs/supported-feature? :file-system]}])
 
@@ -40,9 +46,12 @@
                :label [::save-as "Save as…"]
                :icon "save-as"
                :event [::document.events/save-as]
-               :shortcuts [{:keyCode (utils.key/codes "S")
-                            :ctrlKey true
-                            :shiftKey true}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "S")
+                                   :ctrlKey true
+                                   :shiftKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "S")
+                                   :metaKey true
+                                   :shiftKey true}]}
                :enabled [::document.subs/some-entities?]
                :available [::app.subs/supported-feature? :file-system]}])
 
@@ -59,8 +68,10 @@
                :label [::close "Close"]
                :icon "window-close"
                :event [::document.events/close-active]
-               :shortcuts [{:keyCode (utils.key/codes "W")
-                            :ctrlKey true}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "W")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "W")
+                                   :metaKey true}]}
                :enabled [::document.subs/some-entities?]}])
 
 (rf/dispatch [::action.events/register-action
@@ -68,9 +79,12 @@
                :label [::close-all "Close all"]
                :event [::document.events/close-all]
                :enabled [::document.subs/some-entities?]
-               :shortcuts [{:keyCode (utils.key/codes "W")
-                            :ctrlKey true
-                            :altKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "W")
+                                   :ctrlKey true
+                                   :altKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "W")
+                                   :metaKey true
+                                   :altKey true}]}}])
 
 (def clear-recent-label [::recent-clear "Clear recent"])
 
@@ -137,9 +151,12 @@
                :event [::document.events/reopen-last-closed]
                :enabled [::document.subs/some-recently-closed?]
                :available [::app.subs/supported-feature? :file-system]
-               :shortcuts [{:keyCode (utils.key/codes "T")
-                            :ctrlKey true
-                            :shiftKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "T")
+                                   :ctrlKey true
+                                   :shiftKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "T")
+                                   :metaKey true
+                                   :shiftKey true}]}}])
 
 (rf/dispatch [::action.events/register-action-group
               {:id :export/vector
@@ -179,8 +196,10 @@
                :event [::document.events/toggle-attr :grid]
                :active [::document.subs/attr :grid]
                :enabled [::document.subs/some-entities?]
-               :shortcuts [{:keyCode (utils.key/codes "PERIOD")
-                            :ctrlKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "PERIOD")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "PERIOD")
+                                   :metaKey true}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :document-view/toggle-rulers
@@ -189,8 +208,10 @@
                :event [::document.events/toggle-attr :rulers]
                :active [::document.subs/attr :rulers]
                :enabled [::document.subs/some-entities?]
-               :shortcuts [{:keyCode (utils.key/codes "R")
-                            :ctrlKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "R")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "R")
+                                   :metaKey true}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :document-view/toggle-guides
@@ -199,8 +220,8 @@
                :event [::document.events/toggle-attr :guides]
                :active [::document.subs/attr :guides]
                :enabled [::document.subs/some-entities?]
-               :shortcuts [{:keyCode (utils.key/codes "PERIOD")
-                            :shiftKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "PERIOD")
+                                   :shiftKey true}]}}])
 
 (rf/dispatch [::action.events/register-action-group
               {:id :document/view

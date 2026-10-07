@@ -165,7 +165,7 @@
         :on-escape-key-down #(.stopPropagation %)}
        [:div.flex.gap-2.items-center
         [action.views/label action]
-        [views/shortcuts action]]]]]))
+        [views/action-shortcuts action]]]]]))
 
 (defn button-group
   [action-group & {:as props}]
@@ -246,7 +246,7 @@
                   (keep action.views/deref-action-group)
                   (map dropdown-button)))
        (into [views/toolbar
-              {:class "bg-primary justify-center gap-2 max-md:py-2"}])))
+              {:class "bg-primary justify-center gap-2"}])))
 
 (defn toolbar
   []

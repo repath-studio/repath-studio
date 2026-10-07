@@ -34,10 +34,6 @@
                           있습니다."
   :confirm-paste "이해했습니다. 붙여 넣겠습니다"}
 
- :renderer.shell.views
- {:hide-command-output "명령 출력 숨기기"
-  :show-command-output "명령 출력 보이기"}
-
  :renderer.dialog.events
  {:are-you-sure "계속하시겠습니까?"
   :keybindings "키 바인딩"}
@@ -50,10 +46,13 @@
   :add "추가"
   :reset-shortcuts "기본값으로 재설정"
   :search-command "명령 검색"
+  :shortcut-in-use [:div "이 단축키는 이미 %1에서 사용되고 있습니다."]
   :no-results "검색 결과가 없습니다."
   :version "버전: "
   :browser "브라우저: "
+  :hide-shortcutless "단축키 없는 명령 숨김"
   :save "저장"
+  :hide-disabled "비활성 명령 숨김"
   :dont-save "저장하지 않음"
   :cancel "취소"
   :ok "확인"
@@ -154,6 +153,12 @@
  {:label "모션 애니메이션"
   :description "SVG <animateMotion> 요소는 요소가 모션 경로를 따라 어떻게
                 이동하는지 정의할 수 있습니다."}
+
+ :renderer.element.impl.text-content.text-path
+ {:label "텍스트 경로"
+  :description "SVG <textPath> 요소는 <path> 요소의 모양을 따라 텍스트를 렌더링
+                하는 데 사용됩니다. 텍스트는 <textPath> 요소 안에 포함되어야
+                하며, href 속성을 사용하여 원하는 <path>를 참조합니다."}
 
  :renderer.element.impl.animation.animate-transform
  {:label "변환 애니메이션"
@@ -266,13 +271,11 @@
                 SVG 문서의 가장 바깥쪽 요소로 사용되지만, SVG나 HTML 문서 내에
                 SVG 조각을 포함하는 데도 사용할 수 있습니다."}
 
- :renderer.element.impl.text
+ :renderer.element.impl.text-content.text
  {:description "SVG <text> 요소는 텍스트로 구성된 그래픽 요소를 그립니다.
                 다른 SVG 그래픽 요소와 마찬가지로 <text>에도 그래디언트, 패턴,
                 클리핑 패스, 마스크 또는 필터를 적용할 수 있습니다."
-  :label "텍스트"
-  :remove-text "텍스트 제거"
-  :set-text "텍스트 설정"}
+  :label "텍스트"}
 
  :renderer.attribute.views
  {:all "모두"
@@ -539,6 +542,16 @@
                 텍스트를 렌더링하는 데 사용되는 글리프의 굵기나 가벼움을
                 나타냅니다."}
 
+ :renderer.element.impl.text-content.tspan
+ {:label "TSpan"
+  :description "SVG <tspan> 요소는 <text> 요소나 다른 <tspan> 요소 안의 부분 텍
+                스트를 정의합니다. 필요에 따라 해당 부분 텍스트의 스타일 또는
+                위치를 조정할 수 있습니다."}
+
+ :renderer.element.impl.text-content.core
+ {:remove-text "텍스트 제거"
+  :set-text "텍스트 설정"}
+
  :renderer.attribute.impl.crossorigin
  {:description "crossorigin 속성은 <image> 및 <feImage> 요소에서
                 유효하며, 요소의 가져온 데이터에 대한 교차 출처
@@ -563,7 +576,9 @@
   :label "편집"}
 
  :renderer.tool.impl.base.edit.idle
- {:help-idle [:div "핸들을 드래그하여 모양을 수정합니다. 요소를 클릭하여 선택을 변경합니다."]}
+ {:help-idle [:div "핸들을 드래그하여 모양을 수정합니다.
+                    요소를 클릭하여 선택을 변경합니다.
+                    경로를 더블 클릭하여 점을 추가합니다."]}
 
  :renderer.tool.impl.base.edit.select
  {:select-handles "핸들 선택"}
@@ -843,7 +858,7 @@
   :panel-attributes "속성"
   :panel-xml-view "XML 보기"
   :panel-history-tree "기록 트리"
-  :panel-shell-history "쉘 기록"
+  :panel-shell-output "쉘 출력"
   :panel-timeline-editor "타임라인 편집기"}
 
  :renderer.snap.core

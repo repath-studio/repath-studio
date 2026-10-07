@@ -22,3 +22,8 @@
 (defn mac?
   [platform]
   (= platform "darwin"))
+
+(m/=> linux? [:-> Platform boolean?])
+(defn linux?
+  [platform]
+  (= platform "linux"))

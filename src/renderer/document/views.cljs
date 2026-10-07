@@ -89,14 +89,11 @@
     (rf/dispatch [::document.events/swap-position dropped-id id])))
 
 (defn document-title
-  [id]
-  (let [document @(rf/subscribe [::document.subs/entity id])
-        saved? @(rf/subscribe [::document.subs/saved? id])
-        {:keys [title]} document]
-    [:div.pointer-events-none.px-2.gap-1.flex.overflow-hidden
-     (when-not saved?
-       [:span.md:hidden "•"])
-     [:span.truncate title]]))
+  [title saved?]
+  [:div.pointer-events-none.px-2.gap-1.flex.overflow-hidden
+   (when-not saved?
+     [:span.md:hidden "•"])
+   [:span.truncate title]])
 
 (defn tab-button-classes
   [active? saved?]
@@ -113,7 +110,9 @@
   [id]
   (reagent/with-let [dragged-over? (reagent/atom false)]
     (let [saved? @(rf/subscribe [::document.subs/saved? id])
-          active? @(rf/subscribe [::document.subs/active? id])]
+          active? @(rf/subscribe [::document.subs/active? id])
+          document @(rf/subscribe [::document.subs/entity id])
+          {:keys [title path]} document]
       [:div.tab
        {:class (tab-button-classes active? saved?)
         :on-wheel #(when-not (zero? (.-deltaY %))
@@ -130,8 +129,9 @@
         :on-drag-enter #(reset! dragged-over? true)
         :on-drag-leave #(reset! dragged-over? false)
         :on-drop (partial on-tab-drop id dragged-over?)
+        :title path
         :ref #(when active? (rf/dispatch [::events/scroll-into-view %]))}
-       [document-title id]
+       [document-title title saved?]
        [close-button id saved?]])))
 
 (defn tab

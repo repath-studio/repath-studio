@@ -19,9 +19,10 @@
                :label cmdk-title
                :icon "command"
                :event [::dialog.events/show-cmdk cmdk-title]
-               :shortcuts [{:keyCode (utils.key/codes "F1")}
-                           {:keyCode (utils.key/codes "K")
-                            :ctrlKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "K")
+                                   :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "K")
+                                   :metaKey true}]}}])
 
 (rf/dispatch [::action.events/register-action-group
               {:id :dialog

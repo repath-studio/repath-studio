@@ -40,10 +40,10 @@
 
 (defn update-el
   [db e]
-  (let [pointer-pos (tool.handlers/snapped-position db)
-        parent-offset (element.handlers/parent-offset db)
-        position (utils.math/v-sub pointer-pos parent-offset)
-        origin (utils.math/v-sub (:last-origin db) parent-offset)
+  (let [{:keys [id]} (first (element.handlers/selected db))
+        position (->> (tool.handlers/snapped-position db)
+                      (element.handlers/local-point db id))
+        origin (element.handlers/local-point db id (:last-origin db))
         position (cond->> position
                    (input.handlers/snap-to-angle? db e)
                    (input.handlers/snap-angle origin))
@@ -102,4 +102,4 @@
                :icon "svg"
                :event [::tool.events/activate ::svg]
                :active [::tool.subs/active? ::svg]
-               :shortcuts [{:keyCode (utils.key/codes "S")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "S")}]}}])

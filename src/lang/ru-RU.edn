@@ -34,10 +34,6 @@
                           могут скрывать вредоносное содержимое."
   :confirm-paste "Я понимаю, позвольте вставить"}
 
- :renderer.shell.views
- {:hide-command-output "Скрыть вывод команд"
-  :show-command-output "Показать вывод команд"}
-
  :renderer.dialog.events
  {:are-you-sure "Вы уверены, что хотите продолжить?"
   :keybindings "Горячие клавиши"}
@@ -50,10 +46,13 @@
   :add "Добавить"
   :reset-shortcuts "Сбросить до стандартных"
   :search-command "Поиск команды"
+  :shortcut-in-use [:div "Эта горячая клавиша уже используется в %1."]
   :no-results "Результаты не найдены."
   :version "Версия: "
   :browser "Браузер: "
+  :hide-shortcutless "Скрыть без горячих клавиш"
   :save "Сохранить"
+  :hide-disabled "Скрыть отключённые"
   :dont-save "Не сохранять"
   :cancel "Отмена"
   :ok "ОК"
@@ -154,6 +153,13 @@
  {:label "Анимировать движение"
   :description "Элемент SVG <animateMotion> позволяет определить, как элемент
                 перемещается вдоль траектории движения."}
+
+ :renderer.element.impl.text-content.text-path
+ {:label "Траектория текста"
+  :description "Элемент SVG <textPath> используется для отрисовки текста вдоль
+                формы элемента <path>. Текст должен находиться внутри
+                элемента <textPath>, а его атрибут href используется для
+                ссылки на нужный элемент <path>."}
 
  :renderer.element.impl.animation.animate-transform
  {:label "Анимировать трансформацию"
@@ -276,14 +282,12 @@
                 внешний элемент документов SVG, но также может использоваться
                 для встраивания фрагмента SVG в документ SVG или HTML."}
 
- :renderer.element.impl.text
+ :renderer.element.impl.text-content.text
  {:description "Элемент SVG <text> рисует графический элемент, состоящий из
                 текста. Возможно применить градиент, узор, обтравочный контур,
                 маску или фильтр к <text>, как к любому другому графическому
                 лементу SVG."
-  :label "Текст"
-  :remove-text "Удалить текст"
-  :set-text "Установить текст"}
+  :label "Текст"}
 
  :renderer.attribute.views
  {:all "всё"
@@ -477,8 +481,8 @@
  {:click-to-start "Щёлкните для добавления первой точки."
   :help-create "Щёлкните для добавления сегмента или щёлкните и перетащите
                 для добавления кривой. Дважды щёлкните или щёлкните правой
-                кнопкой мыши для завершения пути."
-  :create-path "Создать путь"
+                кнопкой мыши для завершения контура."
+  :create-path "Создать контур"
   :label "Контур"}
 
  :renderer.tool.impl.element.polyline
@@ -581,6 +585,16 @@
                 используемых для отображения текста, относительно других шрифтов
                 в том же семействе шрифтов."}
 
+ :renderer.element.impl.text-content.tspan
+ {:label "TSpan"
+  :description "Элемент SVG <tspan> определяет подтекст внутри элемента <text>
+                или другого элемента <tspan>. Он позволяет регулировать стиль
+                и/или положение этого подтекста по мере необходимости."}
+
+ :renderer.element.impl.text-content.core
+ {:remove-text "Удалить текст"
+  :set-text "Установить текст"}
+
  :renderer.attribute.impl.crossorigin
  {:description "Атрибут crossorigin, действительный для элементов <image> и
                 <feImage>, обеспечивает поддержку конфигурации запросов
@@ -608,7 +622,8 @@
 
  :renderer.tool.impl.base.edit.idle
  {:help-idle [:div "Перетащите маркер для изменения вашей формы.
-                    Щёлкните на элементе для изменения выделения."]}
+                    Щёлкните на элементе для изменения выделения.
+                    Двойной щелчок рядом с линией добавит точку."]}
 
  :renderer.tool.impl.base.edit.select
  {:select-handles "Выбрать маркеры"}
@@ -896,7 +911,7 @@
   :panel-attributes "Атрибуты"
   :panel-xml-view "XML вид"
   :panel-history-tree "Дерево истории"
-  :panel-shell-history "История консоли"
+  :panel-shell-output "Вывод консоли"
   :panel-timeline-editor "Редактор временной шкалы"}
 
  :renderer.snap.core

@@ -34,10 +34,6 @@
                           potrebbero nascondere contenuto malevolo."
   :confirm-paste "Ho capito, lascia che incolli"}
 
- :renderer.shell.views
- {:hide-command-output "Nascondi output comando"
-  :show-command-output "Mostra output comando"}
-
  :renderer.dialog.events
  {:are-you-sure "Sei sicuro di voler continuare?"
   :keybindings "Tasti di scelta rapida"}
@@ -50,10 +46,13 @@
   :add "Aggiungi"
   :reset-shortcuts "Ripristina impostazioni predefinite"
   :search-command "Cerca un comando"
+  :shortcut-in-use [:div "Questa scorciatoia è già in uso da parte di %1."]
   :no-results "Nessun risultato trovato."
   :version "Versione: "
   :browser "Browser: "
+  :hide-shortcutless "Nascondi senza scorciatoia"
   :save "Salva"
+  :hide-disabled "Nascondi disabilitati"
   :dont-save "Non salvare"
   :cancel "Annulla"
   :ok "OK"
@@ -155,6 +154,14 @@
  {:label "Anima movimento"
   :description "L'elemento SVG <animateMotion> consente di definire come un
                 elemento si muove lungo un percorso di movimento."}
+
+ :renderer.element.impl.text-content.text-path
+ {:label "Percorso di testo"
+  :description "L'elemento SVG <textPath> viene utilizzato per rendere il
+                testo lungo la forma di un elemento <path>. Il testo deve
+                essere incluso nell'elemento <textPath> e il suo attributo
+                href è utilizzato per fare riferimento all'elemento <path>
+                desiderato."}
 
  :renderer.element.impl.animation.animate-transform
  {:label "Anima trasformazione"
@@ -279,14 +286,12 @@
                 incorporare un frammento SVG all'interno di un documento SVG o
                 HTML."}
 
- :renderer.element.impl.text
+ :renderer.element.impl.text-content.text
  {:description "L'elemento SVG <text> disegna un elemento grafico costituito da
                 testo. È possibile applicare un gradiente, pattern, clipping
                 path, maschera o filtro a <text>, come qualsiasi altro elemento
                 grafico SVG."
-  :label "Testo"
-  :remove-text "Rimuovi testo"
-  :set-text "Imposta testo"}
+  :label "Testo"}
 
  :renderer.attribute.views
  {:all "tutto"
@@ -436,8 +441,8 @@
  {:click-to-start "Clicca per aggiungere il primo punto."
   :help-create "Clicca per aggiungere un segmento, o clicca e trascina per
                 aggiungere una curva. Doppio clic o clic destro per finalizzare
-                il percorso."
-  :create-path "Crea percorso"
+                il tracciato."
+  :create-path "Crea tracciato"
   :label "Tracciato"}
 
  :renderer.tool.impl.element.polyline
@@ -595,6 +600,17 @@
                 leggerezza dei glifi utilizzati per renderizzare il testo,
                 relativo ad altri font nella stessa famiglia di font."}
 
+ :renderer.element.impl.text-content.tspan
+ {:label "TSpan"
+  :description "L'elemento SVG <tspan> definisce un sottotesto all'interno di
+                un elemento <text> o di un altro elemento <tspan>. Consente di
+                regolare lo stile e/o la posizione di quel sottotesto in base
+                alle esigenze."}
+
+ :renderer.element.impl.text-content.core
+ {:remove-text "Rimuovi testo"
+  :set-text "Imposta testo"}
+
  :renderer.attribute.impl.crossorigin
  {:description "L'attributo crossorigin, valido sugli elementi <image> e
                 <feImage>, fornisce supporto per la configurazione delle
@@ -622,7 +638,8 @@
 
  :renderer.tool.impl.base.edit.idle
  {:help-idle [:div "Trascina una maniglia per modificare la tua forma.
-                    Clicca su un elemento per cambiare selezione."]}
+                    Clicca su un elemento per cambiare selezione.
+                    Fai doppio clic su un tracciato per aggiungere un punto."]}
 
  :renderer.tool.impl.base.edit.select
  {:select-handles "Seleziona maniglie"}
@@ -909,7 +926,7 @@
   :panel-attributes "Attributi"
   :panel-xml-view "Vista XML"
   :panel-history-tree "Albero cronologia"
-  :panel-shell-history "Cronologia shell"
+  :panel-shell-output "Output shell"
   :panel-timeline-editor "Editor timeline"}
 
  :renderer.snap.core

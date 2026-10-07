@@ -1,5 +1,6 @@
 (ns renderer.snap.handlers
   (:require
+   [config :as config]
    [kdtree :as kdtree]
    [malli.core :as m]
    [renderer.app.db :refer [App]]
@@ -16,8 +17,7 @@
 (defn active?
   [db]
   (and (:active-document db)
-       (or (-> db :snap :active)
-           (-> db :snap :transient-active))))
+       (-> db :snap :active)))
 
 (m/=> toggle-option [:-> App SnapOption App])
 (defn toggle-option
@@ -39,8 +39,7 @@
   (if-not (active? db)
     db
     (let [zoom (get-in db [:documents (:active-document db) :zoom])
-          threshold (-> db :snap :threshold)
-          threshold (Math/pow (/ threshold zoom) 2)
+          threshold (Math/pow (/ config/snap-threshold zoom) 2)
           nneighbors (nearest-neighbors db)
           nneighbors (filter #(< (:dist-squared %) threshold) nneighbors)]
       (assoc db
@@ -63,13 +62,16 @@
   [db]
   (if (active? db)
     (let [elements (tool.hierarchy/snapping-elements db)
+          db (element.handlers/update-snapping-points-cache
+              (assoc db :snapping-points-cache {})
+              elements)
           points (element.handlers/snapping-points db elements)
           points (cond-> points
                    (contains? (-> db :snap :options) :grid)
                    (into (ruler.handlers/steps-intersections db)))]
       (-> (assoc db :kdtree (kdtree/build-tree points))
           (update-viewport-tree)))
-    (dissoc db :kdtree :viewbox-kdtree)))
+    (dissoc db :kdtree :viewbox-kdtree :snapping-points-cache)))
 
 (m/=> update-tree [:-> App ifn? [:vector Vec2] App])
 (defn update-tree

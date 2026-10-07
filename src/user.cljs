@@ -519,9 +519,12 @@
                     :label [:history/undo-twice "Undo twice"]
                     :icon "undo"
                     :event [:renderer.history.events/undo-by 2]
-                    :shortcuts [{:keyCode 90
-                                 :ctrlKey true
-                                 :altKey true}]
+                    :shortcuts {"All" [{:keyCode 90
+                                        :ctrlKey true
+                                        :altKey true}]
+                                "Mac" [{:keyCode 90
+                                        :metaKey true
+                                        :altKey true}]}
                     :enabled [:renderer.history.subs/undos?]})
 
   (register-icon {:id "dot"

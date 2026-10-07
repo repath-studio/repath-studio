@@ -6,11 +6,10 @@
    [malli.transform :as m.transform]
    [renderer.a11y.db :refer [A11y]]
    [renderer.action.db :refer [ActionRegistry ActionGroupRegistry KeyBindings]]
-   [renderer.db :refer [BBox Vec2 JS_Object]]
+   [renderer.db :refer [BBox Vec2 JS_Object DomRect]]
    [renderer.dialog.db :refer [Dialog]]
    [renderer.document.db :refer [Document DocumentId RecentDocument]]
    [renderer.element.db :refer [Element]]
-   [renderer.frame.db :refer [DomRect]]
    [renderer.i18n.db :refer [LanguageCodeIdentifier
                              LanguageId
                              LanguageRegistry]]
@@ -28,6 +27,9 @@
 
 (def Platform
   [:enum "darwin" "linux" "win32" "ios" "android" "web"])
+
+(def WebPlatform
+  [:enum "Mac" "Win" "Linux" "iPhone" "iPad" "Android"])
 
 (def Font
   [:map-of {:title "style"} string? [:map
@@ -48,8 +50,8 @@
    [:pointer-pos {:default [0 0]} Vec2]
    [:last-origin {:optional true} Vec2]
    [:pointer-offset {:optional true} Vec2]
-   [:adjusted-pointer-pos {:default [0 0]} Vec2]
-   [:adjusted-pointer-offset {:optional true} Vec2]
+   [:local-pointer-pos {:default [0 0]} Vec2]
+   [:local-pointer-offset {:optional true} Vec2]
    [:nearest-neighbor-offset {:optional true} [:maybe Vec2]]
    [:nearest-neighbor {:optional true} [:maybe NearestNeighbor]]
    [:nearest-neighbors {:optional true} [:sequential NearestNeighbor]]
@@ -91,6 +93,7 @@
    [:languages {:default {}} LanguageRegistry]
    [:icons {:default icons/defaults} Icons]
    [:platform {:optional true} Platform]
+   [:web-platform {:optional true} [:maybe WebPlatform]]
    [:versions {:optional true} [:maybe map?]]
    [:standalone {:optional true} boolean?]
    [:menubar {:default {}} Menubar]
@@ -115,11 +118,13 @@
    [:anchor-offset {:default [0.5 0.5]} Vec2]
    [:select-box {:optional true} [:maybe Element]]
    [:clicked-element {:optional true} [:or Element Handle]]
+   [:insertion-point {:optional true} Vec2]
    [:clipboard {:default {}} [:map {:closed true}
                               [:bbox {:optional true} BBox]
                               [:elements {:optional true} [:* Element]]]]
    [:kdtree {:optional true} [:maybe map?]]
    [:viewbox-kdtree {:optional true} [:maybe map?]]
+   [:snapping-points-cache {:optional true} map?]
    [:actions {:default {}} ActionRegistry]
    [:action-groups {:default {}} ActionGroupRegistry]
    [:key-bindings {:default {}

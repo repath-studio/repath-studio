@@ -35,10 +35,6 @@
                           。"
   :confirm-paste "理解しました、貼り付けてください"}
 
- :renderer.shell.views
- {:hide-command-output "コマンド出力を非表示"
-  :show-command-output "コマンド出力を表示"}
-
  :renderer.dialog.events
  {:are-you-sure "続行してもよろしいですか？"
   :keybindings "キーバインド"}
@@ -51,10 +47,13 @@
   :add "追加"
   :reset-shortcuts "デフォルトにリセット"
   :search-command "コマンドを検索"
+  :shortcut-in-use [:div "このショートカットは %1 で既に使用されています。"]
   :no-results "結果が見つかりません。"
   :version "バージョン: "
   :browser "ブラウザ: "
+  :hide-shortcutless "ショートカットなしを非表示"
   :save "保存"
+  :hide-disabled "無効を非表示"
   :dont-save "保存しない"
   :cancel "キャンセル"
   :ok "OK"
@@ -155,6 +154,13 @@
  {:label "モーションアニメーション"
   :description "SVG <animateMotion> 要素は、要素がモーションパスに沿ってどの
                 ように移動するかを定義できます。"}
+
+ :renderer.element.impl.text-content.text-path
+ {:label "テキストパス"
+  :description "SVG <textPath> 要素は、<path> 要素の形状に沿ってテキストをレンダ
+                リングするために使用されます。テキストは <textPath> 要素内に含
+                め、その href 属性を使用して、参照したい <path> 要素を指定しま
+                す。"}
 
  :renderer.element.impl.animation.animate-transform
  {:label "トランスフォームアニメーション"
@@ -265,13 +271,11 @@
                 SVGドキュメントの最も外側の要素として使用されますが、SVGまたは
                 HTMLドキュメント内にSVGフラグメントを埋め込むためにも使用できます。"}
 
- :renderer.element.impl.text
+ :renderer.element.impl.text-content.text
  {:description "SVG <text>要素は、テキストで構成されるグラフィック要素を描画します。
                 他のSVGグラフィック要素と同様に、<text>にグラデーション、パターン、
                 クリッピングパス、マスク、またはフィルターを適用することが可能です。"
-  :label "テキスト"
-  :remove-text "テキストを削除"
-  :set-text "テキストを設定"}
+  :label "テキスト"}
 
  :renderer.attribute.views
  {:all "すべて"
@@ -544,6 +548,16 @@
                 比較して、テキストのレンダリングに使用されるグリフの太さや
                 細さを指します。"}
 
+ :renderer.element.impl.text-content.tspan
+ {:label "TSpan"
+  :description "SVG <tspan> 要素は、<text> 要素または別の <tspan> 要素内のサブテ
+                キストを定義します。必要に応じて、そのサブテキストのスタイルま
+                たは位置を調整できます。"}
+
+ :renderer.element.impl.text-content.core
+ {:remove-text "テキストを削除"
+  :set-text "テキストを設定"}
+
  :renderer.attribute.impl.crossorigin
  {:description "crossorigin属性は、<image>および<feImage>要素で有効で、
                 要素で取得されるデータのCross-Origin Resource Sharing（CORS）
@@ -568,7 +582,9 @@
   :label "編集"}
 
  :renderer.tool.impl.base.edit.idle
- {:help-idle [:div "ハンドルをドラッグして形状を変更。要素をクリックして選択を変更。"]}
+ {:help-idle [:div "ハンドルをドラッグして形状を変更。
+                    要素をクリックして選択を変更。
+                    パスの近くをダブルクリックすると、点を追加できます。"]}
 
  :renderer.tool.impl.base.edit.select
  {:select-handles "ハンドルを選択"}
@@ -850,7 +866,7 @@
   :panel-attributes "属性"
   :panel-xml-view "XML表示"
   :panel-history-tree "履歴ツリー"
-  :panel-shell-history "シェル履歴"
+  :panel-shell-output "シェル出力"
   :panel-timeline-editor "タイムラインエディタ"}
 
  :renderer.snap.core

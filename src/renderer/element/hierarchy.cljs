@@ -28,6 +28,8 @@
 (defmulti scale dispatch :hierarchy hierarchy/hierarchy)
 (defmulti handle-drag dispatch :hierarchy hierarchy/hierarchy)
 (defmulti handle-click dispatch :hierarchy hierarchy/hierarchy)
+(defmulti closest-point dispatch :hierarchy hierarchy/hierarchy)
+(defmulti insert-point dispatch :hierarchy hierarchy/hierarchy)
 (defmulti permitted-content dispatch :hierarchy hierarchy/hierarchy)
 (defmulti properties identity :hierarchy hierarchy/hierarchy)
 
@@ -44,6 +46,7 @@
 (defmethod scale :default [el _ratio _pivot-point] el)
 (defmethod handle-drag :default [el _offset _handle _lock?] el)
 (defmethod handle-click :default [el _handle] el)
+(defmethod closest-point :default [_el _position])
+(defmethod insert-point :default [el _position] [el nil])
 (defmethod permitted-content :default [_el])
 (defmethod properties :default [_tag])
-

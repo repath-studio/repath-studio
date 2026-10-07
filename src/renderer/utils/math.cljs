@@ -71,7 +71,7 @@
    (apply mapv op (map #(cond-> % (number? %) repeat)
                        (cons v (cons x more))))))
 
-(m/=> v-sub [:-> vector? [:+ [:or [:vector number?] number?]] Vec2])
+(m/=> v-add [:-> vector? [:+ [:or [:vector number?] number?]] Vec2])
 (defn v-add
   ([v x] (elementwise + v x))
   ([v x & more] (apply elementwise + v x more)))

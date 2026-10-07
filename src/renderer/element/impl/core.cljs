@@ -8,13 +8,11 @@
    [renderer.element.impl.descriptive.core]
    [renderer.element.impl.renderable]
    [renderer.element.impl.shape.core]
-   [renderer.element.impl.text]
+   [renderer.element.impl.text-content.core]
    [renderer.hierarchy :as hierarchy]))
 
 (hierarchy/derive! ::element.hierarchy/graphics ::element.hierarchy/renderable)
 (hierarchy/derive! ::element.hierarchy/gradient ::element.hierarchy/renderable)
 (hierarchy/derive! :foreignObject ::element.hierarchy/graphics)
-(hierarchy/derive! :textPath ::element.hierarchy/graphics)
-(hierarchy/derive! :tspan ::element.hierarchy/graphics)
 (hierarchy/derive! :linearGradient ::element.hierarchy/gradient)
 (hierarchy/derive! :radialGradient ::element.hierarchy/gradient)

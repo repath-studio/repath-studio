@@ -3,10 +3,9 @@
    [config :as config]
    [malli.core :as m]
    [renderer.app.db :refer [App]]
-   [renderer.db :refer [BBox Vec2]]
+   [renderer.db :refer [BBox Vec2 DomRect Viewbox]]
    [renderer.document.db :refer [DocumentId ZoomFactor]]
    [renderer.element.handlers :as element.handlers]
-   [renderer.frame.db :refer [DomRect Viewbox FocusType]]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.extra :refer [rpartial]]
@@ -71,7 +70,7 @@
 (m/=> zoom-at-pointer [:-> App number? App])
 (defn zoom-at-pointer
   [db factor]
-  (zoom-at-position db factor (:adjusted-pointer-pos db)))
+  (zoom-at-position db factor (:local-pointer-pos db)))
 
 (m/=> zoom-in-place [:-> App number? App])
 (defn zoom-in-place
@@ -100,8 +99,8 @@
     (assoc-in db [:documents active-document :pan] pan)))
 
 (m/=> focus-bbox [:function
-                  [:-> App FocusType App]
-                  [:-> App FocusType BBox App]])
+                  [:-> App [:enum :original :fit :fill] App]
+                  [:-> App [:enum :original :fit :fill] BBox App]])
 (defn focus-bbox
   ([db focus-type]
    (cond-> db

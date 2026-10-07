@@ -3,8 +3,10 @@
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/circle"
   (:require
    [clojure.string :as string]
+   [re-frame.core :as rf]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.element.subs :as-alias element.subs]
    [renderer.hierarchy :as hierarchy]
    [renderer.tool.impl.element.core :as-alias element.core]
    [renderer.utils.attribute :as utils.attribute]
@@ -87,9 +89,7 @@
 (defmethod element.hierarchy/handles :circle
   [el]
   (let [{{:keys [cx cy r]} :attrs} el
-        [cx cy r] (map utils.length/unit->px [cx cy r])
-        offset (utils.element/offset el)
-        [cx cy] (utils.math/v-add [cx cy] offset)]
+        [cx cy r] (map utils.length/unit->px [cx cy r])]
     [{:position [(+ cx r) cy]
       :id :r
       :label [::r-handle "radius handle"]
@@ -100,16 +100,19 @@
 
 (defmethod element.hierarchy/render-edit :circle
   [el]
-  (let [{{:keys [cx cy r]} :attrs} el
+  (let [transform @(rf/subscribe [::element.subs/transform (:id el)])
+        {{:keys [cx cy r]} :attrs} el
         [cx cy r] (map utils.length/unit->px [cx cy r])
-        offset (utils.element/offset el)
-        [cx cy] (utils.math/v-add [cx cy] offset)]
+        wpoint (partial utils.element/transform-point transform)
+        center (wpoint [cx cy])
+        edge (wpoint [(+ cx r) cy])
+        [label-x label-y] (wpoint [(+ cx (/ r 2)) cy])]
     [:g
-     [utils.svg/line [cx cy] [(+ cx r) cy] :stroke "var(--accent-foreground)"]
-     [utils.svg/line [cx cy] [(+ cx r) cy] :stroke-dasharray 5]
-     [utils.svg/label (utils.attribute/->fixed r 2 false) {:x (+ cx (/ r 2))
-                                                           :y cy}]
-     [utils.svg/times [cx cy]]]))
+     [utils.svg/line center edge :stroke "var(--accent-foreground)"]
+     [utils.svg/line center edge :stroke-dasharray 5]
+     [utils.svg/label (utils.attribute/->fixed r 2 false) {:x label-x
+                                                           :y label-y}]
+     [utils.svg/times center]]))
 
 (defmethod element.hierarchy/snapping-points :circle
   [el]

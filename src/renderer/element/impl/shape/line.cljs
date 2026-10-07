@@ -60,16 +60,15 @@
 
 (defmethod element.hierarchy/handles :line
   [el]
-  (let [offset (utils.element/offset el)
-        {{:keys [x1 y1 x2 y2]} :attrs} el
+  (let [{{:keys [x1 y1 x2 y2]} :attrs} el
         [x1 y1 x2 y2] (mapv utils.length/unit->px [x1 y1 x2 y2])]
-    [{:position (utils.math/v-add offset [x1 y1])
+    [{:position [x1 y1]
       :id :starting-point
       :label [::starting-point "starting point"]
       :type :handle
       :action :edit
       :parent (:id el)}
-     {:position (utils.math/v-add offset [x2 y2])
+     {:position [x2 y2]
       :id :ending-point
       :label [::ending-point "ending point"]
       :type :handle

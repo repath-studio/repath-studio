@@ -16,11 +16,12 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.key :as utils.key]
-   [renderer.views :as views]))
+   [renderer.views :as views]
+   [renderer.window.subs :as-alias window.subs]))
 
 (defn coordinates
   []
-  (let [[x y] @(rf/subscribe [::input.subs/adjusted-pointer-pos])]
+  (let [[x y] @(rf/subscribe [::input.subs/local-pointer-pos])]
     [:div.flex-col.font-mono.leading-tight.mx-1.hidden
      {:class "@3xl/toolbar:flex"
       :style {:min-width "90px"}
@@ -171,14 +172,16 @@
   (let [zoom @(rf/subscribe [::document.subs/zoom])
         active-tool @(rf/subscribe [::tool.subs/cached-or-active])
         help-message @(rf/subscribe [::tool.subs/help])
-        help-bar @(rf/subscribe [::app.subs/help-bar])]
+        help-bar @(rf/subscribe [::app.subs/help-bar])
+        sm? @(rf/subscribe [::window.subs/sm?])]
     [views/toolbar
      {:class "bg-primary relative justify-center md:justify-start py-2 md:py-1
               gap-2 md:gap-1 @container/toolbar overflow-hidden"}
      (->> [[color-selectors]
-           (when-let [options (tool.hierarchy/tool-options active-tool)]
-             [:div.hidden {:class "@lg/toolbar:flex"}
-              options])
+           (when sm?
+             (when-let [options (tool.hierarchy/tool-options active-tool)]
+               [:div.hidden {:class "@lg/toolbar:flex"}
+                options]))
            (when (and help-bar (seq help-message))
              [help help-message])]
           (remove nil?)

@@ -15,9 +15,7 @@
    [renderer.frame.handlers :as frame.handlers]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.db :refer [HandleId]]
-   [renderer.utils.compatibility
-    :as utils.compatibility
-    :refer [SemanticVersion]]
+   [renderer.utils.compatibility :as utils.compatibility]
    [renderer.utils.element :as utils.element]
    [renderer.utils.vec :as utils.vec]))
 
@@ -258,32 +256,14 @@
   (-> (apply dissoc document config/save-info-keys)
       (pr-str)))
 
+(m/=> migrate [:-> map? map?])
+(defn migrate
+  [document]
+  (utils.compatibility/migrate document document.migrations/migrations))
+
 (m/=> recently-closed [:-> App [:vector RecentDocument]])
 (defn recently-closed
   [db]
   (->> (:recent db)
        (filter #(not (open? db (:id %))))
        (reverse)))
-
-(m/=> requires-migration? [:-> map? SemanticVersion boolean?])
-(defn requires-migration?
-  "Checks if the provided document requires migration to the given version.
-
-   Returns true if the document's version is older than the given version,
-   or if the document has no version (a document created before versioning was
-   introduced to the document schema)."
-  [document version]
-  (or (not (:version document))
-      (-> (utils.compatibility/version->vec (:version document))
-          (utils.compatibility/requires-migration? version))))
-
-(m/=> migrate [:function
-               [:-> map? map?]
-               [:-> map? [:tuple SemanticVersion ifn?] map?]])
-(defn migrate
-  ([document]
-   (reduce migrate document document.migrations/migrations))
-  ([document [version f]]
-   (cond-> document
-     (requires-migration? document version)
-     (f))))

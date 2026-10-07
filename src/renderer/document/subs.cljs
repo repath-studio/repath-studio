@@ -193,7 +193,7 @@
  :<- [::window.subs/md?]
  :<- [::app.subs/supported-feature? :touch]
  (fn [[zoom md? touch?] [_]]
-   (let [base-size 13]
+   (let [base-size config/snap-threshold]
      (cond-> (/ base-size zoom)
        (and touch? (not md?))
        (* 1.8)))))

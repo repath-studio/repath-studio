@@ -15,6 +15,7 @@
    [renderer.tool.impl.base.edit.type]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.tool.views :as tool.views]
+   [renderer.utils.element :as utils.element]
    [renderer.utils.key :as utils.key]
    [renderer.utils.svg :as utils.svg]))
 
@@ -26,24 +27,39 @@
 
 (defmethod tool.hierarchy/on-deactivate ::edit
   [db]
-  (element.handlers/clear-selected-handles db))
+  (-> db
+      (element.handlers/clear-selected-handles)
+      (dissoc :insertion-point)))
 
 (defmethod tool.hierarchy/render ::edit
   []
   (let [selected-elements @(rf/subscribe [::element.subs/selected])
-        select-box @(rf/subscribe [::tool.subs/select-box])]
-    (when (seq selected-elements)
+        transforms @(rf/subscribe [::element.subs/selected-transforms])
+        select-box @(rf/subscribe [::tool.subs/select-box])
+        insertion-point @(rf/subscribe [::tool.subs/insertion-point])]
+    (when (or (seq selected-elements) insertion-point)
       (->> selected-elements
            (map (fn [el]
-                  [:g
-                   [element.hierarchy/render-edit el]
-                   (->> (element.hierarchy/handles el)
-                        (map (fn [handle] [tool.views/handle handle]))
-                        (into [:g]))
-                   (when-let [centroid (element.hierarchy/centroid el)]
-                     [utils.svg/dot centroid
-                      [:title (i18n.views/t [::centroid "Centroid"])]])]))
-           (into [:g [element.hierarchy/render select-box]])))))
+                  (let [transform (get transforms (:id el))]
+                    [:g
+                     [element.hierarchy/render-edit el]
+
+                     (->> (element.hierarchy/handles el)
+                          (map (fn [handle]
+                                 [tool.views/handle
+                                  (assoc handle :position
+                                         (utils.element/transform-point
+                                          transform (:position handle)))]))
+                          (into [:g]))
+
+                     (when-let [centroid (element.hierarchy/centroid el)]
+                       [utils.svg/dot (utils.element/transform-point transform
+                                                                     centroid)
+                        [:title (i18n.views/t [::centroid "Centroid"])]])])))
+           (into [:g [element.hierarchy/render select-box]
+                  (when insertion-point
+                    [:g {:pointer-events "none"}
+                     [utils.svg/dot insertion-point]])])))))
 
 (rf/dispatch [::action.events/register-action
               {:id :tool/edit
@@ -51,4 +67,4 @@
                :icon "edit"
                :event [::tool.events/activate ::edit]
                :active [::tool.subs/active? ::edit]
-               :shortcuts [{:keyCode (utils.key/codes "E")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "E")}]}}])

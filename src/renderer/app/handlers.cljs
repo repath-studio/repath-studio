@@ -2,10 +2,14 @@
   (:require
    [malli.core :as m]
    [renderer.app.db :refer [App Feature]]
+   [renderer.app.migrations :as app.migrations]
+   [renderer.utils.compatibility :as utils.compatibility]
    [renderer.utils.platform :as utils.platform]))
 
-(m/=> add-fx [:-> App vector? App])
-(defn add-fx
+(m/=> enqueue-fx [:-> App vector? App])
+(defn enqueue-fx
+  "Enqueues an effect when we are in the middle of a pure db transformation.
+   The addition is handled by `::renderer.app.events/enqueue-fx` interceptor."
   [db effect]
   (update db :fx conj effect))
 
@@ -23,3 +27,8 @@
 (defn mobile?
   [db]
   (-> db :platform utils.platform/mobile?))
+
+(m/=> migrate [:-> map? App])
+(defn migrate
+  [db]
+  (utils.compatibility/migrate db app.migrations/migrations))

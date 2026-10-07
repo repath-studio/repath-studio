@@ -20,16 +20,19 @@
 
 (defn create-el
   [db]
-  (let [attrs (-> (document.handlers/attrs db)
+  (let [parent-id (:id (element.handlers/hovered-svg db))
+        to-local (partial element.handlers/container-local-point db parent-id)
+        attrs (-> (document.handlers/attrs db)
                   (select-keys [:stroke :fill :stroke-width]))
-        [offset-x offset-y] (tool.handlers/snapped-offset db)
-        [x y] (tool.handlers/snapped-position db)
+        [offset-x offset-y] (to-local (tool.handlers/snapped-offset db))
+        [x y] (to-local (tool.handlers/snapped-position db))
         [rx ry] (->> [(abs (- x offset-x)) (abs (- y offset-y))]
                      (mapv utils.attribute/->fixed))]
     (-> db
         (tool.handlers/set-state :create)
         (element.handlers/add {:type :element
                                :tag :ellipse
+                               :parent parent-id
                                :attrs (merge attrs {:rx rx
                                                     :ry ry
                                                     :cx x
@@ -37,10 +40,10 @@
 
 (defn update-el
   [db e]
-  (let [pointer-pos (tool.handlers/snapped-position db)
-        parent-offset (element.handlers/parent-offset db)
-        position (utils.math/v-sub pointer-pos parent-offset)
-        {:keys [cx cy]} (->> db element.handlers/selected first :attrs)
+  (let [{:keys [attrs id]} (first (element.handlers/selected db))
+        position (->> (tool.handlers/snapped-position db)
+                      (element.handlers/local-point db id))
+        {:keys [cx cy]} attrs
         center (mapv utils.length/unit->px [cx cy])
         position (cond->> position
                    (input.handlers/snap-to-angle? db e)

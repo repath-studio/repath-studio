@@ -32,10 +32,6 @@
                           ，从不可信来源复制的命令也可能隐藏恶意内容。"
   :confirm-paste "我明白了，请粘贴"}
 
- :renderer.shell.views
- {:hide-command-output "隐藏命令输出"
-  :show-command-output "显示命令输出"}
-
  :renderer.dialog.events
  {:are-you-sure "您确定要继续吗？"
   :keybindings "键盘快捷键"}
@@ -48,10 +44,13 @@
   :add "添加"
   :reset-shortcuts "恢复默认设置"
   :search-command "搜索命令"
+  :shortcut-in-use [:div "此快捷键已被 %1 使用。"]
   :no-results "未找到结果。"
   :version "版本："
   :browser "浏览器："
+  :hide-shortcutless "隐藏无快捷键的命令"
   :save "保存"
+  :hide-disabled "隐藏禁用的命令"
   :dont-save "不保存"
   :cancel "取消"
   :ok "确定"
@@ -149,6 +148,12 @@
  :renderer.element.impl.animation.animate-motion
  {:label "运动动画"
   :description "SVG <animateMotion> 元素允许定义元素如何沿着运动路径移动。"}
+
+ :renderer.element.impl.text-content.text-path
+ {:label "文本路径"
+  :description "SVG <textPath> 元素用于沿着 <path> 元素的形状渲染文本。文本必须
+                包含在 <textPath> 元素中，其 href 属性用于引用所需的 <path> 元
+                素。"}
 
  :renderer.element.impl.animation.animate-transform
  {:label "变换动画"
@@ -252,12 +257,10 @@
  {:description "svg 元素是定义新坐标系统和视口的容器。它用作 SVG 文档的最外层元素，
                 但也可用于在 SVG 或 HTML 文档中嵌入 SVG 片段。"}
 
- :renderer.element.impl.text
+ :renderer.element.impl.text-content.text
  {:description "SVG <text> 元素绘制由文本组成的图形元素。可以对 <text> 应用渐变、
                 图案、剪切路径、蒙版或滤镜，就像任何其他 SVG 图形元素一样。"
-  :label "文本"
-  :remove-text "移除文本"
-  :set-text "设置文本"}
+  :label "文本"}
 
  :renderer.attribute.views
  {:all "全部"
@@ -504,6 +507,15 @@
  {:description "font-weight 属性是指用于渲染文本的字形的粗细或轻重，相对于
                 同一字体系列中的其他字体。"}
 
+ :renderer.element.impl.text-content.tspan
+ {:label "TSpan"
+  :description "SVG <tspan> 元素用于定义 <text> 元素或另一个 <tspan> 元素内的子
+                文本。可以按需调整该子文本的样式和/或位置。"}
+
+ :renderer.element.impl.text-content.core
+ {:remove-text "移除文本"
+  :set-text "设置文本"}
+
  :renderer.attribute.impl.crossorigin
  {:description "crossorigin 属性在 <image> 和 <feImage> 元素上有效，为元素
                 获取的数据的跨源资源共享（CORS）请求配置提供支持。"
@@ -525,7 +537,7 @@
   :label "编辑"}
 
  :renderer.tool.impl.base.edit.idle
- {:help-idle [:div "拖动控制柄修改您的形状。点击元素更改选择。"]}
+ {:help-idle [:div "拖动控制柄修改您的形状。点击元素更改选择。在路径附近双击以添加一个点。"]}
 
  :renderer.tool.impl.base.edit.select
  {:select-handles "选择控制点"}
@@ -802,7 +814,7 @@
   :panel-attributes "属性"
   :panel-xml-view "XML 视图"
   :panel-history-tree "历史树"
-  :panel-shell-history "终端历史"
+  :panel-shell-output "终端输出"
   :panel-timeline-editor "时间轴编辑器"}
 
  :renderer.snap.core

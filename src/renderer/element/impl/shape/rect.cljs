@@ -111,8 +111,6 @@
   (let [{{:keys [x y width height rx ry]} :attrs} el
         [x y width height rx ry] (->> [x y width height rx ry]
                                       (mapv utils.length/unit->px))
-        offset (utils.element/offset el)
-        [x y] (utils.math/v-add [x y] offset)
         max-x (+ x width)]
     [{:type :handle
       :action :edit

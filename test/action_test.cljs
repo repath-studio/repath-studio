@@ -20,9 +20,9 @@
                             :label [:history/undo-twice "Undo twice"]
                             :icon "undo"
                             :event [::history.events/undo-by 2]
-                            :shortcuts [{:keyCode 90
-                                         :ctrlKey true
-                                         :altKey true}]
+                            :shortcuts {"All" [{:keyCode 90
+                                                :ctrlKey true
+                                                :altKey true}]}
                             :enabled [::history.subs/undos?]}
          undo-group {:id :history/undo-group
                      :icon "history"
@@ -67,7 +67,7 @@
                       :label [:history/undo-twice "Undo twice"]
                       :icon "undo"
                       :event [::history.events/undo-by 2]
-                      :shortcuts [default-shortcut]}
+                      :shortcuts {"All" [default-shortcut]}}
          effective (rf/subscribe [::action.subs/action-shortcuts
                                   :history/undo-twice])]
 

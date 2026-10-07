@@ -34,10 +34,6 @@
                           onbetrouwbare bronnen kwaadaardige inhoud verbergen."
   :confirm-paste "Ik begrijp het, laat me plakken"}
 
- :renderer.shell.views
- {:hide-command-output "Commando-uitvoer verbergen"
-  :show-command-output "Commando-uitvoer tonen"}
-
  :renderer.dialog.events
  {:are-you-sure "Weet u zeker dat u wilt doorgaan?"
   :keybindings "Sneltoetsen"}
@@ -50,10 +46,13 @@
   :add "Toevoegen"
   :reset-shortcuts "Standaardinstellingen herstellen"
   :search-command "Zoek naar een commando"
+  :shortcut-in-use [:div "Deze sneltoets wordt al gebruikt door %1."]
   :no-results "Geen resultaten gevonden."
   :version "Versie: "
   :browser "Browser: "
+  :hide-shortcutless "Zonder sneltoets verbergen"
   :save "Opslaan"
+  :hide-disabled "Uitgeschakelde verbergen"
   :dont-save "Niet opslaan"
   :cancel "Annuleren"
   :ok "OK"
@@ -155,6 +154,14 @@
   :description "Het SVG <animateMotion> element maakt het mogelijk om te
                 definiëren hoe een element zich langs een bewegingspad
                 beweegt."}
+
+ :renderer.element.impl.text-content.text-path
+ {:label "Tekstpad"
+  :description "Het SVG <textPath> element wordt gebruikt om tekst weer te
+                geven langs de vorm van een <path> element. De tekst moet
+                binnen het <textPath> element staan en de href-attribute
+                ervan wordt gebruikt om te verwijzen naar het gewenste <path>
+                element."}
 
  :renderer.element.impl.animation.animate-transform
  {:label "Transformatie animeren"
@@ -278,14 +285,12 @@
                 gebruikt worden om een SVG fragment in te bedden binnen een SVG
                 of HTML document."}
 
- :renderer.element.impl.text
+ :renderer.element.impl.text-content.text
  {:description "Het SVG <text> element tekent een grafisch element bestaande
                 uit tekst. Het is mogelijk om een verloop, patroon, clipping
                 path, masker of filter toe te passen op <text>, zoals elk ander
                 SVG grafisch element."
-  :label "Tekst"
-  :remove-text "Tekst verwijderen"
-  :set-text "Tekst instellen"}
+  :label "Tekst"}
 
  :renderer.attribute.views
  {:all "alle"
@@ -597,6 +602,17 @@
                 van de glyphs gebruikt om de tekst te renderen, relatief aan
                 andere lettertypen in dezelfde lettertypefamilie."}
 
+ :renderer.element.impl.text-content.tspan
+ {:label "TSpan"
+  :description "Het SVG <tspan> element definieert een subtekst binnen een
+                <text> element of een ander <tspan> element. Hiermee kan de
+                stijl en/of positie van die subtekst naar wens worden
+                aangepast."}
+
+ :renderer.element.impl.text-content.core
+ {:remove-text "Tekst verwijderen"
+  :set-text "Tekst instellen"}
+
  :renderer.attribute.impl.crossorigin
  {:description "Het crossorigin attribuut, geldig op de <image> en <feImage>
                 elementen, biedt ondersteuning voor configuratie van de
@@ -624,7 +640,8 @@
 
  :renderer.tool.impl.base.edit.idle
  {:help-idle [:div "Sleep een handvat om uw vorm te wijzigen.
-                    Klik op een element om selectie te wijzigen."]}
+                    Klik op een element om selectie te wijzigen.
+                    Dubbelklik nabij een pad om een punt toe te voegen."]}
 
  :renderer.tool.impl.base.edit.select
  {:select-handles "Selecteer handvatten"}
@@ -910,7 +927,7 @@
   :panel-attributes "Attributen"
   :panel-xml-view "XML-weergave"
   :panel-history-tree "Geschiedenisboom"
-  :panel-shell-history "Shell-geschiedenis"
+  :panel-shell-output "Shell-uitvoer"
   :panel-timeline-editor "Tijdlijn-editor"}
 
  :renderer.snap.core

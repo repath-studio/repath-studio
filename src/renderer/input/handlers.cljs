@@ -51,7 +51,7 @@
   [db]
   (-> db
       (assoc :active-pointers {})
-      (dissoc :drag-pointer :pointer-offset :adjusted-pointer-offset
+      (dissoc :drag-pointer :pointer-offset :local-pointer-offset
               :nearest-neighbor :nearest-neighbor-offset
               :pinch-distance :pinch-midpoint)))
 

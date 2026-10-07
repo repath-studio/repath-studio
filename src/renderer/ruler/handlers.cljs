@@ -3,9 +3,8 @@
    [clojure.math.combinatorics :as combo]
    [malli.core :as m]
    [renderer.app.db :refer [App]]
-   [renderer.db :refer [Orientation]]
+   [renderer.db :refer [Orientation Viewbox]]
    [renderer.document.db :refer [ZoomFactor]]
-   [renderer.frame.db :refer [Viewbox]]
    [renderer.frame.handlers :as frame.handlers]))
 
 (m/=> step [:-> ZoomFactor number?])

@@ -13,7 +13,7 @@
                :icon "zoom-in"
                :event [::frame.events/zoom-in]
                :enabled [::document.subs/zoom-in-available?]
-               :shortcuts [{:keyCode (utils.key/codes "EQUALS")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "EQUALS")}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :zoom/out
@@ -21,7 +21,7 @@
                :icon "zoom-out"
                :event [::frame.events/zoom-out]
                :enabled [::document.subs/zoom-out-available?]
-               :shortcuts [{:keyCode (utils.key/codes "DASH")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "DASH")}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :zoom/set-50
@@ -47,21 +47,21 @@
                :icon "focus"
                :enabled [::document.subs/some-entities?]
                :event [::frame.events/focus-selection :original]
-               :shortcuts [{:keyCode (utils.key/codes "ONE")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "ONE")}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :zoom/fit-selected
                :label [::zoom-fit-selected "Fit selected"]
                :enabled [::document.subs/some-entities?]
                :event [::frame.events/focus-selection :fit]
-               :shortcuts [{:keyCode (utils.key/codes "TWO")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "TWO")}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :zoom/fill-selected
                :label [::zoom-fill-selected "Fill selected"]
                :enabled [::document.subs/some-entities?]
                :event [::frame.events/focus-selection :fill]
-               :shortcuts [{:keyCode (utils.key/codes "THREE")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "THREE")}]}}])
 
 (rf/dispatch [::action.events/register-action-group
               {:id :zoom/in-out

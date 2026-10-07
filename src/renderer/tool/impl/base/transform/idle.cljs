@@ -97,12 +97,12 @@
       (-> (tool.handlers/set-state new-state)
           (element.handlers/clear-hovered))
 
-      (not= state new-state)
-      (snap.handlers/rebuild-tree)
-
       (transform.select/selectable? clicked-element)
       (-> (element.handlers/toggle-selection id shift-key)
-          (snap.handlers/delete-from-tree #{id})))))
+          (snap.handlers/delete-from-tree #{id}))
+
+      (not= state new-state)
+      (snap.handlers/rebuild-tree))))
 
 (defn event->arrow-key-step
   [e]

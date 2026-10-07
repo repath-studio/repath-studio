@@ -20,11 +20,12 @@
 
 (defn update-element
   [db el offset lock?]
-  (->> (:selected-handles el)
-       (reduce (fn [db handle-id]
-                 (element.handlers/update-el db (:id el)
-                                             element.hierarchy/handle-drag
-                                             offset handle-id lock?)) db)))
+  (let [offset (element.handlers/container-scale-offset db (:id el) offset)]
+    (->> (:selected-handles el)
+         (reduce (fn [db handle-id]
+                   (element.handlers/update-el db (:id el)
+                                               element.hierarchy/handle-drag
+                                               offset handle-id lock?)) db))))
 
 (defmethod tool.hierarchy/on-drag [::edit/edit :edit]
   [db e]

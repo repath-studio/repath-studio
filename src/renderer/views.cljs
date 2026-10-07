@@ -24,7 +24,9 @@
    ["tailwind-merge" :refer [twMerge]]
    ["vaul" :refer [Drawer]]
    [clojure.string :as string]
+   [re-frame.core :as rf]
    [reagent.core :as reagent]
+   [renderer.action.subs :as action.subs]
    [renderer.action.views :as action.views]
    [renderer.i18n.views :as i18n.views]
    [renderer.icon.views :as icon.views]
@@ -53,9 +55,10 @@
      path]))
 
 (defn kbd
-  [k]
-  [:span {:class ["p-1 text-2xs bg-overlay rounded-sm font-bold uppercase"
-                  "text-foreground-muted"]} k])
+  [k & {:as props}]
+  [:span (merge-with-class {:class ["font-bold text-2xs bg-overlay rounded-sm
+                                     p-1 uppercase text-foreground-muted"]}
+                           props) k])
 
 (defn icon-button
   [icon-name props]
@@ -66,14 +69,15 @@
    [icon icon-name]])
 
 (defn tag
-  [content on-remove & {:keys [remove-label]}]
+  [content & {:keys [on-remove remove-label]}]
   [:div.flex.items-center.gap-2.bg-overlay.rounded.py-1
    {:class "px-1.5"}
    content
-   [icon-button "times"
-    {:on-click on-remove
-     :title (or remove-label (i18n.views/t [::remove "Remove"]))
-     :class "button-size-sm text-foreground-muted"}]])
+   (when on-remove
+     [icon-button "times"
+      {:on-click on-remove
+       :title (or remove-label (i18n.views/t [::remove "Remove"]))
+       :class "button-size-sm text-foreground-muted"}])])
 
 (defn action-icon-button
   [action & {:as props}]
@@ -131,36 +135,53 @@
                                                 "Resize panel thumb"])}]])
 
 (defn format-shortcut
-  [shortcut]
-  (into [:div.flex.gap-1.items-center {:dir "ltr"}]
-        (comp (map kbd)
-              (interpose [:span "+"]))
-        (cond-> []
-          (:ctrlKey shortcut)
-          (conj "Ctrl")
+  [action-id shortcut]
+  (let [default? @(rf/subscribe [::action.subs/default-shortcut?
+                                 action-id
+                                 shortcut])]
+    (into [:div.flex.gap-1.items-center
+           {:dir "ltr"
+            :class (when-not default? "text-foreground-hovered")}]
+          (comp (map #(kbd % {:class (when-not default?
+                                       "text-foreground-hovered")}))
+                (interpose [:span "+"]))
+          (cond-> []
+            (:ctrlKey shortcut)
+            (conj "Ctrl")
 
-          (:shiftKey shortcut)
-          (conj "⇧")
+            (:shiftKey shortcut)
+            (conj "⇧")
 
-          (:altKey shortcut)
-          (conj "Alt")
+            (:altKey shortcut)
+            (conj "Alt")
 
-          (:keyCode shortcut)
-          (conj (utils.key/code->key (:keyCode shortcut))))))
+            (:metaKey shortcut)
+            (conj "⌘")
+
+            (:keyCode shortcut)
+            (conj (utils.key/code->key (:keyCode shortcut)))))))
 
 (defn shortcuts
+  [action-id v truncated?]
+  (cond->> v
+    :always
+    (into [] (comp (map (partial format-shortcut action-id))
+                   (interpose [:span])))
+
+    truncated?
+    (conj [:span "…"])
+
+    :always
+    (into [:span {:class ["text-foreground-muted hidden lg:inline-flex"
+                          "flex-wrap items-center gap-2"]}])))
+
+(defn action-shortcuts
   [action & {:keys [limit]}]
   (let [event-shortcuts (:shortcuts action)]
     (when (seq event-shortcuts)
       (let [truncated? (and limit (> (count event-shortcuts) limit))
             shown (cond->> event-shortcuts limit (take limit))]
-        (into [:span.text-foreground-muted.hidden.lg:inline-flex.items-center
-               {:class "gap-1.5"}]
-              (cond-> (into []
-                            (comp (map format-shortcut)
-                                  (interpose [:span]))
-                            shown)
-                truncated? (conj [:span "…"])))))))
+        [shortcuts (:id action) shown truncated?]))))
 
 (defn radio-icon-button
   [icon-name active props]
@@ -206,7 +227,7 @@
               content-props)
        [:div.flex.gap-2.items-center
         [action.views/label action]
-        [shortcuts action]]]]]))
+        [action-shortcuts action]]]]]))
 
 (defn action-button-group
   [action-group & {:as content-props}]
@@ -232,7 +253,7 @@
       {:class "menu-item-indicator"}
       [icon "checkmark"]]
      [:div [action.views/label action]]
-     [shortcuts action]]
+     [action-shortcuts action]]
 
     :else
     [:> ContextMenu/Item
@@ -240,7 +261,7 @@
       :onSelect (action.views/dispatch action)
       :disabled (action.views/disabled? action)}
      [:div [action.views/label action]]
-     [shortcuts action]]))
+     [action-shortcuts action]]))
 
 (defn dropdown-menu-item
   [action & {:as props}]
@@ -264,7 +285,7 @@
       (when (:icon action)
         [icon (:icon action)])
       [action.views/label action]]
-     [shortcuts action]]
+     [action-shortcuts action]]
 
     :else
     [:> DropdownMenu/Item
@@ -276,13 +297,13 @@
       (when (:icon action)
         [icon (:icon action)])
       [action.views/label action]]
-     [shortcuts action]]))
+     [action-shortcuts action]]))
 
 (defn scroll-area
   [& more]
   (let [children (if (map? (first more)) (rest more) more)]
     [:> ScrollArea/Root
-     {:class "overflow-hidden w-full"}
+     {:class "overflow-hidden w-full h-full"}
      (into [:> ScrollArea/Viewport
             {:ref (:ref (first more))
              :class "w-full h-full [&>div]:block!"}] children)
@@ -479,32 +500,47 @@
 
 (defn drawer
   [props & children]
-  [:> Drawer.Root
-   {:direction "bottom"
-    :modal false}
-   [:> Drawer.Trigger
-    {:class ["button p-1 rounded h-auto flex flex-col flex-1 text-2xs gap-1"
-             "overflow-hidden items-center"]}
-    [icon (:icon props)]
-    [:span.truncate.w-full (i18n.views/t (:label props))]]
-   [:> Drawer.Portal
-    [:> Drawer.Content
-     {:class ["inset-0 fixed z-0 outline-none bg-secondary flex shadow-lg"
-              "flex-col items-center top-auto px-safe pb-safe rounded-t-xl"
-              "h-70 overflow-hidden gap-px"]
-      :style {:margin "0 - env(safe-area-inset-right)
-                       0 - env(safe-area-inset-left)"
-              :box-shadow "0 -10px 15px -3px
-                           var(--tw-shadow-color, rgb(0 0 0 / 0.1)),
-                           0 -4px 6px -4px
-                           var(--tw-shadow-color, rgb(0 0 0 / 0.1))"}}
-     [:div.bg-primary.w-full
-      [:> Drawer.Handle
-       {:class "mx-auto my-3! w-12! h-1.5! rounded-full bg-overlay!"}]]
-     [:> Drawer.Title
-      {:class "sr-only"}
-      (i18n.views/t (:label props))]
-     (into [:div.flex.flex-1.overflow-hidden.w-full] children)]]])
+  (reagent/with-let [snap (reagent/atom "320px")]
+    [:> Drawer.Root
+     {:direction "bottom"
+      :modal (= @snap "640px")
+      :snapPoints #js ["320px" "640px"]
+      :activeSnapPoint @snap
+      :handleOnly true
+      :setActiveSnapPoint #(reset! snap %)}
+     [:> Drawer.Trigger
+      {:class ["button p-1 rounded h-auto flex flex-col flex-1 text-2xs gap-1"
+               "overflow-hidden items-center"]}
+      [icon (:icon props)]
+      [:span.truncate.w-full (i18n.views/t (:label props))]]
+     (when (= @snap "640px")
+       [:> Drawer.Overlay
+        {:class "fixed inset-0 bg-backdrop animate-in fade-in"}])
+     [:> Drawer.Portal
+      [:> Drawer.Content
+       {:class ["inset-0 fixed z-0 outline-none bg-secondary flex shadow-lg"
+                "flex-col items-center top-auto px-safe pb-safe rounded-t-xl"
+                "h-full overflow-hidden gap-px"]
+        :style {:margin (str "0 - env(safe-area-inset-right) "
+                             "0 - env(safe-area-inset-left)")
+                :box-shadow (str "0 -10px 15px -3px "
+                                 "var(--tw-shadow-color, rgb(0 0 0 / 0.1)), "
+                                 "0 -4px 6px -4px "
+                                 "var(--tw-shadow-color, rgb(0 0 0 / 0.1))")}}
+       [:div
+        [:> Drawer.Handle
+         {:class "bg-primary! w-dvh! h-7! flex! items-center m-0! rounded-none!
+                  after:mx-auto after:my-3 after:w-12 after:h-1.5
+                  after:rounded-full after:bg-overlay"}]]
+       [:> Drawer.Title
+        {:class "sr-only"}
+        (i18n.views/t (:label props))]
+       (let [height (str (- (js/parseInt @snap) 31) "px")
+             style {:height height
+                    :transition "height 0.5s cubic-bezier(0.32, 0.72, 0, 1)"}]
+         (into [:div.flex.overflow-hidden.w-full
+                {:style style}]
+               children))]]]))
 
 (defn color-selection-gradient
   [hue]
@@ -575,7 +611,7 @@
       :max 359
       :disabled (js/isNaN hue)
       :step 1
-      :value [(first (.hsl color))]
+      :value [(if (js/isNaN hue) 0 hue)]
       :on-value-change (fn [[v]]
                          (on-change (utils.color/set-hue color notation v)))
       :on-value-commit (fn [[v]]

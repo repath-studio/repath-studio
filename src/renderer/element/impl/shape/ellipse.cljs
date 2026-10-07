@@ -3,8 +3,10 @@
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/ellipse"
   (:require
    [clojure.string :as string]
+   [re-frame.core :as rf]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.element.subs :as-alias element.subs]
    [renderer.hierarchy :as hierarchy]
    [renderer.tool.impl.element.core :as-alias element.core]
    [renderer.utils.attribute :as utils.attribute]
@@ -96,9 +98,7 @@
 (defmethod element.hierarchy/handles :ellipse
   [el]
   (let [{{:keys [cx cy rx ry]} :attrs} el
-        [cx cy rx ry] (mapv utils.length/unit->px [cx cy rx ry])
-        offset (utils.element/offset el)
-        [cx cy] (utils.math/v-add [cx cy] offset)]
+        [cx cy rx ry] (mapv utils.length/unit->px [cx cy rx ry])]
     [{:type :handle
       :action :edit
       :parent (:id el)
@@ -116,27 +116,29 @@
 
 (defmethod element.hierarchy/render-edit :ellipse
   [el]
-  (let [{{:keys [cx cy rx ry]} :attrs} el
+  (let [transform @(rf/subscribe [::element.subs/transform (:id el)])
+        {{:keys [cx cy rx ry]} :attrs} el
         [cx cy rx ry] (mapv utils.length/unit->px [cx cy rx ry])
-        offset (utils.element/offset el)
-        [cx cy] (utils.math/v-add [cx cy] offset)
-        line-end-x (+ cx rx)
-        line-end-y (- cy ry)]
+        wpoint (partial utils.element/transform-point transform)
+        center (wpoint [cx cy])
+        edge-x (wpoint [(+ cx rx) cy])
+        edge-y (wpoint [cx (- cy ry)])
+        [rx-label-x rx-label-y] (wpoint [(+ cx (/ rx 2)) cy])
+        [ry-label-x ry-label-y] (wpoint [cx (- cy (/ ry 2))])]
     [:g ::edit-handles
-     [utils.svg/times [cx cy]]
+     [utils.svg/times center]
 
-     [utils.svg/line [cx cy] [line-end-x cy] :stroke "var(--accent-foreground)"]
-     [utils.svg/line [cx cy] [cx line-end-y] :stroke "var(--accent-foreground)"]
+     [utils.svg/line center edge-x :stroke "var(--accent-foreground)"]
+     [utils.svg/line center edge-y :stroke "var(--accent-foreground)"]
 
-     [utils.svg/line [cx cy] [line-end-x cy] :stroke-dasharray 5]
-     [utils.svg/line [cx cy] [cx line-end-y] :stroke-dasharray 5]
+     [utils.svg/line center edge-x :stroke-dasharray 5]
+     [utils.svg/line center edge-y :stroke-dasharray 5]
 
-     [utils.svg/label (utils.attribute/->fixed rx 2 false) {:x (+ cx (/ rx 2))
-                                                            :y cy}]
+     [utils.svg/label (utils.attribute/->fixed rx 2 false) {:x rx-label-x
+                                                            :y rx-label-y}]
 
-     [utils.svg/label (utils.attribute/->fixed ry 2 false) {:x cx
-                                                            :y (- cy
-                                                                  (/ ry 2))}]]))
+     [utils.svg/label (utils.attribute/->fixed ry 2 false) {:x ry-label-x
+                                                            :y ry-label-y}]]))
 
 (defmethod element.hierarchy/snapping-points :ellipse
   [el]

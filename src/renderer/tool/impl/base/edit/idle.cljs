@@ -1,17 +1,30 @@
 (ns renderer.tool.impl.base.edit.idle
   (:require
+   [config :as config]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
+   [renderer.input.handlers :as input.handlers]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
-   [renderer.tool.impl.base.edit.core :as-alias edit]))
+   [renderer.tool.impl.base.edit.core :as-alias edit]
+   [renderer.utils.math :as utils.math]))
 
 (defmethod tool.hierarchy/help [::edit/edit :idle]
   []
   (i18n.views/t [::help-idle "Drag a handle to modify your shape.
-                              Click on an element to change selection."]))
+                              Click on an element to change selection.
+                              Double click near a path to add a point."]))
+
+(defn insertion-candidate
+  [db el position]
+  (let [zoom (get-in db [:documents (:active-document db) :zoom])
+        threshold (/ config/snap-threshold zoom)
+        transform (element.handlers/transform db (:id el))]
+    (when-let [closest (element.hierarchy/closest-point el transform position)]
+      (when (<= (utils.math/distance closest position) threshold)
+        closest))))
 
 (defmethod tool.hierarchy/on-pointer-down [::edit/edit :idle]
   [db e]
@@ -40,25 +53,60 @@
 
 (defmethod tool.hierarchy/on-double-click [::edit/edit :idle]
   [db e]
-  (let [{:keys [element]} e
+  (let [{:keys [local-pointer-pos]} db
+        {:keys [element]} e
         {:keys [parent id]} element]
-    (cond-> db
+    (cond
       (= (:type element) :handle)
-      (-> (dissoc :clicked-element)
+      (-> (dissoc db :clicked-element)
           (element.handlers/update-el parent element.hierarchy/handle-click id)
-          (history.handlers/finalize (:timestamp e) [::edit/label "Edit"])))))
+          (history.handlers/finalize (:timestamp e) [::edit/label "Edit"]))
+
+      (and (= (:type element) :element)
+           (contains? (element.handlers/selected-ids db) id)
+           (insertion-candidate db element local-pointer-pos))
+      (let [[new-el handle-id] (element.hierarchy/insert-point
+                                element
+                                (element.handlers/transform db id)
+                                local-pointer-pos)]
+        (cond-> db
+          :always
+          (-> (dissoc :clicked-element :insertion-point)
+              (element.handlers/update-el id (constantly new-el)))
+
+          handle-id
+          (element.handlers/select-handle handle-id id)
+
+          :always
+          (history.handlers/finalize (:timestamp e) [::edit/label "Edit"])))
+
+      :else
+      db)))
 
 (defmethod tool.hierarchy/on-pointer-move [::edit/edit :idle]
   [db e]
-  (-> db
-      (element.handlers/clear-hovered)
-      (element.handlers/hover (-> e :element :id))))
+  (let [position (input.handlers/adjusted-pos db (:pointer-pos e))
+        candidates (keep #(insertion-candidate db % position)
+                         (element.handlers/selected db))
+        best (when (seq candidates)
+               (apply min-key #(utils.math/distance % position) candidates))]
+    (cond-> db
+      :always
+      (-> (element.handlers/clear-hovered)
+          (element.handlers/hover (-> e :element :id)))
+
+      best
+      (assoc :insertion-point best)
+
+      (nil? best)
+      (dissoc :insertion-point))))
 
 (defmethod tool.hierarchy/on-drag-start [::edit/edit :idle]
   [db e]
   (let [{:keys [clicked-element]} db
         {:keys [shift-key]} e
-        {:keys [id parent]} clicked-element]
+        {:keys [id parent]} clicked-element
+        db (dissoc db :insertion-point)]
     (if (= (:type clicked-element) :handle)
       (-> db
           (element.handlers/toggle-handle-selection parent id shift-key)

@@ -9,7 +9,7 @@
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
    [renderer.utils.math :as utils.math]
-   [renderer.utils.vec]))
+   [renderer.utils.vec :as utils.vec]))
 
 (hierarchy/derive! ::element.hierarchy/poly ::element.hierarchy/shape)
 
@@ -57,10 +57,7 @@
 
 (defn handle
   [el index point]
-  (let [offset (utils.element/offset el)
-        position (->> point
-                      (mapv utils.length/unit->px)
-                      (utils.math/v-add offset))]
+  (let [position (mapv utils.length/unit->px point)]
     {:id (keyword (str index))
      :position position
      :label [::point "point"]
@@ -118,8 +115,7 @@
   ;; Calculates the centroid of a polygon using an extension of the Shoelace
   ;; Formula. This method works for both convex and concave polygons, but not
   ;; for self-intersecting ones.
-  (let [offset (utils.element/offset el)
-        vertices (->vertices el)
+  (let [vertices (->vertices el)
         count-v (count vertices)
         [cx cy cross-sum] (reduce-kv
                            (fn [[cx cy s] index [x1 y1]]
@@ -133,8 +129,7 @@
                            [0 0 0]
                            vertices)
         denom (* 3 cross-sum)]
-    (utils.math/v-add [(/ cx denom) (/ cy denom)]
-                      offset)))
+    [(/ cx denom) (/ cy denom)]))
 
 (defmethod element.hierarchy/snapping-points ::element.hierarchy/poly
   [el]
@@ -155,3 +150,67 @@
     (-> el
         (assoc :selected-handles #{})
         (assoc-in [:attrs :points] updated-points))))
+
+(defn edge-endpoints
+  [el vertices]
+  (let [n (count vertices)
+        closed? (= :polygon (:tag el))
+        end-idx (if closed?
+                  (fn [i] (mod (inc i) n))
+                  (fn [i] (inc i)))]
+    (map (fn [i] [i (vertices i) (vertices (end-idx i))])
+         (range (if closed? n (dec n))))))
+
+(defn closest-point-on-segment
+  [point start end]
+  (let [direction (utils.math/v-sub end start)
+        squared-length (matrix/dot direction direction)
+        fraction (if (zero? squared-length)
+                   0
+                   (-> (utils.math/v-sub point start)
+                       (matrix/dot direction)
+                       (/ squared-length)
+                       (utils.math/clamp 0 1)))
+        projection (utils.math/v-add start
+                                     (utils.math/v-mul fraction direction))]
+    {:position projection
+     :distance (utils.math/distance point projection)}))
+
+(defn closest-edge
+  [el pos]
+  (reduce (fn [best [i start end]]
+            (let [edge (assoc (closest-point-on-segment pos start end)
+                              :index i
+                              :start start
+                              :end end)]
+              (if (and best (< (:distance best) (:distance edge)))
+                best
+                edge)))
+          nil
+          (edge-endpoints el (->vertices el))))
+
+(defmethod element.hierarchy/closest-point ::element.hierarchy/poly
+  [el transform position]
+  (let [pos (utils.element/untransform-point transform position)
+        closest (some-> (closest-edge el pos) :position)]
+    (when closest
+      (utils.element/transform-point transform closest))))
+
+(defmethod element.hierarchy/insert-point ::element.hierarchy/poly
+  [el transform position]
+  (let [pos (utils.element/untransform-point transform position)
+        edge (closest-edge el pos)
+        point (:position edge)
+        inserted? (and point
+                       (every? #(> (utils.math/distance point %) 1e-3)
+                               [(:start edge) (:end edge)]))
+        index (inc (:index edge))
+        points (utils.attribute/points->vec (get-in el [:attrs :points]))
+        new-points (->> (mapv utils.attribute/->fixed point)
+                        (utils.vec/add points index)
+                        (flatten)
+                        (string/join " "))]
+    (if inserted?
+      [(assoc-in el [:attrs :points] new-points)
+       (keyword (str index))]
+      [el nil])))

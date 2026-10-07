@@ -13,7 +13,7 @@
                :label [::toggle-fullscreen "Toggle fullscreen"]
                :icon "arrow-minimize"
                :event [::window.events/toggle-fullscreen]
-               :shortcuts [{:keyCode (utils.key/codes "F11")}]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "F11")}]}
                :available [::app.subs/not-mobile?]
                :active [::window.subs/fullscreen?]}])
 
@@ -37,8 +37,10 @@
                :label [::exit "Exit"]
                :icon "exit"
                :event [::window.events/close]
-               :shortcuts [{:keyCode (utils.key/codes "Q")
-                            :ctrlKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "Q")
+                                    :ctrlKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "Q")
+                                    :metaKey true}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :window/toggle-devtools
@@ -46,9 +48,12 @@
                :icon "window-restore"
                :event [::window.events/toggle-devtools]
                :available [::app.subs/desktop?]
-               :shortcuts [{:keyCode (utils.key/codes "I")
-                            :ctrlKey true
-                            :shiftKey true}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "I")
+                                    :ctrlKey true
+                                    :shiftKey true}]
+                           "Mac" [{:keyCode (utils.key/codes "I")
+                                    :metaKey true
+                                    :shiftKey true}]}}])
 
 (rf/dispatch [::action.events/register-action-group
               {:id :window/actions

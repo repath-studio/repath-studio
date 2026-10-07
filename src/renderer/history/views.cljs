@@ -143,25 +143,25 @@
   []
   (let [start-color (history.handlers/age-ratio->color 0)
         end-color (history.handlers/age-ratio->color 1)]
-    [:div.flex.flex-col.p-2.bg-primary
-     [:div.flex.justify-between.text-2xs.text-foreground-muted
-      [:div.flex.gap-1
-       [:div.h-5.w-px {:style {:background start-color}}]
-       [:span (i18n.views/t [::oldest "Oldest"])]]
-
-      [:div.flex.gap-1
-       [:span (i18n.views/t [::newest "Newest"])]
-       [:div.h-5.w-px {:style {:background end-color}}]]]
+    [:div.flex.flex-col.p-2.bg-primary.sm:flex-col-reverse
      [:div.w-full.h-2
       {:style {:background (str "linear-gradient(to right, "
                                 start-color ", "
-                                end-color ")")}}]]))
+                                end-color ")")}}]
+     [:div.flex.justify-between.text-2xs.text-foreground-muted
+      [:div.flex.gap-1.items-center
+       [:div.h-5.w-px {:style {:background start-color}}]
+       [:span (i18n.views/t [::oldest "Oldest"])]]
+
+      [:div.flex.gap-1.items-center
+       [:span (i18n.views/t [::newest "Newest"])]
+       [:div.h-5.w-px {:style {:background end-color}}]]]]))
 
 (defn root
   []
   (let [ref (react/createRef)
         md? @(rf/subscribe [::window.subs/md?])]
-    [:div.flex.flex-col.h-full.gap-px.w-full
+    [:div.flex.flex-col.h-full.gap-px.w-full.overflow-hidden
      [views/toolbar
       {:class "bg-primary"}
       [views/action-icon-button :history/clear]
@@ -173,10 +173,11 @@
       [views/action-switch :history/toggle-labels]
       [:div.flex-1]
       (when md? [panel.views/close-button :history])]
-     [:div.flex-1
-      {:ref ref
-       ;; Prevents moving/closing the drawer panel on mobile.
-       :on-pointer-move #(when (= (.-pointerType %) "touch")
-                           (.stopPropagation %))}
-      [tree ref]]
-     [legend]]))
+     [:div.flex-1.flex.flex-col.sm:flex-col-reverse
+      [legend]
+      [:div.flex-1
+       {:ref ref
+        ;; Prevents moving/closing the drawer panel on mobile.
+        :on-pointer-move #(when (= (.-pointerType %) "touch")
+                            (.stopPropagation %))}
+       [tree ref]]]]))

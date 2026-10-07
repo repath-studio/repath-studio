@@ -61,4 +61,4 @@
                :icon "fill"
                :event [::tool.events/activate ::fill]
                :active [::tool.subs/active? ::fill]
-               :shortcuts [{:keyCode (utils.key/codes "F")}]}])
+               :shortcuts {"All" [{:keyCode (utils.key/codes "F")}]}}])

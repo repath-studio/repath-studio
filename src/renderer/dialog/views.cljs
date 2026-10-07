@@ -15,7 +15,8 @@
    [renderer.document.events :as-alias document.events]
    [renderer.i18n.views :as i18n.views]
    [renderer.utils.key :as utils.key]
-   [renderer.views :as views]))
+   [renderer.views :as views]
+   [renderer.window.subs :as-alias window.subs]))
 
 (defn button
   [props & children]
@@ -123,40 +124,59 @@
         :on-click (fn [e]
                     (.stopPropagation e)
                     (rf/dispatch [::dialog.events/show-edit-shortcut id]))}]
-      [views/shortcuts action :limit 3]]]))
+      [views/action-shortcuts action :limit 3]]]))
 
 (defn cmdk-group
-  [{:keys [label actions]}]
-  (->> actions
-       (keep action.views/deref-action)
-       (map (partial cmdk-item label))
-       (into [:> Command/CommandGroup
-              {:heading (i18n.views/t label)}])))
+  [{:keys [label actions]} hide-disabled? hide-shortcutless?]
+  (let [actions (cond->> (keep action.views/deref-action actions)
+                  hide-disabled? (remove action.views/disabled?)
+                  hide-shortcutless? (filter :shortcuts))]
+    (when (seq actions)
+      (->> actions
+           (map (partial cmdk-item label))
+           (into [:> Command/CommandGroup
+                  {:heading (i18n.views/t label)}])))))
 
 (defn cmdk
   []
-  (let [action-groups @(rf/subscribe [::action.subs/action-groups])
-        groupless-actions @(rf/subscribe [::action.subs/groupless-actions])
-        action-groups (cond-> action-groups
-                        (seq groupless-actions)
-                        (assoc :other-actions
-                               {:id :other-actions
-                                :label [::other-actions "Other Actions"]
-                                :actions (keys groupless-actions)}))]
-    [:> Command/Command
-     {:label "Command Menu"
-      :on-key-down #(.stopPropagation %)}
-     [:> Command/CommandInput
-      {:class "p-3 bg-primary border-b border-border w-full"
-       :placeholder (i18n.views/t [::search-command "Search for a command"])}]
-     [views/scroll-area
-      (->> (vals action-groups)
-           (keep cmdk-group)
-           (into [:> Command/CommandList
-                  {:class "p-1 max-h-[50dvh]"}
-                  [:> Command/CommandEmpty
-                   {:class "p-2"}
-                   (i18n.views/t [::no-results "No results found."])]]))]]))
+  (reagent/with-let [hide-disabled? (reagent/atom false)
+                     hide-shortcutless? (reagent/atom false)]
+    (let [action-groups @(rf/subscribe [::action.subs/action-groups])
+          groupless-actions @(rf/subscribe [::action.subs/groupless-actions])
+          lg? @(rf/subscribe [::window.subs/lg?])
+          action-groups (cond-> action-groups
+                          (seq groupless-actions)
+                          (assoc :other-actions
+                                 {:id :other-actions
+                                  :label [::other-actions "Other Actions"]
+                                  :actions (keys groupless-actions)}))]
+      [:> Command/Command
+       {:label "Command Menu"
+        :on-key-down #(.stopPropagation %)}
+       [:> Command/CommandInput
+        {:class "p-3 bg-primary w-full"
+         :placeholder (i18n.views/t [::search-command "Search for a command"])}]
+       [views/toolbar
+        {:class "gap-4 bg-secondary p-2"}
+        [views/switch
+         (i18n.views/t [::hide-disabled "Hide disabled"])
+         {:id "hide-disabled"
+          :default-checked @hide-disabled?
+          :on-checked-change #(reset! hide-disabled? %)}]
+        (when lg?
+          [views/switch
+           (i18n.views/t [::hide-shortcutless "Hide shortcutless"])
+           {:id "hide-shortcutless"
+            :default-checked @hide-shortcutless?
+            :on-checked-change #(reset! hide-shortcutless? %)}])]
+       [views/scroll-area
+        (->> (vals action-groups)
+             (keep #(cmdk-group % @hide-disabled? @hide-shortcutless?))
+             (into [:> Command/CommandList
+                    {:class "p-1 max-h-[50dvh]"}
+                    [:> Command/CommandEmpty
+                     {:class "p-2"}
+                     (i18n.views/t [::no-results "No results found."])]]))]])))
 
 (def modifier-key-codes
   "keyCodes for keys that are modifiers on their own and shouldn't be captured
@@ -170,29 +190,38 @@
       (cond-> {:keyCode key-code}
         (.-ctrlKey e) (assoc :ctrlKey true)
         (.-shiftKey e) (assoc :shiftKey true)
-        (.-altKey e) (assoc :altKey true)))))
+        (.-altKey e) (assoc :altKey true)
+        (.-metaKey e) (assoc :metaKey true)))))
 
 (defn shortcut->string
   [shortcut]
   (->> [(when (:ctrlKey shortcut) "Ctrl")
         (when (:shiftKey shortcut) "Shift")
         (when (:altKey shortcut) "Alt")
+        (when (:metaKey shortcut) "Meta")
         (some-> (:keyCode shortcut) utils.key/code->key)]
        (remove nil?)
        (string/join " + ")))
 
+(defn shortcut-tag
+  [action-id shortcut]
+  [views/tag
+   [views/format-shortcut action-id shortcut]
+   {:on-remove #(rf/dispatch [::action.events/remove-shortcut
+                              action-id
+                              shortcut])}])
+
 (defn edit-shortcut
-  [id label]
+  [action-id label]
   (reagent/with-let [pending (reagent/atom nil)]
-    (let [shortcuts @(rf/subscribe [::action.subs/action-shortcuts id])
+    (let [shortcuts @(rf/subscribe [::action.subs/action-shortcuts action-id])
+          conflict @(rf/subscribe [::action.subs/conflicting-action @pending])
           label (i18n.views/t label)
           add! (fn [_]
                  (when @pending
-                   (rf/dispatch [::action.events/add-shortcut id @pending]))
-                 (reset! pending nil))
-          remove! (fn [shortcut]
-                    (rf/dispatch
-                     [::action.events/remove-shortcut id shortcut]))]
+                   (rf/dispatch [::action.events/add-shortcut
+                                 action-id @pending]))
+                 (reset! pending nil))]
       [:div.flex.flex-col.gap-4
        [:div (i18n.views/t [::customize-shortcuts-for
                             [:div "Customize shortcuts for %1"]]
@@ -205,22 +234,23 @@
           :on-key-down (fn [e]
                          (.preventDefault e)
                          (.stopPropagation e)
-                         (when-let [shortcut (keydown->shortcut e)]
-                           (reset! pending shortcut)))}]
+                         (some->> (keydown->shortcut e)
+                                  (reset! pending)))}]
         [:button.button.px-3.rounded.bg-overlay
-         {:disabled (nil? @pending)
+         {:disabled (or (nil? @pending) conflict)
           :on-click add!}
          (i18n.views/t [::add "Add"])]]
+       (when conflict
+         (let [conflict-label (i18n.views/t (:label conflict))]
+           [:div.text-error
+            (i18n.views/t [::shortcut-in-use
+                           [:div "This shortcut is already in use by %1."]]
+                          [[:strong conflict-label]])]))
        (into [:div.flex.flex-wrap.gap-2.min-h-8]
-             (map (fn [shortcut]
-                    ^{:key (str shortcut)}
-                    [views/tag
-                     [views/format-shortcut shortcut]
-                     #(remove! shortcut)])
-                  shortcuts))
+             (map (partial shortcut-tag action-id) shortcuts))
        [button-bar
         [button
-         {:on-click #(rf/dispatch [::action.events/reset-shortcuts id])}
+         {:on-click #(rf/dispatch [::action.events/reset-shortcuts action-id])}
          (i18n.views/t [::reset-shortcuts "Reset to defaults"])]
         [button
          {:on-click #(rf/dispatch [::dialog.events/close nil])

@@ -25,30 +25,25 @@
                 [[views/kbd "Ctrl"]
                  [views/kbd "Alt"]]))
 
-(m/=> start-point [:-> Element Vec2])
-(defn start-point
-  [el]
-  (into [] (take 2) (:bbox el)))
-
-(m/=> swap-parent [:-> App ElementId Element Element App])
+(m/=> swap-parent [:-> App ElementId Element App])
 (defn swap-parent
-  [db id hovered-svg container-el]
-  (cond-> db
-    :always
-    (element.handlers/set-parent id (:id hovered-svg))
-
-    (:bbox container-el)
-    (element.handlers/translate id (start-point container-el))
-
-    (:bbox hovered-svg)
-    (element.handlers/translate id (utils.math/v-mul (start-point hovered-svg)
-                                                     -1))))
+  [db id hovered-svg]
+  (let [{:keys [local-pointer-pos]} db
+        transform (element.handlers/transform db id)
+        db (element.handlers/set-parent db id (:id hovered-svg))
+        offset (->> local-pointer-pos
+                    (utils.element/untransform-point transform)
+                    (utils.element/transform-point
+                     (element.handlers/transform db id))
+                    (utils.math/v-sub local-pointer-pos)
+                    (element.handlers/container-scale-offset db id))]
+    (element.handlers/translate db id offset)))
 
 (m/=> translate-el [:-> App ElementId map? App])
 (defn translate-el
   [db id {:keys [offset hovered-svg auto-parent]}]
   (let [el (element.handlers/entity db id)
-        container-el (element.handlers/parent-container db id)]
+        offset (element.handlers/container-scale-offset db id offset)]
     (cond-> db
       :always
       (element.handlers/translate id offset)
@@ -56,7 +51,7 @@
       (and auto-parent
            (not (utils.element/svg? el))
            (not (utils.element/top-level? el)))
-      (swap-parent id hovered-svg container-el))))
+      (swap-parent id hovered-svg))))
 
 (m/=> direction [:-> Vec2 Orientation])
 (defn direction
