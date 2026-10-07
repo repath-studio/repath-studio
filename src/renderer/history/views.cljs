@@ -3,7 +3,6 @@
    ["@radix-ui/react-select" :as Select]
    ["react" :as react]
    ["react-d3-tree" :refer [Tree]]
-   [clojure.core.matrix :as matrix]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
    [renderer.history.events :as-alias history.events]
@@ -11,6 +10,7 @@
    [renderer.history.subs :as-alias history.subs]
    [renderer.i18n.views :as i18n.views]
    [renderer.panel.views :as panel.views]
+   [renderer.utils.math :as utils.math]
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]))
 
@@ -115,8 +115,8 @@
 (defn center
   [ref]
   (when-let [dom-el (.-current ref)]
-    (matrix/div [(.-clientWidth dom-el)
-                 (.-clientHeight dom-el)] 2)))
+    (utils.math/v-div [(.-clientWidth dom-el)
+                       (.-clientHeight dom-el)] 2)))
 
 (defn tree
   [parent-ref]

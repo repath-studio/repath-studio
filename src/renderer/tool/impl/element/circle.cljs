@@ -1,7 +1,6 @@
 (ns renderer.tool.impl.element.circle
   "https://www.w3.org/TR/SVG/shapes.html#CircleElement"
   (:require
-   [clojure.core.matrix :as matrix]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.document.handlers :as document.handlers]
@@ -13,7 +12,8 @@
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.attribute :as utils.attribute]
-   [renderer.utils.key :as utils.key]))
+   [renderer.utils.key :as utils.key]
+   [renderer.utils.math :as utils.math]))
 
 (hierarchy/derive! ::circle ::tool.hierarchy/element)
 
@@ -23,7 +23,7 @@
         to-local (partial element.handlers/container-local-point db parent-id)
         offset (to-local (tool.handlers/snapped-offset db))
         position (to-local (tool.handlers/snapped-position db))
-        radius (matrix/distance position offset)
+        radius (utils.math/distance position offset)
         [cx cy] offset
         attrs (-> (document.handlers/attrs db)
                   (select-keys [:stroke :fill :stroke-width]))]
@@ -43,7 +43,7 @@
                       (element.handlers/local-point db id))
         {:keys [cx cy]} attrs
         radius (-> position
-                   (matrix/distance [cx cy])
+                   (utils.math/distance [cx cy])
                    (utils.attribute/->fixed))]
     (element.handlers/update-selected db #(assoc-in % [:attrs :r] radius))))
 

@@ -1,7 +1,6 @@
 (ns renderer.element.impl.shape.poly
   "An abstraction for polygons and polylines that have similar behavior."
   (:require
-   [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
@@ -47,11 +46,11 @@
                      (transduce
                       partition-to-px
                       (fn [points point]
-                        (let [rel-point (matrix/sub bounds-min point)
+                        (let [rel-point (utils.math/v-sub bounds-min point)
                               offset (->> ratio
-                                          (matrix/mul rel-point)
-                                          (matrix/sub rel-point)
-                                          (matrix/add offset))]
+                                          (utils.math/v-mul rel-point)
+                                          (utils.math/v-sub rel-point)
+                                          (utils.math/v-add offset))]
                           (translate offset points point))) [])
                      (string/join " ")
                      (string/trim)))))
@@ -164,17 +163,18 @@
 
 (defn closest-point-on-segment
   [point start end]
-  (let [direction (matrix/sub end start)
-        squared-length (matrix/dot direction direction)
+  (let [direction (utils.math/v-sub end start)
+        squared-length (utils.math/v-dot direction direction)
         fraction (if (zero? squared-length)
                    0
-                   (-> (matrix/sub point start)
-                       (matrix/dot direction)
+                   (-> (utils.math/v-sub point start)
+                       (utils.math/v-dot direction)
                        (/ squared-length)
                        (utils.math/clamp 0 1)))
-        projection (matrix/add start (matrix/mul fraction direction))]
+        projection (utils.math/v-add start
+                                     (utils.math/v-mul direction fraction))]
     {:position projection
-     :distance (matrix/distance point projection)}))
+     :distance (utils.math/distance point projection)}))
 
 (defn closest-edge
   [el pos]
@@ -202,7 +202,7 @@
         edge (closest-edge el pos)
         point (:position edge)
         inserted? (and point
-                       (every? #(> (matrix/distance point %) 1e-3)
+                       (every? #(> (utils.math/distance point %) 1e-3)
                                [(:start edge) (:end edge)]))
         index (inc (:index edge))
         points (utils.attribute/points->vec (get-in el [:attrs :points]))

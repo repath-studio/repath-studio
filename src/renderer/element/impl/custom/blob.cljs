@@ -3,7 +3,6 @@
   (:require
    ["blobs/v2" :as blobs]
    ["svgpath" :as svgpath]
-   [clojure.core.matrix :as matrix]
    [re-frame.core :as rf]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.impl.length :as attribute.impl.length]
@@ -17,6 +16,7 @@
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
+   [renderer.utils.math :as utils.math]
    [renderer.utils.svg :as utils.svg]
    [renderer.views :as views]))
 
@@ -136,7 +136,7 @@
   [el]
   (let [{{:keys [x y size]} :attrs} el
         [x y size] (mapv utils.length/unit->px [x y size])]
-    (matrix/add [x y] (/ size 2))))
+    (utils.math/v-add [x y] (/ size 2))))
 
 (defmethod element.hierarchy/path :blob
   [el]
@@ -169,7 +169,7 @@
       :action :edit
       :label [::size-handle "size handle"]
       :parent (:id el)
-      :position (matrix/add [x y] size)
+      :position (utils.math/v-add [x y] size)
       :id :size}]))
 
 (defmethod element.hierarchy/render-edit :blob
@@ -179,7 +179,7 @@
         [x y size] (mapv utils.length/unit->px [x y size])
         wpoint (partial utils.element/transform-point transform)
         start (wpoint [x y])
-        end (wpoint (matrix/add [x y] size))]
+        end (wpoint (utils.math/v-add [x y] size))]
     [:<>
      [utils.svg/line start end]
      [utils.svg/times start]]))

@@ -2,8 +2,6 @@
   "https://github.com/steveruizok/perfect-freehand"
   (:require
    ["perfect-freehand" :refer [getStroke]]
-   [clojure.core.matrix :as matrix]
-   [clojure.core.matrix.stats :as matrix.stats]
    [clojure.string :as string]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.attribute.impl.range :as attribute.impl.range]
@@ -15,6 +13,7 @@
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
+   [renderer.utils.math :as utils.math]
    [renderer.utils.path :as utils.path]))
 
 (hierarchy/derive! :brush ::element.hierarchy/custom)
@@ -90,8 +89,8 @@
                    (utils.attribute/->fixed bx) ","
                    (utils.attribute/->fixed by)
                    " "
-                   (utils.attribute/->fixed (matrix.stats/mean [bx cx])) ","
-                   (utils.attribute/->fixed (matrix.stats/mean [by cy]))
+                   (utils.attribute/->fixed (utils.math/mean bx cx)) ","
+                   (utils.attribute/->fixed (utils.math/mean by cy))
                    " T")]
         (reduce-kv
          (fn [result index]
@@ -101,9 +100,9 @@
              (let [[ax ay] (nth points index)
                    [bx by] (nth points (inc index))]
                (str result
-                    (utils.attribute/->fixed (matrix.stats/mean [ax bx]))
+                    (utils.attribute/->fixed (utils.math/mean ax bx))
                     ","
-                    (utils.attribute/->fixed (matrix.stats/mean [ay by]))
+                    (utils.attribute/->fixed (utils.math/mean ay by))
                     " ")))) d points)))))
 
 (def partition-to-px
@@ -167,9 +166,9 @@
   (->> (utils.attribute/str->seq el)
        (into [] partition-to-px)
        (reduce (fn [points point]
-                 (let [rel-point (matrix/sub bbox-min (take 2 point))
+                 (let [rel-point (utils.math/v-sub bbox-min (take 2 point))
                        rel-offset (utils.element/scale-offset ratio rel-point)
-                       offset (matrix/add offset rel-offset)]
+                       offset (utils.math/v-add offset rel-offset)]
                    (translate offset points point))) [])
        (string/join " ")))
 

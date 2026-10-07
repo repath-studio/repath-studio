@@ -27,9 +27,7 @@
                          :exclude-urls true}
            :consistent-alias
            {:level :warning
-            :aliases {clojure.core.matrix matrix
-                      clojure.core.matrix.stats matrix.stats
-                      clojure.set set
+            :aliases {clojure.set set
                       clojure.string string
                       malli.core m
                       re-frame.core rf

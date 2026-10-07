@@ -4,7 +4,6 @@
   (:require
    ["svg-path-bbox" :refer [svgPathBbox]]
    ["svgpath" :as svgpath]
-   [clojure.core.matrix :as matrix]
    [malli.core :as m]
    [re-frame.core :as rf]
    [renderer.attribute.impl.d :as attribute.impl.d]
@@ -15,6 +14,7 @@
    [renderer.input.handlers :as input.handlers]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
+   [renderer.utils.math :as utils.math]
    [renderer.utils.path :as utils.path]
    [renderer.utils.svg :as utils.svg]))
 
@@ -51,8 +51,8 @@
   (let [[scale-x scale-y] ratio
         offset (utils.element/scale-offset ratio pivot-point)
         [x y] (element.hierarchy/bbox el)
-        [x y] (-> (matrix/add [x y] offset)
-                  (matrix/sub (matrix/mul ratio [x y])))]
+        [x y] (-> (utils.math/v-add [x y] offset)
+                  (utils.math/v-sub (utils.math/v-mul ratio [x y])))]
     (update-path el #(-> %
                          (.scale scale-x scale-y)
                          (.translate x y)))))
@@ -314,9 +314,9 @@
                  (get endpoints (dec index))
                  (get endpoints index))
         cp-pos (->px-point (aget segments index) point-type)
-        new-cp-pos (matrix/add cp-pos offset)
+        new-cp-pos (utils.math/v-add cp-pos offset)
         snapped (input.handlers/snap-angle anchor new-cp-pos)]
-    (matrix/sub snapped cp-pos)))
+    (utils.math/v-sub snapped cp-pos)))
 
 (defmethod element.hierarchy/handle-drag :path
   [el offset handle lock?]

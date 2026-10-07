@@ -1,6 +1,5 @@
 (ns renderer.element.handlers
   (:require
-   [clojure.core.matrix :as matrix]
    [clojure.set :as set]
    [clojure.string :as string]
    [hickory.core :as hickory]
@@ -20,6 +19,7 @@
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.extra :refer [rpartial]]
+   [renderer.utils.math :as utils.math]
    [renderer.utils.path :as utils.path]
    [renderer.utils.vec :as utils.vec]))
 
@@ -735,7 +735,7 @@
   ([db id position]
    (let [el (entity db id)
          center (utils.bounds/center (element.hierarchy/bbox el))
-         offset (matrix/sub position center)]
+         offset (utils.math/v-sub position center)]
      (translate db offset))))
 
 (m/=> scale-pivot [:-> Vec2 map? [:set ElementId] fn?])
@@ -746,9 +746,9 @@
   (fn [db id]
     (when-let [el-origin (get origins id)]
       (if (contains? top-ids id)
-        (matrix/sub pivot el-origin)
+        (utils.math/v-sub pivot el-origin)
         (when-let [ancestor-origin (some #(get origins %) (ancestor-ids db id))]
-          (matrix/sub ancestor-origin el-origin))))))
+          (utils.math/v-sub ancestor-origin el-origin))))))
 
 (m/=> scale-group [:-> App ElementId Vec2 Vec2 [:set ElementId] App])
 (defn scale-group
@@ -770,7 +770,7 @@
 
                       child-origin
                       (update-el db child-id element.hierarchy/scale ratio
-                                 (matrix/sub pivot-point child-origin))
+                                 (utils.math/v-sub pivot-point child-origin))
 
                       :else
                       db)))
@@ -821,8 +821,8 @@
        (let [center (utils.bounds/center el-bbox)
              parent-bbox (:bbox (parent db id))
              parent-center (utils.bounds/center parent-bbox)
-             [cx cy] (matrix/sub parent-center center)
-             delta-bbox (matrix/sub parent-bbox el-bbox)
+             [cx cy] (utils.math/v-sub parent-center center)
+             delta-bbox (utils.math/v-sub parent-bbox el-bbox)
              [min-x-delta min-y-delta max-x-delta max-y-delta] delta-bbox]
          (translate db id (case direction
                             :top [0 min-y-delta]
@@ -1023,7 +1023,7 @@
   ([db el parent-el]
    (let [center (utils.bounds/center (-> db :clipboard :bbox))
          el-center (utils.bounds/center (:bbox el))
-         offset (matrix/sub el-center center)
+         offset (utils.math/v-sub el-center center)
          el (dissoc el :bbox)
          [s-x1 s-y1] (:bbox parent-el)
          pointer-pos (:local-pointer-pos db)
@@ -1035,7 +1035,7 @@
                :always
                (-> (deselect)
                    (add el)
-                   (place (matrix/add pointer-pos offset)))
+                   (place (utils.math/v-add pointer-pos offset)))
 
                (and (not= (:id (root db)) (:id parent-el))
                     (not (utils.element/top-level? el)))

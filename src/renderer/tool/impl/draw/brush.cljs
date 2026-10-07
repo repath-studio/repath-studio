@@ -1,7 +1,6 @@
 (ns renderer.tool.impl.draw.brush
   "https://github.com/steveruizok/perfect-freehand"
   (:require
-   [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
@@ -21,6 +20,7 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.element :as utils.element]
    [renderer.utils.key :as utils.key]
+   [renderer.utils.math :as utils.math]
    [renderer.views :as views]))
 
 (hierarchy/derive! ::brush ::tool.hierarchy/draw)
@@ -115,19 +115,22 @@
 
 (defmethod tool.hierarchy/on-drag [::brush :idle]
   [db e]
-  (cond-> db
-    (:shift-key e)
-    (-> (document.handlers/update-attr
-         ::size
-         (fn [size]
-           (let [{:keys [last-origin]} db
-                 [delta-x delta-y] (matrix/sub (:pointer-pos e) last-origin)
-                 delta (if (> (abs delta-x) (abs delta-y)) delta-x (- delta-y))]
-             (if (pos? delta)
-               (min max-size (inc size))
-               (max min-size (dec size))))))
-        (update-brush-size)
-        (assoc :last-origin (:pointer-pos e)))))
+  (let [{:keys [pointer-pos shift-key]} e]
+    (cond-> db
+      shift-key
+      (-> (document.handlers/update-attr
+           ::size
+           (fn [size]
+             (let [{:keys [last-origin]} db
+                   [delta-x delta-y] (utils.math/v-sub pointer-pos last-origin)
+                   delta (if (> (abs delta-x) (abs delta-y))
+                           delta-x
+                           (- delta-y))]
+               (if (pos? delta)
+                 (min max-size (inc size))
+                 (max min-size (dec size))))))
+          (update-brush-size)
+          (assoc :last-origin pointer-pos)))))
 
 (defmethod tool.hierarchy/on-drag [::brush :create]
   [db e]

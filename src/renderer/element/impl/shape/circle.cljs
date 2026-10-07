@@ -2,7 +2,6 @@
   "https://www.w3.org/TR/SVG/shapes.html#CircleElement
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/circle"
   (:require
-   [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [re-frame.core :as rf]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
@@ -43,8 +42,8 @@
   (let [{{:keys [stroke-width]} :attrs} el
         padding (/ (utils.length/unit->px stroke-width) 2)
         dimensions (-> el element.hierarchy/bbox utils.bounds/->dimensions)
-        pivot-point (->> (matrix/div dimensions 2)
-                         (matrix/sub pivot-point))
+        pivot-point (->> (utils.math/v-div dimensions 2)
+                         (utils.math/v-sub pivot-point))
         offset (utils.element/scale-offset ratio pivot-point)
         ratio (apply min ratio)]
     (-> el

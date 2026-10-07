@@ -3,7 +3,6 @@
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
    ["@radix-ui/react-tooltip" :as Tooltip]
    ["react" :as react]
-   [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [malli.core :as m]
    [re-frame.core :as rf]
@@ -19,6 +18,7 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.dom :as utils.dom]
+   [renderer.utils.math :as utils.math]
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]))
 
@@ -95,12 +95,12 @@
         min-size (* handle-size 2)]
     (cond-> bbox
       (< w min-size)
-      (matrix/add [(- (/ (- min-size w) 2)) 0
-                   (/ (- min-size w) 2) 0])
+      (utils.math/v-add [(- (/ (- min-size w) 2)) 0
+                         (/ (- min-size w) 2) 0])
 
       (< h min-size)
-      (matrix/add [0 (- (/ (- min-size h) 2))
-                   0 (/ (- min-size h) 2)]))))
+      (utils.math/v-add [0 (- (/ (- min-size h) 2))
+                         0 (/ (- min-size h) 2)]))))
 
 (m/=> corner-handles [:-> BBox any?])
 (defn corner-handles

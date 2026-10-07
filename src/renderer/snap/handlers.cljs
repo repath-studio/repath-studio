@@ -1,6 +1,5 @@
 (ns renderer.snap.handlers
   (:require
-   [clojure.core.matrix :as matrix]
    [config :as config]
    [kdtree :as kdtree]
    [malli.core :as m]
@@ -11,7 +10,8 @@
    [renderer.frame.handlers :as frame.handlers]
    [renderer.ruler.handlers :as ruler.handlers]
    [renderer.snap.db :refer [SnapOption NearestNeighbor]]
-   [renderer.tool.hierarchy :as tool.hierarchy]))
+   [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.utils.math :as utils.math]))
 
 (m/=> active? [:-> App boolean?])
 (defn active?
@@ -101,7 +101,7 @@
 (defn nearest-delta
   [db]
   (or (when-let [{:keys [point base-point]} (:nearest-neighbor db)]
-        (matrix/sub point base-point))
+        (utils.math/v-sub point base-point))
       [0 0]))
 
 (m/=> snap-with [:-> App ifn? [:* any?] App])

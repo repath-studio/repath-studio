@@ -3,7 +3,6 @@
    ["paper" :refer [Path]]
    ["paperjs-offset" :refer [PaperOffset]]
    ["style-to-object" :as parse]
-   [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [clojure.zip :as zip]
    [malli.core :as m]
@@ -20,7 +19,8 @@
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.dom :as utils.dom]
    [renderer.utils.length :as utils.length]
-   [renderer.utils.map :as utils.map]))
+   [renderer.utils.map :as utils.map]
+   [renderer.utils.math :as utils.math]))
 
 (m/=> root? [:-> Element boolean?])
 (defn root?
@@ -281,8 +281,8 @@
 (defn scale-offset
   [ratio pivot-point]
   (->> ratio
-       (matrix/mul pivot-point)
-       (matrix/sub pivot-point)))
+       (utils.math/v-mul pivot-point)
+       (utils.math/v-sub pivot-point)))
 
 (m/=> ->dom-element [:-> Element JS_Element])
 (defn ->dom-element

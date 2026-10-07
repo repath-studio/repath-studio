@@ -1,6 +1,5 @@
 (ns renderer.element.impl.text-content.core
   (:require
-   [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [re-frame.core :as rf]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
@@ -18,7 +17,8 @@
    [renderer.utils.element :as utils.element]
    [renderer.utils.font :as utils.font]
    [renderer.utils.key :as utils.key]
-   [renderer.utils.length :as utils.length]))
+   [renderer.utils.length :as utils.length]
+   [renderer.utils.math :as utils.math]))
 
 (hierarchy/derive! ::element.hierarchy/text-content ::element.hierarchy/shape)
 (hierarchy/derive! ::element.hierarchy/text-content-child
@@ -44,7 +44,7 @@
         y-attr (utils.length/unit->px (get-in el [:attrs :y]))
         ascent (- y-attr (second bounds))
         descent (- h ascent)
-        pivot-point (matrix/sub pivot-point [0 ascent])
+        pivot-point (utils.math/v-sub pivot-point [0 ascent])
         [offset-x offset-y] (utils.element/scale-offset ratio pivot-point)
         ratio (apply min ratio)
         offset [(+ offset-x (min 0 (* w ratio)))

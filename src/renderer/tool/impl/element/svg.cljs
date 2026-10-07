@@ -1,7 +1,6 @@
 (ns renderer.tool.impl.element.svg
   "https://www.w3.org/TR/SVG/struct.html#SVGElement"
   (:require
-   [clojure.core.matrix :as matrix]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.element.handlers :as element.handlers]
@@ -13,7 +12,8 @@
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.attribute :as utils.attribute]
-   [renderer.utils.key :as utils.key]))
+   [renderer.utils.key :as utils.key]
+   [renderer.utils.math :as utils.math]))
 
 (hierarchy/derive! ::svg ::tool.hierarchy/element)
 
@@ -47,7 +47,7 @@
         position (cond->> position
                    (input.handlers/snap-to-angle? db e)
                    (input.handlers/snap-angle origin))
-        size (matrix/sub position origin)
+        size (utils.math/v-sub position origin)
         [w h] (mapv (comp utils.attribute/->fixed abs) size)
         new-x (cond-> (first origin)
                 (neg? (first size))

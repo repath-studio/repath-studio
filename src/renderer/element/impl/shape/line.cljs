@@ -2,7 +2,6 @@
   "https://www.w3.org/TR/SVG/shapes.html#LineElement
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/line"
   (:require
-   [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.element.hierarchy :as element.hierarchy]
@@ -11,7 +10,8 @@
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
-   [renderer.utils.length :as utils.length]))
+   [renderer.utils.length :as utils.length]
+   [renderer.utils.math :as utils.math]))
 
 (hierarchy/derive! :line ::element.hierarchy/shape)
 
@@ -41,8 +41,8 @@
   (let [{:keys [x1 y1 x2 y2]} (:attrs el)
         [x1 y1 x2 y2] (mapv utils.length/unit->px [x1 y1 x2 y2])
         dimensions (utils.bounds/->dimensions (element.hierarchy/bbox el))
-        [x y] (matrix/sub dimensions (matrix/mul dimensions ratio))
-        pivot-diff (matrix/sub pivot-point dimensions)
+        [x y] (utils.math/v-sub dimensions (utils.math/v-mul dimensions ratio))
+        pivot-diff (utils.math/v-sub pivot-point dimensions)
         offset (utils.element/scale-offset ratio pivot-diff)]
     (-> el
         (attribute.hierarchy/update-attr (if (< x1 x2) :x1 :x2) + x)

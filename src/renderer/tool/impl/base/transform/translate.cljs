@@ -1,6 +1,5 @@
 (ns renderer.tool.impl.base.transform.translate
   (:require
-   [clojure.core.matrix :as matrix]
    [malli.core :as m]
    [renderer.app.db :refer [App]]
    [renderer.db :refer [Orientation Vec2]]
@@ -16,6 +15,7 @@
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.extra :refer [rpartial]]
+   [renderer.utils.math :as utils.math]
    [renderer.views :as views]))
 
 (defmethod tool.hierarchy/help [::transform/transform :translate]
@@ -35,7 +35,7 @@
                     (utils.element/untransform-point transform)
                     (utils.element/transform-point
                      (element.handlers/transform db id))
-                    (matrix/sub local-pointer-pos)
+                    (utils.math/v-sub local-pointer-pos)
                     (element.handlers/container-scale-offset db id))]
     (element.handlers/translate db id offset)))
 

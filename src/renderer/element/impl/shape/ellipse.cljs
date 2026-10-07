@@ -2,7 +2,6 @@
   "https://www.w3.org/TR/SVG/shapes.html#EllipseElement
    https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/ellipse"
   (:require
-   [clojure.core.matrix :as matrix]
    [clojure.string :as string]
    [re-frame.core :as rf]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
@@ -46,8 +45,8 @@
         dimensions (-> el element.hierarchy/bbox utils.bounds/->dimensions)
         update-size (fn [ratio size]
                       (- (* (+ size padding) (abs ratio)) padding))
-        pivot-point (->> (matrix/div dimensions 2)
-                         (matrix/sub pivot-point))
+        pivot-point (->> (utils.math/v-div dimensions 2)
+                         (utils.math/v-sub pivot-point))
         offset (utils.element/scale-offset ratio pivot-point)]
     (-> el
         (attribute.hierarchy/update-attr :rx (partial update-size x))
@@ -70,7 +69,7 @@
         rx (or rx ry)
         ry (or ry rx)
         [cx cy rx ry] (mapv utils.length/unit->px [cx cy rx ry])
-        [krx kry] (matrix/mul [rx ry] utils.math/KAPPA)]
+        [krx kry] (utils.math/v-mul [rx ry] utils.math/KAPPA)]
     (->> ["M" (+ cx rx) cy
           "C" (+ cx rx) (+ cy kry) (+ cx krx) (+ cy ry) cx (+ cy ry)
           "S" (- cx rx) (+ cy kry) (- cx rx) cy

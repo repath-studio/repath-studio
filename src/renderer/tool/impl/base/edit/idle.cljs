@@ -1,6 +1,5 @@
 (ns renderer.tool.impl.base.edit.idle
   (:require
-   [clojure.core.matrix :as matrix]
    [config :as config]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
@@ -9,7 +8,8 @@
    [renderer.input.handlers :as input.handlers]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
-   [renderer.tool.impl.base.edit.core :as-alias edit]))
+   [renderer.tool.impl.base.edit.core :as-alias edit]
+   [renderer.utils.math :as utils.math]))
 
 (defmethod tool.hierarchy/help [::edit/edit :idle]
   []
@@ -23,7 +23,7 @@
         threshold (/ config/snap-threshold zoom)
         transform (element.handlers/transform db (:id el))]
     (when-let [closest (element.hierarchy/closest-point el transform position)]
-      (when (<= (matrix/distance closest position) threshold)
+      (when (<= (utils.math/distance closest position) threshold)
         closest))))
 
 (defmethod tool.hierarchy/on-pointer-down [::edit/edit :idle]
@@ -89,7 +89,7 @@
         candidates (keep #(insertion-candidate db % position)
                          (element.handlers/selected db))
         best (when (seq candidates)
-               (apply min-key #(matrix/distance % position) candidates))]
+               (apply min-key #(utils.math/distance % position) candidates))]
     (cond-> db
       :always
       (-> (element.handlers/clear-hovered)

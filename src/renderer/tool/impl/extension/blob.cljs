@@ -1,7 +1,6 @@
 (ns renderer.tool.impl.extension.blob
   "Custom element for https://blobs.dev/"
   (:require
-   [clojure.core.matrix :as matrix]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
    [renderer.document.handlers :as document.handlers]
@@ -12,7 +11,8 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
-   [renderer.utils.attribute :as utils.attribute]))
+   [renderer.utils.attribute :as utils.attribute]
+   [renderer.utils.math :as utils.math]))
 
 (hierarchy/derive! ::blob ::tool.hierarchy/element)
 
@@ -23,7 +23,7 @@
                      (element.handlers/local-point db id))
         offset (->> (tool.handlers/snapped-offset db)
                     (element.handlers/local-point db id))
-        radius (matrix/distance offset position)
+        radius (utils.math/distance offset position)
         [offset-x offset-y] offset
         attrs (-> (document.handlers/attrs db)
                   (select-keys [:stroke :fill :stroke-width]))]
