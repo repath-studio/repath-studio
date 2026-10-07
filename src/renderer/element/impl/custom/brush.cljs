@@ -89,8 +89,8 @@
                    (utils.attribute/->fixed bx) ","
                    (utils.attribute/->fixed by)
                    " "
-                   (utils.attribute/->fixed (utils.math/mean [bx cx])) ","
-                   (utils.attribute/->fixed (utils.math/mean [by cy]))
+                   (utils.attribute/->fixed (utils.math/mean bx cx)) ","
+                   (utils.attribute/->fixed (utils.math/mean by cy))
                    " T")]
         (reduce-kv
          (fn [result index]
@@ -100,9 +100,9 @@
              (let [[ax ay] (nth points index)
                    [bx by] (nth points (inc index))]
                (str result
-                    (utils.attribute/->fixed (utils.math/mean [ax bx]))
+                    (utils.attribute/->fixed (utils.math/mean ax bx))
                     ","
-                    (utils.attribute/->fixed (utils.math/mean [ay by]))
+                    (utils.attribute/->fixed (utils.math/mean ay by))
                     " ")))) d points)))))
 
 (def partition-to-px

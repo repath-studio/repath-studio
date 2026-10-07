@@ -77,13 +77,13 @@
   [db factor]
   (let [{:keys [active-document dom-rect]} db
         {:keys [zoom pan]} (get-in db [:documents active-document])
-        {:keys [w h]} dom-rect]
+        {:keys [width height]} dom-rect]
     (cond-> db
       active-document
-      (zoom-at-position factor (utils.math/v-add pan
-                                                 (utils.math/v-div [w h]
-                                                                   2
-                                                                   zoom))))))
+      (zoom-at-position factor
+                        (utils.math/v-add pan
+                                          (utils.math/v-div [width height]
+                                                            2 zoom))))))
 
 (m/=> pan-to-bbox [:-> App BBox App])
 (defn pan-to-bbox
