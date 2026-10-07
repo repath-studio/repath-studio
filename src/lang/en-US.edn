@@ -56,6 +56,7 @@
   :dont-save "Don't save"
   :cancel "Cancel"
   :ok "OK"
+  :toggle "Toggle"
   :action-cannot-undone "This action cannot be undone."
   :changes-will-be-lost [:p "Your changes to %1 will be lost if you close the
                              document without saving."]}
@@ -917,9 +918,9 @@
 
  :renderer.window.core
  {:exit "Exit"
-  :toggle-fullscreen "Toggle fullscreen"
-  :toggle-maximized "Toggle maximized"
-  :toggle-devtools "Toggle developer tools"
+  :fullscreen "Fullscreen"
+  :maximized "Maximized"
+  :devtools "Developer tools"
   :minimize "Minimize"
   :window "Window"}
 

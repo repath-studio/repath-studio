@@ -52,6 +52,7 @@
   :browser "Webbläsare: "
   :hide-shortcutless "Dölj utan genväg"
   :save "Spara"
+  :toggle "Växla"
   :hide-disabled "Dölj inaktiverade"
   :dont-save "Spara inte"
   :cancel "Avbryt"
@@ -931,9 +932,9 @@
 
  :renderer.window.core
  {:exit "Avsluta"
-  :toggle-fullscreen "Växla helskärm"
-  :toggle-maximized "Växla maximerad"
-  :toggle-devtools "Växla utvecklarverktyg"
+  :fullscreen "Helskärm"
+  :maximized "Maximerad"
+  :devtools "Utvecklarverktyg"
   :minimize "Minimera"
   :window "Fönster"}
 

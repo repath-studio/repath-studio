@@ -10,7 +10,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :window/toggle-fullscreen
-               :label [::toggle-fullscreen "Toggle fullscreen"]
+               :label [::fullscreen "Fullscreen"]
                :icon "arrow-minimize"
                :event [::window.events/toggle-fullscreen]
                :shortcuts {"All" [{:keyCode (utils.key/codes "F11")}]}
@@ -19,7 +19,7 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :window/toggle-maximized
-               :label [::toggle-maximized "Toggle maximized"]
+               :label [::maximized "Maximized"]
                :icon "window-restore"
                :event [::window.events/toggle-maximized]
                :available [::app.subs/desktop?]
@@ -38,22 +38,22 @@
                :icon "exit"
                :event [::window.events/close]
                :shortcuts {"All" [{:keyCode (utils.key/codes "Q")
-                                    :ctrlKey true}]
+                                   :ctrlKey true}]
                            "Mac" [{:keyCode (utils.key/codes "Q")
-                                    :metaKey true}]}}])
+                                   :metaKey true}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :window/toggle-devtools
-               :label [::toggle-devtools "Toggle developer tools"]
+               :label [::devtools "Developer tools"]
                :icon "window-restore"
                :event [::window.events/toggle-devtools]
                :available [::app.subs/desktop?]
                :shortcuts {"All" [{:keyCode (utils.key/codes "I")
-                                    :ctrlKey true
-                                    :shiftKey true}]
+                                   :ctrlKey true
+                                   :shiftKey true}]
                            "Mac" [{:keyCode (utils.key/codes "I")
-                                    :metaKey true
-                                    :shiftKey true}]}}])
+                                   :metaKey true
+                                   :shiftKey true}]}}])
 
 (rf/dispatch [::action.events/register-action-group
               {:id :window/actions

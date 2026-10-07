@@ -51,6 +51,7 @@
   :browser "المتصفح: "
   :hide-shortcutless "إخفاء بدون اختصار"
   :save "حفظ"
+  :toggle "تبديل"
   :hide-disabled "إخفاء المعطَّل"
   :dont-save "عدم الحفظ"
   :cancel "إلغاء"
@@ -897,9 +898,9 @@
 
  :renderer.window.core
  {:exit "خروج"
-  :toggle-fullscreen "تبديل ملء الشاشة"
-  :toggle-maximized "تبديل التكبير"
-  :toggle-devtools "تبديل أدوات المطور"
+  :fullscreen "ملء الشاشة"
+  :maximized "مكبَّر"
+  :devtools "أدوات المطور"
   :minimize "تصغير"
   :window "نافذة"}
 

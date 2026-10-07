@@ -99,7 +99,7 @@
      (i18n.views/t [::save "Save"])]]])
 
 (defn cmdk-item
-  [parent-label {:keys [id label event icon]
+  [parent-label {:keys [id label event icon active]
                  :as action}]
   (let [disabled? (action.views/disabled? action)]
     [:> Command/CommandItem
@@ -114,7 +114,10 @@
       [:div.truncate
        {:class (when disabled? "text-foreground-disabled")}
        [:span.sr-only (i18n.views/t parent-label)]
-       (i18n.views/t label)]]
+       [:div.flex.gap-1
+        (when active
+          [:div.text-foreground-muted (i18n.views/t [::toggle "Toggle"])])
+        [:div (i18n.views/t label)]]]]
      [:div.flex.items-center.gap-2.shrink-0
       [views/tooltip-icon-button "pencil"
        (i18n.views/t [::edit-shortcuts "Edit shortcuts"])

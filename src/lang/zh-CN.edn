@@ -50,6 +50,7 @@
   :browser "浏览器："
   :hide-shortcutless "隐藏无快捷键的命令"
   :save "保存"
+  :toggle "切换"
   :hide-disabled "隐藏禁用的命令"
   :dont-save "不保存"
   :cancel "取消"
@@ -835,9 +836,9 @@
 
  :renderer.window.core
  {:exit "退出"
-  :toggle-fullscreen "切换全屏"
-  :toggle-maximized "切换最大化"
-  :toggle-devtools "切换开发者工具"
+  :fullscreen "全屏"
+  :maximized "最大化"
+  :devtools "开发者工具"
   :minimize "最小化"
   :window "窗口"}
 

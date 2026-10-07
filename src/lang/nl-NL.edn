@@ -52,6 +52,7 @@
   :browser "Browser: "
   :hide-shortcutless "Zonder sneltoets verbergen"
   :save "Opslaan"
+  :toggle "Wisselen"
   :hide-disabled "Uitgeschakelde verbergen"
   :dont-save "Niet opslaan"
   :cancel "Annuleren"
@@ -948,9 +949,9 @@
 
  :renderer.window.core
  {:exit "Afsluiten"
-  :toggle-fullscreen "Volledig scherm wisselen"
-  :toggle-maximized "Gemaximaliseerd wisselen"
-  :toggle-devtools "Ontwikkelaarsgereedschap wisselen"
+  :fullscreen "Volledig scherm"
+  :maximized "Gemaximaliseerd"
+  :devtools "Ontwikkelaarsgereedschap"
   :minimize "Minimaliseren"
   :window "Venster"}
 

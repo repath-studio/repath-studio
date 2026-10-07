@@ -52,6 +52,7 @@
   :browser "Браузер: "
   :hide-shortcutless "Скрыть без горячих клавиш"
   :save "Сохранить"
+  :toggle "Переключить"
   :hide-disabled "Скрыть отключённые"
   :dont-save "Не сохранять"
   :cancel "Отмена"
@@ -932,9 +933,9 @@
 
  :renderer.window.core
  {:exit "Выход"
-  :toggle-fullscreen "Переключить полноэкранный режим"
-  :toggle-maximized "Переключить развернутое состояние"
-  :toggle-devtools "Переключить инструменты разработчика"
+  :fullscreen "Полноэкранный режим"
+  :maximized "Развернутое окно"
+  :devtools "Инструменты разработчика"
   :minimize "Свернуть"
   :window "Окно"}
 

@@ -53,6 +53,7 @@
   :browser "Πρόγραμμα περιήγησης: "
   :hide-shortcutless "Απόκρυψη χωρίς συντόμευση"
   :save "Αποθήκευση"
+  :toggle "Εναλλαγή"
   :hide-disabled "Απόκρυψη ανενεργών"
   :dont-save "Μη αποθήκευση"
   :cancel "Ακύρωση"
@@ -956,9 +957,9 @@
 
  :renderer.window.core
  {:exit "Έξοδος"
-  :toggle-fullscreen "Εναλλαγή πλήρους οθόνης"
-  :toggle-maximized "Εναλλαγή μεγιστοποίησης"
-  :toggle-devtools "Εναλλαγή εργαλείων ανάπτυξης"
+  :fullscreen "Πλήρης οθόνη"
+  :maximized "Μεγιστοποιημένο"
+  :devtools "Εργαλεία ανάπτυξης"
   :minimize "Ελαχιστοποίηση"
   :window "Παράθυρο"}
 

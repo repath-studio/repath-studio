@@ -53,6 +53,7 @@
   :browser "Browser: "
   :hide-shortcutless "Ohne Tastenkürzel ausblenden"
   :save "Speichern"
+  :toggle "Umschalten"
   :hide-disabled "Deaktivierte ausblenden"
   :dont-save "Nicht speichern"
   :cancel "Abbrechen"
@@ -951,9 +952,9 @@
 
  :renderer.window.core
  {:exit "Beenden"
-  :toggle-fullscreen "Vollbild umschalten"
-  :toggle-maximized "Maximiert umschalten"
-  :toggle-devtools "Developer-Tools umschalten"
+  :fullscreen "Vollbild"
+  :maximized "Maximiert"
+  :devtools "Developer-Tools"
   :minimize "Minimieren"
   :window "Fenster"}
 

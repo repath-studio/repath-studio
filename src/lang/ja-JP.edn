@@ -53,6 +53,7 @@
   :browser "ブラウザ: "
   :hide-shortcutless "ショートカットなしを非表示"
   :save "保存"
+  :toggle "切り替え"
   :hide-disabled "無効を非表示"
   :dont-save "保存しない"
   :cancel "キャンセル"
@@ -887,9 +888,9 @@
 
  :renderer.window.core
  {:exit "終了"
-  :toggle-fullscreen "全画面切り替え"
-  :toggle-maximized "最大化切り替え"
-  :toggle-devtools "開発者ツール切り替え"
+  :fullscreen "全画面表示"
+  :maximized "最大化"
+  :devtools "開発者ツール"
   :minimize "最小化"
   :window "ウィンドウ"}
 

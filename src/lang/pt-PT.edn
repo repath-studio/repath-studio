@@ -52,6 +52,7 @@
   :browser "Navegador: "
   :hide-shortcutless "Ocultar sem atalho"
   :save "Guardar"
+  :toggle "Alternar"
   :hide-disabled "Ocultar desativados"
   :dont-save "Não guardar"
   :cancel "Cancelar"
@@ -928,9 +929,9 @@
 
  :renderer.window.core
  {:exit "Sair"
-  :toggle-fullscreen "Alternar ecrã completo"
-  :toggle-maximized "Alternar maximizado"
-  :toggle-devtools "Alternar ferramentas de desenvolvimento"
+  :fullscreen "Ecrã completo"
+  :maximized "Maximizado"
+  :devtools "Ferramentas de desenvolvimento"
   :minimize "Minimizar"
   :window "Janela"}
 

@@ -53,6 +53,7 @@
   :browser "Navigateur : "
   :hide-shortcutless "Masquer sans raccourci"
   :save "Enregistrer"
+  :toggle "Basculer"
   :hide-disabled "Masquer les désactivés"
   :dont-save "Ne pas enregistrer"
   :cancel "Annuler"
@@ -944,9 +945,9 @@
 
  :renderer.window.core
  {:exit "Quitter"
-  :toggle-fullscreen "Basculer en plein écran"
-  :toggle-maximized "Basculer en mode maximisé"
-  :toggle-devtools "Basculer les outils de développement"
+  :fullscreen "Plein écran"
+  :maximized "Maximisé"
+  :devtools "Outils de développement"
   :minimize "Réduire"
   :window "Fenêtre"}
 

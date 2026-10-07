@@ -52,6 +52,7 @@
   :browser "Browser: "
   :hide-shortcutless "Nascondi senza scorciatoia"
   :save "Salva"
+  :toggle "Attiva/disattiva"
   :hide-disabled "Nascondi disabilitati"
   :dont-save "Non salvare"
   :cancel "Annulla"
@@ -947,9 +948,9 @@
 
  :renderer.window.core
  {:exit "Esci"
-  :toggle-fullscreen "Attiva/disattiva schermo intero"
-  :toggle-maximized "Attiva/disattiva massimizzato"
-  :toggle-devtools "Attiva/disattiva strumenti di sviluppo"
+  :fullscreen "Schermo intero"
+  :maximized "Massimizzato"
+  :devtools "Strumenti di sviluppo"
   :minimize "Minimizza"
   :window "Finestra"}
 

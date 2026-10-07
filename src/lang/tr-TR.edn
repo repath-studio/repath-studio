@@ -52,6 +52,7 @@
   :browser "Tarayıcı: "
   :hide-shortcutless "Kısayolsuzları gizle"
   :save "Kaydet"
+  :toggle "Değiştir"
   :hide-disabled "Devre dışı bırakılanları gizle"
   :dont-save "Kaydetme"
   :cancel "İptal"
@@ -925,9 +926,9 @@
 
  :renderer.window.core
  {:exit "Çıkış"
-  :toggle-fullscreen "Tam ekran geçiş"
-  :toggle-maximized "Büyütülmuş geçiş"
-  :toggle-devtools "Geliştirici araçlarını geçiş"
+  :fullscreen "Tam ekran"
+  :maximized "Büyütülmüş"
+  :devtools "Geliştirici araçları"
   :minimize "Küçült"
   :window "Pencere"}
 
