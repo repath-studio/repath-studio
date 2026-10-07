@@ -36,28 +36,32 @@
                         Hold %1 to add or remove elements to selection."]]
                 [[views/kbd "⇧"]]))
 
-(defmethod tool.hierarchy/on-pointer-down [::transform/transform :idle]
+(defn toggle-selection
   [db e]
-  (let [{:keys [button element]} e
-        {:keys [selected id]} element]
-    (cond-> db
-      element
-      (assoc :clicked-element element)
-
-      (and (= button :right) (not selected))
-      (element.handlers/toggle-selection id (:shift-key e)))))
-
-(defmethod tool.hierarchy/on-pointer-up [::transform/transform :idle]
-  [db e]
-  (let [{:keys [element timestamp shift-key]} e
+  (let [{:keys [element timestamp]} e
         {:keys [selected id]} element]
     (-> db
-        (dissoc :clicked-element)
-        (element.handlers/toggle-selection id shift-key)
+        (element.handlers/toggle-selection id (:shift-key e))
         (history.handlers/finalize timestamp
                                    (if selected
                                      [::deselect-element "Deselect element"]
                                      [::select-element "Select element"])))))
+
+(defmethod tool.hierarchy/on-pointer-down [::transform/transform :idle]
+  [db e]
+  (let [{:keys [button element]} e]
+    (cond-> db
+      element
+      (assoc :clicked-element element)
+
+      (and (= button :right) (not (:selected element)))
+      (toggle-selection e))))
+
+(defmethod tool.hierarchy/on-pointer-up [::transform/transform :idle]
+  [db e]
+  (-> db
+      (dissoc :clicked-element)
+      (toggle-selection e)))
 
 (defmethod tool.hierarchy/on-double-click [::transform/transform :idle]
   [db e]
