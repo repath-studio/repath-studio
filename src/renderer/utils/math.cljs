@@ -90,3 +90,8 @@
 (defn v-div
   ([v x] (elementwise / v x))
   ([v x & more] (apply elementwise / v x more)))
+
+(m/=> v-dot [:-> Vec2 Vec2 number?])
+(defn v-dot
+  [v x]
+  (reduce + (map * v x)))

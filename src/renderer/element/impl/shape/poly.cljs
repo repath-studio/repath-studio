@@ -164,15 +164,15 @@
 (defn closest-point-on-segment
   [point start end]
   (let [direction (utils.math/v-sub end start)
-        squared-length (matrix/dot direction direction)
+        squared-length (utils.math/v-dot direction direction)
         fraction (if (zero? squared-length)
                    0
                    (-> (utils.math/v-sub point start)
-                       (matrix/dot direction)
+                       (utils.math/v-dot direction)
                        (/ squared-length)
                        (utils.math/clamp 0 1)))
         projection (utils.math/v-add start
-                                     (utils.math/v-mul fraction direction))]
+                                     (utils.math/v-mul direction fraction))]
     {:position projection
      :distance (utils.math/distance point projection)}))
 
