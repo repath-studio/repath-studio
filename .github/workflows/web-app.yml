@@ -75,7 +75,7 @@ jobs:
         run: npm run test
 
       - name: Build
-        run: npm run build
+        run: npm run build-web
         env:
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
