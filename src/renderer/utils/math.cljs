@@ -71,22 +71,22 @@
    (apply mapv op (map #(cond-> % (number? %) repeat)
                        (cons v (cons x more))))))
 
-(m/=> v-add [:-> vector? [:+ [:or [:vector number?] number?]] Vec2])
+(m/=> v-add [:-> vector? [:+ [:or [:vector number?] number?]] vector?])
 (defn v-add
   ([v x] (elementwise + v x))
   ([v x & more] (apply elementwise + v x more)))
 
-(m/=> v-sub [:-> vector? [:+ [:or [:vector number?] number?]] Vec2])
+(m/=> v-sub [:-> vector? [:+ [:or [:vector number?] number?]] vector?])
 (defn v-sub
   ([v x] (elementwise - v x))
   ([v x & more] (apply elementwise - v x more)))
 
-(m/=> v-mul [:-> vector? [:+ [:or [:vector number?] number?]] Vec2])
+(m/=> v-mul [:-> vector? [:+ [:or [:vector number?] number?]] vector?])
 (defn v-mul
   ([v x] (elementwise * v x))
   ([v x & more] (apply elementwise * v x more)))
 
-(m/=> v-div [:-> vector? [:+ [:or [:vector number?] number?]] Vec2])
+(m/=> v-div [:-> vector? [:+ [:or [:vector number?] number?]] vector?])
 (defn v-div
   ([v x] (elementwise / v x))
   ([v x & more] (apply elementwise / v x more)))
