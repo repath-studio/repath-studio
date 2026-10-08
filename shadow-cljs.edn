@@ -2,7 +2,6 @@
 
  :build-defaults {:build-hooks [(shadow-git-inject.core/hook)]
                   :compiler-options {:source-map true
-                                     :silence-optimizations-warning true
                                      :output-feature-set :es-unsupported
                                      :language-in :unsupported}}
 
@@ -32,7 +31,8 @@
              :compiler-options {:optimizations :advanced
                                 :closure-defines
                                 {config/version :shadow-git-inject/version}}
-             :devtools {:preloads [day8.re-frame-10x.preload
+             :devtools {:silence-optimizations-warning true
+                        :preloads [day8.re-frame-10x.preload
                                    devtools.preload
                                    ;; This can be enabled to generate a
                                    ;; clj-kondo config based on the malli
