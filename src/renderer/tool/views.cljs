@@ -54,14 +54,12 @@
              :on-pointer-up pointer-handler
              :on-pointer-down pointer-handler
              :on-pointer-move pointer-handler
-             :fill (cond
-                     selected "var(--accent)"
-                     implied "lightgray"
-                     :else "var(--accent-foreground)")
-             :stroke (cond
-                       active "var(--accent)"
-                       implied "var(--border)"
-                       :else "var(--foreground-muted)")}
+             :fill (cond selected "var(--accent)"
+                         implied "lightgray"
+                         :else "var(--accent-foreground)")
+             :stroke (cond active "var(--accent-foreground)"
+                           implied "var(--border)"
+                           :else "var(--foreground-muted)")}
       (when label [:title (i18n.views/t label)])]]))
 
 (m/=> selected-bbox [:-> BBox any?])
