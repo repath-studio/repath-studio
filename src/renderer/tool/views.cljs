@@ -37,30 +37,29 @@
         [x y] position
         scale (if hovered 1.3 1)
         half-size (/ handle-size 2)]
-    [:g
-     [:rect {:style {:transition "transform 0.1s ease-out"}
-             :transform (str "scale(" scale ")")
-             :transform-origin (string/join " " position)
-             :x (- x half-size)
-             :y (- y half-size)
-             :rx (when rounded half-size)
-             :width handle-size
-             :height handle-size
-             :stroke-opacity ".5"
-             :stroke-width (/ 1 zoom)
-             :cursor (or cursor "move")
-             :pointer-events (when implied "none")
-             :on-pointer-up pointer-handler
-             :on-pointer-down pointer-handler
-             :on-pointer-move pointer-handler
-             :fill (cond selected "var(--accent)"
-                         implied "lightgray"
-                         :else "var(--accent-foreground)")
-             :stroke (cond selected "var(--accent-foreground)"
-                           hovered "var(--accent)"
-                           implied "var(--border)"
-                           :else "var(--foreground-muted)")}
-      (when label [:title (i18n.views/t label)])]]))
+    [:rect {:style {:transition "transform 0.1s ease-out"}
+            :transform (str "scale(" scale ")")
+            :transform-origin (string/join " " position)
+            :x (- x half-size)
+            :y (- y half-size)
+            :rx (when rounded half-size)
+            :width handle-size
+            :height handle-size
+            :stroke-opacity ".5"
+            :stroke-width (/ 1 zoom)
+            :cursor (or cursor "move")
+            :pointer-events (when implied "none")
+            :on-pointer-up pointer-handler
+            :on-pointer-down pointer-handler
+            :on-pointer-move pointer-handler
+            :fill (cond selected "var(--accent)"
+                        implied "lightgray"
+                        :else "var(--accent-foreground)")
+            :stroke (cond selected "var(--accent-foreground)"
+                          hovered "var(--accent)"
+                          implied "var(--border)"
+                          :else "var(--foreground-muted)")}
+     (when label [:title (i18n.views/t label)])]))
 
 (m/=> selected-bbox [:-> BBox any?])
 (defn selected-bbox
