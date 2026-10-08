@@ -149,6 +149,11 @@ handlers. By default, function schemas are instrumented only during tests to
 avoid performance overhead. However, runtime instrumentation can also be enabled
 in the development environment (see `dev.cljs`).
 
+## Errors and warnings
+
+We have a zero error and warning policy. Changes should not introduce any of
+those. That applies to the browser console, and to the build output.
+
 ## Upgrading dependencies
 
 ### NPM packages
@@ -177,7 +182,7 @@ resolution issues that may arise. The most common problem is upgrading
 Before pushing those changes, we need to test all related functionality to
 ensure that there are no regressions.
 
-## Clojure packages
+### Clojure packages
 
 We can check for outdated Clojure dependencies by running `clojure -M:outdated`.
 There is an automated action that runs this check once a week.
