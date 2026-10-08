@@ -34,7 +34,6 @@
                                    (= (:parent clicked-element) (:parent el))))
         hovered @(rf/subscribe [::element.subs/hovered? id])
         pointer-handler (partial input.impl.pointer/handler! el)
-        active (or selected hovered)
         [x y] position
         scale (if hovered 1.3 1)
         half-size (/ handle-size 2)]
@@ -57,7 +56,8 @@
              :fill (cond selected "var(--accent)"
                          implied "lightgray"
                          :else "var(--accent-foreground)")
-             :stroke (cond active "var(--accent-foreground)"
+             :stroke (cond selected "var(--accent-foreground)"
+                           hovered "var(--accent)"
                            implied "var(--border)"
                            :else "var(--foreground-muted)")}
       (when label [:title (i18n.views/t label)])]]))
