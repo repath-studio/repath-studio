@@ -32,7 +32,9 @@
   (update-in el
              [:attrs :points]
              #(->> (utils.attribute/str->seq %)
-                   (transduce (partition-all 2) (partial translate offset) [])
+                   (transduce (partition-all 2)
+                              (completing (partial translate offset))
+                              [])
                    (string/join " ")
                    (string/trim))))
 
@@ -45,13 +47,15 @@
                #(->> (utils.attribute/str->seq %)
                      (transduce
                       partition-to-px
-                      (fn [points point]
-                        (let [rel-point (utils.math/v-sub bounds-min point)
-                              offset (->> ratio
-                                          (utils.math/v-mul rel-point)
-                                          (utils.math/v-sub rel-point)
-                                          (utils.math/v-add offset))]
-                          (translate offset points point))) [])
+                      (completing
+                       (fn [points point]
+                         (let [rel-point (utils.math/v-sub bounds-min point)
+                               offset (->> ratio
+                                           (utils.math/v-mul rel-point)
+                                           (utils.math/v-sub rel-point)
+                                           (utils.math/v-add offset))]
+                           (translate offset points point))))
+                      [])
                      (string/join " ")
                      (string/trim)))))
 

@@ -52,7 +52,10 @@
 (set! rf.subs/warn-when-not-reactive (constantly nil))
 
 (defn ^:dev/after-load instrument! []
-  (m.instrument/instrument! {:report (pretty/reporter)})
+  (m.instrument/instrument! {:report (fn [report]
+                                       (pretty/reporter report)
+                                       (throw (ex-info "malli validation error"
+                                                       report)))})
   (rf/reg-global-interceptor app.events/schema-validator))
 
 (instrument!)
