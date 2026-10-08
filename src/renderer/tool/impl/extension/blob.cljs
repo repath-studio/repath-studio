@@ -19,8 +19,8 @@
 (defn attributes
   [db]
   (let [{:keys [id]} (first (element.handlers/selected db))
-        position (-> (tool.handlers/snapped-position db)
-                     (element.handlers/local-point db id))
+        position (->> (tool.handlers/snapped-position db)
+                      (element.handlers/local-point db id))
         offset (->> (tool.handlers/snapped-offset db)
                     (element.handlers/local-point db id))
         radius (utils.math/distance offset position)

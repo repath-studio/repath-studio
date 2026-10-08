@@ -8,7 +8,7 @@
         com.taoensso/tempura {:mvn/version "1.5.4"}
         day8.re-frame/tracing {:mvn/version "0.9.2"}
         day8/shadow-git-inject {:mvn/version "0.0.10"}
-        metosin/malli {:mvn/version "0.20.2"}
+        metosin/malli {:mvn/version "0.20.3"}
         org.clj-commons/hickory {:mvn/version "0.7.7"}
         org.babashka/sci {:mvn/version "0.15.59"}
         org.clojure/math.combinatorics {:mvn/version "0.3.2"}

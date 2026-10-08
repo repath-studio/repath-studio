@@ -38,7 +38,7 @@
 
 (defmethod element.hierarchy/scale ::element.hierarchy/poly
   [el ratio pivot-point]
-  (let [bounds-min (take 2 (element.hierarchy/bbox el))
+  (let [bounds-min (into [] (take 2 (element.hierarchy/bbox el)))
         offset (utils.element/scale-offset ratio pivot-point)]
     (update-in el
                [:attrs :points]

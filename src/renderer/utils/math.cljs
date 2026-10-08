@@ -91,7 +91,7 @@
   ([v x] (elementwise / v x))
   ([v x & more] (apply elementwise / v x more)))
 
-(m/=> v-dot [:-> vector? vector? number?])
+(m/=> v-dot [:-> [:vector number?] [:vector number?] number?])
 (defn v-dot
   [v x]
   (reduce + (map * v x)))

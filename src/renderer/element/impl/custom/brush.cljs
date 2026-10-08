@@ -166,7 +166,8 @@
   (->> (utils.attribute/str->seq el)
        (into [] partition-to-px)
        (reduce (fn [points point]
-                 (let [rel-point (utils.math/v-sub bbox-min (take 2 point))
+                 (let [rel-point (->> (into [] (take 2 point))
+                                      (utils.math/v-sub bbox-min))
                        rel-offset (utils.element/scale-offset ratio rel-point)
                        offset (utils.math/v-add offset rel-offset)]
                    (translate offset points point))) [])

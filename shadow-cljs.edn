@@ -37,7 +37,7 @@
                                    ;; This can be enabled to generate a
                                    ;; clj-kondo config based on the malli
                                    ;; types used in the project.
-                                   #_malli.dev.cljs-kondo-preload
+                                   malli.dev.cljs-kondo-preload
                                    dev]}
              :dev {:compiler-options
                    {:closure-defines
