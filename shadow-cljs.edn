@@ -31,12 +31,10 @@
              :compiler-options {:optimizations :advanced
                                 :closure-defines
                                 {config/version :shadow-git-inject/version}}
-             :devtools {:silence-optimizations-warning true
-                        :preloads [day8.re-frame-10x.preload
+             :devtools {:preloads [day8.re-frame-10x.preload
                                    devtools.preload
-                                   ;; This can be enabled to generate a
-                                   ;; clj-kondo config based on the malli
-                                   ;; types used in the project.
+                                   ;; This generates a clj-kondo config based on
+                                   ;; the malli types used in the project.
                                    malli.dev.cljs-kondo-preload
                                    dev]}
              :dev {:compiler-options
@@ -45,7 +43,11 @@
                      day8.re-frame.tracing.trace-enabled? true}}}
              :release {:build-options {:ns-aliases
                                        {day8.re-frame.tracing
-                                        day8.re-frame.tracing-stubs}}}
+                                        day8.re-frame.tracing-stubs}}
+                       :compiler-options
+                       {:external-config
+                        {:devtools/config
+                         {:silence-optimizations-warning true}}}}
 
              :closure-defines {config/SENTRY-DSN #shadow/env "SENTRY_DSN"}
              :modules {:shared {:entries []}
