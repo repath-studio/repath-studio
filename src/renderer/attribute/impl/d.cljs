@@ -276,10 +276,11 @@
   (let [command (first segment)
         {:keys [url]} (->command command)
         id (segment-id index)
-        hovered? @(rf/subscribe [::element.subs/hovered? id])
+        hovered? @(rf/subscribe [::element.subs/hovered? [el-id id]])
         selected? (segment-active? selected-handles index)]
     [:div.flex.flex-col.gap-px.overflow-hidden
-     {:on-pointer-enter #(rf/dispatch [::document.events/set-hovered-id id])
+     {:on-pointer-enter #(rf/dispatch [::document.events/set-hovered-id
+                                       [el-id id]])
       :on-pointer-leave #(rf/dispatch [::document.events/clear-hovered])}
      [:div.flex.overflow-hidden
       [:div.bg-primary.flex-1.flex.p-2.overflow-hidden

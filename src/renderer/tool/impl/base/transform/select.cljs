@@ -57,9 +57,8 @@
         multi-touch? (input.handlers/multi-touch? db)
         intersecting? (or alt-key intersecting? multi-touch?)]
     (transduce (comp (element.handlers/visible)
-                     (filter (partial hovered? db intersecting?))
-                     (map :id))
-               (fn [db id] (cond-> db id (f id)))
+                     (filter (partial hovered? db intersecting?)))
+               (fn [db el] (cond-> db el (f el)))
                db
                (element.handlers/entities db))))
 
@@ -85,7 +84,7 @@
     element.handlers/deselect
 
     :always
-    (-> (reduce-by-area e element.handlers/select)
+    (-> (reduce-by-area e #(element.handlers/select %1 (:id %2)))
         (tool.handlers/set-select-box nil)
         (dissoc :clicked-element :pivot-point)
         (tool.handlers/set-state :idle)

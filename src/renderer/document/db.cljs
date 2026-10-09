@@ -15,6 +15,8 @@
 
 (def DocumentTitle [:string {:min 1}])
 
+(def HoveredId [:or [:tuple [:maybe ElementId] HandleId] ElementId])
+
 (def DocumentAttrs
   [:map
    [:fill {:optional true} string?]
@@ -35,7 +37,7 @@
    [:saved-history-index {:optional true} HistoryIndex]
    [:version {:optional true
               :persist true} string?]
-   [:hovered-ids {:default #{}} [:set [:or HandleId ElementId]]]
+   [:hovered-ids {:default #{}} [:set HoveredId]]
    [:collapsed-ids {:default #{}} [:set ElementId]]
    [:ignored-ids {:default #{}} [:set [:or HandleId ElementId]]]
    [:zoom {:default 1} ZoomFactor]

@@ -24,9 +24,7 @@
   [db f]
   (->> (element.handlers/handles db)
        (transduce (filter (partial selectable? db))
-                  (fn [db handle] (cond-> db
-                                    (:id handle)
-                                    (f (:id handle) (:parent handle))))
+                  (fn [db handle] (cond-> db handle (f handle)))
                   db)))
 
 (defmethod tool.hierarchy/on-drag [::edit/edit :select]
@@ -43,7 +41,9 @@
     (element.handlers/assoc-prop :selected-handles #{})
 
     :always
-    (-> (reduce-by-area element.handlers/select-handle)
+    (-> (reduce-by-area (fn [db handle]
+                          (let [{:keys [id parent]} handle]
+                            (element.handlers/select-handle db id parent))))
         (tool.handlers/set-select-box nil)
         (tool.handlers/set-state :idle)
         (history.handlers/finalize (:timestamp e)
