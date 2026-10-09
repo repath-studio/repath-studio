@@ -9,15 +9,18 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.edit.core :as-alias edit]
-   [renderer.utils.bounds :as utils.bounds]))
+   [renderer.utils.bounds :as utils.bounds]
+   [renderer.utils.element :as utils.element]))
 
 (m/=> selectable? [:-> App Handle boolean?])
 (defn selectable?
   [db handle]
   (and (:select-box db)
-       (some-> (:select-box db)
-               (element.hierarchy/bbox)
-               (utils.bounds/contained-point? (:position handle)))))
+       (let [{:keys [position parent]} handle
+             position (-> (element.handlers/transform db parent)
+                          (utils.element/transform-point position))]
+         (-> (element.hierarchy/bbox (:select-box db))
+             (utils.bounds/contained-point? position)))))
 
 (m/=> reduce-by-area [:-> App ifn? App])
 (defn reduce-by-area

@@ -57,7 +57,6 @@
                         :else "var(--accent-foreground)")
             :stroke (cond selected "var(--accent-foreground)"
                           hovered "var(--accent)"
-                          implied "var(--border)"
                           :else "var(--foreground-muted)")}
      (when label [:title (i18n.views/t label)])]))
 
