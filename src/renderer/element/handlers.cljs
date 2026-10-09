@@ -625,14 +625,16 @@
   [db]
   (utils.element/united-bbox (selected db)))
 
-(m/=> copy [:-> App App])
-(defn copy
+(m/=> clipboard-data [:-> App map?])
+(defn clipboard-data
   [db]
-  (let [els (top-selected-sorted db)]
-    (cond-> db
-      (seq els)
-      (assoc :clipboard {:elements els
-                         :bbox (bbox db)}))))
+  (letfn [(payload-el [id]
+            (let [el (entity db id)]
+              (cond-> (dissoc el :children :selected :selected-handles)
+                (seq (:children el))
+                (assoc :content (mapv payload-el (:children el))))))]
+    {:elements (mapv payload-el (top-selected-sorted-ids db))
+     :bbox (bbox db)}))
 
 (m/=> remove-child [:-> App ElementId ElementId App])
 (defn remove-child
@@ -1005,27 +1007,27 @@
                                 :attrs (assoc (:attrs el) :d d)})))
                 db))))
 
-(m/=> paste-in-place [:function
-                      [:-> App App]
-                      [:-> App Element App]])
+(m/=> paste-in-place [:-> App map? App])
 (defn paste-in-place
-  ([db]
-   (reduce paste-in-place (deselect db) (-> db :clipboard :elements)))
-  ([db el]
-   (->> (selected-ids db)
-        (reduce select (add db el)))))
+  [db data]
+  (reduce (fn [db el]
+            (->> (selected-ids db)
+                 (reduce select (add db el))))
+          (deselect db)
+          (:elements data)))
 
 (m/=> paste [:function
-             [:-> App App]
-             [:-> App Element Element App]])
+             [:-> App map? App]
+             [:-> App Element Element Vec2 App]])
 (defn paste
-  ([db]
-   (let [parent-el (hovered-svg db)]
-     (reduce (rpartial paste parent-el) (deselect db)
-             (-> db :clipboard :elements))))
-  ([db el parent-el]
-   (let [center (utils.bounds/center (-> db :clipboard :bbox))
-         el-center (utils.bounds/center (:bbox el))
+  ([db data]
+   (let [parent-el (hovered-svg db)
+         center (utils.bounds/center (:bbox data))]
+     (reduce (fn [db el] (paste db el parent-el center))
+             (deselect db)
+             (:elements data))))
+  ([db el parent-el center]
+   (let [el-center (utils.bounds/center (:bbox el))
          offset (utils.math/v-sub el-center center)
          el (dissoc el :bbox)
          [s-x1 s-y1] (:bbox parent-el)
@@ -1065,20 +1067,23 @@
                            :parent id}) (selected-ids db))))
 
 (m/=> paste-styles [:function
-                    [:-> App App]
-                    [:-> App ElementId App]])
+                    [:-> App map? App]
+                    [:-> App ElementId map? App]])
 (defn paste-styles
-  ([db]
-   (reduce paste-styles db (selected-ids db)))
-  ([db id]
-   (if (= 1 (count (-> db :clipboard :elements)))
-     (let [attrs (-> db :clipboard :elements first :attrs)
-           style-attrs (disj utils.attribute/presentation :transform)]
-       (reduce (fn [db attr]
-                 (cond-> db
-                   (attr attrs)
-                   (update-attr id attr #(-> attrs attr))))
-               db style-attrs)) db)))
+  ([db data]
+   (if (= 1 (count (:elements data)))
+     (reduce (rpartial paste-styles (-> data :elements first :attrs))
+             db
+             (selected-ids db))
+     db))
+  ([db id attrs]
+   (let [style-attrs (disj utils.attribute/presentation :transform)]
+     (reduce (fn [db attr]
+               (cond-> db
+                 (attr attrs)
+                 (update-attr id attr #(attrs attr))))
+             db
+             style-attrs))))
 
 (m/=> inherit-attrs [:-> App Element ElementId App])
 (defn inherit-attrs
@@ -1138,6 +1143,19 @@
    (cond-> db
      (= (:tag (entity db id)) :path)
      (update-attr id :d utils.path/manipulate action))))
+
+(m/=> svg->data [:-> string? [:maybe map?]])
+(defn svg->data
+  [svg]
+  (let [hickory (hickory/as-hickory (hickory/parse svg))
+        zipper (hickory.zip/hickory-zip hickory)
+        el (utils.element/find-svg zipper)]
+    (when (= :svg (:tag el))
+      (let [el (-> el
+                   (update :attrs dissoc :desc :version :xmlns)
+                   (assoc :bbox (element.hierarchy/bbox el)))]
+        {:elements [el]
+         :bbox (:bbox el)}))))
 
 (def SvgData [:map
               [:svg string?]

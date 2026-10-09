@@ -1,10 +1,15 @@
 (ns renderer.effects
   (:require
+   [cljs.reader :refer [read-string]]
    [clojure.string :as string]
+   [config :as config]
+   [malli.core :as m]
    [re-frame.core :as rf]
    [renderer.app.events :as-alias app.events]
+   [renderer.element.handlers :as element.handlers]
    [renderer.i18n.views :as i18n.views]
-   [renderer.utils.dom :as utils.dom]))
+   [renderer.utils.dom :as utils.dom]
+   [renderer.utils.element :as utils.element]))
 
 (rf/reg-cofx
  ::guid
@@ -32,22 +37,84 @@
  (fn [coeffects _]
    (assoc coeffects :time-origin (.-timeOrigin js/performance))))
 
+(m/=> ->payload [:-> map? string?])
+(defn ->payload
+  [{:keys [elements bbox]}]
+  (pr-str {:bbox bbox
+           :elements elements}))
+
+(m/=> payload->data [:-> string? [:maybe map?]])
+(defn payload->data
+  [payload]
+  (when-let [data (some-> payload read-string)]
+    (when (sequential? (:elements data))
+      data)))
+
+(def custom-mime-type
+  "Custom clipboard MIME-type format.
+   https://developer.mozilla.org/en-US/docs/Web/API/ClipboardItem/supports_static"
+  (str "web " config/mime-type))
+
 (rf/reg-fx
  ::clipboard-write
- (fn [{:keys [data on-success on-error]}]
-   (-> (let [blob-array (js-obj)]
-         (doseq
-          [[data-type data] [["image/svg+xml" data]
-                             ["text/html" data]]]
-           (when (.supports js/ClipboardItem data-type)
-             (aset blob-array
-                   data-type
-                   (js/Blob. (array data) #js {:type data-type}))))
-         blob-array)
-       (js/ClipboardItem.)
-       (array)
-       (js/navigator.clipboard.write)
-       (.then #(some-> on-success rf/dispatch))
+ (fn [{:keys [data on-error]}]
+   (let [svg (utils.element/->svg (:elements data))]
+     (-> (let [blob-array (js-obj)]
+           (doseq [[data-type data] [[custom-mime-type (->payload data)]
+                                     ["image/svg+xml" svg]
+                                     ["text/html" svg]]]
+             (when (.supports js/ClipboardItem data-type)
+               (aset blob-array
+                     data-type
+                     (js/Blob. (array data) #js {:type data-type}))))
+           blob-array)
+         (js/ClipboardItem.)
+         (array)
+         (js/navigator.clipboard.write)
+         (.catch #(some-> on-error (conj %) rf/dispatch))))))
+
+(defn some-data
+  [fns]
+  (reduce (fn [p f] (.then p (fn [data] (if (some? data) data (f)))))
+          (js/Promise.resolve nil)
+          fns))
+
+(defn text->data
+  [text]
+  (when (not (string/blank? text))
+    {:elements [{:tag :text
+                 :content text}]}))
+
+(defn item-type-fn
+  [item mime parser]
+  [(fn []
+     (-> item
+         (.getType mime)
+         (.then #(.text %))
+         (.then parser)))])
+
+(defn item-data-fns
+  [item]
+  (let [types (set (.-types item))]
+    (condp #(contains? %2 %1) types
+      custom-mime-type
+      (item-type-fn item custom-mime-type payload->data)
+
+      "image/svg+xml"
+      (item-type-fn item "image/svg+xml" element.handlers/svg->data)
+
+      "text/html"
+      (item-type-fn item "text/html" element.handlers/svg->data)
+
+      "text/plain"
+      (item-type-fn item "text/plain" text->data))))
+
+(rf/reg-fx
+ ::clipboard-read
+ (fn [{:keys [on-success on-error]}]
+   (-> (js/navigator.clipboard.read)
+       (.then (fn [items] (some-data (mapcat item-data-fns (vec items)))))
+       (.then (fn [data] (when data (rf/dispatch (conj on-success data)))))
        (.catch #(some-> on-error (conj %) rf/dispatch)))))
 
 (rf/reg-fx
