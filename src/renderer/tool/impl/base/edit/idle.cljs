@@ -85,15 +85,18 @@
 
 (defmethod tool.hierarchy/on-pointer-move [::edit/edit :idle]
   [db e]
-  (let [position (input.handlers/adjusted-pos db (:pointer-pos e))
+  (let [{:keys [element pointer-pos]} e
+        position (input.handlers/adjusted-pos db pointer-pos)
         candidates (keep #(insertion-candidate db % position)
                          (element.handlers/selected db))
         best (when (seq candidates)
                (apply min-key #(utils.math/distance % position) candidates))]
     (cond-> db
       :always
-      (-> (element.handlers/clear-hovered)
-          (element.handlers/hover (:element e)))
+      (element.handlers/clear-hovered)
+
+      (:id element)
+      (element.handlers/hover element)
 
       best
       (assoc :insertion-point best)

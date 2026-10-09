@@ -41,8 +41,9 @@
     (element.handlers/assoc-prop :selected-handles #{})
 
     :always
-    (-> (reduce-by-area #(element.handlers/select-handle %1
-                                                         (:id %2) (:parent %2)))
+    (-> (reduce-by-area (fn [db handle]
+                          (let [{:keys [id parent]} handle]
+                            (element.handlers/select-handle db id parent))))
         (tool.handlers/set-select-box nil)
         (tool.handlers/set-state :idle)
         (history.handlers/finalize (:timestamp e)
