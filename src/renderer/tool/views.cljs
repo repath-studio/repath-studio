@@ -32,7 +32,7 @@
         selected @(rf/subscribe [::element.subs/handle-selected? parent id])
         selected (or selected (and (= (:id clicked-element) (:id el))
                                    (= (:parent clicked-element) (:parent el))))
-        hovered @(rf/subscribe [::element.subs/hovered? id])
+        hovered @(rf/subscribe [::element.subs/hovered? [parent id]])
         pointer-handler (partial input.impl.pointer/handler! el)
         [x y] position
         scale (if hovered 1.3 1)

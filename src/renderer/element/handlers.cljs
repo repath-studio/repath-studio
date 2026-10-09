@@ -591,10 +591,13 @@
                    (not (contains? #{:svg :canvas} (:tag el)))
                    (update-prop (:id el) :selected not))) db)))
 
-(m/=> hover [:-> App [:or ElementId HandleId] App])
+(m/=> hover [:-> App [:or Element Handle] App])
 (defn hover
-  [db id]
-  (update-in db [:documents (:active-document db) :hovered-ids] conj id))
+  [db el]
+  (update-in db [:documents (:active-document db) :hovered-ids] conj
+             (if (= (:type el) :handle)
+               [(:parent el) (:id el)]
+               (:id el))))
 
 (m/=> ignore [:-> App [:or ElementId HandleId] App])
 (defn ignore

@@ -238,10 +238,11 @@
 (defn attr-label
   [tag k]
   (let [clicked-element @(rf/subscribe [::app.subs/clicked-element])
+        clicked-id (:id clicked-element)
         base-attr? (utils.element/base-attr? tag k)
-        hovered? @(rf/subscribe [::element.subs/hovered? k])
+        hovered? @(rf/subscribe [::element.subs/hovered? [clicked-id k]])
         active? (and (= (:type clicked-element) :handle)
-                     (= (:id clicked-element) k))]
+                     (= clicked-id k))]
     [:> HoverCard/Root
      [:> HoverCard/Trigger
       {:as-child true}

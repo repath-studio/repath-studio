@@ -73,13 +73,13 @@
 (defn point-row
   [el-id index [x y] points]
   (let [handle-id (keyword (str index))
-        hovered? @(rf/subscribe [::element.subs/hovered? handle-id])
+        hovered? @(rf/subscribe [::element.subs/hovered? [el-id handle-id]])
         selected? @(rf/subscribe [::element.subs/handle-selected?
                                   el-id handle-id])]
     [:div.grid.grid-flow-col.gap-px.text-right
      {:dir "ltr"
       :on-pointer-enter #(rf/dispatch [::document.events/set-hovered-id
-                                       handle-id])
+                                       [el-id handle-id]])
       :on-pointer-leave #(rf/dispatch [::document.events/clear-hovered])
       :style {:grid-template-columns "minmax(0, 60px) 1fr 1fr auto"}}
      [:span.form-element.flex-1.py-0!.h-full!.px-4!

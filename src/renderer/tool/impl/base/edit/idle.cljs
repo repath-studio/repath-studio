@@ -93,7 +93,7 @@
     (cond-> db
       :always
       (-> (element.handlers/clear-hovered)
-          (element.handlers/hover (-> e :element :id)))
+          (element.handlers/hover (:element e)))
 
       best
       (assoc :insertion-point best)

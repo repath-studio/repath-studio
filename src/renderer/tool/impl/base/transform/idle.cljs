@@ -27,7 +27,7 @@
           (tool.handlers/set-cursor cursor))
 
       (:id element)
-      (element.handlers/hover (:id element)))))
+      (element.handlers/hover element))))
 
 (defmethod tool.hierarchy/help [::transform/transform :idle]
   []
