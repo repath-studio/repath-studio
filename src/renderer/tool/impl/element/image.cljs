@@ -41,8 +41,7 @@
  (fn [{:keys [db]} [_ _file-handle file]]
    (let [parent-id (:id (element.handlers/hovered-svg db))
          to-local (partial element.handlers/container-local-point db parent-id)
-         {:keys [nearest-neighbor local-pointer-pos]} db
-         position (to-local (or (:point nearest-neighbor) local-pointer-pos))]
+         position (to-local (tool.handlers/snapped-position db))]
      {:db (tool.handlers/deactivate db)
       ::element.effects/import-image
       {:file file
