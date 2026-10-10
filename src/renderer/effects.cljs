@@ -1,10 +1,15 @@
 (ns renderer.effects
   (:require
+   [cljs.reader :refer [read-string]]
    [clojure.string :as string]
+   [config :as config]
+   [malli.core :as m]
    [re-frame.core :as rf]
    [renderer.app.events :as-alias app.events]
+   [renderer.element.handlers :as element.handlers]
    [renderer.i18n.views :as i18n.views]
-   [renderer.utils.dom :as utils.dom]))
+   [renderer.utils.dom :as utils.dom]
+   [renderer.utils.element :as utils.element]))
 
 (rf/reg-cofx
  ::guid
@@ -32,22 +37,104 @@
  (fn [coeffects _]
    (assoc coeffects :time-origin (.-timeOrigin js/performance))))
 
+(m/=> ->payload [:-> map? string?])
+(defn ->payload
+  [{:keys [elements bbox]}]
+  (pr-str {:bbox bbox
+           :elements elements}))
+
+(m/=> payload->data [:-> string? [:maybe map?]])
+(defn payload->data
+  [payload]
+  (when-let [data (some-> payload read-string)]
+    (when (sequential? (:elements data))
+      data)))
+
+(def custom-mime-type
+  "Custom clipboard MIME-type format.
+   https://developer.mozilla.org/en-US/docs/Web/API/ClipboardItem/supports_static"
+  (str "web " config/mime-type))
+
+(defn file-data-fn
+  [item mime]
+  (-> item
+      (.getType mime)
+      (.then (fn [^js/Blob blob]
+               {:file (js/File. (array blob)
+                                (or (.-name blob)
+                                    (str "Pasted "
+                                         (string/replace-first (.-type blob)
+                                                               "image/" "")))
+                                #js {:type mime})}))))
+string/upper-case
 (rf/reg-fx
  ::clipboard-write
- (fn [{:keys [data on-success on-error]}]
-   (-> (let [blob-array (js-obj)]
-         (doseq
-          [[data-type data] [["image/svg+xml" data]
-                             ["text/html" data]]]
-           (when (.supports js/ClipboardItem data-type)
-             (aset blob-array
-                   data-type
-                   (js/Blob. (array data) #js {:type data-type}))))
-         blob-array)
-       (js/ClipboardItem.)
-       (array)
-       (js/navigator.clipboard.write)
-       (.then #(some-> on-success rf/dispatch))
+ (fn [{:keys [data on-error]}]
+   (let [svg (utils.element/->svg (:elements data))]
+     (-> (let [blob-array (js-obj)]
+           (doseq [[data-type data] [[custom-mime-type (->payload data)]
+                                     ["image/svg+xml" svg]
+                                     ["text/html" svg]]]
+             (when (.supports js/ClipboardItem data-type)
+               (aset blob-array
+                     data-type
+                     (js/Blob. (array data) #js {:type data-type}))))
+           blob-array)
+         (js/ClipboardItem.)
+         (array)
+         (js/navigator.clipboard.write)
+         (.catch #(some-> on-error (conj %) rf/dispatch))))))
+
+(defn text->data
+  [text]
+  (when (not (string/blank? text))
+    {:elements [{:tag :text
+                 :content text}]}))
+
+(defn text-data-fn
+  [item mime parser]
+  (-> item
+      (.getType mime)
+      (.then #(.text %))
+      (.then parser)))
+
+(defn item-data-fn
+  [item]
+  (let [types (set (.-types item))
+        file-mime (some (fn [mime] (when (contains? types mime) mime))
+                        (keys config/supported-mime-types))]
+    (cond
+      (contains? types custom-mime-type)
+      (text-data-fn item custom-mime-type payload->data)
+
+      (some? file-mime)
+      (file-data-fn item file-mime)
+
+      (contains? types "text/html")
+      (text-data-fn item "text/html" element.handlers/svg->data)
+
+      (contains? types "text/plain")
+      (text-data-fn item "text/plain" text->data))))
+
+(defn normalize-data
+  [data]
+  (let [files (vec (filter :file data))]
+    (if (seq files)
+      files
+      (first (filter (complement :file) data)))))
+
+(rf/reg-fx
+ ::clipboard-read
+ (fn [{:keys [on-success on-error]}]
+   (-> (js/navigator.clipboard.read)
+       (.then (fn [items]
+                (-> (keep item-data-fn items)
+                    (into-array)
+                    (js/Promise.all)
+                    (.then (partial filterv some?)))))
+       (.then (fn [data]
+                (when-let [payload (normalize-data data)]
+                  (rf/dispatch (conj on-success payload)))))
        (.catch #(some-> on-error (conj %) rf/dispatch)))))
 
 (rf/reg-fx

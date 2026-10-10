@@ -6,7 +6,7 @@
    [malli.transform :as m.transform]
    [renderer.a11y.db :refer [A11y]]
    [renderer.action.db :refer [ActionRegistry ActionGroupRegistry KeyBindings]]
-   [renderer.db :refer [BBox Vec2 JS_Object DomRect]]
+   [renderer.db :refer [Vec2 JS_Object DomRect]]
    [renderer.dialog.db :refer [Dialog]]
    [renderer.document.db :refer [Document DocumentId RecentDocument]]
    [renderer.element.db :refer [Element]]
@@ -119,9 +119,6 @@
    [:select-box {:optional true} [:maybe Element]]
    [:clicked-element {:optional true} [:or Element Handle]]
    [:insertion-point {:optional true} Vec2]
-   [:clipboard {:default {}} [:map {:closed true}
-                              [:bbox {:optional true} BBox]
-                              [:elements {:optional true} [:* Element]]]]
    [:kdtree {:optional true} [:maybe map?]]
    [:viewbox-kdtree {:optional true} [:maybe map?]]
    [:snapping-points-cache {:optional true} map?]

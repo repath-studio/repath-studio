@@ -12,7 +12,6 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.utils.bounds :as utils.bounds]
-   [renderer.utils.element :as utils.element]
    [renderer.utils.extra :refer [rpartial]]))
 
 (rf/reg-event-db
@@ -170,23 +169,52 @@
  (fn [db _]
    (element.handlers/align db :bottom)))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  ::paste
+ (fn [_ _]
+   {:fx [[::effects/clipboard-read
+          {:on-success [::paste-data]
+           :on-error [::app.events/toast-error]}]]}))
+
+(rf/reg-event-fx
+ ::paste-data
  [(finalize [::paste "Paste"])]
- (fn [db _]
-   (element.handlers/paste db)))
+ (fn [{:keys [db]} [_ data]]
+   (when (= (:state db) :idle)
+     (if (vector? data)
+       {:dispatch-n (mapv (fn [{:keys [file]}]
+                            [::import-file
+                             nil file (tool.handlers/snapped-position db)])
+                          data)}
+       {:db (element.handlers/paste db data)}))))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  ::paste-in-place
- [(finalize [::paste-in-place "Paste in place"])]
- (fn [db _]
-   (element.handlers/paste-in-place db)))
+ (fn [_ _]
+   {:fx [[::effects/clipboard-read
+          {:on-success [::paste-data-in-place]
+           :on-error [::app.events/toast-error]}]]}))
 
 (rf/reg-event-db
+ ::paste-data-in-place
+ [(finalize [::paste-in-place "Paste in place"])]
+ (fn [db [_ data]]
+   (when (= (:state db) :idle)
+     (element.handlers/paste-in-place db data))))
+
+(rf/reg-event-fx
  ::paste-styles
+ (fn [_ _]
+   {:fx [[::effects/clipboard-read
+          {:on-success [::paste-data-styles]
+           :on-error [::app.events/toast-error]}]]}))
+
+(rf/reg-event-db
+ ::paste-data-styles
  [(finalize [::paste-styles "Paste styles"])]
- (fn [db _]
-   (element.handlers/paste-styles db)))
+ (fn [db [_ data]]
+   (when (= (:state db) :idle)
+     (element.handlers/paste-styles db data))))
 
 (rf/reg-event-db
  ::duplicate
@@ -400,11 +428,10 @@
  (fn [{:keys [db]} _]
    (let [els (element.handlers/top-selected-sorted db)]
      (when (= (:state db) :idle)
-       {:db (-> (tool.handlers/deactivate db)
-                (element.handlers/copy))
+       {:db (tool.handlers/deactivate db)
         :fx [(when (seq els)
                [::effects/clipboard-write
-                {:data (utils.element/->svg els)
+                {:data (element.handlers/clipboard-data db)
                  :on-error [::app.events/toast-error]}])]}))))
 
 (rf/reg-event-fx
@@ -413,11 +440,10 @@
  (fn [{:keys [db]} _]
    (when (= (:state db) :idle)
      (let [els (element.handlers/top-selected-sorted db)]
-       {:db (-> (element.handlers/copy db)
-                (element.handlers/delete))
+       {:db (element.handlers/delete db)
         :fx [(when (seq els)
                [::effects/clipboard-write
-                {:data (utils.element/->svg els)
+                {:data (element.handlers/clipboard-data db)
                  :on-error [::app.events/toast-error]}])]}))))
 
 (rf/reg-event-fx

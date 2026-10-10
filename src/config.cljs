@@ -32,6 +32,13 @@
    "image/gif" [".gif"]
    "image/webp" [".webp"]})
 
+(def vector-mime-types
+  {"image/svg+xml" [".svg"]})
+
+(def supported-mime-types
+  (merge vector-mime-types
+         image-mime-types))
+
 (def save-info-keys
   "These are the keys that are saved in the recent documents list.
    The opposite is true for saved documents, that shouldn't maintain keys
