@@ -57,16 +57,16 @@
 
 (defn file-data-fn
   [item mime]
-  (fn []
-    (-> item
-        (.getType mime)
-        (.then (fn [^js/Blob blob]
-                 (if (and (= mime "image/svg+xml") (empty? (.-name blob)))
-                   (-> (.text blob) (.then element.handlers/svg->data))
-                   {:file (js/File. (array blob)
-                                    (or (.-name blob) "pasted")
-                                    #js {:type mime})}))))))
-
+  (-> item
+      (.getType mime)
+      (.then (fn [^js/Blob blob]
+               {:file (js/File. (array blob)
+                                (or (.-name blob)
+                                    (str "Pasted "
+                                         (string/replace-first (.-type blob)
+                                                               "image/" "")))
+                                #js {:type mime})}))))
+string/upper-case
 (rf/reg-fx
  ::clipboard-write
  (fn [{:keys [data on-error]}]
@@ -91,31 +91,30 @@
     {:elements [{:tag :text
                  :content text}]}))
 
-(defn item-type-fn
+(defn text-data-fn
   [item mime parser]
-  [(fn []
-     (-> item
-         (.getType mime)
-         (.then #(.text %))
-         (.then parser)))])
+  (-> item
+      (.getType mime)
+      (.then #(.text %))
+      (.then parser)))
 
-(defn item-data-fns
+(defn item-data-fn
   [item]
   (let [types (set (.-types item))
         file-mime (some (fn [mime] (when (contains? types mime) mime))
                         (keys config/supported-mime-types))]
     (cond
       (contains? types custom-mime-type)
-      (item-type-fn item custom-mime-type payload->data)
+      (text-data-fn item custom-mime-type payload->data)
 
       (some? file-mime)
-      [(file-data-fn item file-mime)]
+      (file-data-fn item file-mime)
 
       (contains? types "text/html")
-      (item-type-fn item "text/html" element.handlers/svg->data)
+      (text-data-fn item "text/html" element.handlers/svg->data)
 
       (contains? types "text/plain")
-      (item-type-fn item "text/plain" text->data))))
+      (text-data-fn item "text/plain" text->data))))
 
 (defn normalize-data
   [data]
@@ -129,12 +128,10 @@
  (fn [{:keys [on-success on-error]}]
    (-> (js/navigator.clipboard.read)
        (.then (fn [items]
-                (let [items (->> (vec items)
-                                 (mapcat item-data-fns)
-                                 (mapv (fn [f] (f))))]
-                  (-> (into-array items)
-                      (js/Promise.all)
-                      (.then (partial filterv some?))))))
+                (-> (keep item-data-fn items)
+                    (into-array)
+                    (js/Promise.all)
+                    (.then (partial filterv some?)))))
        (.then (fn [data]
                 (when-let [payload (normalize-data data)]
                   (rf/dispatch (conj on-success payload)))))
