@@ -176,12 +176,17 @@
           {:on-success [::paste-data]
            :on-error [::app.events/toast-error]}]]}))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  ::paste-data
  [(finalize [::paste "Paste"])]
- (fn [db [_ data]]
+ (fn [{:keys [db]} [_ data]]
    (when (= (:state db) :idle)
-     (element.handlers/paste db data))))
+     (if (vector? data)
+       {:dispatch-n (mapv (fn [{:keys [file]}]
+                            [::import-file
+                             nil file (tool.handlers/snapped-position db)])
+                          data)}
+       {:db (element.handlers/paste db data)}))))
 
 (rf/reg-event-fx
  ::paste-in-place

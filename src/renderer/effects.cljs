@@ -55,6 +55,18 @@
    https://developer.mozilla.org/en-US/docs/Web/API/ClipboardItem/supports_static"
   (str "web " config/mime-type))
 
+(defn file-data-fn
+  [item mime]
+  (fn []
+    (-> item
+        (.getType mime)
+        (.then (fn [^js/Blob blob]
+                 (if (and (= mime "image/svg+xml") (empty? (.-name blob)))
+                   (-> (.text blob) (.then element.handlers/svg->data))
+                   {:file (js/File. (array blob)
+                                    (or (.-name blob) "pasted")
+                                    #js {:type mime})}))))))
+
 (rf/reg-fx
  ::clipboard-write
  (fn [{:keys [data on-error]}]
@@ -73,12 +85,6 @@
          (js/navigator.clipboard.write)
          (.catch #(some-> on-error (conj %) rf/dispatch))))))
 
-(defn some-data
-  [fns]
-  (reduce (fn [p f] (.then p (fn [data] (if (some? data) data (f)))))
-          (js/Promise.resolve nil)
-          fns))
-
 (defn text->data
   [text]
   (when (not (string/blank? text))
@@ -95,26 +101,43 @@
 
 (defn item-data-fns
   [item]
-  (let [types (set (.-types item))]
-    (condp #(contains? %2 %1) types
-      custom-mime-type
+  (let [types (set (.-types item))
+        file-mime (some (fn [mime] (when (contains? types mime) mime))
+                        (keys config/supported-mime-types))]
+    (cond
+      (contains? types custom-mime-type)
       (item-type-fn item custom-mime-type payload->data)
 
-      "image/svg+xml"
-      (item-type-fn item "image/svg+xml" element.handlers/svg->data)
+      (some? file-mime)
+      [(file-data-fn item file-mime)]
 
-      "text/html"
+      (contains? types "text/html")
       (item-type-fn item "text/html" element.handlers/svg->data)
 
-      "text/plain"
+      (contains? types "text/plain")
       (item-type-fn item "text/plain" text->data))))
+
+(defn normalize-data
+  [data]
+  (let [files (vec (filter :file data))]
+    (if (seq files)
+      files
+      (first (filter (complement :file) data)))))
 
 (rf/reg-fx
  ::clipboard-read
  (fn [{:keys [on-success on-error]}]
    (-> (js/navigator.clipboard.read)
-       (.then (fn [items] (some-data (mapcat item-data-fns (vec items)))))
-       (.then (fn [data] (when data (rf/dispatch (conj on-success data)))))
+       (.then (fn [items]
+                (let [items (->> (vec items)
+                                 (mapcat item-data-fns)
+                                 (mapv (fn [f] (f))))]
+                  (-> (into-array items)
+                      (js/Promise.all)
+                      (.then (partial filterv some?))))))
+       (.then (fn [data]
+                (when-let [payload (normalize-data data)]
+                  (rf/dispatch (conj on-success payload)))))
        (.catch #(some-> on-error (conj %) rf/dispatch)))))
 
 (rf/reg-fx
