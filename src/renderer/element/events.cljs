@@ -241,6 +241,18 @@
    (let [pivot-point (-> db element.handlers/bbox utils.bounds/center)]
      (element.handlers/scale db ratio pivot-point false))))
 
+(rf/reg-event-db
+ ::rotate
+ [(finalize [::rotate-selection "Rotate selection"])]
+ (fn [db [_ angle]]
+   (element.handlers/rotate db angle)))
+
+(rf/reg-event-db
+ ::flip
+ [(finalize [::flip-selection "Flip selection"])]
+ (fn [db [_ axis]]
+   (element.handlers/flip db axis)))
+
 (rf/reg-event-fx
  ::->path
  (fn [{:keys [db]}]

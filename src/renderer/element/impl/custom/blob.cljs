@@ -18,6 +18,7 @@
    [renderer.utils.length :as utils.length]
    [renderer.utils.math :as utils.math]
    [renderer.utils.svg :as utils.svg]
+   [renderer.utils.transform :as utils.transform]
    [renderer.views :as views]))
 
 (hierarchy/derive! :blob ::element.hierarchy/custom)
@@ -127,10 +128,11 @@
       (attribute.hierarchy/update-attr :y + y)))
 
 (defmethod element.hierarchy/bbox :blob
-  [el]
+  [el transform]
   (let [{{:keys [x y size]} :attrs} el
         [x y size] (mapv utils.length/unit->px [x y size])]
-    [x y (+ x size) (+ y size)]))
+    (->> [x y (+ x size) (+ y size)]
+         (utils.transform/aabb transform))))
 
 (defmethod element.hierarchy/centroid :blob
   [el]
@@ -177,7 +179,7 @@
   (let [transform @(rf/subscribe [::element.subs/transform (:id el)])
         {{:keys [x y size]} :attrs} el
         [x y size] (mapv utils.length/unit->px [x y size])
-        wpoint (partial utils.element/transform-point transform)
+        wpoint (partial utils.transform/point transform)
         start (wpoint [x y])
         end (wpoint (utils.math/v-add [x y] size))]
     [:<>

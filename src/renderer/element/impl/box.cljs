@@ -8,7 +8,8 @@
    [renderer.input.handlers :as input.handlers]
    [renderer.tool.impl.element.core :as-alias element.core]
    [renderer.utils.element :as utils.element]
-   [renderer.utils.length :as utils.length]))
+   [renderer.utils.length :as utils.length]
+   [renderer.utils.transform :as utils.transform]))
 
 (hierarchy/derive! ::element.hierarchy/box ::element.hierarchy/renderable)
 
@@ -54,7 +55,7 @@
 
 (defmethod element.hierarchy/handles ::element.hierarchy/box
   [el]
-  (let [[min-x min-y max-x max-y] (element.hierarchy/bbox el)]
+  (let [[min-x min-y max-x max-y] (utils.element/local-bbox el)]
     [{:type :handle
       :action :edit
       :parent (:id el)
@@ -69,10 +70,11 @@
       :label [::size-handle "size handle"]}]))
 
 (defmethod element.hierarchy/bbox ::element.hierarchy/box
-  [el]
+  [el transform]
   (let [{{:keys [x y width height]} :attrs} el
         [x y width height] (mapv utils.length/unit->px [x y width height])]
-    [x y (+ x width) (+ y height)]))
+    (->> [x y (+ x width) (+ y height)]
+         (utils.transform/aabb transform))))
 
 (defmethod element.hierarchy/area ::element.hierarchy/box
   [el]

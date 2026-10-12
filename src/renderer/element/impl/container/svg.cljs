@@ -12,7 +12,8 @@
    [renderer.hierarchy :as hierarchy]
    [renderer.i18n.views :as i18n.views]
    [renderer.input.impl.pointer :as input.impl.pointer]
-   [renderer.utils.element :as utils.element]))
+   [renderer.utils.element :as utils.element]
+   [renderer.utils.transform :as utils.transform]))
 
 (hierarchy/derive! :svg ::element.hierarchy/container)
 (hierarchy/derive! :svg ::element.hierarchy/box)
@@ -32,20 +33,38 @@
    :attrs [:overflow]})
 
 (defn shadow
-  [rect-attrs shadow-size]
-  [:rect (merge rect-attrs
-                {:fill "rgba(0, 0, 0, .1)"
-                 :transform (str "translate(" shadow-size " " shadow-size ")")
-                 :style {:filter (str "blur(" shadow-size "px)")}})])
+  [rect-attrs shadow-size transform]
+  (let [offset (str "translate(" shadow-size " " shadow-size ")")]
+    [:rect (merge rect-attrs
+                  {:fill "rgba(0, 0, 0, .1)"
+                   :transform (if transform (str offset " " transform) offset)
+                   :style {:filter (str "blur(" shadow-size "px)")}})]))
 
 (defn viewport-rect
   [el]
-  (let [[sx sy ox oy] (utils.element/transform el)
+  (let [[a _b _c d e f] (utils.element/transform el)
         [x y w h] (utils.element/viewbox el)]
-    [(/ (- x ox) sx)
-     (/ (- y oy) sy)
-     (/ w sx)
-     (/ h sy)]))
+    [(/ (- x e) a)
+     (/ (- y f) d)
+     (/ w a)
+     (/ h d)]))
+
+(defn render-label
+  [{:keys [el label-anchor pointer-handler zoom]}]
+  (let [label-transform (-> (utils.element/transform-attr el)
+                            (utils.transform/unscale-at label-anchor)
+                            (utils.transform/->str))]
+    [:text
+     (merge
+      (zipmap [:x :y] label-anchor)
+      {:on-pointer-up pointer-handler
+       :on-pointer-down pointer-handler
+       :on-pointer-move pointer-handler
+       :fill "var(--foreground-muted)"
+       :font-size (/ 12 zoom)
+       :transform label-transform})
+     (or (:label el)
+         (i18n.views/t label))]))
 
 (defmethod element.hierarchy/render :svg
   [_el]
@@ -60,25 +79,19 @@
         (let [{:keys [selected attrs children]} el
               child-els @(rf/subscribe [::element.subs/filter-visible children])
               rect-attrs (select-keys attrs [:x :y :width :height])
-              text-attrs (select-keys attrs [:x :y])
               active-filter @(rf/subscribe [::a11y.subs/active-filter])
               zoom @(rf/subscribe [::document.subs/zoom])
+              label-anchor [(:x rect-attrs) (- (:y rect-attrs) (/ 10 zoom))]
               pointer-handler (partial input.impl.pointer/handler! el)
               shadow-size (/ 2 zoom)
               [x y w h] (viewport-rect el)]
           [:g
-           [:text
-            (merge
-             (update text-attrs :y - (/ 10 zoom))
-             {:on-pointer-up pointer-handler
-              :on-pointer-down pointer-handler
-              :on-pointer-move pointer-handler
-              :fill "var(--foreground-muted)"
-              :font-size (/ 12 zoom)})
-            (or (:label el)
-                (i18n.views/t label))]
+           [render-label {:el el
+                          :label-anchor label-anchor
+                          :pointer-handler pointer-handler
+                          :zoom zoom}]
 
-           [shadow rect-attrs shadow-size]
+           [shadow rect-attrs shadow-size (:transform attrs)]
 
            [:svg
             (cond-> attrs

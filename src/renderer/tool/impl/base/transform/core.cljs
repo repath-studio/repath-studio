@@ -17,6 +17,7 @@
    [renderer.tool.impl.base.transform.clone]
    [renderer.tool.impl.base.transform.edit]
    [renderer.tool.impl.base.transform.idle]
+   [renderer.tool.impl.base.transform.rotate :as transform.rotate]
    [renderer.tool.impl.base.transform.scale :as transform.scale]
    [renderer.tool.impl.base.transform.select :as transform.select]
    [renderer.tool.impl.base.transform.translate]
@@ -100,7 +101,7 @@
                          [fx fy] anchor-offset]
                      [(+ min-x (* fx w)) (+ min-y (* fy h))]))]
     [:g
-     (when (and pivot-point (= state :scale))
+     (when (and pivot-point (contains? #{:scale :rotate} state))
        [utils.svg/times pivot-point])
      (when (and bbox (contains? #{:edit :idle} state))
        [:g
@@ -151,11 +152,13 @@
         selected-elements @(rf/subscribe [::element.subs/selected])
         bbox @(rf/subscribe [::element.subs/bbox])
         hovered-elements @(rf/subscribe [::element.subs/hovered])
+        idle? @(rf/subscribe [::tool.subs/idle?])
         touch? @(rf/subscribe [::app.subs/supported-feature? :touch])
         select-box @(rf/subscribe [::tool.subs/select-box])]
     [:<>
-     (into [:<>]
-           (map #(bounding-box % false) selected-elements))
+     (when idle?
+       (into [:<>]
+             (map #(bounding-box % false) selected-elements)))
 
      (when (or (not touch?) (= state :select))
        (into [:<>]
@@ -164,6 +167,8 @@
      (when (seq bbox)
        [:<>
         [utils.svg/bounding-box bbox false]
+        (when (contains? #{:idle :rotate} state)
+          [transform.rotate/handle])
         (when (= state :idle)
           [tool.views/corner-handles bbox])])
 

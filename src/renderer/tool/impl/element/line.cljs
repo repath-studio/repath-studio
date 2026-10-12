@@ -45,7 +45,7 @@
         start-pos (mapv utils.length/unit->px [x1 y1])
         end-pos (cond->> end-pos
                   (input.handlers/snap-to-angle? db e)
-                  (input.handlers/snap-angle start-pos))
+                  (input.handlers/snap-point-to-angle start-pos))
         [x2 y2] (mapv utils.attribute/->fixed end-pos)]
     (element.handlers/update-selected db #(-> %
                                               (assoc-in [:attrs :x2] x2)

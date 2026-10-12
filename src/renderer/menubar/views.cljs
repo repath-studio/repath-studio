@@ -89,7 +89,8 @@
                                   (interpose :separator)
                                   (flatten))}
                    (action.views/deref-action-group :object/animate)
-                   (action.views/deref-action-group :object/boolean-operations)]
+                   (action.views/deref-action-group :object/boolean-operations)
+                   (action.views/deref-action-group :object/transform)]
                   (->> :object/index-operations
                        (action.views/deref-action-group)
                        :actions)

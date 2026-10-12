@@ -15,9 +15,9 @@
    [renderer.tool.impl.base.edit.type]
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.tool.views :as tool.views]
-   [renderer.utils.element :as utils.element]
    [renderer.utils.key :as utils.key]
-   [renderer.utils.svg :as utils.svg]))
+   [renderer.utils.svg :as utils.svg]
+   [renderer.utils.transform :as utils.transform]))
 
 (hierarchy/derive! ::edit ::tool.hierarchy/tool)
 
@@ -48,13 +48,13 @@
                           (map (fn [handle]
                                  [tool.views/handle
                                   (assoc handle :position
-                                         (utils.element/transform-point
+                                         (utils.transform/point
                                           transform (:position handle)))]))
                           (into [:g]))
 
                      (when-let [centroid (element.hierarchy/centroid el)]
-                       [utils.svg/dot (utils.element/transform-point transform
-                                                                     centroid)
+                       [utils.svg/dot (utils.transform/point transform
+                                                             centroid)
                         [:title (i18n.views/t [::centroid "Centroid"])]])])))
            (into [:g [element.hierarchy/render select-box]
                   (when insertion-point

@@ -170,6 +170,38 @@
                :enabled [::element.subs/some-selected-tag? :g]}])
 
 (rf/dispatch [::action.events/register-action
+              {:id :object/rotate-clockwise
+               :label [::rotate-clockwise "Rotate 90° clockwise"]
+               :icon "rotate-clockwise"
+               :event [::element.events/rotate 90]
+               :enabled [::element.subs/some-non-root-selected?]}])
+
+(rf/dispatch [::action.events/register-action
+              {:id :object/rotate-counterclockwise
+               :label [::rotate-counterclockwise "Rotate 90° counterclockwise"]
+               :icon "rotate-counterclockwise"
+               :event [::element.events/rotate -90]
+               :enabled [::element.subs/some-non-root-selected?]}])
+
+(rf/dispatch [::action.events/register-action
+              {:id :object/flip-horizontal
+               :label [::flip-horizontal "Flip horizontal"]
+               :icon "flip-horizontal"
+               :event [::element.events/flip :horizontal]
+               :enabled [::element.subs/some-non-root-selected?]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "H")
+                                   :shiftKey true}]}}])
+
+(rf/dispatch [::action.events/register-action
+              {:id :object/flip-vertical
+               :label [::flip-vertical "Flip vertical"]
+               :icon "flip-vertical"
+               :event [::element.events/flip :vertical]
+               :enabled [::element.subs/some-non-root-selected?]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "V")
+                                   :shiftKey true}]}}])
+
+(rf/dispatch [::action.events/register-action
               {:id :object/lock
                :label [::element.events/lock]
                :icon "lock"
@@ -411,6 +443,14 @@
                          :object/lower
                          :object/raise-to-top
                          :object/lower-to-bottom]}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :object/transform
+               :label [::transform "Transform"]
+               :actions [:object/rotate-clockwise
+                         :object/rotate-counterclockwise
+                         :object/flip-horizontal
+                         :object/flip-vertical]}])
 
 (rf/dispatch [::action.events/register-action-group
               {:id :object/boolean-operations

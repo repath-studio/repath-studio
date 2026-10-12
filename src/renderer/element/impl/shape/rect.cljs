@@ -11,7 +11,8 @@
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
-   [renderer.utils.math :as utils.math]))
+   [renderer.utils.math :as utils.math]
+   [renderer.utils.transform :as utils.transform]))
 
 (hierarchy/derive! :rect ::element.hierarchy/box)
 (hierarchy/derive! :rect ::element.hierarchy/shape)
@@ -168,9 +169,10 @@
                    (string/join " ")))))
 
 (defmethod element.hierarchy/bbox :rect
-  [el]
+  [el transform]
   (let [{{:keys [x y width height stroke-width]} :attrs} el
         [x y width height stroke-width] (->> [x y width height stroke-width]
                                              (mapv utils.length/unit->px))
         padding (/ stroke-width 2)]
-    [(- x padding) (- y padding) (+ x width padding) (+ y height padding)]))
+    (->> [(- x padding) (- y padding) (+ x width padding) (+ y height padding)]
+         (utils.transform/aabb transform))))

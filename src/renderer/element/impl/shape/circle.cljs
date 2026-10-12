@@ -14,7 +14,8 @@
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
    [renderer.utils.math :as utils.math]
-   [renderer.utils.svg :as utils.svg]))
+   [renderer.utils.svg :as utils.svg]
+   [renderer.utils.transform :as utils.transform]))
 
 (hierarchy/derive! :circle ::element.hierarchy/shape)
 
@@ -41,7 +42,7 @@
   [el ratio pivot-point]
   (let [{{:keys [stroke-width]} :attrs} el
         padding (/ (utils.length/unit->px stroke-width) 2)
-        dimensions (-> el element.hierarchy/bbox utils.bounds/->dimensions)
+        dimensions (utils.bounds/->dimensions (utils.element/local-bbox el))
         pivot-point (->> (utils.math/v-div dimensions 2)
                          (utils.math/v-sub pivot-point))
         offset (utils.element/scale-offset ratio pivot-point)
@@ -52,12 +53,17 @@
         (element.hierarchy/translate offset))))
 
 (defmethod element.hierarchy/bbox :circle
-  [el]
+  [el transform]
   (let [{{:keys [cx cy r stroke-width]} :attrs} el
         [cx cy r stroke-width] (->> [cx cy r stroke-width]
                                     (map utils.length/unit->px))
-        padding (/ stroke-width 2)]
-    [(- cx r padding) (- cy r padding) (+ cx r padding) (+ cy r padding)]))
+        [a b c d _e _f] transform
+        [center-x center-y] (utils.transform/point transform [cx cy])
+        radius (+ r (/ stroke-width 2))
+        half-x (* radius (Math/sqrt (+ (* a a) (* c c))))
+        half-y (* radius (Math/sqrt (+ (* b b) (* d d))))]
+    [(- center-x half-x) (- center-y half-y)
+     (+ center-x half-x) (+ center-y half-y)]))
 
 (defmethod element.hierarchy/area :circle
   [el]
@@ -103,7 +109,7 @@
   (let [transform @(rf/subscribe [::element.subs/transform (:id el)])
         {{:keys [cx cy r]} :attrs} el
         [cx cy r] (map utils.length/unit->px [cx cy r])
-        wpoint (partial utils.element/transform-point transform)
+        wpoint (partial utils.transform/point transform)
         center (wpoint [cx cy])
         edge (wpoint [(+ cx r) cy])
         [label-x label-y] (wpoint [(+ cx (/ r 2)) cy])]

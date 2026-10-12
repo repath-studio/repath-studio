@@ -51,7 +51,6 @@
    :rx :ry
    :r
    :rotate
-   :transform
    :font-family :font-size :font-weight :font-style
    :textLength
    :lengthAdjust

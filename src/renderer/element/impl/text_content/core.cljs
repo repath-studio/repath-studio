@@ -18,7 +18,8 @@
    [renderer.utils.font :as utils.font]
    [renderer.utils.key :as utils.key]
    [renderer.utils.length :as utils.length]
-   [renderer.utils.math :as utils.math]))
+   [renderer.utils.math :as utils.math]
+   [renderer.utils.transform :as utils.transform]))
 
 (hierarchy/derive! ::element.hierarchy/text-content ::element.hierarchy/shape)
 (hierarchy/derive! ::element.hierarchy/text-content-child
@@ -39,7 +40,7 @@
 
 (defmethod element.hierarchy/scale ::element.hierarchy/text-content
   [el ratio pivot-point]
-  (let [bounds (element.hierarchy/bbox el)
+  (let [bounds (utils.element/local-bbox el)
         [w h] (utils.bounds/->dimensions bounds)
         y-attr (utils.length/unit->px (get-in el [:attrs :y]))
         ascent (- y-attr (second bounds))
@@ -76,8 +77,8 @@
 (defmethod element.hierarchy/render-edit ::element.hierarchy/text-content
   [el]
   (let [{:keys [id content]} el
-        [sx sy ox oy] @(rf/subscribe [::element.subs/transform (:id el)])
-        el-bbox (element.hierarchy/bbox el)
+        transform @(rf/subscribe [::element.subs/transform (:id el)])
+        el-bbox (utils.element/local-bbox el)
         [x y] el-bbox
         [_w h] (utils.bounds/->dimensions el-bbox)
         attrs (utils.element/attributes el)
@@ -90,8 +91,7 @@
                      :y y
                      :width "1000vw"
                      :height h
-                     :transform (str "translate(" ox " " oy ") "
-                                     "scale(" sx " " sy ")")}
+                     :transform (utils.transform/->str transform)}
      [:input
       {:key id
        :default-value content

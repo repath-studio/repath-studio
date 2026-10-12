@@ -47,12 +47,12 @@
     (element.handlers/local-point db)
 
     (input.handlers/snap-to-angle? db e)
-    (input.handlers/snap-angle (->> (element.handlers/selected db)
-                                    first :attrs :d
-                                    (utils.path/string->segments)
-                                    (take-last 2)
-                                    (apply utils.path/abs-endpoint)
-                                    (mapv utils.length/unit->px)))))
+    (input.handlers/snap-point-to-angle (->> (element.handlers/selected db)
+                                             first :attrs :d
+                                             (utils.path/string->segments)
+                                             (take-last 2)
+                                             (apply utils.path/abs-endpoint)
+                                             (mapv utils.length/unit->px)))))
 
 (m/=> local-pointer-offset [:-> App Vec2])
 (defn local-pointer-offset

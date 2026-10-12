@@ -5,7 +5,8 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
    [renderer.hierarchy :as hierarchy]
-   [renderer.utils.element :as utils.element]))
+   [renderer.utils.element :as utils.element]
+   [renderer.utils.transform :as utils.transform]))
 
 (hierarchy/derive! ::element.hierarchy/renderable ::element.hierarchy/element)
 
@@ -28,5 +29,6 @@
           (map element.hierarchy/render-to-string child-elements))))
 
 (defmethod element.hierarchy/bbox ::element.hierarchy/renderable
-  [el]
-  (:bbox (utils.element/get-computed-styles el)))
+  [el transform]
+  (some->> (:bbox (utils.element/get-computed-styles el))
+           (utils.transform/aabb transform)))

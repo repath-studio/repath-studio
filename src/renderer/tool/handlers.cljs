@@ -24,11 +24,6 @@
   [db cursor]
   (assoc db :cursor cursor))
 
-(m/=> help [:-> Tool State any?])
-(defn help
-  [tool state]
-  (tool.hierarchy/help tool state))
-
 (m/=> activate [:-> App Tool [:* any?] App])
 (defn activate
   [db tool & {:as props}]

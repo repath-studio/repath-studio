@@ -37,6 +37,17 @@
 (def PathManipulation
   [:enum :simplify :smooth :flatten :reverse])
 
+(def TransformOperation
+  [:multi {:dispatch (fn [x] (when (seqable? x) (first x)))}
+   [:translate [:tuple [:= :translate] number? number?]]
+   [:scale [:tuple [:= :scale] number? number?]]
+   [:rotate [:tuple [:= :rotate] number? number? number?]]
+   [:skew-x [:tuple [:= :skew-x] number?]]
+   [:skew-y [:tuple [:= :skew-y] number?]]
+   [:matrix [:tuple [:= :matrix]
+             number? number? number?
+             number? number? number?]]])
+
 (def PathPointType
   [:enum
    :start-control-point
@@ -90,9 +101,11 @@
    [number? {:title "width"}]
    [number? {:title "height"}]])
 
-(def Transform
+(def TransformationMatrix
   [:tuple
-   [number? {:title "scale-x"}]
-   [number? {:title "scale-y"}]
-   [number? {:title "offset-x"}]
-   [number? {:title "offset-y"}]])
+   [number? {:title "a"}]
+   [number? {:title "b"}]
+   [number? {:title "c"}]
+   [number? {:title "d"}]
+   [number? {:title "e"}]
+   [number? {:title "f"}]])

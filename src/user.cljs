@@ -56,6 +56,14 @@
   ([x :- :float y :- :float]
    (rf/dispatch [::element.events/scale [x y]])))
 
+(mx/defn rotate
+  "Rotates the selected elements.
+
+   Arguments:
+   - `angle`: The rotation angle"
+  ([angle :- :float]
+   (rf/dispatch [::element.events/rotate angle])))
+
 (mx/defn fill
   "Fills the selected elements.
 

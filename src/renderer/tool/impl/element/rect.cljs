@@ -51,7 +51,7 @@
         origin (element.handlers/local-point db id (:last-origin db))
         position (cond->> position
                    (input.handlers/snap-to-angle? db e)
-                   (input.handlers/snap-angle origin))
+                   (input.handlers/snap-point-to-angle origin))
         size (utils.math/v-sub position origin)
         [w h] (mapv (comp utils.attribute/->fixed abs) size)
         new-x (cond-> (first origin)

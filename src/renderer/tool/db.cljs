@@ -16,7 +16,8 @@
    tool?])
 
 (def State
-  [:enum :idle :translate :clone :scale :select :create :edit :type :pan])
+  [:enum :idle :translate :clone :scale :select :create :edit
+   :type :pan :rotate])
 
 (def Cursor
   [:enum
@@ -58,7 +59,7 @@
    "zoom-out"])
 
 (def HandleAction
-  [:enum :translate :scale :edit])
+  [:enum :translate :scale :rotate :edit])
 
 (def HandleId keyword?)
 

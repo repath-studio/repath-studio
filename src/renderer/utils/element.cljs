@@ -8,7 +8,7 @@
    [malli.core :as m]
    [malli.transform :as m.transform]
    [reagent.dom.server :as dom.server]
-   [renderer.db :refer [BBox Vec2 JS_Element Transform Viewbox]]
+   [renderer.db :refer [BBox Vec2 JS_Element TransformationMatrix Viewbox]]
    [renderer.element.db
     :as element.db
     :refer [Element ElementAttrs ElementTag PersistedElement]]
@@ -20,7 +20,8 @@
    [renderer.utils.dom :as utils.dom]
    [renderer.utils.length :as utils.length]
    [renderer.utils.map :as utils.map]
-   [renderer.utils.math :as utils.math]))
+   [renderer.utils.math :as utils.math]
+   [renderer.utils.transform :as utils.transform]))
 
 (m/=> root? [:-> Element boolean?])
 (defn root?
@@ -32,18 +33,11 @@
   [el]
   (= :svg (:tag el)))
 
-(m/=> container? [:-> Element boolean?])
-(defn container?
+(m/=> transform-attr [:-> Element TransformationMatrix])
+(defn transform-attr
   [el]
-  (or (svg? el) (root? el)))
-
-(m/=> compose-transforms [:-> Transform Transform Transform])
-(defn compose-transforms
-  [[sx-out sy-out ox-out oy-out] [sx-in sy-in ox-in oy-in]]
-  [(* sx-out sx-in)
-   (* sy-out sy-in)
-   (+ (* sx-out ox-in) ox-out)
-   (+ (* sy-out oy-in) oy-out)])
+  (-> (or (utils.transform/parse (get-in el [:attrs :transform])) [])
+      (utils.transform/ops->matrix)))
 
 (m/=> viewbox [:-> Element Viewbox])
 (defn viewbox
@@ -54,7 +48,21 @@
      (utils.length/unit->px width :svg :width)
      (utils.length/unit->px height :svg :height)]))
 
-(m/=> transform [:-> Element Transform])
+(m/=> view-box->transform [:-> Viewbox Viewbox boolean? TransformationMatrix])
+(defn view-box->transform
+  [[x y width height] [vb-x vb-y vb-w vb-h] preserve-none?]
+  (let [[sx sy] (if preserve-none?
+                  [(/ width vb-w) (/ height vb-h)]
+                  (let [s (min (/ width vb-w) (/ height vb-h))]
+                    [s s]))
+        tx (+ x (/ (- width (* sx vb-w)) 2))
+        ty (+ y (/ (- height (* sy vb-h)) 2))]
+    (-> (utils.transform/translate tx ty)
+        (utils.transform/compose (utils.transform/scale [sx sy]))
+        (utils.transform/compose (utils.transform/translate (- vb-x)
+                                                            (- vb-y))))))
+
+(m/=> transform [:-> Element TransformationMatrix])
 (defn transform
   [el]
   (cond
@@ -65,33 +73,31 @@
           preserve-none? (some-> preserveAspectRatio
                                  (string/trim)
                                  (string/lower-case)
-                                 #(string/starts-with? % "none"))]
+                                 (string/starts-with? "none"))]
       (if-not (every? #(and (pos? %) (js/isFinite %)) [vb-w vb-h width height])
-        [1 1 x y]
-        (if preserve-none?
-          (let [sx (/ width vb-w)
-                sy (/ height vb-h)]
-            [sx sy (- x (* vb-x sx)) (- y (* vb-y sy))])
-
-          (let [s (min (/ width vb-w) (/ height vb-h))
-                ox (+ x (/ (- width (* s vb-w)) 2) (- (* vb-x s)))
-                oy (+ y (/ (- height (* s vb-h)) 2) (- (* vb-y s)))]
-            [s s ox oy]))))
+        (utils.transform/translate x y)
+        (view-box->transform [x y width height]
+                             [vb-x vb-y vb-w vb-h]
+                             preserve-none?)))
 
     :else
-    [1 1 0 0]))
+    utils.transform/identity-transform))
 
-(m/=> transform-point [:-> Transform Vec2 Vec2])
-(defn transform-point
-  [[sx sy ox oy] [x y]]
-  [(+ (* x sx) ox)
-   (+ (* y sy) oy)])
+(m/=> own-transform [:-> Element TransformationMatrix])
+(defn own-transform
+  [el]
+  (if (root? el)
+    utils.transform/identity-transform
+    (utils.transform/compose (transform-attr el) (transform el))))
 
-(m/=> untransform-point [:-> Transform Vec2 Vec2])
+(m/=> untransform-point [:-> TransformationMatrix Vec2 Vec2])
 (defn untransform-point
-  [[sx sy ox oy] [x y]]
-  [(/ (- x ox) sx)
-   (/ (- y oy) sy)])
+  [m point]
+  (utils.transform/inverse-point m point))
+
+(defn local-bbox
+  [el]
+  (element.hierarchy/bbox el utils.transform/identity-transform))
 
 (def properties-memo (memoize element.hierarchy/properties))
 
@@ -127,13 +133,15 @@
   [els]
   (reduce #(+ %1 (element.hierarchy/area %2)) 0 els))
 
-(m/=> acc-snapping-points [:-> Element Transform SnapOptions [:* Vec2]])
+(m/=> acc-snapping-points [:->
+                           Element TransformationMatrix SnapOptions
+                           [:* Vec2]])
 (defn acc-snapping-points
   [el el-transform options]
   (let [points (or (when (contains? options :nodes)
                      (let [centroid (element.hierarchy/centroid el)]
                        (mapv #(with-meta
-                                (transform-point el-transform %)
+                                (utils.transform/point el-transform %)
                                 (merge (meta %) {:id (:id el)}))
                              (cond-> (element.hierarchy/snapping-points el)
                                centroid

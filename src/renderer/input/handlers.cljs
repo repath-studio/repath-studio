@@ -28,23 +28,34 @@
   [db]
   (> (count (:active-pointers db)) 1))
 
+(defn primary-mod?
+  [db e]
+  (if (= (:web-platform db) "Mac")
+    (:meta-key e)
+    (:ctrl-key e)))
+
 (m/=> snap-to-angle? [:-> App PointerEvent boolean?])
 (defn snap-to-angle?
   [db e]
   (and (not= (:state db) :scale)
-       (or (:ctrl-key e)
+       (or (primary-mod? db e)
            (multi-touch? db))))
 
-(m/=> snap-angle [:-> Vec2 Vec2 Vec2])
+(m/=> snap-angle [:-> number? number?])
 (defn snap-angle
+  [angle]
+  (let [snap-step 15]
+    (* snap-step (Math/round (/ angle snap-step)))))
+
+(m/=> snap-point-to-angle [:-> Vec2 Vec2 Vec2])
+(defn snap-point-to-angle
   "Snaps the end position to the nearest 15 degree angle."
   [start end]
-  (let [degrees (utils.math/angle start end)
-        snapped (* (Math/round (/ degrees 15)) 15)
+  (let [angle (snap-angle (utils.math/angle start end))
         r (utils.math/distance start end)
         [x1 y1] start]
-    [(+ x1 (utils.math/angle-dx snapped r))
-     (+ y1 (utils.math/angle-dy snapped r))]))
+    [(+ x1 (utils.math/angle-dx angle r))
+     (+ y1 (utils.math/angle-dy angle r))]))
 
 (m/=> clear-pointer-data [:-> App App])
 (defn clear-pointer-data

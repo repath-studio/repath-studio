@@ -1,7 +1,7 @@
 (ns renderer.tool.subs
   (:require
    [re-frame.core :as rf]
-   [renderer.tool.handlers :as tool.handlers]
+   [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.edit.core :as-alias tool.impl.base.edit]))
 
 (rf/reg-sub
@@ -60,9 +60,7 @@
 
 (rf/reg-sub
  ::help
- :<- [::active]
- :<- [::state]
- :-> (partial apply tool.handlers/help))
+ :-> tool.hierarchy/help)
 
 (rf/reg-sub
  ::insertion-point
