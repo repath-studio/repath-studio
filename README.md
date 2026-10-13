@@ -120,6 +120,9 @@ terminal.
 npm run electron
 ```
 
+If you want a light development environment, you can run `dev-web`, that builds
+and watches the web app only, and also auto opens the corresponding browser tab.
+
 ### Open Source programs
 
 We are using Sentry's open-source sponsorship plan for error reporting.
