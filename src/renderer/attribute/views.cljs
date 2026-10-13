@@ -161,8 +161,7 @@
    [form-input k v (select-keys attrs [:disabled :placeholder])]
    (when (seq items)
      (let [v (if (empty? v) default-value v)
-           icon (:icon (first (filter #(= (:value %) v) items)))]
-       (print icon)
+           item (first (filter #(= (:value %) (string/lower-case v)) items))]
        [:> Select/Root
         {:value v
          :onValueChange #(rf/dispatch [::element.events/set-attr k %])
@@ -173,7 +172,7 @@
          [:> Select/Value ""]
          [:> Select/Icon
           {:class "flex"}
-          [views/icon (or icon "chevron-down")]]]
+          [views/icon (or (:icon item) "chevron-down")]]]
         [:> Select/Portal
          [:> Select/Content
           {:class "menu-content rounded-sm select-content"
