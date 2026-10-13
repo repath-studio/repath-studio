@@ -788,89 +788,76 @@
          offset (utils.math/v-sub position center)]
      (translate db offset))))
 
-(m/=> scale-pivot [:-> Vec2 map? [:set ElementId] fn?])
-(defn scale-pivot
-  "Returns a function that calculates the scaling pivot point based on the
-   element's ancestry."
-  [pivot origins top-ids]
-  (fn [db id]
-    (when-let [el-origin (get origins id)]
-      (if (contains? top-ids id)
-        (utils.math/v-sub pivot el-origin)
-        (when-let [ancestor-origin (some #(get origins %) (ancestor-ids db id))]
-          (utils.math/v-sub ancestor-origin el-origin))))))
+(m/=> scale-by-transform [:-> App ElementId Vec2 Vec2 App])
+(defn scale-by-transform
+  [db id ratio pivot-point]
+  (let [el (entity db id)
+        p (transform db (or (:parent el) (:id el)))
+        m (utils.transform/compose
+           (utils.transform/inverse p)
+           (utils.transform/compose (utils.transform/scale-about ratio
+                                                                 pivot-point)
+                                    p))]
+    (update-el db id
+               (fn [e] (attribute.hierarchy/update-attr e :transform m)))))
 
-(m/=> scale-group [:-> App ElementId Vec2 Vec2 [:set ElementId] App])
+(m/=> scale-leaf [:-> App ElementId Vec2 Vec2 App])
+(defn scale-leaf
+  [db id ratio pivot-point]
+  (if-let [el-bbox (local-bbox db id)]
+    (let [el (entity db id)]
+      (if (or (transformed? el)
+              (and (not (utils.transform/axis-aligned? (transform db id)))
+                   (not= (first ratio) (second ratio))))
+        (scale-by-transform db id ratio pivot-point)
+        (update-el db id element.hierarchy/scale ratio
+                   (utils.math/v-sub (local-point db id pivot-point)
+                                     (vec (take 2 el-bbox))))))
+    db))
+
+(m/=> scale-group
+      [:-> App ElementId Vec2 Vec2
+       [:set ElementId] App])
 (defn scale-group
   [db id ratio pivot-point ids-to-scale]
-  (let [children (remove ids-to-scale (:children (entity db id)))
-        child-origins (->> children
-                           (keep (fn [child-id]
-                                   (when-let [bb (:bbox (entity db child-id))]
-                                     [child-id (local-point
-                                                db child-id
-                                                (into [] (take 2 bb)))])))
-                           (into {}))]
+  (let [children (remove ids-to-scale (:children (entity db id)))]
     (-> (reduce (fn [db child-id]
-                  (let [child-origin (get child-origins child-id)
-                        {:keys [tag locked]} (entity db child-id)]
-                    (cond
-                      (and (= tag :g) (not locked))
-                      (scale-group db child-id ratio pivot-point ids-to-scale)
-
-                      child-origin
-                      (update-el db child-id element.hierarchy/scale ratio
-                                 (utils.math/v-sub pivot-point child-origin))
-
-                      :else
-                      db)))
+                  (let [child (entity db child-id)]
+                    (if (and (= (:tag child) :g) (not (:locked child)))
+                      (scale-group db child-id ratio pivot-point
+                                   ids-to-scale)
+                      (scale-leaf db child-id ratio pivot-point))))
                 db children)
         (refresh-bbox id))))
 
-(m/=> scale-transformed [:-> App ElementId Vec2 Vec2 App])
-(defn scale-transformed
-  [db id ratio relative]
-  (let [pivot (utils.math/v-add relative (vec (take 2 (:bbox (entity db id)))))]
-    (update-transform db id pivot
-                      (fn [p] (utils.transform/scale-about ratio p)))))
+(defn scale-reduce
+  [db ratio pivot-point recursive]
+  (let [ids-to-scale (cond->> (selected-ids db)
+                       recursive (set/union (descendant-ids db)))
+        ;; A transformed element also scales the subtree, so its descendants
+        ;; don't have to be scaled.
+        ids-to-scale (-> ids-to-scale
+                         (set/difference
+                          (into #{}
+                                (comp (filter #(transformed? (entity db %)))
+                                      (mapcat (partial descendant-ids db)))
+                                (selected-ids db))))]
+    (reduce (fn [db id]
+              (let [el (entity db id)]
+                (if (and (= (:tag el) :g)
+                         (not (:locked el))
+                         (not (transformed? el)))
+                  (scale-group db id ratio pivot-point ids-to-scale)
+                  (scale-leaf db id ratio pivot-point))))
+            db ids-to-scale)))
 
 (m/=> scale [:-> App Vec2 Vec2 boolean? App])
 (defn scale
   [db ratio pivot-point recursive]
-  (let [ratio (mapv #(if (or (infinite? %) (js/isNaN %)) 1 %) ratio)
-        top-ids (top-ancestor-ids db)
-        ids-to-scale (cond->> (selected-ids db)
-                       recursive (set/union (descendant-ids db)))
-        origins (->> ids-to-scale
-                     (keep (fn [id]
-                             (when-let [bb (:bbox (entity db id))]
-                               [id (into [] (take 2 bb))])))
-                     (into {}))
-        get-pivot (scale-pivot pivot-point origins top-ids)]
-    (reduce (fn [db id]
-              (let [el (entity db id)
-                    pivot (some->> (get-pivot db id)
-                                   (container-scale-offset db id))]
-                (cond
-                  (and (= (:tag el) :g)
-                       (not (:locked el))
-                       (not (transformed? el))
-                       pivot)
-                  (scale-group db id ratio (local-point db id pivot-point)
-                               ids-to-scale)
-
-                  (and (transformed? el)
-                       (get-pivot db id)
-                       (:bbox el))
-                  (scale-transformed db id ratio (get-pivot db id))
-
-                  pivot
-                  (update-el db id element.hierarchy/scale ratio pivot)
-
-                  :else
-                  db)))
-            db
-            ids-to-scale)))
+  (scale-reduce db
+                (mapv #(if (or (infinite? %) (js/isNaN %)) 1 %) ratio)
+                pivot-point
+                recursive))
 
 (m/=> rotate [:function
               [:-> App number? App]

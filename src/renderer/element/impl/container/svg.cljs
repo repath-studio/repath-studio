@@ -13,6 +13,7 @@
    [renderer.i18n.views :as i18n.views]
    [renderer.input.impl.pointer :as input.impl.pointer]
    [renderer.utils.element :as utils.element]
+   [renderer.utils.length :as utils.length]
    [renderer.utils.transform :as utils.transform]))
 
 (hierarchy/derive! :svg ::element.hierarchy/container)
@@ -50,8 +51,11 @@
      (/ h d)]))
 
 (defn render-label
-  [{:keys [el label-anchor pointer-handler zoom]}]
-  (let [label-transform (-> (utils.element/transform-attr el)
+  [el zoom pointer-handler]
+  (let [{:keys [x y]} (:attrs el)
+        [x y] (mapv utils.length/unit->px [x y])
+        label-anchor [x (- y (/ 10 zoom))]
+        label-transform (-> (utils.element/transform-attr el)
                             (utils.transform/unscale-at label-anchor)
                             (utils.transform/->str))]
     [:text
@@ -81,15 +85,11 @@
               rect-attrs (select-keys attrs [:x :y :width :height])
               active-filter @(rf/subscribe [::a11y.subs/active-filter])
               zoom @(rf/subscribe [::document.subs/zoom])
-              label-anchor [(:x rect-attrs) (- (:y rect-attrs) (/ 10 zoom))]
               pointer-handler (partial input.impl.pointer/handler! el)
               shadow-size (/ 2 zoom)
               [x y w h] (viewport-rect el)]
           [:g
-           [render-label {:el el
-                          :label-anchor label-anchor
-                          :pointer-handler pointer-handler
-                          :zoom zoom}]
+           [render-label el zoom pointer-handler]
 
            [shadow rect-attrs shadow-size (:transform attrs)]
 

@@ -17,6 +17,12 @@
   (every? (fn [[x t]] (< (Math/abs (- x t)) EPSILON))
           (map vector m identity-transform)))
 
+(m/=> axis-aligned? [:-> TransformationMatrix boolean?])
+(defn axis-aligned?
+  [[_a b c _d _e _f]]
+  (and (< (Math/abs b) EPSILON)
+       (< (Math/abs c) EPSILON)))
+
 (m/=> point [:-> TransformationMatrix Vec2 Vec2])
 (defn point
   [[a b c d e f] [x y]]
@@ -312,7 +318,7 @@
 
 (defn ->num
   [v]
-  (js/parseFloat (.toFixed v 3)))
+  (js/parseFloat (.toFixed v 6)))
 
 (defn op->string
   [[op-type & args]]
