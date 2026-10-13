@@ -12,6 +12,7 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.transform.core :as-alias transform]
+   [renderer.tool.views :as tool.views]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.math :as utils.math]
    [renderer.views :as views]))
@@ -21,7 +22,7 @@
   (i18n.views/t [::scale
                  [:div "Hold %1 to lock proportions, %2 to scale in place,
                         %3 to also scale children."]]
-                [[views/kbd "Ctrl"]
+                [[tool.views/primary-mod-key]
                  [views/kbd "⇧"]
                  [views/kbd "Alt"]]))
 
@@ -130,7 +131,7 @@
 (m/=> ratio-locked? [:-> App any? boolean?])
 (defn ratio-locked?
   [db e]
-  (boolean (or (:ctrl-key e)
+  (boolean (or (input.handlers/primary-mod? db e)
                (input.handlers/multi-touch? db)
                (element.handlers/ratio-locked? db)
                (document.handlers/attr db ::ratio-locked))))

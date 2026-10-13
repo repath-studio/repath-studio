@@ -9,14 +9,14 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.edit.core :as-alias edit]
+   [renderer.tool.views :as tool.views]
    [renderer.utils.extra :refer [rpartial]]
-   [renderer.utils.math :as utils.math]
-   [renderer.views :as views]))
+   [renderer.utils.math :as utils.math]))
 
 (defmethod tool.hierarchy/help [::edit/edit :edit]
   []
   (i18n.views/t [::help-edit "Hold %1 to restrict direction."]
-                [[views/kbd "Ctrl"]]))
+                [[tool.views/primary-mod-key]]))
 
 (defn update-element
   [db el offset lock?]
@@ -29,8 +29,9 @@
 
 (defmethod tool.hierarchy/on-drag [::edit/edit :edit]
   [db e]
-  (let [{:keys [shift-key ctrl-key]} e
-        lock? (or ctrl-key (input.handlers/multi-touch? db))
+  (let [{:keys [shift-key]} e
+        lock? (or (input.handlers/primary-mod? db e)
+                  (input.handlers/multi-touch? db))
         {:keys [id parent]} (:clicked-element db)
         db (history.handlers/reset-state db)
         handle-selected? (element.handlers/handle-selected? db parent id)

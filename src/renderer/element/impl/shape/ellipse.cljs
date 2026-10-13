@@ -14,7 +14,8 @@
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
    [renderer.utils.math :as utils.math]
-   [renderer.utils.svg :as utils.svg]))
+   [renderer.utils.svg :as utils.svg]
+   [renderer.utils.transform :as utils.transform]))
 
 (hierarchy/derive! :ellipse ::element.hierarchy/shape)
 
@@ -42,7 +43,8 @@
   (let [[x y] ratio
         {{:keys [stroke-width]} :attrs} el
         padding (/ (utils.length/unit->px stroke-width) 2)
-        dimensions (-> el element.hierarchy/bbox utils.bounds/->dimensions)
+        dimensions (utils.bounds/->dimensions
+                    (utils.element/local-bbox el))
         update-size (fn [ratio size]
                       (- (* (+ size padding) (abs ratio)) padding))
         pivot-point (->> (utils.math/v-div dimensions 2)
@@ -54,14 +56,20 @@
         (element.hierarchy/translate offset))))
 
 (defmethod element.hierarchy/bbox :ellipse
-  [el]
+  [el transform]
   (let [{{:keys [cx cy rx ry stroke-width]} :attrs} el
         rx (or rx ry)
         ry (or ry rx)
         [cx cy rx ry stroke-width] (->> [cx cy rx ry stroke-width]
                                         (map utils.length/unit->px))
-        padding (/ stroke-width 2)]
-    [(- cx rx padding) (- cy ry padding) (+ cx rx padding) (+ cy ry padding)]))
+        [a b c d _e _f] transform
+        [center-x center-y] (utils.transform/point transform [cx cy])
+        rx (+ rx (/ stroke-width 2))
+        ry (+ ry (/ stroke-width 2))
+        half-x (Math/sqrt (+ (* a a rx rx) (* c c ry ry)))
+        half-y (Math/sqrt (+ (* b b rx rx) (* d d ry ry)))]
+    [(- center-x half-x) (- center-y half-y)
+     (+ center-x half-x) (+ center-y half-y)]))
 
 (defmethod element.hierarchy/path :ellipse
   [el]
@@ -104,14 +112,12 @@
       :parent (:id el)
       :position [(+ cx rx) cy]
       :id :rx
-      :cursor "ew-resize"
       :label [::rx-handle "x radius handle"]}
      {:type :handle
       :action :edit
       :parent (:id el)
       :position [cx (- cy ry)]
       :id :ry
-      :cursor "ns-resize"
       :label [::ry-handle "y radius handle"]}]))
 
 (defmethod element.hierarchy/render-edit :ellipse
@@ -119,7 +125,7 @@
   (let [transform @(rf/subscribe [::element.subs/transform (:id el)])
         {{:keys [cx cy rx ry]} :attrs} el
         [cx cy rx ry] (mapv utils.length/unit->px [cx cy rx ry])
-        wpoint (partial utils.element/transform-point transform)
+        wpoint (partial utils.transform/point transform)
         center (wpoint [cx cy])
         edge-x (wpoint [(+ cx rx) cy])
         edge-y (wpoint [cx (- cy ry)])

@@ -5,19 +5,20 @@
    [renderer.db :refer [BBox Orientation Vec2]]
    [renderer.element.handlers :as element.handlers]
    [renderer.i18n.views :as i18n.views]
+   [renderer.input.handlers :as input.handlers]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.transform.core :as-alias transform]
    [renderer.tool.impl.base.transform.translate :as transform.translate]
+   [renderer.tool.views :as tool.views]
    [renderer.utils.bounds :as utils.bounds]
-   [renderer.utils.math :as utils.math]
-   [renderer.views :as views]))
+   [renderer.utils.math :as utils.math]))
 
 (defmethod tool.hierarchy/help [::transform/transform :edit]
   []
   (i18n.views/t [::help-edit "Hold %1 to restrict direction."]
-                [[views/kbd "Ctrl"]]))
+                [[tool.views/primary-mod-key]]))
 
 (m/=> translate-offset [:-> App Vec2 [:maybe Orientation] BBox App])
 (defn translate-offset
@@ -34,7 +35,8 @@
   [db e]
   (let [bbox (element.handlers/bbox db)
         delta (tool.handlers/pointer-delta db)
-        axis (when (:ctrl-key e) (transform.translate/direction delta))]
+        axis (when (input.handlers/primary-mod? db e)
+               (transform.translate/direction delta))]
     (-> db
         (assoc :anchor-offset (:anchor-point db))
         (translate-offset delta axis bbox)

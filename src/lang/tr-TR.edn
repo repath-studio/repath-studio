@@ -105,6 +105,7 @@
   :create "%1 oluştur"
   :import-svg "SVG içe aktar"
   :set-parent "Ebeveyn ayarla"
+  :rotate-clockwise "90° saat yönünde döndür"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Kombine"
   :break-apart "Parçalara Ayır"
@@ -131,14 +132,17 @@
   :lower "Arkaya gönder"
   :lower-to-bottom "En arkaya gönder"
   :object-to-path "Nesneyi yola dönüştür"
+  :flip-horizontal "Yatay ters çevir"
   :paste "Yapıştır"
   :paste-in-place "Yerinde yapıştır"
   :paste-styles "Stilleri yapıştır"
   :path-flatten "Düzleştir"
   :path-reverse "Ters çevir"
+  :flip-vertical "Dikey ters çevir"
   :path-simplify "Basitleştir"
   :path-smooth "Yumuşat"
   :raise "Öne getir"
+  :rotate-counterclockwise "90° saat yönünün tersine döndür"
   :raise-to-top "En öne getir"
   :stroke-to-path "Çizgiyi yola dönüştür"
   :ungroup "Grubu çöz"
@@ -543,6 +547,9 @@
   :convert-segment "Segmenti dönüştür"
   :open-command-specification "Komut belirtimini aç"}
 
+ :renderer.attribute.impl.transform
+ {:edit "Dönüşümü düzenle"}
+
  :renderer.attribute.impl.length
  {:increase "Artır"
   :decrease "Azalt"}
@@ -726,6 +733,12 @@
   :error-loading "Belge yüklenirken hata oluştu"
   :unsupported-or-corrupted "Dosya desteklenmiyor veya bozuk görünüyor."}
 
+ :renderer.tool.impl.base.transform.rotate
+ {:rotate [:div "Seçimi pivot noktası etrafında döndürmek için sürükleyin.
+                 15°'lik adımlara oturtmak için %1 tuşunu basılı tutun."]
+  :rotate-handle "döndürme tutamacı"
+  :rotate-selection "Seçimi döndür"}
+
  :renderer.document.views
  {:open-directory "İçeren dizini aç"
   :close "Kapat"
@@ -848,6 +861,7 @@
 
  :renderer.element.core
  {:copy "Kopyala"
+  :transform "Dönüştür"
   :index-operations "İndeks İşlemleri"
   :boolean-operations "Boole İşlemleri"
   :horizontal-alignment "Yatay Hizalama"

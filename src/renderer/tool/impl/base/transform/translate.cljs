@@ -7,22 +7,25 @@
    [renderer.element.handlers :as element.handlers]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
+   [renderer.input.handlers :as input.handlers]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.transform.core :as-alias transform]
    [renderer.tool.impl.base.transform.select :as transform.select]
+   [renderer.tool.views :as tool.views]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.extra :refer [rpartial]]
    [renderer.utils.math :as utils.math]
+   [renderer.utils.transform :as utils.transform]
    [renderer.views :as views]))
 
 (defmethod tool.hierarchy/help [::transform/transform :translate]
   []
   (i18n.views/t [::translate
                  [:div "Hold %1 to restrict direction, and %2 to clone."]]
-                [[views/kbd "Ctrl"]
+                [[tool.views/primary-mod-key]
                  [views/kbd "Alt"]]))
 
 (m/=> swap-parent [:-> App ElementId Element App])
@@ -31,19 +34,17 @@
   (let [{:keys [local-pointer-pos]} db
         transform (element.handlers/transform db id)
         db (element.handlers/set-parent db id (:id hovered-svg))
-        offset (->> local-pointer-pos
+        updated-transform (element.handlers/transform db id)
+        landed (->> local-pointer-pos
                     (utils.element/untransform-point transform)
-                    (utils.element/transform-point
-                     (element.handlers/transform db id))
-                    (utils.math/v-sub local-pointer-pos)
-                    (element.handlers/container-scale-offset db id))]
+                    (utils.transform/point updated-transform))
+        offset (utils.math/v-sub local-pointer-pos landed)]
     (element.handlers/translate db id offset)))
 
 (m/=> translate-el [:-> App ElementId map? App])
 (defn translate-el
   [db id {:keys [offset hovered-svg auto-parent]}]
-  (let [el (element.handlers/entity db id)
-        offset (element.handlers/container-scale-offset db id offset)]
+  (let [el (element.handlers/entity db id)]
     (cond-> db
       :always
       (element.handlers/translate id offset)
@@ -73,7 +74,8 @@
         auto-parent? (and (contains? #{:translate :clone} (:state db))
                           (not= (:id parent-el) (:id hovered-svg))
                           (not (next parent-ids))
-                          (utils.element/container? parent-el))
+                          (or (utils.element/svg? parent-el)
+                              (utils.element/root? parent-el)))
         offset (case axis
                  :horizontal [offset-x 0]
                  :vertical [0 offset-y]
@@ -85,17 +87,18 @@
 
 (defmethod tool.hierarchy/on-drag [::transform/transform :translate]
   [db e]
-  (let [{:keys [shift-key ctrl-key alt-key]} e
+  (let [{:keys [shift-key alt-key]} e
         delta (tool.handlers/pointer-delta db)
         selected-elements (element.handlers/selected db)
-        locked? (every? :locked selected-elements)]
+        locked? (every? :locked selected-elements)
+        primary-mod? (input.handlers/primary-mod? db e)]
     (if alt-key
       (tool.handlers/set-state db :clone)
       (-> db
           (history.handlers/reset-state)
           (transform.select/select-element shift-key)
-          (translate delta ctrl-key)
-          (snap.handlers/snap-with translate ctrl-key)
+          (translate delta primary-mod?)
+          (snap.handlers/snap-with translate primary-mod?)
           (tool.handlers/set-cursor (if locked? "not-allowed" "move"))))))
 
 (defmethod tool.hierarchy/on-drag-end [::transform/transform :translate]

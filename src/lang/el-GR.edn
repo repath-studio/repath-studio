@@ -106,6 +106,7 @@
   :create "Δημιουργία %1"
   :import-svg "Εισαγωγή svg"
   :set-parent "Ορισμός γονέα"
+  :rotate-clockwise "Περιστροφή 90° δεξιόστροφα"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Συνδυασμός"
   :break-apart "Διάσπαση"
@@ -132,14 +133,17 @@
   :lower "Κατέβασμα"
   :lower-to-bottom "Μετακίνση προς τα κάτω"
   :object-to-path "Μετατροπή αντικειμένου σε διαδρομή"
+  :flip-horizontal "Αντιστροφή οριζόντια"
   :paste "Επικόλληση"
   :paste-in-place "Επικόλληση επί τόπου"
   :paste-styles "Επικόλληση μορφοποιήσεων"
   :path-flatten "Επιπεδοποίηση"
   :path-reverse "Αντιστροφή"
+  :flip-vertical "Αντιστροφή κατακόρυφα"
   :path-simplify "Απλοποίηση"
   :path-smooth "Εξομάλυνση"
   :raise "Ανέβασμα"
+  :rotate-counterclockwise "Περιστροφή 90° αριστερόστροφα"
   :raise-to-top "Μετακίνηση προς τα πάνω"
   :stroke-to-path "Μετατροπή περιγράμματος σε διαδρομή"
   :ungroup "Αποομαδοποίηση"
@@ -568,6 +572,9 @@
   :convert-segment "Μετατροπή τμήματος"
   :open-command-specification "Άνοιγμα προδιαγραφής εντολής"}
 
+ :renderer.attribute.impl.transform
+ {:edit "Επεξεργασία μετασχηματισμού"}
+
  :renderer.attribute.impl.length
  {:increase "Αύξηση"
   :decrease "Μείωση"}
@@ -757,6 +764,12 @@
   :unsupported-or-corrupted "Ο τύπος αρχείου δεν υποστηρίζεται ή το αρχείο είναι
                              κατεστραμμένο."}
 
+ :renderer.tool.impl.base.transform.rotate
+ {:rotate [:div "Σύρετε για να περιστρέψετε την επιλογή γύρω από το
+                 σημείο περιστροφής. Πιέστε %1 για προσκόλληση σε βήματα 15°."]
+  :rotate-handle "ξήνωμα περιστροφής"
+  :rotate-selection "Περιστροφή επιλογής"}
+
  :renderer.document.views
  {:open-directory "Άνοιγμα φακέλου προέλευσης"
   :close "Κλείσμο"
@@ -879,6 +892,7 @@
 
  :renderer.element.core
  {:copy "Αντιγραφή"
+  :transform "Μετασχηματισμός"
   :index-operations "Δημιουργία Ευρετηρίου"
   :boolean-operations "Λογικές Πράξεις"
   :horizontal-alignment "Οριζόντια Ευθυγράμμιση"

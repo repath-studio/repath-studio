@@ -14,7 +14,8 @@
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
    [renderer.utils.math :as utils.math]
-   [renderer.utils.path :as utils.path]))
+   [renderer.utils.path :as utils.path]
+   [renderer.utils.transform :as utils.transform]))
 
 (hierarchy/derive! :brush ::element.hierarchy/custom)
 
@@ -129,20 +130,23 @@
                    :on-pointer-up pointer-handler
                    :on-pointer-down pointer-handler
                    :on-pointer-move pointer-handler}
-                  (select-keys attrs [:id :class :opacity :fill]))]))
+                  (select-keys attrs [:id :class :opacity :fill :transform]))]))
 
 (defn points->vec
   [points]
   (utils.attribute/points->vec points 3))
 
 (defmethod element.hierarchy/bbox :brush
-  [el]
+  [el transform]
   (let [points (-> el :attrs :points points->vec)
-        min-x (apply min (map #(utils.length/unit->px (first %)) points))
-        min-y (apply min (map #(utils.length/unit->px (second %)) points))
-        max-x (apply max (map #(utils.length/unit->px (first %)) points))
-        max-y (apply max (map #(utils.length/unit->px (second %)) points))]
-    [min-x min-y max-x max-y]))
+        pts (mapv (fn [[x y _]]
+                    (utils.transform/point transform
+                                           [(utils.length/unit->px x)
+                                            (utils.length/unit->px y)]))
+                  points)
+        xs (map first pts)
+        ys (map second pts)]
+    [(apply min xs) (apply min ys) (apply max xs) (apply max ys)]))
 
 (defn translate
   [[offset-x offset-y] points point]
@@ -175,7 +179,7 @@
 
 (defmethod element.hierarchy/scale :brush
   [el ratio pivot-point]
-  (let [bbox-min (take 2 (element.hierarchy/bbox el))
+  (let [bbox-min (take 2 (utils.element/local-bbox el))
         offset (utils.element/scale-offset ratio pivot-point)]
     (update-in el [:attrs :points] (partial scale-el ratio bbox-min offset))))
 

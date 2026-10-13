@@ -41,11 +41,11 @@
     (element.handlers/local-point db)
 
     (input.handlers/snap-to-angle? db e)
-    (input.handlers/snap-angle (->> (element.handlers/selected db)
-                                    first :attrs :points
-                                    (utils.attribute/points->vec)
-                                    pop peek
-                                    (mapv utils.length/unit->px)))
+    (input.handlers/snap-point-to-angle (->> (element.handlers/selected db)
+                                             first :attrs :points
+                                             (utils.attribute/points->vec)
+                                             pop peek
+                                             (mapv utils.length/unit->px)))
 
     :always
     (mapv utils.attribute/->fixed)))

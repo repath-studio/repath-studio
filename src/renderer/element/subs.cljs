@@ -128,11 +128,6 @@
  :-> utils.element/united-bbox)
 
 (rf/reg-sub
- ::local-bbox
- (fn [db [_ id]]
-   (element.handlers/local-bbox db id)))
-
-(rf/reg-sub
  ::transform
  (fn [db [_ id]]
    (element.handlers/transform db id)))

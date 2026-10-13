@@ -106,6 +106,7 @@
   :create "Crea %1"
   :import-svg "Importa svg"
   :set-parent "Imposta genitore"
+  :rotate-clockwise "Ruota di 90° in senso orario"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Combina"
   :break-apart "Separa"
@@ -132,14 +133,17 @@
   :lower "Porta dietro"
   :lower-to-bottom "Porta in fondo"
   :object-to-path "Oggetto a tracciato"
+  :flip-horizontal "Inverti in orizzontale"
   :paste "Incolla"
   :paste-in-place "Incolla in posizione"
   :paste-styles "Incolla stili"
   :path-flatten "Appiattisci"
   :path-reverse "Inverti"
+  :flip-vertical "Inverti in verticale"
   :path-simplify "Semplifica"
   :path-smooth "Arrotonda"
   :raise "Porta avanti"
+  :rotate-counterclockwise "Ruota di 90° in senso antiorario"
   :raise-to-top "Porta in primo piano"
   :stroke-to-path "Contorno a tracciato"
   :ungroup "Separa"
@@ -561,6 +565,9 @@
   :convert-segment "Converti segmento"
   :open-command-specification "Apri specifica del comando"}
 
+ :renderer.attribute.impl.transform
+ {:edit "Modifica trasformazione"}
+
  :renderer.attribute.impl.length
  {:increase "Aumenta"
   :decrease "Diminuisci"}
@@ -748,6 +755,12 @@
   :error-loading "Errore durante il caricamento del documento"
   :unsupported-or-corrupted "Il file sembra non supportato o danneggiato."}
 
+ :renderer.tool.impl.base.transform.rotate
+ {:rotate [:div "Trascina per ruotare la selezione attorno al punto di pivot.
+                 Tieni premuto %1 per agganciare a incrementi di 15°."]
+  :rotate-handle "maniglia di rotazione"
+  :rotate-selection "Ruota selezione"}
+
  :renderer.document.views
  {:open-directory "Apri directory contenente"
   :close "Chiudi"
@@ -870,6 +883,7 @@
 
  :renderer.element.core
  {:copy "Copia"
+  :transform "Trasforma"
   :index-operations "Operazioni di Indice"
   :boolean-operations "Operazioni Booleane"
   :horizontal-alignment "Allineamento Orizzontale"

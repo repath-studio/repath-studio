@@ -6,7 +6,7 @@
    arguments can be passed to the multimethods, but the first argument is always
    the db, or a direct [tool state] vector.
 
-   See the :default definitions for the input arguments. For input related 
+   See the :default definitions for the input arguments. For input related
    events, the second argument is always the event map."
   (:require
    [renderer.hierarchy :as hierarchy]))
@@ -28,12 +28,12 @@
 (defmulti snapping-points dispatch :hierarchy hierarchy/hierarchy)
 (defmulti snapping-elements dispatch :hierarchy hierarchy/hierarchy)
 (defmulti on-delete dispatch :hierarchy hierarchy/hierarchy)
+(defmulti help dispatch :hierarchy hierarchy/hierarchy)
 (defmulti on-activate :tool :hierarchy hierarchy/hierarchy)
 (defmulti on-deactivate :tool :hierarchy hierarchy/hierarchy)
 (defmulti tool-options identity :hierarchy hierarchy/hierarchy)
 (defmulti render identity :hierarchy hierarchy/hierarchy)
 (defmulti attributes-panel identity :hierarchy hierarchy/hierarchy)
-(defmulti help (fn [tool state] [tool state]) :hierarchy hierarchy/hierarchy)
 
 (defmethod on-pointer-down :default [db _e] db)
 (defmethod on-pointer-up :default [db _e] db)
@@ -48,8 +48,8 @@
 (defmethod snapping-points :default [_db])
 (defmethod snapping-elements :default [_db])
 (defmethod on-delete :default [db] db)
+(defmethod help :default [_db])
 (defmethod on-activate :default [db & {:as _props}] db)
 (defmethod on-deactivate :default [db] db)
 (defmethod tool-options :default [_tag])
 (defmethod render :default [_tag])
-(defmethod help :default [_tool _state])

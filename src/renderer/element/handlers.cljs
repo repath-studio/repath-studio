@@ -8,10 +8,12 @@
    [malli.error :as m.error]
    [renderer.app.db :refer [App]]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
-   [renderer.db :refer [BBox BooleanOperation PathManipulation Vec2 Transform]]
+   [renderer.db :refer [BBox BooleanOperation Orientation PathManipulation Vec2
+                        TransformationMatrix]]
    [renderer.element.db
     :as element.db
-    :refer [ElementAttrs Element ElementId ElementTag AnimationTag Direction]]
+    :refer [ElementAttrs Element ElementId ElementTag AnimationTag
+            Direction]]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.snap.db :refer [SnapOptions]]
    [renderer.tool.db :refer [Handle HandleId]]
@@ -21,6 +23,7 @@
    [renderer.utils.extra :refer [rpartial]]
    [renderer.utils.math :as utils.math]
    [renderer.utils.path :as utils.path]
+   [renderer.utils.transform :as utils.transform]
    [renderer.utils.vec :as utils.vec]))
 
 (m/=> path [:function
@@ -121,53 +124,48 @@
   ([db]
    (into #{} (parent-ids) (entities db))))
 
+(declare ancestor-ids)
+
+(m/=> first-common-ancestor-id [:-> App [:set ElementId] [:maybe ElementId]])
+(defn first-common-ancestor-id
+  [db ids]
+  (let [chains (mapv (fn [id] (vec (reverse (ancestor-ids db id)))) ids)]
+    (when (seq chains)
+      (some (fn [i]
+              (let [ids (mapv #(nth % i) chains)]
+                (when (apply = ids) (first ids))))
+            (reverse (range (apply min (map count chains))))))))
+
 (m/=> parent [:function
               [:-> App [:maybe Element]]
               [:-> App [:maybe ElementId] [:maybe Element]]])
 (defn parent
   ([db]
-   (let [ids (parent-ids db)]
-     (if (= (count ids) 1)
-       (entity db (first ids))
-       (root db))))
+   (if-let [id (first-common-ancestor-id db (selected-ids db))]
+     (entity db id)
+     (root db)))
   ([db id]
    (some->> (entity db id)
             :parent
             (entity db))))
 
-(m/=> parent-container [:-> App ElementId [:maybe Element]])
-(defn parent-container
-  [db id]
-  (when-let [parent-el (parent db id)]
-    (if (utils.element/container? parent-el)
-      parent-el
-      (recur db (:id parent-el)))))
-
 (m/=> transform [:function
-                 [:-> App Transform]
-                 [:-> App ElementId Transform]])
+                 [:-> App TransformationMatrix]
+                 [:-> App ElementId TransformationMatrix]])
 (defn transform
-  "The cumulative transform of the element's parent containers."
   ([db]
    (transform db (first (selected-ids db))))
   ([db id]
-   (loop [default-transform [1 1 0 0]
-          container (parent-container db id)]
-     (if container
-       (recur (utils.element/compose-transforms
-               (utils.element/transform container)
-               default-transform)
-              (parent-container db (:id container)))
-       default-transform))))
+   (let [el (entity db id)]
+     (if-let [parent-id (:parent el)]
+       (utils.transform/compose (transform db parent-id)
+                                (utils.element/own-transform el))
+       (utils.element/own-transform el)))))
 
 (m/=> container-local-point [:-> App ElementId Vec2 Vec2])
 (defn container-local-point
   [db container-id point]
-  (let [container (entity db container-id)]
-    (utils.element/untransform-point (utils.element/compose-transforms
-                                      (transform db container-id)
-                                      (utils.element/transform container))
-                                     point)))
+  (utils.element/untransform-point (transform db container-id) point))
 
 (m/=> local-point [:function
                    [:-> App Vec2 Vec2]
@@ -176,45 +174,75 @@
   ([db point]
    (local-point db (first (selected-ids db)) point))
   ([db id point]
-   (let [container (parent-container db id)]
-     (container-local-point db (:id container) point))))
+   (utils.element/untransform-point (transform db id) point)))
 
 (m/=> container-scale-offset [:-> App ElementId Vec2 Vec2])
 (defn container-scale-offset
   [db id offset]
-  (let [[sx sy _ _] (transform db id)
-        [x y] offset]
-    [(/ x sx) (/ y sy)]))
+  (utils.transform/offset (transform db id) offset))
 
 (m/=> local-bbox [:-> App ElementId [:maybe BBox]])
 (defn local-bbox
   [db id]
   (let [el (entity db id)]
-    (if (= (:tag el) :g)
+    (cond
+      (= (:tag el) :g)
       (let [children (:children el)]
         (when (seq children)
           (->> (entities db children)
-               (map #(if (= (:tag %) :g)
-                       (local-bbox db (:id %))
-                       (element.hierarchy/bbox %)))
+               (map (fn [child]
+                      (let [child-bbox (if (= (:tag child) :g)
+                                         (local-bbox db (:id child))
+                                         (utils.element/local-bbox child))]
+                        (when child-bbox
+                          (-> (utils.element/transform-attr child)
+                              (utils.transform/aabb child-bbox))))))
+               (keep identity)
                (apply utils.bounds/union))))
-      (element.hierarchy/bbox el))))
+
+      :else
+      (utils.element/own-bbox el))))
 
 (m/=> world-bbox [:-> App ElementId [:maybe BBox]])
 (defn world-bbox
   [db id]
-  (let [bbox (local-bbox db id)]
-    (if-not bbox
-      bbox
-      (let [el-transform (transform db id)
-            [min-x min-y max-x max-y] bbox
-            [min-x' min-y'] (utils.element/transform-point el-transform
-                                                           [min-x min-y])
-            [max-x' max-y'] (utils.element/transform-point el-transform
-                                                           [max-x max-y])]
-        [min-x' min-y' max-x' max-y']))))
+  (let [el (entity db id)]
+    (cond
+      (= (:tag el) :g)
+      (let [child-bboxes (keep identity
+                               (map (partial world-bbox db)
+                                    (children-ids db id)))]
+        (when (seq child-bboxes)
+          (apply utils.bounds/union child-bboxes)))
+
+      (utils.element/svg? el)
+      (when-let [bbox (local-bbox db id)]
+        (utils.transform/aabb (transform db id) bbox))
+
+      :else
+      (element.hierarchy/bbox el (transform db id)))))
 
 (declare refresh-bbox)
+
+(m/=> transformed? [:-> Element boolean?])
+(defn transformed?
+  [el]
+  (not (-> (utils.element/transform-attr el)
+           (utils.transform/identity?))))
+
+(m/=> refresh-group-bbox [:-> App Element App])
+(defn refresh-group-bbox
+  [db parent-el]
+  (let [parent-path (path db (:id parent-el))]
+    (if (transformed? parent-el)
+      (if-let [bbox (world-bbox db (:id parent-el))]
+        (assoc-in db (conj parent-path :bbox) bbox)
+        (update-in db parent-path dissoc :bbox))
+      (if-let [bounds (seq (->> (:children parent-el)
+                                (entities db)
+                                (keep :bbox)))]
+        (assoc-in db (conj parent-path :bbox) (apply utils.bounds/union bounds))
+        (update-in db parent-path dissoc :bbox)))))
 
 (m/=> propagate-bbox [:-> App ElementId App])
 (defn propagate-bbox
@@ -222,16 +250,10 @@
   (loop [db db
          current-id id]
     (if-let [parent-el (parent db current-id)]
-      (-> (if (= (:tag parent-el) :g)
-            (let [bounds (->> (:children parent-el)
-                              (entities db)
-                              (keep :bbox))]
-              (if (seq bounds)
-                (->> (apply utils.bounds/union bounds)
-                     (update-in db (path db (:id parent-el)) assoc :bbox))
-                (update-in db (path db (:id parent-el)) dissoc :bbox)))
-            db)
-          (recur (:id parent-el)))
+      (recur (cond-> db
+               (= (:tag parent-el) :g)
+               (refresh-group-bbox parent-el))
+             (:id parent-el))
       db)))
 
 (m/=> refresh-bbox [:-> App ElementId App])
@@ -283,15 +305,6 @@
    (reduce (rpartial update-el f arg) db (selected-ids db)))
   ([db f arg & more]
    (reduce (apply rpartial update-el f arg more) db (selected-ids db))))
-
-(m/=> siblings-selected? [:-> App [:maybe boolean?]])
-(defn siblings-selected?
-  [db]
-  (let [ids (parent-ids db)]
-    (and (seq ids)
-         (empty? (rest ids))
-         (= (count (selected db))
-            (count (children-ids db (first ids)))))))
 
 (m/=> siblings [:function
                 [:-> App [:maybe [:vector ElementId]]]
@@ -464,6 +477,17 @@
      (apply update-el db id attribute.hierarchy/update-attr k f arg more)
      db)))
 
+(m/=> update-transform [:-> App ElementId Vec2 ifn? App])
+(defn update-transform
+  [db id pivot f]
+  (update-el db id
+             (fn [e]
+               (attribute.hierarchy/update-attr
+                e :transform
+                (f (utils.element/untransform-point
+                    (transform db (or (:parent e) (:id e)))
+                    pivot))))))
+
 (m/=> deselect [:function
                 [:-> App App]
                 [:-> App ElementId App]])
@@ -519,10 +543,16 @@
 (m/=> select-all [:-> App App])
 (defn select-all
   [db]
-  (let [ids (if (siblings-selected? db)
-              (children-ids db (:id (parent db (:id (parent db)))))
-              (siblings db))]
-    (reduce select db (remove (partial virtual? db) ids))))
+  (let [parent-id (:id (parent db))
+        children (children-ids db parent-id)
+        all-selected? (= (count children)
+                         (count (filter
+                                 #(contains? (selected-ids db) %) children)))
+        grandparent-id (some-> (parent db parent-id) :id)
+        ids (if (and all-selected? grandparent-id)
+              (children-ids db grandparent-id)
+              children)]
+    (reduce select (deselect db) (remove (partial virtual? db) ids))))
 
 (m/=> selected-tags [:-> App [:set ElementTag]])
 (defn selected-tags
@@ -720,15 +750,30 @@
                  [:-> App Vec2 App]
                  [:-> App ElementId Vec2 App]])
 (defn translate
-  "Moves elements by a given offset."
   ([db offset]
    (reduce (rpartial translate offset) db (top-ancestor-ids db)))
   ([db id offset]
-   (let [{:keys [tag children locked]} (entity db id)]
-     (if (and (= tag :g) (not locked))
-       (-> (reduce (rpartial translate offset) db children)
+   (let [el (entity db id)]
+     (cond
+       (and (= (:tag el) :g)
+            (not (:locked el))
+            (not (transformed? el)))
+       (-> (reduce (rpartial translate offset) db (:children el))
            (refresh-bbox id))
-       (update-el db id element.hierarchy/translate offset)))))
+
+       :else
+       (update-el db id
+                  (fn [e]
+                    (if (transformed? e)
+                      (attribute.hierarchy/update-attr
+                       e :transform
+                       (utils.transform/translate
+                        (container-scale-offset
+                         db (or (:parent e) (:id e)) offset)))
+                      (element.hierarchy/translate
+                       e
+                       (container-scale-offset
+                        db (or (:parent e) (:id e)) offset)))))))))
 
 (m/=> place [:function
              [:-> App Vec2 App]
@@ -739,78 +784,113 @@
    (reduce (rpartial place position) db (top-ancestor-ids db)))
   ([db id position]
    (let [el (entity db id)
-         center (utils.bounds/center (element.hierarchy/bbox el))
+         center (utils.bounds/center (utils.element/local-bbox el))
          offset (utils.math/v-sub position center)]
      (translate db offset))))
 
-(m/=> scale-pivot [:-> Vec2 map? [:set ElementId] fn?])
-(defn scale-pivot
-  "Returns a function that calculates the scaling pivot point based on the
-   element's ancestry."
-  [pivot origins top-ids]
-  (fn [db id]
-    (when-let [el-origin (get origins id)]
-      (if (contains? top-ids id)
-        (utils.math/v-sub pivot el-origin)
-        (when-let [ancestor-origin (some #(get origins %) (ancestor-ids db id))]
-          (utils.math/v-sub ancestor-origin el-origin))))))
+(m/=> scale-by-transform [:-> App ElementId Vec2 Vec2 App])
+(defn scale-by-transform
+  [db id ratio pivot-point]
+  (let [el (entity db id)
+        p (transform db (or (:parent el) (:id el)))
+        m (utils.transform/compose
+           (utils.transform/inverse p)
+           (utils.transform/compose (utils.transform/scale-about ratio
+                                                                 pivot-point)
+                                    p))]
+    (update-el db id
+               (fn [e] (attribute.hierarchy/update-attr e :transform m)))))
+
+
+(m/=> transform-scale? [:-> App Element ElementId Vec2 boolean?])
+(defn transform-scale?
+  [db el id ratio]
+  (or (transformed? el)
+      (and (not (utils.transform/axis-aligned? (transform db id)))
+           (not= (first ratio) (second ratio)))))
+
+(m/=> scale-leaf [:-> App ElementId Vec2 Vec2 App])
+(defn scale-leaf
+  [db id ratio pivot-point]
+  (if-let [el-bbox (local-bbox db id)]
+    (let [el (entity db id)]
+      (if (transform-scale? db el id ratio)
+        (scale-by-transform db id ratio pivot-point)
+        (update-el db id element.hierarchy/scale ratio
+                   (utils.math/v-sub (local-point db id pivot-point)
+                                     (vec (take 2 el-bbox))))))
+    db))
 
 (m/=> scale-group [:-> App ElementId Vec2 Vec2 [:set ElementId] App])
 (defn scale-group
   [db id ratio pivot-point ids-to-scale]
-  (let [children (remove ids-to-scale (:children (entity db id)))
-        child-origins (->> children
-                           (keep (fn [child-id]
-                                   (when-let [bb (:bbox (entity db child-id))]
-                                     [child-id (local-point
-                                                db child-id
-                                                (into [] (take 2 bb)))])))
-                           (into {}))]
+  (let [children (remove ids-to-scale (:children (entity db id)))]
     (-> (reduce (fn [db child-id]
-                  (let [child-origin (get child-origins child-id)
-                        {:keys [tag locked]} (entity db child-id)]
-                    (cond
-                      (and (= tag :g) (not locked))
-                      (scale-group db child-id ratio pivot-point ids-to-scale)
-
-                      child-origin
-                      (update-el db child-id element.hierarchy/scale ratio
-                                 (utils.math/v-sub pivot-point child-origin))
-
-                      :else
-                      db)))
+                  (let [child (entity db child-id)]
+                    (if (and (= (:tag child) :g) (not (:locked child)))
+                      (scale-group db child-id ratio pivot-point
+                                   ids-to-scale)
+                      (scale-leaf db child-id ratio pivot-point))))
                 db children)
         (refresh-bbox id))))
+
+(defn scale-reduce
+  [db ratio pivot-point recursive]
+  (let [ids-to-scale (cond->> (selected-ids db)
+                       recursive (set/union (descendant-ids db)))
+        ;; A transformed element also scales the subtree, so its descendants
+        ;; don't have to be scaled.
+        ids-to-scale (-> ids-to-scale
+                         (set/difference
+                          (into #{}
+                                (comp (filter #(transformed? (entity db %)))
+                                      (mapcat (partial descendant-ids db)))
+                                (selected-ids db))))]
+    (reduce (fn [db id]
+              (let [el (entity db id)]
+                (if (and (= (:tag el) :g)
+                         (not (:locked el))
+                         (not (transformed? el)))
+                  (scale-group db id ratio pivot-point ids-to-scale)
+                  (scale-leaf db id ratio pivot-point))))
+            db ids-to-scale)))
 
 (m/=> scale [:-> App Vec2 Vec2 boolean? App])
 (defn scale
   [db ratio pivot-point recursive]
-  (let [ratio (mapv #(if (or (infinite? %) (js/isNaN %)) 1 %) ratio)
-        top-ids (top-ancestor-ids db)
-        ids-to-scale (cond->> (selected-ids db)
-                       recursive (set/union (descendant-ids db)))
-        origins (->> ids-to-scale
-                     (keep (fn [id]
-                             (when-let [bb (:bbox (entity db id))]
-                               [id (into [] (take 2 bb))])))
-                     (into {}))
-        get-pivot (scale-pivot pivot-point origins top-ids)]
-    (reduce (fn [db id]
-              (let [pivot (some->> (get-pivot db id)
-                                   (container-scale-offset db id))
-                    {:keys [tag locked]} (entity db id)]
-                (cond
-                  (and (= tag :g) (not locked) pivot)
-                  (scale-group db id ratio (local-point db id pivot-point)
-                               ids-to-scale)
+  (scale-reduce db
+                (mapv #(if (or (infinite? %) (js/isNaN %)) 1 %) ratio)
+                pivot-point
+                recursive))
 
-                  pivot
-                  (update-el db id element.hierarchy/scale ratio pivot)
+(m/=> rotate [:function
+              [:-> App number? App]
+              [:-> App number? Vec2 App]
+              [:-> App ElementId number? Vec2 App]])
+(defn rotate
+  ([db angle]
+   (rotate db angle (-> db bbox utils.bounds/center)))
+  ([db angle pivot]
+   (reduce (rpartial rotate angle pivot) db (top-ancestor-ids db)))
+  ([db id angle pivot]
+   (update-transform db id pivot
+                     (fn [p] (utils.transform/rotate angle
+                                                     (first p)
+                                                     (second p))))))
 
-                  :else
-                  db)))
-            db
-            ids-to-scale)))
+(m/=> flip [:function
+            [:-> App Orientation App]
+            [:-> App Orientation Vec2 App]
+            [:-> App ElementId Orientation Vec2 App]])
+(defn flip
+  ([db axis]
+   (flip db axis (-> db bbox utils.bounds/center)))
+  ([db axis pivot-point]
+   (reduce (rpartial flip axis pivot-point) db (top-ancestor-ids db)))
+  ([db id axis pivot-point]
+   (let [ratio (if (= :horizontal axis) [-1 1] [1 -1])]
+     (update-transform db id pivot-point
+                       (fn [p] (utils.transform/scale-about ratio p))))))
 
 (m/=> align [:function
              [:-> App Direction App]
@@ -862,7 +942,7 @@
     (not (or (utils.element/root? el) (:parent el)))
     (assoc :parent (:id (if (utils.element/top-level? el)
                           (root db)
-                          (if-let [el-bbox (element.hierarchy/bbox el)]
+                          (if-let [el-bbox (utils.element/local-bbox el)]
                             (overlapping-svg db el-bbox)
                             (root db)))))))
 
@@ -877,7 +957,7 @@
         child-els (-> (entities db (:children el))
                       (concat (:content el)))
         parent-el (entity db (:parent new-el))
-        [min-x min-y] (some-> parent-el element.hierarchy/bbox)
+        [min-x min-y] (some-> parent-el utils.element/local-bbox)
         is-translated (or (utils.element/svg? new-el)
                           (utils.element/root? new-el)
                           (:parent el))]
@@ -1088,13 +1168,16 @@
 (m/=> inherit-attrs [:-> App Element ElementId App])
 (defn inherit-attrs
   [db source-el id]
-  (reduce
-   (fn [db attr]
-     (let [source-attr (-> source-el :attrs attr)
-           get-value (fn [v] (if (empty? (str v)) source-attr v))]
-       (cond-> db
-         source-attr
-         (update-attr id attr get-value)))) db utils.attribute/presentation))
+  (let [style-attrs (disj utils.attribute/presentation :transform)]
+    (reduce
+     (fn [db attr]
+       (let [source-attr (-> source-el :attrs attr)
+             get-value (fn [v] (if (empty? (str v)) source-attr v))]
+         (cond-> db
+           source-attr
+           (update-attr id attr get-value))))
+     db
+     style-attrs)))
 
 (m/=> group [:function
              [:-> App App]
@@ -1103,9 +1186,21 @@
   ([db]
    (group db (top-selected-sorted-ids db)))
   ([db ids]
-   (let [db (add db {:tag :g
-                     :parent (:id (parent db))})
-         group-id (-> db selected-ids first)]
+   (let [parent-id (:id (parent db))
+         last-id (last ids)
+         last-index (children-index db last-id)
+         db (add db {:tag :g
+                     :parent parent-id})
+         group-id (-> db selected-ids first)
+         db (cond-> db
+              (and (some? last-index)
+                   (>= last-index 0)
+                   (= parent-id (:parent (entity db last-id))))
+              (update-prop parent-id :children
+                           (fn [children]
+                             (utils.vec/move children
+                                             (.indexOf children group-id)
+                                             last-index))))]
      (-> (reduce (rpartial set-parent group-id) db ids)
          (refresh-bbox group-id)))))
 
@@ -1117,19 +1212,28 @@
    (reduce ungroup db (selected-ids db)))
   ([db id]
    (let [{:keys [tag locked]
-          :as el} (entity db id)]
+          :as el} (entity db id)
+         group-transform (utils.element/transform-attr el)]
      (cond-> db
        (and (not locked) (= tag :g))
        (as-> db db
          (let [index (children-index db id)]
            (reduce
             (fn [db child-id]
-              (-> db
-                  (set-parent child-id (:parent el) index)
-                  ;; Group attributes are inherited by its children,
-                  ;; so we need to maintain the presentation attrs.
-                  (inherit-attrs el child-id)
-                  (select child-id)))
+              (cond-> db
+                :always
+                (set-parent child-id (:parent el) index)
+
+                ;; Compose group transform into each children.
+                (not (utils.transform/identity? group-transform))
+                (update-el child-id attribute.hierarchy/update-attr :transform
+                           group-transform)
+
+                ;; Group attributes are inherited by its children,
+                ;; so we need to maintain the presentation attrs.
+                :always
+                (-> (inherit-attrs el child-id)
+                    (select child-id))))
             db (reverse (children-ids db id))))
          (delete db id))))))
 
@@ -1150,10 +1254,10 @@
   (let [hickory (hickory/as-hickory (hickory/parse svg))
         zipper (hickory.zip/hickory-zip hickory)
         el (utils.element/find-svg zipper)]
-    (when (= :svg (:tag el))
+    (when (utils.element/svg? el)
       (let [el (-> el
                    (update :attrs dissoc :desc :version :xmlns)
-                   (assoc :bbox (element.hierarchy/bbox el)))]
+                   (assoc :bbox (utils.element/local-bbox el)))]
         {:elements [el]
          :bbox (:bbox el)}))))
 

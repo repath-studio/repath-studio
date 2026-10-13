@@ -105,6 +105,7 @@
   :create "%1 생성"
   :import-svg "SVG 가져오기"
   :set-parent "부모 설정"
+  :rotate-clockwise "90° 시계 방향 회전"
   :toggle-handle-selection "Toggle handle selection"
   :combine "결합"
   :break-apart "분리"
@@ -131,14 +132,17 @@
   :lower "뒤로"
   :lower-to-bottom "맨 뒤로"
   :object-to-path "객체를 패스로"
+  :flip-horizontal "수평 뒤집기"
   :paste "붙여넣기"
   :paste-in-place "제자리에 붙여넣기"
   :paste-styles "스타일 붙여넣기"
   :path-flatten "평면화"
   :path-reverse "역방향"
+  :flip-vertical "수직 뒤집기"
   :path-simplify "단순화"
   :path-smooth "매끄럽게"
   :raise "앞으로"
+  :rotate-counterclockwise "90° 반시계 방향 회전"
   :raise-to-top "맨 앞으로"
   :stroke-to-path "획을 패스로"
   :ungroup "그룹 해제"
@@ -506,6 +510,9 @@
   :convert-segment "세그먼트 변환"
   :open-command-specification "명령 사양 열기"}
 
+ :renderer.attribute.impl.transform
+ {:edit "변퉘 편집"}
+
  :renderer.attribute.impl.length
  {:increase "증가"
   :decrease "감소"}
@@ -682,6 +689,12 @@
   :error-loading "문서 로드 중 오류"
   :unsupported-or-corrupted "파일이 지원되지 않거나 손상된 것 같습니다."}
 
+ :renderer.tool.impl.base.transform.rotate
+ {:rotate [:div "드래그하면 선택이 피벗 포인트 주위를 회전합니다。
+                 %1을(를) 누르면 15° 단위로 스냅됩니다。"]
+  :rotate-handle "회전 핸들"
+  :rotate-selection "선택 회전"}
+
  :renderer.document.views
  {:open-directory "포함 디렉토리 열기"
   :close "닫기"
@@ -802,6 +815,7 @@
 
  :renderer.element.core
  {:copy "복사"
+  :transform "변환"
   :index-operations "인덱스 작업"
   :boolean-operations "부울 작업"
   :horizontal-alignment "수평 정렬"

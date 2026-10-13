@@ -47,7 +47,7 @@
         center (mapv utils.length/unit->px [cx cy])
         position (cond->> position
                    (input.handlers/snap-to-angle? db e)
-                   (input.handlers/snap-angle center))
+                   (input.handlers/snap-point-to-angle center))
         radius (utils.math/v-sub center position)
         [rx ry] (mapv (comp utils.attribute/->fixed abs) radius)]
     (element.handlers/update-selected db #(-> %

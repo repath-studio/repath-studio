@@ -104,6 +104,7 @@
   :create "إنشاء %1"
   :import-svg "استيراد svg"
   :set-parent "تعيين الأصل"
+  :rotate-clockwise "تدوير 90° مع اتجاه عقارب الساعة"
   :toggle-handle-selection "Toggle handle selection"
   :combine "دمج"
   :break-apart "فصل"
@@ -130,14 +131,17 @@
   :lower "خفض"
   :lower-to-bottom "خفض إلى الأسفل"
   :object-to-path "كائن إلى مسار"
+  :flip-horizontal "قلب أفقي"
   :paste "لصق"
   :paste-in-place "لصق في المكان"
   :paste-styles "لصق الأنماط"
   :path-flatten "تسطيح"
   :path-reverse "عكس"
+  :flip-vertical "قلب عمودي"
   :path-simplify "تبسيط"
   :path-smooth "تنعيم"
   :raise "رفع"
+  :rotate-counterclockwise "تدوير 90° عكس اتجاه عقارب الساعة"
   :raise-to-top "رفع إلى الأعلى"
   :stroke-to-path "خط إلى مسار"
   :ungroup "إلغاء التجميع"
@@ -526,6 +530,9 @@
   :convert-segment "تحويل مقطع"
   :open-command-specification "فتح مواصفات الأمر"}
 
+ :renderer.attribute.impl.transform
+ {:edit "تعديل التحويل"}
+
  :renderer.attribute.impl.length
  {:increase "زيادة"
   :decrease "تقليل"}
@@ -699,6 +706,12 @@
   :error-loading "خطأ أثناء تحميل المستند"
   :unsupported-or-corrupted "يبدو أن الملف غير مدعوم أو تالف."}
 
+ :renderer.tool.impl.base.transform.rotate
+ {:rotate [:div "اسحب لتدوير التحديد حول نقطة الارتكاز.
+                 اضغط %1 للتثبيت على زوايا 15°."]
+  :rotate-handle "مقبض التدوير"
+  :rotate-selection "تدوير التحديد"}
+
  :renderer.document.views
  {:open-directory "فتح المجلد المحتوي"
   :close "إغلاق"
@@ -820,6 +833,7 @@
 
  :renderer.element.core
  {:copy "نسخ"
+  :transform "تحويل"
   :index-operations "عمليات الفهرس"
   :boolean-operations "العمليات المنطقية"
   :horizontal-alignment "المحاذاة الأفقية"

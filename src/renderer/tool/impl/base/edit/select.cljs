@@ -3,14 +3,14 @@
    [malli.core :as m]
    [renderer.app.db :refer [App]]
    [renderer.element.handlers :as element.handlers]
-   [renderer.element.hierarchy :as element.hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.tool.db :refer [Handle]]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.edit.core :as-alias edit]
    [renderer.utils.bounds :as utils.bounds]
-   [renderer.utils.element :as utils.element]))
+   [renderer.utils.element :as utils.element]
+   [renderer.utils.transform :as utils.transform]))
 
 (m/=> selectable? [:-> App Handle boolean?])
 (defn selectable?
@@ -18,8 +18,9 @@
   (and (:select-box db)
        (let [{:keys [position parent]} handle
              position (-> (element.handlers/transform db parent)
-                          (utils.element/transform-point position))]
-         (-> (element.hierarchy/bbox (:select-box db))
+                          (utils.transform/point position))]
+         (-> (:select-box db)
+             (utils.element/local-bbox)
              (utils.bounds/contained-point? position)))))
 
 (m/=> reduce-by-area [:-> App ifn? App])

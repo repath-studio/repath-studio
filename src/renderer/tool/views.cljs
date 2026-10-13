@@ -276,3 +276,8 @@
                   (interpose [:span.v-divider])
                   (into [views/toolbar
                          {:class "bg-primary justify-center"}])))]))})))
+
+(defn primary-mod-key
+  []
+  (let [web-platform @(rf/subscribe [::app.subs/web-platform])]
+    [views/kbd (if (= web-platform "Mac") "⌘" "Ctrl")]))

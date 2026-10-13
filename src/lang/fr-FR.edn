@@ -106,6 +106,7 @@
   :create "Créer %1"
   :import-svg "Importer SVG"
   :set-parent "Définir le parent"
+  :rotate-clockwise "Pivoter de 90° dans le sens horaire"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Combiner"
   :break-apart "Séparer"
@@ -132,14 +133,17 @@
   :lower "Descendre"
   :lower-to-bottom "Envoyer à l'arrière-plan"
   :object-to-path "Objet vers tracé"
+  :flip-horizontal "Inverser horizontalement"
   :paste "Coller"
   :paste-in-place "Coller en place"
   :paste-styles "Coller les styles"
   :path-flatten "Aplatir"
   :path-reverse "Inverser"
+  :flip-vertical "Inverser verticalement"
   :path-simplify "Simplifier"
   :path-smooth "Lisser"
   :raise "Monter"
+  :rotate-counterclockwise "Pivoter de 90° dans le sens antihoraire"
   :raise-to-top "Monter au premier plan"
   :stroke-to-path "Contour vers tracé"
   :ungroup "Dégrouper"
@@ -557,6 +561,9 @@
   :convert-segment "Convertir le segment"
   :open-command-specification "Ouvrir la spécification de commande"}
 
+ :renderer.attribute.impl.transform
+ {:edit "Modifier la transformation"}
+
  :renderer.attribute.impl.length
  {:increase "Augmenter"
   :decrease "Diminuer"}
@@ -744,6 +751,12 @@
   :unsupported-or-corrupted "Le fichier semble être non pris en charge ou
                              corrompu."}
 
+ :renderer.tool.impl.base.transform.rotate
+ {:rotate [:div "Glissez pour faire pivoter la sélection autour du point de
+                 pivot. Maintenez %1 pour ajuster par pas de 15°."]
+  :rotate-handle "poignée de rotation"
+  :rotate-selection "Pivoter la sélection"}
+
  :renderer.document.views
  {:open-directory "Ouvrir le répertoire contenant"
   :close "Fermer"
@@ -867,6 +880,7 @@
 
  :renderer.element.core
  {:copy "Copier"
+  :transform "Transformer"
   :index-operations "Opérations d'Indexation"
   :boolean-operations "Opérations Booléennes"
   :horizontal-alignment "Alignement Horizontal"

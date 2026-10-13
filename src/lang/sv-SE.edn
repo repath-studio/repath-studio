@@ -105,6 +105,7 @@
   :create "Skapa %1"
   :import-svg "Importera SVG"
   :set-parent "Sätt förälder"
+  :rotate-clockwise "Rotera 90° medurs"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Kombinera"
   :break-apart "Dela upp"
@@ -131,14 +132,17 @@
   :lower "Lägg bak"
   :lower-to-bottom "Lägg längst bak"
   :object-to-path "Objekt till bana"
+  :flip-horizontal "Vänd horisontellt"
   :paste "Klistra in"
   :paste-in-place "Klistra in på plats"
   :paste-styles "Klistra in stilar"
   :path-flatten "Platta ut"
   :path-reverse "Vänd"
+  :flip-vertical "Vänd vertikalt"
   :path-simplify "Förenkla"
   :path-smooth "Jämna ut"
   :raise "Lyft fram"
+  :rotate-counterclockwise "Rotera 90° moturs"
   :raise-to-top "Lyft till toppen"
   :stroke-to-path "Linje till bana"
   :ungroup "Dela upp grupp"
@@ -551,6 +555,9 @@
   :convert-segment "Konvertera segment"
   :open-command-specification "Öppna kommandospecifikation"}
 
+ :renderer.attribute.impl.transform
+ {:edit "Redigera transformation"}
+
  :renderer.attribute.impl.length
  {:increase "Öka"
   :decrease "Minska"}
@@ -733,6 +740,12 @@
   :error-loading "Fel vid inläsning av dokumentet"
   :unsupported-or-corrupted "Filen verkar vara ostödd eller skadad."}
 
+ :renderer.tool.impl.base.transform.rotate
+ {:rotate [:div "Dra för att rotera markeringen kring rotationspunkten.
+                 Håll %1 för att stämma in på steg om 15°."]
+  :rotate-handle "rotationshantel"
+  :rotate-selection "Rotera markering"}
+
  :renderer.document.views
  {:open-directory "Öppna innehållande katalog"
   :close "Stäng"
@@ -854,6 +867,7 @@
 
  :renderer.element.core
  {:copy "Kopiera"
+  :transform "Transformera"
   :index-operations "Indexoperationer"
   :boolean-operations "Booleska Operationer"
   :horizontal-alignment "Horisontell Justering"

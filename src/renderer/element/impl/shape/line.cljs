@@ -11,7 +11,8 @@
    [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
-   [renderer.utils.math :as utils.math]))
+   [renderer.utils.math :as utils.math]
+   [renderer.utils.transform :as utils.transform]))
 
 (hierarchy/derive! :line ::element.hierarchy/shape)
 
@@ -40,7 +41,7 @@
   [el ratio pivot-point]
   (let [{:keys [x1 y1 x2 y2]} (:attrs el)
         [x1 y1 x2 y2] (mapv utils.length/unit->px [x1 y1 x2 y2])
-        dimensions (utils.bounds/->dimensions (element.hierarchy/bbox el))
+        dimensions (utils.bounds/->dimensions (utils.element/local-bbox el))
         [x y] (utils.math/v-sub dimensions (utils.math/v-mul dimensions ratio))
         pivot-diff (utils.math/v-sub pivot-point dimensions)
         offset (utils.element/scale-offset ratio pivot-diff)]
@@ -94,9 +95,11 @@
       el)))
 
 (defmethod element.hierarchy/bbox :line
-  [el]
+  [el transform]
   (let [{{:keys [x1 y1 x2 y2]} :attrs} el
-        [x1 y1 x2 y2] (mapv utils.length/unit->px [x1 y1 x2 y2])]
+        [x1 y1 x2 y2] (mapv utils.length/unit->px [x1 y1 x2 y2])
+        [[x1 y1] [x2 y2]] (map (partial utils.transform/point transform)
+                               [[x1 y1] [x2 y2]])]
     [(min x1 x2) (min y1 y2) (max x1 x2) (max y1 y2)]))
 
 #_(defmethod hierarchy/snapping-points :line

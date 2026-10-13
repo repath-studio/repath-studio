@@ -5,7 +5,6 @@
    [renderer.document.handlers :as document.handlers]
    [renderer.element.db :refer [Element]]
    [renderer.element.handlers :as element.handlers]
-   [renderer.element.hierarchy :as element.hierarchy]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
    [renderer.input.db :refer [PointerEvent]]
@@ -41,7 +40,7 @@
 (m/=> hovered? [:-> Element boolean? Element boolean?])
 (defn hovered?
   [db intersecting? el]
-  (let [selection-bbox (element.hierarchy/bbox (:select-box db))
+  (let [selection-bbox (utils.element/local-bbox (:select-box db))
         el-bbox (:bbox el)]
     (if (and selection-bbox el-bbox)
       (if intersecting?

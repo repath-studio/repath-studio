@@ -2,6 +2,7 @@
   "https://www.w3.org/TR/SVG/struct.html#TermContainerElement"
   (:require
    [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.element.impl.container.defs]
    [renderer.element.impl.container.group]
    [renderer.element.impl.container.svg]
    [renderer.hierarchy :as hierarchy]))
@@ -10,7 +11,6 @@
 
 (hierarchy/derive! :a ::element.hierarchy/container)
 (hierarchy/derive! :clipPath ::element.hierarchy/container)
-(hierarchy/derive! :defs ::element.hierarchy/container)
 (hierarchy/derive! :marker ::element.hierarchy/container)
 (hierarchy/derive! :mask ::element.hierarchy/container)
 (hierarchy/derive! :pattern ::element.hierarchy/container)

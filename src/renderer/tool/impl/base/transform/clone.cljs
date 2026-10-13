@@ -3,12 +3,14 @@
    [renderer.element.handlers :as element.handlers]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
+   [renderer.input.handlers :as input.handlers]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.transform.core :as-alias transform]
    [renderer.tool.impl.base.transform.select :as transform.select]
    [renderer.tool.impl.base.transform.translate :as transform.translate]
+   [renderer.tool.views :as tool.views]
    [renderer.utils.bounds :as utils.bounds]
    [renderer.views :as views]))
 
@@ -16,20 +18,21 @@
   []
   (i18n.views/t [::clone
                  [:div "Hold %1 to restrict direction. or release %2 to move"]]
-                [[views/kbd "Ctrl"]
+                [[tool.views/primary-mod-key]
                  [views/kbd "Alt"]]))
 
 (defmethod tool.hierarchy/on-drag [::transform/transform :clone]
   [db e]
-  (let [{:keys [ctrl-key shift-key alt-key]} e
-        delta (tool.handlers/pointer-delta db)]
+  (let [{:keys [shift-key alt-key]} e
+        delta (tool.handlers/pointer-delta db)
+        primary-mod? (input.handlers/primary-mod? db e)]
     (if alt-key
       (-> db
           (history.handlers/reset-state)
           (transform.select/select-element shift-key)
           (element.handlers/duplicate)
-          (transform.translate/translate delta ctrl-key)
-          (snap.handlers/snap-with transform.translate/translate ctrl-key)
+          (transform.translate/translate delta primary-mod?)
+          (snap.handlers/snap-with transform.translate/translate primary-mod?)
           (tool.handlers/set-cursor "copy"))
       (tool.handlers/set-state db :translate))))
 

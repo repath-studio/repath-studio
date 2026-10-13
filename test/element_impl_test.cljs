@@ -2,7 +2,8 @@
   (:require
    [cljs.test :refer-macros [deftest is testing]]
    [clojure.string :as string]
-   [renderer.element.hierarchy :as element.hierarchy]))
+   [renderer.element.hierarchy :as element.hierarchy]
+   [renderer.utils.element :as utils.element]))
 
 (def test-cases
   [{:label "circle"
@@ -208,7 +209,7 @@
   (doseq [{:keys [label el bbox]} test-cases
           :when bbox]
     (testing label
-      (is (= (element.hierarchy/bbox el) bbox)))))
+      (is (= (utils.element/local-bbox el) bbox)))))
 
 (deftest to-path
   (doseq [{:keys [label el path path-throws?]} test-cases

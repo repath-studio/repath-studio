@@ -106,6 +106,7 @@
   :create "%1 erstellen"
   :import-svg "SVG importieren"
   :set-parent "Übergeordnetes Element setzen"
+  :rotate-clockwise "90° im Uhrzeigersinn drehen"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Kombinieren"
   :break-apart "Trennen"
@@ -132,14 +133,17 @@
   :lower "Nach hinten"
   :lower-to-bottom "Ganz nach hinten"
   :object-to-path "Objekt zu Pfad"
+  :flip-horizontal "Horizontal spiegeln"
   :paste "Einfügen"
   :paste-in-place "An Ort einfügen"
   :paste-styles "Stile einfügen"
   :path-flatten "Abflachen"
   :path-reverse "Umkehren"
+  :flip-vertical "Vertikal spiegeln"
   :path-simplify "Vereinfachen"
   :path-smooth "Glätten"
   :raise "Nach vorne"
+  :rotate-counterclockwise "90° gegen den Uhrzeigersinn drehen"
   :raise-to-top "Ganz nach vorne"
   :stroke-to-path "Kontur zu Pfad"
   :ungroup "Gruppierung aufheben"
@@ -564,6 +568,9 @@
   :convert-segment "Segment konvertieren"
   :open-command-specification "Befehlsspezifikation öffnen"}
 
+ :renderer.attribute.impl.transform
+ {:edit "Transformation bearbeiten"}
+
  :renderer.attribute.impl.length
  {:increase "Erhöhen"
   :decrease "Verringern"}
@@ -751,6 +758,12 @@
   :unsupported-or-corrupted "Datei scheint nicht unterstützt oder beschädigt zu
                              sein."}
 
+ :renderer.tool.impl.base.transform.rotate
+ {:rotate [:div "Ziehen, um die Auswahl um den Drehpunkt zu drehen.
+                 Halten Sie %1, um in 15°-Schritten einzuklinken."]
+  :rotate-handle "Drehgriff"
+  :rotate-selection "Auswahl drehen"}
+
  :renderer.document.views
  {:open-directory "Enthaltenden Ordner öffnen"
   :close "Schließen"
@@ -874,6 +887,7 @@
 
  :renderer.element.core
  {:copy "Kopieren"
+  :transform "Transformieren"
   :index-operations "Indexoperationen"
   :boolean-operations "Boolesche Operationen"
   :horizontal-alignment "Horizontale Ausrichtung"

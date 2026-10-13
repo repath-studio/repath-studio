@@ -102,6 +102,7 @@
   :create "创建 %1"
   :import-svg "导入 SVG"
   :set-parent "设置父级"
+  :rotate-clockwise "顺时针旋转 90°"
   :toggle-handle-selection "Toggle handle selection"
   :combine "组合"
   :break-apart "拆分"
@@ -128,14 +129,17 @@
   :lower "下移"
   :lower-to-bottom "置于底层"
   :object-to-path "对象转路径"
+  :flip-horizontal "水平翻转"
   :paste "粘贴"
   :paste-in-place "原位粘贴"
   :paste-styles "粘贴样式"
   :path-flatten "展平"
   :path-reverse "反转"
+  :flip-vertical "垂直翻转"
   :path-simplify "简化"
   :path-smooth "平滑"
   :raise "上移"
+  :rotate-counterclockwise "逆时针旋转 90°"
   :raise-to-top "置于顶层"
   :stroke-to-path "描边转路径"
   :ungroup "取消成组"
@@ -474,6 +478,9 @@
   :convert-segment "转换段"
   :open-command-specification "打开命令规范"}
 
+ :renderer.attribute.impl.transform
+ {:edit "编辑变换"}
+
  :renderer.attribute.impl.length
  {:increase "增加"
   :decrease "减少"}
@@ -638,6 +645,11 @@
   :error-loading "加载文档时出错"
   :unsupported-or-corrupted "文件似乎不受支持或已损坏。"}
 
+ :renderer.tool.impl.base.transform.rotate
+ {:rotate [:div "拖拽以绕旋转中心点旋转选择。按住 %1 可按 15° 步进吸附。"]
+  :rotate-handle "旋转手柄"
+  :rotate-selection "旋转选择"}
+
  :renderer.document.views
  {:open-directory "打开包含目录"
   :close "关闭"
@@ -758,6 +770,7 @@
 
  :renderer.element.core
  {:copy "复制"
+  :transform "变换"
   :index-operations "索引操作"
   :boolean-operations "布尔运算"
   :horizontal-alignment "水平对齐"

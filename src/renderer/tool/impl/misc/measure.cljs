@@ -35,7 +35,7 @@
    (let [start-pos [(:x1 @measure-attrs) (:y1 @measure-attrs)]
          end-pos (cond->> end-pos
                    snap-to-angle?
-                   (input.handlers/snap-angle start-pos))
+                   (input.handlers/snap-point-to-angle start-pos))
          [adjacent opposite] (utils.math/v-sub start-pos end-pos)
          hypotenuse (Math/hypot adjacent opposite)]
      (swap! measure-attrs

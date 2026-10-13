@@ -241,6 +241,30 @@
    (let [pivot-point (-> db element.handlers/bbox utils.bounds/center)]
      (element.handlers/scale db ratio pivot-point false))))
 
+(rf/reg-event-db
+ ::rotate-clockwise
+ [(finalize [::rotate-clockwise "Rotate 90° clockwise"])]
+ (fn [db _]
+   (element.handlers/rotate db 90)))
+
+(rf/reg-event-db
+ ::rotate-counterclockwise
+ [(finalize [::rotate-counterclockwise "Rotate 90° counterclockwise"])]
+ (fn [db _]
+   (element.handlers/rotate db -90)))
+
+(rf/reg-event-db
+ ::flip-horizontal
+ [(finalize [::flip-horizontally "Flip horizontally"])]
+ (fn [db _]
+   (element.handlers/flip db :horizontal)))
+
+(rf/reg-event-db
+ ::flip-vertical
+ [(finalize [::flip-vertically "Flip vertically"])]
+ (fn [db _]
+   (element.handlers/flip db :vertical)))
+
 (rf/reg-event-fx
  ::->path
  (fn [{:keys [db]}]

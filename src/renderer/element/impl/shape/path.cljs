@@ -16,7 +16,8 @@
    [renderer.utils.length :as utils.length]
    [renderer.utils.math :as utils.math]
    [renderer.utils.path :as utils.path]
-   [renderer.utils.svg :as utils.svg]))
+   [renderer.utils.svg :as utils.svg]
+   [renderer.utils.transform :as utils.transform]))
 
 (hierarchy/derive! :path ::element.hierarchy/shape)
 
@@ -50,7 +51,7 @@
   [el ratio pivot-point]
   (let [[scale-x scale-y] ratio
         offset (utils.element/scale-offset ratio pivot-point)
-        [x y] (element.hierarchy/bbox el)
+        [x y] (utils.element/local-bbox el)
         [x y] (-> (utils.math/v-add [x y] offset)
                   (utils.math/v-sub (utils.math/v-mul ratio [x y])))]
     (update-path el #(-> %
@@ -58,8 +59,13 @@
                          (.translate x y)))))
 
 (defmethod element.hierarchy/bbox :path
-  [el]
-  (some-> el :attrs :d svgPathBbox vec))
+  [el transform]
+  (some-> el :attrs :d
+          (svgpath)
+          (.matrix (clj->js transform))
+          (.toString)
+          (svgPathBbox)
+          (vec)))
 
 (m/=> ->px-point [:-> PathSegment PathPointType [:maybe Vec2]])
 (defn ->px-point
@@ -69,7 +75,7 @@
 
 (defn render-arms
   [{:keys [endpoints segments]} index segment transform]
-  (let [wpoint (partial utils.element/transform-point transform)
+  (let [wpoint (partial utils.transform/point transform)
         prev-ep (some-> endpoints (get (dec index)) wpoint)
         cp0 (some-> segment (->px-point :start-control-point) wpoint)
         ep (some-> segment (->px-point :end-point) wpoint)]
@@ -143,13 +149,11 @@
       "H"
       [(when-let [[_ prev-y] prev-ep]
          {:point-type :end-point
-          :cursor "ew-resize"
           :pos (mapv utils.length/unit->px [(second segment) prev-y])})]
 
       "V"
       [(when-let [[prev-x _] prev-ep]
          {:point-type :end-point
-          :cursor "ns-resize"
           :pos (mapv utils.length/unit->px [prev-x (second segment)])})]
 
       nil)))
@@ -207,7 +211,7 @@
         local (utils.element/untransform-point transform pos)
         closest (some-> d (utils.path/closest-point local))]
     (when closest
-      (utils.element/transform-point transform closest))))
+      (utils.transform/point transform closest))))
 
 (defmethod element.hierarchy/insert-point :path
   [el transform pos]
@@ -315,7 +319,7 @@
                  (get endpoints index))
         cp-pos (->px-point (aget segments index) point-type)
         new-cp-pos (utils.math/v-add cp-pos offset)
-        snapped (input.handlers/snap-angle anchor new-cp-pos)]
+        snapped (input.handlers/snap-point-to-angle anchor new-cp-pos)]
     (utils.math/v-sub snapped cp-pos)))
 
 (defmethod element.hierarchy/handle-drag :path

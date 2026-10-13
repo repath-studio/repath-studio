@@ -105,6 +105,7 @@
   :create "Создать %1"
   :import-svg "Импорт SVG"
   :set-parent "Установить родителя"
+  :rotate-clockwise "Повернуть на 90° по часовой стрелке"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Совместить"
   :break-apart "Разбить"
@@ -131,14 +132,17 @@
   :lower "Опустить"
   :lower-to-bottom "Отправить на задний план"
   :object-to-path "Объект в контур"
+  :flip-horizontal "Отразить по горизонтали"
   :paste "Вставить"
   :paste-in-place "Вставить на место"
   :paste-styles "Вставить стили"
   :path-flatten "Выровнять"
   :path-reverse "Обратить"
+  :flip-vertical "Отразить по вертикали"
   :path-simplify "Упростить"
   :path-smooth "Сгладить"
   :raise "Поднять"
+  :rotate-counterclockwise "Повернуть на 90° против часовой стрелки"
   :raise-to-top "Поднять на передний план"
   :stroke-to-path "Обводка в контур"
   :ungroup "Разгруппировать"
@@ -547,6 +551,9 @@
   :convert-segment "Преобразовать сегмент"
   :open-command-specification "Открыть спецификацию команды"}
 
+ :renderer.attribute.impl.transform
+ {:edit "Редактировать преобразование"}
+
  :renderer.attribute.impl.length
  {:increase "Увеличить"
   :decrease "Уменьшить"}
@@ -732,6 +739,12 @@
   :error-loading "Ошибка при загрузке документа"
   :unsupported-or-corrupted "Файл не поддерживается или повреждён."}
 
+ :renderer.tool.impl.base.transform.rotate
+ {:rotate [:div "Перетащите, чтобы повернуть выделение вокруг точки поворота.
+                 Удерживайте %1, чтобы привязываться к шагам 15°."]
+  :rotate-handle "ручка поворота"
+  :rotate-selection "Повернуть выделение"}
+
  :renderer.document.views
  {:open-directory "Открыть содержащую папку"
   :close "Закрыть"
@@ -855,6 +868,7 @@
 
  :renderer.element.core
  {:copy "Копировать"
+  :transform "Трансформация"
   :index-operations "Операции индексирования"
   :boolean-operations "Логические операции"
   :horizontal-alignment "Горизонтальное выравнивание"

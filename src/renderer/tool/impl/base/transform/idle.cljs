@@ -5,6 +5,7 @@
    [renderer.element.handlers :as element.handlers]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.views :as i18n.views]
+   [renderer.input.handlers :as input.handlers]
    [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.db :refer [Handle State]]
    [renderer.tool.handlers :as tool.handlers]
@@ -109,16 +110,15 @@
       (snap.handlers/rebuild-tree))))
 
 (defn event->arrow-key-step
-  [e]
-  (let [{:keys [shift-key ctrl-key]} e
-        step 10]
+  [db e]
+  (let [step 10]
     (cond-> 1
-      shift-key (* step)
-      ctrl-key (/ step))))
+      (:shift-key e) (* step)
+      (input.handlers/primary-mod? db e) (/ step))))
 
 (defn event->offset
-  [e]
-  (let [arrow-key-step (event->arrow-key-step e)]
+  [db e]
+  (let [arrow-key-step (event->arrow-key-step db e)]
     (case (:key e)
       "ArrowUp" [0 (- arrow-key-step)]
       "ArrowDown" [0 arrow-key-step]
@@ -131,7 +131,7 @@
   (let [k (:key e)]
     (cond-> db
       (utils.key/arrow? k)
-      (element.handlers/translate (event->offset e))
+      (element.handlers/translate (event->offset db e))
 
       (= k "Escape")
       (-> (history.handlers/reset-state)

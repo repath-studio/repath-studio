@@ -37,7 +37,7 @@
 (defmethod render-to-string :default [el] [render el])
 (defmethod render-edit :default [_el])
 (defmethod handles :default [_el])
-(defmethod bbox :default [_el])
+(defmethod bbox :default [_el _transform])
 (defmethod delete-segments :default [el] el)
 (defmethod area :default [_el])
 (defmethod centroid :default [_el])

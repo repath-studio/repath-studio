@@ -102,6 +102,10 @@
   :move-selection "Move selection"
   :place-selection "Place selection"
   :scale-selection "Scale selection"
+  :rotate-clockwise "Rotate 90° clockwise"
+  :rotate-counterclockwise "Rotate 90° counterclockwise"
+  :flip-horizontal "Flip horizontal"
+  :flip-vertical "Flip vertical"
   :create "Create %1"
   :import-svg "Import svg"
   :set-parent "Set parent"
@@ -556,6 +560,9 @@
   :convert-segment "Convert segment"
   :open-command-specification "Open command specification"}
 
+ :renderer.attribute.impl.transform
+ {:edit "Edit transform"}
+
  :renderer.attribute.impl.length
  {:increase "Increase"
   :decrease "Decrease"}
@@ -649,6 +656,12 @@
                 %3 to also scale children."]
   :scale-handle "scale handle"
   :scale-selection "Scale selection"}
+
+ :renderer.tool.impl.base.transform.rotate
+ {:rotate [:div "Drag to rotate the selection about the pivot point.
+                 Hold %1 to snap to 15° increments."]
+  :rotate-handle "rotate handle"
+  :rotate-selection "Rotate selection"}
 
  :renderer.tool.impl.base.transform.select
  {:select [:div "Hold %1 to select intersecting elements."]
@@ -840,6 +853,7 @@
 
  :renderer.element.core
  {:copy "Copy"
+  :transform "Transform"
   :index-operations "Index operations"
   :boolean-operations "Boolean operations"
   :horizontal-alignment "Horizontal alignment"

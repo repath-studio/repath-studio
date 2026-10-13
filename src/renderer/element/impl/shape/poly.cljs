@@ -9,6 +9,7 @@
    [renderer.utils.element :as utils.element]
    [renderer.utils.length :as utils.length]
    [renderer.utils.math :as utils.math]
+   [renderer.utils.transform :as utils.transform]
    [renderer.utils.vec :as utils.vec]))
 
 (hierarchy/derive! ::element.hierarchy/poly ::element.hierarchy/shape)
@@ -40,7 +41,7 @@
 
 (defmethod element.hierarchy/scale ::element.hierarchy/poly
   [el ratio pivot-point]
-  (let [bounds-min (into [] (take 2 (element.hierarchy/bbox el)))
+  (let [bounds-min (into [] (take 2 (utils.element/local-bbox el)))
         offset (utils.element/scale-offset ratio pivot-point)]
     (update-in el
                [:attrs :points]
@@ -88,13 +89,16 @@
                                         (->> (string/join " "))))))
 
 (defmethod element.hierarchy/bbox ::element.hierarchy/poly
-  [el]
+  [el transform]
   (let [points (-> el :attrs :points utils.attribute/points->vec)
-        min-x (apply min (map #(utils.length/unit->px (first %)) points))
-        min-y (apply min (map #(utils.length/unit->px (second %)) points))
-        max-x (apply max (map #(utils.length/unit->px (first %)) points))
-        max-y (apply max (map #(utils.length/unit->px (second %)) points))]
-    [min-x min-y max-x max-y]))
+        pts (mapv (fn [[x y]]
+                    (utils.transform/point transform
+                                           [(utils.length/unit->px x)
+                                            (utils.length/unit->px y)]))
+                  points)
+        xs (map first pts)
+        ys (map second pts)]
+    [(apply min xs) (apply min ys) (apply max xs) (apply max ys)]))
 
 (defn ->vertices
   [el]
@@ -198,7 +202,7 @@
   (let [pos (utils.element/untransform-point transform position)
         closest (some-> (closest-edge el pos) :position)]
     (when closest
-      (utils.element/transform-point transform closest))))
+      (utils.transform/point transform closest))))
 
 (defmethod element.hierarchy/insert-point ::element.hierarchy/poly
   [el transform position]
