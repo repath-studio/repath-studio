@@ -99,7 +99,6 @@
     [{:position [(+ cx r) cy]
       :id :r
       :label [::r-handle "radius handle"]
-      :cursor "ew-resize"
       :type :handle
       :action :edit
       :parent (:id el)}]))

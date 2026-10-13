@@ -112,14 +112,12 @@
       :parent (:id el)
       :position [(+ cx rx) cy]
       :id :rx
-      :cursor "ew-resize"
       :label [::rx-handle "x radius handle"]}
      {:type :handle
       :action :edit
       :parent (:id el)
       :position [cx (- cy ry)]
       :id :ry
-      :cursor "ns-resize"
       :label [::ry-handle "y radius handle"]}]))
 
 (defmethod element.hierarchy/render-edit :ellipse

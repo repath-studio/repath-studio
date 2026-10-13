@@ -149,13 +149,11 @@
       "H"
       [(when-let [[_ prev-y] prev-ep]
          {:point-type :end-point
-          :cursor "ew-resize"
           :pos (mapv utils.length/unit->px [(second segment) prev-y])})]
 
       "V"
       [(when-let [[prev-x _] prev-ep]
          {:point-type :end-point
-          :cursor "ns-resize"
           :pos (mapv utils.length/unit->px [prev-x (second segment)])})]
 
       nil)))
