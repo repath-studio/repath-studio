@@ -530,6 +530,9 @@
   :convert-segment "تحويل مقطع"
   :open-command-specification "فتح مواصفات الأمر"}
 
+ :renderer.attribute.impl.transform
+ {:edit "تعديل التحويل"}
+
  :renderer.attribute.impl.length
  {:increase "زيادة"
   :decrease "تقليل"}

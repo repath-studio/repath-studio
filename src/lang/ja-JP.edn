@@ -516,6 +516,9 @@
   :convert-segment "セグメントを変換"
   :open-command-specification "コマンド仕様を開く"}
 
+ :renderer.attribute.impl.transform
+ {:edit "変形を編集"}
+
  :renderer.attribute.impl.length
  {:increase "増加"
   :decrease "減少"}

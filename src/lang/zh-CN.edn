@@ -478,6 +478,9 @@
   :convert-segment "转换段"
   :open-command-specification "打开命令规范"}
 
+ :renderer.attribute.impl.transform
+ {:edit "编辑变换"}
+
  :renderer.attribute.impl.length
  {:increase "增加"
   :decrease "减少"}

@@ -552,6 +552,9 @@
   :convert-segment "Converter segmento"
   :open-command-specification "Abrir especificação do comando"}
 
+ :renderer.attribute.impl.transform
+ {:edit "Editar transformação"}
+
  :renderer.attribute.impl.length
  {:increase "Aumentar"
   :decrease "Diminuir"}

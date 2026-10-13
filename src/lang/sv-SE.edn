@@ -555,6 +555,9 @@
   :convert-segment "Konvertera segment"
   :open-command-specification "Öppna kommandospecifikation"}
 
+ :renderer.attribute.impl.transform
+ {:edit "Redigera transformation"}
+
  :renderer.attribute.impl.length
  {:increase "Öka"
   :decrease "Minska"}

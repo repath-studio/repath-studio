@@ -572,6 +572,9 @@
   :convert-segment "Μετατροπή τμήματος"
   :open-command-specification "Άνοιγμα προδιαγραφής εντολής"}
 
+ :renderer.attribute.impl.transform
+ {:edit "Επεξεργασία μετασχηματισμού"}
+
  :renderer.attribute.impl.length
  {:increase "Αύξηση"
   :decrease "Μείωση"}

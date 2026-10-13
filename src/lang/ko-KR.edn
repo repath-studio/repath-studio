@@ -510,6 +510,9 @@
   :convert-segment "세그먼트 변환"
   :open-command-specification "명령 사양 열기"}
 
+ :renderer.attribute.impl.transform
+ {:edit "변퉘 편집"}
+
  :renderer.attribute.impl.length
  {:increase "증가"
   :decrease "감소"}

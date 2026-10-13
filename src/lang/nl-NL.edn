@@ -567,6 +567,9 @@
   :convert-segment "Segment converteren"
   :open-command-specification "Opdrachtspecificatie openen"}
 
+ :renderer.attribute.impl.transform
+ {:edit "Transformatie bewerken"}
+
  :renderer.attribute.impl.length
  {:increase "Verhogen"
   :decrease "Verlagen"}

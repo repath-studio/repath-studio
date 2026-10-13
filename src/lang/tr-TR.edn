@@ -547,6 +547,9 @@
   :convert-segment "Segmenti dönüştür"
   :open-command-specification "Komut belirtimini aç"}
 
+ :renderer.attribute.impl.transform
+ {:edit "Dönüşümü düzenle"}
+
  :renderer.attribute.impl.length
  {:increase "Artır"
   :decrease "Azalt"}

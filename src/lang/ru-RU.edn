@@ -551,6 +551,9 @@
   :convert-segment "Преобразовать сегмент"
   :open-command-specification "Открыть спецификацию команды"}
 
+ :renderer.attribute.impl.transform
+ {:edit "Редактировать преобразование"}
+
  :renderer.attribute.impl.length
  {:increase "Увеличить"
   :decrease "Уменьшить"}
