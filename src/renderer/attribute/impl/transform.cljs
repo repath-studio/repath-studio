@@ -41,7 +41,7 @@
              :defaults [0]
              :row :skew}]
    [:matrix {:labels ["a" "b" "c" "d" "e" "f"]
-             :defaults [1 0 0 1 0 0]}]])
+             :defaults utils.transform/identity-transform}]])
 
 (def field-labels (into {} (map (juxt first (comp :labels second)) ops)))
 
