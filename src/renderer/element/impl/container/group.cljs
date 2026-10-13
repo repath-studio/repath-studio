@@ -42,12 +42,11 @@
                                       ::tool.impl.base.transform/transform])]
        (when (and transform? bbox)
          (let [[min-x min-y max-x max-y] bbox
-               corners [[min-x min-y] [min-x max-y]
-                        [max-x min-y] [max-x max-y]]
+               corners [[min-x min-y] [max-x min-y]
+                        [max-x max-y] [min-x max-y]]
                world->local (partial utils.transform/inverse-point transform)
                points (->> corners
-                           (map world->local)
-                           (map (fn [[x y]] (str x "," y)))
+                           (map (comp (fn [[x y]] (str x "," y)) world->local))
                            (string/join " "))]
            [:polygon {:points points
                       :fill "transparent"

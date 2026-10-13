@@ -99,6 +99,12 @@
   [el]
   (element.hierarchy/bbox el utils.transform/identity-transform))
 
+(defn own-bbox
+  [el]
+  (-> (transform el)
+      (utils.transform/inverse)
+      (utils.transform/aabb (local-bbox el))))
+
 (def properties-memo (memoize element.hierarchy/properties))
 
 (m/=> properties [:-> Element [:maybe map?]])

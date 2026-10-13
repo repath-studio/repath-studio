@@ -171,32 +171,32 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :object/rotate-clockwise
-               :label [::rotate-clockwise "Rotate 90° clockwise"]
+               :label [::element.events/rotate-clockwise]
                :icon "rotate-clockwise"
-               :event [::element.events/rotate 90]
+               :event [::element.events/rotate-clockwise]
                :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :object/rotate-counterclockwise
-               :label [::rotate-counterclockwise "Rotate 90° counterclockwise"]
+               :label [::element.events/rotate-counterclockwise]
                :icon "rotate-counterclockwise"
-               :event [::element.events/rotate -90]
+               :event [::element.events/rotate-counterclockwise]
                :enabled [::element.subs/some-non-root-selected?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :object/flip-horizontal
-               :label [::flip-horizontal "Flip horizontal"]
+               :label [::element.events/flip-horizontal]
                :icon "flip-horizontal"
-               :event [::element.events/flip :horizontal]
+               :event [::element.events/flip-horizontal]
                :enabled [::element.subs/some-non-root-selected?]
                :shortcuts {"All" [{:keyCode (utils.key/codes "H")
                                    :shiftKey true}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :object/flip-vertical
-               :label [::flip-vertical "Flip vertical"]
+               :label [::element.events/flip-vertical]
                :icon "flip-vertical"
-               :event [::element.events/flip :vertical]
+               :event [::element.events/flip-vertical]
                :enabled [::element.subs/some-non-root-selected?]
                :shortcuts {"All" [{:keyCode (utils.key/codes "V")
                                    :shiftKey true}]}}])

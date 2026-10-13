@@ -61,8 +61,18 @@
 
    Arguments:
    - `angle`: The rotation angle"
-  ([angle :- :float]
-   (rf/dispatch [::element.events/rotate angle])))
+  [angle :- :float]
+  (rf/dispatch [::element.events/rotate angle]))
+
+(mx/defn flip-horizontally
+  "Flips the selected elements horizontally."
+  []
+  (rf/dispatch [::element.events/flip-horizontal]))
+
+(mx/defn flip-vertically
+  "Flips the selected elements vertically."
+  []
+  (rf/dispatch [::element.events/flip-vertical]))
 
 (mx/defn fill
   "Fills the selected elements.

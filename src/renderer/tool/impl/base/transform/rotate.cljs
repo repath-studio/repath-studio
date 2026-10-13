@@ -4,7 +4,7 @@
    [malli.core :as m]
    [re-frame.core :as rf]
    [renderer.app.db :refer [App]]
-   [renderer.db :refer [Vec2]]
+   [renderer.db :refer [BBox Vec2]]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.subs :as-alias element.subs]
@@ -38,6 +38,16 @@
             [fx fy] (:anchor-offset db)]
         [(+ min-x (* fx w)) (+ min-y (* fy h))]))))
 
+(m/=> ->anchor-offset [:-> BBox Vec2 Vec2])
+(defn ->anchor-offset
+  "The [0 1] anchor offset that resolves to the given point within the bounds.
+   Inverse of `pivot`; used to keep the pivot in place after the bounds change."
+  [bbox [px py]]
+  (let [[min-x min-y] bbox
+        [w h] (utils.bounds/->dimensions bbox)]
+    [(/ (- px min-x) w)
+     (/ (- py min-y) h)]))
+
 (m/=> drag-angle [:-> App Vec2 number?])
 (defn drag-angle
   [db p]
@@ -51,7 +61,7 @@
 (defmethod tool.hierarchy/on-drag [::transform/transform :rotate]
   [db e]
   (let [db (history.handlers/reset-state db)
-        p (or (:pivot-point db) (pivot db))
+        p (pivot db)
         angle (drag-angle db p)
         angle (if (input.handlers/snap-to-angle? db e)
                 (input.handlers/snap-angle angle) angle)]
@@ -63,10 +73,20 @@
 
 (defmethod tool.hierarchy/on-drag-end [::transform/transform :rotate]
   [db e]
-  (-> db
+  (let [anchor (some-> (element.handlers/bbox db)
+                       (->anchor-offset (:pivot-point db)))]
+    (cond-> db
+      :always
       (tool.handlers/set-state :idle)
-      (history.handlers/finalize (:timestamp e)
-                                 [::rotate-selection "Rotate selection"])))
+
+      anchor
+      (assoc :anchor-offset anchor
+             :anchor-point anchor)
+
+      :always
+      (-> (dissoc :clicked-element :pivot-point)
+          (history.handlers/finalize (:timestamp e) [::rotate-selection
+                                                     "Rotate selection"])))))
 
 (defn handle
   []

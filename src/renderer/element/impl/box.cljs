@@ -55,7 +55,7 @@
 
 (defmethod element.hierarchy/handles ::element.hierarchy/box
   [el]
-  (let [[min-x min-y max-x max-y] (utils.element/local-bbox el)]
+  (let [[min-x min-y max-x max-y] (utils.element/own-bbox el)]
     [{:type :handle
       :action :edit
       :parent (:id el)

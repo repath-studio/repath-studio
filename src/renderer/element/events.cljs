@@ -242,16 +242,28 @@
      (element.handlers/scale db ratio pivot-point false))))
 
 (rf/reg-event-db
- ::rotate
- [(finalize [::rotate-selection "Rotate selection"])]
- (fn [db [_ angle]]
-   (element.handlers/rotate db angle)))
+ ::rotate-clockwise
+ [(finalize [::rotate-clockwise "Rotate 90° clockwise"])]
+ (fn [db _]
+   (element.handlers/rotate db 90)))
 
 (rf/reg-event-db
- ::flip
- [(finalize [::flip-selection "Flip selection"])]
- (fn [db [_ axis]]
-   (element.handlers/flip db axis)))
+ ::rotate-counterclockwise
+ [(finalize [::rotate-counterclockwise "Rotate 90° counterclockwise"])]
+ (fn [db _]
+   (element.handlers/rotate db -90)))
+
+(rf/reg-event-db
+ ::flip-horizontal
+ [(finalize [::flip-horizontally "Flip horizontally"])]
+ (fn [db _]
+   (element.handlers/flip db :horizontal)))
+
+(rf/reg-event-db
+ ::flip-vertical
+ [(finalize [::flip-vertically "Flip vertically"])]
+ (fn [db _]
+   (element.handlers/flip db :vertical)))
 
 (rf/reg-event-fx
  ::->path

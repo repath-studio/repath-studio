@@ -124,15 +124,26 @@
   ([db]
    (into #{} (parent-ids) (entities db))))
 
+(declare ancestor-ids)
+
+(m/=> first-common-ancestor-id [:-> App [:set ElementId] [:maybe ElementId]])
+(defn first-common-ancestor-id
+  [db ids]
+  (let [chains (mapv (fn [id] (vec (reverse (ancestor-ids db id)))) ids)]
+    (when (seq chains)
+      (some (fn [i]
+              (let [ids (mapv #(nth % i) chains)]
+                (when (apply = ids) (first ids))))
+            (reverse (range (apply min (map count chains))))))))
+
 (m/=> parent [:function
               [:-> App [:maybe Element]]
               [:-> App [:maybe ElementId] [:maybe Element]]])
 (defn parent
   ([db]
-   (let [ids (parent-ids db)]
-     (if (= (count ids) 1)
-       (entity db (first ids))
-       (root db))))
+   (if-let [id (first-common-ancestor-id db (selected-ids db))]
+     (entity db id)
+     (root db)))
   ([db id]
    (some->> (entity db id)
             :parent
@@ -189,13 +200,8 @@
                (keep identity)
                (apply utils.bounds/union))))
 
-      (utils.element/svg? el)
-      (-> (utils.element/transform el)
-          (utils.transform/inverse)
-          (utils.transform/aabb (utils.element/local-bbox el)))
-
       :else
-      (utils.element/local-bbox el))))
+      (utils.element/own-bbox el))))
 
 (m/=> world-bbox [:-> App ElementId [:maybe BBox]])
 (defn world-bbox
@@ -299,15 +305,6 @@
    (reduce (rpartial update-el f arg) db (selected-ids db)))
   ([db f arg & more]
    (reduce (apply rpartial update-el f arg more) db (selected-ids db))))
-
-(m/=> siblings-selected? [:-> App [:maybe boolean?]])
-(defn siblings-selected?
-  [db]
-  (let [ids (parent-ids db)]
-    (and (seq ids)
-         (empty? (rest ids))
-         (= (count (selected db))
-            (count (children-ids db (first ids)))))))
 
 (m/=> siblings [:function
                 [:-> App [:maybe [:vector ElementId]]]
@@ -546,10 +543,16 @@
 (m/=> select-all [:-> App App])
 (defn select-all
   [db]
-  (let [ids (if (siblings-selected? db)
-              (children-ids db (:id (parent db (:id (parent db)))))
-              (siblings db))]
-    (reduce select db (remove (partial virtual? db) ids))))
+  (let [parent-id (:id (parent db))
+        children (children-ids db parent-id)
+        all-selected? (= (count children)
+                         (count (filter
+                                 #(contains? (selected-ids db) %) children)))
+        grandparent-id (some-> (parent db parent-id) :id)
+        ids (if (and all-selected? grandparent-id)
+              (children-ids db grandparent-id)
+              children)]
+    (reduce select (deselect db) (remove (partial virtual? db) ids))))
 
 (m/=> selected-tags [:-> App [:set ElementTag]])
 (defn selected-tags
@@ -1192,9 +1195,21 @@
   ([db]
    (group db (top-selected-sorted-ids db)))
   ([db ids]
-   (let [db (add db {:tag :g
-                     :parent (:id (parent db))})
-         group-id (-> db selected-ids first)]
+   (let [parent-id (:id (parent db))
+         last-id (last ids)
+         last-index (children-index db last-id)
+         db (add db {:tag :g
+                     :parent parent-id})
+         group-id (-> db selected-ids first)
+         db (cond-> db
+              (and (some? last-index)
+                   (>= last-index 0)
+                   (= parent-id (:parent (entity db last-id))))
+              (update-prop parent-id :children
+                           (fn [children]
+                             (utils.vec/move children
+                                             (.indexOf children group-id)
+                                             last-index))))]
      (-> (reduce (rpartial set-parent group-id) db ids)
          (refresh-bbox group-id)))))
 
