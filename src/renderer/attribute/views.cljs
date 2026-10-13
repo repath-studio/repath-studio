@@ -161,7 +161,7 @@
    [form-input k v (select-keys attrs [:disabled :placeholder])]
    (when (seq items)
      (let [v (if (empty? v) default-value v)
-           item (first (filter #(= (:value %) (string/lower-case v)) items))]
+           item (first (filter #(= (:value %) v) items))]
        [:> Select/Root
         {:value v
          :onValueChange #(rf/dispatch [::element.events/set-attr k %])
