@@ -160,31 +160,33 @@
   [:div.flex.w-full.gap-px
    [form-input k v (select-keys attrs [:disabled :placeholder])]
    (when (seq items)
-     [:> Select/Root
-      {:value (if (empty? v) default-value v)
-       :onValueChange #(rf/dispatch [::element.events/set-attr k %])
-       :disabled disabled}
-      [:> Select/Trigger
-       {:class "form-control-button"
-        :aria-label (i18n.views/t [::select "Select %1"] [(name k)])}
-       [:> Select/Value ""]
-       [:> Select/Icon
-        {:class "flex"}
-        [views/icon "chevron-down"]]]
-      [:> Select/Portal
-       [:> Select/Content
-        {:class "menu-content rounded-sm select-content"
-         :on-key-down #(.stopPropagation %)
-         :on-escape-key-down #(.stopPropagation %)}
-        [:> Select/ScrollUpButton
-         {:class "select-scroll-button"}
-         [views/icon "chevron-up"]]
-        (into [:> Select/Viewport
-               {:class "select-viewport"}]
-              (map select-item items))
-        [:> Select/ScrollDownButton
-         {:class "select-scroll-button"}
-         [views/icon "chevron-down"]]]]])])
+     (let [v (if (empty? v) default-value v)
+           item (first (filter #(= (:value %) (string/lower-case v)) items))]
+       [:> Select/Root
+        {:value v
+         :onValueChange #(rf/dispatch [::element.events/set-attr k %])
+         :disabled disabled}
+        [:> Select/Trigger
+         {:class "form-control-button"
+          :title (i18n.views/t [::select "Select %1"] [(name k)])}
+         [:> Select/Value ""]
+         [:> Select/Icon
+          {:class "flex"}
+          [views/icon (or (:icon item) "chevron-down")]]]
+        [:> Select/Portal
+         [:> Select/Content
+          {:class "menu-content rounded-sm select-content"
+           :on-key-down #(.stopPropagation %)
+           :on-escape-key-down #(.stopPropagation %)}
+          [:> Select/ScrollUpButton
+           {:class "select-scroll-button"}
+           [views/icon "chevron-up"]]
+          (into [:> Select/Viewport
+                 {:class "select-viewport"}]
+                (map select-item items))
+          [:> Select/ScrollDownButton
+           {:class "select-scroll-button"}
+           [views/icon "chevron-down"]]]]]))])
 
 (defn purify
   [s]
