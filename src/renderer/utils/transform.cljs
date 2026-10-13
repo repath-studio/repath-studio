@@ -143,52 +143,58 @@
     "matrix" :matrix
     nil))
 
+(defn parse-translate
+  [args]
+  (when (<= (count args) 2)
+    (let [x (if (seq args) (->number (first args)) 0)
+          y (if (>= (count args) 2) (->number (second args)) 0)]
+      (when (and (number? x) (number? y))
+        [:translate x y]))))
+
+(defn parse-scale
+  [args]
+  (when (<= (count args) 2)
+    (let [sx (if (seq args) (->number (first args)) 1)
+          sy (if (>= (count args) 2) (->number (second args)) sx)]
+      (when (and (number? sx) (number? sy))
+        [:scale sx sy]))))
+
+(defn parse-rotate
+  [args]
+  (case (count args)
+    1 (let [a (->number (first args))]
+        (when (number? a)
+          [:rotate a 0 0]))
+    3 (let [a (->number (nth args 0))
+            cx (->number (nth args 1))
+            cy (->number (nth args 2))]
+        (when (and (number? a) (number? cx) (number? cy))
+          [:rotate a cx cy]))
+    nil))
+
+(defn parse-skew
+  [op-type args]
+  (when (= (count args) 1)
+    (let [a (->number (first args))]
+      (when (number? a)
+        [op-type a]))))
+
+(defn parse-matrix
+  [args]
+  (when (= (count args) 6)
+    (let [m (mapv ->number args)]
+      (when (every? number? m)
+        (vec (cons :matrix m))))))
+
 (defn parse-op
   [op-type args]
   (case op-type
-    :translate
-    (when (<= (count args) 2)
-      (let [x (if (seq args) (->number (first args)) 0)
-            y (if (>= (count args) 2) (->number (second args)) 0)]
-        (when (and (number? x) (number? y))
-          [:translate x y])))
-
-    :scale (when (<= (count args) 2)
-             (let [sx (if (seq args) (->number (first args)) 1)
-                   sy (if (>= (count args) 2) (->number (second args)) sx)]
-               (when (and (number? sx) (number? sy))
-                 [:scale sx sy])))
-
-    :rotate
-    (case (count args)
-      1 (let [a (->number (first args))]
-          (when (number? a)
-            [:rotate a 0 0]))
-      3 (let [a (->number (nth args 0))
-              cx (->number (nth args 1))
-              cy (->number (nth args 2))]
-          (when (and (number? a) (number? cx) (number? cy))
-            [:rotate a cx cy]))
-      nil)
-
-    :skew-x
-    (when (= (count args) 1)
-      (let [a (->number (first args))]
-        (when (number? a)
-          [:skew-x a])))
-
-    :skew-y
-    (when (= (count args) 1)
-      (let [a (->number (first args))]
-        (when (number? a)
-          [:skew-y a])))
-
-    :matrix
-    (when (= (count args) 6)
-      (let [m (mapv ->number args)]
-        (when (every? number? m)
-          (vec (cons :matrix m)))))
-
+    :translate (parse-translate args)
+    :scale (parse-scale args)
+    :rotate (parse-rotate args)
+    :skew-x (parse-skew :skew-x args)
+    :skew-y (parse-skew :skew-y args)
+    :matrix (parse-matrix args)
     nil))
 
 (defn parse
@@ -280,8 +286,10 @@
     [:skew-x phi-deg]))
 
 (defn centered-rotate
-  [m e f theta theta-deg]
-  (let [c (rotation-center e f theta)
+  [m theta theta-deg]
+  (let [e (nth m 4)
+        f (nth m 5)
+        c (rotation-center e f theta)
         c-ops (when c [[:rotate theta-deg (snap (first c)) (snap (second c))]])]
     (when (and c-ops (close-matrix? m (ops->matrix c-ops)))
       c-ops)))
@@ -300,7 +308,7 @@
                             (nil? scale-op)
                             (nil? skew-op))]
     (if rotation-only?
-      (or (centered-rotate [a b c d e f] e f theta theta-deg)
+      (or (centered-rotate [a b c d e f] theta theta-deg)
           (vec (filter some? [translate-op rotate-op])))
       (vec (filter some? [translate-op rotate-op scale-op skew-op])))))
 

@@ -146,6 +146,13 @@
     [utils.svg/label text {:x x
                            :y y}]))
 
+(defn scale-overlays
+  [state bbox]
+  (when (and (= state :scale) (seq bbox))
+    [:<>
+     [area-label bbox]
+     [size-label bbox]]))
+
 (defmethod tool.hierarchy/render ::transform
   []
   (let [state @(rf/subscribe [::tool.subs/state])
@@ -172,10 +179,7 @@
         (when (= state :idle)
           [tool.views/corner-handles bbox])])
 
-     (when (and (= state :scale) (seq bbox))
-       [:<>
-        [area-label bbox]
-        [size-label bbox]])
+     (scale-overlays state bbox)
 
      [pivot-handle]
 

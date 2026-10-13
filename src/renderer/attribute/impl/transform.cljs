@@ -86,7 +86,10 @@
   [e {:keys [v op-type i]}]
   (let [new-v (utils.transform/->number (.. e -target -value))]
     (if (nil? new-v)
-      (set! (.. e -target -value) (op-args v op-type i))
+      (set! (.. e -target -value)
+            (if (some? (get (op-args-map v) op-type))
+              (op-args v op-type i)
+              ""))
       (let [ops-map (op-args-map v)
             args (assoc (op-args v op-type) i new-v)]
         (rf/dispatch [::element.events/set-attr :transform
@@ -94,18 +97,20 @@
 
 (defn op-input
   [v op-type i]
-  (let [value (op-args v op-type i)
+  (let [args (get (op-args-map v) op-type)
+        value (op-args v op-type i)
         attrs {:v v
                :op-type op-type
                :i i}
         label (nth (field-labels op-type) i)]
     [:input.form-element.min-w-0.flex-1
-     {:key (str op-type i value)
-      :default-value value
+     {:key (str op-type i (if (some? args) value :unset))
       :dir "ltr"
       :enter-key-hint "done"
       :aria-label label
       :title label
+      :default-value (when (some? args) value)
+      :placeholder (when (nil? args) value)
       :on-blur #(set-op-field % attrs)
       :on-pointer-up attribute.views/pointer-up-handler
       :on-key-down #(utils.key/down-handler % value set-op-field attrs)}]))
