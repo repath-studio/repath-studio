@@ -801,23 +801,27 @@
     (update-el db id
                (fn [e] (attribute.hierarchy/update-attr e :transform m)))))
 
+
+(m/=> transform-scale? [:-> App Element ElementId Vec2 boolean?])
+(defn transform-scale?
+  [db el id ratio]
+  (or (transformed? el)
+      (and (not (utils.transform/axis-aligned? (transform db id)))
+           (not= (first ratio) (second ratio)))))
+
 (m/=> scale-leaf [:-> App ElementId Vec2 Vec2 App])
 (defn scale-leaf
   [db id ratio pivot-point]
   (if-let [el-bbox (local-bbox db id)]
     (let [el (entity db id)]
-      (if (or (transformed? el)
-              (and (not (utils.transform/axis-aligned? (transform db id)))
-                   (not= (first ratio) (second ratio))))
+      (if (transform-scale? db el id ratio)
         (scale-by-transform db id ratio pivot-point)
         (update-el db id element.hierarchy/scale ratio
                    (utils.math/v-sub (local-point db id pivot-point)
                                      (vec (take 2 el-bbox))))))
     db))
 
-(m/=> scale-group
-      [:-> App ElementId Vec2 Vec2
-       [:set ElementId] App])
+(m/=> scale-group [:-> App ElementId Vec2 Vec2 [:set ElementId] App])
 (defn scale-group
   [db id ratio pivot-point ids-to-scale]
   (let [children (remove ids-to-scale (:children (entity db id)))]
