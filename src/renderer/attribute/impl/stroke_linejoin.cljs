@@ -19,10 +19,13 @@
    (merge attrs {:default-value "miter"
                  :items [{:key :bevel
                           :value "bevel"
-                          :label [::bevel "Bevel"]}
+                          :label [::bevel "Bevel"]
+                          :icon "linejoin-bevel"}
                          {:key :miter
                           :value "miter"
-                          :label [::miter "Miter"]}
+                          :label [::miter "Miter"]
+                          :icon "linejoin-miter"}
                          {:key :round
                           :value "round"
-                          :label [::round "Round"]}]})])
+                          :label [::round "Round"]
+                          :icon "linejoin-round"}]})])
