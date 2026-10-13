@@ -106,6 +106,7 @@
   :create "%1を作成"
   :import-svg "SVGをインポート"
   :set-parent "親を設定"
+  :rotate-clockwise "90° 時計回りに回転"
   :toggle-handle-selection "Toggle handle selection"
   :combine "複合"
   :break-apart "分割"
@@ -132,14 +133,17 @@
   :lower "背面へ"
   :lower-to-bottom "最背面へ"
   :object-to-path "オブジェクトをパスに"
+  :flip-horizontal "水平方向に反転"
   :paste "貼り付け"
   :paste-in-place "同じ場所に貼り付け"
   :paste-styles "スタイルを貼り付け"
   :path-flatten "平坦化"
   :path-reverse "反転"
+  :flip-vertical "垂直方向に反転"
   :path-simplify "単純化"
   :path-smooth "スムーズ"
   :raise "前面へ"
+  :rotate-counterclockwise "90° 反時計回りに回転"
   :raise-to-top "最前面へ"
   :stroke-to-path "ストロークをパスに"
   :ungroup "グループ解除"
@@ -689,6 +693,12 @@
   :error-loading "ドキュメントの読み込みエラー"
   :unsupported-or-corrupted "ファイルがサポートされていないか破損しているようです。"}
 
+ :renderer.tool.impl.base.transform.rotate
+ {:rotate [:div "ドラッグで選択をピボットポイントの周りに回転します。
+                 %1を押すと 15° 刻みにスナップします。"]
+  :rotate-handle "回転ハンドル"
+  :rotate-selection "選択を回転"}
+
  :renderer.document.views
  {:open-directory "格納ディレクトリを開く"
   :close "閉じる"
@@ -810,6 +820,7 @@
 
  :renderer.element.core
  {:copy "コピー"
+  :transform "変形"
   :index-operations "インデックス操作"
   :boolean-operations "ブール演算"
   :horizontal-alignment "水平配置"

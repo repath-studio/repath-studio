@@ -105,6 +105,7 @@
   :create "Maak %1"
   :import-svg "SVG importeren"
   :set-parent "Ouder instellen"
+  :rotate-clockwise "Draai 90° met de klok mee"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Combineren"
   :break-apart "Opsplitsen"
@@ -131,14 +132,17 @@
   :lower "Naar achteren"
   :lower-to-bottom "Naar achtergrond"
   :object-to-path "Object naar pad"
+  :flip-horizontal "Horizontaal spiegelen"
   :paste "Plakken"
   :paste-in-place "Plakken op locatie"
   :paste-styles "Stijlen plakken"
   :path-flatten "Afvlakken"
   :path-reverse "Omkeren"
+  :flip-vertical "Verticaal spiegelen"
   :path-simplify "Vereenvoudigen"
   :path-smooth "Gladmaken"
   :raise "Naar voren"
+  :rotate-counterclockwise "Draai 90° tegen de klok in"
   :raise-to-top "Naar voorgrond"
   :stroke-to-path "Lijn naar pad"
   :ungroup "Groepering opheffen"
@@ -749,6 +753,12 @@
   :error-loading "Fout bij het laden van het document"
   :unsupported-or-corrupted "Bestand lijkt niet ondersteund of beschadigd."}
 
+ :renderer.tool.impl.base.transform.rotate
+ {:rotate [:div "Sleep om de selectie te draaien rond het draaipunt.
+                 Houd %1 ingedrukt om vast te zetten in stappen van 15°."]
+  :rotate-handle "rotatiehandvat"
+  :rotate-selection "Selectie draaien"}
+
  :renderer.document.views
  {:open-directory "Containing directory openen"
   :close "Sluiten"
@@ -871,6 +881,7 @@
 
  :renderer.element.core
  {:copy "Kopiëren"
+  :transform "Transformeren"
   :index-operations "Indexbewerkingen"
   :boolean-operations "Booleaanse Bewerkingen"
   :horizontal-alignment "Horizontale Uitlijning"

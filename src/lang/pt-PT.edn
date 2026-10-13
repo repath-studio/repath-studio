@@ -105,6 +105,7 @@
   :create "Criar %1"
   :import-svg "Importar SVG"
   :set-parent "Definir pai"
+  :rotate-clockwise "Rodar 90° no sentido horário"
   :toggle-handle-selection "Toggle handle selection"
   :combine "Combinar"
   :break-apart "Separar"
@@ -131,14 +132,17 @@
   :lower "Descer"
   :lower-to-bottom "Enviar para trás"
   :object-to-path "Objeto para caminho"
+  :flip-horizontal "Inverter horizontalmente"
   :paste "Colar"
   :paste-in-place "Colar no local"
   :paste-styles "Colar estilos"
   :path-flatten "Achatar"
   :path-reverse "Inverter"
+  :flip-vertical "Inverter verticalmente"
   :path-simplify "Simplificar"
   :path-smooth "Suavizar"
   :raise "Subir"
+  :rotate-counterclockwise "Rodar 90° no sentido anti-horário"
   :raise-to-top "Subir para frente"
   :stroke-to-path "Contorno para caminho"
   :ungroup "Desagrupar"
@@ -729,6 +733,12 @@
   :unsupported-or-corrupted "O ficheiro parece não ser suportado ou estar
                              corrompido."}
 
+ :renderer.tool.impl.base.transform.rotate
+ {:rotate [:div "Arraste para rodar a seleção em torno do ponto de pivô。
+                 Mantenha %1 para ajustar em incrementos de 15°。"]
+  :rotate-handle "controlo de rotação"
+  :rotate-selection "Rodar seleção"}
+
  :renderer.document.views
  {:open-directory "Abrir diretório contendo"
   :close "Fechar"
@@ -851,6 +861,7 @@
 
  :renderer.element.core
  {:copy "Copiar"
+  :transform "Transformar"
   :index-operations "Operações de Índice"
   :boolean-operations "Operações Booleanas"
   :horizontal-alignment "Alinhamento Horizontal"
