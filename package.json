@@ -72,6 +72,7 @@
       "category": "public.app-category.graphics-design",
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
+      "x64ArchFiles": "**/node_modules/@oxc-parser/binding-darwin-x64/**/*",
       "target": [
         {
           "target": "default",
