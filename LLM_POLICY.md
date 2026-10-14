@@ -31,6 +31,15 @@ partially assisted by AI tools are allowed, as long as they are not used to
 generate code. Using LLMs to ask questions, research, and to catch minor errors
 or fix typos before submitting a PR is allowed and does not require notice.
 
+There is a huge gray area between LLM generated PRs and purely handwritten code,
+that is really hard to evaluate or validate, so we don't think there is a point
+trying to specify this further. For instance, repetitive changes that can be
+easily automated by an LLM, is an accepted use case. But if your contribution is
+a prompt, opening a new issue is a better option.
+
+Use your judgement, with or without the help of LLMs. If your understanding of
+the project decreases after creating a pull request, you should be alarmed.
+
 ## Testing
 
 **Using LLMs to write tests is also prohibited.** We prefer adding tests
