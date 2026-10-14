@@ -135,6 +135,7 @@
   :flip-horizontal "수평 뒤집기"
   :paste "붙여넣기"
   :paste-in-place "제자리에 붙여넣기"
+  :rotate-selection "선택 영역 회전"
   :paste-styles "스타일 붙여넣기"
   :path-flatten "평면화"
   :path-reverse "역방향"

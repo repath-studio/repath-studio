@@ -784,9 +784,12 @@
    (reduce (rpartial place position) db (top-ancestor-ids db)))
   ([db id position]
    (let [el (entity db id)
-         center (utils.bounds/center (utils.element/local-bbox el))
-         offset (utils.math/v-sub position center)]
-     (translate db offset))))
+         bounds (or (:bbox el)
+                    (cond-> (utils.element/local-bbox el)
+                      (transformed? el)
+                      (utils.transform/aabb (utils.element/transform-attr el))))
+         center (utils.bounds/center bounds)]
+     (translate db (utils.math/v-sub position center)))))
 
 (m/=> scale-by-transform [:-> App ElementId Vec2 Vec2 App])
 (defn scale-by-transform
@@ -800,7 +803,6 @@
                                     p))]
     (update-el db id
                (fn [e] (attribute.hierarchy/update-attr e :transform m)))))
-
 
 (m/=> transform-scale? [:-> App Element ElementId Vec2 boolean?])
 (defn transform-scale?
@@ -1109,22 +1111,16 @@
   ([db el parent-el center]
    (let [el-center (utils.bounds/center (:bbox el))
          offset (utils.math/v-sub el-center center)
-         el (dissoc el :bbox)
-         [s-x1 s-y1] (:bbox parent-el)
+         el (dissoc el :bbox :parent)
          pointer-pos (:local-pointer-pos db)
          el (cond-> el
               (not (utils.element/top-level? el))
               (assoc :parent (:id parent-el)))]
      (reduce select
-             (cond-> db
-               :always
-               (-> (deselect)
-                   (add el)
-                   (place (utils.math/v-add pointer-pos offset)))
-
-               (and (not= (:id (root db)) (:id parent-el))
-                    (not (utils.element/top-level? el)))
-               (translate [(- s-x1) (- s-y1)]))
+             (-> db
+                 (deselect)
+                 (add el)
+                 (place (utils.math/v-add pointer-pos offset)))
              (selected-ids db)))))
 
 (m/=> duplicate [:-> App App])

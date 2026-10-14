@@ -136,6 +136,7 @@
   :flip-horizontal "Horizontal spiegeln"
   :paste "Einfügen"
   :paste-in-place "An Ort einfügen"
+  :rotate-selection "Auswahl drehen"
   :paste-styles "Stile einfügen"
   :path-flatten "Abflachen"
   :path-reverse "Umkehren"

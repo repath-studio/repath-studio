@@ -135,6 +135,7 @@
   :flip-horizontal "Отразить по горизонтали"
   :paste "Вставить"
   :paste-in-place "Вставить на место"
+  :rotate-selection "Повернуть выделение"
   :paste-styles "Вставить стили"
   :path-flatten "Выровнять"
   :path-reverse "Обратить"

@@ -135,6 +135,7 @@
   :flip-horizontal "Inverter horizontalmente"
   :paste "Colar"
   :paste-in-place "Colar no local"
+  :rotate-selection "Rodar seleção"
   :paste-styles "Colar estilos"
   :path-flatten "Achatar"
   :path-reverse "Inverter"

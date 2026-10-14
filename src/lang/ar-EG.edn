@@ -134,6 +134,7 @@
   :flip-horizontal "قلب أفقي"
   :paste "لصق"
   :paste-in-place "لصق في المكان"
+  :rotate-selection "تدوير التحديد"
   :paste-styles "لصق الأنماط"
   :path-flatten "تسطيح"
   :path-reverse "عكس"

@@ -102,6 +102,9 @@
                  :height height
                  :cursor cursor
                  :style {:outline 0
+                         :top 0
+                         :left 0
+                         :position "absolute"
                          :background (:fill attrs)}}
            (when (and (seq bbox) (not edit?))
              [tool.views/selected-bbox bbox])

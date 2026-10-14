@@ -136,6 +136,7 @@
   :flip-horizontal "Inverser horizontalement"
   :paste "Coller"
   :paste-in-place "Coller en place"
+  :rotate-selection "Pivoter la sélection"
   :paste-styles "Coller les styles"
   :path-flatten "Aplatir"
   :path-reverse "Inverser"

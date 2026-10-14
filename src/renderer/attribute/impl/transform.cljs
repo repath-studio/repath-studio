@@ -133,7 +133,7 @@
    [attribute.views/form-input k v attrs]
    [:> Popover/Root {:modal true}
     [:> Popover/Trigger
-     [views/icon-button "pencil"
+     [views/icon "pencil"
       {:class "form-control-button"
        :disabled (:disabled attrs)
        :title (i18n.views/t [::edit "Edit transform"])}]]
