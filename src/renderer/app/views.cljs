@@ -177,7 +177,10 @@
      {:aria-label (i18n.views/t [::more-actions "More object actions"])}
      [views/icon "ellipsis-h"]]]
    [:> DropdownMenu/Portal
-    (->> frame.views/context-menu-action-groups
+    (->> [:edit/clipboard
+          :object/grouping
+          :object/locking
+          :object/animate]
          (map (comp :actions action.views/deref-action-group))
          (interpose {:type :separator})
          (flatten)
@@ -232,10 +235,8 @@
          [:div.bg-primary.flex.items-center.absolute.right-2.rounded-md
           {:class "bottom-2"}
           [action-toolbar
-           [:object/index-operations
-            :object/horizontal-alignment
-            :object/vertical-alignment]
-           [:span.h-divider]
+           [:object/entity]
+
            [context-dropdown-button]]])]]]))
 
 (defn xml-panel
@@ -399,7 +400,8 @@
           [:object/index-operations
            :object/horizontal-alignment
            :object/vertical-alignment
-           :object/boolean-operations]]])]]))
+           :object/boolean-operations
+           :object/transform]]])]]))
 
 (defn main-panel-group
   []
