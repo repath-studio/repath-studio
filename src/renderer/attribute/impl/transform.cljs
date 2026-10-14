@@ -132,11 +132,11 @@
   [:div.flex.gap-px.w-full
    [attribute.views/form-input k v attrs]
    [:> Popover/Root {:modal true}
-    [:> Popover/Trigger
-     [views/icon "pencil"
-      {:class "form-control-button"
-       :disabled (:disabled attrs)
-       :title (i18n.views/t [::edit "Edit transform"])}]]
+    [:> Popover/Trigger {:as-child true}
+     [:button.form-control-button
+      {:disabled (:disabled attrs)
+       :title (i18n.views/t [::edit "Edit transform"])}
+      [views/icon "pencil"]]]
     [:> Popover/Portal
      [:> Popover/Content
       {:sideOffset 5
