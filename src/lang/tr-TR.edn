@@ -135,6 +135,7 @@
   :flip-horizontal "Yatay ters çevir"
   :paste "Yapıştır"
   :paste-in-place "Yerinde yapıştır"
+  :rotate-selection "Seçimi döndür"
   :paste-styles "Stilleri yapıştır"
   :path-flatten "Düzleştir"
   :path-reverse "Ters çevir"

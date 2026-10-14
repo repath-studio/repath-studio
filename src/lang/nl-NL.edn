@@ -135,6 +135,7 @@
   :flip-horizontal "Horizontaal spiegelen"
   :paste "Plakken"
   :paste-in-place "Plakken op locatie"
+  :rotate-selection "Selectie roteren"
   :paste-styles "Stijlen plakken"
   :path-flatten "Afvlakken"
   :path-reverse "Omkeren"

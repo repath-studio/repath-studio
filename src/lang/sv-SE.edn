@@ -135,6 +135,7 @@
   :flip-horizontal "Vänd horisontellt"
   :paste "Klistra in"
   :paste-in-place "Klistra in på plats"
+  :rotate-selection "Rotera markering"
   :paste-styles "Klistra in stilar"
   :path-flatten "Platta ut"
   :path-reverse "Vänd"

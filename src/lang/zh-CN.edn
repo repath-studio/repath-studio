@@ -132,6 +132,7 @@
   :flip-horizontal "水平翻转"
   :paste "粘贴"
   :paste-in-place "原位粘贴"
+  :rotate-selection "旋转选区"
   :paste-styles "粘贴样式"
   :path-flatten "展平"
   :path-reverse "反转"

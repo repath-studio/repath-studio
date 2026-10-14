@@ -242,6 +242,12 @@
      (element.handlers/scale db ratio pivot-point false))))
 
 (rf/reg-event-db
+ ::rotate
+ [(finalize [::rotate-selection "Rotate selection"])]
+ (fn [db [_ angle]]
+   (element.handlers/rotate db angle)))
+
+(rf/reg-event-db
  ::rotate-clockwise
  [(finalize [::rotate-clockwise "Rotate 90° clockwise"])]
  (fn [db _]

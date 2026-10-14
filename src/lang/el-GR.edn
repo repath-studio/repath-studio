@@ -136,6 +136,7 @@
   :flip-horizontal "Αντιστροφή οριζόντια"
   :paste "Επικόλληση"
   :paste-in-place "Επικόλληση επί τόπου"
+  :rotate-selection "Περιστροφή επιλογής"
   :paste-styles "Επικόλληση μορφοποιήσεων"
   :path-flatten "Επιπεδοποίηση"
   :path-reverse "Αντιστροφή"

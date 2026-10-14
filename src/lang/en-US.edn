@@ -102,6 +102,7 @@
   :move-selection "Move selection"
   :place-selection "Place selection"
   :scale-selection "Scale selection"
+  :rotate-selection "Rotate selection"
   :rotate-clockwise "Rotate 90° clockwise"
   :rotate-counterclockwise "Rotate 90° counterclockwise"
   :flip-horizontal "Flip horizontal"
