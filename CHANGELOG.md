@@ -3,11 +3,48 @@
 All notable user facing changes to this project will be documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 0.4.24 (2026-10-14)
+
+**Added**
+
+- Handle viewBox attribute [#222](https://github.com/repath-studio/repath-studio/pull/222)
+- Clipboard enhancements [#225](https://github.com/repath-studio/repath-studio/pull/225)
+- Enhanced text content elements [#221](https://github.com/repath-studio/repath-studio/pull/221)
+- Handle transform attribute [#226](https://github.com/repath-studio/repath-studio/pull/226)
+  - Rotate handle to selection (holding `Ctrl` snaps to 15° increments)
+  - Popover that helps manual editing translate, rotate, scale, skew, matrix
+  - Ungrouping applies the group transform to its children
+  - Flip and rotate shell commands
+  - Menu actions under `Object -> Transform` for
+    - Rotate 90° clockwise/counterclockwise
+    - Flip horizontally/vertically (`Shift+H`, `Shift+V`)
+
+**Removed**
+
+- Mikera core matrix dependency [#223](https://github.com/repath-studio/repath-studio/pull/223)
+
+**Changed**
+
+- Actions that use the `Ctrl` modifier now use `⌘` on Mac
+- Holding `Shift` while using the mouse wheel inverts the scroll direction
+- Grouping elements creates the group on the top common ancestor, and at the
+  index of the last (top) grouped element
+- Allow clearing the `multiple` attribute value using the remove button
+- Show icons on select input and add linejoin icons
+- Enhance labels of toggle actions on command dialog
+- Enhance handle readability
+
+**Fixed**
+
+- Handle highlight on hover [#224](https://github.com/repath-studio/repath-studio/pull/224)
+- Finalize selection on right click
+- Incorrect bounds from `defs` removed
+
 ## 0.4.23 (2026-10-02)
 
 **Added**
 
-- Native context menu on desktop for editable areas and highlighted text [#216](https://github.com/repath-studio/repath-studio/pull/216)
+- Native context menu on desktop for editable areas and highlighted text c
 - App db migrations [#217](https://github.com/repath-studio/repath-studio/pull/217)
 - Keyboard shortcut enhancements [#218](https://github.com/repath-studio/repath-studio/pull/218)
 - Path as title on mouse over document tab when available
