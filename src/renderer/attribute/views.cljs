@@ -94,6 +94,10 @@
     (when (= start-pos end-pos)
       (.select target))))
 
+(defn removable-val?
+  [v]
+  (or (nil? v) (seq v)))
+
 (defn form-input
   [k v {:keys [disabled placeholder]
         :as attrs}]
@@ -110,7 +114,7 @@
             :placeholder (if v placeholder "multiple")
             :on-blur #(update-handler % k v)
             :on-key-down #(utils.key/down-handler % v update-handler k v)})]
-   (when-not (or (empty? (str v)) disabled)
+   (when (and (not disabled) (removable-val? v))
      [:button.form-control-button.bg-primary!.absolute!.right-0.p1.invisible
       {:class ["hover:bg-transparent rtl:right-auto rtl:left-0"
                "group-hover:visible"]
