@@ -802,6 +802,7 @@
   :close-all "모두 닫기"
   :close-saved "저장된 것 닫기"
   :svg "SVG"
+  :import "가져오기..."
   :png "PNG"
   :jpg "JPG"
   :webp "WEBP"
