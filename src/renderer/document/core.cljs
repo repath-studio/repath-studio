@@ -64,6 +64,13 @@
                :available [::app.subs/unsupported-feature? :file-system]}])
 
 (rf/dispatch [::action.events/register-action
+              {:id :document/import
+               :label [::import "Import…"]
+               :icon "import"
+               :event [::document.events/import]
+               :enabled [::document.subs/some-entities?]}])
+
+(rf/dispatch [::action.events/register-action
               {:id :document/close
                :label [::close "Close"]
                :icon "window-close"
@@ -184,6 +191,7 @@
                          :document/save
                          :document/save-as
                          :document/download
+                         :document/import
                          :document/print
                          :document/close
                          :document/close-all

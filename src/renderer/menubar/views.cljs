@@ -47,6 +47,8 @@
              :document/save
              :document/save-as
              :document/download
+             :separator
+             :document/import
              {:id :export
               :label [::export-as "Export as"]
               :enabled [::document.subs/some-entities?]
