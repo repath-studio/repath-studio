@@ -14,6 +14,7 @@
    [renderer.document.handlers :as document.handlers]
    [renderer.effects :as-alias effects]
    [renderer.element.effects :as-alias element.effects]
+   [renderer.element.events :as-alias element.events]
    [renderer.element.handlers :as element.handlers]
    [renderer.events :as-alias events]
    [renderer.history.events :refer [finalize]]
@@ -189,6 +190,22 @@
       {:options (assoc file-picker-options :multiple true)
        :on-success [::file-read nil]
        :on-error [::app.events/toast-error]}})))
+
+(rf/reg-event-fx
+ ::import
+ (fn [_ [_]]
+   {::effects/file-open
+    {:options {:startIn "pictures"
+               :id "import-picker"
+               :multiple true
+               :types [{:accept config/supported-mime-types}]}
+     :on-success [::import-file]
+     :on-error [::app.events/toast-error]}}))
+
+(rf/reg-event-fx
+ ::import-file
+ (fn [_ [_ file-handle ^js/File file]]
+   {:dispatch [::element.events/import-file file-handle file [0 0]]}))
 
 (rf/reg-event-fx
  ::open-from-args

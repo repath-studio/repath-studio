@@ -848,6 +848,7 @@
   :close-all "Tümünü kapat"
   :close-saved "Kaydedilenleri kapat"
   :svg "SVG"
+  :import "İçe aktar..."
   :png "PNG"
   :jpg "JPG"
   :webp "WEBP"

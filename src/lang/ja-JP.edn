@@ -810,6 +810,7 @@
   :close-saved "保存済みを閉じる"
 
   :svg "SVG"
+  :import "インポート..."
   :png "PNG"
   :jpg "JPG"
   :webp "WEBP"

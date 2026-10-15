@@ -851,6 +851,7 @@
   :close-all "Fechar tudo"
   :close-saved "Fechar guardados"
   :svg "SVG"
+  :import "Importar..."
   :png "PNG"
   :jpg "JPG"
   :webp "WEBP"

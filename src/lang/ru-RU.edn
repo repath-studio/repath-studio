@@ -855,6 +855,7 @@
   :close-all "Закрыть всё"
   :close-saved "Закрыть сохранённые"
   :svg "SVG"
+  :import "Импорт..."
   :png "PNG"
   :jpg "JPG"
   :webp "WEBP"

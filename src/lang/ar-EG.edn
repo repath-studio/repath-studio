@@ -820,6 +820,7 @@
   :close-all "إغلاق الكل"
   :close-saved "إغلاق المحفوظة"
   :svg "SVG"
+  :import "استيراد..."
   :png "PNG"
   :jpg "JPG"
   :webp "WEBP"

@@ -757,6 +757,7 @@
   :close-all "关闭全部"
   :close-saved "关闭已保存"
   :svg "SVG"
+  :import "导入..."
   :png "PNG"
   :jpg "JPG"
   :webp "WEBP"

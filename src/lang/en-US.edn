@@ -836,6 +836,7 @@
   :save "Save"
   :save-as "Save as…"
   :download "Download"
+  :import "Import…"
   :close "Close"
   :close-all "Close all"
   :close-saved "Close saved"

@@ -871,6 +871,7 @@
   :close-all "Alles sluiten"
   :close-saved "Opgeslagen sluiten"
   :svg "SVG"
+  :import "Importeren..."
   :png "PNG"
   :jpg "JPG"
   :webp "WEBP"

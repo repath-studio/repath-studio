@@ -854,6 +854,7 @@
   :close-all "Stäng alla"
   :close-saved "Stäng sparade"
   :svg "SVG"
+  :import "Importera..."
   :png "PNG"
   :jpg "JPG"
   :webp "WEBP"

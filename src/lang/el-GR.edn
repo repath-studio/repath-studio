@@ -879,6 +879,7 @@
   :close-all "Κλείσιμο όλων"
   :close-saved "Κλείσιμο αποθηκευμένων"
   :svg "SVG"
+  :import "Εισαγωγή..."
   :png "PNG"
   :jpg "JPG"
   :webp "WEBP"
