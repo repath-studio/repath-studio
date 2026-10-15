@@ -113,17 +113,13 @@
         bbox (element.handlers/bbox db)
         [offset pivot-point] (delta->offset-with-pivot handle offset bbox)
         dimensions (utils.bounds/->dimensions bbox)
-        pivot-point (if in-place
-                      (element.handlers/pivot-point db)
-                      pivot-point)
-        offset (cond-> offset
-                 in-place
-                 (pivot-offset handle bbox pivot-point))
+        pivot-point (if in-place (element.handlers/pivot-point db) pivot-point)
+        offset (cond-> offset in-place (pivot-offset handle bbox pivot-point))
         ratio (utils.math/v-div (utils.math/v-add dimensions offset) dimensions)
         ratio (cond-> ratio ratio-locked (lock-ratio handle))]
     (-> db
         (assoc :pivot-point pivot-point)
-        (element.handlers/scale ratio pivot-point recursive))))
+        (element.handlers/scale ratio recursive pivot-point))))
 
 (m/=> ratio-locked? [:-> App any? boolean?])
 (defn ratio-locked?

@@ -858,22 +858,29 @@
                   (scale-leaf db id ratio pivot-point))))
             db ids-to-scale)))
 
-(m/=> scale [:-> App Vec2 Vec2 boolean? App])
-(defn scale
-  [db ratio pivot-point recursive]
-  (scale-reduce db
-                (mapv #(if (or (infinite? %) (js/isNaN %)) 1 %) ratio)
-                pivot-point
-                recursive))
-
-(m/=> pivot-point [:-> App [:maybe Vec2]])
+(m/=> pivot-point [:-> App Vec2])
 (defn pivot-point
   [db]
-  (when-let [bounds (bbox db)]
-    (let [[min-x min-y] bounds
-          [w h] (utils.bounds/->dimensions bounds)
-          [fx fy] (:anchor-offset db)]
-      [(+ min-x (* fx w)) (+ min-y (* fy h))])))
+  (let [bounds (bbox db)
+        [min-x min-y] bounds
+        [w h] (utils.bounds/->dimensions bounds)
+        [fx fy] (:anchor-point db)]
+    [(+ min-x (* fx w)) (+ min-y (* fy h))]))
+
+(m/=> scale [:function
+             [:-> App Vec2 App]
+             [:-> App Vec2 boolean? App]
+             [:-> App Vec2 boolean? Vec2 App]])
+(defn scale
+  ([db ratio]
+   (scale db ratio false))
+  ([db ratio recursive]
+   (scale db ratio recursive (pivot-point db)))
+  ([db ratio recursive anchor-point]
+   (scale-reduce db
+                 (mapv #(if (or (infinite? %) (js/isNaN %)) 1 %) ratio)
+                 anchor-point
+                 recursive)))
 
 (m/=> rotate [:function
               [:-> App number? App]
@@ -896,12 +903,16 @@
             [:-> App ElementId Orientation Vec2 App]])
 (defn flip
   ([db axis]
-   (flip db axis (-> db bbox utils.bounds/center)))
-  ([db axis pivot-point]
-   (reduce (rpartial flip axis pivot-point) db (top-ancestor-ids db)))
-  ([db id axis pivot-point]
+   (flip db axis (pivot-point db)))
+  ([db axis pivot]
+   (let [[ax ay] (:anchor-point db)
+         new-anchor (if (= :horizontal axis) [(- 1 ax) ay] [ax (- 1 ay)])]
+     (-> (reduce (rpartial flip axis pivot) db (top-ancestor-ids db))
+         (assoc :anchor-point new-anchor
+                :anchor-offset new-anchor))))
+  ([db id axis pivot]
    (let [ratio (if (= :horizontal axis) [-1 1] [1 -1])]
-     (update-transform db id pivot-point
+     (update-transform db id pivot
                        (fn [p] (utils.transform/scale-about ratio p))))))
 
 (m/=> align [:function

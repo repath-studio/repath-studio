@@ -11,7 +11,6 @@
    [renderer.history.events :refer [finalize]]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
-   [renderer.utils.bounds :as utils.bounds]
    [renderer.utils.extra :refer [rpartial]]))
 
 (rf/reg-event-db
@@ -238,8 +237,7 @@
  ::scale
  [(finalize [::scale-selection "Scale selection"])]
  (fn [db [_ ratio]]
-   (let [pivot-point (-> db element.handlers/bbox utils.bounds/center)]
-     (element.handlers/scale db ratio pivot-point false))))
+   (element.handlers/scale db ratio)))
 
 (rf/reg-event-db
  ::rotate
