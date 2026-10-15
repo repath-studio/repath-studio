@@ -1,5 +1,6 @@
 (ns renderer.element.handlers
   (:require
+   ["svgpath" :as svgpath]
    [clojure.set :as set]
    [clojure.string :as string]
    [hickory.core :as hickory]
@@ -1031,22 +1032,26 @@
 (m/=> boolean-operation [:-> App BooleanOperation App])
 (defn boolean-operation
   [db operation]
-  (let [selected-elements (top-selected-sorted db)
-        attrs (-> selected-elements first :attrs)
+  (let [transformed-path #(-> % :attrs :d
+                              (svgpath)
+                              (.matrix (clj->js (transform db (:id %))))
+                              (.toString))
+        selected-elements (top-selected-sorted db)
+        el (first selected-elements)
         new-path (->> (rest selected-elements)
                       (reduce (fn [path-a el]
-                                (let [path-b (-> el :attrs :d)]
+                                (let [path-b (transformed-path el)]
                                   (utils.path/boolean-operation path-a
                                                                 path-b
                                                                 operation)))
-                              (:d attrs)))]
+                              (transformed-path el)))]
     (cond-> db
       (seq new-path)
       (-> (delete)
           (add {:type :element
                 :tag :path
                 :parent (-> selected-elements first :parent)
-                :attrs (merge attrs {:d new-path})})))))
+                :attrs (merge (:attrs el) {:d new-path})})))))
 
 (m/=> combine [:-> App App])
 (defn combine
