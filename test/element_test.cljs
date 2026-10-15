@@ -335,7 +335,8 @@
                                                   :width "100"
                                                   :height "100"
                                                   :fill "red"
-                                                  :stroke "black"}}])
+                                                  :stroke "black"
+                                                  :stroke-width "2"}}])
       (rf/dispatch [::element.events/stroke->path])
 
       (rf.test/wait-for
