@@ -170,9 +170,9 @@
 
 (defmethod element.hierarchy/bbox :rect
   [el transform]
-  (let [{{:keys [x y width height stroke-width]} :attrs} el
+  (let [{{:keys [x y width height stroke-width stroke]} :attrs} el
         [x y width height stroke-width] (->> [x y width height stroke-width]
                                              (mapv utils.length/unit->px))
-        padding (/ stroke-width 2)]
+        padding (if stroke (/ stroke-width 2) 0)]
     (->> [(- x padding) (- y padding) (+ x width padding) (+ y height padding)]
          (utils.transform/aabb transform))))

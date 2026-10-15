@@ -57,15 +57,15 @@
 
 (defmethod element.hierarchy/bbox :ellipse
   [el transform]
-  (let [{{:keys [cx cy rx ry stroke-width]} :attrs} el
+  (let [{{:keys [cx cy rx ry stroke-width stroke]} :attrs} el
         rx (or rx ry)
         ry (or ry rx)
         [cx cy rx ry stroke-width] (->> [cx cy rx ry stroke-width]
                                         (map utils.length/unit->px))
         [a b c d _e _f] transform
         [center-x center-y] (utils.transform/point transform [cx cy])
-        rx (+ rx (/ stroke-width 2))
-        ry (+ ry (/ stroke-width 2))
+        rx (cond-> rx stroke (+ (/ stroke-width 2)))
+        ry (cond-> ry stroke (+ (/ stroke-width 2)))
         half-x (Math/sqrt (+ (* a a rx rx) (* c c ry ry)))
         half-y (Math/sqrt (+ (* b b rx rx) (* d d ry ry)))]
     [(- center-x half-x) (- center-y half-y)

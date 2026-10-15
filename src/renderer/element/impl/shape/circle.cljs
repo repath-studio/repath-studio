@@ -54,12 +54,12 @@
 
 (defmethod element.hierarchy/bbox :circle
   [el transform]
-  (let [{{:keys [cx cy r stroke-width]} :attrs} el
+  (let [{{:keys [cx cy r stroke-width stroke]} :attrs} el
         [cx cy r stroke-width] (->> [cx cy r stroke-width]
                                     (map utils.length/unit->px))
         [a b c d _e _f] transform
         [center-x center-y] (utils.transform/point transform [cx cy])
-        radius (+ r (/ stroke-width 2))
+        radius (cond-> r stroke (+ (/ stroke-width 2)))
         half-x (* radius (Math/sqrt (+ (* a a) (* c c))))
         half-y (* radius (Math/sqrt (+ (* b b) (* d d))))]
     [(- center-x half-x) (- center-y half-y)
