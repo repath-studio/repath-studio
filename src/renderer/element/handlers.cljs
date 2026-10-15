@@ -866,13 +866,22 @@
                 pivot-point
                 recursive))
 
+(m/=> pivot-point [:-> App [:maybe Vec2]])
+(defn pivot-point
+  [db]
+  (when-let [bounds (bbox db)]
+    (let [[min-x min-y] bounds
+          [w h] (utils.bounds/->dimensions bounds)
+          [fx fy] (:anchor-offset db)]
+      [(+ min-x (* fx w)) (+ min-y (* fy h))])))
+
 (m/=> rotate [:function
               [:-> App number? App]
               [:-> App number? Vec2 App]
               [:-> App ElementId number? Vec2 App]])
 (defn rotate
   ([db angle]
-   (rotate db angle (-> db bbox utils.bounds/center)))
+   (rotate db angle (pivot-point db)))
   ([db angle pivot]
    (reduce (rpartial rotate angle pivot) db (top-ancestor-ids db)))
   ([db id angle pivot]

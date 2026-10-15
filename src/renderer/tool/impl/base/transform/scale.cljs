@@ -114,10 +114,7 @@
         [offset pivot-point] (delta->offset-with-pivot handle offset bbox)
         dimensions (utils.bounds/->dimensions bbox)
         pivot-point (if in-place
-                      (let [[min-x min-y] bbox
-                            [w h] dimensions
-                            [fx fy] (:anchor-offset db)]
-                        [(+ min-x (* fx w)) (+ min-y (* fy h))])
+                      (element.handlers/pivot-point db)
                       pivot-point)
         offset (cond-> offset
                  in-place

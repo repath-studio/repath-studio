@@ -28,16 +28,6 @@
                          Hold %1 to snap to 15° increments."]]
                 [[views/kbd "Ctrl"]]))
 
-(m/=> pivot [:-> App [:maybe Vec2]])
-(defn pivot
-  [db]
-  (let [bbox (element.handlers/bbox db)]
-    (when bbox
-      (let [[min-x min-y] bbox
-            [w h] (utils.bounds/->dimensions bbox)
-            [fx fy] (:anchor-offset db)]
-        [(+ min-x (* fx w)) (+ min-y (* fy h))]))))
-
 (m/=> ->anchor-offset [:-> BBox Vec2 Vec2])
 (defn ->anchor-offset
   "The [0 1] anchor offset that resolves to the given point within the bounds.
@@ -50,10 +40,10 @@
 
 (m/=> drag-angle [:-> App Vec2 number?])
 (defn drag-angle
-  [db p]
+  [db pivot-point]
   (let [[sx sy] (:local-pointer-offset db)
         [cx cy] (:local-pointer-pos db)
-        [px py] p
+        [px py] pivot-point
         start (Math/atan2 (- sy py) (- sx px))
         current (Math/atan2 (- cy py) (- cx px))]
     (math/to-degrees (- current start))))
@@ -61,14 +51,14 @@
 (defmethod tool.hierarchy/on-drag [::transform/transform :rotate]
   [db e]
   (let [db (history.handlers/reset-state db)
-        p (pivot db)
-        angle (drag-angle db p)
+        pivot-point (element.handlers/pivot-point db)
+        angle (drag-angle db pivot-point)
         angle (if (input.handlers/snap-to-angle? db e)
                 (input.handlers/snap-angle angle) angle)]
     (cond-> db
       (number? angle)
-      (-> (assoc :pivot-point p)
-          (element.handlers/rotate angle p)
+      (-> (assoc :pivot-point pivot-point)
+          (element.handlers/rotate angle pivot-point)
           (tool.handlers/set-cursor "crosshair")))))
 
 (defmethod tool.hierarchy/on-drag-end [::transform/transform :rotate]
