@@ -3,6 +3,13 @@
 All notable user facing changes to this project will be documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 0.4.26 (2026-10-16)
+
+**Fixed**
+
+- Import file regression
+- Performance regression
+
 ## 0.4.25 (2026-10-16)
 
 **Added**
