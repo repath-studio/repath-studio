@@ -3,6 +3,28 @@
 All notable user facing changes to this project will be documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 0.4.25 (2026-10-16)
+
+**Added**
+
+- Import action [#230](https://github.com/repath-studio/repath-studio/pull/230)
+
+**Removed**
+
+- Action icon from system language and history labels
+
+**Changed**
+
+- Refine rotate icons and action toolbar
+
+**Fixed**
+
+- Command dialog scroll thumb update issue
+- Boolean operation on transformed elements
+- Transform attribute when converting to path
+- Pivot on rotate and flip
+- Bounds when stroke is not set
+
 ## 0.4.24 (2026-10-14)
 
 **Added**
