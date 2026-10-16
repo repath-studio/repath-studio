@@ -106,6 +106,11 @@
       (-> (element.handlers/toggle-selection id shift-key)
           (snap.handlers/delete-from-tree #{id}))
 
+      ;; Set the pivot point for the duration of the rotate drag, since the
+      ;; anchor is re-adjusted on each drag event.
+      (= new-state :rotate)
+      (assoc :pivot-point (element.handlers/pivot-point db))
+
       (not= state new-state)
       (snap.handlers/rebuild-tree))))
 

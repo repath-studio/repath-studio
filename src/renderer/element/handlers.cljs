@@ -858,14 +858,14 @@
                   (scale-leaf db id ratio pivot-point))))
             db ids-to-scale)))
 
-(m/=> pivot-point [:-> App Vec2])
+(m/=> pivot-point [:-> App [:maybe Vec2]])
 (defn pivot-point
   [db]
-  (let [bounds (bbox db)
-        [min-x min-y] bounds
-        [w h] (utils.bounds/->dimensions bounds)
-        [fx fy] (:anchor-point db)]
-    [(+ min-x (* fx w)) (+ min-y (* fy h))]))
+  (when-let [bounds (bbox db)]
+    (let [[min-x min-y] bounds
+          [w h] (utils.bounds/->dimensions bounds)
+          [fx fy] (:anchor-point db)]
+      [(+ min-x (* fx w)) (+ min-y (* fy h))])))
 
 (m/=> scale [:function
              [:-> App Vec2 App]
@@ -876,11 +876,23 @@
    (scale db ratio false))
   ([db ratio recursive]
    (scale db ratio recursive (pivot-point db)))
-  ([db ratio recursive anchor-point]
-   (scale-reduce db
-                 (mapv #(if (or (infinite? %) (js/isNaN %)) 1 %) ratio)
-                 anchor-point
-                 recursive)))
+  ([db ratio recursive pivot]
+   (cond-> db
+     pivot
+     (scale-reduce (mapv #(if (or (infinite? %) (js/isNaN %)) 1 %) ratio)
+                   pivot
+                   recursive))))
+
+(m/=> ->anchor-offset [:-> BBox Vec2 Vec2])
+(defn ->anchor-offset
+  "The [0 1] anchor offset that resolves to the given point within the bounds.
+   Inverse of `pivot-point`, to keep the pivot in place after the bounds
+   change."
+  [bounds [px py]]
+  (let [[min-x min-y] bounds
+        [w h] (utils.bounds/->dimensions bounds)]
+    [(/ (- px min-x) w)
+     (/ (- py min-y) h)]))
 
 (m/=> rotate [:function
               [:-> App number? App]
@@ -890,12 +902,19 @@
   ([db angle]
    (rotate db angle (pivot-point db)))
   ([db angle pivot]
-   (reduce (rpartial rotate angle pivot) db (top-ancestor-ids db)))
+   (let [db (reduce (rpartial rotate angle pivot) db (top-ancestor-ids db))
+         new-anchor (some-> (bbox db) (->anchor-offset pivot))]
+     (cond-> db
+       new-anchor
+       (assoc :anchor-point new-anchor
+              :anchor-offset new-anchor))))
   ([db id angle pivot]
-   (update-transform db id pivot
-                     (fn [p] (utils.transform/rotate angle
-                                                     (first p)
-                                                     (second p))))))
+   (cond-> db
+     pivot
+     (update-transform id pivot
+                       (fn [p] (utils.transform/rotate angle
+                                                       (first p)
+                                                       (second p)))))))
 
 (m/=> flip [:function
             [:-> App Orientation App]
@@ -912,8 +931,10 @@
                 :anchor-offset new-anchor))))
   ([db id axis pivot]
    (let [ratio (if (= :horizontal axis) [-1 1] [1 -1])]
-     (update-transform db id pivot
-                       (fn [p] (utils.transform/scale-about ratio p))))))
+     (cond-> db
+       pivot
+       (update-transform id pivot
+                         (fn [p] (utils.transform/scale-about ratio p)))))))
 
 (m/=> align [:function
              [:-> App Direction App]

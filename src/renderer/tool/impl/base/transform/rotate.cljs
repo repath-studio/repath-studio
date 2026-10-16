@@ -4,7 +4,7 @@
    [malli.core :as m]
    [re-frame.core :as rf]
    [renderer.app.db :refer [App]]
-   [renderer.db :refer [BBox Vec2]]
+   [renderer.db :as db]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.subs :as-alias element.subs]
@@ -28,17 +28,7 @@
                          Hold %1 to snap to 15° increments."]]
                 [[views/kbd "Ctrl"]]))
 
-(m/=> ->anchor-offset [:-> BBox Vec2 Vec2])
-(defn ->anchor-offset
-  "The [0 1] anchor offset that resolves to the given point within the bounds.
-   Inverse of `pivot`; used to keep the pivot in place after the bounds change."
-  [bbox [px py]]
-  (let [[min-x min-y] bbox
-        [w h] (utils.bounds/->dimensions bbox)]
-    [(/ (- px min-x) w)
-     (/ (- py min-y) h)]))
-
-(m/=> drag-angle [:-> App Vec2 number?])
+(m/=> drag-angle [:-> App db/Vec2 number?])
 (defn drag-angle
   [db pivot-point]
   (let [[sx sy] (:local-pointer-offset db)
@@ -51,32 +41,22 @@
 (defmethod tool.hierarchy/on-drag [::transform/transform :rotate]
   [db e]
   (let [db (history.handlers/reset-state db)
-        pivot-point (element.handlers/pivot-point db)
+        pivot-point (:pivot-point db)
         angle (drag-angle db pivot-point)
         angle (if (input.handlers/snap-to-angle? db e)
                 (input.handlers/snap-angle angle) angle)]
     (cond-> db
-      (number? angle)
-      (-> (assoc :pivot-point pivot-point)
-          (element.handlers/rotate angle pivot-point)
+      (and pivot-point (number? angle))
+      (-> (element.handlers/rotate angle pivot-point)
           (tool.handlers/set-cursor "crosshair")))))
 
 (defmethod tool.hierarchy/on-drag-end [::transform/transform :rotate]
   [db e]
-  (let [anchor (some-> (element.handlers/bbox db)
-                       (->anchor-offset (:pivot-point db)))]
-    (cond-> db
-      :always
+  (-> db
       (tool.handlers/set-state :idle)
-
-      anchor
-      (assoc :anchor-offset anchor
-             :anchor-point anchor)
-
-      :always
-      (-> (dissoc :clicked-element :pivot-point)
-          (history.handlers/finalize (:timestamp e) [::rotate-selection
-                                                     "Rotate selection"])))))
+      (dissoc :clicked-element :pivot-point)
+      (history.handlers/finalize (:timestamp e) [::rotate-selection
+                                                 "Rotate selection"])))
 
 (defn handle
   []
