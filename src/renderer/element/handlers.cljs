@@ -1092,7 +1092,9 @@
           (add {:type :element
                 :tag :path
                 :parent (-> selected-elements first :parent)
-                :attrs (merge (:attrs el) {:d new-path})})))))
+                :attrs (-> (:attrs el)
+                           (dissoc :transform)
+                           (assoc :d new-path))})))))
 
 (m/=> combine [:-> App App])
 (defn combine
