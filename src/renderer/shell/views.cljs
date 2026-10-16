@@ -227,7 +227,7 @@
       [:div.grow]
       [:div.flex-1]
       (when md? [panel.views/close-button :shell-output])]
-     [:div.flex.flex-1.h-full.overflow-hidden.border-b..border-border
+     [:div.flex.flex-1.h-full.overflow-hidden.border-b.border-border
       (if loaded?
         [views/scroll-area
          {:ref #(rf/dispatch [::events/scroll-to-bottom %])}
