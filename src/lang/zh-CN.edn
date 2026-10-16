@@ -611,7 +611,7 @@
  {:label "画笔"
   :draw-brush "用画笔绘制"
   :brush-size "画笔大小"
-  :help-idle [:div "单击并拖动以使用画笔。按住 %1 调整画笔大小。"]}
+  :help-idle [:div "单击并拖动以使用画笔。按住 %1 调整画笔大小，%2 限制方向。"]}
 
  :renderer.tool.impl.draw.pencil
  {:label "铅笔"

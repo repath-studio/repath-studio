@@ -699,7 +699,8 @@
   :draw-brush "Fırçala"
   :brush-size "Fırça boyutu"
   :help-idle [:div "Fırçalamak için tıklayın ve sürükleyin.
-                    Fırça boyutunu ayarlamak için %1 tuşunu basılı tutun."]}
+                    Fırça boyutunu ayarlamak için %1 tuşunu basılı tutun,
+                    %2 ile yönü kısıtlayın."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Kurşunkalem"

@@ -721,7 +721,8 @@
   :draw-brush "Pennellare"
   :brush-size "Dimensione del pennello"
   :help-idle [:div "Fai clic e trascina per pennellare.
-                    Tieni premuto %1 per regolare la dimensione del pennello."]}
+                    Tieni premuto %1 per regolare la dimensione del pennello,
+                    %2 per limitare la direzione."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Matita"

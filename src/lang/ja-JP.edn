@@ -662,7 +662,8 @@
   :draw-brush "ブラシで描く"
   :brush-size "ブラシサイズ"
   :help-idle [:div "クリックしてドラッグしてブラシをかけます。
-                    %1 を押しながらブラシサイズを調整します。"]}
+                    %1 を押しながらブラシサイズを調整し、
+                    %2 で方向を制限します。"]}
 
  :renderer.tool.impl.draw.pencil
  {:label "鉛筆"

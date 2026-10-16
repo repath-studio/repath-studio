@@ -14,6 +14,10 @@
  :-> element.handlers/root)
 
 (rf/reg-sub
+ ::hovered-svg
+ :-> element.handlers/hovered-svg)
+
+(rf/reg-sub
  ::root-children
  :<- [::document.subs/elements]
  :<- [::root]

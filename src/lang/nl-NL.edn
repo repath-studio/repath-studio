@@ -722,7 +722,8 @@
   :draw-brush "Penselen"
   :brush-size "Penseelgrootte"
   :help-idle [:div "Klik en sleep om te penselen.
-                    Houd %1 ingedrukt om de penseelgrootte aan te passen."]}
+                    Houd %1 ingedrukt om de penseelgrootte aan te passen,
+                    %2 om de richting te beperken."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Potlood"

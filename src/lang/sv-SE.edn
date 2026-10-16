@@ -706,7 +706,8 @@
   :draw-brush "Pensla"
   :brush-size "Penselstorlek"
   :help-idle [:div "Klicka och dra för att pensla.
-                    Håll %1 intryckt för att justera penselstorlek."]}
+                    Håll %1 intryckt för att justera penselstorlek,
+                    %2 för att begränsa riktning."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Blyertspenna"

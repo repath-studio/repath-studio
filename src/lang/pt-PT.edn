@@ -701,7 +701,8 @@
   :draw-brush "Pincelar"
   :brush-size "Tamanho do pincel"
   :help-idle [:div "Clique e arraste para pincelar.
-                    Segure %1 para ajustar o tamanho do pincel."]}
+                    Segure %1 para ajustar o tamanho do pincel,
+                    %2 para restringir a direção."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Lápis"

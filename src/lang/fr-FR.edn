@@ -716,7 +716,8 @@
   :draw-brush "Brosser"
   :brush-size "Taille du pinceau"
   :help-idle [:div "Cliquez et faites glisser pour brosser.
-                    Maintenez %1 pour ajuster la taille du pinceau."]}
+                    Maintenez %1 pour ajuster la taille du pinceau,
+                    %2 pour restreindre la direction."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Crayon"

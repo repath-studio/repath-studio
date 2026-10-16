@@ -723,7 +723,8 @@
   :draw-brush "Pinseln"
   :brush-size "Pinselgröße"
   :help-idle [:div "Klicken und ziehen zum Pinseln.
-                    Halten Sie %1 gedrückt, um die Pinselgröße anzupassen."]}
+                    Halten Sie %1 gedrückt, um die Pinselgröße anzupassen,
+                    %2 um die Richtung zu beschränken."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Bleistift"

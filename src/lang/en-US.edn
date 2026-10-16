@@ -698,7 +698,8 @@
   :draw-brush "Brush"
   :brush-size "Brush size"
   :help-idle [:div "Click and drag to brush.
-                    Hold %1 to adjust the brush size."]}
+                    Hold %1 to adjust the brush size,
+                    %2 to restrict direction."]}
 
  :renderer.tool.impl.draw.pencil
  {:label "Pencil"
