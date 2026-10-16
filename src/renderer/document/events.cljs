@@ -17,6 +17,7 @@
    [renderer.element.events :as-alias element.events]
    [renderer.element.handlers :as element.handlers]
    [renderer.events :as-alias events]
+   [renderer.frame.events :as-alias frame.events]
    [renderer.history.events :refer [finalize]]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.handlers :as i18n.handlers]
@@ -205,7 +206,8 @@
 (rf/reg-event-fx
  ::import-file
  (fn [_ [_ file-handle ^js/File file]]
-   {:dispatch [::element.events/import-file file-handle file [0 0]]}))
+   {:dispatch-n [[::element.events/import-file file-handle file [0 0]]
+                 [::frame.events/focus-selection :original]]}))
 
 (rf/reg-event-fx
  ::open-from-args
