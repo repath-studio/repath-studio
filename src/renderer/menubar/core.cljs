@@ -65,7 +65,6 @@
 (rf/dispatch [::action.events/register-action
               {:id :help/license
                :label [::license "License"]
-               :icon "lgpl"
                :event [::events/open-remote-url
                        "https://repath.studio/policies/license/"]}])
 
@@ -79,14 +78,12 @@
 (rf/dispatch [::action.events/register-action
               {:id :help/privacy-policy
                :label [::privacy-policy "Privacy Policy"]
-               :icon "lock"
                :event [::events/open-remote-url
                        "https://repath.studio/policies/privacy/"]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :help/submit-issue
                :label [::submit-an-issue "Submit an issue"]
-               :icon "warning"
                :event [::events/open-remote-url
                        "https://github.com/repath-studio/repath-studio/issues/new/choose"]}])
 
@@ -96,8 +93,8 @@
                :label [::help-links "Help links"]
                :actions [:help/website
                          :help/source-code
-                         :help/license
                          :help/changelog
+                         :help/license
                          :help/privacy-policy
                          :help/submit-issue]}])
 

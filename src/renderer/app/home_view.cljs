@@ -68,7 +68,7 @@
   [{:keys [path title]
     :as recent}]
   [:div.flex.items-center.gap-x-2.flex-wrap
-   [views/icon "folder"]
+   [:span {:class "w-[17px] shrink-0"}]
    [button-link
     {:on-click #(rf/dispatch [::document.events/open-recent recent])}
     (or title (.basename path-browserify path))]
@@ -78,7 +78,8 @@
 (defn command
   [action]
   [:div.flex.items-center.gap-3.flex-wrap
-   [views/icon (:icon action)]
+   [:span {:class "w-[17px] shrink-0 text-foreground-muted"}
+    [views/icon (:icon action)]]
    [button-link
     {:on-click (action.views/dispatch action)}
     [action.views/label action]]

@@ -9,7 +9,6 @@
 (rf/dispatch [::action.events/register-action
               {:id :dialog/about
                :label [::about "About"]
-               :icon "info"
                :event [::dialog.events/show-about]}])
 
 (def cmdk-title [::command-panel "Command panel"])

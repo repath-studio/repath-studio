@@ -288,7 +288,7 @@
      [:> HoverCard/Root
       [:> HoverCard/Trigger {:as-child true}
        [:div.flex.items-center
-        [views/icon-button "info"
+        [views/icon-button "book"
          {:title (i18n.views/t [::mdn-info "MDN Info"])
           :class "hover:bg-transparent w-auto h-auto"}]]]
       [:> HoverCard/Portal

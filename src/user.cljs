@@ -431,13 +431,18 @@
   (rf/dispatch [::window.events/close]))
 
 (mx/defn register-icon
-  "Registers an icon."
-  [icon]
-  (rf/dispatch [::icon.events/register-icon icon]))
+  "Registers an icon.
+
+   Arguments:
+   - `id`: The id of the icon.
+   - `d`: The path string."
+  [id :- :string d :- :string]
+  (rf/dispatch [::icon.events/register-icon {:id id
+                                             :path d}]))
 
 (mx/defn deregister-icon
   "Deregisters an icon."
-  [id]
+  [id :- :string]
   (rf/dispatch [::icon.events/deregister-icon id]))
 
 (mx/defn register-accessibility-filter
@@ -545,10 +550,9 @@
                                         :altKey true}]}
                     :enabled [:renderer.history.subs/undos?]})
 
-  (register-icon {:id "dot"
-                  :path "M 12.982 8.5 A 4.482 4.482 0 0 1 8.5 12.982 A 4.482
-                         4.482 0 0 1 4.018 8.5 A 4.482 4.482 0 0 1 12.982 8.5
-                         z"})
+  (register-icon "dot" "M 12.982 8.5 A 4.482 4.482 0 0 1 8.5 12.982 A 4.482
+                        4.482 0 0 1 4.018 8.5 A 4.482 4.482 0 0 1 12.982 8.5
+                        z")
 
   (register-language {:id "im-LA"
                       :dir "ltr"
