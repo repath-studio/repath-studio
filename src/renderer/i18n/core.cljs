@@ -10,7 +10,6 @@
 (rf/dispatch [::action.events/register-action
               {:id :lang/system
                :label [::system "System"]
-               :icon "language"
                :event [::i18n.events/set-user-lang "system"]
                :active [::i18n.subs/selected-lang? "system"]}])
 
