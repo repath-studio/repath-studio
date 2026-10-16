@@ -275,9 +275,8 @@
             {:class "bg-primary"}
             [:div.flex-1]
             [panel.views/close-button :xml]]
-           [:div.flex.flex-1.overflow-hidden.h-full
-            [views/scroll-area
-             [:div.flex [xml-panel]]]]]]
+           [views/scroll-area
+            [:div.flex [xml-panel]]]]]
          [panel.views/separator]])
 
       [panel.views/panel

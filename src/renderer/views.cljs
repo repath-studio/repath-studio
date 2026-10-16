@@ -301,12 +301,13 @@
 
 (defn scroll-area
   [& more]
-  (let [children (if (map? (first more)) (rest more) more)]
+  (let [props (when (map? (first more)) (first more))
+        children (if props (rest more) more)]
     [:> ScrollArea/Root
      {:class "overflow-hidden w-full h-full"}
      (into [:> ScrollArea/Viewport
-            {:ref (:ref (first more))
-             :class "w-full h-full [&>div]:block!"}] children)
+            (merge-with-class {:class "w-full h-full [&>div]:block!"}
+                              props)] children)
 
      [:> ScrollArea/Scrollbar
       {:class "flex touch-none p-0.5 select-none w-2.5"

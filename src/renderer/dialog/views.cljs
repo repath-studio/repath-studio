@@ -173,13 +173,15 @@
             :default-checked @hide-shortcutless?
             :on-checked-change #(reset! hide-shortcutless? %)}])]
        [views/scroll-area
+        {:class "max-h-[50dvh]"}
         (->> (vals action-groups)
              (keep #(cmdk-group % @hide-disabled? @hide-shortcutless?))
              (into [:> Command/CommandList
-                    {:class "p-1 max-h-[50dvh]"}
+                    {:class "p-1"}
                     [:> Command/CommandEmpty
                      {:class "p-2"}
-                     (i18n.views/t [::no-results "No results found."])]]))]])))
+                     (i18n.views/t [::no-results
+                                    "No results found."])]]))]])))
 
 (def modifier-key-codes
   "keyCodes for keys that are modifiers on their own and shouldn't be captured

@@ -42,18 +42,18 @@
     [:> Command/CommandInput
      {:class "p-3 bg-primary border-b border-border w-full"
       :placeholder (i18n.views/t [::search-font "Search for a font"])}]
-    [:div.flex.max-h-80.overflow-hidden
-     [views/scroll-area
-      [:> Command/CommandList
-       {:class "p-1"}
-       [:> Command/CommandEmpty
-        (if-not font-list
-          [:div.w-full.flex.justify-center.p-2.bg-primary
-           [views/loading-indicator]]
-          (i18n.views/t [::no-local-font "No local fonts found."]))]
-       (for [font font-list]
-         ^{:key font}
-         [font-item font])]]]]])
+    [views/scroll-area
+     {:class "max-h-80"}
+     [:> Command/CommandList
+      {:class "p-1"}
+      [:> Command/CommandEmpty
+       (if-not font-list
+         [:div.w-full.flex.justify-center.p-2.bg-primary
+          [views/loading-indicator]]
+         (i18n.views/t [::no-local-font "No local fonts found."]))]
+      (for [font font-list]
+        ^{:key font}
+        [font-item font])]]]])
 
 (defmethod attribute.hierarchy/form-element [::element.hierarchy/element
                                              :font-family]

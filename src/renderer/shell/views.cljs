@@ -260,8 +260,9 @@
       [:div.font-semibold.text-normal.text-sm
        [views/static-highlight head theme-mode parser]]
       (when body
-        [:div.max-h-40.overflow-hidden.flex
-         [views/scroll-area body]])]]))
+        [views/scroll-area
+         {:class "max-h-40"}
+         body])]]))
 
 (defn completion-list
   []

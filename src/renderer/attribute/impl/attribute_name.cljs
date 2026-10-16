@@ -37,15 +37,15 @@
      {:class "p-3 bg-primary border-b border-border w-full"
       :placeholder (i18n.views/t [::search-attribute
                                   "Search for an attribute"])}]
-    [:div.flex.max-h-80.overflow-hidden
-     [views/scroll-area
-      [:> Command/CommandList
-       {:class "p-1"}
-       [:> Command/CommandEmpty
-        (i18n.views/t [::no-attributes "No attributes found."])]
-       (for [attr utils.attribute/presentation]
-         ^{:key attr}
-         [attr-item (name attr)])]]]]])
+    [views/scroll-area
+     {:class "max-h-80"}
+     [:> Command/CommandList
+      {:class "p-1"}
+      [:> Command/CommandEmpty
+       (i18n.views/t [::no-attributes "No attributes found."])]
+      (for [attr utils.attribute/presentation]
+        ^{:key attr}
+        [attr-item (name attr)])]]]])
 
 (defmethod attribute.hierarchy/form-element [::element.hierarchy/animation
                                              :attributeName]
