@@ -47,7 +47,6 @@
 (rf/dispatch [::action.events/register-action
               {:id :history/toggle-labels
                :label [::labels "Labels"]
-               :icon "text"
                :active [::history.subs/labels?]
                :event [::history.events/toggle-labels]}])
 
