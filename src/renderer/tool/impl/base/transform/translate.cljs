@@ -91,13 +91,14 @@
         delta (tool.handlers/pointer-delta db)
         selected-elements (element.handlers/selected db)
         locked? (every? :locked selected-elements)
-        primary-mod? (input.handlers/primary-mod? db e)]
+        primary-mod? (input.handlers/primary-mod? db e)
+        multi-touch? (input.handlers/multi-touch? db)]
     (if alt-key
       (tool.handlers/set-state db :clone)
       (-> db
           (history.handlers/reset-state)
           (transform.select/select-element shift-key)
-          (translate delta primary-mod?)
+          (translate delta (or primary-mod? multi-touch?))
           (snap.handlers/snap-with translate primary-mod?)
           (tool.handlers/set-cursor (if locked? "not-allowed" "move"))))))
 

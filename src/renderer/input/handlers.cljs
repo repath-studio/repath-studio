@@ -24,10 +24,12 @@
         (utils.math/v-div zoom)
         (utils.math/v-add pan))))
 
+(m/=> multi-touch? [:-> App boolean?])
 (defn multi-touch?
   [db]
   (> (count (:active-pointers db)) 1))
 
+(m/=> primary-mod? [:-> App PointerEvent boolean?])
 (defn primary-mod?
   [db e]
   (if (= (:web-platform db) "Mac")
