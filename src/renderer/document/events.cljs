@@ -206,8 +206,7 @@
 (rf/reg-event-fx
  ::import-file
  (fn [_ [_ file-handle ^js/File file]]
-   {:dispatch-n [[::element.events/import-file file-handle file [0 0]]
-                 [::frame.events/focus-selection :original]]}))
+   {:dispatch-n [::element.events/import-file file-handle file [0 0]]}))
 
 (rf/reg-event-fx
  ::open-from-args
