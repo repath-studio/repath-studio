@@ -17,7 +17,6 @@
    [renderer.element.events :as-alias element.events]
    [renderer.element.handlers :as element.handlers]
    [renderer.events :as-alias events]
-   [renderer.frame.events :as-alias frame.events]
    [renderer.history.events :refer [finalize]]
    [renderer.history.handlers :as history.handlers]
    [renderer.i18n.handlers :as i18n.handlers]
