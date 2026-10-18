@@ -266,7 +266,7 @@
       (when (and md? xml-visible?)
         [:<>
          [panel.views/panel
-          {:id :xml
+          {:id "xml"
            :class "relative"
            :defaultSize 300
            :minSize 100}
@@ -280,7 +280,7 @@
          [panel.views/separator]])
 
       [panel.views/panel
-       {:defaultSize "100%"
+       {:id "frame"
         :minSize 320}
        [frame-panel]]
 
@@ -288,7 +288,7 @@
         [:<>
          [panel.views/separator]
          [panel.views/panel
-          {:id :history
+          {:id "history"
            :class "relative"
            :defaultSize 300
            :minSize 100}
@@ -304,7 +304,7 @@
       :id "editor-group"
       :class "h-full"}
      [panel.views/panel
-      {:defaultSize "100%"
+      {:id "center"
        :minSize 100}
       [center-top-group]]
 
@@ -312,7 +312,7 @@
        [:<>
         [panel.views/separator]
         [panel.views/panel
-         {:id :timeline
+         {:id "timeline"
           :class "relative"
           :minSize 100
           :defaultSize 300}
@@ -379,7 +379,7 @@
         :id "main-editor-group"
         :class "w-full"}
        [panel.views/panel
-        {:defaultSize "100%"
+        {:id "editor"
          :minSize 320}
         [:div.flex.h-full.flex-col.flex-1.overflow-hidden.gap-px.w-full
          [editor]]]
@@ -387,7 +387,7 @@
          [:<>
           [panel.views/separator]
           [panel.views/panel
-           {:id :attributes
+           {:id "attributes"
             :defaultSize 320
             :minSize 320
             :groupResizeBehavior "preserve-pixel-size"
@@ -415,7 +415,7 @@
        (when (and tree? md?)
          [:<>
           [panel.views/panel
-           {:id :tree
+           {:id "tree"
             :defaultSize 227
             :minSize 227
             :groupResizeBehavior "preserve-pixel-size"}
@@ -424,7 +424,7 @@
             [tree.views/root]]]
           [panel.views/separator]])
        [panel.views/panel
-        {:defaultSize "100%"
+        {:id "main"
          :minSize 665}
         [center-panel]]]]
      (when-not md?

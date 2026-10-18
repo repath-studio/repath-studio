@@ -40,8 +40,7 @@
 (defc group
   [{:keys [id]
     :as props} & children]
-  (let [layout (useDefaultLayout #js {:id id
-                                      :onlySaveAfterUserInteractions true})]
+  (let [layout (useDefaultLayout #js {:id id})]
     (into [:> Group
            (merge {:defaultLayout (.-defaultLayout layout)
                    :onLayoutChange (.-onLayoutChange layout)}

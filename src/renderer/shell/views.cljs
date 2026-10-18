@@ -291,7 +291,7 @@
      (if md?
        (when repl-history?
          [panel.views/panel
-          {:id :shell-output
+          {:id "shell-output"
            :class "relative"
            :minSize 100
            :defaultSize 300}
