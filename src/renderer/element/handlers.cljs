@@ -866,7 +866,7 @@
                           (into #{}
                                 (comp (filter #(transformed? (entity db %)))
                                       (mapcat (partial descendant-ids db)))
-                                (selected-ids db))))]
+                                ids-to-scale)))]
     (reduce (fn [db id]
               (let [el (entity db id)]
                 (if (and (= (:tag el) :g)
