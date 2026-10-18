@@ -280,7 +280,7 @@
          [panel.views/separator]])
 
       [panel.views/panel
-       {:id "frame"
+       {:id "iframe"
         :minSize 320}
        [frame-panel]]
 

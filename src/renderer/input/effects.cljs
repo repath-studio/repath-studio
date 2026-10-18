@@ -7,12 +7,14 @@
 (rf/reg-fx
  ::set-pointer-capture
  (fn [pointer-id]
-   (.setPointerCapture (utils.dom/get-canvas-element) pointer-id)))
+   (some-> (utils.dom/get-canvas-element)
+           (.setPointerCapture pointer-id))))
 
 (rf/reg-fx
  ::release-pointer-capture
  (fn [pointer-id]
-   (.releasePointerCapture (utils.dom/get-canvas-element) pointer-id)))
+   (some-> (utils.dom/get-canvas-element)
+           (.releasePointerCapture pointer-id))))
 
 (rf/reg-fx
  ::drop
