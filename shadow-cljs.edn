@@ -1,5 +1,7 @@
 {:deps {:aliases [:dev]}
 
+ :nrepl {:port 9000}
+
  :build-defaults {:build-hooks [(shadow-git-inject.core/hook)]
                   :compiler-options {:source-map true
                                      :output-feature-set :es-unsupported
@@ -31,7 +33,8 @@
              :compiler-options {:optimizations :advanced
                                 :closure-defines
                                 {config/version :shadow-git-inject/version}}
-             :devtools {:preloads [day8.re-frame-10x.preload
+             :devtools {:preloads [flow-storm.preload
+                                   day8.re-frame-10x.preload
                                    devtools.preload
                                    ;; This generates a clj-kondo config based on
                                    ;; the malli types used in the project.
