@@ -31,7 +31,7 @@
     "electron": "npx electron .",
     "dist": "npx electron-builder",
     "clj-format": "clojure -M:format -m cljfmt.main fix src test portfolio",
-    "clj-lint": "clojure -M:lint -m clj-kondo.main --lint src test portfolio",
+    "clj-lint": "clojure -M:lint -m clj-kondo.main --lint src test portfolio .clj-kondo",
     "validate-translations": "clojure -M -m build.translation-validator",
     "check-links": "npx doc-link-checker-cli lint",
     "markdown-lint": "npx markdownlint-cli **/*.md -i node_modules -c .markdownlint.json",

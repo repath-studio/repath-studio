@@ -855,6 +855,7 @@
                 db children)
         (refresh-bbox id))))
 
+(m/=> scale-reduce [:-> App Vec2 Vec2 boolean? App])
 (defn scale-reduce
   [db ratio pivot-point recursive]
   (let [ids-to-scale (cond->> (selected-ids db)
@@ -1055,7 +1056,7 @@
         (add-child-elements id child-els)))))
 
 (m/=> add-child-elements [:-> App ElementId any? App])
-(defn- add-child-elements
+(defn add-child-elements
   [db parent-id child-els]
   (reduce #(cond-> %1
              (element.db/tag? (:tag %2))
