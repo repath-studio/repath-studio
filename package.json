@@ -38,7 +38,9 @@
     "lint": "npx npm-run-all --parallel clj-lint markdown-lint check-links validate-translations",
     "clean": "rm -rf resources/public/js/* && rm -rf src/generated && rm -rf target && rm -rf dist && rm -rf .shadow-cljs",
     "build-report": "npx shadow-cljs run shadow.cljs.build-report renderer target/build-report.html",
-    "test": "npx shadow-cljs compile karma-test && npx karma start --browsers ChromeHeadlessNoSandbox --single-run --reporters junit,dots",
+    "test:renderer": "npx shadow-cljs compile karma-test && npx karma start --single-run --reporters junit,dots",
+    "test:electron": "npx shadow-cljs release main preload && npx shadow-cljs compile karma-electron && env -u ELECTRON_RUN_AS_NODE KARMA_ELECTRON=1 xvfb-run -a npx karma start --single-run --reporters dots,junit",
+    "test": "npx npm-run-all test:electron test:renderer",
     "mobile-assets": "npx @capacitor/assets generate --pwaManifestPath=/resources/public/manifest.json --assetPath=/resources/public/img --splashBackgroundColor=#dd286c --splashBackgroundColorDark=#dd286c --logoSplashScale=0.4 --iconBackgroundColor=#dd286c --iconBackgroundColorDark=#dd286c --android --ios",
     "pwa-assets": "npx @capacitor/assets generate --pwaManifestPath=/resources/public/manifest.json --assetPath=/resources/public/img/pwa --pwa"
   },

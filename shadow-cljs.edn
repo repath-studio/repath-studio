@@ -63,10 +63,16 @@
 
   :browser-test {:target :browser-test
                  :runner-ns shadow.test.browser
-                 :test-dir "target/browser-test"}
+                 :test-dir "target/browser-test"
+                 :exclude #{electron.electron-test}}
 
   :karma-test {:target :karma
-               :output-to "target/karma-test.js"}
+               :output-to "target/karma-test.js"
+               :exclude #{electron.electron-test}}
+
+  :karma-electron {:target :karma
+                   :output-to "target/karma-electron-test.js"
+                   :namespaces #{electron.electron-test}}
 
   :portfolio {:target :browser
               :modules {:scenes {:init-fn portfolio/init!}}
