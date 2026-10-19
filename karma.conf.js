@@ -15,6 +15,7 @@ module.exports = function (config) {
       CustomElectron: {
         base: 'Electron',
         require: __dirname + '/test/electron/test-main.js',
+        flags: ['--no-sandbox'],
         browserWindowOptions: {
           webPreferences: {
             preload: __dirname + '/resources/preload.js',
