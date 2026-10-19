@@ -6,11 +6,23 @@ that provides targets to make building tests easier.
 ## Running the tests
 
 Browser tests are watched and served on dev at [`http://localhost:8081/`](http://localhost:8081/).
-You can also individually run the tests by executing
+You can also run the headless renderer tests by executing
 
 ```bash
-npm run test
+npm run test:renderer
 ```
+
+The electron specific tests can be executed with
+
+```bash
+npm run test:electron
+```
+
+They run the main process under an xvfb display, so `xvfb-run` needs to be
+available on Linux. Do not run them while an Electron app instance is open.
+The main process requests a single-instance lock and quits if it fails.
+
+`npm run test` runs both suites sequentially.
 
 See [`shadow-cljs.edn`](../shadow-cljs.edn) and [`karma.conf.js`](../karma.conf.js)
 for details.

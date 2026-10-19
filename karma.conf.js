@@ -1,5 +1,6 @@
 module.exports = function (config) {
-  var junitOutputDir = process.env.CIRCLE_TEST_REPORTS || "target/junit"
+  var isElectron = process.env.KARMA_ELECTRON === '1'
+  var junitOutputDir = 'junit'
 
   config.set({
     browserDisconnectTimeout: 10000,
@@ -13,7 +14,8 @@ module.exports = function (config) {
       },
       CustomElectron: {
         base: 'Electron',
-        require: __dirname + '/resources/main.js',
+        require: __dirname + '/test/electron/test-main.js',
+        flags: ['--no-sandbox'],
         browserWindowOptions: {
           webPreferences: {
             preload: __dirname + '/resources/preload.js',
@@ -22,9 +24,9 @@ module.exports = function (config) {
         }
       }
     },
-    browsers: ['ChromeHeadlessNoSandbox', 'CustomElectron'],
+    browsers: [isElectron ? 'CustomElectron' : 'ChromeHeadlessNoSandbox'],
     basePath: 'target',
-    files: ['karma-test.js'],
+    files: [isElectron ? 'karma-electron-test.js' : 'karma-test.js'],
     frameworks: ['cljs-test'],
     plugins: [
       'karma-electron',

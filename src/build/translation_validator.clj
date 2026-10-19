@@ -116,8 +116,8 @@
    already present in the language file, for use as an insertion anchor."
   [present entries target]
   (first (filter #(contains? present (name (first %)))
-                  (reverse (take-while #(not= (name (first %)) (name target))
-                                       entries)))))
+                 (reverse (take-while #(not= (name (first %)) (name target))
+                                      entries)))))
 
 (defn ns-anchor
   "Returns the closest preceding namespace (in base order) that exists in the
@@ -125,8 +125,8 @@
    namespace."
   [base-dictionary lang-dictionary ns-key]
   (first (filter #(contains? lang-dictionary %)
-                  (reverse (take-while #(not= % ns-key)
-                                       (keys base-dictionary))))))
+                 (reverse (take-while #(not= % ns-key)
+                                      (keys base-dictionary))))))
 
 (defn missing-groups
   "Groups the base keys missing from a language dictionary by namespace,
@@ -152,8 +152,9 @@
                             :present (or present #{})
                             :missing missing}]))
                       (when-not (contains? lang-dictionary k)
-                        [{:scalar k :value base-value}])))))
-                (keys base-dictionary)))
+                        [{:scalar k
+                          :value base-value}])))))
+        (keys base-dictionary)))
 
 (defn print-ns-group
   "Prints the missing keys of one namespace with their insertion anchors."

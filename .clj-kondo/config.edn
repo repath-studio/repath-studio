@@ -6,7 +6,7 @@
            :single-key-in {:level :warning}
            :shadowed-var {:level :warning}
            :aliased-namespace-symbol {:level :warning}
-           :condition-always-true {:level :warning}
+           :constant-condition {:level :warning}
            :case-symbol-test {:level :warning}
            :docstring-leading-trailing-whitespace {:level :warning}
            :def-fn {:level :warning}
@@ -143,6 +143,7 @@
                       renderer.utils.svg utils.svg
                       renderer.utils.unit utils.unit
                       renderer.utils.vec utils.vec
+                      renderer.utils.transform utils.transform
                       renderer.window.db window.db
                       renderer.window.effects window.effects
                       renderer.window.events window.events
