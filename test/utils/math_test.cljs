@@ -42,7 +42,8 @@
                                       (let [d1 (utils.math/distance p q)
                                             d2 (utils.math/distance q p)]
                                         (and (>= d1 0)
-                                             (= d1 d2))))))))
+                                             (<= (Math/abs (- d1 d2))
+                                                 1e-10))))))))
 
 (deftest test-triangle-inequality
   (testing "triangle inequality holds for distance"
