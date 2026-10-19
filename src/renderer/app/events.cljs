@@ -133,10 +133,9 @@
    {:db (cond-> db
           (:active-document db)
           (snap.handlers/rebuild-tree))
-    ;; The order of the following events is important.
-    ;; Changes require thorough testing on all platforms.
-    :fx (into [[:dispatch [::error.events/init-reporting]]
-               ;; We initialize values that might flicker the view
+    :fx (into [;; The order of the following events is important.
+               ;; Changes require thorough testing on all platforms.
+               [:dispatch [::error.events/init-reporting]]
                [:dispatch [::theme.events/set-native-mode]]
                [:dispatch [::theme.events/update-data-theme]]
                [:dispatch [::theme.events/update-meta-color]]
@@ -144,6 +143,7 @@
                [:dispatch [::i18n.events/set-lang-attrs]]
                [:dispatch [::shell.events/init]]
                [:dispatch [::document.events/open-from-args]]
+               ;; We initialize values that might flicker the view before this.
                [:dispatch [::set-loading false]]
                [::app.effects/hide-splash-screen]
                [::effects/ipc-send ["initialized"]]
