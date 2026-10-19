@@ -1327,21 +1327,35 @@
 (def SvgData [:map
               [:svg string?]
               [:label string?]
-              [:position Vec2]])
+              [:position Vec2]
+              [:size {:optional true} [:maybe Vec2]]
+              [:viewBox {:optional true} [:maybe string?]]
+              [:preserveAspectRatio {:optional true} [:maybe string?]]])
 
 (m/=> import-svg [:-> App SvgData App])
 (defn import-svg
   [db data]
-  (let [{:keys [svg label position]} data
+  (let [{:keys [svg label position size viewBox preserveAspectRatio]} data
         [x y] position
         hickory (hickory/as-hickory (hickory/parse svg))
         zipper (hickory.zip/hickory-zip hickory)
         svg (utils.element/find-svg zipper)
-        svg (-> svg
-                (assoc :label label)
-                (update :attrs dissoc :desc :version :xmlns)
-                (assoc-in [:attrs :x] x)
-                (assoc-in [:attrs :y] y))]
+        svg (cond-> svg
+              :always
+              (-> (assoc :label label)
+                  (update :attrs dissoc :desc :version :xmlns)
+                  (assoc-in [:attrs :x] x)
+                  (assoc-in [:attrs :y] y))
+
+              size
+              (-> (assoc-in [:attrs :width] (first size))
+                  (assoc-in [:attrs :height] (second size)))
+
+              viewBox
+              (assoc-in [:attrs :viewBox] viewBox)
+
+              preserveAspectRatio
+              (assoc-in [:attrs :preserveAspectRatio] preserveAspectRatio))]
     (-> (add db svg)
         (collapse-all))))
 

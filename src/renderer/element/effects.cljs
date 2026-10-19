@@ -5,17 +5,24 @@
    [renderer.utils.length :as utils.length]
    [renderer.worker.events :as-alias worker.events]))
 
-(defn data-url->canvas!
-  [data-url size on-error f]
-  (let [[w h] size
-        canvas (js/OffscreenCanvas. w h)
-        context (.getContext canvas "2d")
-        image (js/Image.)]
+(defn decode-image!
+  [data-url on-error f]
+  (let [image (js/Image.)]
     (set! (.-src image) data-url)
     (-> (.decode image)
-        (.then #(do (.drawImage context image 0 0 w h)
-                    (f canvas)))
+        (.then #(f image))
         (.catch #(some-> on-error (conj %) rf/dispatch)))))
+
+(defn data-url->canvas!
+  [data-url size on-error f]
+  (decode-image!
+   data-url
+   on-error
+   (fn [^js/Image image]
+     (let [[w h] size
+           canvas (js/OffscreenCanvas. w h)]
+       (.drawImage (.getContext canvas "2d") image 0 0 w h)
+       (f canvas)))))
 
 (rf/reg-fx
  ::trace
@@ -23,23 +30,32 @@
    (doseq [image data]
      (let [data-url (-> image :attrs :href)
            [x y] (:bbox image)
-           ;; TODO: Handle preserveAspectRatio.
+           label (:label image)
+           preserve-aspect-ratio (-> image :attrs :preserveAspectRatio)
            w (utils.length/unit->px (-> image :attrs :width))
            h (utils.length/unit->px (-> image :attrs :height))]
-       (data-url->canvas!
+       (decode-image!
         data-url
-        [w h]
         on-error
-        (fn [canvas]
-          (rf/dispatch
-           [::worker.events/create
-            {:action "trace"
-             :data {:label (:label image)
-                    :position [x y]
-                    :image (-> canvas
-                               (.getContext "2d")
-                               (.getImageData 0 0 w h))}
-             :on-success on-success}])))))))
+        (fn [^js/Image img]
+          (let [iw (or (when (pos? (.-naturalWidth img))
+                         (.-naturalWidth img)) w)
+                ih (or (when (pos? (.-naturalHeight img))
+                         (.-naturalHeight img)) h)
+                canvas (js/OffscreenCanvas. iw ih)]
+            (.drawImage (.getContext canvas "2d") img 0 0 iw ih)
+            (rf/dispatch
+             [::worker.events/create
+              {:action "trace"
+               :data {:label label
+                      :position [x y]
+                      :size (when (and (pos? w) (pos? h)) [w h])
+                      :viewBox (str "0 0 " iw " " ih)
+                      :preserveAspectRatio preserve-aspect-ratio
+                      :image (-> canvas
+                                 (.getContext "2d")
+                                 (.getImageData 0 0 iw ih))}
+               :on-success on-success}]))))))))
 
 (defn- decode-image
   [data-url {:keys [^js/File file parent position on-success on-error]}]
