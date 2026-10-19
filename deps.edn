@@ -26,7 +26,8 @@
          ;; before attempting to upgrade re-frame-10x.
          day8.re-frame/re-frame-10x {:mvn/version "1.12.1"}
          day8.re-frame/test {:mvn/version "0.1.7"}
-         no.cjohansen/portfolio {:mvn/version "2026.03.1"}}}
+         no.cjohansen/portfolio {:mvn/version "2026.03.1"}
+         org.clojure/test.check {:mvn/version "1.1.3"}}}
   :format {:deps {dev.weavejester/cljfmt {:mvn/version "0.16.6"}}}
   :lint {:deps {clj-kondo/clj-kondo {:mvn/version "2026.08.04"}}}
   :outdated {:deps {com.github.liquidz/antq {:mvn/version "2.11.1276"}}
