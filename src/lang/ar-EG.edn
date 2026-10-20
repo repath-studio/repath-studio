@@ -33,8 +33,15 @@
                           المنسوخة من مصادر غير موثوقة محتوى خبيثًا."
   :confirm-paste "أفهم، دعني ألصق"}
 
+ :renderer.app.events
+ {:invalid-configuration "تكوين غير صالح"
+  :configuration-reset "كان تكوينك غير صالح وتمت إعادة تعيينه."
+  :download-complete "اكتمل التنزيل"
+  :restart-to-update "سيتم تحديث التطبيق عند إعادة تشغيله."}
+
  :renderer.dialog.events
  {:are-you-sure "هل أنت متأكد أنك تريد المتابعة؟"
+  :update-available "تحديث متاح"
   :keybindings "اختصارات لوحة المفاتيح"}
 
  :renderer.dialog.views
@@ -47,6 +54,7 @@
   :search-command "البحث عن أمر"
   :shortcut-in-use [:div "هذا الاختصار قيد الاستخدام من قبل %1."]
   :no-results "لا توجد نتائج."
+  :remind-me-later "ذكّرني لاحقًا"
   :version "الإصدار: "
   :browser "المتصفح: "
   :hide-shortcutless "إخفاء بدون اختصار"
@@ -56,9 +64,11 @@
   :dont-save "عدم الحفظ"
   :cancel "إلغاء"
   :ok "موافق"
+  :new-version "الإصدار %1 متاح."
   :action-cannot-undone "لا يمكن التراجع عن هذا الإجراء."
   :changes-will-be-lost [:p "ستفقد التغييرات في %1 إذا أغلقت المستند
-                             بدون حفظ."]}
+                             بدون حفظ."]
+  :install-now "ثبّت الآن"}
 
  :renderer.menubar.views
  {:file "ملف"
@@ -728,6 +738,7 @@
   :close "إغلاق"
   :theme "وضع السمة - %1"
   :enter-fullscreen "دخول الشاشة الكاملة"
+  :update-available "تحديث متاح"
   :exit-fullscreen "خروج من الشاشة الكاملة"
   :install "تثبيت"}
 
@@ -799,9 +810,9 @@
  {:close-panel "إغلاق اللوحة"}
 
  :renderer.app.core
- {:help-view "عرض المساعدة"
-  :help-bar "شريط المساعدة"
-  :debug-info "معلومات التصحيح"}
+ {:help-bar "شريط المساعدة"
+  :debug-info "معلومات التصحيح"
+  :auto-update "التحديث التلقائي"}
 
  :renderer.dialog.core
  {:dialog "مربع حوار"

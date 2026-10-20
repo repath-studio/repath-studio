@@ -32,8 +32,15 @@
                           ，从不可信来源复制的命令也可能隐藏恶意内容。"
   :confirm-paste "我明白了，请粘贴"}
 
+ :renderer.app.events
+ {:invalid-configuration "配置无效"
+  :configuration-reset "您的配置无效，已被重置。"
+  :download-complete "下载完成"
+  :restart-to-update "应用重启后将会更新。"}
+
  :renderer.dialog.events
  {:are-you-sure "您确定要继续吗？"
+  :update-available "有可用更新"
   :keybindings "键盘快捷键"}
 
  :renderer.dialog.views
@@ -46,6 +53,7 @@
   :search-command "搜索命令"
   :shortcut-in-use [:div "此快捷键已被 %1 使用。"]
   :no-results "未找到结果。"
+  :remind-me-later "稍后提醒我"
   :version "版本："
   :browser "浏览器："
   :hide-shortcutless "隐藏无快捷键的命令"
@@ -55,8 +63,10 @@
   :dont-save "不保存"
   :cancel "取消"
   :ok "确定"
+  :new-version "版本 %1 可用。"
   :action-cannot-undone "此操作无法撤销。"
-  :changes-will-be-lost [:p "如果您不保存就关闭文档，您对 %1 的更改将丢失。"]}
+  :changes-will-be-lost [:p "如果您不保存就关闭文档，您对 %1 的更改将丢失。"]
+  :install-now "立即安装"}
 
  :renderer.menubar.views
  {:file "文件"
@@ -665,6 +675,7 @@
   :close "关闭"
   :theme "主题模式 - %1"
   :enter-fullscreen "进入全屏"
+  :update-available "有可用更新"
   :exit-fullscreen "退出全屏"
   :install "安装"}
 
@@ -735,9 +746,9 @@
  {:close-panel "关闭面板"}
 
  :renderer.app.core
- {:help-view "帮助视图"
-  :help-bar "帮助栏"
-  :debug-info "调试信息"}
+ {:help-bar "帮助栏"
+  :debug-info "调试信息"
+  :auto-update "自动更新"}
 
  :renderer.dialog.core
  {:dialog "对话框"

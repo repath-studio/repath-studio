@@ -34,8 +34,15 @@
                           могут скрывать вредоносное содержимое."
   :confirm-paste "Я понимаю, позвольте вставить"}
 
+ :renderer.app.events
+ {:invalid-configuration "Некорректная конфигурация"
+  :configuration-reset "Ваша конфигурация была некорректной и была сброшена."
+  :download-complete "Загрузка завершена"
+  :restart-to-update "Приложение будет обновлено после перезапуска."}
+
  :renderer.dialog.events
  {:are-you-sure "Вы уверены, что хотите продолжить?"
+  :update-available "Доступно обновление"
   :keybindings "Горячие клавиши"}
 
  :renderer.dialog.views
@@ -48,6 +55,7 @@
   :search-command "Поиск команды"
   :shortcut-in-use [:div "Эта горячая клавиша уже используется в %1."]
   :no-results "Результаты не найдены."
+  :remind-me-later "Напомнить позже"
   :version "Версия: "
   :browser "Браузер: "
   :hide-shortcutless "Скрыть без горячих клавиш"
@@ -57,9 +65,11 @@
   :dont-save "Не сохранять"
   :cancel "Отмена"
   :ok "ОК"
+  :new-version "Версия %1 доступна."
   :action-cannot-undone "Это действие нельзя отменить."
   :changes-will-be-lost [:p "Ваши изменения в %1 будут потеряны, если вы
-                             закроете документ без сохранения."]}
+                             закроете документ без сохранения."]
+  :install-now "Установить сейчас"}
 
  :renderer.menubar.views
  {:file "Файл"
@@ -761,6 +771,7 @@
   :close "Закрыть"
   :theme "Режим темы - %1"
   :enter-fullscreen "Войти в полноэкранный режим"
+  :update-available "Доступно обновление"
   :exit-fullscreen "Выйти из полноэкранного режима"
   :install "Установить"}
 
@@ -834,9 +845,9 @@
  {:close-panel "Закрыть панель"}
 
  :renderer.app.core
- {:help-view "Вид справки"
-  :help-bar "Панель справки"
-  :debug-info "Отладочная информация"}
+ {:help-bar "Панель справки"
+  :debug-info "Отладочная информация"
+  :auto-update "Автообновление"}
 
  :renderer.dialog.core
  {:dialog "Диалоговое окно"

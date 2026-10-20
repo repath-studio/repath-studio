@@ -34,8 +34,15 @@
                           있습니다."
   :confirm-paste "이해했습니다. 붙여 넣겠습니다"}
 
+ :renderer.app.events
+ {:invalid-configuration "유효하지 않은 구성"
+  :configuration-reset "구성이 잘못되어 재설정되었습니다."
+  :download-complete "다운로드 완료"
+  :restart-to-update "앱은 재시작 시 업데이트됩니다."}
+
  :renderer.dialog.events
  {:are-you-sure "계속하시겠습니까?"
+  :update-available "업데이트 가능"
   :keybindings "키 바인딩"}
 
  :renderer.dialog.views
@@ -48,6 +55,7 @@
   :search-command "명령 검색"
   :shortcut-in-use [:div "이 단축키는 이미 %1에서 사용되고 있습니다."]
   :no-results "검색 결과가 없습니다."
+  :remind-me-later "나중에 알려 주세요"
   :version "버전: "
   :browser "브라우저: "
   :hide-shortcutless "단축키 없는 명령 숨김"
@@ -57,9 +65,11 @@
   :dont-save "저장하지 않음"
   :cancel "취소"
   :ok "확인"
+  :new-version "버전 %1이(가) 사용 가능합니다."
   :action-cannot-undone "이 작업은 실행 취소할 수 없습니다."
   :changes-will-be-lost [:p "저장하지 않고 문서를 닫으면
-                             %1에 대한 변경사항이 손실됩니다."]}
+                             %1에 대한 변경사항이 손실됩니다."]
+  :install-now "지금 설치"}
 
  :renderer.menubar.views
  {:file "파일"
@@ -711,6 +721,7 @@
   :close "닫기"
   :theme "테마 모드 - %1"
   :enter-fullscreen "전체화면 모드"
+  :update-available "업데이트 가능"
   :exit-fullscreen "전체화면 종료"
   :install "설치"}
 
@@ -781,9 +792,9 @@
  {:close-panel "패널 닫기"}
 
  :renderer.app.core
- {:help-view "도움말 보기"
-  :help-bar "도움말 바"
-  :debug-info "디버그 정보"}
+ {:help-bar "도움말 바"
+  :debug-info "디버그 정보"
+  :auto-update "자동 업데이트"}
 
  :renderer.dialog.core
  {:dialog "대화 상자"

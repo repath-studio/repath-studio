@@ -124,6 +124,9 @@
              {:type :separator
               :available [::window.subs/md?]}
              (action.views/deref-action-group :view/panels)
+             {:type :separator}
+             :app/toggle-help-bar
+             :app/toggle-debug-info
              {:type :separator
               :available [::app.subs/not-mobile?]}
              :window/toggle-devtools
@@ -135,11 +138,11 @@
    :label [::help "Help"]
    :type :root
    :actions (->> [[:dialog/command-panel]
-                  (:actions (action.views/deref-action-group :help-view))
+                  [:app/auto-update
+                   :error/toggle-reporting]
                   (->> :help-links
                        (action.views/deref-action-group)
                        :actions)
-                  [:error/toggle-reporting]
                   [:dialog/about]]
                  (interpose :separator)
                  (flatten))})

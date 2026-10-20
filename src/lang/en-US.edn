@@ -36,6 +36,7 @@
 
  :renderer.dialog.events
  {:are-you-sure "Are you sure you want to continue?"
+  :update-available "Update available"
   :keybindings "Keybindings"}
 
  :renderer.dialog.views
@@ -59,7 +60,10 @@
   :toggle "Toggle"
   :action-cannot-undone "This action cannot be undone."
   :changes-will-be-lost [:p "Your changes to %1 will be lost if you close the
-                             document without saving."]}
+                             document without saving."]
+  :new-version "Version %1 is available."
+  :remind-me-later "Remind me later"
+  :install-now "Install now"}
 
  :renderer.menubar.views
  {:file "File"
@@ -749,7 +753,14 @@
   :theme "Theme mode - %1"
   :enter-fullscreen "Enter fullscreen"
   :exit-fullscreen "Exit fullscreen"
-  :install "Install"}
+  :install "Install"
+  :update-available "Update available"}
+
+ :renderer.app.events
+ {:invalid-configuration "Invalid configuration"
+  :configuration-reset "Your configuration was invalid and has been reset."
+  :download-complete "Download complete"
+  :restart-to-update "The app will be updated when it is restarted."}
 
  :renderer.app.status-view
  {:select-zoom "Select zoom level"
@@ -819,9 +830,9 @@
  {:close-panel "Close panel"}
 
  :renderer.app.core
- {:help-view "Help view"
-  :help-bar "Help bar"
-  :debug-info "Debug info"}
+ {:help-bar "Help bar"
+  :debug-info "Debug info"
+  :auto-update "Auto update"}
 
  :renderer.dialog.core
  {:dialog "Dialog"

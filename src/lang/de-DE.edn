@@ -35,8 +35,15 @@
                           Inhalte verbergen."
   :confirm-paste "Ich verstehe, bitte einfügen"}
 
+ :renderer.app.events
+ {:invalid-configuration "Ungültige Konfiguration"
+  :configuration-reset "Ihre Konfiguration war ungültig und wurde zurückgesetzt."
+  :download-complete "Download abgeschlossen"
+  :restart-to-update "Die App wird beim Neustart aktualisiert."}
+
  :renderer.dialog.events
  {:are-you-sure "Sind Sie sicher, dass Sie fortfahren möchten?"
+  :update-available "Update verfügbar"
   :keybindings "Tastenkombinationen"}
 
  :renderer.dialog.views
@@ -49,6 +56,7 @@
   :search-command "Nach einem Befehl suchen"
   :shortcut-in-use [:div "Dieses Tastenkürzel wird bereits von %1 verwendet."]
   :no-results "Keine Ergebnisse gefunden."
+  :remind-me-later "Erinnere mich später"
   :version "Version: "
   :browser "Browser: "
   :hide-shortcutless "Ohne Tastenkürzel ausblenden"
@@ -58,9 +66,11 @@
   :dont-save "Nicht speichern"
   :cancel "Abbrechen"
   :ok "OK"
+  :new-version "Version %1 ist verfügbar."
   :action-cannot-undone "Diese Aktion kann nicht rückgängig gemacht werden."
   :changes-will-be-lost [:p "Ihre Änderungen an %1 gehen verloren, wenn Sie
-                             das Dokument ohne Speichern schließen."]}
+                             das Dokument ohne Speichern schließen."]
+  :install-now "Jetzt installieren"}
 
  :renderer.menubar.views
  {:file "Datei"
@@ -780,6 +790,7 @@
   :close "Schließen"
   :theme "Themamodus - %1"
   :enter-fullscreen "Vollbild aktivieren"
+  :update-available "Update verfügbar"
   :exit-fullscreen "Vollbild verlassen"
   :install "Installieren"}
 
@@ -853,9 +864,9 @@
  {:close-panel "Panel schließen"}
 
  :renderer.app.core
- {:help-view "Hilfeansicht"
-  :help-bar "Hilfeleiste"
-  :debug-info "Debug-Informationen"}
+ {:help-bar "Hilfeleiste"
+  :debug-info "Debug-Informationen"
+  :auto-update "Automatische Updates"}
 
  :renderer.dialog.core
  {:dialog "Dialog"

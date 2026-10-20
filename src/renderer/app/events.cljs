@@ -9,12 +9,14 @@
    [renderer.app.effects :as-alias app.effects]
    [renderer.app.events :as-alias app.events]
    [renderer.app.handlers :as app.handlers]
+   [renderer.dialog.events :as-alias dialog.events]
    [renderer.document.events :as-alias document.events]
    [renderer.document.handlers :as document.handlers]
    [renderer.effects :as-alias effects]
    [renderer.error.events :as-alias error.events]
    [renderer.i18n.effects :as-alias i18n.effects]
    [renderer.i18n.events :as-alias i18n.events]
+   [renderer.i18n.handlers :as i18n.handlers]
    [renderer.input.events :as-alias input.events]
    [renderer.input.impl.keyboard :as impl.keyboard]
    [renderer.shell.events :as-alias shell.events]
@@ -42,6 +44,7 @@
         ["leaved-fullscreen" [::window.events/set-fullscreen false]]
         ["minimized" [::window.events/set-minimized true]]
         ["restored" [::window.events/set-minimized false]]
+        ["update-available" [::update-available]]
         ["document-opened-from-args" [::document.events/load-from-args]]]
        (mapv (partial vector ::effects/ipc-on))))
 
@@ -94,9 +97,12 @@
        {::app.effects/clear-local-store
         {:on-success [::app.events/toast
                       :error
-                      "Invalid configuration"
-                      {:description "Your local configuration was invalid and
-                                     has been reset."}]}}))))
+                      (i18n.handlers/t db [::invalid-configuration
+                                           "Invalid configuration"])
+                      {:description
+                       (i18n.handlers/t db [::configuration-reset
+                                            "Your configuration was invalid and
+                                             has been reset."])}]}}))))
 
 (rf/reg-event-db
  ::set-loading
@@ -173,6 +179,35 @@
  [persist]
  (fn [db [_]]
    (update db :help-bar not)))
+
+(rf/reg-event-db
+ ::toggle-auto-update
+ [persist]
+ (fn [db [_]]
+   (update db :auto-update not)))
+
+(rf/reg-event-fx
+ ::update-available
+ (fn [{:keys [db]} [_ version]]
+   (if (:auto-update db)
+     {:dispatch [::apply-update]}
+     {:db (assoc db :pending-update version)
+      :dispatch [::dialog.events/show-update version]})))
+
+(rf/reg-event-fx
+ ::apply-update
+ (fn [{:keys [db]} _]
+   {:db (dissoc db :pending-update)
+    ::effects/ipc-invoke
+    {:channel "apply-update"
+     :on-error [::app.events/toast-error]
+     :on-success [::app.events/toast
+                  :success
+                  (i18n.handlers/t db [::download-complete "Download complete"])
+                  {:description
+                   (i18n.handlers/t db [::restart-to-update
+                                        "The app will be updated when it is
+                                         restarted."])}]}}))
 
 (rf/reg-event-db
  ::set-backdrop

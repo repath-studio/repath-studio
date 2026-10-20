@@ -35,8 +35,15 @@
                           。"
   :confirm-paste "理解しました、貼り付けてください"}
 
+ :renderer.app.events
+ {:invalid-configuration "無効な設定"
+  :configuration-reset "設定が不正だったため、リセットされました。"
+  :download-complete "ダウンロード完了"
+  :restart-to-update "アプリは再起動時に更新されます。"}
+
  :renderer.dialog.events
  {:are-you-sure "続行してもよろしいですか？"
+  :update-available "アップデート利用可能"
   :keybindings "キーバインド"}
 
  :renderer.dialog.views
@@ -49,6 +56,7 @@
   :search-command "コマンドを検索"
   :shortcut-in-use [:div "このショートカットは %1 で既に使用されています。"]
   :no-results "結果が見つかりません。"
+  :remind-me-later "後でリマインダー"
   :version "バージョン: "
   :browser "ブラウザ: "
   :hide-shortcutless "ショートカットなしを非表示"
@@ -58,9 +66,11 @@
   :dont-save "保存しない"
   :cancel "キャンセル"
   :ok "OK"
+  :new-version "バージョン %1 が利用可能です。"
   :action-cannot-undone "この操作は元に戻せません。"
   :changes-will-be-lost [:p "%1 への変更は、保存せずにドキュメントを
-                             閉じると失われます。"]}
+                             閉じると失われます。"]
+  :install-now "今すぐインストール"}
 
  :renderer.menubar.views
  {:file "ファイル"
@@ -718,6 +728,7 @@
   :close "閉じる"
   :theme "テーマモード - %1"
   :enter-fullscreen "フルスクリーンに入る"
+  :update-available "アップデート利用可能"
   :exit-fullscreen "フルスクリーンを終了"
   :install "インストール"}
 
@@ -788,9 +799,9 @@
  {:close-panel "パネルを閉じる"}
 
  :renderer.app.core
- {:help-view "ヘルプビュー"
-  :help-bar "ヘルプバー"
-  :debug-info "デバッグ情報"}
+ {:help-bar "ヘルプバー"
+  :debug-info "デバッグ情報"
+  :auto-update "自動更新"}
 
  :renderer.dialog.core
  {:dialog "ダイアログ"

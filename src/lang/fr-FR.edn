@@ -35,8 +35,15 @@
                           malveillant."
   :confirm-paste "Je comprends, laissez-moi coller"}
 
+ :renderer.app.events
+ {:invalid-configuration "Configuration invalide"
+  :configuration-reset "Votre configuration était invalide et a été réinitialisée."
+  :download-complete "Téléchargement terminé"
+  :restart-to-update "L'application sera mise à jour au redémarrage."}
+
  :renderer.dialog.events
  {:are-you-sure "Êtes-vous sûr de vouloir continuer ?"
+  :update-available "Mise à jour disponible"
   :keybindings "Raccourcis clavier"}
 
  :renderer.dialog.views
@@ -49,6 +56,7 @@
   :search-command "Rechercher une commande"
   :shortcut-in-use [:div "Ce raccourci est déjà utilisé par %1."]
   :no-results "Aucun résultat trouvé."
+  :remind-me-later "Me le rappeler plus tard"
   :version "Version : "
   :browser "Navigateur : "
   :hide-shortcutless "Masquer sans raccourci"
@@ -58,9 +66,11 @@
   :dont-save "Ne pas enregistrer"
   :cancel "Annuler"
   :ok "OK"
+  :new-version "La version %1 est disponible."
   :action-cannot-undone "Cette action ne peut pas être annulée."
   :changes-will-be-lost [:p "Vos modifications à %1 seront perdues si vous
-                             fermez le document sans enregistrer."]}
+                             fermez le document sans enregistrer."]
+  :install-now "Installer maintenant"}
 
  :renderer.menubar.views
  {:file "Fichier"
@@ -773,6 +783,7 @@
   :close "Fermer"
   :theme "Mode de thème - %1"
   :enter-fullscreen "Activer le plein écran"
+  :update-available "Mise à jour disponible"
   :exit-fullscreen "Quitter le plein écran"
   :install "Installer"}
 
@@ -846,9 +857,9 @@
  {:close-panel "Fermer le panneau"}
 
  :renderer.app.core
- {:help-view "Vue d'aide"
-  :help-bar "Barre d'aide"
-  :debug-info "Informations de débogage"}
+ {:help-bar "Barre d'aide"
+  :debug-info "Informations de débogage"
+  :auto-update "Mise à jour automatique"}
 
  :renderer.dialog.core
  {:dialog "Boîte de dialogue"

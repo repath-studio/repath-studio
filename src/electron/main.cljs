@@ -64,6 +64,14 @@
   (.close ^js @loading-window)
   (.initialize log)
 
+  (set! (.-autoDownload autoUpdater) false)
+
+  (.on autoUpdater "update-available"
+       (fn [^js info]
+         (send-to-renderer "update-available" (.-version info))))
+
+  (.checkForUpdatesAndNotify autoUpdater)
+
   (send-to-renderer (if (.isMaximized ^js @main-window)
                       "maximized"
                       "unmaximized"))
@@ -96,7 +104,8 @@
      ["save-document" file/save]
      ["save-document-as" file/save-as]
      ["print" file/show-print-dialog]
-     ["open-documents-from-args" #(open-arg-document (.-argv js/process))]]]
+     ["open-documents-from-args" #(open-arg-document (.-argv js/process))]
+     ["apply-update" #(.downloadUpdate autoUpdater)]]]
     (.handle ipcMain e #(f %2))))
 
 (defn register-window-events []
@@ -164,9 +173,7 @@
   (register-web-contents-events)
   (register-ipc-on-events)
   (register-ipc-handle-events)
-  (register-window-events)
-
-  (.checkForUpdatesAndNotify autoUpdater))
+  (register-window-events))
 
 (defn init-loading-window! []
   (reset! loading-window

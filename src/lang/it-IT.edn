@@ -34,8 +34,15 @@
                           potrebbero nascondere contenuto malevolo."
   :confirm-paste "Ho capito, lascia che incolli"}
 
+ :renderer.app.events
+ {:invalid-configuration "Configurazione non valida"
+  :configuration-reset "La tua configurazione non era valida ed è stata reimpostata."
+  :download-complete "Download completato"
+  :restart-to-update "L'app verrà aggiornata al riavvio."}
+
  :renderer.dialog.events
  {:are-you-sure "Sei sicuro di voler continuare?"
+  :update-available "Aggiornamento disponibile"
   :keybindings "Tasti di scelta rapida"}
 
  :renderer.dialog.views
@@ -48,6 +55,7 @@
   :search-command "Cerca un comando"
   :shortcut-in-use [:div "Questa scorciatoia è già in uso da parte di %1."]
   :no-results "Nessun risultato trovato."
+  :remind-me-later "Ricordarmelo più tardi"
   :version "Versione: "
   :browser "Browser: "
   :hide-shortcutless "Nascondi senza scorciatoia"
@@ -57,9 +65,11 @@
   :dont-save "Non salvare"
   :cancel "Annulla"
   :ok "OK"
+  :new-version "La versione %1 è disponibile."
   :action-cannot-undone "Questa azione non può essere annullata."
   :changes-will-be-lost [:p "Le tue modifiche a %1 andranno perse se chiudi il
-                             documento senza salvare."]}
+                             documento senza salvare."]
+  :install-now "Installa ora"}
 
  :renderer.menubar.views
  {:file "File"
@@ -777,6 +787,7 @@
   :close "Chiudi"
   :theme "Modalità tema - %1"
   :enter-fullscreen "Entra a schermo intero"
+  :update-available "Aggiornamento disponibile"
   :exit-fullscreen "Esci da schermo intero"
   :install "Installa"}
 
@@ -849,9 +860,9 @@
  {:close-panel "Chiudi pannello"}
 
  :renderer.app.core
- {:help-view "Vista aiuto"
-  :help-bar "Barra aiuto"
-  :debug-info "Info debug"}
+ {:help-bar "Barra aiuto"
+  :debug-info "Info debug"
+  :auto-update "Aggiornamento automatico"}
 
  :renderer.dialog.core
  {:dialog "Finestra di dialogo"

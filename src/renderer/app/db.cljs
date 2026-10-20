@@ -98,6 +98,9 @@
    [:standalone {:optional true} boolean?]
    [:menubar {:default {}} Menubar]
    [:install-prompt {:optional true} JS_Object]
+   [:auto-update {:default true
+                  :persist true} boolean?]
+   [:pending-update {:optional true} string?]
    [:user-agent {:optional true} string?]
    [:shell {:default {}
             :persist true} Shell]

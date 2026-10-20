@@ -34,8 +34,15 @@
                           onbetrouwbare bronnen kwaadaardige inhoud verbergen."
   :confirm-paste "Ik begrijp het, laat me plakken"}
 
+ :renderer.app.events
+ {:invalid-configuration "Ongeldige configuratie"
+  :configuration-reset "Uw configuratie was ongeldig en is heresteld."
+  :download-complete "Download voltooid"
+  :restart-to-update "De app wordt bij het herstarten bijgewerkt."}
+
  :renderer.dialog.events
  {:are-you-sure "Weet u zeker dat u wilt doorgaan?"
+  :update-available "Update beschikbaar"
   :keybindings "Sneltoetsen"}
 
  :renderer.dialog.views
@@ -48,6 +55,7 @@
   :search-command "Zoek naar een commando"
   :shortcut-in-use [:div "Deze sneltoets wordt al gebruikt door %1."]
   :no-results "Geen resultaten gevonden."
+  :remind-me-later "Herinner me later"
   :version "Versie: "
   :browser "Browser: "
   :hide-shortcutless "Zonder sneltoets verbergen"
@@ -57,9 +65,11 @@
   :dont-save "Niet opslaan"
   :cancel "Annuleren"
   :ok "OK"
+  :new-version "Versie %1 is beschikbaar."
   :action-cannot-undone "Deze actie kan niet ongedaan gemaakt worden."
   :changes-will-be-lost [:p "Uw wijzigingen aan %1 gaan verloren als u het
-                             document sluit zonder op te slaan."]}
+                             document sluit zonder op te slaan."]
+  :install-now "Nu installeren"}
 
  :renderer.menubar.views
  {:file "Bestand"
@@ -778,6 +788,7 @@
   :close "Sluiten"
   :theme "Thema modus - %1"
   :enter-fullscreen "Volledig scherm activeren"
+  :update-available "Update beschikbaar"
   :exit-fullscreen "Volledig scherm verlaten"
   :install "Installeren"}
 
@@ -850,9 +861,9 @@
  {:close-panel "Paneel sluiten"}
 
  :renderer.app.core
- {:help-view "Helpweergave"
-  :help-bar "Helpbalk"
-  :debug-info "Debug-informatie"}
+ {:help-bar "Helpbalk"
+  :debug-info "Debug-informatie"
+  :auto-update "Automatische update"}
 
  :renderer.dialog.core
  {:dialog "Dialoogvenster"
