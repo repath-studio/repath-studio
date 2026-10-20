@@ -112,7 +112,6 @@
       :default-value (when (some? args) value)
       :placeholder (when (nil? args) value)
       :on-blur #(set-op-field % attrs)
-      :on-pointer-up attribute.views/pointer-up-handler
       :on-key-down #(utils.key/down-handler % value set-op-field attrs)}]))
 
 (defn op-row

@@ -136,7 +136,6 @@
       :enter-key-hint "done"
       :disabled (not idle?)
       :on-blur #(set-segment-value % attrs)
-      :on-pointer-up attribute.views/pointer-up-handler
       :on-key-down #(utils.key/down-handler % value set-segment-value attrs)}]))
 
 (defn segment-field

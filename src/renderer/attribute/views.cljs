@@ -86,14 +86,6 @@
                        ::element.events/set-attr
                        ::element.events/preview-attr) k new-v])))))
 
-(defn pointer-up-handler
-  [event]
-  (let [target (.-target event)
-        start-pos (.-selectionStart target)
-        end-pos (.-selectionEnd target)]
-    (when (= start-pos end-pos)
-      (.select target))))
-
 (defn removable-val?
   [v]
   (or (nil? v) (seq v)))
@@ -110,7 +102,6 @@
             :id (name k)
             :default-value v
             :enter-key-hint "done"
-            :on-pointer-up pointer-up-handler
             :placeholder (if v placeholder "multiple")
             :on-blur #(update-handler % k v)
             :on-key-down #(utils.key/down-handler % v update-handler k v)})]
