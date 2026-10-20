@@ -385,6 +385,11 @@
         (set/union child-keys children-set))
        child-keys))))
 
+(m/=> with-descendants-ids [:-> App [:set ElementId] [:set ElementId]])
+(defn with-descendants-ids
+  [db ids]
+  (reduce (fn [s id] (set/union s (descendant-ids db id))) ids ids))
+
 (m/=> top-ancestor-ids [:-> App [:set ElementId]])
 (defn top-ancestor-ids
   [db]
@@ -394,6 +399,16 @@
 (defn selected-with-descendant-ids
   [db]
   (set/union (selected-ids db) (descendant-ids db)))
+
+(m/=> surviving-parent-ids [:-> App [:set ElementId] [:set ElementId]])
+(defn surviving-parent-ids
+  [db ids]
+  (set/difference (into #{} (keep :parent (entities db (vec ids)))) ids))
+
+(m/=> topmost-ids [:-> App [:set ElementId] [:set ElementId]])
+(defn topmost-ids
+  [db ids]
+  (set/difference ids (set (keep (comp :id (partial parent db)) ids))))
 
 (m/=> non-selected-ids [:-> App [:maybe [:set ElementId]]])
 (defn non-selected-ids
@@ -676,29 +691,44 @@
     {:elements (mapv payload-el (top-selected-sorted-ids db))
      :bbox (bbox db)}))
 
-(m/=> remove-child [:-> App ElementId ElementId App])
-(defn remove-child
-  [db parent-id child-id]
-  (-> db
-      (update-prop parent-id :children
-                   utils.vec/remove-nth
-                   (children-index db child-id))
-      (refresh-bbox parent-id)))
+(m/=> remove-els-fn [:-> [:set ElementId] [:set ElementId] fn?])
+(defn remove-els-fn
+  [ids surviving-parents]
+  (fn [els]
+    (reduce (fn [m [id el]]
+              (cond
+                (contains? ids id)
+                m
+
+                (contains? surviving-parents id)
+                (assoc m id (assoc el :children
+                                   (vec (remove (partial contains? ids)
+                                                (:children el)))))
+
+                :else
+                (assoc m id el)))
+            {}
+            els)))
+
+(m/=> delete-ids [:-> App [:set ElementId] App])
+(defn delete-ids
+  [db ids]
+  (let [ids (with-descendants-ids db (disj ids (:id (root db))))
+        surviving-parents (surviving-parent-ids db ids)
+        db (-> db
+               (update-in (path db) (remove-els-fn ids surviving-parents))
+               (update-in [:documents (:active-document db) :collapsed-ids]
+                          set/difference ids))]
+    (reduce (rpartial refresh-bbox) db (topmost-ids db surviving-parents))))
 
 (m/=> delete [:function
               [:-> App App]
               [:-> App ElementId App]])
 (defn delete
   ([db]
-   (reduce delete db (reverse (selected-sorted-ids db))))
+   (delete-ids db (selected-ids db)))
   ([db id]
-   (let [el (entity db id)
-         db (if (utils.element/root? el) db (reduce delete db (:children el)))]
-     (cond-> db
-       (not (utils.element/root? el))
-       (-> (remove-child (:parent el) id)
-           (update-in (path db) dissoc id)
-           (expand id))))))
+   (delete-ids db #{id})))
 
 (m/=> update-index [:function
                     [:-> App ifn? App]
