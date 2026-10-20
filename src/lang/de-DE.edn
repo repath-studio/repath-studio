@@ -37,7 +37,8 @@
 
  :renderer.app.events
  {:invalid-configuration "Ungültige Konfiguration"
-  :configuration-reset "Ihre Konfiguration war ungültig und wurde zurückgesetzt."
+  :configuration-reset "Ihre Konfiguration war ungültig und wurde
+                        zurückgesetzt."
   :download-complete "Download abgeschlossen"
   :restart-to-update "Die App wird beim Neustart aktualisiert."}
 

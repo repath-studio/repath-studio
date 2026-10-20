@@ -36,7 +36,8 @@
 
  :renderer.app.events
  {:invalid-configuration "Configurazione non valida"
-  :configuration-reset "La tua configurazione non era valida ed è stata reimpostata."
+  :configuration-reset "La tua configurazione non era valida ed è stata
+                        reimpostata."
   :download-complete "Download completato"
   :restart-to-update "L'app verrà aggiornata al riavvio."}
 
