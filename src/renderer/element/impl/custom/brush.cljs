@@ -132,6 +132,10 @@
                    :on-pointer-move pointer-handler}
                   (select-keys attrs [:id :class :opacity :fill :transform]))]))
 
+(defmethod element.hierarchy/render-to-string :brush
+  [el]
+  [element.hierarchy/render el])
+
 (defn points->vec
   [points]
   (utils.attribute/points->vec points 3))
