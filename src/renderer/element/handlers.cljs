@@ -1122,25 +1122,30 @@
 (m/=> boolean-operation [:-> App BooleanOperation App])
 (defn boolean-operation
   [db operation]
-  (let [transformed-path #(-> % :attrs :d
-                              (svgpath)
-                              (.matrix (clj->js (transform db (:id %))))
-                              (.toString))
-        selected-elements (top-selected-sorted db)
+  (let [selected-elements (top-selected-sorted db)
         el (first selected-elements)
+        parent-id (:parent el)
+        parent-inv (utils.transform/inverse (transform db parent-id))
+        to-parent-space (fn [el]
+                          (let [m (->> (transform db (:id el))
+                                       (utils.transform/compose parent-inv))]
+                            (-> el :attrs :d
+                                (svgpath)
+                                (.matrix (clj->js m))
+                                (.toString))))
         new-path (->> (rest selected-elements)
                       (reduce (fn [path-a el]
-                                (let [path-b (transformed-path el)]
+                                (let [path-b (to-parent-space el)]
                                   (utils.path/boolean-operation path-a
                                                                 path-b
                                                                 operation)))
-                              (transformed-path el)))]
+                              (to-parent-space el)))]
     (cond-> db
       (seq new-path)
       (-> (delete)
           (add {:type :element
                 :tag :path
-                :parent (-> selected-elements first :parent)
+                :parent parent-id
                 :attrs (-> (:attrs el)
                            (dissoc :transform)
                            (assoc :d new-path))})))))
