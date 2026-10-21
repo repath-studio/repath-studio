@@ -9,6 +9,7 @@
    [renderer.action.events :as-alias action.events]
    [renderer.action.subs :as-alias action.subs]
    [renderer.action.views :as action.views]
+   [renderer.app.events :as-alias app.events]
    [renderer.app.subs :as-alias app.subs]
    [renderer.dialog.events :as-alias dialog.events]
    [renderer.dialog.subs :as-alias dialog.subs]
@@ -28,6 +29,21 @@
 (defn button-bar
   [& children]
   (into [:div.flex.flex-wrap.gap-3.sm:flex-nowrap.sm:gap-2] children))
+
+(defn update-dialog
+  [version]
+  [:div
+   [:p (i18n.views/t [::new-version "Version %1 is available."] [version])]
+   [button-bar
+    [button
+     {:on-click #(rf/dispatch [::dialog.events/close nil])}
+     (i18n.views/t [::remind-me-later "Remind me later"])]
+    [button
+     {:auto-focus true
+      :class "accent"
+      :on-click #(rf/dispatch [::dialog.events/close
+                               [::app.events/apply-update]])}
+     (i18n.views/t [::install-now "Install now"])]]])
 
 (defn about
   []

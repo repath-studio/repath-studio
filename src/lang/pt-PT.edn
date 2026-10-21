@@ -34,8 +34,15 @@
                           conteúdo malicioso."
   :confirm-paste "Compreendo, deixa-me colar"}
 
+ :renderer.app.events
+ {:invalid-configuration "Configuração inválida"
+  :configuration-reset "A sua configuração era inválida e foi redefinida."
+  :download-complete "Transferência concluída"
+  :restart-to-update "A app será atualizada ao reiniciar."}
+
  :renderer.dialog.events
  {:are-you-sure "Tem a certeza de que pretende continuar?"
+  :update-available "Atualização disponível"
   :keybindings "Atalhos de teclado"}
 
  :renderer.dialog.views
@@ -48,6 +55,7 @@
   :search-command "Procurar comando"
   :shortcut-in-use [:div "Este atalho já está em uso por %1."]
   :no-results "Nenhum resultado encontrado."
+  :remind-me-later "Lembrar-me mais tarde"
   :version "Versão: "
   :browser "Navegador: "
   :hide-shortcutless "Ocultar sem atalho"
@@ -57,9 +65,11 @@
   :dont-save "Não guardar"
   :cancel "Cancelar"
   :ok "OK"
+  :new-version "A versão %1 está disponível."
   :action-cannot-undone "Esta ação não pode ser desfeita."
   :changes-will-be-lost [:p "As suas alterações em %1 serão perdidas se fechar o
-                             documento sem guardar."]}
+                             documento sem guardar."]
+  :install-now "Instalar agora"}
 
  :renderer.menubar.views
  {:file "Ficheiro"
@@ -758,6 +768,7 @@
   :close "Fechar"
   :theme "Modo de tema - %1"
   :enter-fullscreen "Entrar em ecrã inteiro"
+  :update-available "Atualização disponível"
   :exit-fullscreen "Sair do ecrã inteiro"
   :install "Instalar"}
 
@@ -830,9 +841,9 @@
  {:close-panel "Fechar painel"}
 
  :renderer.app.core
- {:help-view "Vista de ajuda"
-  :help-bar "Barra de ajuda"
-  :debug-info "Informação de depuração"}
+ {:help-bar "Barra de ajuda"
+  :debug-info "Informação de depuração"
+  :check-for-updates "Verificar atualizações automaticamente"}
 
  :renderer.dialog.core
  {:dialog "Caixa de diálogo"

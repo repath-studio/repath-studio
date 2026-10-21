@@ -80,6 +80,22 @@
    (and web? (not standalone?) install-prompt)))
 
 (rf/reg-sub
+ ::auto-update?
+ :-> :auto-update)
+
+(rf/reg-sub
+ ::pending-update
+ :-> :pending-update)
+
+(rf/reg-sub
+ ::update-available?
+ :<- [::desktop?]
+ :<- [::auto-update?]
+ :<- [::pending-update]
+ (fn [[desktop? auto-update? pending-update] _]
+   (and desktop? auto-update? pending-update)))
+
+(rf/reg-sub
  ::user-agent
  :-> :user-agent)
 

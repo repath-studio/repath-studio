@@ -35,8 +35,15 @@
                           περιεχόμενο."
   :confirm-paste "Το καταλαβαίνω, αφήστε με να κάνω επικόλληση"}
 
+ :renderer.app.events
+ {:invalid-configuration "Μη έγκυρη διαμόρφωση"
+  :configuration-reset "Η διαμόρφωσή σας ήταν μη έγκυρη και επαναφέρθηκε."
+  :download-complete "Η λήψη ολοκληρώθηκε"
+  :restart-to-update "Η εφαρμογή θα ενημερωθεί κατά την επανεκκίνηση."}
+
  :renderer.dialog.events
  {:are-you-sure "Είστε βέβαιοι ότι θέλετε να συνεχίσετε;"
+  :update-available "Διαθέσιμη ενημέρωση"
   :keybindings "Συντομεύσεις πληκτρολογίου"}
 
  :renderer.dialog.views
@@ -49,6 +56,7 @@
   :search-command "Αναζήτηση εντολής"
   :shortcut-in-use [:div "Η συντόμευση αυτή χρησιμοποιείται ήδη από %1."]
   :no-results "Δεν βρέθηκαν αποτελέσματα."
+  :remind-me-later "Υπενθύμιση αργότερα"
   :version "Έκδοση: "
   :browser "Πρόγραμμα περιήγησης: "
   :hide-shortcutless "Απόκρυψη χωρίς συντόμευση"
@@ -58,9 +66,11 @@
   :dont-save "Μη αποθήκευση"
   :cancel "Ακύρωση"
   :ok "Εντάξει"
+  :new-version "Η έκδοση %1 είναι διαθέσιμη."
   :action-cannot-undone "Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
   :changes-will-be-lost [:p "Οι αλλαγές στο %1 θα χαθούνε εάν κλείσετε το
-                             έγγραφο χωρίς αποθήκευση."]}
+                             έγγραφο χωρίς αποθήκευση."]
+  :install-now "Εγκατάσταση τώρα"}
 
  :renderer.menubar.views
  {:file "Αρχείο"
@@ -786,6 +796,7 @@
   :close "Κλείσιμο"
   :theme "Θέμα - %1"
   :enter-fullscreen "Είσοδος σε πλήρη οθόνη"
+  :update-available "Διαθέσιμη ενημέρωση"
   :exit-fullscreen "Έξοδος από πλήρη οθόνη"
   :install "Εγκατάσταση"}
 
@@ -858,9 +869,9 @@
  {:close-panel "Κλείσιμο πάνελ"}
 
  :renderer.app.core
- {:help-view "Προβολή βοήθειας"
-  :help-bar "Μπάρα βοηθείας"
-  :debug-info "Πληροφορίες αποσφαλμάτωσης"}
+ {:help-bar "Μπάρα βοηθείας"
+  :debug-info "Πληροφορίες αποσφαλμάτωσης"
+  :check-for-updates "Αυτόματος έλεγχος για ενημερώσεις"}
 
  :renderer.dialog.core
  {:dialog "Παράθυρο διαλόγου"

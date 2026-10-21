@@ -34,8 +34,15 @@
                           dölja skadligt innehåll."
   :confirm-paste "Jag förstår, låt mig klistra in"}
 
+ :renderer.app.events
+ {:invalid-configuration "Ogiltig konfiguration"
+  :configuration-reset "Din konfiguration var ogiltig och har återställts."
+  :download-complete "Nedladdning slutförd"
+  :restart-to-update "Appen uppdateras när den startas om."}
+
  :renderer.dialog.events
  {:are-you-sure "Är du säker på att du vill fortsätta?"
+  :update-available "Uppdatering tillgänglig"
   :keybindings "Tangentbordsgenvägar"}
 
  :renderer.dialog.views
@@ -48,6 +55,7 @@
   :search-command "Sök efter ett kommando"
   :shortcut-in-use [:div "Denna genväg används redan av %1."]
   :no-results "Inga resultat hittades."
+  :remind-me-later "Påminn mig senare"
   :version "Version: "
   :browser "Webbläsare: "
   :hide-shortcutless "Dölj utan genväg"
@@ -57,9 +65,11 @@
   :dont-save "Spara inte"
   :cancel "Avbryt"
   :ok "OK"
+  :new-version "Version %1 är tillgänglig."
   :action-cannot-undone "Denna åtgärd kan inte ångras."
   :changes-will-be-lost [:p "Dina ändringar av %1 kommer att förloras om du
-                             stänger dokumentet utan att spara."]}
+                             stänger dokumentet utan att spara."]
+  :install-now "Installera nu"}
 
  :renderer.menubar.views
  {:file "Arkiv"
@@ -762,6 +772,7 @@
   :close "Stäng"
   :theme "Tema läge - %1"
   :enter-fullscreen "Aktivera helskärm"
+  :update-available "Uppdatering tillgänglig"
   :exit-fullscreen "Lämna helskärm"
   :install "Installera"}
 
@@ -833,9 +844,9 @@
  {:close-panel "Stäng panel"}
 
  :renderer.app.core
- {:help-view "Hjälpvy"
-  :help-bar "Hjälpfält"
-  :debug-info "Felsökningsinformation"}
+ {:help-bar "Hjälpfält"
+  :debug-info "Felsökningsinformation"
+  :check-for-updates "Sök automatiskt efter uppdateringar"}
 
  :renderer.dialog.core
  {:dialog "Dialog"

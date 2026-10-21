@@ -34,8 +34,15 @@
                           içerik barındırabilir."
   :confirm-paste "Anlıyorum, yapıştırayım"}
 
+ :renderer.app.events
+ {:invalid-configuration "Geçersiz yapılandırma"
+  :configuration-reset "Yapılandırmanız geçersizdi ve sıfırlandı."
+  :download-complete "İndirme tamamlandı"
+  :restart-to-update "Uygulama yeniden başlatıldığında güncellenecektir."}
+
  :renderer.dialog.events
  {:are-you-sure "Devam etmek istediğinizden emin misiniz?"
+  :update-available "Güncelleme mevcut"
   :keybindings "Klavye kısayolları"}
 
  :renderer.dialog.views
@@ -48,6 +55,7 @@
   :search-command "Komut ara"
   :shortcut-in-use [:div "Bu kısayol zaten %1 tarafından kullanılıyor."]
   :no-results "Sonuç bulunamadı."
+  :remind-me-later "Sonra hatırlat"
   :version "Sürüm: "
   :browser "Tarayıcı: "
   :hide-shortcutless "Kısayolsuzları gizle"
@@ -57,9 +65,11 @@
   :dont-save "Kaydetme"
   :cancel "İptal"
   :ok "Tamam"
+  :new-version "%1 sürümü kullanılabilir."
   :action-cannot-undone "Bu eylem geri alınamaz."
   :changes-will-be-lost [:p "Belgeyi kaydetmeden kapatırsanız
-                             %1 için yaptığınız değişiklikler kaybolacak."]}
+                             %1 için yaptığınız değişiklikler kaybolacak."]
+  :install-now "Şimdi yükle"}
 
  :renderer.menubar.views
  {:file "Dosya"
@@ -755,6 +765,7 @@
   :close "Kapat"
   :theme "Tema modu - %1"
   :enter-fullscreen "Tam ekrana geç"
+  :update-available "Güncelleme mevcut"
   :exit-fullscreen "Tam ekrandan çık"
   :install "Kur"}
 
@@ -827,9 +838,9 @@
  {:close-panel "Paneli kapat"}
 
  :renderer.app.core
- {:help-view "Yardım görünümü"
-  :help-bar "Yardım çubuğu"
-  :debug-info "Hata ayıklama bilgisi"}
+ {:help-bar "Yardım çubuğu"
+  :debug-info "Hata ayıklama bilgisi"
+  :check-for-updates "Güncellemeleri otomatik olarak kontrol et"}
 
  :renderer.dialog.core
  {:dialog "İletişim kutusu"

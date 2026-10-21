@@ -6,6 +6,7 @@
    [renderer.action.views :as action.views]
    [renderer.app.events :as-alias app.events]
    [renderer.app.subs :as-alias app.subs]
+   [renderer.dialog.events :as-alias dialog.events]
    [renderer.document.subs :as-alias document.subs]
    [renderer.i18n.subs :as-alias i18n.subs]
    [renderer.i18n.views :as i18n.views]
@@ -98,6 +99,15 @@
     :class "rounded-none outline-inset bg-transparent!"
     :on-click #(rf/dispatch [::app.events/install])}])
 
+(defn update-button
+  []
+  [:div.relative
+   [views/icon-button "download"
+    {:title (i18n.views/t [::update-available "Update available"])
+     :class "rounded-none outline-inset bg-transparent!"
+     :on-click #(rf/dispatch [::dialog.events/show-update])}]
+   [:div.rounded-full.bg-accent.w-1.h-1.top-2.right-2.absolute]])
+
 (defn titlebar
   [s]
   [:div
@@ -141,12 +151,14 @@
         theme-mode @(rf/subscribe [::theme.subs/mode])
         mac? @(rf/subscribe [::app.subs/mac?])
         installable? @(rf/subscribe [::app.subs/installable?])
+        update-available? @(rf/subscribe [::app.subs/update-available?])
         md? @(rf/subscribe [::window.subs/md?])
         system-code @(rf/subscribe [::i18n.subs/system-lang-code])
         code @(rf/subscribe [::i18n.subs/lang-code])
         window-controls? @(rf/subscribe [::window.subs/window-controls?])
         fullscreen-toggle? @(rf/subscribe [::window.subs/fullscreen-toggle?])]
     [:div.flex.gap-px
+     (when update-available? [update-button])
      (when installable? [install-button])
      (when (or md? mac?)
        [:<>

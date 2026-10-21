@@ -8,13 +8,13 @@
    [renderer.utils.key :as utils.key]))
 
 (rf/dispatch [::action.events/register-action
-              {:id :help-view/toggle-help-bar
+              {:id :app/toggle-help-bar
                :label [::help-bar "Help bar"]
                :active [::app.subs/help-bar]
                :event [::app.events/toggle-help-bar]}])
 
 (rf/dispatch [::action.events/register-action
-              {:id :help-view/toggle-debug-info
+              {:id :app/toggle-debug-info
                :label [::debug-info "Debug info"]
                :event [::app.events/toggle-debug-info]
                :active [::app.subs/debug-info]
@@ -25,9 +25,8 @@
                                    :metaKey true
                                    :shiftKey true}]}}])
 
-(rf/dispatch [::action.events/register-action-group
-              {:id :help-view
-               :icon "toggles"
-               :label [::help-view "Help view"]
-               :actions [:help-view/toggle-help-bar
-                         :help-view/toggle-debug-info]}])
+(rf/dispatch [::action.events/register-action
+              {:id :app/auto-update
+               :label [::check-for-updates "Check for updates automatically"]
+               :event [::app.events/toggle-auto-update]
+               :active [::app.subs/auto-update?]}])

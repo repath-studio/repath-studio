@@ -31,6 +31,14 @@
                                :content [dialog.views/about]})))
 
 (rf/reg-event-db
+ ::show-update
+ (fn [db [_]]
+   (dialog.handlers/create
+    db
+    {:title (i18n.handlers/t db [::update-available "Update available"])
+     :content [dialog.views/update-dialog (:pending-update db)]})))
+
+(rf/reg-event-db
  ::confirm-irreversible-action
  (fn [db [_ data]]
    (dialog.handlers/create
