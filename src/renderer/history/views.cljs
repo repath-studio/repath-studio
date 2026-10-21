@@ -5,6 +5,7 @@
    ["react-d3-tree" :refer [Tree]]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
+   [renderer.action.views :as action.views]
    [renderer.history.events :as-alias history.events]
    [renderer.history.handlers :as history.handlers]
    [renderer.history.subs :as-alias history.subs]
@@ -56,18 +57,18 @@
      [views/select-arrow]]]])
 
 (defn action-button
-  [action]
-  (let [{:keys [icon label options event show-options options-label]} action]
-    (reagent/with-let [open (reagent/atom false)]
-      [:button.button.rounded-sm.items-center.px-1.gap-1.flex.w-auto
-       {:title (i18n.views/t label)
-        :class [(if show-options "px-1" "px-2")
-                (when @open "bg-overlay!")]
-        :on-click #(rf/dispatch event)
-        :disabled (empty? options)}
-       [views/icon icon]
-       (when show-options
-         [select options-label options open])])))
+  [{:keys [icon dropdown-options show-dropdown dropdown-label]
+    :as action}]
+  (reagent/with-let [open (reagent/atom false)]
+    [:button.button.rounded-sm.items-center.px-1.gap-1.flex.w-auto.shrink-0
+     {:title (action.views/label action)
+      :class [(if show-dropdown "px-1" "px-2")
+              (when @open "bg-overlay!")]
+      :on-click (action.views/dispatch action)
+      :disabled (action.views/disabled? action)}
+     [views/icon icon]
+     (when show-dropdown
+       [select dropdown-label dropdown-options open])]))
 
 (defn node
   "https://bkrem.github.io/react-d3-tree/docs/interfaces/CustomNodeElementProps.html"

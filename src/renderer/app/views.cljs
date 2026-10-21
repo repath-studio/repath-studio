@@ -200,8 +200,7 @@
        (interpose [:span {:class "h-divider"}])
        (into [:<>])
        (conj more)
-       (into [views/toolbar
-              {:class "flex-col px-1 gap-2 md:gap-1"}])))
+       (into [views/toolbar {:class "flex-col px-1 gap-1"}])))
 
 (defn frame-panel
   []
@@ -232,12 +231,16 @@
       [:div.relative.grow.flex
        [frame]
        (when-not md?
-         [:div.bg-primary.flex.items-center.absolute.right-2.rounded-md
-          {:class "bottom-2"}
-          [action-toolbar
-           [:object/entity]
-
-           [context-dropdown-button]]])]]]))
+         [:div.flex.flex-col.items-center.absolute.right-2.bottom-2.gap-2
+          (->> [:history/undo
+                :history/redo]
+               (map (comp history.views/action-button
+                          action.views/deref-action))
+               (into [views/toolbar {:class "bg-primary rounded-md flex-col"}]))
+          [:div.bg-primary.rounded-md
+           [action-toolbar
+            [:object/entity]
+            [context-dropdown-button]]]])]]]))
 
 (defn xml-panel
   []

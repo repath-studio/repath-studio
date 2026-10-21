@@ -520,7 +520,7 @@
      [:> Drawer.Portal
       [:> Drawer.Content
        {:class ["inset-0 fixed z-0 outline-none bg-secondary flex shadow-lg"
-                "flex-col items-center top-auto px-safe pb-safe rounded-t-xl"
+                "flex-col items-center top-auto px-safe rounded-t-xl"
                 "h-full overflow-hidden gap-px"]
         :style {:margin (str "0 - env(safe-area-inset-right) "
                              "0 - env(safe-area-inset-left)")
@@ -539,7 +539,7 @@
        (let [height (str (- (js/parseInt @snap) 31) "px")
              style {:height height
                     :transition "height 0.5s cubic-bezier(0.32, 0.72, 0, 1)"}]
-         (into [:div.flex.overflow-hidden.w-full
+         (into [:div.flex.overflow-hidden.w-full.pb-safe
                 {:style style}]
                children))]]]))
 

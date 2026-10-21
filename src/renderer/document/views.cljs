@@ -33,17 +33,19 @@
           (keep views/action-icon-button)
           (into [:<>]))
 
-     [:span.v-divider]
+     (when md?
+       [:<>
+        [:span.v-divider]
 
-     [history.views/action-button
-      (merge undo-action {:options undos
-                          :options-label [::undo-stack "Undo stack"]
-                          :show-options md?})]
+        [history.views/action-button
+         (merge undo-action {:dropdown-options undos
+                             :dropdown-label [::undo-stack "Undo stack"]
+                             :show-dropdown true})]
 
-     [history.views/action-button
-      (merge redo-action {:options redos
-                          :options-label [::redo-stack "Redo stack"]
-                          :show-options md?})]]))
+        [history.views/action-button
+         (merge redo-action {:dropdown-options redos
+                             :dropdown-label [::redo-stack "Redo stack"]
+                             :show-dropdown true})]])]))
 
 (defn close-button
   [id saved]
