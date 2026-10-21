@@ -505,13 +505,15 @@
 (m/=> update-transform [:-> App ElementId Vec2 ifn? App])
 (defn update-transform
   [db id pivot f]
-  (update-el db id
-             (fn [e]
-               (attribute.hierarchy/update-attr
-                e :transform
-                (f (utils.element/untransform-point
-                    (transform db (or (:parent e) (:id e)))
-                    pivot))))))
+  (cond-> db
+    (not (virtual? db id))
+    (update-el id
+               (fn [e]
+                 (attribute.hierarchy/update-attr
+                  e :transform
+                  (f (utils.element/untransform-point
+                      (transform db (or (:parent e) (:id e)))
+                      pivot)))))))
 
 (m/=> deselect [:function
                 [:-> App App]
@@ -794,17 +796,19 @@
              (not (:locked el))
              (not (transformed? el)))
       (reduce (rpartial translate-raw offset) db (:children el))
-      (update-el-raw db id (fn [e]
-                             (if (transformed? e)
-                               (attribute.hierarchy/update-attr
-                                e :transform
-                                (utils.transform/translate
-                                 (container-scale-offset
-                                  db (or (:parent e) (:id e)) offset)))
-                               (element.hierarchy/translate
-                                e
-                                (container-scale-offset
-                                 db (or (:parent e) (:id e)) offset))))))))
+      (update-el-raw db id
+                     (fn [e]
+                       (if (and (transformed? e)
+                                (not (utils.element/virtual? e)))
+                         (attribute.hierarchy/update-attr
+                          e :transform
+                          (utils.transform/translate
+                           (container-scale-offset
+                            db (or (:parent e) (:id e)) offset)))
+                         (element.hierarchy/translate
+                          e
+                          (container-scale-offset
+                           db (or (:parent e) (:id e)) offset))))))))
 
 (m/=> translate [:function
                  [:-> App Vec2 App]
@@ -849,9 +853,10 @@
 (m/=> transform-scale? [:-> App Element ElementId Vec2 boolean?])
 (defn transform-scale?
   [db el id ratio]
-  (or (transformed? el)
-      (and (not (utils.transform/axis-aligned? (transform db id)))
-           (not= (first ratio) (second ratio)))))
+  (and (not (utils.element/virtual? el))
+       (or (transformed? el)
+           (and (not (utils.transform/axis-aligned? (transform db id)))
+                (not= (first ratio) (second ratio))))))
 
 (m/=> scale-leaf-raw [:-> App ElementId Vec2 Vec2 App])
 (defn scale-leaf-raw
