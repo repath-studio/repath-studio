@@ -847,7 +847,7 @@
  :renderer.app.core
  {:help-bar "Панель справки"
   :debug-info "Отладочная информация"
-  :auto-update "Автообновление"}
+  :check-for-updates "Автоматически проверять обновления"}
 
  :renderer.dialog.core
  {:dialog "Диалоговое окно"

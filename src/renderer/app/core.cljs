@@ -27,6 +27,6 @@
 
 (rf/dispatch [::action.events/register-action
               {:id :app/auto-update
-               :label [::auto-update "Auto update"]
+               :label [::check-for-updates "Check for updates automatically"]
                :event [::app.events/toggle-auto-update]
                :active [::app.subs/auto-update?]}])

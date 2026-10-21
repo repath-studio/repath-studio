@@ -860,7 +860,7 @@
  :renderer.app.core
  {:help-bar "Barre d'aide"
   :debug-info "Informations de débogage"
-  :auto-update "Mise à jour automatique"}
+  :check-for-updates "Rechercher automatiquement les mises à jour"}
 
  :renderer.dialog.core
  {:dialog "Boîte de dialogue"

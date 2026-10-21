@@ -189,10 +189,9 @@
 (rf/reg-event-fx
  ::update-available
  (fn [{:keys [db]} [_ version]]
-   (if (:auto-update db)
-     {:dispatch [::apply-update]}
-     {:db (assoc db :pending-update version)
-      :dispatch [::dialog.events/show-update version]})))
+   (cond-> {:db (assoc db :pending-update version)}
+     (:auto-update db)
+     (assoc :dispatch [::dialog.events/show-update version]))))
 
 (rf/reg-event-fx
  ::apply-update

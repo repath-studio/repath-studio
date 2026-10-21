@@ -851,7 +851,7 @@
  :renderer.app.core
  {:help-bar "Barra de ayuda"
   :debug-info "Información de depuración"
-  :auto-update "Actualización automática"}
+  :check-for-updates "Buscar actualizaciones automáticamente"}
 
  :renderer.dialog.core
  {:dialog "Cuadro de diálogo"

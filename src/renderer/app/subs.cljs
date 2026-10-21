@@ -90,9 +90,10 @@
 (rf/reg-sub
  ::update-available?
  :<- [::desktop?]
+ :<- [::auto-update?]
  :<- [::pending-update]
- (fn [[desktop? pending-update] _]
-   (and desktop? pending-update)))
+ (fn [[desktop? auto-update? pending-update] _]
+   (and desktop? auto-update? pending-update)))
 
 (rf/reg-sub
  ::user-agent

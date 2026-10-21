@@ -863,7 +863,7 @@
  :renderer.app.core
  {:help-bar "Barra aiuto"
   :debug-info "Info debug"
-  :auto-update "Aggiornamento automatico"}
+  :check-for-updates "Controlla automaticamente gli aggiornamenti"}
 
  :renderer.dialog.core
  {:dialog "Finestra di dialogo"

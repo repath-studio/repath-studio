@@ -871,7 +871,7 @@
  :renderer.app.core
  {:help-bar "Μπάρα βοηθείας"
   :debug-info "Πληροφορίες αποσφαλμάτωσης"
-  :auto-update "Αυτόματη ενημέρωση"}
+  :check-for-updates "Αυτόματος έλεγχος για ενημερώσεις"}
 
  :renderer.dialog.core
  {:dialog "Παράθυρο διαλόγου"

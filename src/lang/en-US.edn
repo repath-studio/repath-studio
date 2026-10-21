@@ -832,7 +832,7 @@
  :renderer.app.core
  {:help-bar "Help bar"
   :debug-info "Debug info"
-  :auto-update "Auto update"}
+  :check-for-updates "Check for updates automatically"}
 
  :renderer.dialog.core
  {:dialog "Dialog"

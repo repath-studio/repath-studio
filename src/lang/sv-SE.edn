@@ -846,7 +846,7 @@
  :renderer.app.core
  {:help-bar "Hjälpfält"
   :debug-info "Felsökningsinformation"
-  :auto-update "Automatisk uppdatering"}
+  :check-for-updates "Sök automatiskt efter uppdateringar"}
 
  :renderer.dialog.core
  {:dialog "Dialog"

@@ -801,7 +801,7 @@
  :renderer.app.core
  {:help-bar "ヘルプバー"
   :debug-info "デバッグ情報"
-  :auto-update "自動更新"}
+  :check-for-updates "更新を自動的に確認"}
 
  :renderer.dialog.core
  {:dialog "ダイアログ"

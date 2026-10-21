@@ -843,7 +843,7 @@
  :renderer.app.core
  {:help-bar "Barra de ajuda"
   :debug-info "Informação de depuração"
-  :auto-update "Atualização automática"}
+  :check-for-updates "Verificar atualizações automaticamente"}
 
  :renderer.dialog.core
  {:dialog "Caixa de diálogo"

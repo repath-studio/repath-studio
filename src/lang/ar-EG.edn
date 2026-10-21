@@ -812,7 +812,7 @@
  :renderer.app.core
  {:help-bar "شريط المساعدة"
   :debug-info "معلومات التصحيح"
-  :auto-update "التحديث التلقائي"}
+  :check-for-updates "فحص التحديثات تلقائيًا"}
 
  :renderer.dialog.core
  {:dialog "مربع حوار"

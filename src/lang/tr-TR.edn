@@ -840,7 +840,7 @@
  :renderer.app.core
  {:help-bar "Yardım çubuğu"
   :debug-info "Hata ayıklama bilgisi"
-  :auto-update "Otomatik güncelleme"}
+  :check-for-updates "Güncellemeleri otomatik olarak kontrol et"}
 
  :renderer.dialog.core
  {:dialog "İletişim kutusu"

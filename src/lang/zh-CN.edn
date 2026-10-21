@@ -748,7 +748,7 @@
  :renderer.app.core
  {:help-bar "帮助栏"
   :debug-info "调试信息"
-  :auto-update "自动更新"}
+  :check-for-updates "自动检查更新"}
 
  :renderer.dialog.core
  {:dialog "对话框"
