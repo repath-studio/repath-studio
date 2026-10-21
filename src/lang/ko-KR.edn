@@ -852,9 +852,9 @@
   :zoom-set-50 "50%로 설정"
   :zoom-set-100 "100%로 설정"
   :zoom-set-200 "200%로 설정"
-  :zoom-focus-selected "선택 항목에 초점"
-  :zoom-fit-selected "선택 항목에 맞춤"
-  :zoom-fill-selected "선택 항목 채우기"
+  :focus-selected "선택 항목에 초점"
+  :fit-selected "선택 항목에 맞춤"
+  :fill-selected "선택 항목 채우기"
   :zoom-in-out "확대/축소"
   :zoom-set "줌 설정"
   :focus "초점"}

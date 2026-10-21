@@ -232,6 +232,7 @@
        [frame]
        (when-not md?
          [:div.flex.flex-col.items-center.absolute.right-2.bottom-2.gap-2
+
           (->> [:history/undo
                 :history/redo]
                (map (comp history.views/action-button
@@ -240,7 +241,9 @@
           [:div.bg-primary.rounded-md
            [action-toolbar
             [:object/entity]
-            [context-dropdown-button]]]])]]]))
+            [context-dropdown-button]]]
+          [views/toolbar {:class "bg-primary rounded-md flex-col"}
+           [views/action-icon-button :zoom/focus]]])]]]))
 
 (defn xml-panel
   []

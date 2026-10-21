@@ -42,23 +42,30 @@
                :event [::frame.events/set-zoom 2]}])
 
 (rf/dispatch [::action.events/register-action
-              {:id :zoom/focus-selected
-               :label [::zoom-focus-selected "Focus selected"]
+              {:id :zoom/focus
+               :label [::focus "Focus"]
                :icon "focus"
+               :enabled [::document.subs/some-entities?]
+               :event [::frame.events/focus]
+               :shortcuts {"All" [{:keyCode (utils.key/codes "ZERO")}]}}])
+
+(rf/dispatch [::action.events/register-action
+              {:id :zoom/focus-selected
+               :label [::focus-selected "Focus selected"]
                :enabled [::document.subs/some-entities?]
                :event [::frame.events/focus-selection :original]
                :shortcuts {"All" [{:keyCode (utils.key/codes "ONE")}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :zoom/fit-selected
-               :label [::zoom-fit-selected "Fit selected"]
+               :label [::fit-selected "Fit selected"]
                :enabled [::document.subs/some-entities?]
                :event [::frame.events/focus-selection :fit]
                :shortcuts {"All" [{:keyCode (utils.key/codes "TWO")}]}}])
 
 (rf/dispatch [::action.events/register-action
               {:id :zoom/fill-selected
-               :label [::zoom-fill-selected "Fill selected"]
+               :label [::fill-selected "Fill selected"]
                :enabled [::document.subs/some-entities?]
                :event [::frame.events/focus-selection :fill]
                :shortcuts {"All" [{:keyCode (utils.key/codes "THREE")}]}}])
@@ -82,6 +89,7 @@
               {:id :zoom/focus
                :icon "focus"
                :label [::focus "Focus"]
-               :actions [:zoom/focus-selected
+               :actions [:zoom/focus
+                         :zoom/focus-selected
                          :zoom/fit-selected
                          :zoom/fill-selected]}])

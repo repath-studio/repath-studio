@@ -929,9 +929,9 @@
   :zoom-set-50 "Ορισμός σε 50%"
   :zoom-set-100 "Ορισμός σε 100%"
   :zoom-set-200 "Ορισμός σε 200%"
-  :zoom-focus-selected "Εστίαση επιλογής"
-  :zoom-fit-selected "Προσαρμογή επιλογής"
-  :zoom-fill-selected "Γέμισμα επιλογής"
+  :focus-selected "Εστίαση επιλογής"
+  :fit-selected "Προσαρμογή επιλογής"
+  :fill-selected "Γέμισμα επιλογής"
   :zoom-in-out "Μεγέθυνση/Σμίκρυνση"
   :zoom-set "Ορισμός ζουμ"
   :focus "Εστίαση"}

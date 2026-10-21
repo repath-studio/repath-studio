@@ -114,7 +114,7 @@
   (cond-> db
     (and (:active-document db)
          (-> db :dom-rect))
-    (-> (frame.handlers/focus-bbox :original)
+    (-> (frame.handlers/focus)
         (snap.handlers/update-viewport-tree))))
 
 (m/=> new-title [:-> App DocumentTitle])

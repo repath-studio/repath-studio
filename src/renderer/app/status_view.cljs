@@ -92,24 +92,26 @@
 
 (defn zoom-button-group
   [zoom]
-  [views/button-group
-   (-> :zoom/out
-       action.views/deref-action
-       (assoc :icon "minus")
-       views/action-icon-button)
+  (let [md? @(rf/subscribe [::window.subs/md?])]
+    [views/button-group
+     (-> :zoom/out
+         action.views/deref-action
+         (assoc :icon "minus")
+         views/action-icon-button)
 
-   (-> :zoom/in
-       action.views/deref-action
-       (assoc :icon "plus")
-       views/action-icon-button)
+     (-> :zoom/in
+         action.views/deref-action
+         (assoc :icon "plus")
+         views/action-icon-button)
 
-   [:div.flex.hidden.items-center
-    {:class "@7xl/toolbar:flex"
-     :dir "ltr"}
-    [zoom-input zoom]
-    [:div.px-2.flex.items-center.font-mono "%"]]
+     (when md?
+       [:div.flex.hidden.items-center
+        {:class "@7xl/toolbar:flex"
+         :dir "ltr"}
+        [zoom-input zoom]
+        [:div.px-2.flex.items-center.font-mono "%"]])
 
-   [zoom-menu]])
+     (when md? [zoom-menu])]))
 
 (defn color-picker
   [props & children]

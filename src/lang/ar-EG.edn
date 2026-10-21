@@ -870,9 +870,9 @@
   :zoom-set-50 "تعيين إلى 50%"
   :zoom-set-100 "تعيين إلى 100%"
   :zoom-set-200 "تعيين إلى 200%"
-  :zoom-focus-selected "تركيز على المحدد"
-  :zoom-fit-selected "ملائمة المحدد"
-  :zoom-fill-selected "ملء المحدد"
+  :focus-selected "تركيز على المحدد"
+  :fit-selected "ملائمة المحدد"
+  :fill-selected "ملء المحدد"
   :zoom-in-out "تكبير/تصغير"
   :zoom-set "ضبط التكبير"
   :focus "تركيز"}

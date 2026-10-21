@@ -904,9 +904,9 @@
   :zoom-set-50 "Sätt till 50%"
   :zoom-set-100 "Sätt till 100%"
   :zoom-set-200 "Sätt till 200%"
-  :zoom-focus-selected "Fokusera markerat"
-  :zoom-fit-selected "Anpassa markerat"
-  :zoom-fill-selected "Fyll markerat"
+  :focus-selected "Fokusera markerat"
+  :fit-selected "Anpassa markerat"
+  :fill-selected "Fyll markerat"
   :zoom-in-out "Zooma in/ut"
   :zoom-set "Ange zoom"
   :focus "Fokusera"}

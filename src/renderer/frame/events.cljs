@@ -16,10 +16,17 @@
        (snap.handlers/update-viewport-tree))))
 
 (rf/reg-event-db
+ ::focus
+ [persist]
+ (fn [db [_]]
+   (-> (frame.handlers/focus db)
+       (snap.handlers/update-viewport-tree))))
+
+(rf/reg-event-db
  ::focus-selection
  [persist]
  (fn [db [_ focus-type]]
-   (-> (frame.handlers/focus-bbox db focus-type)
+   (-> (frame.handlers/focus db focus-type)
        (snap.handlers/update-viewport-tree))))
 
 (rf/reg-event-db

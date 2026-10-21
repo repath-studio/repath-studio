@@ -10,46 +10,42 @@
    [renderer.snap.subs :as-alias snap.subs]
    [renderer.utils.math :as utils.math]
    [renderer.utils.svg :as utils.svg]
-   [renderer.views :as views]
-   [renderer.window.subs :as-alias window.subs]))
+   [renderer.views :as views]))
 
 (defn root
   []
   (let [active? (rf/subscribe [::snap.subs/active?])
-        md? @(rf/subscribe [::window.subs/md?])
         toggle-snap-action (action.views/deref-action :snap/toggle)]
     (reagent/with-let [open (reagent/atom false)]
       [:button.button.rounded-sm.items-center.gap-1.md:flex.justify-items-center
        {:title (action.views/label toggle-snap-action)
-        :class ["active:bg-overlay shrink-0"
-                (when md? "px-1")
+        :class ["active:bg-overlay shrink-0 px-1 flex"
                 (when @active? "accent")
                 (when @open "bg-overlay!")]
         :on-click (action.views/dispatch toggle-snap-action)}
        [views/icon (:icon toggle-snap-action)]
-       (when md?
-         [:> DropdownMenu/Root
-          {:on-open-change #(reset! open %)}
-          [:> DropdownMenu/Trigger
-           {:as-child true}
-           [:div.h-full.flex.items-center.hover:pb-1
-            {:class "min-h-[inherit]"
-             :role "button"
-             :title (i18n.views/t [::snap-options "Snap options"])}
-            [views/icon "chevron-up"]]]
-          [:> DropdownMenu/Portal
-           (->> (:actions (action.views/deref-action-group :snap/options))
-                (map views/dropdown-menu-item)
-                (into [:> DropdownMenu/Content
-                       {:side "top"
-                        :align "end"
-                        :sideOffset 5
-                        :alignOffset -5
-                        :position "popper"
-                        :class "menu-content rounded-sm select-content"
-                        :on-key-down #(.stopPropagation %)
-                        :on-escape-key-down #(.stopPropagation %)}
-                       [views/dropdownmenu-arrow]]))]])])))
+       [:> DropdownMenu/Root
+        {:on-open-change #(reset! open %)}
+        [:> DropdownMenu/Trigger
+         {:as-child true}
+         [:div.h-full.flex.items-center.hover:pb-1
+          {:class "min-h-[inherit]"
+           :role "button"
+           :title (i18n.views/t [::snap-options "Snap options"])}
+          [views/icon "chevron-up"]]]
+        [:> DropdownMenu/Portal
+         (->> (:actions (action.views/deref-action-group :snap/options))
+              (map views/dropdown-menu-item)
+              (into [:> DropdownMenu/Content
+                     {:side "top"
+                      :align "end"
+                      :sideOffset 5
+                      :alignOffset -5
+                      :position "popper"
+                      :class "menu-content rounded-sm select-content"
+                      :on-key-down #(.stopPropagation %)
+                      :on-escape-key-down #(.stopPropagation %)}
+                     [views/dropdownmenu-arrow]]))]]])))
 
 (defn canvas-label
   [nearest-neighbor]

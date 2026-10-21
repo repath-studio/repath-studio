@@ -98,14 +98,20 @@
                 (utils.math/v-add [min-x min-y]))]
     (assoc-in db [:documents active-document :pan] pan)))
 
-(m/=> focus-bbox [:function
-                  [:-> App [:enum :original :fit :fill] App]
-                  [:-> App [:enum :original :fit :fill] BBox App]])
-(defn focus-bbox
+(m/=> focus [:function
+             [:-> App App]
+             [:-> App [:enum :original :fit :fill] App]
+             [:-> App [:enum :original :fit :fill] BBox App]])
+(defn focus
+  ([db]
+   (cond-> db
+     (:active-document db)
+     (focus :original (-> (element.handlers/root-children db)
+                          (utils.element/united-bbox)))))
   ([db focus-type]
    (cond-> db
      (:active-document db)
-     (focus-bbox
+     (focus
       focus-type
       (or (element.handlers/bbox db)
           (utils.element/united-bbox (element.handlers/root-children db))))))

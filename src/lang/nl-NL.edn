@@ -921,9 +921,9 @@
   :zoom-set-50 "Instellen op 50%"
   :zoom-set-100 "Instellen op 100%"
   :zoom-set-200 "Instellen op 200%"
-  :zoom-focus-selected "Focus op geselecteerd"
-  :zoom-fit-selected "Geselecteerd passend maken"
-  :zoom-fill-selected "Geselecteerd vullen"
+  :focus-selected "Focus op geselecteerd"
+  :fit-selected "Geselecteerd passend maken"
+  :fill-selected "Geselecteerd vullen"
   :zoom-in-out "In-/uitzoomen"
   :zoom-set "Zoom instellen"
   :focus "Focus"}

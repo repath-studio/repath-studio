@@ -806,9 +806,9 @@
   :zoom-set-50 "设置为 50%"
   :zoom-set-100 "设置为 100%"
   :zoom-set-200 "设置为 200%"
-  :zoom-focus-selected "聚焦选择"
-  :zoom-fit-selected "适合选择"
-  :zoom-fill-selected "填充选择"
+  :focus-selected "聚焦选择"
+  :fit-selected "适合选择"
+  :fill-selected "填充选择"
   :zoom-in-out "放大/缩小"
   :zoom-set "设置缩放"
   :focus "聚焦"}

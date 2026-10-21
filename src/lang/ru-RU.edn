@@ -905,9 +905,9 @@
   :zoom-set-50 "Установить 50%"
   :zoom-set-100 "Установить 100%"
   :zoom-set-200 "Установить 200%"
-  :zoom-focus-selected "Сфокусировать на выделенном"
-  :zoom-fit-selected "Уместить выделенное"
-  :zoom-fill-selected "Заполнить выделенным"
+  :focus-selected "Сфокусировать на выделенном"
+  :fit-selected "Уместить выделенное"
+  :fill-selected "Заполнить выделенным"
   :zoom-in-out "Увеличить/Уменьшить"
   :zoom-set "Установить масштаб"
   :focus "Фокус"}

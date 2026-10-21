@@ -860,9 +860,9 @@
   :zoom-set-50 "50%に設定"
   :zoom-set-100 "100%に設定"
   :zoom-set-200 "200%に設定"
-  :zoom-focus-selected "選択項目にフォーカス"
-  :zoom-fit-selected "選択項目にフィット"
-  :zoom-fill-selected "選択項目を画面に合わせる"
+  :focus-selected "選択項目にフォーカス"
+  :fit-selected "選択項目にフィット"
+  :fill-selected "選択項目を画面に合わせる"
   :zoom-in-out "ズームイン/アウト"
   :zoom-set "ズームを設定"
   :focus "フォーカス"}

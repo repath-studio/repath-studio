@@ -898,9 +898,9 @@
   :zoom-set-50 "%50'ye ayarla"
   :zoom-set-100 "%100'e ayarla"
   :zoom-set-200 "%200'e ayarla"
-  :zoom-focus-selected "Seçilene odaklan"
-  :zoom-fit-selected "Seçilene sığdır"
-  :zoom-fill-selected "Seçileni doldur"
+  :focus-selected "Seçilene odaklan"
+  :fit-selected "Seçilene sığdır"
+  :fill-selected "Seçileni doldur"
   :zoom-in-out "Yakınlaştır/Uzaklaştır"
   :zoom-set "Yakınlaştırmayı ayarla"
   :focus "Odak"}
