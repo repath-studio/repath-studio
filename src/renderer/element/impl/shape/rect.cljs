@@ -69,7 +69,8 @@
                 (and (contains? #{:position :size} handle)
                      lock?)
                 (input.handlers/lock-direction))
-        [w h] (utils.bounds/->dimensions (:bbox el))
+        {{:keys [width height]} :attrs} el
+        [w h] (mapv utils.length/unit->px [width height])
         clamp-radius (fn [r max-size]
                        (min (max 0 r)
                             (/ (if lock?
