@@ -573,7 +573,7 @@
                 キストを定義します。必要に応じて、そのサブテキストのスタイルま
                 たは位置を調整できます。"}
 
- :renderer.element.impl.text-content.core
+ :renderer.element.impl.text-content.text-node
  {:remove-text "テキストを削除"
   :set-text "テキストを設定"}
 

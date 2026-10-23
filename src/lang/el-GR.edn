@@ -634,7 +634,7 @@
                 τη ρύθμιση του στυλ και/ή της θέσης αυτού του κειμένου ανάλογα
                 με τις ανάγκες."}
 
- :renderer.element.impl.text-content.core
+ :renderer.element.impl.text-content.text-node
  {:remove-text "Διαφραφή κειμένου"
   :set-text "Ορισμός κειμένου"}
 

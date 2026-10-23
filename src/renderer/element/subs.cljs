@@ -132,6 +132,12 @@
  :-> utils.element/united-bbox)
 
 (rf/reg-sub
+ ::transformable?
+ :<- [::selected]
+ (fn [selected-elements [_]]
+   (boolean (some utils.element/transformable? selected-elements))))
+
+(rf/reg-sub
  ::transform
  (fn [db [_ id]]
    (element.handlers/transform db id)))

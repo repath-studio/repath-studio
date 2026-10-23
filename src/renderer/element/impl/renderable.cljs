@@ -29,6 +29,6 @@
           (map element.hierarchy/render-to-string child-elements))))
 
 (defmethod element.hierarchy/bbox ::element.hierarchy/renderable
-  [el transform]
-  (some->> (:bbox (utils.element/get-computed-styles el))
+  [el transform & more]
+  (some->> (:bbox (utils.element/get-computed-styles el (first more)))
            (utils.transform/aabb transform)))

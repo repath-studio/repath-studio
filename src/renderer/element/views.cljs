@@ -13,7 +13,7 @@
   "Renders a ghost element on top of the actual element to ensure that the user
    can interact with it."
   [el pointer-handler]
-  (let [{:keys [attrs tag content id]} el
+  (let [{:keys [attrs tag id]} el
         handle-size @(rf/subscribe [::document.subs/handle-size])
         transform @(rf/subscribe [::element.subs/transform id])
         stroke-width (/ (* handle-size 2)
@@ -25,8 +25,7 @@
                  :shape-rendering "optimizeSpeed"
                  :fill "transparent"
                  :stroke "transparent"
-                 :stroke-width stroke-width})
-     content]))
+                 :stroke-width stroke-width})]))
 
 (defn render-to-dom
   "We need a reagent form-3 component to set the style attribute manually.
@@ -52,20 +51,19 @@
       :reagent-render
       (fn
         [el child-els idle]
-        (let [{:keys [attrs tag title content]} el
+        (let [{:keys [attrs tag title]} el
               pointer-handler (partial input.impl.pointer/handler! el)]
           [:<>
-           [tag (-> attrs
-                    (dissoc :style)
-                    (assoc :shape-rendering "geometricPrecision"
-                           :ref ref
-                           :on-pointer-up pointer-handler
-                           :on-pointer-down pointer-handler
-                           :on-pointer-move pointer-handler))
+           [tag (merge (dissoc attrs :style)
+                       {:shape-rendering "geometricPrecision"
+                        :ref ref
+                        :on-pointer-up pointer-handler
+                        :on-pointer-down pointer-handler
+                        :on-pointer-move pointer-handler})
             (when title [:title title])
-            content
             (for [child child-els]
               ^{:key (:id child)}
               [element.hierarchy/render child])]
 
-           (when idle [ghost-element el pointer-handler])]))})))
+           (when idle
+             [ghost-element el pointer-handler])]))})))

@@ -165,11 +165,12 @@
 
 (rf/reg-fx
  ::element.effects/->path
- (fn [{:keys [data on-success on-error]}]
-   (-> (mapv utils.element/->path data)
-       (js/Promise.all)
-       (.then #(some-> on-success (conj %) rf/dispatch))
-       (.catch #(some-> on-error (conj %) rf/dispatch)))))
+ (fn [{:keys [data entities on-success on-error]}]
+   (let [by-id (into {} (map (juxt :id identity)) entities)]
+     (-> (mapv #(utils.element/->path % by-id) data)
+         (js/Promise.all)
+         (.then #(some-> on-success (conj %) rf/dispatch))
+         (.catch #(some-> on-error (conj %) rf/dispatch))))))
 
 (rf/reg-cofx
  ::effects/guid

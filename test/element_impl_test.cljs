@@ -180,7 +180,6 @@
    {:label "text"
     :el {:type :element
          :tag :text
-         :content "My text"
          :attrs {:x "0"
                  :y "0"
                  :width "50"

@@ -64,15 +64,34 @@
       (dissoc :clicked-element)
       (toggle-selection e)))
 
+(defn single-text-data-child?
+  [db id]
+  (let [children (get (element.handlers/entity db id) :children)]
+    (and (= 1 (count children))
+         (= :text-node (:tag (element.handlers/entity db (first children)))))))
+
 (defmethod tool.hierarchy/on-double-click [::transform/transform :idle]
   [db e]
   (let [{{:keys [timestamp tag id]} :element} e]
-    (if (= tag :g)
+    (cond
+      (and (contains? #{:text :tspan :textPath} tag)
+           (single-text-data-child? db id))
+      (-> db
+          (element.handlers/deselect id)
+          (element.handlers/select
+           (first (:children (element.handlers/entity db id))))
+          (history.handlers/finalize timestamp
+                                     [::select-element "Select element"])
+          (tool.handlers/edit))
+
+      (contains? #{:g :text :tspan :textPath} tag)
       (-> db
           (element.handlers/ignore id)
           (element.handlers/deselect id)
           (history.handlers/finalize timestamp
                                      [::deselect-element "Deselect element"]))
+
+      :else
       (cond-> db
         (not= :canvas tag)
         (tool.handlers/edit)))))

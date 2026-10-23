@@ -3,22 +3,20 @@
    [clojure.string :as string]
    [re-frame.core :as rf]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
-   [renderer.effects :as-alias effects]
-   [renderer.element.handlers :as element.handlers]
+   [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.impl.text-content.text]
+   [renderer.element.impl.text-content.text-node]
    [renderer.element.impl.text-content.tspan]
    [renderer.element.subs :as-alias element.subs]
+   [renderer.element.views :as element.views]
    [renderer.hierarchy :as hierarchy]
-   [renderer.history.handlers :as history.handlers]
-   [renderer.tool.events :as-alias tool.events]
-   [renderer.tool.handlers :as tool.handlers]
-   [renderer.utils.bounds :as utils.bounds]
+   [renderer.input.impl.pointer :as input.impl.pointer]
+   [renderer.tool.impl.base.transform.core :as-alias tool.impl.base.transform]
+   [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.element :as utils.element]
    [renderer.utils.font :as utils.font]
-   [renderer.utils.key :as utils.key]
    [renderer.utils.length :as utils.length]
-   [renderer.utils.math :as utils.math]
    [renderer.utils.transform :as utils.transform]))
 
 (hierarchy/derive! ::element.hierarchy/text-content ::element.hierarchy/shape)
@@ -38,92 +36,25 @@
       (attribute.hierarchy/update-attr :x + x)
       (attribute.hierarchy/update-attr :y + y)))
 
-(defmethod element.hierarchy/scale ::element.hierarchy/text-content
-  [el ratio pivot-point]
-  (let [bounds (utils.element/local-bbox el)
-        [w h] (utils.bounds/->dimensions bounds)
-        y-attr (utils.length/unit->px (get-in el [:attrs :y]))
-        ascent (- y-attr (second bounds))
-        descent (- h ascent)
-        pivot-point (utils.math/v-sub pivot-point [0 ascent])
-        [offset-x offset-y] (utils.element/scale-offset ratio pivot-point)
-        ratio (apply min ratio)
-        offset [(+ offset-x (min 0 (* w ratio)))
-                (+ offset-y (* (- (min 0 ratio)) (- ascent descent)))]]
-    (-> el
-        (attribute.hierarchy/update-attr :font-size #(abs (* % ratio)))
-        (element.hierarchy/translate offset))))
-
-(defn get-text
-  "Retrieves the input value and replaces spaces with no-break space to maintain
-   user intent."
-  [e]
-  (string/replace (.. e -target -value) " " "\u00a0"))
-
-(rf/reg-event-fx
- ::set-text
- [(rf/inject-cofx ::effects/now)]
- (fn [{:keys [db now]} [_ id s]]
-   {:db (-> (if (and (empty? s)
-                     (empty? (:children (element.handlers/entity db id))))
-              (-> (element.handlers/delete db id)
-                  (history.handlers/finalize now [::remove-text "Remove text"]))
-              (-> (element.handlers/assoc-prop db id :content s)
-                  (element.handlers/refresh-bbox id)
-                  (history.handlers/finalize now [::set-text "Set text"])))
-            (tool.handlers/deactivate))
-    ::effects/focus-canvas nil}))
-
-(defmethod element.hierarchy/render-edit ::element.hierarchy/text-content
-  [el]
-  (let [{:keys [id content]} el
-        transform @(rf/subscribe [::element.subs/transform (:id el)])
-        el-bbox (utils.element/local-bbox el)
-        [x y] el-bbox
-        [_w h] (utils.bounds/->dimensions el-bbox)
-        attrs (utils.element/attributes el)
-        {:keys [fill font-family font-size font-weight font-style]} attrs
-        font-size-px (utils.length/unit->px font-size)
-        font-size (if (zero? font-size-px)
-                    font-size
-                    (str font-size-px "px"))]
-    [:foreignObject {:x x
-                     :y y
-                     :width "1000vw"
-                     :height h
-                     :transform (utils.transform/->str transform)}
-     [:input
-      {:key id
-       :default-value content
-       :auto-focus true
-       :enter-key-hint "done"
-       :on-focus #(.. % -target select)
-       :on-pointer-down #(.stopPropagation %)
-       :on-pointer-up #(.stopPropagation %)
-       :on-blur #(rf/dispatch [::set-text id (get-text %)])
-       :on-key-down #(utils.key/down-handler % content identity id)
-       :ref (fn [this]
-              (when this
-                (rf/dispatch [::tool.events/set-state :type])))
-       :style {:color fill
-               :caret-color fill
-               :display "block"
-               :width "1000vw"
-               :height h
-               :padding 0
-               :border 0
-               :outline "none"
-               :background "transparent"
-               :font-style font-style
-               :font-family (if (empty? font-family) "var(--sans)" font-family)
-               :font-size font-size
-               :font-weight font-weight}}]]))
+(defn content-of
+  [el resolve-child]
+  (let [resolve-child (or resolve-child (constantly nil))]
+    (letfn [(collect [e]
+              (if (utils.element/text-node? e)
+                (or (get-in e [:attrs :content]) "")
+                (string/join
+                 (map collect
+                      (keep resolve-child (or (:children e) []))))))]
+      (string/join
+       (map collect (keep resolve-child (or (:children el) [])))))))
 
 (defmethod element.hierarchy/path ::element.hierarchy/text-content
-  [el]
-  (let [{:keys [attrs content]} el
+  [el & more]
+  (let [resolve-child (first more)
+        content (content-of el resolve-child)
+        {:keys [attrs]} el
         {:keys [x y font-family]} attrs
-        computed-styles (utils.element/get-computed-styles el)
+        computed-styles (utils.element/get-computed-styles el resolve-child)
         {:keys [font-size font-style font-weight]} computed-styles
         [x y font-size] (mapv utils.length/unit->px [x y font-size])
         props {:x x
@@ -142,3 +73,64 @@
       (-> (utils.font/default-font-path font-style font-weight)
           (js/fetch)
           (.then #(utils.font/font-data->path-data! % content props))))))
+
+(defn text-descendants
+  [el resolve-child]
+  (letfn [(walk [e depth]
+            (mapcat (fn [cid]
+                      (when-let [child (resolve-child cid)]
+                        (when (contains? #{:tspan :textPath :text-node}
+                                         (:tag child))
+                          (cons [child depth] (walk child (inc depth))))))
+                    (:children e)))]
+    (->> (walk el 0)
+         (sort-by (comp - second))
+         (map first))))
+
+(defn text-ghost
+  [el transform]
+  (let [{:keys [id bbox]} el
+        ignored-ids @(rf/subscribe [::document.subs/ignored-ids])
+        ignored? (contains? ignored-ids id)
+        pointer-handler (partial input.impl.pointer/handler! el)
+        handle-size @(rf/subscribe [::document.subs/handle-size])
+        stroke-width (/ handle-size (utils.transform/scale-factor transform))
+        idle? @(rf/subscribe [::tool.subs/idle?])
+        transform? @(rf/subscribe [::tool.subs/active?
+                                   ::tool.impl.base.transform/transform])
+        clickable? (and bbox (or idle? transform?))]
+    (when clickable?
+      (let [[min-x min-y max-x max-y] bbox
+            corners [[min-x min-y] [max-x min-y]
+                     [max-x max-y] [min-x max-y]]
+            world->local (partial utils.transform/inverse-point transform)
+            points (->> corners
+                        (map (comp (fn [[x y]] (str x "," y)) world->local))
+                        (string/join " "))]
+        [:polygon {:points points
+                   :fill "transparent"
+                   :stroke "transparent"
+                   :stroke-width stroke-width
+                   :pointer-events (when ignored? "none")
+                   :on-pointer-up pointer-handler
+                   :on-pointer-down pointer-handler
+                   :on-pointer-move pointer-handler}]))))
+
+(defn text-ghosts
+  [el transform]
+  (let [entities @(rf/subscribe [::element.subs/entities])
+        by-id (group-by :id entities)
+        resolve-child (fn [cid] (first (get by-id cid)))]
+    (->> (concat (text-descendants el resolve-child) [el])
+         (map (fn [el] ^{:key (:id el)} [text-ghost el transform])))))
+
+(defmethod element.hierarchy/render ::element.hierarchy/text-content
+  [el]
+  (let [child-els @(rf/subscribe [::element.subs/filter-visible (:children el)])
+        idle? @(rf/subscribe [::tool.subs/idle?])
+        editing? @(rf/subscribe [::tool.subs/editing?])
+        text? (= (:tag el) :text)
+        transform @(rf/subscribe [::element.subs/transform (:parent el)])]
+    [:g {:cursor (when editing? "text")}
+     [element.views/render-to-dom el child-els idle?]
+     (when text? (text-ghosts el transform))]))

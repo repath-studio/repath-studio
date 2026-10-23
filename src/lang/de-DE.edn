@@ -630,7 +630,7 @@
                 Damit lässt sich der Stil und/oder die Position dieses
                 Teiltexts nach Bedarf anpassen."}
 
- :renderer.element.impl.text-content.core
+ :renderer.element.impl.text-content.text-node
  {:remove-text "Text entfernen"
   :set-text "Text setzen"}
 

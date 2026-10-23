@@ -153,6 +153,21 @@
      [area-label bbox]
      [size-label bbox]]))
 
+(m/=> bounding-boxes [:-> [:sequential Element] boolean? any?])
+(defn bounding-boxes
+  [elements dashed?]
+  (into [:<>] (map #(bounding-box % dashed?) elements)))
+
+(defn bbox-overlays
+  [state bbox idle? transformable?]
+  (when (seq bbox)
+    [:<>
+     [utils.svg/bounding-box bbox false]
+     (when (and (contains? #{:idle :rotate} state) transformable?)
+       [transform.rotate/handle])
+     (when (and idle? transformable?)
+       [tool.views/corner-handles bbox])]))
+
 (defmethod tool.hierarchy/render ::transform
   []
   (let [state @(rf/subscribe [::tool.subs/state])
@@ -160,28 +175,22 @@
         bbox @(rf/subscribe [::element.subs/bbox])
         hovered-elements @(rf/subscribe [::element.subs/hovered])
         idle? @(rf/subscribe [::tool.subs/idle?])
+        transformable? @(rf/subscribe [::element.subs/transformable?])
         touch? @(rf/subscribe [::app.subs/supported-feature? :touch])
         select-box @(rf/subscribe [::tool.subs/select-box])]
     [:<>
      (when idle?
-       (into [:<>]
-             (map #(bounding-box % false) selected-elements)))
+       (bounding-boxes selected-elements false))
 
      (when (or (not touch?) (= state :select))
-       (into [:<>]
-             (map #(bounding-box % true) hovered-elements)))
+       (bounding-boxes hovered-elements true))
 
-     (when (seq bbox)
-       [:<>
-        [utils.svg/bounding-box bbox false]
-        (when (contains? #{:idle :rotate} state)
-          [transform.rotate/handle])
-        (when (= state :idle)
-          [tool.views/corner-handles bbox])])
+     (bbox-overlays state bbox idle? transformable?)
 
      (scale-overlays state bbox)
 
-     [pivot-handle]
+     (when transformable?
+       [pivot-handle])
 
      [element.hierarchy/render select-box]]))
 

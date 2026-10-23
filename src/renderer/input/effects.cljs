@@ -26,7 +26,8 @@
          (.getAsString item #(rf/dispatch [::element.events/add
                                            {:type :element
                                             :tag :text
-                                            :content %
+                                            :content [{:tag :text-node
+                                                       :attrs {:content %}}]
                                             :attrs {:x x
                                                     :y y}}])))
 

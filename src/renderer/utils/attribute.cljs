@@ -330,17 +330,18 @@
 
 (def ->attrs-memo (memoize ->attrs))
 
+(defn supports-core-attrs?
+  [tag]
+  (and (not= tag :text-node)
+       (or (hierarchy/gisa? tag ::element.hierarchy/shape)
+           (hierarchy/gisa? tag ::element.hierarchy/container))))
+
 (m/=> defaults [:-> ElementTag ElementAttrs])
 (defn defaults
   [tag]
   (merge (when (element.db/tag? tag)
            (merge (->attrs-memo (or (tag (:elements svg-data)) {}))
-                  (when (or (isa? @hierarchy/hierarchy
-                                  tag
-                                  ::element.hierarchy/shape)
-                            (isa? @hierarchy/hierarchy
-                                  tag
-                                  ::element.hierarchy/container))
+                  (when (supports-core-attrs? tag)
                     (zipmap core (repeat "")))))
          (when (contains? #{:animateMotion :animateTransform} tag)
            (defaults :animate))

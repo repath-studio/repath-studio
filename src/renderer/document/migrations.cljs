@@ -73,4 +73,27 @@
                                             (update-keys attrs
                                                          #(if (= :stroke %)
                                                             :fill
-                                                            %))))))))]])
+                                                            %))))))))]
+
+   [[0 4 27] (fn [document]
+               (let [text-els (filter utils.element/text-content?
+                                      (vals (:elements document)))]
+                 (reduce (fn [doc el]
+                           (let [el-id (:id el)
+                                 node (utils.element/normalize
+                                       {:id (random-uuid)
+                                        :tag :text-node
+                                        :attrs {:content (:content el)}
+                                        :parent el-id})]
+                             (update doc
+                                     :elements
+                                     (fn [els]
+                                       (-> els
+                                           (update el-id dissoc :content)
+                                           (update-in [el-id :children]
+                                                      (fn [cs]
+                                                        (vec (into [(:id node)]
+                                                                   cs))))
+                                           (assoc (:id node) node))))))
+                         document
+                         text-els)))]])

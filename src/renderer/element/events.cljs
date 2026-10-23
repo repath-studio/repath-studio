@@ -276,6 +276,7 @@
      {:db (tool.handlers/deactivate db)
       ::element.effects/->path
       {:data (element.handlers/selected db)
+       :entities (element.handlers/entities db)
        :on-success [::finalize->path]
        :on-error [::app.events/toast-error]}})))
 
@@ -292,6 +293,7 @@
      {:db (tool.handlers/deactivate db)
       ::element.effects/->path
       {:data (element.handlers/selected db)
+       :entities (element.handlers/entities db)
        :on-success [::finalize-stroke->path]
        :on-error [::app.events/toast-error]}})))
 
@@ -310,6 +312,7 @@
      {:db (tool.handlers/deactivate db)
       ::element.effects/->path
       {:data (element.handlers/selected db)
+       :entities (element.handlers/entities db)
        :on-success (case operation
                      :unite [::finalize-boolean-unite]
                      :intersect [::finalize-boolean-intersect]

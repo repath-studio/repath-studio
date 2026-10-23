@@ -5,3 +5,7 @@
 (defn derive!
   [k parent]
   (swap! hierarchy derive k parent))
+
+(defn gisa?
+  [child parent]
+  (isa? @hierarchy child parent))

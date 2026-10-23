@@ -587,7 +587,7 @@
                 <tspan> آخر. ويتيح تعديل نمط ذلك النص الفرعي و/أو موقعه حسب
                 الحاجة."}
 
- :renderer.element.impl.text-content.core
+ :renderer.element.impl.text-content.text-node
  {:remove-text "إزالة النص"
   :set-text "تعيين النص"}
 

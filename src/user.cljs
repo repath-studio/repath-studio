@@ -240,7 +240,8 @@
    (text x y content {}))
   ([x :- :float y :- :float content :- :string attrs :- :map]
    (create {:tag :text
-            :content content
+            :content [{:tag :text-node
+                       :attrs {:content content}}]
             :attrs (merge {:x x
                            :y y} attrs)})))
 

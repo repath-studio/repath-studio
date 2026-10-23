@@ -32,11 +32,15 @@
         el {:type :element
             :tag :text
             :parent parent-id
+            :content [{:tag :text-node
+                       :attrs {:content ""}}]
             :attrs {:x offset-x
-                    :y offset-y}}]
+                    :y offset-y}}
+        db (element.handlers/add db el)
+        node-id (first (:children (first (element.handlers/selected db))))]
     (-> db
         (element.handlers/deselect)
-        (element.handlers/add el)
+        (element.handlers/select node-id)
         (tool.handlers/set-state :type)
         (tool.handlers/edit))))
 
