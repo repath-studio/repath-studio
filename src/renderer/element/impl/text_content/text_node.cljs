@@ -183,7 +183,7 @@
               (resolve-children)
               ::set-text))
 
-(defn set-text-node
+(defn set-text
   [db id s now]
   (if (empty? s)
     (-> (element.handlers/delete db id)
@@ -195,6 +195,6 @@
  ::set-text
  [(rf/inject-cofx ::effects/now)]
  (fn [{:keys [db now]} [_ id s]]
-   {:db (-> (set-text-node db id s now)
+   {:db (-> (set-text db id s now)
             (tool.handlers/deactivate))
     ::effects/focus-canvas nil}))
