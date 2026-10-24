@@ -29,4 +29,5 @@
               {:id :app/auto-update
                :label [::check-for-updates "Check for updates automatically"]
                :event [::app.events/toggle-auto-update]
+               :available [::app.subs/desktop?]
                :active [::app.subs/auto-update?]}])
