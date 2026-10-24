@@ -90,11 +90,6 @@
   ([db]
    (into [] (visible) (entities db))))
 
-(m/=> ratio-locked? [:-> App boolean?])
-(defn ratio-locked?
-  [db]
-  (every? utils.element/ratio-locked? (selected db)))
-
 (m/=> selected-ids [:function
                     [:-> fn?]
                     [:-> App [:set ElementId]]])
@@ -890,8 +885,9 @@
   (and (not (utils.element/virtual? el))
        (or (transformed? el)
            (= (:tag el) :text)
-           (and (not (utils.transform/axis-aligned? (transform db id)))
-                (not= (first ratio) (second ratio))))))
+           (and (not= (first ratio) (second ratio))
+                (or (not (utils.transform/axis-aligned? (transform db id)))
+                    (utils.element/ratio-locked? el))))))
 
 (m/=> scale-leaf-raw [:-> App ElementId Vec2 Vec2 App])
 (defn scale-leaf-raw

@@ -126,7 +126,6 @@
   [db e]
   (boolean (or (input.handlers/primary-mod? db e)
                (input.handlers/multi-touch? db)
-               (element.handlers/ratio-locked? db)
                (document.handlers/attr db ::ratio-locked))))
 
 (defmethod tool.hierarchy/on-drag [::transform/transform :scale]
