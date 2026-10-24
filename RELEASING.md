@@ -2,8 +2,8 @@
 
 Those are the steps to release a new desktop and mobile version. The web
 application follows the `main` branch, and always includes the latest changes.
-We usually cut a new release biweekly, but critical fixes should be releases
-as soon as possible.
+We usually cut a new release weekly, but critical fixes should be released as
+soon as possible.
 
 ## Update version
 
