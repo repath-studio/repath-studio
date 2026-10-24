@@ -3,6 +3,34 @@
 All notable user facing changes to this project will be documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 0.4.27 (2026-10-24)
+
+**Added**
+
+- Make automatic updates optional [#234](https://github.com/repath-studio/repath-studio/pull/234)
+- Enhance support of text content elements [#236](https://github.com/repath-studio/repath-studio/pull/236)
+- GitHub releases to discord action
+
+**Removed**
+
+- Custom pointer up handler from attribute inputs
+
+**Changed**
+
+- Preserve aspect ratio of image on trace
+- Improve performance of bulk delete
+- Various mobile enhancements
+
+**Fixed**
+
+- Panel size persist
+- Recursive scaling of nested transformed children
+- Index of multiple selected elements on swap parent while translating
+- Render to string of brush elements
+- Transform after boolean operation on elements with transformed parents
+- Prevent transforming virtual elements
+- Rectangle radius clamp on edit
+
 ## 0.4.26 (2026-10-16)
 
 **Fixed**
