@@ -623,7 +623,7 @@
                 d'ajuster le style et/ou la position de ce sous-texte si
                 besoin."}
 
- :renderer.element.impl.text-content.core
+ :renderer.element.impl.text-content.text-node
  {:remove-text "Supprimer le texte"
   :set-text "Définir le texte"}
 

@@ -627,7 +627,7 @@
                 regolare lo stile e/o la posizione di quel sottotesto in base
                 alle esigenze."}
 
- :renderer.element.impl.text-content.core
+ :renderer.element.impl.text-content.text-node
  {:remove-text "Rimuovi testo"
   :set-text "Imposta testo"}
 

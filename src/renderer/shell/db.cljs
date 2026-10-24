@@ -9,7 +9,7 @@
 
 (defn shell-language?
   [k]
-  (contains? (descendants @hierarchy/hierarchy ::shell.hierarchy/language) k))
+  (hierarchy/gisa? k ::shell.hierarchy/language))
 
 (def ShellLanguageId
   [:fn {:error/fn (fn [{:keys [value]} _]

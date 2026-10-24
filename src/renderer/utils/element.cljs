@@ -33,6 +33,19 @@
   [el]
   (= :svg (:tag el)))
 
+(defn text-node?
+  [el]
+  (= (:tag el) :text-node))
+
+(defn text-content?
+  [el]
+  (hierarchy/gisa? (:tag el) :renderer.element.hierarchy/text-content))
+
+(m/=> text-content-child? [:-> map? boolean?])
+(defn text-content-child?
+  [el]
+  (hierarchy/gisa? (:tag el) :renderer.element.hierarchy/text-content-child))
+
 (m/=> transform-attr [:-> Element TransformationMatrix])
 (defn transform-attr
   [el]
@@ -96,14 +109,22 @@
   (utils.transform/inverse-point m point))
 
 (defn local-bbox
-  [el]
-  (element.hierarchy/bbox el utils.transform/identity-transform))
+  ([el]
+   (element.hierarchy/bbox el utils.transform/identity-transform))
+  ([el resolve-child]
+   (element.hierarchy/bbox el
+                           utils.transform/identity-transform
+                           resolve-child)))
 
 (defn own-bbox
-  [el]
-  (-> (transform el)
-      (utils.transform/inverse)
-      (utils.transform/aabb (local-bbox el))))
+  ([el]
+   (-> (transform el)
+       (utils.transform/inverse)
+       (utils.transform/aabb (local-bbox el))))
+  ([el resolve-child]
+   (-> (transform el)
+       (utils.transform/inverse)
+       (utils.transform/aabb (local-bbox el resolve-child)))))
 
 (def properties-memo (memoize element.hierarchy/properties))
 
@@ -220,27 +241,34 @@
       (update :attrs update-keys (partial normalize-attr-key props))))
 
 (m/=> ->path [:-> Element Element])
+(defn ->path-with-data
+  [el d]
+  (let [default-attrs (utils.attribute/defaults-memo :path)]
+    (cond
+      (string? d)
+      (-> (assoc el :tag :path)
+          (update :attrs #(utils.map/merge-common-with str % default-attrs))
+          (assoc-in [:attrs :d] d)
+          (assoc-in [:attrs :transform] (-> el :attrs :transform))
+          (update :attrs utils.map/remove-nils))
+
+      (instance? js/Promise d)
+      (.then d (partial ->path-with-data el))
+
+      :else
+      el)))
+
 (defn ->path
   ([el]
+   (->path el nil))
+  ([el resolve-child]
    (if (get-method element.hierarchy/path (:tag el))
-     (->path el (element.hierarchy/path el))
-     (js/Promise.reject (str "No path implementation for " (name (:tag el))
-                             " elements."))))
-  ([el d]
-   (let [default-attrs (utils.attribute/defaults-memo :path)]
-     (cond
-       (string? d)
-       (-> (assoc el :tag :path)
-           (update :attrs #(utils.map/merge-common-with str % default-attrs))
-           (assoc-in [:attrs :d] d)
-           (assoc-in [:attrs :transform] (-> el :attrs :transform))
-           (update :attrs utils.map/remove-nils))
-
-       (instance? js/Promise d)
-       (.then d (partial ->path el))
-
-       :else
-       el))))
+     (->path-with-data el
+                       (if (text-content? el)
+                         (element.hierarchy/path el resolve-child)
+                         (element.hierarchy/path el)))
+     (js/Promise.reject
+      (str "No path implementation for " (name (:tag el)) " elements. ")))))
 
 (m/=> stroke->path [:-> Element Element])
 (defn stroke->path
@@ -284,7 +312,7 @@
                 :attrs {:width (str w)
                         :height (str h)
                         :viewBox (string/join " " [min-x min-y w h])
-                        :xmlns "http://www.w3.org/2000/svg"}}])))
+                        :xmlns utils.dom/svg-ns}}])))
 
 (m/=> style->map [:-> ElementAttrs ElementAttrs])
 (defn style->map
@@ -296,6 +324,13 @@
          (nil? (:style attrs))
          (dissoc :style))
        (catch :default _err (dissoc attrs :style))))
+
+(m/=> style-attr->map [:-> string? ElementAttrs])
+(defn style-attr->map
+  "Parses a CSS style attribute string into a keyword->value map."
+  [s]
+  (try (into {} (map (fn [[k v]] [(keyword k) v])) (js->clj (parse s)))
+       (catch :default _err {})))
 
 (m/=> scale-offset [:-> Vec2 Vec2 Vec2])
 (defn scale-offset
@@ -309,7 +344,7 @@
   [el]
   (let [{:keys [tag attrs]} el
         dom-el (->> (name tag)
-                    (js/document.createElementNS "http://www.w3.org/2000/svg"))
+                    (js/document.createElementNS utils.dom/svg-ns))
         el (dissoc el :attrs)
         supported-attrs (->> attrs
                              (keep (fn [[k v]]
@@ -319,23 +354,68 @@
       (.setAttributeNS dom-el nil (name k) v))
     dom-el))
 
+(m/=> ->dom-subtree [:-> Element any? any?])
+(defn ->dom-subtree
+  [el resolve-child]
+  (let [resolve-child (or resolve-child (constantly nil))]
+    (if (text-node? el)
+      (.createTextNode js/document (get-in el [:attrs :content]))
+      (let [dom-el (->dom-element el)]
+        (doseq [child (keep resolve-child (or (:children el) []))]
+          (.appendChild dom-el (->dom-subtree child resolve-child)))
+        dom-el))))
+
+(defn ->child-dom
+  "Builds a temporary DOM subtree from el for measurement, recording each
+  tspan and text-node as an [id dom-node] entry appended to acc. Text-nodes
+  are wrapped on a tspan so they can be measured. Returns
+  [dom-node [child-entries]]."
+  [el resolve-child acc]
+  (if (text-node? el)
+    (let [dom-el (.createElementNS js/document utils.dom/svg-ns "tspan")]
+      (when-let [content (get-in el [:attrs :content])]
+        (.appendChild dom-el (.createTextNode js/document content)))
+      [dom-el (conj acc [(:id el) dom-el])])
+    (let [dom-el (->dom-element el)
+          acc (if (= (:tag el) :tspan)
+                (conj acc [(:id el) dom-el])
+                acc)
+          acc (reduce (fn [acc child]
+                        (let [[c-dom c-acc]
+                              (->child-dom child resolve-child acc)]
+                          (.appendChild dom-el c-dom)
+                          c-acc))
+                      acc
+                      (keep resolve-child (or (:children el) [])))]
+      [dom-el acc])))
+
+(m/=> ->subtree-bboxes [:-> Element any? map?])
+(defn ->subtree-bboxes
+  "Measures el's subtree with a single DOM insertion, returning
+  {:own bbox, :children {child-id bbox}} where :own holds el's own bounds
+  and :children holds the bounds of each tspan/text-node descendant, all in
+  el's local coordinates."
+  [el resolve-child]
+  (if-let [svg (utils.dom/get-canvas-element)]
+    (let [resolve-child (or resolve-child (constantly nil))
+          [dom-el child-acc] (->child-dom el resolve-child [])]
+      (.appendChild svg dom-el)
+      (let [result {:own (utils.bounds/dom-el->bbox dom-el)
+                    :children
+                    (into {} (map (fn [[id dom-node]]
+                                    [id (utils.bounds/dom-el->bbox dom-node)])
+                                  child-acc))}]
+        (.remove dom-el)
+        result))
+    {:own nil
+     :children {}}))
+
 (m/=> normalize [:-> map? Element])
 (defn normalize
   [props]
-  (-> (update props :content
-              (fn [content]
-                (cond
-                  (string? content)
-                  content
-
-                  (sequential? content)
-                  (let [joined (apply str (filter string? content))]
-                    (when (not (string/blank? joined))
-                      joined))
-
-                  :else
-                  nil)))
+  (-> props
       (utils.map/remove-nils)
+      (dissoc :content)
       (normalize-attrs)
       (dissoc :locked)
       (merge element.db/default)))
@@ -362,22 +442,22 @@
 
 (m/=> get-computed-styles [:-> Element [:maybe map?]])
 (defn get-computed-styles
-  [{:keys [content]
-    :as el}]
-  (when-let [svg (utils.dom/get-canvas-element)]
-    (let [dom-el (->dom-element el)]
-      (.appendChild svg dom-el)
-      (set! (.-innerHTML dom-el) (if (empty? content) "\u00a0" content))
-      (let [computed-style (.getComputedStyle js/window dom-el nil)
-            font-style (.getPropertyValue computed-style "font-style")
-            font-size (.getPropertyValue computed-style "font-size")
-            font-weight (.getPropertyValue computed-style "font-weight")
-            bbox (utils.bounds/dom-el->bbox dom-el)]
-        (.remove dom-el)
-        {:font-style font-style
-         :font-size font-size
-         :font-weight font-weight
-         :bbox bbox}))))
+  ([el]
+   (get-computed-styles el nil))
+  ([el resolve-child]
+   (when-let [svg (utils.dom/get-canvas-element)]
+     (let [dom-el (->dom-subtree el resolve-child)]
+       (.appendChild svg dom-el)
+       (let [computed-style (.getComputedStyle js/window dom-el nil)
+             font-style (.getPropertyValue computed-style "font-style")
+             font-size (.getPropertyValue computed-style "font-size")
+             font-weight (.getPropertyValue computed-style "font-weight")
+             bbox (utils.bounds/dom-el->bbox dom-el)]
+         (.remove dom-el)
+         {:font-style font-style
+          :font-size font-size
+          :font-weight font-weight
+          :bbox bbox})))))
 
 (m/=> breakable? [:-> Element boolean?])
 (defn breakable?
@@ -391,10 +471,16 @@
                    (string/upper-case)
                    (string/includes? "M"))))
 
+(m/=> transformable? [:-> Element boolean?])
+(defn transformable?
+  [el]
+  (and (not (virtual? el))
+       (not (text-content-child? el))))
+
 (m/=> permitted-content? [:-> Element ElementTag boolean?])
 (defn permitted-content?
   [parent tag]
   (let [permitted-content (element.hierarchy/permitted-content parent)]
     (->> permitted-content
-         (some (partial isa? @hierarchy/hierarchy tag))
+         (some (partial hierarchy/gisa? tag))
          (boolean))))

@@ -614,7 +614,7 @@
                 elemento <text> o de otro elemento <tspan>. Permite ajustar el
                 estilo y/o la posición de ese subtexto según sea necesario."}
 
- :renderer.element.impl.text-content.core
+ :renderer.element.impl.text-content.text-node
  {:remove-text "Eliminar texto"
   :set-text "Establecer texto"}
 

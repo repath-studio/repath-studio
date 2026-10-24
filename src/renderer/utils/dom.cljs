@@ -3,6 +3,8 @@
    [malli.core :as m]
    [renderer.db :refer [JS_Object]]))
 
+(def svg-ns "http://www.w3.org/2000/svg")
+
 (def canvas-id "canvas")
 (def frame-id "frame")
 (def shell-input-id "shell-input")

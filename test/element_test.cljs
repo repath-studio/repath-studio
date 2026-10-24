@@ -453,7 +453,8 @@
    (rf/dispatch [::app.events/load-system-fonts])
 
    (rf/dispatch [::element.events/add {:tag :text
-                                       :content "Hello!"
+                                       :content [{:tag :text-node
+                                                  :attrs {:content "Hello!"}}]
                                        :attrs {:x "100"
                                                :y "100"}}])
    (let [font-weights (rf/subscribe [::element.subs/font-weights])]

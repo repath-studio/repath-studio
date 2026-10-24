@@ -11,10 +11,7 @@
  ::animations
  :<- [::element.subs/entities]
  (fn [elements]
-   (->> elements
-        (filter #(contains? (descendants @hierarchy/hierarchy
-                                         ::element.hierarchy/animation)
-                            (:tag %))))))
+   (filter #(hierarchy/gisa? (:tag %) ::element.hierarchy/animation) elements)))
 
 (defn effect-id
   [el]

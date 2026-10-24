@@ -291,7 +291,7 @@
                 mask, or filter to <text>, like any other SVG graphics element."
   :label "Text"}
 
- :renderer.element.impl.text-content.core
+ :renderer.element.impl.text-content.text-node
  {:remove-text "Remove text"
   :set-text "Set text"}
 

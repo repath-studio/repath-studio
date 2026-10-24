@@ -89,7 +89,8 @@ string/upper-case
   [text]
   (when (not (string/blank? text))
     {:elements [{:tag :text
-                 :content text}]}))
+                 :content [{:tag :text-node
+                            :attrs {:content text}}]}]}))
 
 (defn text-data-fn
   [item mime parser]

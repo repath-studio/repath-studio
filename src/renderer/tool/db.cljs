@@ -8,7 +8,7 @@
 
 (defn tool?
   [tool]
-  (isa? @hierarchy/hierarchy tool ::tool.hierarchy/tool))
+  (hierarchy/gisa? tool ::tool.hierarchy/tool))
 
 (def Tool
   [:fn {:error/fn (fn [{:keys [value]} _]

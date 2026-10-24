@@ -610,7 +610,7 @@
                 или другого элемента <tspan>. Он позволяет регулировать стиль
                 и/или положение этого подтекста по мере необходимости."}
 
- :renderer.element.impl.text-content.core
+ :renderer.element.impl.text-content.text-node
  {:remove-text "Удалить текст"
   :set-text "Установить текст"}
 

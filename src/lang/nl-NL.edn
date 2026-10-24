@@ -628,7 +628,7 @@
                 stijl en/of positie van die subtekst naar wens worden
                 aangepast."}
 
- :renderer.element.impl.text-content.core
+ :renderer.element.impl.text-content.text-node
  {:remove-text "Tekst verwijderen"
   :set-text "Tekst instellen"}
 

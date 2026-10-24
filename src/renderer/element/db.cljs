@@ -8,8 +8,7 @@
 
 (defn tag?
   [k]
-  (contains? (descendants @hierarchy/hierarchy
-                          ::element.hierarchy/element) k))
+  (hierarchy/gisa? k ::element.hierarchy/element))
 
 (def ElementTag
   [:fn {:error/fn (fn [{:keys [value]} _]
@@ -48,8 +47,6 @@
                :persist true} [:vector ElementId]]
    [:bbox {:optional true
            :persist true} BBox]
-   [:content {:optional true
-              :persist true} string?]
    [:attrs {:optional true
             :persist true} ElementAttrs]])
 

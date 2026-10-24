@@ -90,11 +90,6 @@
   ([db]
    (into [] (visible) (entities db))))
 
-(m/=> ratio-locked? [:-> App boolean?])
-(defn ratio-locked?
-  [db]
-  (every? utils.element/ratio-locked? (selected db)))
-
 (m/=> selected-ids [:function
                     [:-> fn?]
                     [:-> App [:set ElementId]]])
@@ -185,24 +180,27 @@
 (m/=> local-bbox [:-> App ElementId [:maybe BBox]])
 (defn local-bbox
   [db id]
-  (let [el (entity db id)]
+  (let [el (entity db id)
+        resolve-child (fn [cid] (entity db cid))]
     (cond
       (= (:tag el) :g)
       (let [children (:children el)]
         (when (seq children)
           (->> (entities db children)
                (map (fn [child]
-                      (let [child-bbox (if (= (:tag child) :g)
-                                         (local-bbox db (:id child))
-                                         (utils.element/local-bbox child))]
-                        (when child-bbox
+                      (let [bbox (if (= (:tag child) :g)
+                                   (local-bbox db (:id child))
+                                   (utils.element/local-bbox
+                                    child
+                                    resolve-child))]
+                        (when bbox
                           (-> (utils.element/transform-attr child)
-                              (utils.transform/aabb child-bbox))))))
+                              (utils.transform/aabb bbox))))))
                (keep identity)
                (apply utils.bounds/union))))
 
       :else
-      (utils.element/own-bbox el))))
+      (utils.element/own-bbox el resolve-child))))
 
 (m/=> world-bbox [:-> App ElementId [:maybe BBox]])
 (defn world-bbox
@@ -221,7 +219,8 @@
         (utils.transform/aabb (transform db id) bbox))
 
       :else
-      (element.hierarchy/bbox el (transform db id)))))
+      (element.hierarchy/bbox el (transform db id)
+                              (fn [cid] (entity db cid))))))
 
 (declare refresh-bbox)
 
@@ -231,20 +230,49 @@
   (not (-> (utils.element/transform-attr el)
            (utils.transform/identity?))))
 
+(m/=> refresh-world-bbox [:-> App ElementId App])
+(defn refresh-world-bbox
+  [db id]
+  (if-let [bbox (world-bbox db id)]
+    (assoc-in db (conj (path db id) :bbox) bbox)
+    (update-in db (path db id) dissoc :bbox)))
+
+(m/=> refresh-container-bbox [:-> App ElementId App])
+(defn refresh-container-bbox
+  [db id]
+  (let [child-bboxes (->> (children-ids db id)
+                          (entities db)
+                          (keep :bbox))]
+    (if (seq child-bboxes)
+      (assoc-in db (conj (path db id) :bbox)
+                (apply utils.bounds/union child-bboxes))
+      (update-in db (path db id) dissoc :bbox))))
+
+(m/=> refresh-text-bbox [:-> App ElementId App])
+(defn refresh-text-bbox
+  [db id]
+  (let [el (entity db id)
+        el-transform (transform db id)
+        {:keys [own children]}
+        (utils.element/->subtree-bboxes el (fn [cid] (entity db cid)))]
+    (if-not own
+      (update-in db (path db id) dissoc :bbox)
+      (reduce (fn [db [child-id bbox]]
+                (assoc-in db (conj (path db child-id) :bbox)
+                          (utils.transform/aabb el-transform bbox)))
+              (assoc-in db (conj (path db id) :bbox)
+                        (utils.transform/aabb el-transform own))
+              children))))
+
 (m/=> refresh-node [:-> App ElementId App])
 (defn refresh-node
   [db id]
-  (if (= (:tag (entity db id)) :g)
-    (let [child-bboxes (->> (children-ids db id)
-                            (entities db)
-                            (keep :bbox))]
-      (if (seq child-bboxes)
-        (assoc-in db (conj (path db id) :bbox)
-                  (apply utils.bounds/union child-bboxes))
-        (update-in db (path db id) dissoc :bbox)))
-    (if-let [bbox (world-bbox db id)]
-      (assoc-in db (conj (path db id) :bbox) bbox)
-      (update-in db (path db id) dissoc :bbox))))
+  (let [tag (:tag (entity db id))]
+    (cond
+      (= tag :g) (refresh-container-bbox db id)
+      (= tag :text) (refresh-text-bbox db id)
+      (#{:tspan :text-node} tag) db
+      :else (refresh-world-bbox db id))))
 
 (m/=> refresh-subtree [:-> App ElementId App])
 (defn refresh-subtree
@@ -262,7 +290,7 @@
          current-id id]
     (if-let [parent-el (parent db current-id)]
       (recur (cond-> db
-               (= (:tag parent-el) :g)
+               (#{:g :text} (:tag parent-el))
                (refresh-node (:id parent-el)))
              (:id parent-el))
       db)))
@@ -506,7 +534,7 @@
 (defn update-transform
   [db id pivot f]
   (cond-> db
-    (not (virtual? db id))
+    (utils.element/transformable? (entity db id))
     (update-el id
                (fn [e]
                  (attribute.hierarchy/update-attr
@@ -830,8 +858,9 @@
    (reduce (rpartial place position) db (top-ancestor-ids db)))
   ([db id position]
    (let [el (entity db id)
+         resolve-child (fn [cid] (entity db cid))
          bounds (or (:bbox el)
-                    (cond-> (utils.element/local-bbox el)
+                    (cond-> (utils.element/local-bbox el resolve-child)
                       (transformed? el)
                       (utils.transform/aabb (utils.element/transform-attr el))))
          center (utils.bounds/center bounds)]
@@ -855,20 +884,27 @@
   [db el id ratio]
   (and (not (utils.element/virtual? el))
        (or (transformed? el)
-           (and (not (utils.transform/axis-aligned? (transform db id)))
-                (not= (first ratio) (second ratio))))))
+           (= (:tag el) :text)
+           (and (not= (first ratio) (second ratio))
+                (or (not (utils.transform/axis-aligned? (transform db id)))
+                    (utils.element/ratio-locked? el))))))
 
 (m/=> scale-leaf-raw [:-> App ElementId Vec2 Vec2 App])
 (defn scale-leaf-raw
   [db id ratio pivot-point]
-  (if-let [el-bbox (local-bbox db id)]
-    (let [el (entity db id)]
-      (if (transform-scale? db el id ratio)
-        (scale-by-transform db id ratio pivot-point)
-        (update-el-raw db id element.hierarchy/scale ratio
-                       (utils.math/v-sub (local-point db id pivot-point)
-                                         (vec (take 2 el-bbox))))))
-    db))
+  (let [el (entity db id)]
+    ;; Tspans can't be scaled: they don't support transform, and resizing
+    ;; their font-size would only cover their own run, not position or
+    ;; nested content.
+    (if (= (:tag el) :tspan)
+      db
+      (if-let [el-bbox (local-bbox db id)]
+        (if (transform-scale? db el id ratio)
+          (scale-by-transform db id ratio pivot-point)
+          (update-el-raw db id element.hierarchy/scale ratio
+                         (utils.math/v-sub (local-point db id pivot-point)
+                                           (vec (take 2 el-bbox)))))
+        db))))
 
 (m/=> scale-leaf [:-> App ElementId Vec2 Vec2 App])
 (defn scale-leaf
@@ -1040,11 +1076,30 @@
     (not (or (utils.element/root? el) (:parent el)))
     (assoc :parent (:id (if (utils.element/top-level? el)
                           (root db)
-                          (if-let [el-bbox (utils.element/local-bbox el)]
+                          (if-let [el-bbox (utils.element/local-bbox
+                                            el
+                                            (fn [cid] (entity db cid)))]
                             (overlapping-svg db el-bbox)
                             (root db)))))))
 
 (declare add-child-elements)
+
+(m/=> content->child-els [:-> App [:maybe Element] map? seq?])
+(defn content->child-els
+  [db parent-el el]
+  (keep (fn [child]
+          (cond
+            (string? child)
+            (when (and parent-el
+                       (not (string/blank? child))
+                       (utils.element/permitted-content? parent-el :text-node))
+              {:tag :text-node
+               :attrs {:content child}})
+
+            (map? child)
+            child))
+        (concat (entities db (:children el))
+                (:content el))))
 
 (m/=> create [:-> App map? App])
 (defn create
@@ -1052,9 +1107,8 @@
   (let [id (random-uuid) ; REVIEW: Hard to use a coeffect because of recursion.
         new-el (->> (assoc (utils.element/normalize el) :id id)
                     (assoc-parent-id db))
-        child-els (-> (entities db (:children el))
-                      (concat (:content el)))
         parent-el (entity db (:parent new-el))
+        child-els (content->child-els db parent-el el)
         [min-x min-y] (some-> parent-el utils.element/local-bbox)
         is-translated (or (utils.element/svg? new-el)
                           (utils.element/root? new-el)
@@ -1087,7 +1141,7 @@
         is-translated
         (refresh-bbox id)
 
-        child-els
+        (seq child-els)
         (add-child-elements id child-els)))))
 
 (m/=> add-child-elements [:-> App ElementId any? App])
