@@ -66,7 +66,7 @@
                                          (string/replace-first (.-type blob)
                                                                "image/" "")))
                                 #js {:type mime})}))))
-string/upper-case
+
 (rf/reg-fx
  ::clipboard-write
  (fn [{:keys [data on-error]}]
