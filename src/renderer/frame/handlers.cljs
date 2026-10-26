@@ -147,4 +147,5 @@
                    (utils.math/clamp 0 (- track-span size)))]
     {:size size
      :offset offset
-     :ratio scale}))
+     :ratio scale
+     :track track-span}))
