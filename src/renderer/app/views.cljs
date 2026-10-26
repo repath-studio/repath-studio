@@ -18,6 +18,7 @@
    [renderer.document.subs :as-alias document.subs]
    [renderer.document.views :as document.views]
    [renderer.element.subs :as-alias element.subs]
+   [renderer.frame.scrollbar-view :as frame.scrollbar-view]
    [renderer.frame.subs :as-alias frame.subs]
    [renderer.frame.views :as frame.views]
    [renderer.history.views :as history.views]
@@ -139,6 +140,14 @@
        :on-click #(rf/dispatch [::document.events/toggle-attr
                                 :guides-locked])}]]))
 
+(defn scrollbars
+  []
+  (let [horizontal-scroll @(rf/subscribe [::frame.subs/scrollbar :horizontal])
+        vertical-scroll @(rf/subscribe [::frame.subs/scrollbar :vertical])]
+    [:<>
+     [frame.scrollbar-view/root :horizontal horizontal-scroll]
+     [frame.scrollbar-view/root :vertical vertical-scroll]]))
+
 (defn frame
   []
   (let [backdrop @(rf/subscribe [::app.subs/backdrop])
@@ -152,7 +161,8 @@
       :style {:background "var(--secondary)"}}
      [frame.views/root]
      [:div.absolute.inset-0.pointer-events-none.inset-shadow]
-     (when-not sm?
+     (if sm?
+       [scrollbars]
        (when-let [options (tool.hierarchy/tool-options active-tool)]
          [views/toolbar
           {:class ["bg-primary absolute top-2 left-1/2 -translate-x-1/2 p-1"

@@ -25,6 +25,8 @@
 
 (def snap-threshold 13)
 
+(def track-thickness 12)
+
 (def image-mime-types
   {"image/png" [".png"]
    "image/jpeg" [".jpeg" ".jpg"]

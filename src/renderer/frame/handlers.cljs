@@ -98,6 +98,12 @@
                 (utils.math/v-add [min-x min-y]))]
     (assoc-in db [:documents active-document :pan] pan)))
 
+(m/=> content-bbox [:-> App [:maybe BBox]])
+(defn content-bbox
+  [db]
+  (some-> (element.handlers/root-children db)
+          (utils.element/united-bbox)))
+
 (m/=> focus [:function
              [:-> App App]
              [:-> App [:enum :original :fit :fill] App]
@@ -106,15 +112,14 @@
   ([db]
    (cond-> db
      (:active-document db)
-     (focus :original (-> (element.handlers/root-children db)
-                          (utils.element/united-bbox)))))
+     (focus :original (content-bbox db))))
   ([db focus-type]
    (cond-> db
      (:active-document db)
      (focus
       focus-type
       (or (element.handlers/bbox db)
-          (utils.element/united-bbox (element.handlers/root-children db))))))
+          (content-bbox db)))))
   ([db focus-type bbox]
    (let [[w h] (utils.bounds/->dimensions bbox)
          {:keys [active-document dom-rect]} db
@@ -127,3 +132,20 @@
                      :fit (min width-ratio height-ratio)
                      :fill (max width-ratio height-ratio)))
          (pan-to-bbox bbox)))))
+
+(m/=> axis-scroll [:-> Vec2 number? number? number? map?])
+(defn axis-scroll
+  [[content-min content-max] viewbox-min viewbox-span track-span]
+  (let [dom-min (min (- content-min viewbox-span) viewbox-min)
+        dom-max (max (+ content-max viewbox-span)
+                     (+ viewbox-min viewbox-span))
+        scale (/ track-span (- dom-max dom-min))
+        min-thumb-size 24
+        size (max (* viewbox-span scale) min-thumb-size)
+        offset (-> (- viewbox-min dom-min)
+                   (* scale)
+                   (utils.math/clamp 0 (- track-span size)))]
+    {:size size
+     :offset offset
+     :ratio scale
+     :track track-span}))

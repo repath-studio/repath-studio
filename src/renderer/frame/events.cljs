@@ -54,3 +54,10 @@
  (fn [db [_ id]]
    (let [element (element.handlers/entity db id)]
      (frame.handlers/pan-to-bbox db (:bbox element)))))
+
+(rf/reg-event-db
+ ::pan-by
+ [persist]
+ (fn [db [_ offset]]
+   (-> (frame.handlers/pan-by db offset)
+       (snap.handlers/update-viewport-tree))))
