@@ -5,7 +5,8 @@
    [config :as config]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
-   [renderer.frame.events :as-alias frame.events]))
+   [renderer.frame.events :as-alias frame.events]
+   [renderer.utils.math :as utils.math]))
 
 (def thumb-thickness (/ config/track-thickness 2))
 
@@ -15,9 +16,10 @@
     [delta 0]
     [0 delta]))
 
-(defn pan
-  [ratio delta-px]
-  (rf/dispatch [::frame.events/pan-by (mapv #(/ % ratio) delta-px)]))
+(defn pan-by
+  [ratio orientation delta-px]
+  (rf/dispatch [::frame.events/pan-by
+                (axis-delta orientation (/ delta-px ratio))]))
 
 (defn thumb
   [orientation offset size margin]
@@ -34,14 +36,55 @@
               :left margin
               :width thumb-thickness})}])
 
+(defn begin-drag
+  [node drag orientation {:keys [size offset ratio]}]
+  (fn [e]
+    (.preventDefault e)
+    (.setPointerCapture (.-current node) (.-pointerId e))
+    (let [^js rect (.getBoundingClientRect (.-current node))
+          horizontal? (= orientation :horizontal)
+          position (if horizontal?
+                     (- (.-clientX e) (.-left rect))
+                     (- (.-clientY e) (.-top rect)))
+          track (if horizontal? (.-width rect) (.-height rect))
+          clicked-track? (identical? (.-target e) (.-current node))
+          target-offset (if clicked-track?
+                          (utils.math/clamp (- position (/ size 2))
+                                            0
+                                            (- track size))
+                          offset)]
+      (reset! drag {:pointer [(.-clientX e) (.-clientY e)]
+                    :ratio ratio
+                    :size size
+                    :offset target-offset
+                    :track track})
+      (when clicked-track?
+        (pan-by ratio orientation (- target-offset offset))))))
+
+(defn move-drag
+  [drag orientation]
+  (fn [e]
+    (when-let [{:keys [pointer ratio size offset track]} @drag]
+      (let [delta (if (= orientation :horizontal)
+                    (- (.-clientX e) (pointer 0))
+                    (- (.-clientY e) (pointer 1)))
+            next-offset (utils.math/clamp (+ offset delta)
+                                          0
+                                          (- track size))]
+        (swap! drag assoc
+               :pointer [(.-clientX e) (.-clientY e)]
+               :offset next-offset)
+        (let [thumb-delta (- next-offset offset)]
+          (when-not (zero? thumb-delta)
+            (pan-by ratio orientation thumb-delta)))))))
+
 (defn root
   [orientation options]
   (reagent/with-let [node (react/createRef)
-                     last-pointer (atom nil)]
-    (let [{:keys [size offset ratio]} options
-          horizontal? (= orientation :horizontal)
-          stop-drag! #(reset! last-pointer nil)
-          margin (/ (- config/track-thickness thumb-thickness) 2)]
+                     drag (atom nil)]
+    (let [horizontal? (= orientation :horizontal)
+          margin (/ (- config/track-thickness thumb-thickness) 2)
+          {:keys [size offset]} options]
       [:div.absolute
        {:ref node
         :class (if horizontal?
@@ -52,27 +95,8 @@
                   :right config/track-thickness}
                  {:width config/track-thickness
                   :bottom config/track-thickness})
-        :on-pointer-down
-        (fn [e]
-          (.preventDefault e)
-          (reset! last-pointer [(.-clientX e) (.-clientY e)])
-          (.setPointerCapture (.-current node) (.-pointerId e))
-          (when (identical? (.-target e) (.-current node))
-            (let [^js rect (.getBoundingClientRect (.-current node))
-                  position (if horizontal?
-                             (- (.-clientX e) (.-left rect))
-                             (- (.-clientY e) (.-top rect)))
-                  delta-px (- position (+ offset (/ size 2)))]
-              (pan ratio (axis-delta orientation delta-px)))))
-        :on-pointer-move
-        (fn [e]
-          (when-let [[last-x last-y] @last-pointer]
-            (let [delta (if horizontal?
-                          (- (.-clientX e) last-x)
-                          (- (.-clientY e) last-y))]
-              (reset! last-pointer [(.-clientX e) (.-clientY e)])
-              (when-not (zero? delta)
-                (pan ratio (axis-delta orientation delta))))))
-        :on-pointer-up stop-drag!
-        :on-pointer-cancel stop-drag!}
+        :on-pointer-down (begin-drag node drag orientation options)
+        :on-pointer-move (move-drag drag orientation)
+        :on-pointer-up #(reset! drag nil)
+        :on-pointer-cancel #(reset! drag nil)}
        [thumb orientation offset size margin]])))

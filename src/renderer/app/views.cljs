@@ -161,8 +161,8 @@
       :style {:background "var(--secondary)"}}
      [frame.views/root]
      [:div.absolute.inset-0.pointer-events-none.inset-shadow]
-     (when sm? [scrollbars])
-     (when-not sm?
+     (if sm?
+       [scrollbars]
        (when-let [options (tool.hierarchy/tool-options active-tool)]
          [views/toolbar
           {:class ["bg-primary absolute top-2 left-1/2 -translate-x-1/2 p-1"

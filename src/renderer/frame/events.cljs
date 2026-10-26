@@ -59,5 +59,5 @@
  ::pan-by
  [persist]
  (fn [db [_ offset]]
-   (-> (frame.handlers/pan-by-in-bounds db offset)
+   (-> (frame.handlers/pan-by db offset)
        (snap.handlers/update-viewport-tree))))

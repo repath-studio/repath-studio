@@ -37,15 +37,13 @@
  :<- [::app.subs/dom-rect]
  (fn [[bbox [viewbox-min-x viewbox-min-y] zoom dom-rect] [_ orientation]]
    (let [{:keys [width height]} dom-rect
-         [content-min-x content-min-y content-max-x content-max-y]
-         (frame.handlers/scroll-bounds bbox [width height])]
+         [content-min-x content-min-y content-max-x content-max-y] bbox]
      (if (= orientation :horizontal)
-       (frame.handlers/axis-scroll content-min-x
-                                   content-max-x
+       (frame.handlers/axis-scroll [content-min-x content-max-x]
                                    viewbox-min-x
                                    (/ width zoom)
                                    (- width config/track-thickness))
-       (frame.handlers/axis-scroll content-min-y content-max-y
+       (frame.handlers/axis-scroll [content-min-y content-max-y]
                                    viewbox-min-y
                                    (/ height zoom)
                                    (- height config/track-thickness))))))
