@@ -146,37 +146,34 @@
   [bbox [viewport-width viewport-height] zoom target]
   (let [[cmin-x cmin-y cmax-x cmax-y]
         (scroll-bounds bbox [viewport-width viewport-height])
-        [vb-width vb-height] (utils.math/v-div [viewport-width viewport-height]
-                                               zoom)]
+        [half-w half-h] (utils.math/v-div [(/ viewport-width 2)
+                                           (/ viewport-height 2)]
+                                          zoom)]
     (mapv utils.math/clamp target
-          [cmin-x cmin-y]
-          [(max cmin-x (- cmax-x vb-width))
-           (max cmin-y (- cmax-y vb-height))])))
+          [(- cmin-x half-w) (- cmin-y half-h)]
+          [(- cmax-x half-w) (- cmax-y half-h)])))
 
 (m/=> pan-by-in-bounds [:-> App Vec2 App])
 (defn pan-by-in-bounds
   [db offset]
   (let [id (:active-document db)
         zoom (get-in db [:documents id :zoom])
-        target (utils.math/v-add (get-in db [:documents id :pan])
-                                 (utils.math/v-div offset zoom))]
+        target (utils.math/v-add (get-in db [:documents id :pan]) offset)]
     (if-let [clamped (when-let [{:keys [width height]} (:dom-rect db)]
                        (when-let [bbox (content-bbox db)]
                          (clamp-pan bbox [width height] zoom target)))]
       (assoc-in db [:documents id :pan] clamped)
       (pan-by db id offset))))
 
-(m/=> axis-scroll [:-> number? number? number? number? ZoomFactor map?])
+(m/=> axis-scroll [:-> number? number? number? number? number? map?])
 (defn axis-scroll
-  [content-min content-max viewbox-min viewport-span track-span zoom]
-  (let [content-span (- content-max content-min)
-        viewbox-max (+ viewbox-min (/ viewport-span zoom))
-        visible-min (max content-min viewbox-min)
-        visible-max (min content-max viewbox-max)
-        scale (/ track-span content-span)
+  [content-min content-max viewbox-min viewbox-span track-span]
+  (let [track-min (- content-min (/ viewbox-span 2))
+        track-max (+ content-max (/ viewbox-span 2))
+        scale (/ track-span (- track-max track-min))
         min-thumb-size 24
-        size (max (* (- visible-max visible-min) scale) min-thumb-size)
-        offset (-> (- visible-min content-min)
+        size (max (* viewbox-span scale) min-thumb-size)
+        offset (-> (- viewbox-min track-min)
                    (* scale)
                    (utils.math/clamp 0 (- track-span size)))]
     {:size size

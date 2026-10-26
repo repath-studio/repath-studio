@@ -43,10 +43,9 @@
        (frame.handlers/axis-scroll content-min-x
                                    content-max-x
                                    viewbox-min-x
-                                   width
-                                   (- width config/track-thickness)
-                                   zoom)
+                                   (/ width zoom)
+                                   (- width config/track-thickness))
        (frame.handlers/axis-scroll content-min-y content-max-y
-                                   viewbox-min-y height
-                                   (- height config/track-thickness)
-                                   zoom)))))
+                                   viewbox-min-y
+                                   (/ height zoom)
+                                   (- height config/track-thickness))))))
