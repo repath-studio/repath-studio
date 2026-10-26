@@ -35,7 +35,7 @@
               :left margin
               :width thumb-thickness})}])
 
-(defn begin-drag
+(defn on-pointer-down
   [orientation {:keys [size offset ratio track]} dom-rect]
   (fn [e]
     (.preventDefault e)
@@ -50,7 +50,7 @@
                                             (- track size))]
         (pan-by ratio orientation (- target-offset offset))))))
 
-(defn move-drag
+(defn on-pointer-move
   [orientation {:keys [offset size ratio track]}]
   (fn [e]
     (when (.hasPointerCapture (.-currentTarget e) (.-pointerId e))
@@ -80,6 +80,6 @@
                 :right config/track-thickness}
                {:width config/track-thickness
                 :bottom config/track-thickness})
-      :on-pointer-down (begin-drag orientation options dom-rect)
-      :on-pointer-move (move-drag orientation options)}
+      :on-pointer-down (on-pointer-down orientation options dom-rect)
+      :on-pointer-move (on-pointer-move orientation options)}
      [thumb orientation offset size margin]]))
