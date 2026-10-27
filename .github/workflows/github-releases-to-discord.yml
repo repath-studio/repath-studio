@@ -13,6 +13,6 @@ jobs:
         with:
           webhook_url: ${{ secrets.DISCORD_RELEASE_WEBHOOK_URL }}
           username: "Release Changelog"
-          content: "||@everyone||"
+          content: "@everyone"
           footer_title: "Changelog"
           reduce_headings: true
