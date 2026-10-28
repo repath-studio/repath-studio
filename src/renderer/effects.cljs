@@ -6,7 +6,6 @@
    [malli.core :as m]
    [re-frame.core :as rf]
    [renderer.app.events :as-alias app.events]
-   [renderer.element.handlers :as element.handlers]
    [renderer.i18n.views :as i18n.views]
    [renderer.utils.dom :as utils.dom]
    [renderer.utils.element :as utils.element]))
@@ -112,7 +111,7 @@
       (file-data-fn item file-mime)
 
       (contains? types "text/html")
-      (text-data-fn item "text/html" element.handlers/svg->data)
+      (text-data-fn item "text/html" utils.element/svg->data)
 
       (contains? types "text/plain")
       (text-data-fn item "text/plain" text->data))))

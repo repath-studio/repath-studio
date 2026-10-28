@@ -5,6 +5,8 @@
    ["style-to-object" :as parse]
    [clojure.string :as string]
    [clojure.zip :as zip]
+   [hickory.core :as hickory]
+   [hickory.zip]
    [malli.core :as m]
    [malli.transform :as m.transform]
    [reagent.dom.server :as dom.server]
@@ -484,3 +486,22 @@
     (->> permitted-content
          (some (partial hierarchy/gisa? tag))
          (boolean))))
+
+(m/=> transformed? [:-> Element boolean?])
+(defn transformed?
+  [el]
+  (not (-> (transform-attr el)
+           (utils.transform/identity?))))
+
+(m/=> svg->data [:-> string? [:maybe map?]])
+(defn svg->data
+  [svg]
+  (let [hickory (hickory/as-hickory (hickory/parse svg))
+        zipper (hickory.zip/hickory-zip hickory)
+        el (find-svg zipper)]
+    (when (svg? el)
+      (let [el (-> el
+                   (update :attrs dissoc :desc :version :xmlns)
+                   (assoc :bbox (local-bbox el)))]
+        {:elements [el]
+         :bbox (:bbox el)}))))

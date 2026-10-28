@@ -69,6 +69,17 @@
        (>= max-x x)
        (>= max-y y)))
 
+(m/=> ->anchor-offset [:-> BBox Vec2 Vec2])
+(defn ->anchor-offset
+  "The [0 1] anchor offset that resolves to the given point within the bounds.
+   Inverse of element.handlers/pivot-point, to keep the pivot in place after
+   the bounds change."
+  [bounds [px py]]
+  (let [[min-x min-y] bounds
+        [w h] (->dimensions bounds)]
+    [(/ (- px min-x) w)
+     (/ (- py min-y) h)]))
+
 (m/=> ->snapping-points [:-> BBox SnapOptions [:* Vec2]])
 (defn ->snapping-points
   [bbox options]

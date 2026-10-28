@@ -224,12 +224,6 @@
 
 (declare refresh-bbox)
 
-(m/=> transformed? [:-> Element boolean?])
-(defn transformed?
-  [el]
-  (not (-> (utils.element/transform-attr el)
-           (utils.transform/identity?))))
-
 (m/=> refresh-world-bbox [:-> App ElementId App])
 (defn refresh-world-bbox
   [db id]
@@ -822,11 +816,11 @@
   (let [el (entity db id)]
     (if (and (= (:tag el) :g)
              (not (:locked el))
-             (not (transformed? el)))
+             (not (utils.element/transformed? el)))
       (reduce (rpartial translate-raw offset) db (:children el))
       (update-el-raw db id
                      (fn [e]
-                       (if (and (transformed? e)
+                       (if (and (utils.element/transformed? e)
                                 (not (utils.element/virtual? e)))
                          (attribute.hierarchy/update-attr
                           e :transform
@@ -861,7 +855,7 @@
          resolve-child (fn [cid] (entity db cid))
          bounds (or (:bbox el)
                     (cond-> (utils.element/local-bbox el resolve-child)
-                      (transformed? el)
+                      (utils.element/transformed? el)
                       (utils.transform/aabb (utils.element/transform-attr el))))
          center (utils.bounds/center bounds)]
      (translate db (utils.math/v-sub position center)))))
@@ -883,7 +877,7 @@
 (defn transform-scale?
   [db el id ratio]
   (and (not (utils.element/virtual? el))
-       (or (transformed? el)
+       (or (utils.element/transformed? el)
            (= (:tag el) :text)
            (and (not= (first ratio) (second ratio))
                 (or (not (utils.transform/axis-aligned? (transform db id)))
@@ -936,14 +930,15 @@
         ids-to-scale (-> ids-to-scale
                          (set/difference
                           (into #{}
-                                (comp (filter #(transformed? (entity db %)))
+                                (comp (filter #(utils.element/transformed?
+                                                (entity db %)))
                                       (mapcat (partial descendant-ids db)))
                                 ids-to-scale)))]
     (reduce (fn [db id]
               (let [el (entity db id)]
                 (if (and (= (:tag el) :g)
                          (not (:locked el))
-                         (not (transformed? el)))
+                         (not (utils.element/transformed? el)))
                   (scale-group db id ratio pivot-point ids-to-scale)
                   (scale-leaf db id ratio pivot-point))))
             db ids-to-scale)))
@@ -973,17 +968,6 @@
                    pivot
                    recursive))))
 
-(m/=> ->anchor-offset [:-> BBox Vec2 Vec2])
-(defn ->anchor-offset
-  "The [0 1] anchor offset that resolves to the given point within the bounds.
-   Inverse of `pivot-point`, to keep the pivot in place after the bounds
-   change."
-  [bounds [px py]]
-  (let [[min-x min-y] bounds
-        [w h] (utils.bounds/->dimensions bounds)]
-    [(/ (- px min-x) w)
-     (/ (- py min-y) h)]))
-
 (m/=> rotate [:function
               [:-> App number? App]
               [:-> App number? Vec2 App]
@@ -993,7 +977,8 @@
    (rotate db angle (pivot-point db)))
   ([db angle pivot]
    (let [db (reduce (rpartial rotate angle pivot) db (top-ancestor-ids db))
-         new-anchor (some-> (bbox db) (->anchor-offset pivot))]
+         new-anchor (some-> (bbox db)
+                            (utils.bounds/->anchor-offset pivot))]
      (cond-> db
        new-anchor
        (assoc :anchor-point new-anchor
@@ -1404,19 +1389,6 @@
    (cond-> db
      (= (:tag (entity db id)) :path)
      (update-attr id :d utils.path/manipulate action))))
-
-(m/=> svg->data [:-> string? [:maybe map?]])
-(defn svg->data
-  [svg]
-  (let [hickory (hickory/as-hickory (hickory/parse svg))
-        zipper (hickory.zip/hickory-zip hickory)
-        el (utils.element/find-svg zipper)]
-    (when (utils.element/svg? el)
-      (let [el (-> el
-                   (update :attrs dissoc :desc :version :xmlns)
-                   (assoc :bbox (utils.element/local-bbox el)))]
-        {:elements [el]
-         :bbox (:bbox el)}))))
 
 (def SvgData [:map
               [:svg string?]
