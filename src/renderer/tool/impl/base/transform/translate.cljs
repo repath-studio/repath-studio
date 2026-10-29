@@ -68,8 +68,7 @@
   (let [[offset-x offset-y] offset
         axis (when lock-direction? (direction offset))
         hovered-svg (element.handlers/hovered-svg db)
-        top-ancestor-ids (->> (element.handlers/top-ancestor-ids db)
-                              (sort-by #(element.handlers/index-path db %)))
+        top-ancestor-ids (element.handlers/top-ancestor-sorted-ids db)
         parent-ids (element.handlers/parent-ids db)
         parent-el (element.handlers/entity db (first parent-ids))
         auto-parent? (and (contains? #{:translate :clone} (:state db))

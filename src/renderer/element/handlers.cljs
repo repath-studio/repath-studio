@@ -380,17 +380,6 @@
   (some-> (siblings db id)
           (.indexOf id)))
 
-(m/=> index-path [:-> App ElementId [:vector int?]])
-(defn index-path
-  "Returns a sequence that represents the index path of an element.
-   For example, the seventh element of the second svg on the canvas will
-   return [2 7]. This is useful when we need to figure out the global index
-   of nested elements."
-  [db id]
-  (let [ancestor-els (reverse (ancestor-ids db id))]
-    (conj (into [] (keep (partial children-index db)) ancestor-els)
-          (children-index db id))))
-
 (m/=> descendant-ids [:function
                       [:-> App [:set ElementId]]
                       [:-> App ElementId [:set ElementId]]])
@@ -633,22 +622,39 @@
                 db
                 (entities db)))))
 
-(m/=> sort-by-index-path [:-> App [:sequential Element] [:sequential Element]])
-(defn sort-by-index-path
+(m/=> index-map [:-> App [:map-of ElementId int?]])
+(defn index-map
+  [db]
+  (let [elements (get-in db (path db))
+        children (fn [el] (keep (partial get elements) (:children el)))
+        document-ids (tree-seq (constantly true) children (root db))]
+    (zipmap (map :id document-ids) (range))))
+
+(m/=> sort-by-index [:-> App [:sequential Element] [:sequential Element]])
+(defn sort-by-index
   [db els]
-  (sort-by #(index-path db (:id %)) els))
+  (let [ranks (index-map db)]
+    (sort-by #(ranks (:id %)) els)))
 
 (m/=> selected-sorted [:-> App [:sequential Element]])
 (defn selected-sorted
   [db]
   (->> (selected db)
-       (sort-by-index-path db)))
+       (sort-by-index db)))
 
 (m/=> top-selected-sorted [:-> App [:sequential Element]])
 (defn top-selected-sorted
   [db]
   (->> (top-selected-ancestors db)
-       (sort-by-index-path db)))
+       (sort-by-index db)))
+
+(m/=> top-ancestor-sorted-ids [:-> App [:vector ElementId]])
+(defn top-ancestor-sorted-ids
+  [db]
+  (let [ranks (index-map db)]
+    (->> (top-ancestor-ids db)
+         (sort-by ranks)
+         (into []))))
 
 (m/=> selected-sorted-ids [:-> App [:vector ElementId]])
 (defn selected-sorted-ids
@@ -1198,7 +1204,7 @@
 (defn combine
   [db]
   (let [selected-path-elements (->> (filter-selected-by-tag db :path)
-                                    (sort-by-index-path db))]
+                                    (sort-by-index db))]
     (if (> (count selected-path-elements) 1)
       (-> (reduce (fn [db el] (delete db (:id el))) db selected-path-elements)
           (add {:type :element
@@ -1217,7 +1223,7 @@
   ([db]
    (let [breakable-elements (->> (filter-selected-by-tag db :path)
                                  (filter utils.element/breakable?)
-                                 (sort-by-index-path db))]
+                                 (sort-by-index db))]
      (if (seq breakable-elements)
        (let [db (->> breakable-elements (map :id) (reduce delete db) deselect)]
          (reduce break-apart db breakable-elements))
