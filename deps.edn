@@ -20,7 +20,7 @@
  :aliases
  {:dev {:extra-paths ["test" "portfolio/src"]
         :extra-deps
-        {cider/cider-nrepl {:mvn/version "0.63.1"}
+        {cider/cider-nrepl {:mvn/version "0.64.0"}
          com.github.flow-storm/flow-storm-inst {:mvn/version "4.8.1"}
          ;; See https://github.com/day8/re-frame-10x/issues/427
          ;; before attempting to upgrade re-frame-10x.

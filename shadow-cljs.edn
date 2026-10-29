@@ -1,6 +1,7 @@
 {:deps {:aliases [:dev]}
 
- :nrepl {:port 9000}
+ :nrepl {:port 9000
+         :middleware [cider.piggieback/wrap-cljs-repl]}
 
  :build-defaults {:build-hooks [(shadow-git-inject.core/hook)]
                   :compiler-options {:source-map true
