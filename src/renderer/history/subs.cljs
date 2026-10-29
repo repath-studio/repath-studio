@@ -2,7 +2,8 @@
   (:require
    [re-frame.core :as rf]
    [renderer.document.subs :as-alias document.subs]
-   [renderer.history.handlers :as history.handlers]))
+   [renderer.history.handlers :as history.handlers]
+   [renderer.tool.subs :as-alias tool.subs]))
 
 (rf/reg-sub
  ::history
@@ -53,3 +54,17 @@
  :<- [::history]
  :<- [::document.subs/saved-history-index]
  :-> (partial apply history.handlers/state->d3-data))
+
+(rf/reg-sub
+ ::undo-available?
+ :<- [::undos?]
+ :<- [::tool.subs/undos?]
+ (fn [[undos? tool-undos?] _]
+   (or undos? tool-undos?)))
+
+(rf/reg-sub
+ ::redo-available?
+ :<- [::history]
+ :<- [::tool.subs/redos?]
+ (fn [[redos? tool-redos?] _]
+   (or redos? tool-redos?)))

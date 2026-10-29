@@ -121,12 +121,14 @@
   [db e]
   (let [[x y] (->> (local-pointer-position db e)
                    (mapv utils.attribute/->fixed))]
-    (update-path db (fn [d]
-                      (let [segments (utils.path/string->segments d)
-                            preview (aget segments (dec (count segments)))]
-                        (-> (utils.path/drop-last-segment segments)
-                            (.concat #js [preview #js ["L" x y]])
-                            (utils.path/segments->string)))))))
+    (-> db
+        (tool.handlers/push-state)
+        (update-path (fn [d]
+                       (let [segments (utils.path/string->segments d)
+                             preview (aget segments (dec (count segments)))]
+                         (-> (utils.path/drop-last-segment segments)
+                             (.concat #js [preview #js ["L" x y]])
+                             (utils.path/segments->string))))))))
 
 (defmethod tool.hierarchy/on-drag [::path :create]
   [db _e]
@@ -147,7 +149,9 @@
 (defmethod tool.hierarchy/on-drag-end [::path :create]
   [db e]
   (let [[x y] (local-pointer-offset db)]
-    (-> (update-path db add-to-path "L" x y)
+    (-> db
+        (tool.handlers/push-state)
+        (update-path add-to-path "L" x y)
         (tool.hierarchy/on-pointer-move db e))))
 
 (defmethod tool.hierarchy/on-double-click [::path :create]

@@ -1,6 +1,7 @@
 (ns renderer.tool.subs
   (:require
    [re-frame.core :as rf]
+   [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.edit.core :as-alias tool.impl.base.edit]))
 
@@ -65,3 +66,11 @@
 (rf/reg-sub
  ::insertion-point
  :-> :insertion-point)
+
+(rf/reg-sub
+ ::undos?
+ :-> tool.handlers/undos?)
+
+(rf/reg-sub
+ ::redos?
+ :-> tool.handlers/redos?)

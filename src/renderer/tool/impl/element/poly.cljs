@@ -52,9 +52,11 @@
 
 (defmethod tool.hierarchy/on-pointer-up [::tool.hierarchy/poly :create]
   [db e]
-  (update-points db #(->> (local-pointer-position db e)
-                          (into [%])
-                          (string/join " "))))
+  (-> db
+      (tool.handlers/push-state)
+      (update-points #(->> (local-pointer-position db e)
+                           (into [%])
+                           (string/join " ")))))
 
 (defmethod tool.hierarchy/on-drag-end [::tool.hierarchy/poly :create]
   [db e]
