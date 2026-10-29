@@ -64,7 +64,7 @@
 
 (rf/reg-sub
  ::redo-available?
- :<- [::history]
+ :<- [::redos?]
  :<- [::tool.subs/redos?]
  (fn [[redos? tool-redos?] _]
    (or redos? tool-redos?)))

@@ -32,7 +32,9 @@
     {:aria-label (i18n.views/t label)
      :as-child true}
     [:div.w-4.m-0.bg-transparent.flex.items-center.hover:pt-1
-     {:class "min-h-[inherit]"}
+     {:class ["min-h-[inherit]"
+              (when (empty? options)
+                "text-foreground-disabled pointer-events-none")]}
      [:> Select/Value ""]
      [:> Select/Icon
       [views/icon "chevron-down"]]]]
