@@ -133,7 +133,7 @@
     "@radix-ui/react-switch": "1.4.1",
     "@radix-ui/react-tooltip": "1.4.1",
     "@sentry/capacitor": "4.4.0",
-    "@sentry/cli": "3.8.0",
+    "@sentry/cli": "3.8.1",
     "@sentry/react": "10.69.0",
     "@tailwindcss/cli": "4.3.3",
     "@xzdarcy/react-timeline-editor": "1.0.0",
@@ -143,8 +143,8 @@
     "cmdk": "1.1.1",
     "chroma-js": "3.2.0",
     "doc-link-checker-cli": "1.0.4",
-    "electron": "44.9.1",
-    "electron-builder": "26.17.0",
+    "electron": "45.1.0",
+    "electron-builder": "26.18.0",
     "electron-builder-notarize": "1.5.2",
     "highlight.js": "11.12.0",
     "imagetracerjs": "1.2.6",
@@ -165,13 +165,13 @@
     "path-browserify": "1.0.1",
     "perfect-freehand": "1.2.3",
     "process": "0.11.10",
-    "puppeteer": "25.14.0",
+    "puppeteer": "25.15.0",
     "pyodide": "314.0.7",
     "react": "19.3.1",
     "react-d3-tree": "3.6.7",
     "react-dom": "19.3.1",
     "react-frame-component": "5.3.2",
-    "react-resizable-panels": "4.14.7",
+    "react-resizable-panels": "4.14.8",
     "shadow-cljs": "3.5.8",
     "shx": "0.4.0",
     "snabbdom": "3.6.4",
@@ -191,7 +191,7 @@
     "@electron/devtron": "2.1.1",
     "@sentry/electron": "8.3.0",
     "electron-log": "5.4.4",
-    "electron-updater": "6.8.10"
+    "electron-updater": "6.8.11"
   },
   "overrides": {
     "react": "19.3.1",
@@ -200,8 +200,8 @@
   "allowScripts": {
     "@parcel/watcher@2.5.1": true,
     "@sentry/capacitor@4.4.0": true,
-    "@sentry/cli@3.8.0": true,
+    "@sentry/cli@3.8.1": true,
     "electron-winstaller@5.4.0": true,
-    "puppeteer@25.14.0": true
+    "puppeteer@25.15.0": true
   }
 }
