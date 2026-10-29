@@ -3,7 +3,8 @@
    [re-frame.core :as rf]
    [renderer.app.effects :as-alias app.effects]
    [renderer.effects :as-alias effects]
-   [renderer.history.handlers :as history.handlers]))
+   [renderer.history.handlers :as history.handlers]
+   [renderer.tool.handlers :as tool.handlers]))
 
 (rf/reg-event-db
  ::toggle-labels
@@ -13,12 +14,16 @@
 (rf/reg-event-db
  ::undo
  (fn [db _]
-   (history.handlers/undo db)))
+   (if (= (:state db) :create)
+     (tool.handlers/undo db)
+     (history.handlers/undo db))))
 
 (rf/reg-event-db
  ::redo
  (fn [db _]
-   (history.handlers/redo db)))
+   (if (= (:state db) :create)
+     (tool.handlers/redo db)
+     (history.handlers/redo db))))
 
 (rf/reg-event-db
  ::undo-by

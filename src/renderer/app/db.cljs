@@ -21,7 +21,7 @@
    [renderer.snap.db :refer [Snap NearestNeighbor]]
    [renderer.theme.db :refer [Theme]]
    [renderer.timeline.db :refer [Timeline]]
-   [renderer.tool.db :refer [Handle Tool State Cursor]]
+   [renderer.tool.db :refer [Handle ToolHistory Tool State Cursor]]
    [renderer.tool.impl.base.transform.core :as-alias tool.transform]
    [renderer.window.db :refer [Window]]))
 
@@ -64,6 +64,7 @@
    [:double-click-delta {:default 300} [:and number? pos?]]
    [:state {:default :idle} State]
    [:cached-state {:optional true} State]
+   [:tool-history {:optional true} ToolHistory]
    [:snap {:default {}
            :persist true} Snap]
    [:active-document {:optional true

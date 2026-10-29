@@ -1,7 +1,7 @@
 (ns renderer.tool.db
   (:require
    [renderer.db :refer [Vec2]]
-   [renderer.element.db :refer [ElementId]]
+   [renderer.element.db :refer [Element ElementId]]
    [renderer.hierarchy :as hierarchy]
    [renderer.i18n.db :refer [Translation]]
    [renderer.tool.hierarchy :as tool.hierarchy]))
@@ -76,3 +76,10 @@
    [:size {:optional true} number?]
    [:stroke-width {:optional true} number?]
    [:parent {:optional true} ElementId]])
+
+(def ToolHistoryState [:map-of ElementId Element])
+
+(def ToolHistory
+  [:map {:closed true}
+   [:undos [:vector ToolHistoryState]]
+   [:redos [:vector ToolHistoryState]]])

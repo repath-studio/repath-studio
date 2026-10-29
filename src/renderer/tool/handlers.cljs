@@ -4,15 +4,45 @@
    [renderer.app.db :refer [App]]
    [renderer.db :refer [Vec2 DomRect]]
    [renderer.element.db :refer [Element]]
+   [renderer.element.handlers :as element.handlers]
    [renderer.frame.handlers :as frame.handlers]
    [renderer.history.handlers :as history.handlers]
    [renderer.input.handlers :as input.handlers]
    [renderer.snap.handlers :as snap.handlers]
-   [renderer.tool.db :refer [Tool State Cursor]]
+   [renderer.tool.db :refer [ToolHistory Tool State Cursor]]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.edit.core :as-alias tool.impl.base.edit]
    [renderer.tool.impl.base.transform.core :as-alias tool.impl.base.transform]
    [renderer.utils.math :as utils.math]))
+
+(m/=> tool-history [:-> App [:maybe ToolHistory]])
+(defn tool-history
+  [db]
+  (:tool-history db))
+
+(m/=> undos? [:-> App boolean?])
+(defn undos?
+  [db]
+  (boolean (seq (:undos (tool-history db)))))
+
+(m/=> redos? [:-> App boolean?])
+(defn redos?
+  [db]
+  (boolean (seq (:redos (tool-history db)))))
+
+(m/=> push-state [:-> App App])
+(defn push-state
+  [db]
+  (let [elements (get-in db (element.handlers/path db))]
+    (update db :tool-history
+            #(assoc %
+                    :undos (conj (:undos % []) elements)
+                    :redos []))))
+
+(m/=> clear-history [:-> App App])
+(defn clear-history
+  [db]
+  (dissoc db :tool-history))
 
 (m/=> set-state [:-> App State App])
 (defn set-state
@@ -33,7 +63,8 @@
 
     (and (not= (:cached-state db) :create)
          (not= (:state db) :type))
-    (history.handlers/reset-state)
+    (-> (history.handlers/reset-state)
+        (clear-history))
 
     :always
     (-> (assoc :tool tool)
@@ -155,3 +186,27 @@
 (defn set-select-box
   [db el]
   (assoc db :select-box el))
+
+(m/=> undo [:-> App App])
+(defn undo
+  [db]
+  (let [{:keys [undos redos]} (tool-history db)
+        current-state (get-in db (element.handlers/path db))]
+    (if-let [previous-state (peek undos)]
+      (-> db
+          (assoc-in (element.handlers/path db) previous-state)
+          (assoc :tool-history {:undos (pop undos)
+                                :redos (conj redos current-state)}))
+      (cancel db))))
+
+(m/=> redo [:-> App App])
+(defn redo
+  [db]
+  (let [{:keys [undos redos]} (tool-history db)
+        current-state (get-in db (element.handlers/path db))]
+    (if-let [next-elements (peek redos)]
+      (-> db
+          (assoc-in (element.handlers/path db) next-elements)
+          (assoc :tool-history {:undos (conj undos current-state)
+                                :redos (pop redos)}))
+      (cancel db))))

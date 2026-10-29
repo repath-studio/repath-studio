@@ -16,7 +16,7 @@
                                    :ctrlKey true}]
                            "Mac" [{:keyCode (utils.key/codes "Z")
                                    :metaKey true}]}
-               :enabled [::history.subs/undos?]}])
+               :enabled [::history.subs/undo-available?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :history/redo
@@ -33,7 +33,7 @@
                                    :shiftKey true}
                                   {:keyCode (utils.key/codes "Y")
                                    :metaKey true}]}
-               :enabled [::history.subs/redos?]}])
+               :enabled [::history.subs/redo-available?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :history/clear
