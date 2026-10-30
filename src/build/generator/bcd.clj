@@ -7,8 +7,11 @@
    The full dataset is ~19MB of JSON covering all browsers and web
    features; the generated file keeps only the `svg` subtree, and within
    it only the fields the attribute utils consume (`mdn_url`, `spec_url`,
-   `status` and per-browser `version_added`), so the rest is not bundled
-   into the renderer."
+   `status`, and per-browser added versions). BCD support entries are
+   flattened to the `version_added` of the standard implementation (the
+   first entry, per BCD's own ordering), dropping the prefixed and
+   partial-implementation variants the UI cannot represent, so the rest
+   is not bundled into the renderer."
   (:require
    [clojure.java.io :as io]
    [clojure.pprint :as pprint]
@@ -20,19 +23,14 @@
 (defn output-file-path! []
   (io/file "src" "generated" "attribute_data.cljs"))
 
-(defn- reduce-support-entry
+(defn- support-version
   [entry]
-  (when (map? entry)
-    (select-keys entry [:version_added])))
+  (:version_added (if (sequential? entry) (first entry) entry)))
 
 (defn- reduce-support
   [support]
   (into {}
-        (map (fn [[browser v]]
-               (let [entries (->> (if (map? v) [v] v)
-                                  (map reduce-support-entry)
-                                  (remove nil?))]
-                 [browser (if (map? v) (first entries) (vec entries))])))
+        (map (fn [[browser entry]] [browser (support-version entry)]))
         support))
 
 (defn- reduce-compat
@@ -40,30 +38,19 @@
   (-> (select-keys c [:mdn_url :spec_url :status :support])
       (update :support reduce-support)))
 
-(defn- reduce-attr
-  [v]
-  (cond-> v
-    (map? v)
-    (update :__compat reduce-compat)))
-
-(defn- reduce-element
-  [el]
+(defn- reduce-node
+  [node]
   (into {}
         (map (fn [[k v]]
-               [k (if (= k :__compat)
-                    (reduce-compat v)
-                    (reduce-attr v))]))
-        el))
+               [k (if (= k :__compat) (reduce-compat v) (reduce-node v))]))
+        node))
 
 (defn- reduced-svg
   [data]
-  (let [svg (:svg data)]
-    {:elements (into {}
-                     (map (fn [[tag el]] [tag (reduce-element el)]))
-                     (:elements svg))
-     :global_attributes (into {}
-                              (map (fn [[attr v]] [attr (reduce-attr v)]))
-                              (:global_attributes svg))}))
+  (into {}
+        (map (fn [[group nodes]]
+               [group (into {} (map (fn [[k v]] [k (reduce-node v)])) nodes)]))
+        (select-keys (:svg data) [:elements :global_attributes])))
 
 (defn- keywordize
   [x]

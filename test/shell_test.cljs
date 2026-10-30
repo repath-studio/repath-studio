@@ -20,37 +20,42 @@
           current-text (rf/subscribe [::shell.subs/current-text])]
 
       (testing "initial"
-        (is (= @active-language :cljs))
+        (is (= @active-language :js))
         (is (= @history [""]))
         (is (= @current-text "")))
 
-      (testing "eval hashmap"
-        (rf/dispatch [::shell.events/execute "{}"])
-
-        (rf.test/wait-for
-         [::shell.events/add-item]
-
-         (is (= @history ["{}"]))
-         (is (= @items ["{}"]))))
-
-      (testing "set text"
-        (rf/dispatch-sync [::shell.events/set-text "foo"])
-        (is (= @current-text "foo")))
-
-      (testing "clear command"
-        (rf/dispatch [::shell.events/execute "(clear)"])
-
-        (rf.test/wait-for
-         [::shell.events/add-item]
-
-         (is (= @history ["(clear)"]))
-         (is (= @items []))))
-
-      (testing "activate javascript"
-        (rf/dispatch [::shell.events/activate-language :js])
+      (testing "activate clojurescript"
+        (rf/dispatch [::shell.events/activate-language :cljs])
 
         (rf.test/wait-for
          [::shell.events/language-load-success]
 
-         (is (= @active-language :js))
-         (is (= @history [""]))))))))
+         (is (= @active-language :cljs))
+         (is (= @history [""]))
+
+         (testing "eval hashmap"
+           (rf/dispatch [::shell.events/execute "{}"])
+
+           (rf.test/wait-for
+            [::shell.events/add-item]
+
+            (is (= @history ["{}" ""]))
+            (is (= (map :type @items) [:input :output]))
+            (is (= (-> @items first :value :text) "{}"))
+            (is (= (-> @items second :value) "{}"))
+
+            (testing "set text"
+              (rf/dispatch [::shell.events/set-text "foo"])
+
+              (rf.test/wait-for
+               [::shell.events/set-text]
+
+               (is (= @current-text "foo"))
+
+               (testing "clear output"
+                 (rf/dispatch [::shell.events/clear-items])
+
+                 (rf.test/wait-for
+                  [::shell.events/clear-items]
+
+                  (is (empty? @items))))))))))))))

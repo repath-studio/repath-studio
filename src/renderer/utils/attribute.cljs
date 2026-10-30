@@ -1,9 +1,10 @@
 (ns renderer.utils.attribute
   (:require
-   ["mdn-data" :as mdn]
    [camel-snake-kebab.core :as camel-snake-kebab]
    [clojure.string :as string]
+   [clojure.walk :as walk]
    [generated.attribute-data :as attribute-data]
+   [generated.mdn-css :as mdn-css]
    [malli.core :as m]
    [renderer.attribute.hierarchy :as attribute.hierarchy]
    [renderer.db :refer [Viewbox]]
@@ -11,10 +12,6 @@
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
    [renderer.utils.extra :refer [rpartial]]))
-
-(def mdn-data
-  "https://github.com/mdn/data/blob/main/docs/updating_css_json.md"
-  (js->clj mdn :keywordize-keys true))
 
 (def svg-data
   "https://github.com/mdn/browser-compat-data"
@@ -237,13 +234,13 @@
    (or (-> svg-data :elements tag attr :__compat)
        (-> svg-data :global_attributes attr :__compat))))
 
+(m/=> translation [:-> string? string? [:maybe string?]])
 (defn translation
-  [k lang]
-  (let [translations (get-in mdn-data [:l10n :css])]
-    (or (get-in translations [k (keyword lang)])
-        (get-in translations [k (keyword (subs lang 0 2))])
-        (get-in translations [k :en-US])
-        (name k))))
+  [value lang]
+  (when-let [translations (get mdn-css/l10n value)]
+    (or (get translations lang)
+        (get translations (subs lang 0 2))
+        (get translations "en-US"))))
 
 (defn remove-refs
   [s]
@@ -254,21 +251,19 @@
 (defn enhance-data-readability
   [property k lang]
   (cond-> property
-    (and (get property k)
-         (string? (get property k)))
-    (update k #(-> (keyword %)
-                   (translation lang)
-                   (remove-refs)))))
+    (string? (get property k))
+    (update k #(-> % (translation lang) (or %) remove-refs))))
 
 (m/=> property-data [:-> keyword? any?])
 (defn property-data
   ([k]
    (property-data k "en-US"))
   ([k lang]
-   (let [css-property (get-in mdn-data [:css :properties k])]
-     (reduce (rpartial enhance-data-readability lang)
-             css-property
-             (keys css-property)))))
+   (when-let [entry (get mdn-css/properties (name k))]
+     (let [css-property (walk/keywordize-keys entry)]
+       (reduce (rpartial enhance-data-readability lang)
+               css-property
+               (keys css-property))))))
 
 (def property-data-memo (memoize property-data))
 

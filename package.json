@@ -132,16 +132,16 @@
     "@radix-ui/react-slider": "1.6.1",
     "@radix-ui/react-switch": "1.4.1",
     "@radix-ui/react-tooltip": "1.4.1",
-    "@sentry/capacitor": "4.4.0",
+    "@sentry/capacitor": "4.5.0",
     "@sentry/cli": "3.8.1",
-    "@sentry/react": "10.69.0",
+    "@sentry/react": "11.8.0",
     "@tailwindcss/cli": "4.3.3",
     "@xzdarcy/react-timeline-editor": "1.0.0",
     "acorn": "8.19.0",
     "blobs": "2.3.0-beta.2",
     "buffer": "6.0.3",
-    "cmdk": "1.1.1",
     "chroma-js": "3.2.0",
+    "cmdk": "1.1.1",
     "doc-link-checker-cli": "1.0.4",
     "electron": "45.1.0",
     "electron-builder": "26.18.0",
@@ -195,13 +195,16 @@
   },
   "overrides": {
     "react": "19.3.1",
-    "react-dom": "19.3.1"
+    "react-dom": "19.3.1",
+    "@sentry/core": "11.8.0",
+    "@sentry/browser": "11.8.0",
+    "@sentry/react": "11.8.0"
   },
   "allowScripts": {
     "@parcel/watcher@2.5.1": true,
-    "@sentry/capacitor@4.4.0": true,
+    "@sentry/capacitor@4.5.0": false,
     "@sentry/cli@3.8.1": true,
-    "electron-winstaller@5.4.0": true,
-    "puppeteer@25.15.0": true
+    "electron-winstaller@5.4.0": false,
+    "puppeteer@25.15.0": false
   }
 }

@@ -106,6 +106,16 @@
         (recur (next xs) (conj acc (js-arg arg))))
       (reverse acc))))
 
+(defn- meta-arglists
+  [m]
+  (let [arglists (or (:raw-arglists m) (:arglists m))
+        arglists (if (and (sequential? arglists)
+                          (= 'quote (first arglists)))
+                   (second arglists)
+                   arglists)]
+    (when (some? arglists)
+      (if (vector? arglists) [arglists] arglists))))
+
 (defn- js-arglist
   "Converts a Clojure arglist to a JavaScript style signature.
    E.g. `[[cx cy] r & {:as attrs}]` becomes `([cx, cy], r, attrs)` and
@@ -133,18 +143,19 @@
     (shell.reepl.sci/js-built-in-docs s)
 
     (symbol? s)
-    (when-let [doc (shell.reepl.sci/doc-from-sym (symbol "user" (name s)))]
-      (let [fn-name (camel-snake-kebab/->camelCaseString (name s))]
+    (when-let [f (get (ns-publics 'user) (symbol (name s)))]
+      (let [m (meta f)
+            fn-name (camel-snake-kebab/->camelCaseString (name s))]
         (with-out-str
-          (println (if-let [arglists (:forms doc)]
+          (println (if-let [arglists (meta-arglists m)]
                      (->> (map js-arglist arglists)
                           (map #(str fn-name "(" % ")"))
                           (interpose "\n")
                           (string/join))
                      fn-name))
-          (when (:doc doc)
+          (when-let [doc (:doc m)]
             (println)
-            (println (:doc doc))))))))
+            (println doc)))))))
 
 (defmethod shell.hierarchy/show-error :js
   [_language v]

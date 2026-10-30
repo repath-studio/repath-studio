@@ -49,9 +49,9 @@
     (i18n.views/t [::browser-compatibility "Browser compatibility"])]
    [views/scroll-area
     [:div.flex.mb-4.gap-px
-     (for [[browser {:keys [version_added]}] support-data]
+     (for [[browser version-added] support-data]
        ^{:key browser}
-       [browser-support browser version_added])]]])
+       [browser-support browser version-added])]]])
 
 (defn info-button
   ([url]
@@ -68,7 +68,7 @@
                (utils.attribute/compatibility tag))
         support-data (:support data)]
     [:div.flex.flex-col
-     (when (some :version_added (vals support-data))
+     (when (some identity (vals support-data))
        [browser-compatibility support-data])
      [:div.flex.gap-2
       (when-let [mdn-url (utils.attribute/mdn-url attr data)]

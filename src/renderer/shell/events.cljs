@@ -47,7 +47,7 @@
  (fn [{:keys [db]} [_ error]]
    {:db (-> db
             (shell.handlers/set-language-status :error)
-            (shell.handlers/set-language :cljs))
+            (shell.handlers/set-language :js))
     :dispatch [::app.events/toast-error error]}))
 
 (rf/reg-event-fx
