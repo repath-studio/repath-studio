@@ -238,7 +238,8 @@
 
 (rf/reg-fx
  ::shell.effects/execute
- (fn [_]))
+ (fn [{:keys [text callback-event]}]
+   (rf/dispatch (conj callback-event :output text))))
 
 (rf/reg-fx
  ::effects/ipc-invoke

@@ -2,10 +2,12 @@
   "Evaluates shell forms with [sci](https://github.com/babashka/sci), a small
    ClojureScript interpreter, against the app's own namespaces.
 
-   Completions and docs come from the build-time generated `shell-dsl` data
-   namespace (see build.generator.shell-dsl)."
+   Completions and docs come from the generated `shell-dsl` module data, JS
+   built-in docs from the generated `js-docs` namespace
+   (see build.generator.shell-dsl and build.generator.js-docs)."
   (:require
    [clojure.string :as string]
+   [generated.js-docs :as js-docs]
    [generated.shell-dsl :as shell-dsl]
    [sci.core :as sci]
    [user]))
@@ -165,8 +167,5 @@
 
 (defn js-built-in-docs
   [s]
-  (when-let [entry (get-in shell-dsl/namespaces ["js" s])]
-    (let [signature (get entry "signature")
-          doc (get entry "doc")]
-      (str s signature "\n\n\n" (when doc doc)))))
-
+  (when-let [{:keys [sig doc]} (get js-docs/data s)]
+    (str s sig "\n\n\n" (when doc doc))))
