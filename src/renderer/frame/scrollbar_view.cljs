@@ -26,11 +26,11 @@
    {:class ["absolute rounded-full bg-backdrop"
             "opacity-50 hover:opacity-80 active:opacity-80"]
     :style (if (= orientation :horizontal)
-             {:left offset
+             {:left (+ offset config/track-thickness)
               :width size
               :top margin
               :height thumb-thickness}
-             {:top offset
+             {:top (+ offset config/track-thickness)
               :height size
               :left margin
               :width thumb-thickness})}])
@@ -38,7 +38,7 @@
 (defn on-pointer-down
   [orientation {:keys [size offset ratio track]} dom-rect]
   (fn [e]
-    (.preventDefault e)
+    (.stopPropagation e)
     (.setPointerCapture (.-currentTarget e) (.-pointerId e))
     (when (identical? (.-target e) (.-currentTarget e))
       (let [horizontal? (= orientation :horizontal)
@@ -53,6 +53,7 @@
 (defn on-pointer-move
   [orientation {:keys [offset size ratio track]}]
   (fn [e]
+    (.stopPropagation e)
     (when (.hasPointerCapture (.-currentTarget e) (.-pointerId e))
       (let [move (if (= orientation :horizontal)
                    (.-movementX e)
@@ -67,19 +68,20 @@
 
 (defn root
   [orientation options]
-  (let [horizontal? (= orientation :horizontal)
-        margin (/ (- config/track-thickness thumb-thickness) 2)
+  (let [margin (/ (- config/track-thickness thumb-thickness) 2)
         {:keys [size offset]} options
         dom-rect @(rf/subscribe [::app.subs/dom-rect])]
-    [:div.absolute
-     {:class (if horizontal?
-               "bottom-0 left-0"
-               "top-0 right-0")
-      :style (if horizontal?
-               {:height config/track-thickness
-                :right config/track-thickness}
-               {:width config/track-thickness
-                :bottom config/track-thickness})
+    [:div.absolute.hover:bg-white.transition-colors.delay-0.hover:delay-300
+     {:style (if (= orientation :horizontal)
+               {:bottom 0
+                :left 0
+                :height config/track-thickness
+                :right 0}
+               {:top 0
+                :right 0
+                :width config/track-thickness
+                :bottom 0})
+      :on-pointer-enter #(.stopPropagation %)
       :on-pointer-down (on-pointer-down orientation options dom-rect)
       :on-pointer-move (on-pointer-move orientation options)}
      [thumb orientation offset size margin]]))

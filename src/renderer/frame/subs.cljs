@@ -44,7 +44,7 @@
          viewbox-min (if horizontal? viewbox-min-x viewbox-min-y)
          span (/ (if horizontal? width height) zoom)
          track (- (if horizontal? width height)
-                  config/track-thickness)
+                  (* config/track-thickness 2))
          scroll (frame.handlers/axis-scroll [content-min content-max]
                                             viewbox-min
                                             span

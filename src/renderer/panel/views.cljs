@@ -10,7 +10,7 @@
 (defn separator []
   [:> Separator
    {:class ["relative after:block after:absolute after:z-1"
-            "after:transition-colors after:duration-300 after:delay-100"
+            "after:transition-colors after:duration-300 after:delay-0"
             "focus:after:delay-0"
             "aria-[orientation=horizontal]:h-px"
             "aria-[orientation=horizontal]:after:w-full"
