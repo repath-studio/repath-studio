@@ -3,6 +3,22 @@
 All notable user facing changes to this project will be documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 0.4.28 (2026-10-31)
+
+**Added**
+
+- Canvas scrollbars [#238](https://github.com/repath-studio/repath-studio/pull/238)
+- Tool scoped history [#239](https://github.com/repath-studio/repath-studio/pull/239)
+
+**Changed**
+
+- Reduce bundle size [#240](https://github.com/repath-studio/repath-studio/pull/240)
+- Enhance performance
+
+**Fixed**
+
+- Show auto updates toggle on desktop only
+
 ## 0.4.27 (2026-10-24)
 
 **Added**
