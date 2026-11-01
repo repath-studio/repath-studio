@@ -1177,36 +1177,60 @@
       (assoc-in (path db (:id el)) el)
       (refresh-bbox (:id el))))
 
-(m/=> boolean-operation [:-> App BooleanOperation App])
-(defn boolean-operation
-  [db operation]
-  (let [selected-elements (top-selected-sorted db)
-        el (first selected-elements)
-        parent-id (:parent el)
-        parent-inv (utils.transform/inverse (transform db parent-id))
+(m/=> preserve-index [:-> App ElementId ElementId [:sequential ElementId] App])
+(defn preserve-index
+  [db parent-id new-id ids]
+  (let [last-id (last ids)
+        last-index (when (some? last-id) (children-index db last-id))]
+    (cond-> db
+      (and (some? last-index)
+           (>= last-index 0)
+           (= parent-id (:parent (entity db last-id))))
+      (update-prop parent-id :children
+                   (fn [children]
+                     (utils.vec/move children
+                                     (.indexOf children new-id)
+                                     last-index))))))
+
+(m/=> boolean-path [:-> App [:sequential Element] BooleanOperation string?])
+(defn boolean-path
+  [db selected-elements operation]
+  (let [el (first selected-elements)
+        parent-inv (utils.transform/inverse (transform db (:parent el)))
         to-parent-space (fn [el]
                           (let [m (->> (transform db (:id el))
                                        (utils.transform/compose parent-inv))]
                             (-> el :attrs :d
                                 (svgpath)
                                 (.matrix (clj->js m))
-                                (.toString))))
-        new-path (->> (rest selected-elements)
-                      (reduce (fn [path-a el]
-                                (let [path-b (to-parent-space el)]
-                                  (utils.path/boolean-operation path-a
-                                                                path-b
-                                                                operation)))
-                              (to-parent-space el)))]
-    (cond-> db
-      (seq new-path)
-      (-> (delete)
-          (add {:type :element
-                :tag :path
-                :parent parent-id
-                :attrs (-> (:attrs el)
-                           (dissoc :transform)
-                           (assoc :d new-path))})))))
+                                (.toString))))]
+    (->> (rest selected-elements)
+         (reduce (fn [path-a el]
+                   (utils.path/boolean-operation path-a
+                                                 (to-parent-space el)
+                                                 operation))
+                 (to-parent-space el)))))
+
+(m/=> boolean-operation [:-> App BooleanOperation App])
+(defn boolean-operation
+  [db operation]
+  (let [selected-elements (top-selected-sorted db)
+        el (first selected-elements)
+        parent-id (:parent el)
+        new-path (boolean-path db selected-elements operation)]
+    (if-not (seq new-path)
+      db
+      (let [ids (mapv :id selected-elements)
+            db (add db {:type :element
+                        :tag :path
+                        :parent parent-id
+                        :attrs (-> (:attrs el)
+                                   (dissoc :transform)
+                                   (assoc :d new-path))})
+            path-id (-> db selected-ids first)]
+        (-> db
+            (preserve-index parent-id path-id ids)
+            (delete-ids (set ids)))))))
 
 (m/=> combine [:-> App App])
 (defn combine
@@ -1343,20 +1367,10 @@
    (group db (top-selected-sorted-ids db)))
   ([db ids]
    (let [parent-id (:id (parent db))
-         last-id (last ids)
-         last-index (children-index db last-id)
          db (add db {:tag :g
                      :parent parent-id})
          group-id (-> db selected-ids first)
-         db (cond-> db
-              (and (some? last-index)
-                   (>= last-index 0)
-                   (= parent-id (:parent (entity db last-id))))
-              (update-prop parent-id :children
-                           (fn [children]
-                             (utils.vec/move children
-                                             (.indexOf children group-id)
-                                             last-index))))]
+         db (preserve-index db parent-id group-id ids)]
      (-> (reduce (rpartial set-parent group-id) db ids)
          (refresh-bbox group-id)))))
 
