@@ -401,6 +401,14 @@
   [db ids]
   (reduce (fn [s id] (set/union s (descendant-ids db id))) ids ids))
 
+(m/=> text-content-child-ids [:-> App [:sequential ElementId] [:set ElementId]])
+(defn text-content-child-ids
+  [db ids]
+  (into #{}
+        (comp (mapcat #(descendant-ids db %))
+              (filter #(utils.element/text-content-child? (entity db %))))
+        ids))
+
 (m/=> top-ancestor-ids [:-> App [:set ElementId]])
 (defn top-ancestor-ids
   [db]

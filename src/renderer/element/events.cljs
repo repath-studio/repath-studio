@@ -284,7 +284,9 @@
  ::finalize->path
  [(finalize [::object-to-path "Object to path"])]
  (fn [db [_ elements]]
-   (reduce element.handlers/swap db elements)))
+   (let [ids (element.handlers/text-content-child-ids db (mapv :id elements))
+         db (reduce element.handlers/swap db elements)]
+     (element.handlers/delete-ids db ids))))
 
 (rf/reg-event-fx
  ::stroke->path
@@ -301,8 +303,10 @@
  ::finalize-stroke->path
  [(finalize [::stroke-to-path "Stroke to path"])]
  (fn [db [_ elements]]
-   (-> (reduce element.handlers/swap db elements)
-       (element.handlers/stroke->path))))
+   (let [ids (element.handlers/text-content-child-ids db (mapv :id elements))
+         db (-> (reduce element.handlers/swap db elements)
+                (element.handlers/stroke->path))]
+     (element.handlers/delete-ids db ids))))
 
 (rf/reg-event-fx
  ::boolean-operation
