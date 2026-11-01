@@ -36,9 +36,3 @@ test configuration
 - [ ] New and existing tests pass locally with my changes
 - [ ] Any dependent changes have been merged and published in downstream modules
 - [ ] My work does not violate any copyright laws
-
-## AI assistance
-
-Please add the utilized models, or remove the line if not applicable.
-
-Assisted-by: [MODELS/TOOLS]
