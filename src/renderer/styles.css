@@ -1,8 +1,10 @@
 @import 'tailwindcss';
 @import "tw-animate-css";
 @import '@xzdarcy/react-timeline-editor/dist/react-timeline-editor.css';
+@import "@fontsource-variable/noto-sans/wght.css";
+@import "@fontsource-variable/noto-sans/wght-italic.css";
+@import "@fontsource-variable/noto-sans-mono/wght.css";
 
-@import './fonts.css';
 @import './utilities.css';
 @import './overrides.css';
 

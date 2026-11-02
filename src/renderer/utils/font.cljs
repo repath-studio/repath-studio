@@ -55,7 +55,10 @@
 (m/=> default-font-path [:-> string? string? string?])
 (defn default-font-path
   [font-style font-weight]
-  (str "./css/files/noto-sans-latin-" font-weight "-" font-style ".woff"))
+  (str "./css/files/noto-sans-latin-" font-weight
+       "-"
+       (if (= "normal" font-style) "normal" "italic") ; Oblique maps to italic.
+       ".woff"))
 
 (m/=> font-data->system-fonts [:-> JS_Array SystemFonts])
 (defn font-data->system-fonts

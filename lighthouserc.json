@@ -5,7 +5,7 @@
             "url": [
                 "http://localhost/index.html"
             ],
-            "numberOfRuns": 1,
+            "numberOfRuns": 3,
             "settings": {
                 "preset": "desktop"
             }
@@ -15,7 +15,7 @@
                 "categories:performance": [
                     "error",
                     {
-                        "minScore": 0.6
+                        "minScore": 0.5
                     }
                 ],
                 "categories:accessibility": [

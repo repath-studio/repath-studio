@@ -1,4 +1,6 @@
-@import './fonts.css';
+@import "@fontsource-variable/noto-sans/wght.css";
+@import "@fontsource-variable/noto-sans/wght-italic.css";
+@import "@fontsource-variable/noto-sans-mono/wght.css";
 
 [data-theme='dark'] {
   --primary: #2d2d2d;
@@ -39,8 +41,8 @@
 
   --font-size: 13px;
 
-  --sans: 'Noto Sans', sans;
-  --mono: 'Noto Sans Mono', monospace;
+  --sans: 'Noto Sans Variable', 'Noto Sans', sans;
+  --mono: 'Noto Sans Mono Variable', 'Noto Sans Mono', monospace;
 
   --accent: #d12b65;
   --accent-light: #e23572;
