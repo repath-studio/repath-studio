@@ -63,3 +63,6 @@ jobs:
 
       - name: Test
         run: npm run test
+
+      - name: Lighthouse
+        run: npm install -g @lhci/cli@0.15.x && lhci autorun
