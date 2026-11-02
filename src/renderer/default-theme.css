@@ -48,7 +48,7 @@
 
   --foreground-default: rgba(var(--foreground-rgb), 0.75);
   --foreground-disabled: rgba(var(--foreground-rgb), 0.3);
-  --foreground-muted: rgba(var(--foreground-rgb), 0.5);
+  --foreground-muted: rgba(var(--foreground-rgb), 0.6);
   --foreground-hovered: rgba(var(--foreground-rgb), 1);
 
   --overlay: rgba(var(--foreground-rgb), 0.1);
