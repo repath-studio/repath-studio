@@ -5,6 +5,7 @@
 /.shadow-cljs/
 /.clj-kondo/.cache
 /.clj-kondo/imports/metosin/malli-types-cljs/
+/.lighthouseci/
 .idea
 
 /resources/public/js/
