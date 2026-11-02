@@ -64,5 +64,10 @@ jobs:
       - name: Test
         run: npm run test
 
+      - name: Build
+        run: npm run build-web
+        env:
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+
       - name: Lighthouse
         run: npm install -g @lhci/cli@0.15.x && lhci autorun
