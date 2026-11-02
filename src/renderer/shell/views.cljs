@@ -285,11 +285,11 @@
 
 (defn root
   []
-  (let [repl-history? @(rf/subscribe [::panel.subs/visible? :shell-output])
+  (let [shell-output? @(rf/subscribe [::panel.subs/visible? :shell-output])
         md? @(rf/subscribe [::window.subs/md?])]
     [:<>
      (if md?
-       (when repl-history?
+       (when shell-output?
          [panel.views/panel
           {:id "shell-output"
            :class "relative"

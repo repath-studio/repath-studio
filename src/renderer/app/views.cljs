@@ -314,6 +314,7 @@
 (defn editor
   []
   (let [timeline-visible @(rf/subscribe [::panel.subs/visible? :timeline])
+        shell-output? @(rf/subscribe [::panel.subs/visible? :shell-output])
         md? @(rf/subscribe [::window.subs/md?])]
     [panel.views/group
      {:orientation "vertical"
@@ -333,11 +334,13 @@
           :minSize 100
           :defaultSize 300}
          [timeline.views/root]]])
-     [panel.views/separator]
+     (when shell-output?
+       [panel.views/separator])
      [app.status-view/root]
      (when md?
        [:<>
-        [panel.views/separator]
+        (when shell-output?
+          [panel.views/separator])
         [shell.views/root]])]))
 
 (defn bottom-bar
