@@ -173,7 +173,7 @@
     "react-dom": "19.3.1",
     "react-frame-component": "5.3.2",
     "react-resizable-panels": "4.14.8",
-    "shadow-cljs": "3.5.8",
+    "shadow-cljs": "3.5.11",
     "shx": "0.4.0",
     "snabbdom": "3.6.4",
     "sonner": "2.0.8",
