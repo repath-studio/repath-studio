@@ -26,8 +26,9 @@
    [clojure.string :as string]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
-   [renderer.action.subs :as action.subs]
+   [renderer.action.subs :as-alias action.subs]
    [renderer.action.views :as action.views]
+   [renderer.app.subs :as-alias app.subs]
    [renderer.i18n.views :as i18n.views]
    [renderer.icon.views :as icon.views]
    [renderer.utils.attribute :as utils.attribute]
@@ -136,7 +137,9 @@
 
 (defn format-shortcut
   [action-id shortcut]
-  (let [default? @(rf/subscribe [::action.subs/default-shortcut?
+  (let [web-platform @(rf/subscribe [::app.subs/web-platform])
+        mac? (= web-platform "Mac")
+        default? @(rf/subscribe [::action.subs/default-shortcut?
                                  action-id
                                  shortcut])]
     (into [:div.flex.gap-1.items-center
@@ -147,16 +150,16 @@
                 (interpose [:span "+"]))
           (cond-> []
             (:ctrlKey shortcut)
-            (conj "Ctrl")
+            (conj (if mac? "⌃" "Ctrl"))
 
             (:shiftKey shortcut)
             (conj "⇧")
 
             (:altKey shortcut)
-            (conj "Alt")
+            (conj (if mac? "⌥" "Alt"))
 
             (:metaKey shortcut)
-            (conj "⌘")
+            (conj (if mac? "⌘" "Meta"))
 
             (:keyCode shortcut)
             (conj (utils.key/code->key (:keyCode shortcut)))))))
