@@ -18,15 +18,14 @@
    [renderer.utils.element :as utils.element]
    [renderer.utils.extra :refer [rpartial]]
    [renderer.utils.math :as utils.math]
-   [renderer.utils.transform :as utils.transform]
-   [renderer.views :as views]))
+   [renderer.utils.transform :as utils.transform]))
 
 (defmethod tool.hierarchy/help [::transform/transform :translate]
   []
   (i18n.views/t [::translate
                  [:div "Hold %1 to restrict direction, and %2 to clone."]]
                 [[tool.views/primary-mod-key]
-                 [views/kbd "Alt"]]))
+                 [tool.views/alt-key]]))
 
 (m/=> swap-parent [:-> App ElementId Element App])
 (defn swap-parent

@@ -281,3 +281,14 @@
   []
   (let [web-platform @(rf/subscribe [::app.subs/web-platform])]
     [views/kbd (if (= web-platform "Mac") "⌘" "Ctrl")]))
+
+(defn alt-key
+  []
+  (let [web-platform @(rf/subscribe [::app.subs/web-platform])]
+    [views/kbd (if (= web-platform "Mac") "⌥" "Alt")]))
+
+(defn shift-key
+  []
+  (let [web-platform @(rf/subscribe [::app.subs/web-platform])]
+    [views/kbd (if (= web-platform "Mac") "⇧" "Shift")]))
+

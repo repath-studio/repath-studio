@@ -14,8 +14,8 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
-   [renderer.utils.key :as utils.key]
-   [renderer.views :as views]))
+   [renderer.tool.views :as tool.views]
+   [renderer.utils.key :as utils.key]))
 
 (hierarchy/derive! ::zoom ::tool.hierarchy/tool)
 
@@ -30,7 +30,7 @@
   []
   (i18n.views/t [::help-idle "Click or select an area to zoom in.
                               Hold %1 to zoom out."]
-                [[views/kbd "⇧"]]))
+                [[tool.views/shift-key]]))
 
 (defmethod tool.hierarchy/help [::zoom :select]
   []

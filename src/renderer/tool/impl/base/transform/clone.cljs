@@ -11,15 +11,14 @@
    [renderer.tool.impl.base.transform.select :as transform.select]
    [renderer.tool.impl.base.transform.translate :as transform.translate]
    [renderer.tool.views :as tool.views]
-   [renderer.utils.bounds :as utils.bounds]
-   [renderer.views :as views]))
+   [renderer.utils.bounds :as utils.bounds]))
 
 (defmethod tool.hierarchy/help [::transform/transform :clone]
   []
   (i18n.views/t [::clone
                  [:div "Hold %1 to restrict direction. or release %2 to move"]]
                 [[tool.views/primary-mod-key]
-                 [views/kbd "Alt"]]))
+                 [tool.views/alt-key]]))
 
 (defmethod tool.hierarchy/on-drag [::transform/transform :clone]
   [db e]

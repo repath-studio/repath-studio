@@ -14,8 +14,7 @@
    [renderer.tool.impl.base.transform.core :as-alias transform]
    [renderer.tool.views :as tool.views]
    [renderer.utils.bounds :as utils.bounds]
-   [renderer.utils.math :as utils.math]
-   [renderer.views :as views]))
+   [renderer.utils.math :as utils.math]))
 
 (defmethod tool.hierarchy/help [::transform/transform :scale]
   []
@@ -23,8 +22,8 @@
                  [:div "Hold %1 to lock proportions, %2 to scale in place,
                         %3 to also scale children."]]
                 [[tool.views/primary-mod-key]
-                 [views/kbd "⇧"]
-                 [views/kbd "Alt"]]))
+                 [tool.views/shift-key]
+                 [tool.views/alt-key]]))
 
 (def ScaleHandle [:enum
                   :middle-right

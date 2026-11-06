@@ -153,7 +153,7 @@
             (conj (if mac? "⌃" "Ctrl"))
 
             (:shiftKey shortcut)
-            (conj "⇧")
+            (conj (if mac? "⇧" "Shift"))
 
             (:altKey shortcut)
             (conj (if mac? "⌥" "Alt"))
@@ -162,7 +162,53 @@
             (conj (if mac? "⌘" "Meta"))
 
             (:keyCode shortcut)
-            (conj (utils.key/code->key (:keyCode shortcut)))))))
+            (conj (let [k (utils.key/code->key (:keyCode shortcut))]
+                    (case k
+                      "BACKSPACE" "⌫"
+                      "ENTER" "⏎"
+                      "WIN_KEY" "⊞"
+                      "CONTEXT_MENU" "≣"
+                      "SPACE" "␣"
+                      "TILDE" "˜"
+                      "SINGLE_QUOTE" "'"
+                      "COMMA" ","
+                      "PERIOD" "."
+                      "SLASH" "/"
+                      "DASH" "-"
+                      "EQUALS" "="
+                      "PLUS_SIGN" "+"
+                      "SEMICOLON" ";"
+                      "UP" "↑"
+                      "DOWN" "↓"
+                      "LEFT" "←"
+                      "RIGHT" "→"
+                      "FIRST_MEDIA_KEY" "⏮"
+                      "LAST_MEDIA_KEY" "⏭"
+                      "ZERO" "0"
+                      "ONE" "1"
+                      "TWO" "2"
+                      "THREE" "3"
+                      "FOUR" "4"
+                      "FIVE" "5"
+                      "SIX" "6"
+                      "SEVEN" "7"
+                      "EIGHT" "8"
+                      "NINE" "9"
+                      "NUM_ZERO" "NUM_0"
+                      "NUM_ONE" "NUM_1"
+                      "NUM_TWO" "NUM_2"
+                      "NUM_THREE" "NUM_3"
+                      "NUM_FOUR" "NUM_4"
+                      "NUM_FIVE" "NUM_5"
+                      "NUM_SIX" "NUM_6"
+                      "NUM_SEVEN" "NUM_7"
+                      "NUM_EIGHT" "NUM_8"
+                      "NUM_NINE" "NUM_9"
+                      "OPEN_SQUARE_BRACKET" "["
+                      "CLOSE_SQUARE_BRACKET" "]"
+                      "BACKSLASH" "\\"
+                      "DELETE" "DEL"
+                      k)))))))
 
 (defn shortcuts
   [action-id v truncated?]

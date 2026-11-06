@@ -13,14 +13,14 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.transform.core :as-alias transform]
+   [renderer.tool.views :as tool.views]
    [renderer.utils.bounds :as utils.bounds]
-   [renderer.utils.element :as utils.element]
-   [renderer.views :as views]))
+   [renderer.utils.element :as utils.element]))
 
 (defmethod tool.hierarchy/help [::transform/transform :select]
   []
   (i18n.views/t [::select [:div "Hold %1 to select intersecting elements."]]
-                [[views/kbd "Alt"]]))
+                [[tool.views/alt-key]]))
 
 (m/=> selectable? [:-> [:or Element Handle nil?] boolean?])
 (defn selectable?

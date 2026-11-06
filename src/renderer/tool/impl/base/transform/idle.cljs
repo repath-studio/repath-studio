@@ -12,9 +12,9 @@
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.impl.base.transform.core :as-alias transform]
    [renderer.tool.impl.base.transform.select :as transform.select]
+   [renderer.tool.views :as tool.views]
    [renderer.utils.element :as utils.element]
-   [renderer.utils.key :as utils.key]
-   [renderer.views :as views]))
+   [renderer.utils.key :as utils.key]))
 
 (defmethod tool.hierarchy/on-pointer-move [::transform/transform :idle]
   [db e]
@@ -35,7 +35,7 @@
   (i18n.views/t [::help-idle
                  [:div "Click to select an element or drag to select by area.
                         Hold %1 to add or remove elements to selection."]]
-                [[views/kbd "⇧"]]))
+                [[tool.views/shift-key]]))
 
 (defn toggle-selection
   [db e]

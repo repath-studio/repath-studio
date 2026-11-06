@@ -18,15 +18,14 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.tool.views :as tool.views]
    [renderer.utils.bounds :as utils.bounds]
-   [renderer.utils.svg :as utils.svg]
-   [renderer.views :as views]))
+   [renderer.utils.svg :as utils.svg]))
 
 (defmethod tool.hierarchy/help [::transform/transform :rotate]
   []
   (i18n.views/t [::rotate
                  [:div "Drag to rotate the selection about the pivot point.\n
                          Hold %1 to snap to 15° increments."]]
-                [[views/kbd "Ctrl"]]))
+                [[tool.views/primary-mod-key]]))
 
 (m/=> drag-angle [:-> App db/Vec2 number?])
 (defn drag-angle

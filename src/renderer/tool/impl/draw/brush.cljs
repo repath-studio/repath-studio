@@ -90,7 +90,7 @@
   (i18n.views/t [::help-idle [:div "Click and drag to brush.
                                     Hold %1 to adjust the brush size,
                                     %2 to restrict direction."]]
-                [[views/kbd "⇧"]
+                [[tool.views/shift-key]
                  [tool.views/primary-mod-key]]))
 
 (defmethod tool.hierarchy/tool-options ::brush
