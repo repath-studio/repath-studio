@@ -299,8 +299,8 @@
 
 (rf/reg-fx
  ::open-remote-url
- (fn [url]
-   (.open js/window url)))
+ (fn [[url target]]
+   (.open js/window url target)))
 
 (rf/reg-fx
  ::add-event-listener

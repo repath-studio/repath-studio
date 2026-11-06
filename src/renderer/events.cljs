@@ -2,7 +2,8 @@
   (:require
    [re-frame.core :as rf]
    [renderer.app.handlers :as app.handlers]
-   [renderer.effects :as-alias effects]))
+   [renderer.effects :as-alias effects]
+   [renderer.utils.platform :as utils.platform]))
 
 (rf/reg-event-fx
  ::scroll-into-view
@@ -34,4 +35,7 @@
  (fn [{:keys [db]} [_ url]]
    (if (app.handlers/desktop? db)
      {::effects/ipc-send ["open-remote-url" url]}
-     {::effects/open-remote-url url})))
+     {::effects/open-remote-url [url
+                                 (if (utils.platform/safari? (:user-agent db))
+                                   "_top"
+                                   "_blank")]})))

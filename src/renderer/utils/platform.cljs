@@ -27,3 +27,8 @@
 (defn linux?
   [platform]
   (= platform "linux"))
+
+(m/=> safari? [:-> string? boolean?])
+(defn safari?
+  [user-agent]
+  (boolean (re-find #"(?i)^((?!chrome|android).)*safari" user-agent)))
