@@ -80,7 +80,7 @@ This project was funded through the
 
 ### System Requirements
 
-- [node.js](https://nodejs.org/)
+- [node.js](https://nodejs.org/) (26+)
 - Java SDK (8+) [OpenJDK](https://openjdk.org/) or
   [Oracle](https://www.oracle.com/java/technologies/downloads/)
 - [Clojure](https://clojure.org/guides/install_clojure)
