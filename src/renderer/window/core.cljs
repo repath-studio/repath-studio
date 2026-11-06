@@ -13,7 +13,10 @@
                :label [::fullscreen "Fullscreen"]
                :icon "arrow-minimize"
                :event [::window.events/toggle-fullscreen]
-               :shortcuts {"All" [{:keyCode (utils.key/codes "F11")}]}
+               :shortcuts {"All" [{:keyCode (utils.key/codes "F11")}]
+                           "Mac" [{:keyCode (utils.key/codes "F")
+                                   :metaKey true
+                                   :ctrlKey true}]}
                :available [::app.subs/not-mobile?]
                :active [::window.subs/fullscreen?]}])
 
