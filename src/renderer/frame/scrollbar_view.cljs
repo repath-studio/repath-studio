@@ -24,7 +24,7 @@
 (defn thumb
   [orientation offset size margin]
   [:div
-   {:class ["absolute rounded-full transition-opacity"
+   {:class ["absolute rounded-full transition-opacity cursor-default!"
             "opacity-50 hover:opacity-80 active:opacity-80"]
     :style (if (= orientation :horizontal)
              {:left (+ offset config/track-thickness)
@@ -37,7 +37,7 @@
               :left 0
               :padding margin
               :width "100%"})}
-   [:div {:class "rounded-full bg-backdrop h-full w-full"}]])
+   [:div {:class "rounded-full bg-backdrop h-full w-full cursor-default!"}]])
 
 (defn on-pointer-down
   [orientation {:keys [size offset ratio track]} dom-rect]
