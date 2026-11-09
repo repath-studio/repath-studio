@@ -24,7 +24,7 @@
 (defn thumb
   [orientation offset size margin]
   [:div
-   {:class ["absolute rounded-full"
+   {:class ["absolute rounded-full transition-opacity"
             "opacity-50 hover:opacity-80 active:opacity-80"]
     :style (if (= orientation :horizontal)
              {:left (+ offset config/track-thickness)
@@ -91,9 +91,8 @@
       (let [margin (/ (- config/track-thickness thumb-thickness) 2)
             {:keys [size offset]} options
             dom-rect @(rf/subscribe [::app.subs/dom-rect])]
-        [:div.absolute.z-2
+        [:div.absolute.transition-colors.hover:bg-white.hover:cursor-default!
          {:data-scrollbar true
-          :class "hover:bg-white transition-colors delay-0.hover:delay-300"
           :style (if (= orientation :horizontal)
                    {:bottom 0
                     :left 0
