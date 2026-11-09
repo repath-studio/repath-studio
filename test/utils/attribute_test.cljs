@@ -50,6 +50,7 @@
          :stroke ""
          :stroke-dasharray ""
          :stroke-linejoin ""
+         :pathLength ""
          :style ""
          :stroke-width ""
          :opacity ""

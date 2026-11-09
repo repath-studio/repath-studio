@@ -55,6 +55,7 @@
    :stroke
    :fill
    :stroke-width :stroke-linecap :stroke-linejoin :stroke-dasharray
+   :pathLength
    :crossorigin
    :decoding
    :opacity
