@@ -189,6 +189,8 @@
     (-> (element.handlers/delete db id)
         (history.handlers/finalize now [::remove-text "Remove text"]))
     (-> (element.handlers/update-el db id assoc-in [:attrs :content] s)
+        (element.handlers/deselect)
+        (element.handlers/select (:id (element.handlers/parent db)))
         (history.handlers/finalize now [::set-text "Set text"]))))
 
 (rf/reg-event-fx
