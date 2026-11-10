@@ -18,7 +18,8 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.dom :as utils.dom]
    [renderer.utils.math :as utils.math]
-   [renderer.views :as views]))
+   [renderer.views :as views]
+   [renderer.window.subs :as-alias window.subs]))
 
 (def thumb-thickness (/ config/track-thickness 2))
 
@@ -118,6 +119,14 @@
           :on-pointer-move (on-pointer-move orientation options)}
          [thumb orientation offset size margin]]))}))
 
+(defn scrollbars
+  []
+  (let [h-scroll @(rf/subscribe [::frame.subs/scrollbar :horizontal])
+        v-scroll @(rf/subscribe [::frame.subs/scrollbar :vertical])]
+    [:<>
+     [scrollbar :horizontal h-scroll]
+     [scrollbar :vertical v-scroll]]))
+
 (defn inner-component
   "We need access to the iframe's window to add the wheel listener.
    This is required in order to prevent the default zoom behavior.
@@ -198,8 +207,7 @@
       (fn []
         (let [root-el @(rf/subscribe [::element.subs/root])
               idle? @(rf/subscribe [::tool.subs/idle?])
-              h-scroll @(rf/subscribe [::frame.subs/scrollbar :horizontal])
-              v-scroll @(rf/subscribe [::frame.subs/scrollbar :vertical])
+              md? @(rf/subscribe [::window.subs/md?])
               {:keys [x y]} @(rf/subscribe [::app.subs/dom-rect])]
           [:<>
            [:> Frame
@@ -230,5 +238,4 @@
                            :on-escape-key-down #(.stopPropagation %)
                            :style {:margin-left (str x "px")
                                    :margin-top (str y "px")}}]))]]]
-           [scrollbar :horizontal h-scroll]
-           [scrollbar :vertical v-scroll]]))})))
+           (when md? [scrollbars])]))})))
