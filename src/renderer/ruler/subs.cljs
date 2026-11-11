@@ -18,6 +18,11 @@
    (ruler.handlers/steps-coll step viewbox orientation)))
 
 (rf/reg-sub
- ::subgrid?
+ ::subgrid-opacity
  :<- [::document.subs/zoom]
- :-> (partial > 50))
+ (fn [zoom _]
+   (let [min-opacity 0.35
+         max-opacity 0.8
+         proximity (- (Math/log10 (ruler.handlers/step zoom))
+                      (Math/log10 (/ 10 zoom)))]
+     (+ min-opacity (* proximity (- max-opacity min-opacity))))))

@@ -169,8 +169,9 @@
   []
   (let [major-sections 10
         zoom @(rf/subscribe [::document.subs/zoom])
+        zoom-in-available? @(rf/subscribe [::document.subs/zoom-in-available?])
         ruler-step @(rf/subscribe [::ruler.subs/step])
-        subgrid? @(rf/subscribe [::ruler.subs/subgrid?])
+        subgrid-opacity @(rf/subscribe [::ruler.subs/subgrid-opacity])
         size (* major-sections ruler-step)
         offset (/ ruler-step 2)
         origin (- (+ (/ size 2) offset))
@@ -179,7 +180,7 @@
         position (fn [index] (+ (* index ruler-step) offset))
         major-style {:stroke-width (/ 1 zoom)
                      :stroke "var(--border)"}
-        minor-style (assoc major-style :opacity ".5")]
+        minor-style (assoc major-style :opacity subgrid-opacity)]
     (into [:pattern {:id grid-id
                      :patternUnits "userSpaceOnUse"
                      :width size
@@ -188,7 +189,7 @@
                      :y origin}]
           cat
           (cond-> [(grid-lines (position major-index) size major-style)]
-            subgrid?
+            zoom-in-available?
             (concat (map #(grid-lines (position %) size minor-style)
                          minor-indexes))))))
 

@@ -9,18 +9,8 @@
 
 (m/=> step [:-> ZoomFactor number?])
 (defn step
-  "Returns the grid step given a zoom level."
   [zoom]
-  (let [raw-step (/ 10 zoom)
-        magnitude (->> (Math/abs raw-step)
-                       (Math/log10)
-                       (Math/floor)
-                       (Math/pow 10))
-        normalized (/ raw-step magnitude)]
-    (* magnitude (condp >= normalized
-                   2 1
-                   7 5
-                   10))))
+  (Math/pow 10 (Math/ceil (Math/log10 (/ 10 zoom)))))
 
 (m/=> steps-coll [:-> number? Viewbox Orientation [:sequential number?]])
 (defn steps-coll
