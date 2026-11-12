@@ -95,40 +95,28 @@
   (let [[x y] @(rf/subscribe [::frame.subs/viewbox])
         zoom @(rf/subscribe [::document.subs/zoom])
         steps-coll @(rf/subscribe [::ruler.subs/steps-coll orientation])
+        subgrid? @(rf/subscribe [::ruler.subs/render-subgrid?])
         active? @(rf/subscribe [::tool.subs/active?
                                 ::tool.impl.misc.guide/guide])
         vertical (= orientation :vertical)]
     (into [:g]
-          (map-indexed
+          (keep-indexed
            (fn [index step]
              (let [adjusted-step (* zoom step)
+                   major? (zero? (rem index 10))
+                   starting-point (if major? 0 (/ ruler-size 1.3))
+                   line [ruler-line {:orientation orientation
+                                     :adjusted-step adjusted-step
+                                     :size ruler-size
+                                     :starting-point starting-point
+                                     :active active?}]
                    text (-> step
                             (+ (if vertical y x))
                             (Math/round)
                             (str))]
-               (cond
-                 (zero? (rem index 10))
-                 [:<>
-                  [ruler-line {:orientation orientation
-                               :adjusted-step adjusted-step
-                               :size ruler-size
-                               :starting-point 0
-                               :active active?}]
-                  [label active? orientation adjusted-step text]]
-
-                 (and (odd? index) (zero? (rem index 5)))
-                 [ruler-line {:orientation orientation
-                              :adjusted-step adjusted-step
-                              :size ruler-size
-                              :starting-point (/ ruler-size 1.6)
-                              :active active?}]
-
-                 :else
-                 [ruler-line {:orientation orientation
-                              :adjusted-step adjusted-step
-                              :size ruler-size
-                              :starting-point (/ ruler-size 1.3)
-                              :active active?}])))
+               (if major?
+                 [:<> line [label active? orientation adjusted-step text]]
+                 (when subgrid? line))))
            steps-coll))))
 
 (defn ruler
@@ -150,37 +138,61 @@
      [base-lines orientation]
      (when md? [pointer orientation])]))
 
-(defn grid-line
-  [step orientation & {:as attrs}]
-  (let [zoom @(rf/subscribe [::document.subs/zoom])
-        [x y w h] @(rf/subscribe [::frame.subs/viewbox-bounds])
-        vertical (= orientation :vertical)
-        step-x (+ step x)
-        step-y (+ step y)]
-    [:line (merge {:x1 (if vertical x step-x)
-                   :y1 (if vertical step-y y)
-                   :x2 (if vertical w step-x)
-                   :y2 (if vertical step-y h)
-                   :stroke-width (/ 1 zoom)
-                   :stroke "var(--border)"
-                   :pointer-events "none"}
-                  attrs)]))
+(defn grid-lines
+  [position size style]
+  [[:line (into {:x1 position
+                 :y1 0
+                 :x2 position
+                 :y2 size}
+                style)]
+   [:line (into {:x1 0
+                 :y1 position
+                 :x2 size
+                 :y2 position}
+                style)]])
+
+(def grid-id "canvas-grid")
+
+(defn grid-pattern
+  []
+  (let [major-sections 10
+        zoom @(rf/subscribe [::document.subs/zoom])
+        subgrid? @(rf/subscribe [::ruler.subs/render-subgrid?])
+        ruler-step @(rf/subscribe [::ruler.subs/step])
+        subgrid-opacity @(rf/subscribe [::ruler.subs/subgrid-opacity])
+        size (* major-sections ruler-step)
+        offset (/ ruler-step 2)
+        origin (- (+ (/ size 2) offset))
+        major-index (quot major-sections 2)
+        minor-indexes (remove #(= major-index %) (range major-sections))
+        position (fn [index] (+ (* index ruler-step) offset))
+        major-style {:stroke-width (/ 1 zoom)
+                     :stroke "var(--border)"}
+        minor-style (assoc major-style :opacity subgrid-opacity)]
+    (into [:pattern {:id grid-id
+                     :patternUnits "userSpaceOnUse"
+                     :width size
+                     :height size
+                     :x origin
+                     :y origin}]
+          cat
+          (cond-> [(grid-lines (position major-index) size major-style)]
+            subgrid?
+            (concat (map #(grid-lines (position %) size minor-style)
+                         minor-indexes))))))
 
 (defn grid-plane
-  [orientation]
-  (let [coll @(rf/subscribe [::ruler.subs/steps-coll orientation])
-        subgrid? @(rf/subscribe [::ruler.subs/subgrid?])
-        render-line (fn [i step]
-                      (let [main? (zero? (rem i 10))
-                            opacity (when-not main? ".5")]
-                        (when (or main? subgrid?)
-                          (grid-line step orientation :opacity opacity))))]
-    (->> coll
-         (map-indexed render-line)
-         (into [:g]))))
+  []
+  (let [[x y x2 y2] @(rf/subscribe [::frame.subs/viewbox-bounds])]
+    [:rect {:x x
+            :y y
+            :width (- x2 x)
+            :height (- y2 y)
+            :fill (str "url(#" grid-id ")")
+            :pointer-events "none"}]))
 
 (defn grid
   []
   [:<>
-   [grid-plane :vertical]
-   [grid-plane :horizontal]])
+   [grid-pattern]
+   [grid-plane]])

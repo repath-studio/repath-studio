@@ -1,26 +1,17 @@
 (ns renderer.ruler.handlers
   (:require
    [clojure.math.combinatorics :as combo]
+   [config :as conf]
    [malli.core :as m]
    [renderer.app.db :refer [App]]
    [renderer.db :refer [Orientation Viewbox]]
    [renderer.document.db :refer [ZoomFactor]]
    [renderer.frame.handlers :as frame.handlers]))
 
-(m/=> step [:-> ZoomFactor number?])
+(m/=> step [:-> number? ZoomFactor number?])
 (defn step
-  "Returns the grid step given a zoom level."
-  [zoom]
-  (let [raw-step (/ 10 zoom)
-        magnitude (->> (Math/abs raw-step)
-                       (Math/log10)
-                       (Math/floor)
-                       (Math/pow 10))
-        normalized (/ raw-step magnitude)]
-    (* magnitude (condp >= normalized
-                   2 1
-                   7 5
-                   10))))
+  [target-px zoom]
+  (Math/pow 10 (Math/ceil (Math/log10 (/ target-px zoom)))))
 
 (m/=> steps-coll [:-> number? Viewbox Orientation [:sequential number?]])
 (defn steps-coll
@@ -41,6 +32,6 @@
   [db]
   (let [zoom (get-in db [:documents (:active-document db) :zoom])
         viewbox (frame.handlers/viewbox db)
-        ruler-step (step zoom)]
+        ruler-step (step conf/grid-target-px zoom)]
     (combo/cartesian-product (steps-coll ruler-step viewbox :vertical)
                              (steps-coll ruler-step viewbox :horizontal))))

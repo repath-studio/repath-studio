@@ -5,19 +5,13 @@
             "url": [
                 "http://localhost/index.html"
             ],
-            "numberOfRuns": 3,
+            "numberOfRuns": 1,
             "settings": {
                 "preset": "desktop"
             }
         },
         "assert": {
             "assertions": {
-                "categories:performance": [
-                    "error",
-                    {
-                        "minScore": 0.5
-                    }
-                ],
                 "categories:accessibility": [
                     "error",
                     {

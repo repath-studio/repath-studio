@@ -19,6 +19,8 @@
 
 (def max-zoom 100)
 
+(def grid-target-px 5)
+
 (def max-shell-history 200)
 
 (def max-shell-completions 50)
