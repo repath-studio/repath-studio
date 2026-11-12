@@ -95,40 +95,28 @@
   (let [[x y] @(rf/subscribe [::frame.subs/viewbox])
         zoom @(rf/subscribe [::document.subs/zoom])
         steps-coll @(rf/subscribe [::ruler.subs/steps-coll orientation])
+        subgrid? @(rf/subscribe [::ruler.subs/render-subgrid?])
         active? @(rf/subscribe [::tool.subs/active?
                                 ::tool.impl.misc.guide/guide])
         vertical (= orientation :vertical)]
     (into [:g]
-          (map-indexed
+          (keep-indexed
            (fn [index step]
              (let [adjusted-step (* zoom step)
+                   major? (zero? (rem index 10))
+                   starting-point (if major? 0 (/ ruler-size 1.3))
+                   line [ruler-line {:orientation orientation
+                                     :adjusted-step adjusted-step
+                                     :size ruler-size
+                                     :starting-point starting-point
+                                     :active active?}]
                    text (-> step
                             (+ (if vertical y x))
                             (Math/round)
                             (str))]
-               (cond
-                 (zero? (rem index 10))
-                 [:<>
-                  [ruler-line {:orientation orientation
-                               :adjusted-step adjusted-step
-                               :size ruler-size
-                               :starting-point 0
-                               :active active?}]
-                  [label active? orientation adjusted-step text]]
-
-                 (and (odd? index) (zero? (rem index 5)))
-                 [ruler-line {:orientation orientation
-                              :adjusted-step adjusted-step
-                              :size ruler-size
-                              :starting-point (/ ruler-size 1.6)
-                              :active active?}]
-
-                 :else
-                 [ruler-line {:orientation orientation
-                              :adjusted-step adjusted-step
-                              :size ruler-size
-                              :starting-point (/ ruler-size 1.3)
-                              :active active?}])))
+               (if major?
+                 [:<> line [label active? orientation adjusted-step text]]
+                 (when subgrid? line))))
            steps-coll))))
 
 (defn ruler
@@ -169,7 +157,7 @@
   []
   (let [major-sections 10
         zoom @(rf/subscribe [::document.subs/zoom])
-        zoom-in-available? @(rf/subscribe [::document.subs/zoom-in-available?])
+        subgrid? @(rf/subscribe [::ruler.subs/render-subgrid?])
         ruler-step @(rf/subscribe [::ruler.subs/step])
         subgrid-opacity @(rf/subscribe [::ruler.subs/subgrid-opacity])
         size (* major-sections ruler-step)
@@ -189,7 +177,7 @@
                      :y origin}]
           cat
           (cond-> [(grid-lines (position major-index) size major-style)]
-            zoom-in-available?
+            subgrid?
             (concat (map #(grid-lines (position %) size minor-style)
                          minor-indexes))))))
 
