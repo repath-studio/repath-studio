@@ -255,6 +255,14 @@
              :on-click (dispatch action)}
             props)]))
 
+(defn radio-icon-button
+  [action & {:as props}]
+  (when-let [action (deref-action action)]
+    [icon-button action
+     (views/merge-with-class {:class ["active:overlay"
+                                      (when (checked? action) "accent")]}
+                             props)]))
+
 (defn switch
   [action & {:as props}]
   (when-let [action (deref-action action)]

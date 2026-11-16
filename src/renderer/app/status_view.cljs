@@ -198,7 +198,7 @@
                      :document-view/toggle-grid
                      :document/view-grid-style]
 
-                    (action.views/icon-button action))))
+                    [action.views/radio-icon-button action])))
           (into [:<>]))
      [action.views/button-with-options :snap/toggle :snap/options]
      [zoom-button-group zoom]
