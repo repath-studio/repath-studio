@@ -750,8 +750,7 @@
   :swap-color "تبديل الملء مع الخط"}
 
  :renderer.snap.views
- {:snap-options "خيارات الالتقاط"
-  :to " إلى "}
+ {:to " إلى "}
 
  :renderer.utils.bounds
  {:bounds-corner "زاوية الحدود"
@@ -832,6 +831,7 @@
   :close-all "إغلاق الكل"
   :close-saved "إغلاق المحفوظة"
   :svg "SVG"
+  :grid-style "نمط الشبكة"
   :import "استيراد..."
   :png "PNG"
   :jpg "JPG"
@@ -842,6 +842,8 @@
   :rasterised-formats "تنسيقات نقطية"
   :document-view "عرض المستند"
   :grid "الشبكة"
+  :grid-lines "الخطوط"
+  :grid-dots "النقاط"
   :guides "الأدلة"
   :rulers "المساطر"}
 

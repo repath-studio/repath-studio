@@ -184,7 +184,7 @@
          (map (comp :actions action.views/deref-action-group))
          (interpose {:type :separator})
          (flatten)
-         (map views/dropdown-menu-item)
+         (map action.views/dropdown-menu-item)
          (into [:> DropdownMenu/Content
                 {:side "left"
                  :align "end"
@@ -196,7 +196,7 @@
 (defn action-toolbar
   [actions & more]
   (->> actions
-       (map (rpartial views/action-button-group :side "left"))
+       (map (rpartial action.views/button-group :side "left"))
        (interpose [:span {:class "h-divider"}])
        (into [:<>])
        (conj more)
@@ -243,7 +243,7 @@
             [:object/entity]
             [context-dropdown-button]]]
           [views/toolbar {:class "bg-primary rounded-md flex-col"}
-           [views/action-icon-button :zoom/focus]]])]]]))
+           [action.views/icon-button :zoom/focus]]])]]]))
 
 (defn xml-panel
   []

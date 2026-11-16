@@ -143,7 +143,7 @@
         :on-click (fn [e]
                     (.stopPropagation e)
                     (rf/dispatch [::dialog.events/show-edit-shortcut id]))}]
-      [views/action-shortcuts action :limit 3]]]))
+      [action.views/shortcuts action :limit 3]]]))
 
 (defn cmdk-group
   [{:keys [label actions]} hide-disabled? hide-shortcutless?]
@@ -227,7 +227,7 @@
 (defn shortcut-tag
   [action-id shortcut]
   [views/tag
-   [views/format-shortcut action-id shortcut]
+   [action.views/format-shortcut action-id shortcut]
    {:on-remove #(rf/dispatch [::action.events/remove-shortcut
                               action-id
                               shortcut])}])

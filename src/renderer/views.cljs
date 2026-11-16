@@ -2,15 +2,13 @@
   "A collection of stateless reusable ui components.
    Avoid using subscriptions to keep the components pure."
   (:require
-   ["@codemirror/commands" :refer [defaultKeymap
-                                   indentWithTab
+   ["@codemirror/commands" :refer [defaultKeymap indentWithTab
                                    insertNewlineAndIndent]]
    ["@codemirror/language" :refer [syntaxHighlighting defaultHighlightStyle]]
    ["@codemirror/state" :refer [Compartment Prec]]
    ["@codemirror/theme-one-dark" :refer [oneDark oneDarkHighlightStyle]]
    ["@codemirror/view" :refer [EditorView basicSetup keymap]]
    ["@lezer/highlight" :refer [highlightCode]]
-   ["@radix-ui/react-context-menu" :as ContextMenu]
    ["@radix-ui/react-dropdown-menu" :as DropdownMenu]
    ["@radix-ui/react-hover-card" :as HoverCard]
    ["@radix-ui/react-popover" :as Popover]
@@ -24,17 +22,12 @@
    ["tailwind-merge" :refer [twMerge]]
    ["vaul" :refer [Drawer]]
    [clojure.string :as string]
-   [re-frame.core :as rf]
    [reagent.core :as reagent]
-   [renderer.action.subs :as-alias action.subs]
-   [renderer.action.views :as action.views]
-   [renderer.app.subs :as-alias app.subs]
    [renderer.i18n.views :as i18n.views]
    [renderer.icon.views :as icon.views]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.codemirror :as utils.codemirror]
    [renderer.utils.color :as utils.color]
-   [renderer.utils.extra :refer [rpartial]]
    [renderer.utils.key :as utils.key]
    [renderer.utils.math :as utils.math]))
 
@@ -80,15 +73,6 @@
        :title (or remove-label (i18n.views/t [::remove "Remove"]))
        :class "button-size-sm text-foreground-muted"}])])
 
-(defn action-icon-button
-  [action & {:as props}]
-  (when-let [action (action.views/deref-action action)]
-    [icon-button (:icon action)
-     (merge {:disabled (action.views/disabled? action)
-             :title (action.views/label action)
-             :on-click (action.views/dispatch action)}
-            props)]))
-
 (defn loading-indicator []
   [icon "spinner" {:class "animate-spin"}])
 
@@ -109,17 +93,6 @@
               "will-change-transform transition-transform translate-x-0.5"
               "data-[state=checked]:translate-x-[18px]"]}]]])
 
-(defn action-switch
-  [action & {:as props}]
-  (when-let [action (action.views/deref-action action)]
-    [switch (action.views/label action)
-     (merge-with-class
-      {:id (:id action)
-       :checked (action.views/checked? action)
-       :disabled (action.views/disabled? action)
-       :on-checked-change (action.views/dispatch action)}
-      props)]))
-
 (defn slider
   [props]
   [:> Slider/Root
@@ -134,103 +107,6 @@
                              "data-disabled:bg-foreground-muted"]
                      :aria-label (i18n.views/t [::resize-thumb
                                                 "Resize panel thumb"])}]])
-
-(defn format-shortcut
-  [action-id shortcut]
-  (let [web-platform @(rf/subscribe [::app.subs/web-platform])
-        mac? (= web-platform "Mac")
-        default? @(rf/subscribe [::action.subs/default-shortcut?
-                                 action-id
-                                 shortcut])]
-    (into [:div.flex.gap-1.items-center
-           {:dir "ltr"
-            :class (when-not default? "text-foreground-hovered")}]
-          (comp (map #(kbd % {:class (when-not default?
-                                       "text-foreground-hovered")}))
-                (interpose [:span "+"]))
-          (cond-> []
-            (:ctrlKey shortcut)
-            (conj (if mac? "⌃" "Ctrl"))
-
-            (:shiftKey shortcut)
-            (conj (if mac? "⇧" "Shift"))
-
-            (:altKey shortcut)
-            (conj (if mac? "⌥" "Alt"))
-
-            (:metaKey shortcut)
-            (conj (if mac? "⌘" "Meta"))
-
-            (:keyCode shortcut)
-            (conj (let [k (utils.key/code->key (:keyCode shortcut))]
-                    (case k
-                      "BACKSPACE" "⌫"
-                      "ENTER" "⏎"
-                      "WIN_KEY" "⊞"
-                      "CONTEXT_MENU" "≣"
-                      "SPACE" "␣"
-                      "TILDE" "˜"
-                      "SINGLE_QUOTE" "'"
-                      "COMMA" ","
-                      "PERIOD" "."
-                      "SLASH" "/"
-                      "DASH" "-"
-                      "EQUALS" "="
-                      "PLUS_SIGN" "+"
-                      "SEMICOLON" ";"
-                      "UP" "↑"
-                      "DOWN" "↓"
-                      "LEFT" "←"
-                      "RIGHT" "→"
-                      "FIRST_MEDIA_KEY" "⏮"
-                      "LAST_MEDIA_KEY" "⏭"
-                      "ZERO" "0"
-                      "ONE" "1"
-                      "TWO" "2"
-                      "THREE" "3"
-                      "FOUR" "4"
-                      "FIVE" "5"
-                      "SIX" "6"
-                      "SEVEN" "7"
-                      "EIGHT" "8"
-                      "NINE" "9"
-                      "NUM_ZERO" "NUM_0"
-                      "NUM_ONE" "NUM_1"
-                      "NUM_TWO" "NUM_2"
-                      "NUM_THREE" "NUM_3"
-                      "NUM_FOUR" "NUM_4"
-                      "NUM_FIVE" "NUM_5"
-                      "NUM_SIX" "NUM_6"
-                      "NUM_SEVEN" "NUM_7"
-                      "NUM_EIGHT" "NUM_8"
-                      "NUM_NINE" "NUM_9"
-                      "OPEN_SQUARE_BRACKET" "["
-                      "CLOSE_SQUARE_BRACKET" "]"
-                      "BACKSLASH" "\\"
-                      "DELETE" "DEL"
-                      k)))))))
-
-(defn shortcuts
-  [action-id v truncated?]
-  (cond->> v
-    :always
-    (into [] (comp (map (partial format-shortcut action-id))
-                   (interpose [:span])))
-
-    truncated?
-    (conj [:span "…"])
-
-    :always
-    (into [:span {:class ["text-foreground-muted hidden lg:inline-flex"
-                          "flex-wrap items-center gap-2"]}])))
-
-(defn action-shortcuts
-  [action & {:keys [limit]}]
-  (let [event-shortcuts (:shortcuts action)]
-    (when (seq event-shortcuts)
-      (let [truncated? (and limit (> (count event-shortcuts) limit))
-            shown (cond->> event-shortcuts limit (take limit))]
-        [shortcuts (:id action) shown truncated?]))))
 
 (defn radio-icon-button
   [icon-name active props]
@@ -251,102 +127,6 @@
       :side "top"
       :on-escape-key-down #(.stopPropagation %)}
      label]]])
-
-(defn tooltip-action-icon-button
-  [action & {:as content-props}]
-  (when-let [action (action.views/deref-action action)]
-    [:> Tooltip/Root
-     [:> Tooltip/Trigger
-      {:as-child true}
-      [:span
-       (if (:active action)
-         [radio-icon-button (:icon action) (action.views/checked? action)
-          {:class (:class action)
-           :aria-label (action.views/label action)
-           :on-click (action.views/dispatch action)}]
-         [action-icon-button action
-          {:aria-label (action.views/label action)
-           :title nil}])]]
-     [:> Tooltip/Portal
-      [:> Tooltip/Content
-       (merge {:class "tooltip-content pointer-events-none"
-               :sideOffset 5
-               :side "top"
-               :on-escape-key-down #(.stopPropagation %)}
-              content-props)
-       [:div.flex.gap-2.items-center
-        [action.views/label action]
-        [action-shortcuts action]]]]]))
-
-(defn action-button-group
-  [action-group & {:as content-props}]
-  (->> action-group
-       action.views/deref-action-group
-       :actions
-       (map (rpartial tooltip-action-icon-button content-props))
-       (into [:<>])))
-
-(defn context-menu-item
-  [action]
-  (cond
-    (= (:type action) :separator)
-    [:> ContextMenu/Separator {:class "menu-separator"}]
-
-    (:active action)
-    [:> ContextMenu/CheckboxItem
-     {:class "menu-checkbox-item inset"
-      :onSelect (action.views/dispatch action)
-      :checked (action.views/checked? action)
-      :disabled (action.views/disabled? action)}
-     [:> ContextMenu/ItemIndicator
-      {:class "menu-item-indicator"}
-      [icon "checkmark"]]
-     [:div [action.views/label action]]
-     [action-shortcuts action]]
-
-    :else
-    [:> ContextMenu/Item
-     {:class "menu-item context-menu-item"
-      :onSelect (action.views/dispatch action)
-      :disabled (action.views/disabled? action)}
-     [:div [action.views/label action]]
-     [action-shortcuts action]]))
-
-(defn dropdown-menu-item
-  [action & {:as props}]
-  (cond
-    (= :separator (:type action))
-    [:> DropdownMenu/Separator (merge-with-class {:class "menu-separator"}
-                                                 props)]
-
-    (:active action)
-    [:> DropdownMenu/CheckboxItem
-     (merge-with-class {:class "menu-checkbox-item inset"
-                        :on-click #(.stopPropagation %)
-                        :on-select (action.views/dispatch action)
-                        :checked (action.views/checked? action)
-                        :disabled (action.views/disabled? action)}
-                       props)
-     [:> DropdownMenu/ItemIndicator
-      {:class "menu-item-indicator"}
-      [icon "checkmark"]]
-     [:div.flex.items-center.gap-2
-      (when (:icon action)
-        [icon (:icon action)])
-      [action.views/label action]]
-     [action-shortcuts action]]
-
-    :else
-    [:> DropdownMenu/Item
-     (merge-with-class {:class "menu-item"
-                        :onSelect (action.views/dispatch action)
-                        :disabled (action.views/disabled? action)}
-                       props)
-     [:div.flex.items-center.gap-2
-      (when (:icon action)
-        [icon (:icon action)])
-      [action.views/label action]]
-     [action-shortcuts action]]))
 
 (defn scroll-area
   [& more]
@@ -459,9 +239,9 @@
               options (last (reagent/argv this))
               {:keys [theme-mode]} options]
           (when (and @cm (not= (.. @cm -state -doc toString) value))
-            #_(reset! updating? true)
+            (reset! updating? true)
             (utils.codemirror/set-value @cm value)
-            #_(reset! updating? false)
+            (reset! updating? false)
             (.dispatch @cm #js {:selection
                                 #js {:anchor (utils.codemirror/get-length
                                               @cm)}}))

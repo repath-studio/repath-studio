@@ -32,7 +32,8 @@
                          :exclude-urls true}
            :consistent-alias
            {:level :warning
-            :aliases {clojure.set set
+            :aliases {clojure.math.combinatorics math.combinatorics
+                      clojure.set set
                       clojure.string string
                       malli.core m
                       re-frame.core rf

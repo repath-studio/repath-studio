@@ -30,7 +30,7 @@
            :document/open
            :document/save
            :document/download]
-          (keep views/action-icon-button)
+          (keep action.views/icon-button)
           (into [:<>]))
 
      (when md?
@@ -144,7 +144,7 @@
     [:div.overflow-hidden.flex [tab-button id]]]
    [:> ContextMenu/Portal
     (->> (context-menu id)
-         (map views/context-menu-item)
+         (map action.views/context-menu-item)
          (into [:> ContextMenu/Content
                 {:class "menu-content context-menu-content"
                  :on-key-down #(.stopPropagation %)
@@ -190,7 +190,7 @@
                 :on-key-down #(.stopPropagation %)
                 :on-escape-key-down #(.stopPropagation %)}
                [views/dropdownmenu-arrow]]
-              (map views/dropdown-menu-item)))]]))
+              (map action.views/dropdown-menu-item)))]]))
 
 (defn panels-dropdown-button
   []
@@ -203,7 +203,7 @@
        [views/icon "panels"]]]
      [:> DropdownMenu/Portal
       (->> actions
-           (map views/dropdown-menu-item)
+           (map action.views/dropdown-menu-item)
            (into [:> DropdownMenu/Content
                   {:side "bottom"
                    :align "start"

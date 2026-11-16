@@ -783,8 +783,7 @@
   :swap-color "Поменять местами заливку и обводку"}
 
  :renderer.snap.views
- {:snap-options "Параметры привязки"
-  :to " к "}
+ {:to " к "}
 
  :renderer.utils.bounds
  {:bounds-corner "угол границ"
@@ -867,6 +866,7 @@
   :close-all "Закрыть всё"
   :close-saved "Закрыть сохранённые"
   :svg "SVG"
+  :grid-style "Стиль сетки"
   :import "Импорт..."
   :png "PNG"
   :jpg "JPG"
@@ -877,6 +877,8 @@
   :rasterised-formats "Растровые форматы"
   :document-view "Вид документа"
   :grid "Сетка"
+  :grid-lines "Линии"
+  :grid-dots "Точки"
   :guides "Направляющие"
   :rulers "Линейки"}
 

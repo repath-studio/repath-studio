@@ -787,8 +787,7 @@
   :swap-color "Intercambiar relleno con contorno"}
 
  :renderer.snap.views
- {:snap-options "Opciones de ajuste"
-  :to " a "}
+ {:to " a "}
 
  :renderer.utils.bounds
  {:bounds-corner "esquina de límites"
@@ -871,6 +870,7 @@
   :close-all "Cerrar todo"
   :close-saved "Cerrar guardados"
   :svg "SVG"
+  :grid-style "Estilo de cuadrícula"
   :import "Importar..."
   :png "PNG"
   :jpg "JPG"
@@ -881,6 +881,8 @@
   :rasterised-formats "Formatos rasterizados"
   :document-view "Vista del documento"
   :grid "Cuadrícula"
+  :grid-lines "Líneas"
+  :grid-dots "Puntos"
   :guides "Guías"
   :rulers "Reglas"}
 

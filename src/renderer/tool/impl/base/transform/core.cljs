@@ -3,6 +3,7 @@
    [malli.core :as m]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
+   [renderer.action.views :as action.views]
    [renderer.app.subs :as-alias app.subs]
    [renderer.document.events :as-alias document.events]
    [renderer.document.subs :as-alias document.subs]
@@ -25,8 +26,7 @@
    [renderer.tool.views :as tool.views]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.bounds :as utils.bounds]
-   [renderer.utils.svg :as utils.svg]
-   [renderer.views :as views]))
+   [renderer.utils.svg :as utils.svg]))
 
 (hierarchy/derive! ::transform ::tool.hierarchy/tool)
 
@@ -77,7 +77,7 @@
 
 (defmethod tool.hierarchy/tool-options ::transform
   []
-  [views/action-button-group :transform/options])
+  [action.views/button-group :transform/options])
 
 (defmethod tool.hierarchy/on-deactivate ::transform
   [db]

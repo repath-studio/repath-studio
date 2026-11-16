@@ -740,8 +740,7 @@
   :swap-color "塗りと線の色を交換"}
 
  :renderer.snap.views
- {:snap-options "スナップオプション"
-  :to " に "}
+ {:to " に "}
 
  :renderer.utils.bounds
  {:bounds-corner "境界角"
@@ -822,6 +821,7 @@
   :close-saved "保存済みを閉じる"
 
   :svg "SVG"
+  :grid-style "グリッドスタイル"
   :import "インポート..."
   :png "PNG"
   :jpg "JPG"
@@ -832,6 +832,8 @@
   :rasterised-formats "ラスター形式"
   :document-view "ドキュメントビュー"
   :grid "グリッド"
+  :grid-lines "線"
+  :grid-dots "ドット"
   :guides "ガイド"
   :rulers "ルーラー"}
 

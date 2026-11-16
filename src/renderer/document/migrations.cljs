@@ -96,4 +96,8 @@
                                                                    cs))))
                                            (assoc (:id node) node))))))
                          document
-                         text-els)))]])
+                         text-els)))]
+
+   [[0 4 29] (fn [document]
+               (update-in document [:attrs :grid-style]
+                          #(or % :lines)))]])

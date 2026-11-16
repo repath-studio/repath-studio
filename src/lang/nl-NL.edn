@@ -800,8 +800,7 @@
   :swap-color "Vulling en lijn verwisselen"}
 
  :renderer.snap.views
- {:snap-options "Uitlijnopties"
-  :to " naar "}
+ {:to " naar "}
 
  :renderer.utils.bounds
  {:bounds-corner "grenshoek"
@@ -883,6 +882,7 @@
   :close-all "Alles sluiten"
   :close-saved "Opgeslagen sluiten"
   :svg "SVG"
+  :grid-style "Rasterstijl"
   :import "Importeren..."
   :png "PNG"
   :jpg "JPG"
@@ -893,6 +893,8 @@
   :rasterised-formats "Rasterformaten"
   :document-view "Documentweergave"
   :grid "Raster"
+  :grid-lines "Lijnen"
+  :grid-dots "Punten"
   :guides "Hulplijnen"
   :rulers "Linealen"}
 

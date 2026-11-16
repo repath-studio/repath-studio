@@ -197,3 +197,13 @@
      (cond-> (/ base-size zoom)
        (and touch? (not md?))
        (* 1.8)))))
+
+(rf/reg-sub
+ ::grid-style
+ :<- [::attrs]
+ :-> :grid-style)
+
+(rf/reg-sub
+ ::grid-style?
+ :<- [::grid-style]
+ :=> =)

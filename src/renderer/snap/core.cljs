@@ -10,7 +10,7 @@
                :label [::snap "Snap"]
                :icon "magnet"
                :event [::snap.events/toggle]
-               :active [::snap.subs/enabled?]}])
+               :active [::snap.subs/active?]}])
 
 (rf/dispatch [::action.events/register-action
               {:id :snap/toggle-centers

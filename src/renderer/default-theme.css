@@ -55,4 +55,5 @@
 
   --overlay: rgba(var(--foreground-rgb), 0.1);
   --border: rgba(var(--foreground-rgb), 0.15);
+  --dot: rgba(var(--foreground-rgb), 0.4);
 }

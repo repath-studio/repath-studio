@@ -733,8 +733,7 @@
   :swap-color "채우기와 획 색상 바꾸기"}
 
  :renderer.snap.views
- {:snap-options "스냅 옵션"
-  :to " ~ "}
+ {:to " ~ "}
 
  :renderer.utils.bounds
  {:bounds-corner "경계 모서리"
@@ -814,6 +813,7 @@
   :close-all "모두 닫기"
   :close-saved "저장된 것 닫기"
   :svg "SVG"
+  :grid-style "격자 스타일"
   :import "가져오기..."
   :png "PNG"
   :jpg "JPG"
@@ -824,6 +824,8 @@
   :rasterised-formats "래스터 형식"
   :document-view "문서 보기"
   :grid "격자"
+  :grid-lines "선"
+  :grid-dots "점"
   :guides "가이드"
   :rulers "눈금자"}
 

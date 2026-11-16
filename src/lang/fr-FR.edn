@@ -796,8 +796,7 @@
   :swap-color "Échanger le remplissage avec le contour"}
 
  :renderer.snap.views
- {:snap-options "Options de magnétisme"
-  :to " vers "}
+ {:to " vers "}
 
  :renderer.utils.bounds
  {:bounds-corner "coin des limites"
@@ -880,6 +879,7 @@
   :close-all "Fermer tout"
   :close-saved "Fermer les enregistrés"
   :svg "SVG"
+  :grid-style "Style de grille"
   :import "Importer..."
   :png "PNG"
   :jpg "JPG"
@@ -890,6 +890,8 @@
   :rasterised-formats "Formats matriciels"
   :document-view "Vue du document"
   :grid "Grille"
+  :grid-lines "Lignes"
+  :grid-dots "Points"
   :guides "Guides"
   :rulers "Règles"}
 

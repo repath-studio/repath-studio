@@ -210,6 +210,20 @@
                                    :metaKey true}]}}])
 
 (rf/dispatch [::action.events/register-action
+              {:id :document-view/grid-style-lines
+               :label [::grid-lines "Lines"]
+               :event [::document.events/set-attr :grid-style :lines]
+               :active [::document.subs/grid-style? :lines]
+               :enabled [::document.subs/some-entities?]}])
+
+(rf/dispatch [::action.events/register-action
+              {:id :document-view/grid-style-dots
+               :label [::grid-dots "Dots"]
+               :event [::document.events/set-attr :grid-style :dots]
+               :active [::document.subs/grid-style? :dots]
+               :enabled [::document.subs/some-entities?]}])
+
+(rf/dispatch [::action.events/register-action
               {:id :document-view/toggle-rulers
                :label [::rulers "Rulers"]
                :icon "ruler-combined"
@@ -230,6 +244,13 @@
                :enabled [::document.subs/some-entities?]
                :shortcuts {"All" [{:keyCode (utils.key/codes "PERIOD")
                                    :shiftKey true}]}}])
+
+(rf/dispatch [::action.events/register-action-group
+              {:id :document/view-grid-style
+               :icon "grid"
+               :label [::grid-style "Grid style"]
+               :actions [:document-view/grid-style-lines
+                         :document-view/grid-style-dots]}])
 
 (rf/dispatch [::action.events/register-action-group
               {:id :document/view

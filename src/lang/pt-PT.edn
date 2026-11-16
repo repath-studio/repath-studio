@@ -780,8 +780,7 @@
   :swap-color "Trocar preenchimento com contorno"}
 
  :renderer.snap.views
- {:snap-options "Opções de ajuste"
-  :to " a "}
+ {:to " a "}
 
  :renderer.utils.bounds
  {:bounds-corner "canto dos limites"
@@ -863,6 +862,7 @@
   :close-all "Fechar tudo"
   :close-saved "Fechar guardados"
   :svg "SVG"
+  :grid-style "Estilo da grelha"
   :import "Importar..."
   :png "PNG"
   :jpg "JPG"
@@ -873,6 +873,8 @@
   :rasterised-formats "Formatos rasterizados"
   :document-view "Vista do documento"
   :grid "Grelha"
+  :grid-lines "Linhas"
+  :grid-dots "Pontos"
   :guides "Guias"
   :rulers "Réguas"}
 

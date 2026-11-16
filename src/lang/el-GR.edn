@@ -808,8 +808,7 @@
   :swap-color "Ανταλλάξτε το γέμισμα με τη γραμμή"}
 
  :renderer.snap.views
- {:snap-options "Ρυθμίσεις προσκόλλησης"
-  :to " προς "}
+ {:to " προς "}
 
  :renderer.utils.bounds
  {:bounds-corner "γωνία ορίων"
@@ -891,6 +890,7 @@
   :close-all "Κλείσιμο όλων"
   :close-saved "Κλείσιμο αποθηκευμένων"
   :svg "SVG"
+  :grid-style "Στυλ πλέγματος"
   :import "Εισαγωγή..."
   :png "PNG"
   :jpg "JPG"
@@ -901,6 +901,8 @@
   :rasterised-formats "Ραστεροποιημένες μορφές"
   :document-view "Προβολή εγγράφου"
   :grid "Πλέγμα"
+  :grid-lines "Γραμμές"
+  :grid-dots "Κουκκίδες"
   :guides "Οδηγοί"
   :rulers "Χάρακες"}
 

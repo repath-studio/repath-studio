@@ -100,16 +100,16 @@
      [views/icon-button "go-to-end"
       {:on-click #(.setTime (.-current timeline-ref) end)
        :disabled (>= tm end)}]
-     [views/tooltip-action-icon-button :timeline/toggle-replay]
+     [action.views/tooltip-icon-button :timeline/toggle-replay]
      [speed-select timeline-ref]
      [:span.font-mono.px-2 time-formatted]
      [:span.v-divider]
-     [views/tooltip-action-icon-button :timeline/toggle-fit-duration]
+     [action.views/tooltip-icon-button :timeline/toggle-fit-duration]
      [:div.gap-1.h-full.hidden
       {:class "@3xl/toolbar:flex"}
       [:span.v-divider]
-      [views/action-switch :timeline/toggle-grid-snap]
-      [views/action-switch :timeline/toggle-guide-snap]]
+      [action.views/switch :timeline/toggle-grid-snap]
+      [action.views/switch :timeline/toggle-guide-snap]]
      [:div.flex-1]
      (when md? [panel.views/close-button :timeline])]))
 
@@ -185,7 +185,7 @@
            (map (comp :actions action.views/deref-action-group))
            (interpose {:type :separator})
            (flatten)
-           (map views/context-menu-item)
+           (map action.views/context-menu-item)
            (into [:> ContextMenu/Content
                   {:class "menu-content context-menu-content"
                    :on-key-down #(.stopPropagation %)

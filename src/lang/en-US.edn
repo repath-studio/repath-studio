@@ -770,8 +770,7 @@
   :swap-color "Swap fill with stroke"}
 
  :renderer.snap.views
- {:snap-options "Snap options"
-  :to " to "}
+ {:to " to "}
 
  :renderer.utils.bounds
  {:bounds-corner "bounds corner"
@@ -862,6 +861,9 @@
   :rasterised-formats "Rasterised formats"
   :document-view "Document view"
   :grid "Grid"
+  :grid-lines "Lines"
+  :grid-dots "Dots"
+  :grid-style "Grid style"
   :guides "Guides"
   :rulers "Rulers"}
 

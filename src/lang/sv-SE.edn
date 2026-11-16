@@ -784,8 +784,7 @@
   :swap-color "Växla fyllning med linje"}
 
  :renderer.snap.views
- {:snap-options "Fästalternativ"
-  :to " till "}
+ {:to " till "}
 
  :renderer.utils.bounds
  {:bounds-corner "gränshörn"
@@ -866,6 +865,7 @@
   :close-all "Stäng alla"
   :close-saved "Stäng sparade"
   :svg "SVG"
+  :grid-style "Rutnätsstil"
   :import "Importera..."
   :png "PNG"
   :jpg "JPG"
@@ -876,6 +876,8 @@
   :rasterised-formats "Rasterformat"
   :document-view "Dokumentvy"
   :grid "Rutnät"
+  :grid-lines "Linjer"
+  :grid-dots "Prickar"
   :guides "Stödlinjer"
   :rulers "Linjaler"}
 
