@@ -167,13 +167,13 @@
     [:div.flex.flex-col.h-full.gap-px.w-full.overflow-hidden
      [views/toolbar
       {:class "bg-primary"}
-      [views/action-icon-button :history/clear]
+      [action.views/icon-button :history/clear]
       [views/icon-button
        "focus"
        {:title (i18n.views/t [::center-view "Center view"])
         :on-click #(rf/dispatch [::history.events/tree-view-updated
                                  0.5 (center ref)])}]
-      [views/action-switch :history/toggle-labels]
+      [action.views/switch :history/toggle-labels]
       [:div.flex-1]
       (when md? [panel.views/close-button :history])]
      [:div.flex-1.flex.flex-col.sm:flex-col-reverse

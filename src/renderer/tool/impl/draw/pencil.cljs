@@ -3,6 +3,7 @@
    [clojure.string :as string]
    [re-frame.core :as rf]
    [renderer.action.events :as-alias action.events]
+   [renderer.action.views :as action.views]
    [renderer.document.events :as-alias document.events]
    [renderer.document.handlers :as document.handlers]
    [renderer.document.subs :as-alias document.subs]
@@ -13,8 +14,7 @@
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
-   [renderer.utils.path :as utils.path]
-   [renderer.views :as views]))
+   [renderer.utils.path :as utils.path]))
 
 (hierarchy/derive! ::pencil ::tool.hierarchy/draw)
 
@@ -35,7 +35,7 @@
 
 (defmethod tool.hierarchy/tool-options ::pencil
   []
-  [views/action-button-group :pencil/options])
+  [action.views/button-group :pencil/options])
 
 (defmethod tool.hierarchy/on-drag-start [::pencil :idle]
   [db _e]

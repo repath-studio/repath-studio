@@ -18,7 +18,6 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.utils.dom :as utils.dom]
    [renderer.utils.math :as utils.math]
-   [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]))
 
 (def thumb-thickness (/ config/track-thickness 2))
@@ -230,7 +229,7 @@
                    (map (comp :actions action.views/deref-action-group))
                    (interpose {:type :separator})
                    (flatten)
-                   (map views/context-menu-item)
+                   (map action.views/context-menu-item)
                    (into [:> ContextMenu/Content
                           {:class "menu-content context-menu-content"
                            :on-close-auto-focus #(.preventDefault %)

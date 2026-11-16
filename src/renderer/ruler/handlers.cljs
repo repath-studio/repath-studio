@@ -1,6 +1,6 @@
 (ns renderer.ruler.handlers
   (:require
-   [clojure.math.combinatorics :as combo]
+   [clojure.math.combinatorics :as math.combinatorics]
    [config :as conf]
    [malli.core :as m]
    [renderer.app.db :refer [App]]
@@ -33,5 +33,6 @@
   (let [zoom (get-in db [:documents (:active-document db) :zoom])
         viewbox (frame.handlers/viewbox db)
         ruler-step (step conf/grid-target-px zoom)]
-    (combo/cartesian-product (steps-coll ruler-step viewbox :vertical)
-                             (steps-coll ruler-step viewbox :horizontal))))
+    (math.combinatorics/cartesian-product
+     (steps-coll ruler-step viewbox :vertical)
+     (steps-coll ruler-step viewbox :horizontal))))

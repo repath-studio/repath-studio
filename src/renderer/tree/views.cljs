@@ -302,7 +302,7 @@
          (map (comp :actions action.views/deref-action-group))
          (interpose {:type :separator})
          (flatten)
-         (map views/context-menu-item)
+         (map action.views/context-menu-item)
          (into [:> ContextMenu/Content
                 {:class "menu-content context-menu-content"
                  :on-key-down #(.stopPropagation %)

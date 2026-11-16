@@ -96,7 +96,7 @@
        (string/upper-case (name active-language))]]
      [:> DropdownMenu/Portal
       (->> actions
-           (map views/dropdown-menu-item)
+           (map action.views/dropdown-menu-item)
            (into [:> DropdownMenu/Content
                   {:side "top"
                    :align "end"
@@ -157,9 +157,10 @@
       [language-dropdown-button loaded?]
       (when @(rf/subscribe [::window.subs/md?])
         [:div.self-start.flex
-         [views/action-icon-button
+         [action.views/icon-button
           (assoc action :icon (if repl-history? "chevron-down" "chevron-up"))
           {:class "form-control-button bg-transparent!"}]])]]))
+
 
 (defn- url
   [s]
@@ -222,8 +223,8 @@
     [:div.flex-1.h-full.overflow-hidden.flex.flex-col
      [views/toolbar
       {:class "bg-primary"}
-      [views/action-icon-button :shell/clear-output]
-      [views/action-switch :shell/toggle-verbose]
+      [action.views/icon-button :shell/clear-output]
+      [action.views/switch :shell/toggle-verbose]
       [:div.grow]
       [:div.flex-1]
       (when md? [panel.views/close-button :shell-output])]

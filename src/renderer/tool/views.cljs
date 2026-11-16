@@ -161,7 +161,7 @@
         :on-escape-key-down #(.stopPropagation %)}
        [:div.flex.gap-2.items-center
         [action.views/label action]
-        [views/action-shortcuts action]]]]]))
+        [action.views/shortcuts action]]]]]))
 
 (defn button-group
   [action-group & {:as props}]
@@ -207,7 +207,7 @@
 
        [:> DropdownMenu/Portal
         (->> actions
-             (map #(views/dropdown-menu-item % {:class "px-2!"}))
+             (map #(action.views/dropdown-menu-item % {:class "px-2!"}))
              (into [:> DropdownMenu/Content
                     {:side "bottom"
                      :align "center"

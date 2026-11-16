@@ -777,8 +777,7 @@
   :swap-color "Dolgu ile çizgi rengini değiştir"}
 
  :renderer.snap.views
- {:snap-options "Yapışma seçenekleri"
-  :to " ile "}
+ {:to " ile "}
 
  :renderer.utils.bounds
  {:bounds-corner "sınır köşesi"
@@ -860,6 +859,7 @@
   :close-all "Tümünü kapat"
   :close-saved "Kaydedilenleri kapat"
   :svg "SVG"
+  :grid-style "Izgara stili"
   :import "İçe aktar..."
   :png "PNG"
   :jpg "JPG"
@@ -870,6 +870,8 @@
   :rasterised-formats "Raster biçimleri"
   :document-view "Belge görünümü"
   :grid "Izgara"
+  :grid-lines "Çizgiler"
+  :grid-dots "Noktalar"
   :guides "Kılavuzlar"
   :rulers "Cetveller"}
 

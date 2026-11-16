@@ -803,8 +803,7 @@
   :swap-color "Füllung mit Kontur tauschen"}
 
  :renderer.snap.views
- {:snap-options "Einrast-Optionen"
-  :to " zu "}
+ {:to " zu "}
 
  :renderer.utils.bounds
  {:bounds-corner "Begrenzungsecke"
@@ -887,6 +886,7 @@
   :close-all "Alle schließen"
   :close-saved "Gespeicherte schließen"
   :svg "SVG"
+  :grid-style "Rasterstil"
   :import "Importieren..."
   :png "PNG"
   :jpg "JPG"
@@ -897,6 +897,8 @@
   :rasterised-formats "Rasterformate"
   :document-view "Dokumentansicht"
   :grid "Raster"
+  :grid-lines "Linien"
+  :grid-dots "Punkte"
   :guides "Hilfslinien"
   :rulers "Lineale"}
 

@@ -1,5 +1,6 @@
 (ns renderer.ruler.views
   (:require
+   [clojure.math.combinatorics :as math.combinatorics]
    [clojure.string :as string]
    [re-frame.core :as rf]
    [renderer.document.subs :as-alias document.subs]
@@ -143,12 +144,14 @@
   [[:line (into {:x1 position
                  :y1 0
                  :x2 position
-                 :y2 size}
+                 :y2 size
+                 :stroke "var(--border)"}
                 style)]
    [:line (into {:x1 0
                  :y1 position
                  :x2 size
-                 :y2 position}
+                 :y2 position
+                 :stroke "var(--border)"}
                 style)]])
 
 (def grid-id "canvas-grid")
@@ -159,27 +162,43 @@
         zoom @(rf/subscribe [::document.subs/zoom])
         subgrid? @(rf/subscribe [::ruler.subs/render-subgrid?])
         ruler-step @(rf/subscribe [::ruler.subs/step])
+        dots? @(rf/subscribe [::document.subs/grid-style? :dots])
         subgrid-opacity @(rf/subscribe [::ruler.subs/subgrid-opacity])
         size (* major-sections ruler-step)
         offset (/ ruler-step 2)
         origin (- (+ (/ size 2) offset))
         major-index (quot major-sections 2)
         minor-indexes (remove #(= major-index %) (range major-sections))
+        indexes (if subgrid? (range major-sections) [major-index])
         position (fn [index] (+ (* index ruler-step) offset))
-        major-style {:stroke-width (/ 1 zoom)
-                     :stroke "var(--border)"}
-        minor-style (assoc major-style :opacity subgrid-opacity)]
+        unit (/ 1 zoom)]
     (into [:pattern {:id grid-id
                      :patternUnits "userSpaceOnUse"
                      :width size
                      :height size
                      :x origin
                      :y origin}]
-          cat
-          (cond-> [(grid-lines (position major-index) size major-style)]
-            subgrid?
-            (concat (map #(grid-lines (position %) size minor-style)
-                         minor-indexes))))))
+          (if dots?
+            (map (fn [[x-index y-index]]
+                   (let [major? (and (= x-index major-index)
+                                     (= y-index major-index))]
+                     [:circle (cond-> {:cx (position x-index)
+                                       :cy (position y-index)
+                                       :fill "var(--dot)"
+                                       :r (* 1.5 unit)}
+                                (not major?)
+                                (assoc :opacity subgrid-opacity))]))
+                 (math.combinatorics/cartesian-product indexes indexes))
+            (apply concat
+                   (cond-> [(grid-lines (position major-index)
+                                        size
+                                        {:stroke-width unit})]
+                     subgrid?
+                     (concat (map #(grid-lines (position %)
+                                               size
+                                               {:stroke-width unit
+                                                :opacity subgrid-opacity})
+                                  minor-indexes))))))))
 
 (defn grid-plane
   []

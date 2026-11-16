@@ -10,7 +10,6 @@
    [renderer.frame.events :as-alias frame.events]
    [renderer.i18n.views :as i18n.views]
    [renderer.input.subs :as-alias input.subs]
-   [renderer.snap.views :as snap.views]
    [renderer.timeline.views :as timeline.views]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.tool.subs :as-alias tool.subs]
@@ -46,7 +45,7 @@
          (interpose {:type :separator})
          (flatten)
          (map #(dissoc % :icon))
-         (map views/dropdown-menu-item)
+         (map action.views/dropdown-menu-item)
          (into [:> DropdownMenu/Content
                 {:class "menu-content rounded-sm"
                  :side "top"
@@ -97,12 +96,12 @@
      (-> :zoom/out
          action.views/deref-action
          (assoc :icon "minus")
-         views/action-icon-button)
+         action.views/icon-button)
 
      (-> :zoom/in
          action.views/deref-action
          (assoc :icon "plus")
-         views/action-icon-button)
+         action.views/icon-button)
 
      (when md?
        [:div.flex.hidden.items-center
@@ -191,9 +190,17 @@
           (into [:<>]))
      [:div.grow.hidden.md:block]
      (->> (:actions (action.views/deref-action-group :document/view))
-          (keep views/tooltip-action-icon-button)
+          (keep (fn [{:keys [id]
+                      :as action}]
+                  (case id
+                    :document-view/toggle-grid
+                    [action.views/button-with-options
+                     :document-view/toggle-grid
+                     :document/view-grid-style]
+
+                    [action.views/radio-icon-button action])))
           (into [:<>]))
-     [snap.views/root]
+     [action.views/button-with-options :snap/toggle :snap/options]
      [zoom-button-group zoom]
      [coordinates]
      [timeline.views/time-bar]]))

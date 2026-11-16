@@ -687,8 +687,7 @@
   :swap-color "交换填充和描边"}
 
  :renderer.snap.views
- {:snap-options "吸附选项"
-  :to " 到 "}
+ {:to " 到 "}
 
  :renderer.utils.bounds
  {:bounds-corner "边界角点"
@@ -768,6 +767,7 @@
   :close-all "关闭全部"
   :close-saved "关闭已保存"
   :svg "SVG"
+  :grid-style "网格样式"
   :import "导入..."
   :png "PNG"
   :jpg "JPG"
@@ -778,6 +778,8 @@
   :rasterised-formats "光栅格式"
   :document-view "文档视图"
   :grid "网格"
+  :grid-lines "线"
+  :grid-dots "点"
   :guides "参考线"
   :rulers "标尺"}
 

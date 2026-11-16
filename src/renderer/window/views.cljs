@@ -136,8 +136,7 @@
       {:title (i18n.views/t label)
        :class "button flex gap-1 items-center px-3 bg-primary outline-inset"}
       [views/icon (name mode)]]
-     (->> actions
-          (mapv views/dropdown-menu-item))]))
+     (mapv action.views/dropdown-menu-item actions)]))
 
 (defn window-controls
   []

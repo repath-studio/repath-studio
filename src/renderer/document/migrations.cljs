@@ -96,4 +96,13 @@
                                                                    cs))))
                                            (assoc (:id node) node))))))
                          document
-                         text-els)))]])
+                         text-els)))]
+
+   [[0 4 29] (fn [document]
+               (-> document
+                   (update-in [:attrs :grid-style] #(or % :lines))
+                   (update-in [:attrs :fill] #(or % "lightgray"))
+                   (update-in [:attrs :stroke] #(or % "black"))
+                   (update-in [:attrs :stroke-width] #(or % "1px"))
+                   (update-in [:attrs :guides] #(if (nil? %) true %))
+                   (update-in [:attrs :rulers] #(if (nil? %) true %))))]])
