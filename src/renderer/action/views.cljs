@@ -307,7 +307,7 @@
     (reagent/with-let [open (reagent/atom false)]
       [:button.button.rounded-sm.items-center.gap-1.justify-items-center
        (views/merge-with-class
-        {:aria-label (label action)
+        {:title (label action)
          :disabled (disabled? action)
          :class ["active:bg-overlay shrink-0 px-1 flex"
                  (when (checked? action) "accent")
