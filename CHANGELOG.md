@@ -3,7 +3,7 @@
 All notable user facing changes to this project will be documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## 0.4.28 (2026-10-31)
+## [0.4.28] - 2026-10-31
 
 **Added**
 
@@ -19,7 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Show auto updates toggle on desktop only
 
-## 0.4.27 (2026-10-24)
+## [0.4.27] - 2026-10-24
 
 **Added**
 
@@ -47,14 +47,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Prevent transforming virtual elements
 - Rectangle radius clamp on edit
 
-## 0.4.26 (2026-10-16)
+## [0.4.26] - 2026-10-16
 
 **Fixed**
 
 - Import file regression
 - Performance regression
 
-## 0.4.25 (2026-10-16)
+## [0.4.25] - 2026-10-16
 
 **Added**
 
@@ -76,7 +76,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Pivot on rotate and flip
 - Bounds when stroke is not set
 
-## 0.4.24 (2026-10-14)
+## [0.4.24] - 2026-10-14
 
 **Added**
 
@@ -113,7 +113,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Finalize selection on right click
 - Incorrect bounds from `defs` removed
 
-## 0.4.23 (2026-10-02)
+## [0.4.23] - 2026-10-02
 
 **Added**
 
@@ -140,7 +140,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Clear brush on deactivate
 - Add default hue slider value
 
-## 0.4.22 (2026-09-25)
+## [0.4.22] - 2026-09-25
 
 **Added**
 
@@ -172,7 +172,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Font-style description and update method
 - Ignore canvas on fill
 
-## 0.4.21 (2026-09-11)
+## [0.4.21] - 2026-09-11
 
 **Added**
 
@@ -191,7 +191,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Paste styles when attribute of target is not set
 - Python shell initialization on desktop app
 
-## 0.4.20 (2026-08-30)
+## [0.4.20] - 2026-08-30
 
 **Added**
 
@@ -202,7 +202,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Enhance snapping points node performance
 
-## 0.4.19 (2026-08-27)
+## [0.4.19] - 2026-08-27
 
 **Added**
 
@@ -238,13 +238,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Path command on user ns
 - Rendering style attribute to string
 
-## 0.4.18 (2026-07-26)
+## [0.4.18] - 2026-07-26
 
 **Fixed**
 
 - Schema error regression
 
-## 0.4.17 (2026-07-24)
+## [0.4.17] - 2026-07-24
 
 **Added**
 
@@ -301,7 +301,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Window resize regression on linux
 - Dialog close event error
 
-## 0.4.16 (2026-06-19)
+## [0.4.16] - 2026-06-19
 
 **Added**
 
@@ -333,7 +333,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Remove segment button color on light mode
 - Line-to segment creation of path tool
 
-## 0.4.15 (2026-06-02)
+## [0.4.15] - 2026-06-02
 
 **Added**
 
@@ -366,7 +366,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Pivot point on recursive scale
 - Title-bar visibility regression
 
-## 0.4.14 (2025-05-02)
+## [0.4.14] - 2025-05-02
 
 **Added**
 
@@ -390,7 +390,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Minor accessibility issues
 - Order of entities preservation
 
-## 0.4.13 (2025-04-13)
+## [0.4.13] - 2025-04-13
 
 **Added**
 
@@ -424,7 +424,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Alignment of compatibility icons
 - Element tree icon size
 
-## 0.4.12 (2025-01-09)
+## [0.4.12] - 2025-01-09
 
 **Added**
 
@@ -450,7 +450,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Adding animations
 - Missing `window-restored` event
 
-## 0.4.11 (2025-11-21)
+## [0.4.11] - 2025-11-21
 
 **Added**
 
@@ -480,7 +480,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Protanopia filter values
 - Scaling elements with no bbox
 
-## 0.4.10 (2025-10-19)
+## [0.4.10] - 2025-10-19
 
 **Added**
 
@@ -521,7 +521,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Update image size on image href update
 - Polygon and polyline drag end
 
-## 0.4.9 (2025-9-4)
+## [0.4.9] - 2025-9-4
 
 **Added**
 
@@ -566,7 +566,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Focus on text create
 - SVG pointer down event
 
-## 0.4.8 (2025-7-3)
+## [0.4.8] - 2025-7-3
 
 **Added**
 
@@ -602,7 +602,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Stop propagation of escape on various cases
 - XML view id console warnings
 
-## 0.4.7 (2025-5-17)
+## [0.4.7] - 2025-5-17
 
 **Changed**
 
@@ -618,7 +618,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Polygon and polyline description
 - loadURL on windows
 
-## 0.4.6 (2025-5-7)
+## [0.4.6] - 2025-5-7
 
 **Added**
 
@@ -651,7 +651,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Drag start on canvas
 - Grid index
 
-## 0.4.5 (2024-11-05)
+## [0.4.5] - 2024-11-05
 
 **Added**
 
@@ -674,7 +674,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fill tool
 - Pan to element
 
-## 0.4.4 (2024-10-14)
+## [0.4.4] - 2024-10-14
 
 **Added**
 
@@ -700,7 +700,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Form input width
 - Disabled state of font family popover
 
-## 0.4.3 (2024-09-23)
+## [0.4.3] - 2024-09-23
 
 **Added**
 
@@ -740,7 +740,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Disabled state on attributes
 - Minor icon issues
 
-## 0.4.1 (2024-08-30)
+## [0.4.1] - 2024-08-30
 
 **Added**
 
@@ -750,7 +750,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Switch to uuids
 
-## 0.3.0 (2024-08-29)
+## [0.3.0] - 2024-08-29
 
 **Added**
 
@@ -793,7 +793,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Set parent locked condition
 - Group element bounds
 
-## 0.2.13 (2024-08-13)
+## [0.2.13] - 2024-08-13
 
 **Added**
 
@@ -824,7 +824,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Image trace
 - Initial value and disabled state of attribute
 
-## 0.2.12 (2024-07-31)
+## [0.2.12] - 2024-07-31
 
 **Added**
 
@@ -854,13 +854,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Element tree overflow
 - Pointer leave on element tree
 
-## 0.2.11 (2024-06-19)
+## [0.2.11] - 2024-06-19
 
 **Removed**
 
 - Image triangulation
 
-## 0.2.10 (2024-06-19)
+## [0.2.10] - 2024-06-19
 
 **Added**
 
@@ -884,7 +884,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Popover arrow
 - Attribute grid styles
 
-## 0.2.9 (2024-04-22)
+## [0.2.9] - 2024-04-22
 
 **Added**
 
@@ -923,7 +923,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Prevent copying empty selection
 - Recent documents on home
 
-## 0.2.8 (2024-04-09)
+## [0.2.8] - 2024-04-09
 
 **Added**
 
@@ -946,7 +946,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Attribute order
 - Prevent default on canvas
 
-## 0.2.7 (2024-03-15)
+## [0.2.7] - 2024-03-15
 
 **Fixed**
 
@@ -954,7 +954,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Shortcuts
 - Git version
 
-## 0.2.6 (2024-03-15)
+## [0.2.6] - 2024-03-15
 
 **Added**
 
@@ -976,7 +976,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Menu order
 - Dot icon
 
-## 0.2.5 (2024-03-05)
+## [0.2.5] - 2024-03-05
 
 **Added**
 
@@ -1002,7 +1002,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Missing default element attrs
 - Window keyboard listeners
 
-## 0.2.4 (2024-03-03)
+## [0.2.4] - 2024-03-03
 
 **Added**
 
@@ -1019,7 +1019,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Document title
 
-## 0.2.3 (2024-03-01)
+## [0.2.3] - 2024-03-01
 
 **Fixed**
 
@@ -1027,7 +1027,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Electron reloader
 - Default panel size
 
-## 0.2.2 (2024-03-01)
+## [0.2.2] - 2024-03-01
 
 **Added**
 
@@ -1044,7 +1044,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - History tree rendering
 - Element selection
 
-## 0.2.1 (2024-02-26)
+## [0.2.1] - 2024-02-26
 
 **Changed**
 
@@ -1054,7 +1054,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Resizable panels
 
-## 0.2.0 (2024-02-22)
+## [0.2.0] - 2024-02-22
 
 **Added**
 
@@ -1088,7 +1088,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 Too many fixes to list.
 
-## 0.1.3 (2022-05-09)
+## [0.1.3] - 2022-05-09
 
 **Added**
 
@@ -1141,7 +1141,7 @@ Too many fixes to list.
 - align method
 - select tool
 
-## 0.1.2 (2022-04-09)
+## [0.1.2] - 2022-04-09
 
 **Added**
 
@@ -1167,7 +1167,7 @@ Too many fixes to list.
 
 - ellipse translate method
 
-## 0.1.1 (2022-03-19)
+## [0.1.1] - 2022-03-19
 
 **Added**
 
@@ -1206,7 +1206,7 @@ Too many fixes to list.
 - no accessibility filter selection
 - zoom validation
 
-## 0.1.0 (2022-03-6)
+## [0.1.0] - 2022-03-6
 
 **Added**
 
