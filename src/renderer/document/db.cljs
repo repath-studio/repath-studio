@@ -17,8 +17,12 @@
 
 (def HoveredId [:or [:tuple [:maybe ElementId] HandleId] ElementId])
 
-(def GridStyle
-  [:enum :lines :dots])
+(def GridStyle [:enum :lines :dots])
+
+(def GridStep
+  [:map {:closed true}
+   [:x pos-int?]
+   [:y pos-int?]])
 
 (def DocumentAttrs
   [:map
@@ -28,7 +32,8 @@
    [:rulers {:optional true} boolean?]
    [:guides {:optional true} boolean?]
    [:grid {:optional true} boolean?]
-   [:grid-style {:optional true} GridStyle]])
+   [:grid-style {:optional true} GridStyle]
+   [:grid-step {:optional true} GridStep]])
 
 (def Document
   [:map {:closed true}
@@ -54,7 +59,9 @@
                       :stroke-width "1px"
                       :rulers true
                       :guides true
-                      :grid-style :lines}} DocumentAttrs]
+                      :grid-style :lines
+                      :grid-step {:x 1
+                                  :y 1}}} DocumentAttrs]
    [:preview-label {:optional true} string?]
    [:file-handle {:optional true} any?]])
 

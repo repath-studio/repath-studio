@@ -767,7 +767,9 @@
   :zoom "Zoom"
   :fill-color "Pick fill color"
   :stroke-color "Pick stroke color"
-  :swap-color "Swap fill with stroke"}
+  :swap-color "Swap fill with stroke"
+  :grid-step-x "X step"
+  :grid-step-y "Y step"}
 
  :renderer.snap.views
  {:to " to "}

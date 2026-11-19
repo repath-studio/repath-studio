@@ -5,13 +5,25 @@
    [malli.core :as m]
    [renderer.app.db :refer [App]]
    [renderer.db :refer [Orientation Viewbox]]
-   [renderer.document.db :refer [ZoomFactor]]
+   [renderer.document.db :refer [GridStep ZoomFactor]]
    [renderer.frame.handlers :as frame.handlers]))
 
-(m/=> step [:-> number? ZoomFactor number?])
+(m/=> step [:-> number? ZoomFactor pos-int? number?])
 (defn step
-  [target-px zoom]
-  (Math/pow 10 (Math/ceil (Math/log10 (/ target-px zoom)))))
+  [target-px zoom major-min-step]
+  (let [exp (Math/floor (Math/log10 major-min-step))
+        mantissa (/ major-min-step (Math/pow 10 exp))
+        auto-step (->> (/ target-px zoom)
+                       (Math/log10)
+                       (Math/ceil)
+                       (Math/pow 10)
+                       (* mantissa))]
+    (max (/ major-min-step 10) auto-step)))
+
+(m/=> axis-min-step [:-> GridStep Orientation pos-int?])
+(defn axis-min-step
+  [grid-step orientation]
+  (get grid-step (if (= orientation :vertical) :y :x)))
 
 (m/=> steps-coll [:-> number? Viewbox Orientation [:sequential number?]])
 (defn steps-coll
@@ -32,7 +44,11 @@
   [db]
   (let [zoom (get-in db [:documents (:active-document db) :zoom])
         viewbox (frame.handlers/viewbox db)
-        ruler-step (step conf/grid-target-px zoom)]
+        attrs (get-in db [:documents (:active-document db) :attrs])
+        steps (fn [orientation]
+                (-> conf/grid-target-px
+                    (step zoom (axis-min-step (:grid-step attrs) orientation))
+                    (steps-coll viewbox orientation)))]
     (math.combinatorics/cartesian-product
-     (steps-coll ruler-step viewbox :vertical)
-     (steps-coll ruler-step viewbox :horizontal))))
+     (steps :vertical)
+     (steps :horizontal))))

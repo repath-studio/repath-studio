@@ -793,7 +793,9 @@
   :zoom "Zoom"
   :fill-color "Choisir la couleur de remplissage"
   :stroke-color "Choisir la couleur de contour"
-  :swap-color "Échanger le remplissage avec le contour"}
+  :swap-color "Échanger le remplissage avec le contour"
+  :grid-step-x "Pas X"
+  :grid-step-y "Pas Y"}
 
  :renderer.snap.views
  {:to " vers "}

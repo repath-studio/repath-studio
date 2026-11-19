@@ -797,7 +797,9 @@
   :zoom "Zoom"
   :fill-color "Vulkleur kiezen"
   :stroke-color "Lijnkleur kiezen"
-  :swap-color "Vulling en lijn verwisselen"}
+  :swap-color "Vulling en lijn verwisselen"
+  :grid-step-x "X-stap"
+  :grid-step-y "Y-stap"}
 
  :renderer.snap.views
  {:to " naar "}

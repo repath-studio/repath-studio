@@ -737,7 +737,9 @@
   :zoom "ズーム"
   :fill-color "塗り色を選択"
   :stroke-color "線色を選択"
-  :swap-color "塗りと線の色を交換"}
+  :swap-color "塗りと線の色を交換"
+  :grid-step-x "X間隔"
+  :grid-step-y "Y間隔"}
 
  :renderer.snap.views
  {:to " に "}

@@ -105,4 +105,6 @@
                    (update-in [:attrs :stroke] #(or % "black"))
                    (update-in [:attrs :stroke-width] #(or % "1px"))
                    (update-in [:attrs :guides] #(if (nil? %) true %))
-                   (update-in [:attrs :rulers] #(if (nil? %) true %))))]])
+                   (update-in [:attrs :rulers] #(if (nil? %) true %))
+                   (update-in [:attrs :grid-step] #(or % {:x 1
+                                                          :y 1}))))]])

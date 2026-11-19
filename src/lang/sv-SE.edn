@@ -781,7 +781,9 @@
   :zoom "Zoom"
   :fill-color "Välj fyllnadsfärg"
   :stroke-color "Välj linjefärg"
-  :swap-color "Växla fyllning med linje"}
+  :swap-color "Växla fyllning med linje"
+  :grid-step-x "Steg X"
+  :grid-step-y "Steg Y"}
 
  :renderer.snap.views
  {:to " till "}

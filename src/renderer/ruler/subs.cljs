@@ -9,8 +9,10 @@
 (rf/reg-sub
  ::step
  :<- [::document.subs/zoom]
- (fn [zoom _]
-   (ruler.handlers/step conf/grid-target-px zoom)))
+ :<- [::document.subs/grid-step]
+ (fn [[zoom grid-step] [_ orientation]]
+   (->> (ruler.handlers/axis-min-step grid-step orientation)
+        (ruler.handlers/step conf/grid-target-px zoom))))
 
 (rf/reg-sub
  ::steps-coll
@@ -22,8 +24,12 @@
 (rf/reg-sub
  ::render-subgrid?
  :<- [::step]
- (fn [step _]
-   (> step (ruler.handlers/step conf/grid-target-px conf/max-zoom))))
+ :<- [::document.subs/grid-step]
+ (fn [[step grid-step] [_ orientation]]
+   (let [min-step (ruler.handlers/axis-min-step grid-step orientation)]
+     (> step (ruler.handlers/step conf/grid-target-px
+                                  conf/max-zoom
+                                  min-step)))))
 
 (rf/reg-sub
  ::px-per-step

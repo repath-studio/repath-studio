@@ -684,7 +684,9 @@
   :zoom "缩放"
   :fill-color "选择填充颜色"
   :stroke-color "选择描边颜色"
-  :swap-color "交换填充和描边"}
+  :swap-color "交换填充和描边"
+  :grid-step-x "X 步长"
+  :grid-step-y "Y 步长"}
 
  :renderer.snap.views
  {:to " 到 "}
