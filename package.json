@@ -5,7 +5,7 @@
   "author": "Konstantinos Kaloutas",
   "homepage": "https://repath.studio",
   "license": "AGPL-3.0",
-  "version": "0.4.28",
+  "version": "0.4.29",
   "scripts": {
     "upgrade": "npx npm-check-updates -u -x 'typescript' --cooldown 7d",
     "fonts:text": "npx shx mkdir -p resources/public/css/files && npx shx cp node_modules/@fontsource/noto-sans/files/noto-sans-latin-[1-9]00-*.woff resources/public/css/files",

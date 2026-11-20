@@ -3,6 +3,28 @@
 All notable user facing changes to this project will be documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.4.29] - 2026-11-20
+
+**Added**
+
+- Dot grid option [#245](https://github.com/repath-studio/repath-studio/pull/245)
+- Customizable grid steps [#246](https://github.com/repath-studio/repath-studio/pull/246)
+
+**Changed**
+
+- Enhance fonts loading speed [#243](https://github.com/repath-studio/repath-studio/pull/243)
+- Enhance grid performance [#244](https://github.com/repath-studio/repath-studio/pull/244)
+- Enhance canvas scrollbar behavior
+- Improve shortcut formatting
+- Custom keyboard shortcut for toggling fullscreen mode on mac
+
+**Fixed**
+
+- Remove text content children when we convert elements to paths
+- Preserve index on boolean operation
+- Open remote url on safari
+- Select parent text element after editing text data content
+
 ## [0.4.28] - 2026-10-31
 
 **Added**
