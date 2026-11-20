@@ -176,7 +176,8 @@
     [:label.flex.items-center.justify-between.gap-2
      [:span label]
      [:input.text-right.font-mono.p-1.bg-secondary.w-10
-      {:dir "ltr"
+      {:key value
+       :dir "ltr"
        :type "number"
        :input-mode "numeric"
        :min "1"
