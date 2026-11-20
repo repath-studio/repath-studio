@@ -207,3 +207,8 @@
  ::grid-style?
  :<- [::grid-style]
  :=> =)
+
+(rf/reg-sub
+ ::grid-step
+ :<- [::attrs]
+ :-> :grid-step)

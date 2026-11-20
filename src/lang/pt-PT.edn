@@ -777,7 +777,9 @@
   :zoom "Zoom"
   :fill-color "Escolher cor de preenchimento"
   :stroke-color "Escolher cor de contorno"
-  :swap-color "Trocar preenchimento com contorno"}
+  :swap-color "Trocar preenchimento com contorno"
+  :grid-step-x "Passo X"
+  :grid-step-y "Passo Y"}
 
  :renderer.snap.views
  {:to " a "}

@@ -805,7 +805,9 @@
   :zoom "Μεγέθυνση"
   :fill-color "Επιλέξτε χρώμα γεμίσματος"
   :stroke-color "Επιλέξτε χρώμα περιγράμματος"
-  :swap-color "Ανταλλάξτε το γέμισμα με τη γραμμή"}
+  :swap-color "Ανταλλάξτε το γέμισμα με τη γραμμή"
+  :grid-step-x "Βήμα X"
+  :grid-step-y "Βήμα Y"}
 
  :renderer.snap.views
  {:to " προς "}

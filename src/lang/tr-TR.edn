@@ -774,7 +774,9 @@
   :zoom "Yakınlaştır"
   :fill-color "Dolgu rengi seç"
   :stroke-color "Çizgi rengi seç"
-  :swap-color "Dolgu ile çizgi rengini değiştir"}
+  :swap-color "Dolgu ile çizgi rengini değiştir"
+  :grid-step-x "X adımı"
+  :grid-step-y "Y adımı"}
 
  :renderer.snap.views
  {:to " ile "}

@@ -747,7 +747,9 @@
   :zoom "تكبير"
   :fill-color "اختيار لون الملء"
   :stroke-color "اختيار لون الخط"
-  :swap-color "تبديل الملء مع الخط"}
+  :swap-color "تبديل الملء مع الخط"
+  :grid-step-x "خطوة X"
+  :grid-step-y "خطوة Y"}
 
  :renderer.snap.views
  {:to " إلى "}

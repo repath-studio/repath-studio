@@ -161,6 +161,38 @@
        [:div.bg-primary.absolute.border.border-border.rounded-xs
         {:class "w-1/2 h-1/2 bottom-1/4 right-1/4"}]]]]))
 
+(defn set-grid-step
+  [e grid-step axis]
+  (let [value (js/parseFloat (.. e -target -value))]
+    (if (or (js/isNaN value) (< value 1))
+      (set! (.. e -target -value) (get grid-step axis))
+      (rf/dispatch [::document.events/set-attr :grid-step
+                    (assoc grid-step axis (js/Math.floor value))]))))
+
+(defn grid-step-input
+  [grid-step axis label]
+  (let [value (get grid-step axis)
+        set-value #(set-grid-step % grid-step axis)]
+    [:label.flex.items-center.justify-between.gap-2
+     [:span label]
+     [:input.text-right.font-mono.p-1.bg-secondary.w-10
+      {:key value
+       :dir "ltr"
+       :type "number"
+       :input-mode "numeric"
+       :min "1"
+       :step "1"
+       :default-value value
+       :on-blur set-value
+       :on-key-down #(utils.key/down-handler % value set-value %)}]]))
+
+(defn grid-step-options
+  []
+  (let [grid-step @(rf/subscribe [::document.subs/grid-step])]
+    [:div.flex.flex-col.gap-1.p-2
+     [grid-step-input grid-step :x (i18n.views/t [::grid-step-x "X step"])]
+     [grid-step-input grid-step :y (i18n.views/t [::grid-step-y "Y step"])]]))
+
 (defn help
   [message]
   [:div.text-xs.px-2.max-h-8.truncate.hidden.overflow-hidden
@@ -196,7 +228,9 @@
                     :document-view/toggle-grid
                     [action.views/button-with-options
                      :document-view/toggle-grid
-                     :document/view-grid-style]
+                     :document/view-grid-style
+                     [action.views/dropdown-menu-item {:type :separator}]
+                     [grid-step-options]]
 
                     [action.views/radio-icon-button action])))
           (into [:<>]))

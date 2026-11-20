@@ -730,7 +730,9 @@
   :zoom "확대/축소"
   :fill-color "채우기 색상 선택"
   :stroke-color "획 색상 선택"
-  :swap-color "채우기와 획 색상 바꾸기"}
+  :swap-color "채우기와 획 색상 바꾸기"
+  :grid-step-x "X 단계"
+  :grid-step-y "Y 단계"}
 
  :renderer.snap.views
  {:to " ~ "}

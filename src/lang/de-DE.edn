@@ -800,7 +800,9 @@
   :zoom "Zoom"
   :fill-color "Füllfarbe wählen"
   :stroke-color "Konturfarbe wählen"
-  :swap-color "Füllung mit Kontur tauschen"}
+  :swap-color "Füllung mit Kontur tauschen"
+  :grid-step-x "X-Schritt"
+  :grid-step-y "Y-Schritt"}
 
  :renderer.snap.views
  {:to " zu "}

@@ -309,7 +309,7 @@
        (into [:<>])))
 
 (defn button-with-options
-  [action options-action-group]
+  [action options-action-group & children]
   (let [action (deref-action action)
         options (deref-action-group options-action-group)]
     (reagent/with-let [open (reagent/atom false)]
@@ -332,8 +332,7 @@
            :title (i18n.views/t (:label options))}
           [views/icon "chevron-up"]]]
         [:> DropdownMenu/Portal
-         (->> (:actions options)
-              (map dropdown-menu-item)
+         (->> (concat (map dropdown-menu-item (:actions options)) children)
               (into [:> DropdownMenu/Content
                      {:side "top"
                       :align "end"
@@ -341,6 +340,7 @@
                       :alignOffset -5
                       :position "popper"
                       :class "menu-content rounded-sm select-content"
+                      :on-click #(.stopPropagation %)
                       :on-key-down #(.stopPropagation %)
                       :on-escape-key-down #(.stopPropagation %)}
                      [views/dropdownmenu-arrow]]))]]])))

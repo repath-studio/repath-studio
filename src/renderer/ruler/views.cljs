@@ -96,7 +96,7 @@
   (let [[x y] @(rf/subscribe [::frame.subs/viewbox])
         zoom @(rf/subscribe [::document.subs/zoom])
         steps-coll @(rf/subscribe [::ruler.subs/steps-coll orientation])
-        subgrid? @(rf/subscribe [::ruler.subs/render-subgrid?])
+        subgrid? @(rf/subscribe [::ruler.subs/render-subgrid? orientation])
         active? @(rf/subscribe [::tool.subs/active?
                                 ::tool.impl.misc.guide/guide])
         vertical (= orientation :vertical)]
@@ -139,66 +139,74 @@
      [base-lines orientation]
      (when md? [pointer orientation])]))
 
-(defn grid-lines
-  [position size style]
-  [[:line (into {:x1 position
-                 :y1 0
-                 :x2 position
-                 :y2 size
-                 :stroke "var(--border)"}
-                style)]
-   [:line (into {:x1 0
-                 :y1 position
-                 :x2 size
-                 :y2 position
-                 :stroke "var(--border)"}
-                style)]])
+(defn axis-params
+  [orientation]
+  (let [major-sections 10
+        step @(rf/subscribe [::ruler.subs/step orientation])
+        subgrid? @(rf/subscribe [::ruler.subs/render-subgrid? orientation])
+        opacity @(rf/subscribe [::ruler.subs/subgrid-opacity orientation])
+        size (* major-sections step)
+        offset (/ step 2)
+        major-index (quot major-sections 2)]
+    {:size size
+     :origin (- (+ (/ size 2) offset))
+     :major-index major-index
+     :indexes (if subgrid? (range major-sections) [major-index])
+     :position (fn [index] (+ (* index step) offset))
+     :opacity opacity}))
+
+(defn axis-lines
+  [{:keys [position indexes major-index opacity]} span vertical? unit]
+  (map (fn [index]
+         (let [attrs (if vertical?
+                       {:x1 (position index)
+                        :y1 0
+                        :x2 (position index)
+                        :y2 span}
+                       {:x1 0
+                        :y1 (position index)
+                        :x2 span
+                        :y2 (position index)})]
+           [:line (cond-> (assoc attrs
+                                 :stroke "var(--border)"
+                                 :stroke-width unit)
+                    (not= index major-index)
+                    (assoc :opacity opacity))]))
+       indexes))
 
 (def grid-id "canvas-grid")
 
+(defn axis-dots
+  [x-axis y-axis unit]
+  (let [{:keys [position indexes major-index opacity]} x-axis]
+    (map (fn [[x-index y-index]]
+           (let [minor? (or (not= x-index major-index)
+                            (not= y-index (:major-index y-axis)))]
+             [:circle (cond-> {:cx (position x-index)
+                               :cy ((:position y-axis) y-index)
+                               :fill "var(--dot)"
+                               :r (* 1.5 unit)}
+                        minor?
+                        (assoc :opacity (min opacity (:opacity y-axis))))]))
+         (math.combinatorics/cartesian-product indexes (:indexes y-axis)))))
+
 (defn grid-pattern
   []
-  (let [major-sections 10
-        zoom @(rf/subscribe [::document.subs/zoom])
-        subgrid? @(rf/subscribe [::ruler.subs/render-subgrid?])
-        ruler-step @(rf/subscribe [::ruler.subs/step])
+  (let [zoom @(rf/subscribe [::document.subs/zoom])
         dots? @(rf/subscribe [::document.subs/grid-style? :dots])
-        subgrid-opacity @(rf/subscribe [::ruler.subs/subgrid-opacity])
-        size (* major-sections ruler-step)
-        offset (/ ruler-step 2)
-        origin (- (+ (/ size 2) offset))
-        major-index (quot major-sections 2)
-        minor-indexes (remove #(= major-index %) (range major-sections))
-        indexes (if subgrid? (range major-sections) [major-index])
-        position (fn [index] (+ (* index ruler-step) offset))
+        x-axis (axis-params :horizontal)
+        y-axis (axis-params :vertical)
         unit (/ 1 zoom)]
     (into [:pattern {:id grid-id
                      :patternUnits "userSpaceOnUse"
-                     :width size
-                     :height size
-                     :x origin
-                     :y origin}]
+                     :width (:size x-axis)
+                     :height (:size y-axis)
+                     :x (:origin x-axis)
+                     :y (:origin y-axis)}]
           (if dots?
-            (map (fn [[x-index y-index]]
-                   (let [major? (and (= x-index major-index)
-                                     (= y-index major-index))]
-                     [:circle (cond-> {:cx (position x-index)
-                                       :cy (position y-index)
-                                       :fill "var(--dot)"
-                                       :r (* 1.5 unit)}
-                                (not major?)
-                                (assoc :opacity subgrid-opacity))]))
-                 (math.combinatorics/cartesian-product indexes indexes))
-            (apply concat
-                   (cond-> [(grid-lines (position major-index)
-                                        size
-                                        {:stroke-width unit})]
-                     subgrid?
-                     (concat (map #(grid-lines (position %)
-                                               size
-                                               {:stroke-width unit
-                                                :opacity subgrid-opacity})
-                                  minor-indexes))))))))
+            (axis-dots x-axis y-axis unit)
+            (concat (axis-lines x-axis (:size y-axis) true unit)
+                    (axis-lines y-axis (:size x-axis) false unit))))))
 
 (defn grid-plane
   []

@@ -780,7 +780,9 @@
   :zoom "Масштаб"
   :fill-color "Выбрать цвет заливки"
   :stroke-color "Выбрать цвет обводки"
-  :swap-color "Поменять местами заливку и обводку"}
+  :swap-color "Поменять местами заливку и обводку"
+  :grid-step-x "Шаг X"
+  :grid-step-y "Шаг Y"}
 
  :renderer.snap.views
  {:to " к "}
