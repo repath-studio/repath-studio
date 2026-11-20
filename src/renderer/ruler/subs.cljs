@@ -11,38 +11,33 @@
  :<- [::document.subs/zoom]
  :<- [::document.subs/grid-step]
  (fn [[zoom grid-step] [_ orientation]]
-   (->> (ruler.handlers/axis-min-step grid-step orientation)
-        (ruler.handlers/step conf/grid-target-px zoom))))
+   (ruler.handlers/current-step zoom grid-step orientation)))
 
 (rf/reg-sub
  ::steps-coll
- :<- [::step]
+ :<- [::document.subs/zoom]
+ :<- [::document.subs/grid-step]
  :<- [::frame.subs/viewbox]
- (fn [[step viewbox] [_ orientation]]
-   (ruler.handlers/steps-coll step viewbox orientation)))
+ (fn [[zoom grid-step viewbox] [_ orientation]]
+   (-> (ruler.handlers/current-step zoom grid-step orientation)
+       (ruler.handlers/steps-coll viewbox orientation))))
 
 (rf/reg-sub
  ::render-subgrid?
- :<- [::step]
- :<- [::document.subs/grid-step]
- (fn [[step grid-step] [_ orientation]]
-   (let [min-step (ruler.handlers/axis-min-step grid-step orientation)]
-     (> step (ruler.handlers/step conf/grid-target-px
-                                  conf/max-zoom
-                                  min-step)))))
-
-(rf/reg-sub
- ::px-per-step
- :<- [::step]
  :<- [::document.subs/zoom]
- (fn [[step zoom] _]
-   (* step zoom)))
+ :<- [::document.subs/grid-step]
+ (fn [[zoom grid-step] [_ orientation]]
+   (let [min-step (ruler.handlers/axis-min-step grid-step orientation)]
+     (> (ruler.handlers/current-step zoom grid-step orientation)
+        (ruler.handlers/step conf/grid-target-px conf/max-zoom min-step)))))
 
 (rf/reg-sub
  ::subgrid-opacity
- :<- [::px-per-step]
- (fn [px-per-step _]
+ :<- [::document.subs/zoom]
+ :<- [::document.subs/grid-step]
+ (fn [[zoom grid-step] [_ orientation]]
    (let [min-opacity 0.2
          max-opacity 0.8
-         closeness (Math/log10 (/ px-per-step conf/grid-target-px))]
+         step (ruler.handlers/current-step zoom grid-step orientation)
+         closeness (Math/log10 (/ (* step zoom) conf/grid-target-px))]
      (+ min-opacity (* closeness (- max-opacity min-opacity))))))

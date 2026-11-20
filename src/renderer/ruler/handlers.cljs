@@ -25,6 +25,16 @@
   [grid-step orientation]
   (get grid-step (if (= orientation :vertical) :y :x)))
 
+(m/=> axis-step [:-> number? ZoomFactor GridStep Orientation number?])
+(defn axis-step
+  [target-px zoom grid-step orientation]
+  (step target-px zoom (axis-min-step grid-step orientation)))
+
+(m/=> current-step [:-> ZoomFactor GridStep Orientation number?])
+(defn current-step
+  [zoom grid-step orientation]
+  (axis-step conf/grid-target-px zoom grid-step orientation))
+
 (m/=> steps-coll [:-> number? Viewbox Orientation [:sequential number?]])
 (defn steps-coll
   "Returns a collection of steps contained on the given viewbox."
