@@ -163,7 +163,7 @@
 
 (defn set-grid-step
   [e grid-step axis]
-  (let [value (-> (.. e -target -value) js/parseFloat)]
+  (let [value (js/parseFloat (.. e -target -value))]
     (if (or (js/isNaN value) (< value 1))
       (set! (.. e -target -value) (get grid-step axis))
       (rf/dispatch [::document.events/set-attr :grid-step
