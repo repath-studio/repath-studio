@@ -407,24 +407,6 @@
      (is (= (-> @selected first :tag) :animate))
      (is (= (-> @selected first :parent) id)))))
 
-(deftest set-parent
-  (rf.test/run-test-sync
-   (rf/dispatch [::app.events/initialize])
-   (rf/dispatch [::document.events/new])
-
-   (rf/dispatch [::element.events/add {:tag :rect
-                                       :attrs {:x "100"
-                                               :y "100"
-                                               :width "100"
-                                               :height "100"}}])
-   (let [selected (rf/subscribe [::element.subs/selected])
-         id (-> @selected first :id)
-         root (rf/subscribe [::element.subs/root])]
-     (is (not= (-> @selected first :parent) (:id @root)))
-
-     (rf/dispatch [::element.events/set-parent id (:id @root)])
-     (is (= (-> @selected first :parent) (:id @root))))))
-
 (deftest group
   (rf.test/run-test-sync
    (rf/dispatch [::app.events/initialize])

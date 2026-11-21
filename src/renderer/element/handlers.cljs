@@ -789,6 +789,12 @@
                             actual-new-i (.indexOf children target-id)]
                         (utils.vec/move children actual-i actual-new-i))))))))
 
+(m/=> remove-from-parent [:-> App Element App])
+(defn remove-from-parent
+  [db {:keys [id]
+       :as el}]
+  (update-prop db (:parent el) :children #(vec (remove #{id} %))))
+
 (m/=> set-parent [:function
                   [:-> App ElementId App]
                   [:-> App ElementId ElementId App]
@@ -810,10 +816,66 @@
             (not= (:parent el) parent-id)
             (not (contains? (descendant-ids db id) parent-id))
             (utils.element/permitted-content? parent-el (:tag el)))
-       (-> (update-prop (:parent el) :children #(vec (remove #{id} %)))
+       (-> (remove-from-parent el)
            (update-prop parent-id :children utils.vec/add index id)
            (assoc-prop id :parent parent-id)
            (refresh-bbox id))))))
+
+(m/=> movable-els [:-> App [:set ElementId] ElementId [:sequential Element]])
+(defn movable-els
+  [db ids parent-id]
+  (let [parent-el (entity db parent-id)]
+    (->> (mapv #(entity db %) ids)
+         (remove (fn [{:keys [id tag]}]
+                   (or (nil? id)
+                       (locked? db id)
+                       (= id parent-id)
+                       (contains? (descendant-ids db id) parent-id)
+                       (not (utils.element/permitted-content? parent-el tag)))))
+         (sort-by (fn [{:keys [id]}] (.indexOf (siblings db id) id))))))
+
+(m/=> insert-index [:-> App ElementId ElementId [:enum :before :after]
+                    [:maybe nat-int?]])
+(defn insert-index
+  [db parent-id target-id position]
+  (let [children (children-ids db parent-id)
+        target-index (.indexOf children target-id)]
+    (case position
+      :before (when (nat-int? target-index) (inc target-index))
+      :after target-index)))
+
+(m/=> insert-at-index [:-> App ElementId nat-int? [:sequential Element] App])
+(defn insert-at-index
+  [db parent-id index els]
+  (loop [db db
+         i index
+         ids (mapv :id els)]
+    (if-let [id (first ids)]
+      (recur (-> db
+                 (update-prop parent-id :children #(utils.vec/add % i id))
+                 (assoc-prop id :parent parent-id)
+                 (refresh-bbox id))
+             (inc i)
+             (next ids))
+      db)))
+
+(m/=> move [:-> App ElementId [:enum :before :after] App])
+(defn move
+  [db target-id position]
+  (let [selection (selected-ids db)
+        nested (into #{} (mapcat #(descendant-ids db %)) selection)
+        ids (set/difference selection nested)
+        parent-id (:parent (entity db target-id))
+        els (movable-els db ids parent-id)]
+    (if (or (nil? parent-id)
+            (contains? ids target-id)
+            (empty? els))
+      db
+      (let [db (reduce remove-from-parent db els)
+            index (insert-index db parent-id target-id position)]
+        (cond-> db
+          (nat-int? index)
+          (insert-at-index parent-id index els))))))
 
 (m/=> hovered-svg [:-> App Element])
 (defn hovered-svg
