@@ -4,7 +4,7 @@
    [renderer.element.db :refer [Element ElementId]]
    [renderer.i18n.db :refer [Translation]]))
 
-(def HistoryIndex [:or pos-int? zero?])
+(def HistoryIndex nat-int?)
 
 (def HistoryState
   [:map {:closed true}

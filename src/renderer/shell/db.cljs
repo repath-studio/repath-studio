@@ -52,8 +52,7 @@
 (def ShellHistory
   [:vector string?])
 
-(def ShellHistoryPosition
-  [:or pos-int? zero?])
+(def ShellHistoryPosition nat-int?)
 
 (def ShellLanguage
   [:map {:closed true}
@@ -64,8 +63,7 @@
    [:items {:max config/max-shell-history
             :default []} [:vector ShellItem]]])
 
-(def ShellCompletionPosition
-  [:or pos-int? zero?])
+(def ShellCompletionPosition nat-int?)
 
 (def ShellCompletionItem
   [:tuple
