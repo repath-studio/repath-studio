@@ -145,59 +145,108 @@
                     (rf/dispatch [::dialog.events/show-edit-shortcut id]))}]
       [action.views/shortcuts action :limit 3]]]))
 
+(defn search-score
+  [group-label query {:keys [label]
+                      :as action}]
+  (when-let [label (i18n.views/t label)]
+    (let [aliases (into-array [(i18n.views/t group-label)])
+          score (Command/defaultFilter label query aliases)]
+      (when (pos? score)
+        [action score]))))
+
+(defn search-actions
+  [opts group-label actions]
+  (let [{:keys [query hide-disabled? hide-shortcutless?]} opts
+        query? (not (string/blank? query))
+        search (partial search-score group-label query)
+        actions (keep action.views/deref-action actions)]
+    (cond->> actions
+      hide-disabled?
+      (remove action.views/disabled?)
+
+      hide-shortcutless?
+      (filter :shortcuts)
+
+      query?
+      (keep search)
+
+      query?
+      (sort-by (comp - second))
+
+      (not query?)
+      (map #(vector % 1)))))
+
+(defn ranked-groups
+  [groups opts]
+  (let [{:keys [query]} opts
+        query? (not (string/blank? query))
+        groups (map (fn [{:keys [id label]
+                          :as group}]
+                      (let [ranked (search-actions opts label (:actions group))]
+                        (assoc group :id id
+                               :group-label label
+                               :actions (map first ranked)
+                               :max-score (some-> ranked first second))))
+                    groups)]
+    (cond->> (filter :max-score groups)
+      query? (sort-by (comp - :max-score)))))
+
 (defn cmdk-group
-  [{:keys [label actions]} hide-disabled? hide-shortcutless?]
-  (let [actions (cond->> (keep action.views/deref-action actions)
-                  hide-disabled? (remove action.views/disabled?)
-                  hide-shortcutless? (filter :shortcuts))]
-    (when (seq actions)
-      (->> actions
-           (map (partial cmdk-item label))
-           (into [:> Command/CommandGroup
-                  {:heading (i18n.views/t label)}])))))
+  [{:keys [group-label actions]}]
+  (into [:> Command/CommandGroup
+         {:heading (i18n.views/t group-label)}]
+        (map (partial cmdk-item group-label))
+        actions))
+
+(defn cmdk-toolbar
+  [hide-disabled? hide-shortcutless? lg?]
+  [views/toolbar
+   {:class "gap-4 bg-secondary p-2"}
+   [views/switch
+    (i18n.views/t [::hide-disabled "Hide disabled"])
+    {:id "hide-disabled"
+     :default-checked @hide-disabled?
+     :on-checked-change #(reset! hide-disabled? %)}]
+   (when lg?
+     [views/switch
+      (i18n.views/t [::hide-shortcutless "Hide shortcutless"])
+      {:id "hide-shortcutless"
+       :default-checked @hide-shortcutless?
+       :on-checked-change #(reset! hide-shortcutless? %)}])])
 
 (defn cmdk
   []
-  (reagent/with-let [hide-disabled? (reagent/atom false)
+  (reagent/with-let [query (reagent/atom "")
+                     hide-disabled? (reagent/atom false)
                      hide-shortcutless? (reagent/atom false)]
     (let [action-groups @(rf/subscribe [::action.subs/action-groups])
           groupless-actions @(rf/subscribe [::action.subs/groupless-actions])
           lg? @(rf/subscribe [::window.subs/lg?])
-          action-groups (cond-> action-groups
-                          (seq groupless-actions)
-                          (assoc :other-actions
-                                 {:id :other-actions
-                                  :label [::other-actions "Other Actions"]
-                                  :actions (keys groupless-actions)}))]
+          groups (concat (vals action-groups)
+                         (when (seq groupless-actions)
+                           [{:id :other-actions
+                             :label [::other-actions "Other Actions"]
+                             :actions (keys groupless-actions)}]))
+          filters {:query @query
+                   :hide-disabled? @hide-disabled?
+                   :hide-shortcutless? @hide-shortcutless?}]
       [:> Command/Command
        {:label "Command Menu"
+        :should-filter false
         :on-key-down #(.stopPropagation %)}
        [:> Command/CommandInput
         {:class "p-3 bg-primary w-full"
+         :value @query
+         :on-value-change #(reset! query %)
          :placeholder (i18n.views/t [::search-command "Search for a command"])}]
-       [views/toolbar
-        {:class "gap-4 bg-secondary p-2"}
-        [views/switch
-         (i18n.views/t [::hide-disabled "Hide disabled"])
-         {:id "hide-disabled"
-          :default-checked @hide-disabled?
-          :on-checked-change #(reset! hide-disabled? %)}]
-        (when lg?
-          [views/switch
-           (i18n.views/t [::hide-shortcutless "Hide shortcutless"])
-           {:id "hide-shortcutless"
-            :default-checked @hide-shortcutless?
-            :on-checked-change #(reset! hide-shortcutless? %)}])]
+       [cmdk-toolbar hide-disabled? hide-shortcutless? lg?]
        [views/scroll-area
         {:class "max-h-[50dvh]"}
-        (->> (vals action-groups)
-             (keep #(cmdk-group % @hide-disabled? @hide-shortcutless?))
-             (into [:> Command/CommandList
-                    {:class "p-1"}
-                    [:> Command/CommandEmpty
-                     {:class "p-2"}
-                     (i18n.views/t [::no-results
-                                    "No results found."])]]))]])))
+        (into [:> Command/CommandList {:class "p-1"}]
+              (if-let [groups (seq (ranked-groups groups filters))]
+                (map cmdk-group groups)
+                [[:div.p-2 (i18n.views/t [::no-results
+                                          "No results found."])]]))]])))
 
 (def modifier-key-codes
   "keyCodes for keys that are modifiers on their own and shouldn't be captured
