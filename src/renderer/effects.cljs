@@ -21,11 +21,6 @@
    (assoc coeffects :now (.now js/performance))))
 
 (rf/reg-fx
- ::focus
- (fn [el-ref]
-   (some-> el-ref (.focus))))
-
-(rf/reg-fx
  ::blur
  (fn []
    (some-> (.-activeElement js/document)

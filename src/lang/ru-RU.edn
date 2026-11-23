@@ -109,9 +109,9 @@
   :select-all "Выделить всё"
   :select-same-tags "Выделить одинаковые теги"
   :invert-selection "Инвертировать выделение"
-  :move-selection "Переместить выделенное"
-  :place-selection "Разместить выделенное"
-  :scale-selection "Масштабировать выделенное"
+  :translate "Сместить"
+  :place "Разместить"
+  :scale "Масштабировать"
   :create "Создать %1"
   :import-svg "Импорт SVG"
   :set-parent "Установить родителя"
@@ -145,7 +145,8 @@
   :flip-horizontal "Отразить по горизонтали"
   :paste "Вставить"
   :paste-in-place "Вставить на место"
-  :rotate-selection "Повернуть выделение"
+  :rotate "Повернуть"
+  :move "Переместить"
   :paste-styles "Вставить стили"
   :path-flatten "Выровнять"
   :path-reverse "Обратить"
@@ -316,8 +317,10 @@
   :animatable "Анимируемое"
   :animation-type "Тип анимации"
   :syntax "Синтаксис"
-  :mdn-info "Информация MDN"
-  :attributes-title "%1 %2 элементов"}
+  :mdn-info "Информация MDN"}
+
+ :renderer.element.views
+ {:selected-elements-title "%1 %2 элементов"}
 
  :renderer.attribute.impl.core
  {:x "Атрибут x определяет координату оси x в пользовательской системе

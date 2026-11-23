@@ -109,9 +109,9 @@
   :select-all "Alles selecteren"
   :select-same-tags "Zelfde tags selecteren"
   :invert-selection "Selectie omkeren"
-  :move-selection "Selectie verplaatsen"
-  :place-selection "Selectie plaatsen"
-  :scale-selection "Selectie schalen"
+  :translate "Verschuiven"
+  :place "Plaatsen"
+  :scale "Schalen"
   :create "Maak %1"
   :import-svg "SVG importeren"
   :set-parent "Ouder instellen"
@@ -145,7 +145,8 @@
   :flip-horizontal "Horizontaal spiegelen"
   :paste "Plakken"
   :paste-in-place "Plakken op locatie"
-  :rotate-selection "Selectie roteren"
+  :rotate "Roteren"
+  :move "Verplaatsen"
   :paste-styles "Stijlen plakken"
   :path-flatten "Afvlakken"
   :path-reverse "Omkeren"
@@ -319,8 +320,10 @@
   :animatable "Animeerbaar"
   :animation-type "Animatietype"
   :syntax "Syntaxis"
-  :mdn-info "MDN Info"
-  :attributes-title "%1 %2 elementen"}
+  :mdn-info "MDN Info"}
+
+ :renderer.element.views
+ {:selected-elements-title "%1 %2 elementen"}
 
  :renderer.attribute.impl.core
  {:x "Het x attribuut definieert een x-as coördinaat in het gebruiker

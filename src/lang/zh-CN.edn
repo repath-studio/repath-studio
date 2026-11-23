@@ -106,9 +106,9 @@
   :select-all "全选"
   :select-same-tags "选择相同标签"
   :invert-selection "反选"
-  :move-selection "移动选择"
-  :place-selection "放置选择"
-  :scale-selection "缩放选择"
+  :translate "平移"
+  :place "放置"
+  :scale "缩放"
   :create "创建 %1"
   :import-svg "导入 SVG"
   :set-parent "设置父级"
@@ -142,7 +142,8 @@
   :flip-horizontal "水平翻转"
   :paste "粘贴"
   :paste-in-place "原位粘贴"
-  :rotate-selection "旋转选区"
+  :rotate "旋转"
+  :move "移动"
   :paste-styles "粘贴样式"
   :path-flatten "展平"
   :path-reverse "反转"
@@ -289,8 +290,10 @@
   :animatable "可动画"
   :animation-type "动画类型"
   :syntax "语法"
-  :mdn-info "MDN 信息"
-  :attributes-title "%1 %2 个元素"}
+  :mdn-info "MDN 信息"}
+
+ :renderer.element.views
+ {:selected-elements-title "%1 %2 个元素"}
 
  :renderer.attribute.impl.core
  {:x "x 属性在用户坐标系统中定义 x 轴坐标。"

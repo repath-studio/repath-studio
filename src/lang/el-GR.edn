@@ -110,9 +110,9 @@
   :select-all "Επιλογή όλων"
   :select-same-tags "Επιλογή κοινών ετικετών"
   :invert-selection "Αντιστροφή επιλογής"
-  :move-selection "Μετακίνηση επιλογής"
-  :place-selection "Τοποθέτηση επιλογής"
-  :scale-selection "Μεταβολή μεγέθους επιλογής"
+  :translate "Μετατόπιση"
+  :place "Τοποθέτηση"
+  :scale "Κλιμάκωση"
   :create "Δημιουργία %1"
   :import-svg "Εισαγωγή svg"
   :set-parent "Ορισμός γονέα"
@@ -146,7 +146,8 @@
   :flip-horizontal "Αντιστροφή οριζόντια"
   :paste "Επικόλληση"
   :paste-in-place "Επικόλληση επί τόπου"
-  :rotate-selection "Περιστροφή επιλογής"
+  :rotate "Περιστροφή"
+  :move "Μετακίνηση"
   :paste-styles "Επικόλληση μορφοποιήσεων"
   :path-flatten "Επιπεδοποίηση"
   :path-reverse "Αντιστροφή"
@@ -323,8 +324,10 @@
   :animatable "Δυνατότητα κίνησης"
   :animation-type "Τύπος κίνησης"
   :syntax "Σύνταξη"
-  :mdn-info "Πληροφορίες MDN"
-  :attributes-title "%1 %2 στοιχεία"}
+  :mdn-info "Πληροφορίες MDN"}
+
+ :renderer.element.views
+ {:selected-elements-title "%1 %2 στοιχεία"}
 
  :renderer.attribute.impl.core
  {:x "To χαρακτηριστικό x καθορίζει μια συντεταγμένη στον άξονα x μέσα στο

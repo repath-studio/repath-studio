@@ -111,9 +111,9 @@
   :select-all "Seleziona tutto"
   :select-same-tags "Seleziona stessi tag"
   :invert-selection "Inverti selezione"
-  :move-selection "Sposta selezione"
-  :place-selection "Posiziona selezione"
-  :scale-selection "Ridimensiona selezione"
+  :translate "Trasla"
+  :place "Posiziona"
+  :scale "Ridimensiona"
   :create "Crea %1"
   :import-svg "Importa svg"
   :set-parent "Imposta genitore"
@@ -147,7 +147,8 @@
   :flip-horizontal "Inverti in orizzontale"
   :paste "Incolla"
   :paste-in-place "Incolla in posizione"
-  :rotate-selection "Ruota la selezione"
+  :rotate "Ruota"
+  :move "Sposta"
   :paste-styles "Incolla stili"
   :path-flatten "Appiattisci"
   :path-reverse "Inverti"
@@ -321,8 +322,10 @@
   :animatable "Animabile"
   :animation-type "Tipo di animazione"
   :syntax "Sintassi"
-  :mdn-info "Info MDN"
-  :attributes-title "%1 %2 elementi"}
+  :mdn-info "Info MDN"}
+
+ :renderer.element.views
+ {:selected-elements-title "%1 %2 elementi"}
 
  :renderer.attribute.impl.core
  {:x "L'attributo x definisce una coordinata dell'asse x nel sistema di

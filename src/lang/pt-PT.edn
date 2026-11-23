@@ -109,9 +109,9 @@
   :select-all "Selecionar tudo"
   :select-same-tags "Selecionar mesmas etiquetas"
   :invert-selection "Inverter seleção"
-  :move-selection "Mover seleção"
-  :place-selection "Colocar seleção"
-  :scale-selection "Escalar seleção"
+  :translate "Deslocar"
+  :place "Colocar"
+  :scale "Escalar"
   :create "Criar %1"
   :import-svg "Importar SVG"
   :set-parent "Definir pai"
@@ -145,7 +145,8 @@
   :flip-horizontal "Inverter horizontalmente"
   :paste "Colar"
   :paste-in-place "Colar no local"
-  :rotate-selection "Rodar seleção"
+  :rotate "Rodar"
+  :move "Mover"
   :paste-styles "Colar estilos"
   :path-flatten "Achatar"
   :path-reverse "Inverter"
@@ -317,8 +318,10 @@
   :animatable "Animável"
   :animation-type "Tipo de animação"
   :syntax "Sintaxe"
-  :mdn-info "Info MDN"
-  :attributes-title "%1 %2 elementos"}
+  :mdn-info "Info MDN"}
+
+ :renderer.element.views
+ {:selected-elements-title "%1 %2 elementos"}
 
  :renderer.attribute.impl.core
  {:x "O atributo x define uma coordenada do eixo x no sistema de coordenadas do

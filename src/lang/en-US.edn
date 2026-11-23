@@ -103,10 +103,11 @@
   :select-all "Select all"
   :select-same-tags "Select same tags"
   :invert-selection "Invert selection"
-  :move-selection "Move selection"
-  :place-selection "Place selection"
-  :scale-selection "Scale selection"
-  :rotate-selection "Rotate selection"
+  :translate "Translate"
+  :place "Place"
+  :scale "Scale"
+  :rotate "Rotate"
+  :move "Move"
   :rotate-clockwise "Rotate 90° clockwise"
   :rotate-counterclockwise "Rotate 90° counterclockwise"
   :flip-horizontal "Flip horizontal"
@@ -319,8 +320,10 @@
   :animatable "Animatable"
   :animation-type "Animation type"
   :syntax "Syntax"
-  :mdn-info "MDN Info"
-  :attributes-title "%1 %2 elements"}
+  :mdn-info "MDN Info"}
+
+ :renderer.element.views
+ {:selected-elements-title "%1 %2 elements"}
 
  :renderer.attribute.impl.core
  {:x "The x attribute defines an x-axis coordinate in the user coordinate

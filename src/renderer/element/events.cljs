@@ -223,25 +223,25 @@
 
 (rf/reg-event-db
  ::translate
- [(finalize [::move-selection "Move selection"])]
+ [(finalize [::translate "Translate"])]
  (fn [db [_ offset]]
    (element.handlers/translate db offset)))
 
 (rf/reg-event-db
  ::place
- [(finalize [::place-selection "Place selection"])]
+ [(finalize [::place "Place"])]
  (fn [db [_ position]]
    (element.handlers/place db position)))
 
 (rf/reg-event-db
  ::scale
- [(finalize [::scale-selection "Scale selection"])]
+ [(finalize [::scale "Scale"])]
  (fn [db [_ ratio]]
    (element.handlers/scale db ratio)))
 
 (rf/reg-event-db
  ::rotate
- [(finalize [::rotate-selection "Rotate selection"])]
+ [(finalize [::rotate "Rotate"])]
  (fn [db [_ angle]]
    (element.handlers/rotate db angle)))
 
@@ -419,8 +419,14 @@
 (rf/reg-event-db
  ::set-parent
  [(finalize [::set-parent "Set parent"])]
- (fn [db [_ id parent-id]]
-   (element.handlers/set-parent db id parent-id)))
+ (fn [db [_ parent-id]]
+   (element.handlers/set-parent db parent-id)))
+
+(rf/reg-event-db
+ ::move
+ [(finalize [::move "Move"])]
+ (fn [db [_ target-id position]]
+   (element.handlers/move db target-id position)))
 
 (rf/reg-event-db
  ::group

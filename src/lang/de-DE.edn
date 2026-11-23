@@ -111,9 +111,9 @@
   :select-all "Alles auswählen"
   :select-same-tags "Gleiche Tags auswählen"
   :invert-selection "Auswahl umkehren"
-  :move-selection "Auswahl verschieben"
-  :place-selection "Auswahl platzieren"
-  :scale-selection "Auswahl skalieren"
+  :translate "Übersetzen"
+  :place "Platzieren"
+  :scale "Skalieren"
   :create "%1 erstellen"
   :import-svg "SVG importieren"
   :set-parent "Übergeordnetes Element setzen"
@@ -147,7 +147,8 @@
   :flip-horizontal "Horizontal spiegeln"
   :paste "Einfügen"
   :paste-in-place "An Ort einfügen"
-  :rotate-selection "Auswahl drehen"
+  :rotate "Drehen"
+  :move "Verschieben"
   :paste-styles "Stile einfügen"
   :path-flatten "Abflachen"
   :path-reverse "Umkehren"
@@ -323,8 +324,10 @@
   :animatable "Animierbar"
   :animation-type "Animationstyp"
   :syntax "Syntax"
-  :mdn-info "MDN-Info"
-  :attributes-title "%1 %2 Elemente"}
+  :mdn-info "MDN-Info"}
+
+ :renderer.element.views
+ {:selected-elements-title "%1 %2 Elemente"}
 
  :renderer.attribute.impl.core
  {:x "Das x-Attribut definiert eine x-Achsen-Koordinate im

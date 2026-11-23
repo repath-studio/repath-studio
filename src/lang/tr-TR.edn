@@ -109,9 +109,9 @@
   :select-all "Tümünü seç"
   :select-same-tags "Aynı etiketleri seç"
   :invert-selection "Seçimi ters çevir"
-  :move-selection "Seçimi taşı"
-  :place-selection "Seçimi yerleştir"
-  :scale-selection "Seçimi ölçeklendir"
+  :translate "Ötele"
+  :place "Yerleştir"
+  :scale "Ölçeklendir"
   :create "%1 oluştur"
   :import-svg "SVG içe aktar"
   :set-parent "Ebeveyn ayarla"
@@ -145,7 +145,8 @@
   :flip-horizontal "Yatay ters çevir"
   :paste "Yapıştır"
   :paste-in-place "Yerinde yapıştır"
-  :rotate-selection "Seçimi döndür"
+  :rotate "Döndür"
+  :move "Taşı"
   :paste-styles "Stilleri yapıştır"
   :path-flatten "Düzleştir"
   :path-reverse "Ters çevir"
@@ -314,8 +315,10 @@
   :animatable "Animasyon yapılabilir"
   :animation-type "Animasyon türü"
   :syntax "Sözdizimi"
-  :mdn-info "MDN Bilgisi"
-  :attributes-title "%1 %2 öğeleri"}
+  :mdn-info "MDN Bilgisi"}
+
+ :renderer.element.views
+ {:selected-elements-title "%1 %2 öğeleri"}
 
  :renderer.attribute.impl.core
  {:x "x özniteliği, kullanıcı koordinat sisteminde bir x ekseni koordinatı

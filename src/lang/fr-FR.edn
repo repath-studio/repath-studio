@@ -111,9 +111,9 @@
   :select-all "Tout sélectionner"
   :select-same-tags "Sélectionner les mêmes balises"
   :invert-selection "Inverser la sélection"
-  :move-selection "Déplacer la sélection"
-  :place-selection "Placer la sélection"
-  :scale-selection "Redimensionner la sélection"
+  :translate "Translater"
+  :place "Placer"
+  :scale "Redimensionner"
   :create "Créer %1"
   :import-svg "Importer SVG"
   :set-parent "Définir le parent"
@@ -147,7 +147,8 @@
   :flip-horizontal "Inverser horizontalement"
   :paste "Coller"
   :paste-in-place "Coller en place"
-  :rotate-selection "Pivoter la sélection"
+  :rotate "Pivoter"
+  :move "Déplacer"
   :paste-styles "Coller les styles"
   :path-flatten "Aplatir"
   :path-reverse "Inverser"
@@ -321,8 +322,10 @@
   :animatable "Animable"
   :animation-type "Type d'animation"
   :syntax "Syntaxe"
-  :mdn-info "Infos MDN"
-  :attributes-title "%1 %2 éléments"}
+  :mdn-info "Infos MDN"}
+
+ :renderer.element.views
+ {:selected-elements-title "%1 %2 éléments"}
 
  :renderer.attribute.impl.core
  {:x "L'attribut x définit une coordonnée de l'axe x dans le système de

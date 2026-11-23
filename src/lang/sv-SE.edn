@@ -109,9 +109,9 @@
   :select-all "Markera allt"
   :select-same-tags "Markera samma taggar"
   :invert-selection "Invertera markering"
-  :move-selection "Flytta markering"
-  :place-selection "Placera markering"
-  :scale-selection "Skala markering"
+  :translate "Förskjut"
+  :place "Placera"
+  :scale "Skala"
   :create "Skapa %1"
   :import-svg "Importera SVG"
   :set-parent "Sätt förälder"
@@ -145,7 +145,8 @@
   :flip-horizontal "Vänd horisontellt"
   :paste "Klistra in"
   :paste-in-place "Klistra in på plats"
-  :rotate-selection "Rotera markering"
+  :rotate "Rotera"
+  :move "Flytta"
   :paste-styles "Klistra in stilar"
   :path-flatten "Platta ut"
   :path-reverse "Vänd"
@@ -316,8 +317,10 @@
   :animatable "Animerbar"
   :animation-type "Animationstyp"
   :syntax "Syntax"
-  :mdn-info "MDN Info"
-  :attributes-title "%1 %2 element"}
+  :mdn-info "MDN Info"}
+
+ :renderer.element.views
+ {:selected-elements-title "%1 %2 element"}
 
  :renderer.attribute.impl.core
  {:x "Attributet x definierar en x-axelkoordinat i användarens
