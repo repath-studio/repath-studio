@@ -22,6 +22,23 @@
    [renderer.views :as views]
    [renderer.window.subs :as-alias window.subs]))
 
+(defn handle-fill
+  [selected? implied?]
+  (cond selected? "var(--accent)"
+        implied? "lightgray"
+        :else "var(--accent-foreground)"))
+
+(defn handle-stroke
+  [selected? hovered?]
+  (cond selected? "var(--accent-foreground)"
+        hovered? "var(--accent)"
+        :else "var(--foreground-muted)"))
+
+(defn clicked-handle?
+  [clicked-element el]
+  (and (= (:id clicked-element) (:id el))
+       (= (:parent clicked-element) (:parent el))))
+
 (m/=> handle [:-> Handle any?])
 (defn handle
   [el]
@@ -30,12 +47,11 @@
         handle-size @(rf/subscribe [::document.subs/handle-size])
         zoom @(rf/subscribe [::document.subs/zoom])
         selected @(rf/subscribe [::element.subs/handle-selected? parent id])
-        selected (or selected (and (= (:id clicked-element) (:id el))
-                                   (= (:parent clicked-element) (:parent el))))
-        hovered @(rf/subscribe [::element.subs/hovered? [parent id]])
+        selected? (or selected (clicked-handle? clicked-element el))
+        hovered? @(rf/subscribe [::element.subs/hovered? [parent id]])
         pointer-handler (partial input.impl.pointer/handler! el)
         [x y] position
-        scale (if hovered 1.3 1)
+        scale (if hovered? 1.3 1)
         half-size (/ handle-size 2)]
     [:rect {:style {:transition "transform 0.1s ease-out"}
             :transform (str "scale(" scale ")")
@@ -52,12 +68,8 @@
             :on-pointer-up pointer-handler
             :on-pointer-down pointer-handler
             :on-pointer-move pointer-handler
-            :fill (cond selected "var(--accent)"
-                        implied "lightgray"
-                        :else "var(--accent-foreground)")
-            :stroke (cond selected "var(--accent-foreground)"
-                          hovered "var(--accent)"
-                          :else "var(--foreground-muted)")}
+            :fill (handle-fill selected? implied)
+            :stroke (handle-stroke selected? hovered?)}
      (when label [:title (i18n.views/t label)])]))
 
 (m/=> selected-bbox [:-> BBox any?])
@@ -291,4 +303,3 @@
   []
   (let [web-platform @(rf/subscribe [::app.subs/web-platform])]
     [views/kbd (if (= web-platform "Mac") "⇧" "Shift")]))
-
