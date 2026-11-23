@@ -87,8 +87,21 @@
 
 (def dragging? (reagent/atom false))
 
+(defn collapse-button-width
+  [md?]
+  (if md? 21 27)) ; TODO: Get from CSS variable.
+
+(defn item-padding
+  [depth has-children md?]
+  (* (collapse-button-width md?)
+     (cond-> depth has-children dec)))
+
+(defn indicator-padding
+  [depth md?]
+  (* (collapse-button-width md?) (dec depth)))
+
 (defn drop-zone
-  [indicator target-id position class]
+  [indicator target class indent]
   (let [active? (= @drop-position indicator)]
     [:div {:class (into class [(when-not @dragging? "pointer-events-none")])
            :on-drag-enter #(do (.preventDefault %)
@@ -96,12 +109,12 @@
                                (reset! drop-position indicator))
            :on-drag-over #(.preventDefault %)
            :on-drop #(do (.preventDefault %)
-                         (rf/dispatch [::element.events/move
-                                       target-id
-                                       position]))}
+                         (rf/dispatch
+                          (into [::element.events/move] target)))}
      (when active?
        [:div.absolute.inset-x-0.top-0
-        {:class "h-0.5 bg-accent pointer-events-none"}])]))
+        {:class "h-0.5 bg-accent pointer-events-none"
+         :style {:left indent}}])]))
 
 (defn on-list-item-drag-start!
   [id selected]
@@ -233,8 +246,7 @@
   [el {:keys [depth collapsed hovered tree-ref]}]
   (let [{:keys [id selected children]} el
         md? @(rf/subscribe [::window.subs/md?])
-        collapse-button-width (if md? 21 27) ; TODO: Get from CSS variable.
-        padding (* collapse-button-width (cond-> depth (seq children) dec))]
+        padding (item-padding depth (seq children) md?)]
     (reagent/with-let [edit-mode? (reagent/atom false)]
       [:div.button.flex.px-1.items-center.text-start.group
        {:class [tree.effects/item-class
@@ -272,6 +284,8 @@
 (defn item [el depth elements tree-ref]
   (let [{:keys [selected children id]} el
         has-children (seq children)
+        md? @(rf/subscribe [::window.subs/md?])
+        indicator (indicator-padding depth md?)
         hovered-ids @(rf/subscribe [::document.subs/hovered-ids])
         collapsed-ids @(rf/subscribe [::document.subs/collapsed-ids])
         collapsed (contains? collapsed-ids id)]
@@ -281,7 +295,8 @@
                            :collapsed collapsed
                            :hovered (contains? hovered-ids id)
                            :tree-ref tree-ref}]
-     [drop-zone id id :before ["absolute inset-x-0 top-0 z-10 h-1.5"]]
+     [drop-zone id [id :before]
+      ["absolute inset-x-0 top-0 z-10 h-1.5"] indicator]
      (when (and has-children (not collapsed))
        [:ul {:role "menu"}
         (for [el (mapv (fn [k] (get elements k)) (reverse children))]
@@ -290,7 +305,8 @@
 
 (defn inner-sidebar-render
   [root-children elements]
-  (let [ref (react/createRef)]
+  (let [ref (react/createRef)
+        root-el (-> root-children first :id)]
     [:div.flex.flex-1.bg-primary.h-full.overflow-hidden
      {:class [;; When the tree is hovered, ignore the hovered class of the
               ;; elements, if the element itself is not also hovered.
@@ -318,9 +334,9 @@
        (for [el (reverse root-children)]
          ^{:key (:id el)}
          [item el 1 elements ref])
-       (when (seq root-children)
-         [drop-zone ::tail (-> root-children first :id)
-          :after ["relative h-4"]])]]]))
+       ;; Tail inserts at root level, which has no nesting indent.
+       (when root-el
+         [drop-zone ::tail [root-el :after] ["relative h-4"] 0])]]]))
 
 (defn inner-sidebar []
   (let [idle? @(rf/subscribe [::tool.subs/idle?])
