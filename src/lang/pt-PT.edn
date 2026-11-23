@@ -318,8 +318,10 @@
   :animatable "Animável"
   :animation-type "Tipo de animação"
   :syntax "Sintaxe"
-  :mdn-info "Info MDN"
-  :attributes-title "%1 %2 elementos"}
+  :mdn-info "Info MDN"}
+
+ :renderer.element.views
+ {:selected-elements-title "%1 %2 elementos"}
 
  :renderer.attribute.impl.core
  {:x "O atributo x define uma coordenada do eixo x no sistema de coordenadas do

@@ -305,8 +305,10 @@
   :animatable "アニメーション可能"
   :animation-type "アニメーションタイプ"
   :syntax "構文"
-  :mdn-info "MDN情報"
-  :attributes-title "%1 %2 要素"}
+  :mdn-info "MDN情報"}
+
+ :renderer.element.views
+ {:selected-elements-title "%1 %2 要素"}
 
  :renderer.attribute.impl.core
  {:x "x属性は、ユーザー座標系内のx軸座標を定義します。"

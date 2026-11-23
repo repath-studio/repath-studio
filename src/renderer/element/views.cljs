@@ -1,13 +1,34 @@
 (ns renderer.element.views
   (:require
    ["react" :as react]
+   [clojure.string :as string]
    [re-frame.core :as rf]
    [reagent.core :as reagent]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
+   [renderer.i18n.views :as i18n.views]
    [renderer.input.impl.pointer :as input.impl.pointer]
    [renderer.utils.transform :as utils.transform]))
+
+(defn selection-label
+  []
+  (let [selected @(rf/subscribe [::element.subs/selected])
+        tags @(rf/subscribe [::element.subs/selected-tags])]
+    (when (seq selected)
+      (if-not (next selected)
+        (let [{:keys [label tag]} (first selected)]
+          (if (empty? label)
+            (or (some-> tag
+                        element.hierarchy/properties
+                        :label
+                        i18n.views/t)
+                (string/capitalize (name tag)))
+            label))
+        (i18n.views/t [::selected-elements-title "%1 %2 elements"]
+                      [(count selected)
+                       (when (= 1 (count tags))
+                         (name (first tags)))])))))
 
 (defn ghost-element
   "Renders a ghost element on top of the actual element to ensure that the user

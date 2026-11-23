@@ -306,8 +306,10 @@
   :animatable "قابل للتحريك"
   :animation-type "نوع التحريك"
   :syntax "بنية الجملة"
-  :mdn-info "معلومات MDN"
-  :attributes-title "%1 %2 عناصر"}
+  :mdn-info "معلومات MDN"}
+
+ :renderer.element.views
+ {:selected-elements-title "%1 %2 عناصر"}
 
  :renderer.attribute.impl.core
  {:x "خاصية x تحدد إحداثي المحور x في نظام إحداثيات المستخدم."

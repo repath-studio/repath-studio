@@ -9,6 +9,7 @@
    [renderer.element.events :as-alias element.events]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
+   [renderer.element.views :as element.views]
    [renderer.events :as-alias events]
    [renderer.i18n.subs :as-alias i18n.subs]
    [renderer.i18n.views :as i18n.views]
@@ -307,24 +308,15 @@
    (when tag [heading-info tag attr])])
 
 (defn head
-  [el selected-elements selected-tags tag]
-  (let [multitag? (next selected-tags)
-        label (if-not (next selected-elements)
-                (let [el-label (:label el)
-                      properties (element.hierarchy/properties tag)]
-                  (if (empty? el-label)
-                    (or (some-> properties :label i18n.views/t)
-                        (string/capitalize (name tag)))
-                    el-label))
-                (i18n.views/t [::attributes-title "%1 %2 elements"]
-                              [(count selected-elements)
-                               (when-not multitag?
-                                 (name tag))]))]
-    [heading label (when-not multitag? tag) nil]))
+  [tag selected-tags]
+  (let [multitag? (next selected-tags)]
+    [heading [element.views/selection-label]
+     (when-not multitag? tag)
+     nil]))
 
 (defn form
   []
-  (let [selected-elements @(rf/subscribe [::element.subs/selected])
+  (let [some-selected? @(rf/subscribe [::element.subs/some-selected?])
         selected-tags @(rf/subscribe [::element.subs/selected-tags])
         edit-attributes @(rf/subscribe [::element.subs/edit-attributes])
         locked? @(rf/subscribe [::element.subs/every-selected-locked?])
@@ -334,9 +326,9 @@
         locked? (or locked?
                     (not= tool-state :idle)
                     (and tool-cached-state (not= tool-cached-state :idle)))]
-    (when-first [el selected-elements]
+    (when some-selected?
       [:div.flex.flex-col.gap-px
-       [head el selected-elements selected-tags tag]
+       [head tag selected-tags]
        (when (seq edit-attributes)
          [:div.grid.grid-cols-2.grid-flow-row.w-full.gap-px
           {:style {:grid-template-columns "minmax(120px, 120px) 1fr"}}

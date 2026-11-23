@@ -11,6 +11,7 @@
    [renderer.element.events :as-alias element.events]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
+   [renderer.element.views :as element.views]
    [renderer.events :as-alias events]
    [renderer.frame.events :as-alias frame.events]
    [renderer.i18n.views :as i18n.views]
@@ -87,6 +88,8 @@
 
 (def dragging? (reagent/atom false))
 
+(def drag-image (reagent/atom nil))
+
 (defn collapse-button-width
   [md?]
   (if md? 21 27)) ; TODO: Get from CSS variable.
@@ -116,13 +119,40 @@
         {:class "h-0.5 bg-accent pointer-events-none"
          :style {:left indent}}])]))
 
+(defn remove-drag-image!
+  []
+  (when-let [node @drag-image]
+    (.remove node)
+    (reset! drag-image nil)))
+
+(defn set-drag-image!
+  [e label]
+  (remove-drag-image!)
+  (let [node (js/document.createElement "div")
+        style (.. node -style)]
+    (set! (.. node -textContent) label)
+    (set! (.-position style) "fixed")
+    (set! (.-top style) "-1000px")
+    (set! (.-fontSize style) "13px")
+    (set! (.-padding style) "4px 10px")
+    (set! (.-borderRadius style) "4px")
+    (set! (.-backgroundColor style) "var(--overlay)")
+    (set! (.-color style) "var(--foreground-default)")
+    (set! (.-whiteSpace style) "nowrap")
+    (.. js/document -body (appendChild node))
+    (reset! drag-image node)
+    (.setDragImage (.-dataTransfer e) node
+                   (.-offsetX e)
+                   (/ (.. node -offsetHeight) 2))))
+
 (defn on-list-item-drag-start!
   [id selected]
   (fn [e]
     (when-not selected (rf/dispatch-sync [::element.events/select id false]))
     (reset! dragging? true)
     (set! (.. e -dataTransfer -effectAllowed) "move")
-    (.. e -dataTransfer (setData "id" (str id)))))
+    (.. e -dataTransfer (setData "id" (str id)))
+    (set-drag-image! e (element.views/selection-label))))
 
 (defn on-list-item-drag-over!
   [e]
@@ -140,7 +170,8 @@
 (defn on-list-item-drag-end!
   [_]
   (reset! dragging? false)
-  (reset! drop-position nil))
+  (reset! drop-position nil)
+  (remove-drag-image!))
 
 (def last-focused-id (reagent/atom nil))
 

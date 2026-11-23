@@ -315,8 +315,10 @@
   :animatable "Animasyon yapılabilir"
   :animation-type "Animasyon türü"
   :syntax "Sözdizimi"
-  :mdn-info "MDN Bilgisi"
-  :attributes-title "%1 %2 öğeleri"}
+  :mdn-info "MDN Bilgisi"}
+
+ :renderer.element.views
+ {:selected-elements-title "%1 %2 öğeleri"}
 
  :renderer.attribute.impl.core
  {:x "x özniteliği, kullanıcı koordinat sisteminde bir x ekseni koordinatı

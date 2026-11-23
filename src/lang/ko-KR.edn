@@ -305,8 +305,10 @@
   :animatable "애니메이션 가능"
   :animation-type "애니메이션 유형"
   :syntax "구문"
-  :mdn-info "MDN 정보"
-  :attributes-title "%1 %2 요소"}
+  :mdn-info "MDN 정보"}
+
+ :renderer.element.views
+ {:selected-elements-title "%1 %2 요소"}
 
  :renderer.attribute.impl.core
  {:x "x 속성은 사용자 좌표계에서 x축 좌표를 정의합니다."

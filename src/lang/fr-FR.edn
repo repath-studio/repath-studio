@@ -322,8 +322,10 @@
   :animatable "Animable"
   :animation-type "Type d'animation"
   :syntax "Syntaxe"
-  :mdn-info "Infos MDN"
-  :attributes-title "%1 %2 éléments"}
+  :mdn-info "Infos MDN"}
+
+ :renderer.element.views
+ {:selected-elements-title "%1 %2 éléments"}
 
  :renderer.attribute.impl.core
  {:x "L'attribut x définit une coordonnée de l'axe x dans le système de
