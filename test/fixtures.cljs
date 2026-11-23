@@ -215,10 +215,6 @@
  (fn [_]))
 
 (rf/reg-fx
- ::effects/focus
- (fn [_]))
-
-(rf/reg-fx
  ::shell.effects/focus
  (fn [_]))
 

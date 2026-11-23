@@ -1,13 +1,12 @@
 (ns renderer.tree.events
   (:require
    [re-frame.core :as rf]
-   [renderer.effects :as-alias effects]
    [renderer.tree.effects :as-alias tree.effects]))
 
 (rf/reg-event-fx
  ::focus
  (fn [_ [_ tree-ref]]
-   {::effects/focus tree-ref}))
+   {::tree.effects/focus tree-ref}))
 
 (rf/reg-event-fx
  ::focus-first

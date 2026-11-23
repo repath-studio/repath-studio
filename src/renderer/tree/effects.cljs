@@ -19,6 +19,13 @@
           (->> (.from js/Array))))
 
 (rf/reg-fx
+ ::focus
+ (fn [el-ref]
+   (some-> el-ref
+           (.-current)
+           (.focus))))
+
+(rf/reg-fx
  ::focus-first
  (fn [tree-ref]
    (some-> tree-ref
