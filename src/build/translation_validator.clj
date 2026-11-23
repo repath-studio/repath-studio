@@ -156,22 +156,46 @@
                           :value base-value}])))))
         (keys base-dictionary)))
 
+(defn missing-key-lines
+  "Returns the report lines for one missing key of a namespace group."
+  [present entries k v]
+  [(str "    " (pr-str k)
+        (if-let [a (key-anchor present entries k)]
+          (str " (insert after " (pr-str (first a)) ")")
+          " (at start)"))
+   (str "      en-US: " (entry-value v))])
+
+(defn ns-group-header
+  "Returns the header line for a namespace group, noting where a new
+   namespace map should be inserted when the language file lacks it."
+  [base-dictionary lang-dictionary ns-k]
+  (if (ns-k lang-dictionary)
+    (str "  " (pr-str ns-k))
+    (str "  " (pr-str ns-k)
+         (if-let [a (ns-anchor base-dictionary lang-dictionary ns-k)]
+           (str " (new namespace, insert after " (pr-str a) ")")
+           " (new namespace, at start)"))))
+
 (defn print-ns-group
   "Prints the missing keys of one namespace with their insertion anchors."
   [base-dictionary lang-dictionary {:keys [ns-k present missing]}]
+  (println (ns-group-header base-dictionary lang-dictionary ns-k))
   (let [entries (seq (ns-k base-dictionary))]
-    (if (ns-k lang-dictionary)
-      (println (str "  " (pr-str ns-k)))
-      (println (str "  " (pr-str ns-k)
-                    (if-let [a (ns-anchor base-dictionary lang-dictionary ns-k)]
-                      (str " (new namespace, insert after " (pr-str a) ")")
-                      " (new namespace, at start)"))))
-    (doseq [[k v] missing]
-      (println (str "    " (pr-str k)
-                    (if-let [a (key-anchor present entries k)]
-                      (str " (insert after " (pr-str (first a)) ")")
-                      " (at start)")))
-      (println (str "      en-US: " (entry-value v))))))
+    (run! println (mapcat (fn [[k v]] (missing-key-lines present entries k v))
+                          missing))))
+
+(defn print-scalar-group
+  "Prints a missing top-level key and its English value."
+  [{:keys [scalar value]}]
+  (println (str "  " (pr-str scalar) " (top-level key)"))
+  (println (str "    en-US: " (entry-value value))))
+
+(defn print-extra-keys
+  "Prints keys found in a language file that are absent from the base file."
+  [extra]
+  (when (seq extra)
+    (println (str "  Extra keys (not in " base-lang ".edn):"))
+    (run! #(println "  -" %) extra)))
 
 (defn print-file-report
   "Prints the missing and extra keys of one language file relative to the
@@ -184,15 +208,13 @@
                                              base-keys)))]
     (when (or (seq groups) (seq extra))
       (println (str (lang-id f) ":"))
-      (doseq [g groups]
-        (if (:scalar g)
-          (do
-            (println (str "  " (pr-str (:scalar g)) " (top-level key)"))
-            (println (str "    en-US: " (entry-value (:value g)))))
-          (print-ns-group base-dictionary lang-dictionary g)))
-      (when (seq extra)
-        (println (str "  Extra keys (not in " base-lang ".edn):"))
-        (doseq [k extra] (println "  -" k)))
+      (run! (fn [g]
+              (if-let [scalar (:scalar g)]
+                (print-scalar-group {:scalar scalar
+                                     :value (:value g)})
+                (print-ns-group base-dictionary lang-dictionary g)))
+            groups)
+      (print-extra-keys extra)
       (println)
       true)))
 
@@ -203,8 +225,6 @@
   (remove #(= base-lang (lang-id %)) (lang-files (lang-dir))))
 
 (defn print-report
-  "Prints the missing and extra keys of all language files relative to the
-   base file."
   []
   (let [base-dictionary (read-lang (base-file))
         other-files (other-lang-files)]
@@ -216,9 +236,30 @@
       (println (str "All " (count other-files) " language files match "
                     base-lang ".edn: nothing to translate.")))))
 
+(defn print-source-issues
+  [source-issues]
+  (if (seq source-issues)
+    (do
+      (println "Base keys missing from their source namespace:")
+      (run! println source-issues))
+    (println "All base keys exist in their source namespaces.")))
+
+(defn print-key-set-issues
+  [issues]
+  (if (seq issues)
+    (run! (fn [[lang {:keys [missing-keys extra-keys]}]]
+            (println (str lang ":"))
+            (when (seq missing-keys)
+              (println "  Missing keys:")
+              (run! #(println "  -" %) missing-keys))
+            (when (seq extra-keys)
+              (println "  Extra keys:")
+              (run! #(println "  -" %) extra-keys))
+            (println))
+          issues)
+    (println "All language files match" (str base-lang ".edn") "key set.")))
+
 (defn validate
-  "Validates all language files and the base source keys, exiting with a
-   non-zero status if any issues are found."
   []
   (let [base-keys (dictionary->keys (read-lang (base-file)))
         other-files (other-lang-files)
@@ -226,22 +267,8 @@
         source-issues (validate-source-keys base-keys)]
     (println "Validating translations against" (str base-lang ".edn") "...")
     (println)
-    (if (seq issues)
-      (doseq [[lang {:keys [missing-keys extra-keys]}] issues]
-        (println (str lang ":"))
-        (when (seq missing-keys)
-          (println "  Missing keys:")
-          (doseq [k missing-keys] (println "  -" k)))
-        (when (seq extra-keys)
-          (println "  Extra keys:")
-          (doseq [k extra-keys] (println "  -" k)))
-        (println))
-      (println "All language files match" (str base-lang ".edn") "key set."))
-    (if (seq source-issues)
-      (do
-        (println "Base keys missing from their source namespace:")
-        (doseq [issue source-issues] (println issue)))
-      (println "All base keys exist in their source namespaces."))
+    (print-key-set-issues issues)
+    (print-source-issues source-issues)
     (when (or (seq issues) (seq source-issues))
       (System/exit 1))))
 
