@@ -10,7 +10,7 @@
         day8/shadow-git-inject {:mvn/version "0.0.10"}
         metosin/malli {:mvn/version "0.20.3"}
         org.clj-commons/hickory {:mvn/version "0.7.8"}
-        org.babashka/sci {:mvn/version "0.15.59"}
+        org.babashka/sci {:mvn/version "0.15.60"}
         org.clojure/math.combinatorics {:mvn/version "0.3.2"}
         org.slf4j/slf4j-nop {:mvn/version "2.0.20"}
         re-frame/re-frame {:mvn/version "1.4.7"}
