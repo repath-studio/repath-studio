@@ -2,6 +2,7 @@
   (:require
    [malli.core :as m]
    [renderer.app.db :refer [App]]
+   [renderer.document.handlers :as document.handlers]
    [renderer.element.handlers :as element.handlers]
    [renderer.history.handlers :as history.handlers]
    [renderer.tool.db :refer [Handle]]
@@ -34,9 +35,9 @@
 (defmethod tool.hierarchy/on-drag [::edit/edit :select]
   [db _e]
   (-> db
-      (element.handlers/clear-hovered)
+      (document.handlers/clear-hovered)
       (tool.handlers/set-select-box (tool.handlers/select-box db))
-      (reduce-by-area element.handlers/hover)))
+      (reduce-by-area document.handlers/hover)))
 
 (defmethod tool.hierarchy/on-drag-end [::edit/edit :select]
   [db e]

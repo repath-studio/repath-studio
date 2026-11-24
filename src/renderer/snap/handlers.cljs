@@ -5,12 +5,13 @@
    [malli.core :as m]
    [renderer.app.db :refer [App]]
    [renderer.db :refer [Vec2]]
-   [renderer.element.db :refer [ElementId]]
+   [renderer.element.db :refer [Element ElementId]]
    [renderer.element.handlers :as element.handlers]
    [renderer.frame.handlers :as frame.handlers]
    [renderer.ruler.handlers :as ruler.handlers]
-   [renderer.snap.db :refer [SnapOption NearestNeighbor]]
+   [renderer.snap.db :refer [NearestNeighbor SnapOption SnapOptions]]
    [renderer.tool.hierarchy :as tool.hierarchy]
+   [renderer.utils.element :as utils.element]
    [renderer.utils.math :as utils.math]))
 
 (m/=> active? [:-> App boolean?])
@@ -57,15 +58,59 @@
                                     (kdtree/interval-search boundaries)
                                     (kdtree/build-tree))))))
 
+(m/=> add-to-cache [:-> App SnapOptions map? Element map?])
+(defn add-to-cache
+  [db options cache el]
+  (let [[cached-points cached-el cached-options] (get cache (:id el))]
+    (if (and cached-points
+             (= cached-el el)
+             (= cached-options options))
+      cache
+      (let [points (utils.element/acc-snapping-points
+                    el (element.handlers/transform db (:id el)) options)]
+        (assoc cache (:id el) [points el options])))))
+
+(m/=> update-snapping-points-cache [:->
+                                    App [:maybe [:sequential Element]]
+                                    App])
+(defn update-snapping-points-cache
+  [db els]
+  (let [options (-> db :snap :options)]
+    (assoc db :snapping-points-cache
+           (reduce (partial add-to-cache db options)
+                   (or (:snapping-points-cache db) {})
+                   els))))
+
+(m/=> snapping-points [:-> App [:maybe [:sequential Element]] [:vector Vec2]])
+(defn snapping-points
+  [db els]
+  (if (active? db)
+    (let [options (-> db :snap :options)
+          cache (:snapping-points-cache db)]
+      (into []
+            (mapcat (fn [el]
+                      (let [[cached-points cached-el cached-options]
+                            (get cache (:id el))]
+                        (if (and cached-points
+                                 (= cached-el el)
+                                 (= cached-options options))
+                          cached-points
+                          (utils.element/acc-snapping-points
+                           el
+                           (element.handlers/transform db (:id el))
+                           options))))
+                    els)))
+    []))
+
 (m/=> rebuild-tree [:-> App App])
 (defn rebuild-tree
   [db]
   (if (active? db)
     (let [elements (tool.hierarchy/snapping-elements db)
-          db (element.handlers/update-snapping-points-cache
+          db (update-snapping-points-cache
               (assoc db :snapping-points-cache {})
               elements)
-          points (element.handlers/snapping-points db elements)
+          points (snapping-points db elements)
           points (cond-> points
                    (contains? (-> db :snap :options) :grid)
                    (into (ruler.handlers/steps-intersections db)))]
@@ -87,14 +132,14 @@
 (defn insert-to-tree
   [db element-ids]
   (let [elements (element.handlers/entities db (vec element-ids))
-        points (element.handlers/snapping-points db elements)]
+        points (snapping-points db elements)]
     (update-tree db kdtree/insert points)))
 
 (m/=> delete-from-tree [:-> App [:maybe [:set ElementId]] App])
 (defn delete-from-tree
   [db element-ids]
   (let [elements (element.handlers/entities db (vec element-ids))
-        points (element.handlers/snapping-points db elements)]
+        points (snapping-points db elements)]
     (update-tree db kdtree/delete points)))
 
 (m/=> nearest-delta [:-> App Vec2])

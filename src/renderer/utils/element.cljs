@@ -13,7 +13,7 @@
    [renderer.db :refer [BBox Vec2 JS_Element TransformationMatrix Viewbox]]
    [renderer.element.db
     :as element.db
-    :refer [Element ElementAttrs ElementTag PersistedElement]]
+    :refer [Element ElementAttrs ElementTag ElementId PersistedElement]]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]
    [renderer.snap.db :refer [SnapOptions]]
@@ -505,3 +505,22 @@
                    (assoc :bbox (local-bbox el)))]
         {:elements [el]
          :bbox (:bbox el)}))))
+
+(m/=> remove-els-fn [:-> [:set ElementId] [:set ElementId] fn?])
+(defn remove-els-fn
+  [ids surviving-parents]
+  (fn [els]
+    (reduce (fn [m [id el]]
+              (cond
+                (contains? ids id)
+                m
+
+                (contains? surviving-parents id)
+                (assoc m id (assoc el :children
+                                   (vec (remove (partial contains? ids)
+                                                (:children el)))))
+
+                :else
+                (assoc m id el)))
+            {}
+            els)))

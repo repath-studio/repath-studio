@@ -1,6 +1,7 @@
 (ns renderer.tool.impl.base.edit.idle
   (:require
    [config :as config]
+   [renderer.document.handlers :as document.handlers]
    [renderer.element.handlers :as element.handlers]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.history.handlers :as history.handlers]
@@ -93,10 +94,10 @@
                (apply min-key #(utils.math/distance % position) candidates))]
     (cond-> db
       :always
-      (element.handlers/clear-hovered)
+      (document.handlers/clear-hovered)
 
       (:id element)
-      (element.handlers/hover element)
+      (document.handlers/hover element)
 
       best
       (assoc :insertion-point best)

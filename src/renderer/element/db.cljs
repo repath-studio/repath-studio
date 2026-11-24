@@ -2,7 +2,7 @@
   (:require
    [malli.core :as m]
    [malli.transform :as m.transform]
-   [renderer.db :refer [BBox]]
+   [renderer.db :refer [BBox Vec2]]
    [renderer.element.hierarchy :as element.hierarchy]
    [renderer.hierarchy :as hierarchy]))
 
@@ -66,3 +66,11 @@
                         :selected-handles #{}
                         :children []}
                        m.transform/default-value-transformer))
+
+(def SvgData [:map
+              [:svg string?]
+              [:label string?]
+              [:position Vec2]
+              [:size {:optional true} [:maybe Vec2]]
+              [:viewBox {:optional true} [:maybe string?]]
+              [:preserveAspectRatio {:optional true} [:maybe string?]]])

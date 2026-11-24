@@ -9,6 +9,7 @@
    [renderer.i18n.views :as i18n.views]
    [renderer.input.db :refer [PointerEvent]]
    [renderer.input.handlers :as input.handlers]
+   [renderer.snap.handlers :as snap.handlers]
    [renderer.tool.db :refer [Handle]]
    [renderer.tool.handlers :as tool.handlers]
    [renderer.tool.hierarchy :as tool.hierarchy]
@@ -72,9 +73,9 @@
   [db e]
   (let [{:keys [alt-key]} e]
     (-> db
-        (element.handlers/clear-hovered)
+        (document.handlers/clear-hovered)
         (tool.handlers/set-select-box (select-rect db alt-key))
-        (reduce-by-area e element.handlers/hover))))
+        (reduce-by-area e document.handlers/hover))))
 
 (defmethod tool.hierarchy/on-drag-end [::transform/transform :select]
   [db e]
@@ -96,7 +97,7 @@
         options (-> db :snap :options)]
     (cond
       (not= (:state db) :idle)
-      (cond-> (element.handlers/snapping-points db (filter :visible selected))
+      (cond-> (snap.handlers/snapping-points db (filter :visible selected))
         (seq (rest selected))
         (into (utils.bounds/->snapping-points (element.handlers/bbox db)
                                               options))))))

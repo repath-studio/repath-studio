@@ -14,9 +14,8 @@
    [renderer.element.db
     :as element.db
     :refer [ElementAttrs Element ElementId ElementTag AnimationTag
-            Direction]]
+            Direction SvgData]]
    [renderer.element.hierarchy :as element.hierarchy]
-   [renderer.snap.db :refer [SnapOptions]]
    [renderer.tool.db :refer [Handle HandleId]]
    [renderer.utils.attribute :as utils.attribute]
    [renderer.utils.bounds :as utils.bounds]
@@ -684,35 +683,6 @@
                    (not (contains? #{:svg :canvas} (:tag el)))
                    (update-prop (:id el) :selected not))) db)))
 
-(m/=> hover [:-> App [:or Element Handle] App])
-(defn hover
-  [db el]
-  (update-in db [:documents (:active-document db) :hovered-ids] conj
-             (if (= (:type el) :handle)
-               [(:parent el) (:id el)]
-               (:id el))))
-
-(m/=> ignore [:-> App [:or ElementId HandleId] App])
-(defn ignore
-  [db id]
-  (cond-> db
-    (and (:active-document db) id)
-    (update-in [:documents (:active-document db) :ignored-ids] conj id)))
-
-(m/=> clear-hovered [:-> App App])
-(defn clear-hovered
-  [db]
-  (cond-> db
-    (:active-document db)
-    (assoc-in [:documents (:active-document db) :hovered-ids] #{})))
-
-(m/=> clear-ignored [:-> App App])
-(defn clear-ignored
-  [db]
-  (cond-> db
-    (:active-document db)
-    (assoc-in [:documents (:active-document db) :ignored-ids] #{})))
-
 (m/=> bbox [:-> App [:maybe BBox]])
 (defn bbox
   [db]
@@ -729,32 +699,14 @@
     {:elements (mapv payload-el (top-selected-sorted-ids db))
      :bbox (bbox db)}))
 
-(m/=> remove-els-fn [:-> [:set ElementId] [:set ElementId] fn?])
-(defn remove-els-fn
-  [ids surviving-parents]
-  (fn [els]
-    (reduce (fn [m [id el]]
-              (cond
-                (contains? ids id)
-                m
-
-                (contains? surviving-parents id)
-                (assoc m id (assoc el :children
-                                   (vec (remove (partial contains? ids)
-                                                (:children el)))))
-
-                :else
-                (assoc m id el)))
-            {}
-            els)))
-
 (m/=> delete-ids [:-> App [:set ElementId] App])
 (defn delete-ids
   [db ids]
   (let [ids (with-descendants-ids db (disj ids (:id (root db))))
         surviving-parents (surviving-parent-ids db ids)
         db (-> db
-               (update-in (path db) (remove-els-fn ids surviving-parents))
+               (update-in (path db)
+                          (utils.element/remove-els-fn ids surviving-parents))
                (update-in [:documents (:active-document db) :collapsed-ids]
                           set/difference ids))]
     (reduce (rpartial refresh-bbox) db (topmost-ids db surviving-parents))))
@@ -1480,14 +1432,6 @@
      (= (:tag (entity db id)) :path)
      (update-attr id :d utils.path/manipulate action))))
 
-(def SvgData [:map
-              [:svg string?]
-              [:label string?]
-              [:position Vec2]
-              [:size {:optional true} [:maybe Vec2]]
-              [:viewBox {:optional true} [:maybe string?]]
-              [:preserveAspectRatio {:optional true} [:maybe string?]]])
-
 (m/=> import-svg [:-> App SvgData App])
 (defn import-svg
   [db data]
@@ -1514,48 +1458,6 @@
               (assoc-in [:attrs :preserveAspectRatio] preserveAspectRatio))]
     (-> (add db svg)
         (collapse-all))))
-
-(m/=> add-to-cache [:-> App SnapOptions map? Element map?])
-(defn add-to-cache
-  [db options cache el]
-  (let [[cached-points cached-el cached-options] (get cache (:id el))]
-    (if (and cached-points
-             (= cached-el el)
-             (= cached-options options))
-      cache
-      (let [points (utils.element/acc-snapping-points
-                    el (transform db (:id el)) options)]
-        (assoc cache (:id el) [points el options])))))
-
-(m/=> update-snapping-points-cache [:->
-                                    App [:maybe [:sequential Element]]
-                                    App])
-(defn update-snapping-points-cache
-  [db els]
-  (let [options (-> db :snap :options)]
-    (assoc db :snapping-points-cache
-           (reduce (partial add-to-cache db options)
-                   (or (:snapping-points-cache db) {})
-                   els))))
-
-(m/=> snapping-points [:-> App [:maybe [:sequential Element]] [:vector Vec2]])
-(defn snapping-points
-  [db els]
-  (if (-> db :snap :active)
-    (let [options (-> db :snap :options)
-          cache (:snapping-points-cache db)]
-      (into []
-            (mapcat (fn [el]
-                      (let [[cached-points cached-el cached-options]
-                            (get cache (:id el))]
-                        (if (and cached-points
-                                 (= cached-el el)
-                                 (= cached-options options))
-                          cached-points
-                          (utils.element/acc-snapping-points
-                           el (transform db (:id el)) options))))
-                    els)))
-    []))
 
 (m/=> handles [:function
                [:-> App [:vector Handle]]

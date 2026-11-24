@@ -115,7 +115,7 @@
         options (-> db :snap :options)]
     (cond
       (not= (:state db) :idle)
-      (cond-> (element.handlers/snapping-points db (filter :visible selected))
+      (cond-> (snap.handlers/snapping-points db (filter :visible selected))
         (seq (rest selected))
         (into (utils.bounds/->snapping-points (element.handlers/bbox db)
                                               options))))))

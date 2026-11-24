@@ -6,6 +6,7 @@
    [renderer.action.views :as action.views]
    [renderer.app.subs :as-alias app.subs]
    [renderer.document.events :as-alias document.events]
+   [renderer.document.handlers :as document.handlers]
    [renderer.document.subs :as-alias document.subs]
    [renderer.element.db :refer [Element]]
    [renderer.element.handlers :as element.handlers]
@@ -82,8 +83,8 @@
 (defmethod tool.hierarchy/on-deactivate ::transform
   [db]
   (-> db
-      (element.handlers/clear-ignored)
-      (element.handlers/clear-hovered)
+      (document.handlers/clear-ignored)
+      (document.handlers/clear-hovered)
       (assoc :pivot-point [0 0])
       (assoc :anchor-offset (:anchor-point db))
       (tool.handlers/set-select-box nil)))

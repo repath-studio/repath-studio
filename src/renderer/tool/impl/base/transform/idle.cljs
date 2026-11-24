@@ -1,6 +1,7 @@
 (ns renderer.tool.impl.base.transform.idle
   (:require
    [malli.core :as m]
+   [renderer.document.handlers :as document.handlers]
    [renderer.element.db :refer [Element]]
    [renderer.element.handlers :as element.handlers]
    [renderer.history.handlers :as history.handlers]
@@ -24,11 +25,11 @@
         cursor (if movable? "move" "default")]
     (cond-> db
       :always
-      (-> (element.handlers/clear-hovered)
+      (-> (document.handlers/clear-hovered)
           (tool.handlers/set-cursor cursor))
 
       (:id element)
-      (element.handlers/hover element))))
+      (document.handlers/hover element))))
 
 (defmethod tool.hierarchy/help [::transform/transform :idle]
   []
@@ -86,7 +87,7 @@
 
       (contains? #{:g :text :tspan :textPath} tag)
       (-> db
-          (element.handlers/ignore id)
+          (document.handlers/ignore id)
           (element.handlers/deselect id)
           (history.handlers/finalize timestamp
                                      [::deselect-element "Deselect element"]))
@@ -119,7 +120,7 @@
     (cond-> db
       :always
       (-> (tool.handlers/set-state new-state)
-          (element.handlers/clear-hovered))
+          (document.handlers/clear-hovered))
 
       (transform.select/selectable? clicked-element)
       (-> (element.handlers/toggle-selection id shift-key)
@@ -159,7 +160,7 @@
 
       (= k "Escape")
       (-> (history.handlers/reset-state)
-          (element.handlers/clear-ignored)))))
+          (document.handlers/clear-ignored)))))
 
 (defmethod tool.hierarchy/on-key-up [::transform/transform :idle]
   [db e]

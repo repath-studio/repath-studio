@@ -10,10 +10,11 @@
     :refer [Document DocumentAttrs DocumentId DocumentTitle PersistedDocument
             RecentDocument HoveredId]]
    [renderer.document.migrations :as document.migrations]
-   [renderer.element.db :refer [ElementId]]
+   [renderer.element.db :refer [Element ElementId]]
    [renderer.element.handlers :as element.handlers]
    [renderer.frame.handlers :as frame.handlers]
    [renderer.snap.handlers :as snap.handlers]
+   [renderer.tool.db :refer [Handle HandleId]]
    [renderer.utils.compatibility :as utils.compatibility]
    [renderer.utils.element :as utils.element]
    [renderer.utils.vec :as utils.vec]))
@@ -266,3 +267,32 @@
   (->> (:recent db)
        (filter #(not (open? db (:id %))))
        (reverse)))
+
+(m/=> hover [:-> App [:or Element Handle] App])
+(defn hover
+  [db el]
+  (update-in db (path db :hovered-ids) conj
+             (if (= (:type el) :handle)
+               [(:parent el) (:id el)]
+               (:id el))))
+
+(m/=> ignore [:-> App [:or ElementId HandleId] App])
+(defn ignore
+  [db id]
+  (cond-> db
+    (and (:active-document db) id)
+    (update-in (path db :ignored-ids) conj id)))
+
+(m/=> clear-hovered [:-> App App])
+(defn clear-hovered
+  [db]
+  (cond-> db
+    (:active-document db)
+    (assoc-in (path db :hovered-ids) #{})))
+
+(m/=> clear-ignored [:-> App App])
+(defn clear-ignored
+  [db]
+  (cond-> db
+    (:active-document db)
+    (assoc-in (path db :ignored-ids) #{})))

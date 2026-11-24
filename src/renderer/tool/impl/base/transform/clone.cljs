@@ -47,7 +47,7 @@
   [db]
   (let [selected (element.handlers/selected db)
         options (-> db :snap :options)]
-    (cond-> (element.handlers/snapping-points db (filter :visible selected))
+    (cond-> (snap.handlers/snapping-points db (filter :visible selected))
       (seq (rest selected))
       (into (utils.bounds/->snapping-points (element.handlers/bbox db)
                                             options)))))
