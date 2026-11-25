@@ -9,3 +9,7 @@
 (defn gisa?
   [child parent]
   (isa? @hierarchy child parent))
+
+(defn get-descendants
+  [parent]
+  (descendants @hierarchy parent))

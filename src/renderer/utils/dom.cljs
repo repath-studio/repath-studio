@@ -1,7 +1,10 @@
 (ns renderer.utils.dom
   (:require
+   [clojure.string :as string]
    [malli.core :as m]
-   [renderer.db :refer [JS_Object]]))
+   [renderer.db :refer [JS_Object]]
+   [renderer.element.hierarchy :as-alias element.hierarchy]
+   [renderer.hierarchy :as hierarchy]))
 
 (def svg-ns "http://www.w3.org/2000/svg")
 
@@ -24,6 +27,18 @@
   []
   (some-> (get-frame-document)
           (.getElementById canvas-id)))
+
+(defn get-svg-elements
+  []
+  (some-> (get-frame-document)
+          (.querySelectorAll "svg")))
+
+(defn get-animation-elements
+  []
+  (when-let [tags (-> (hierarchy/get-descendants ::element.hierarchy/animation)
+                      (seq))]
+    (some-> (get-frame-document)
+            (.querySelectorAll (string/join "," (map name tags))))))
 
 (m/=> event->uuid [:-> JS_Object [:maybe uuid?]])
 (defn event->uuid

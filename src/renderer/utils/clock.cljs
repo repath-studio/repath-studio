@@ -51,3 +51,9 @@
       (if (next clock)
         (clock->ms clock)
         (timecount->ms (first clock))))))
+
+(m/=> ->seconds [:-> string? [:maybe number?]])
+(defn ->seconds
+  [s]
+  (some-> (->ms s)
+          (/ 1000)))

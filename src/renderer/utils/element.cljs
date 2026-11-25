@@ -35,10 +35,12 @@
   [el]
   (= :svg (:tag el)))
 
+(m/=> text-node? [:-> Element boolean?])
 (defn text-node?
   [el]
   (= (:tag el) :text-node))
 
+(m/=> text-content? [:-> Element boolean?])
 (defn text-content?
   [el]
   (hierarchy/gisa? (:tag el) :renderer.element.hierarchy/text-content))
@@ -47,6 +49,11 @@
 (defn text-content-child?
   [el]
   (hierarchy/gisa? (:tag el) :renderer.element.hierarchy/text-content-child))
+
+(m/=> animation? [:-> Element boolean?])
+(defn animation?
+  [el]
+  (hierarchy/gisa? (:tag el) :renderer.element.hierarchy/animation))
 
 (m/=> transform-attr [:-> Element TransformationMatrix])
 (defn transform-attr

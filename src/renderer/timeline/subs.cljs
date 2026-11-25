@@ -2,16 +2,15 @@
   (:require
    [clojure.string :as string]
    [re-frame.core :as rf]
-   [renderer.element.hierarchy :as element.hierarchy]
    [renderer.element.subs :as-alias element.subs]
-   [renderer.hierarchy :as hierarchy]
-   [renderer.utils.clock :as utils.clock]))
+   [renderer.utils.clock :as utils.clock]
+   [renderer.utils.element :as utils.element]))
 
 (rf/reg-sub
  ::animations
  :<- [::element.subs/entities]
  (fn [elements]
-   (filter #(hierarchy/gisa? (:tag %) ::element.hierarchy/animation) elements)))
+   (filter utils.element/animation? elements)))
 
 (defn effect-id
   [el]
