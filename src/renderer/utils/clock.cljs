@@ -33,10 +33,11 @@
 (m/=> clock->ms [:-> vector? [:maybe number?]])
 (defn clock->ms
   [clock]
-  (when (<= (count clock) full-clock-count)
+  (when (and (<= (count clock) full-clock-count)
+             (every? #(re-find timecount-pattern %) clock))
     (let [start (- full-clock-count (count clock))]
       (reduce-kv (fn [total index timecount]
-                   (+ total (* (max 0 (js/parseFloat timecount))
+                   (+ total (* (js/parseFloat timecount)
                                (index->multiplier (+ start index)))))
                  0
                  clock))))
