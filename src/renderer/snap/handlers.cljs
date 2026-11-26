@@ -9,8 +9,7 @@
    [renderer.element.handlers :as element.handlers]
    [renderer.frame.handlers :as frame.handlers]
    [renderer.ruler.handlers :as ruler.handlers]
-   [renderer.snap.db :refer [AxisMatch NearestNeighbor Snapping
-                             SnapOption SnapOptions]]
+   [renderer.snap.db :refer [AxisMatch NearestNeighbor SnapOption SnapOptions]]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.utils.element :as utils.element]
    [renderer.utils.math :as utils.math]))

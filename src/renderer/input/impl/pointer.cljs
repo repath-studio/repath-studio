@@ -4,7 +4,7 @@
    [re-frame.core :as rf]
    [renderer.app.db :refer [App]]
    [renderer.app.handlers :as app.handlers]
-   [renderer.db :refer [JS_Object]]
+   [renderer.db :refer [JS_Object Vec2]]
    [renderer.effects :as-alias effects]
    [renderer.element.db :refer [Element]]
    [renderer.frame.handlers :as frame.handlers]
@@ -157,10 +157,19 @@
                                    db
                                    pointer-pos))))))
 
+(m/=> init-snapped-offset [:-> App Vec2 App])
+(defn init-snapped-offset
+  [db pos]
+  (let [delta (snap.handlers/nearest-delta db)
+        local-pos (input.handlers/adjusted-pos db pos)]
+    (cond-> db
+      (not (every? zero? delta))
+      (assoc-in [:snapping :nearest-neighbor-offset]
+                (utils.math/v-add local-pos delta)))))
+
 (defmethod input.hierarchy/pointer "pointerdown"
   [db e]
   (let [{:keys [active-pointers]} db
-        nearest-neighbor (-> db :snapping :nearest-neighbor)
         {:keys [button pointer-pos pointer-id]} e]
     (cond-> db
       (not= button :right)
@@ -177,8 +186,7 @@
              :local-pointer-offset (input.handlers/adjusted-pos db pointer-pos))
 
       (not (touch? e))
-      (assoc-in [:snapping :nearest-neighbor-offset]
-                (:point nearest-neighbor))
+      (init-snapped-offset pointer-pos)
 
       (or (= button :middle)
           (empty? active-pointers))
