@@ -1,6 +1,5 @@
 (ns renderer.ruler.handlers
   (:require
-   [clojure.math.combinatorics :as math.combinatorics]
    [config :as conf]
    [malli.core :as m]
    [renderer.app.db :refer [App]]
@@ -35,30 +34,39 @@
   [zoom grid-step orientation]
   (axis-step conf/grid-target-px zoom grid-step orientation))
 
+(def major-sections 10)
+
+(m/=> render-subgrid? [:-> number? GridStep Orientation boolean?])
+(defn render-subgrid?
+  [zoom grid-step orientation]
+  (let [min-step (axis-min-step grid-step orientation)]
+    (> (current-step zoom grid-step orientation)
+       (step conf/grid-target-px conf/max-zoom min-step))))
+
 (m/=> steps-coll [:-> number? Viewbox Orientation [:sequential number?]])
 (defn steps-coll
   "Returns a collection of steps contained on the given viewbox."
   [ruler-step viewbox orientation]
   (let [[x y width height] viewbox
-        sections 10
         vertical (= orientation :vertical)]
-    (range (- (+ (* sections ruler-step)
+    (range (- (+ (* major-sections ruler-step)
                  (rem (if vertical y x)
-                      (* sections ruler-step))))
+                      (* major-sections ruler-step))))
            (if vertical height width)
            ruler-step)))
 
-(m/=> steps-intersections [:-> App [:sequential [:sequential number?]]])
-(defn steps-intersections
-  "Returns the intersection points of the rulers."
-  [db]
+(m/=> axis-steps [:-> App [:enum :x :y] [:sequential number?]])
+(defn axis-steps
+  [db axis]
   (let [zoom (get-in db [:documents (:active-document db) :zoom])
         viewbox (frame.handlers/viewbox db)
-        attrs (get-in db [:documents (:active-document db) :attrs])
-        steps (fn [orientation]
-                (-> conf/grid-target-px
-                    (step zoom (axis-min-step (:grid-step attrs) orientation))
-                    (steps-coll viewbox orientation)))]
-    (math.combinatorics/cartesian-product
-     (steps :vertical)
-     (steps :horizontal))))
+        grid-step (get-in db [:documents (:active-document db)
+                              :attrs :grid-step])
+        horizontal? (= axis :x)
+        orientation (if horizontal? :horizontal :vertical)
+        origin (if horizontal? (first viewbox) (second viewbox))
+        rendered-step (axis-step conf/grid-target-px zoom grid-step orientation)
+        snap-step (if (render-subgrid? zoom grid-step orientation)
+                    rendered-step
+                    (* major-sections rendered-step))]
+    (map #(+ % origin) (steps-coll snap-step viewbox orientation))))

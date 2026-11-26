@@ -40,19 +40,19 @@
                :event [::snap.events/toggle-option :nodes]
                :active [::snap.subs/option-enabled? :nodes]}])
 
-#_(rf/dispatch [::action.events/register-action
-                {:id :snap/toggle-grid
-                 :label [::grid "Grid"]
-                 :icon "magnet"
-                 :event [::snap.events/toggle-option :grid]
-                 :active [::snap.subs/option-enabled? :grid]}])
+(rf/dispatch [::action.events/register-action
+              {:id :snap/toggle-grid
+               :label [::grid "Grid"]
+               :icon "grid"
+               :event [::snap.events/toggle-option :grid]
+               :active [::snap.subs/option-enabled? :grid]}])
 
-#_(rf/dispatch [::action.events/register-action
-                {:id :snap/toggle-guides
-                 :label [::guides "Guides"]
-                 :icon "magnet"
-                 :event [::snap.events/toggle-option :guides]
-                 :active [::snap.subs/option-enabled? :guides]}])
+(rf/dispatch [::action.events/register-action
+              {:id :snap/toggle-guides
+               :label [::guides "Guides"]
+               :icon "ruler-straight"
+               :event [::snap.events/toggle-option :guides]
+               :active [::snap.subs/option-enabled? :guides]}])
 
 (rf/dispatch [::action.events/register-action-group
               {:id :snap/options
@@ -62,6 +62,5 @@
                          :snap/toggle-midpoints
                          :snap/toggle-corners
                          :snap/toggle-nodes
-                         ;; :snap/toggle-guides
-                         ;; :snap/toggle-grid
-                         ]}])
+                         :snap/toggle-grid
+                         :snap/toggle-guides]}])

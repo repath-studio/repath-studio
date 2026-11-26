@@ -119,3 +119,9 @@
                     :value "horizontal"}]})])
 
 (defmethod attribute.hierarchy/initial [:guide :orientation] [] "vertical")
+
+(defmethod element.hierarchy/snapping-points :guide
+  [el]
+  (let [{{:keys [x y]} :attrs} el]
+    [(with-meta [(js/parseFloat x) (js/parseFloat y)]
+       {:label [::position "position"]})]))

@@ -52,13 +52,25 @@
 (defn snap-info
   []
   (let [nearest-neighbor @(rf/subscribe [::snap.subs/nearest-neighbor])
+        nearest-x @(rf/subscribe [::snap.subs/nearest-x])
+        nearest-y @(rf/subscribe [::snap.subs/nearest-y])
+        viewbox-bounds @(rf/subscribe [::frame.subs/viewbox-bounds])
         snapped-el-id (-> nearest-neighbor meta :id)
         snapped-el @(rf/subscribe [::element.subs/entity snapped-el-id])]
-    (when snapped-el
-      [utils.svg/bounding-box (:bbox snapped-el) true])
+    [:<>
+     (when snapped-el
+       [utils.svg/bounding-box (:bbox snapped-el) true])
 
-    (when nearest-neighbor
-      [snap.views/canvas-label nearest-neighbor])))
+     (when nearest-neighbor
+       [snap.views/canvas-label nearest-neighbor])
+
+     (when nearest-x
+       [snap.views/axis-indicator nearest-x
+        (or (:delta nearest-y) 0) viewbox-bounds])
+
+     (when nearest-y
+       [snap.views/axis-indicator nearest-y
+        (or (:delta nearest-x) 0) viewbox-bounds])]))
 
 (defmethod element.hierarchy/render :canvas
   [_el]

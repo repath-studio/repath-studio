@@ -7,6 +7,7 @@
    [renderer.element.subs :as-alias element.subs]
    [renderer.frame.subs :as-alias frame.subs]
    [renderer.input.subs :as-alias input.subs]
+   [renderer.ruler.handlers :as ruler.handlers]
    [renderer.ruler.subs :as-alias ruler.subs]
    [renderer.tool.events :as tool.events]
    [renderer.tool.impl.misc.guide :as-alias tool.impl.misc.guide]
@@ -104,7 +105,7 @@
           (keep-indexed
            (fn [index step]
              (let [adjusted-step (* zoom step)
-                   major? (zero? (rem index 10))
+                   major? (zero? (rem index ruler.handlers/major-sections))
                    starting-point (if major? 0 (/ ruler-size 1.3))
                    line [ruler-line {:orientation orientation
                                      :adjusted-step adjusted-step
@@ -141,7 +142,7 @@
 
 (defn axis-params
   [orientation]
-  (let [major-sections 10
+  (let [major-sections ruler.handlers/major-sections
         step @(rf/subscribe [::ruler.subs/step orientation])
         subgrid? @(rf/subscribe [::ruler.subs/render-subgrid? orientation])
         opacity @(rf/subscribe [::ruler.subs/subgrid-opacity orientation])

@@ -66,6 +66,7 @@
       (assoc :active-pointers {})
       (dissoc :drag-pointer :pointer-offset :local-pointer-offset
               :nearest-neighbor :nearest-neighbor-offset
+              :nearest-x :nearest-y
               :pinch-distance :pinch-midpoint)))
 
 (m/=> pointer [:-> App PointerEvent App])

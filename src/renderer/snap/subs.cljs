@@ -25,3 +25,11 @@
 (rf/reg-sub
  ::nearest-neighbor
  :-> :nearest-neighbor)
+
+(rf/reg-sub
+ ::nearest-x
+ :-> :nearest-x)
+
+(rf/reg-sub
+ ::nearest-y
+ :-> :nearest-y)
