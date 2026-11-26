@@ -662,6 +662,10 @@
  :renderer.tool.impl.base.edit.select
  {:select-handles "Sélectionner les poignées"}
 
+ :renderer.snap.handlers
+ {:grid-line "ligne de grille"
+  :guide "guide"}
+
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Maintenez %1 pour restreindre la direction."]
   :handle "poignée"}

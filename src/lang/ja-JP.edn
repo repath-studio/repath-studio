@@ -611,6 +611,10 @@
  :renderer.tool.impl.base.edit.select
  {:select-handles "ハンドルを選択"}
 
+ :renderer.snap.handlers
+ {:grid-line "グリッド線"
+  :guide "ガイド"}
+
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "%1を押しながら方向を制限。"]
   :handle "ハンドル"}

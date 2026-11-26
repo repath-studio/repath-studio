@@ -675,6 +675,10 @@
  :renderer.tool.impl.base.edit.select
  {:select-handles "Επιλογή λαβών"}
 
+ :renderer.snap.handlers
+ {:grid-line "γραμμή πλέγματος"
+  :guide "οδηγός"}
+
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Κρατήστε %1 για να περιορίσετε την κατεύθυνση."]
   :handle "χειριστήριο"}

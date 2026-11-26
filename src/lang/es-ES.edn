@@ -654,6 +654,10 @@
  :renderer.tool.impl.base.edit.select
  {:select-handles "Seleccionar controladores"}
 
+ :renderer.snap.handlers
+ {:grid-line "línea de cuadrícula"
+  :guide "guía"}
+
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Mantenga %1 para restringir la dirección."]
   :handle "asa"}
