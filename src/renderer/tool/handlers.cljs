@@ -93,13 +93,13 @@
 (m/=> snapped-offset [:-> App Vec2])
 (defn snapped-offset
   [db]
-  (or (:nearest-neighbor-offset db)
+  (or (-> db :snapping :nearest-neighbor-offset)
       (:local-pointer-offset db)))
 
 (m/=> snapped-position [:-> App Vec2])
 (defn snapped-position
   [db]
-  (or (:point (:nearest-neighbor db))
+  (or (-> db :snapping :nearest-neighbor :point)
       (:local-pointer-pos db)))
 
 (m/=> axis-pan-offset [:-> number? number? number? number?])

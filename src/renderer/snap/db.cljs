@@ -29,3 +29,16 @@
    [:active {:default true} boolean?]
    [:options {:default #{:centers :midpoints :corners :grid :guides}}
     SnapOptions]])
+
+(def Snapping
+  [:map {:closed true}
+   [:kdtree {:optional true} [:maybe map?]]
+   [:viewbox-kdtree {:optional true} [:maybe map?]]
+   [:x-tree {:optional true} [:maybe map?]]
+   [:y-tree {:optional true} [:maybe map?]]
+   [:snapping-points-cache {:optional true} map?]
+   [:nearest-neighbor-offset {:optional true} [:maybe Vec2]]
+   [:nearest-neighbor {:optional true} [:maybe NearestNeighbor]]
+   [:nearest-neighbors {:optional true} [:sequential NearestNeighbor]]
+   [:nearest-x {:optional true} [:maybe AxisMatch]]
+   [:nearest-y {:optional true} [:maybe AxisMatch]]])
