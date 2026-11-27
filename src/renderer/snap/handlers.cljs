@@ -9,7 +9,8 @@
    [renderer.element.handlers :as element.handlers]
    [renderer.frame.handlers :as frame.handlers]
    [renderer.ruler.handlers :as ruler.handlers]
-   [renderer.snap.db :refer [AxisMatch NearestNeighbor SnapOption SnapOptions]]
+   [renderer.snap.db :refer [AxisMatch NearestNeighbor SnapOption
+                             SnapOptions]]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.utils.element :as utils.element]
    [renderer.utils.math :as utils.math]))
@@ -31,11 +32,17 @@
   (let [is-enabled (contains? (-> db :snap :options) option)]
     (update-in db [:snap :options] (if is-enabled disj conj) option)))
 
+(m/=> axis-participant [:-> any? [:maybe [:enum :x :y]]])
+(defn axis-participant
+  [point]
+  (-> point meta :axis-only))
+
 (m/=> nearest-neighbors [:-> App [:sequential NearestNeighbor]])
 (defn nearest-neighbors
   [db]
   (let [{:keys [viewbox-kdtree]} (:snapping db)]
     (->> (tool.hierarchy/snapping-points db)
+         (remove axis-participant)
          (keep #(some-> (kdtree/nearest-neighbor viewbox-kdtree %)
                         (assoc :base-point %))))))
 
@@ -68,7 +75,11 @@
      (sort-by :dist
               (remove nil?
                       (map #(axis-match axis % tree threshold)
-                           base-points))))))
+                           (filter (fn [point]
+                                     (let [axis-only (axis-participant point)]
+                                       (or (nil? axis-only)
+                                           (= axis-only axis))))
+                                   base-points)))))))
 
 (m/=> update-nearest-neighbors [:-> App App])
 (defn update-nearest-neighbors
@@ -149,21 +160,18 @@
          (with-meta [value] {:label [::grid-line "grid line"]}))
        (ruler.handlers/axis-steps db axis)))
 
-(m/=> guide-axis-values [:-> App [:enum :x :y] [:sequential [:tuple number?]]])
-(defn guide-axis-values
+(m/=> element-axis-values [:-> App [:enum :x :y]
+                           [:sequential [:tuple number?]]])
+(defn element-axis-values
   [db axis]
-  (let [horizontal? (= axis :y)
-        orientation (if horizontal? "horizontal" "vertical")
-        coord (if horizontal? :y :x)
+  (let [index (case axis :x 0 :y 1)
         ids (vec (element.handlers/non-selected-ids db))]
     (into []
-          (keep (fn [el]
-                  (let [value (js/parseFloat (-> el :attrs coord))]
-                    (when-not (js/isNaN value)
-                      (with-meta [value] {:label [::guide "guide"]})))))
-          (->> (element.handlers/entities db ids)
-               (filter #(and (= (:tag %) :guide)
-                             (= (-> % :attrs :orientation) orientation)))))))
+          (keep (fn [point]
+                  (when (= (axis-participant point) axis)
+                    (with-meta [(nth point index)]
+                      {:label (-> point meta :label)}))))
+          (snapping-points db (element.handlers/entities db ids)))))
 
 (m/=> axis-values [:->
                    App [:vector Vec2] [:enum :x :y]
@@ -184,7 +192,7 @@
             (into (grid-axis-values db axis))
 
             (and (contains? options :guides) (:guides attrs))
-            (into (guide-axis-values db axis))))))
+            (into (element-axis-values db axis))))))
 
 (m/=> update-viewport-tree [:-> App App])
 (m/=> update-viewport-tree [:-> App App])
@@ -194,7 +202,10 @@
     db
     (let [[x y width height] (frame.handlers/viewbox db)
           boundaries [[x (+ x width)] [y (+ y height)]]
-          points (kdtree/interval-search (-> db :snapping :kdtree) boundaries)
+          points (->> boundaries
+                      (kdtree/interval-search (-> db :snapping :kdtree))
+                      (remove axis-participant)
+                      vec)
           axis-tree #(kdtree/build-tree (axis-values db points %))]
       (update-snapping db assoc
                        :viewbox-kdtree (kdtree/build-tree points)

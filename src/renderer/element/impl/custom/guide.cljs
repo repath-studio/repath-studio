@@ -121,7 +121,9 @@
 (defmethod attribute.hierarchy/initial [:guide :orientation] [] "vertical")
 
 (defmethod element.hierarchy/snapping-points :guide
-  [el]
-  (let [{{:keys [x y]} :attrs} el]
-    [(with-meta [(js/parseFloat x) (js/parseFloat y)]
-       {:label [::position "position"]})]))
+  [{:keys [attrs]}]
+  (let [parse #(js/parseFloat %)
+        axis (if (= (:orientation attrs) "vertical") :x :y)]
+    [(with-meta [(parse (:x attrs)) (parse (:y attrs))]
+       {:label [::position "position"]
+        :axis-only axis})]))
