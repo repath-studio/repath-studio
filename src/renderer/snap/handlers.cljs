@@ -18,8 +18,8 @@
 (m/=> active? [:-> App boolean?])
 (defn active?
   [db]
-  (and (:active-document db)
-       (-> db :snap :active)))
+  (boolean (and (:active-document db)
+                (-> db :snap :active))))
 
 (m/=> update-snapping [:-> App ifn? [:* any?] App])
 (defn update-snapping
@@ -221,7 +221,8 @@
       (-> (assoc-in db [:snapping :kdtree]
                     (kdtree/build-tree (snapping-points db elements)))
           (update-viewport-tree)))
-    (dissoc db :snapping)))
+    ;; :snapping has a schema default, so it must stay present
+    (assoc db :snapping {})))
 
 (m/=> update-tree [:-> App ifn? [:vector Vec2] App])
 (defn update-tree
