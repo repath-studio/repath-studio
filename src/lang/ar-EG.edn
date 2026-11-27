@@ -623,8 +623,7 @@
  {:select-handles "تحديد مقابض"}
 
  :renderer.snap.handlers
- {:grid-line "خط الشبكة"
-  :guide "دليل"}
+ {:grid-line "خط الشبكة"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "اضغط %1 لتقييد الاتجاه."]

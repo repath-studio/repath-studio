@@ -668,8 +668,7 @@
  {:select-handles "Seleziona maniglie"}
 
  :renderer.snap.handlers
- {:grid-line "linea della griglia"
-  :guide "guida"}
+ {:grid-line "linea della griglia"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Tieni premuto %1 per limitare la direzione."]

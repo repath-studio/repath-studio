@@ -650,8 +650,7 @@
  {:select-handles "Selecionar alças"}
 
  :renderer.snap.handlers
- {:grid-line "linha de grelha"
-  :guide "guia"}
+ {:grid-line "linha de grelha"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Mantenha %1 para restringir a direção."]

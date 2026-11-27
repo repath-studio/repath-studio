@@ -654,8 +654,7 @@
  {:select-handles "Välj handtag"}
 
  :renderer.snap.handlers
- {:grid-line "rutnätslinje"
-  :guide "stödlinje"}
+ {:grid-line "rutnätslinje"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Håll %1 för att begränsa riktning."]

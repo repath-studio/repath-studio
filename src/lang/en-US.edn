@@ -947,8 +947,7 @@
   :snap-options "Snap options"}
 
  :renderer.snap.handlers
- {:grid-line "grid line"
-  :guide "guide"}
+ {:grid-line "grid line"}
 
  :renderer.theme.core
  {:theme-mode "Theme mode"

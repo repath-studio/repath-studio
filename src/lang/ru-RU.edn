@@ -651,8 +651,7 @@
  {:select-handles "Выбрать маркеры"}
 
  :renderer.snap.handlers
- {:grid-line "линия сетки"
-  :guide "направляющая"}
+ {:grid-line "линия сетки"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Удерживайте %1 для ограничения направления."]

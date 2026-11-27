@@ -655,8 +655,7 @@
  {:select-handles "Seleccionar controladores"}
 
  :renderer.snap.handlers
- {:grid-line "línea de cuadrícula"
-  :guide "guía"}
+ {:grid-line "línea de cuadrícula"}
 
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Mantenga %1 para restringir la dirección."]
