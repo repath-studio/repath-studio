@@ -182,9 +182,9 @@
                      (conj (with-meta centroid
                              {:label [::centroid "centroid"]}))))
                  (filter #(-> % meta :axis-only) points))
-        with-id #(with-meta % (merge (meta %) {:id (:id el)}))]
-    (into (mapv #(-> (utils.transform/point el-transform %) with-id)
-                points)
+        with-id #(with-meta % (merge (meta %) {:id (:id el)}))
+        absolute #(with-meta (utils.transform/point el-transform %) (meta %))]
+    (into (mapv (comp with-id absolute) points)
           (cond-> []
             (:bbox el)
             (into (mapv with-id
