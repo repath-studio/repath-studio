@@ -183,7 +183,7 @@
                              {:label [::centroid "centroid"]}))))
                  (filter #(-> % meta :axis-only) points))
         with-id #(with-meta % (merge (meta %) {:id (:id el)}))]
-    (into (mapv #(-> % (utils.transform/point el-transform) with-id)
+    (into (mapv #(-> (utils.transform/point el-transform %) with-id)
                 points)
           (cond-> []
             (:bbox el)

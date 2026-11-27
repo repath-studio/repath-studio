@@ -27,7 +27,7 @@
 (def Snap
   [:map {:closed true}
    [:active {:default true} boolean?]
-   [:options {:default #{:centers :midpoints :corners :nodes :guides}}
+   [:options {:default #{:centers :midpoints :corners :alignment :grid :guides}}
     SnapOptions]])
 
 (def Snapping

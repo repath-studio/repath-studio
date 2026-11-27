@@ -195,7 +195,6 @@
             (into (element-axis-values db axis))))))
 
 (m/=> update-viewport-tree [:-> App App])
-(m/=> update-viewport-tree [:-> App App])
 (defn update-viewport-tree
   [db]
   (if-not (active? db)
@@ -217,7 +216,7 @@
   [db]
   (if (active? db)
     (let [elements (tool.hierarchy/snapping-elements db)
-          db (update-snapping-points-cache (dissoc db :snapping) elements)]
+          db (update-snapping-points-cache db elements)]
       (-> (assoc-in db [:snapping :kdtree]
                     (kdtree/build-tree (snapping-points db elements)))
           (update-viewport-tree)))
