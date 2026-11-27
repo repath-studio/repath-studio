@@ -63,6 +63,7 @@
          :base-point base-point
          :delta (- (first point) base)
          :dist dist-squared
+         :id (-> result meta :id)
          :label (-> result meta :label)}))))
 
 (m/=> nearest-axis-match [:->

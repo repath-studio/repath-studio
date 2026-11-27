@@ -1,6 +1,7 @@
 (ns renderer.snap.db
   (:require
-   [renderer.db :refer [Vec2]]))
+   [renderer.db :refer [Vec2]]
+   [renderer.element.db :refer [ElementId]]))
 
 (def SnapOption
   [:enum :centers :midpoints :corners :nodes :alignment :grid :guides])
@@ -22,7 +23,8 @@
    [:base-point Vec2]
    [:delta number?]
    [:dist number?]
-   [:label {:optional true} [:maybe [:tuple keyword? string?]]]])
+   [:id [:maybe ElementId]]
+   [:label [:maybe [:tuple keyword? string?]]]])
 
 (def Snap
   [:map {:closed true}

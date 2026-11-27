@@ -3,6 +3,7 @@
    [clojure.string :as string]
    [re-frame.core :as rf]
    [renderer.document.subs :as-alias document.subs]
+   [renderer.element.subs :as-alias element.subs]
    [renderer.i18n.views :as i18n.views]
    [renderer.utils.math :as utils.math]
    [renderer.utils.svg :as utils.svg]))
@@ -92,3 +93,17 @@
 
      (when base-label
        [labeled-point snapped-base (i18n.views/t base-label) margin])]))
+
+(defn snapped-bounding-box
+  [id]
+  (when-let [{:keys [bbox]} @(rf/subscribe [::element.subs/entity id])]
+    [utils.svg/bounding-box bbox true]))
+
+(defn snapped-bounding-boxes
+  [matches]
+  (->> matches
+       (map #(or (:id %) (-> % meta :id)))
+       (remove nil?)
+       (distinct)
+       (map (fn [id] ^{:key id} [snapped-bounding-box id]))
+       (into [:<>])))
