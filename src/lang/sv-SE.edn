@@ -960,6 +960,7 @@
   :corners "Hörn"
   :nodes "Noder"
   :grid "Rutnät"
+  :alignment "Justering"
   :guides "Stödlinjer"
   :snap-options "Fästalternativ"}
 

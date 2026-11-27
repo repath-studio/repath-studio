@@ -916,6 +916,7 @@
   :corners "角"
   :nodes "ノード"
   :grid "グリッド"
+  :alignment "整列"
   :guides "ガイド"
   :snap-options "スナップオプション"}
 

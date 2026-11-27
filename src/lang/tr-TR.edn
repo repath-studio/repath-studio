@@ -954,6 +954,7 @@
   :corners "Köşeler"
   :nodes "Düğümler"
   :grid "Izgara"
+  :alignment "Hizalama"
   :guides "Kılavuzlar"
   :snap-options "Yapışma seçenekleri"}
 

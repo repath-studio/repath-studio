@@ -908,6 +908,7 @@
   :corners "모서리"
   :nodes "노드"
   :grid "그리드"
+  :alignment "정렬"
   :guides "가이드"
   :snap-options "스낵 옵션"}
 

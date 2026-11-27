@@ -977,6 +977,7 @@
   :corners "Hoeken"
   :nodes "Knooppunten"
   :grid "Raster"
+  :alignment "Uitlijning"
   :guides "Hulplijnen"
   :snap-options "Uitlijningsopties"}
 

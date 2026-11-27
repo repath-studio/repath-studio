@@ -862,6 +862,7 @@
   :corners "角点"
   :nodes "节点"
   :grid "网格"
+  :alignment "对齐"
   :guides "参考线"
   :snap-options "吸附选项"}
 

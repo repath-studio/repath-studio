@@ -961,6 +961,7 @@
   :corners "Углы"
   :nodes "Узлы"
   :grid "Сетка"
+  :alignment "Выравнивание"
   :guides "Направляющие"
   :snap-options "Параметры привязки"}
 

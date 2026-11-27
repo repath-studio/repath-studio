@@ -41,6 +41,13 @@
                :active [::snap.subs/option-enabled? :nodes]}])
 
 (rf/dispatch [::action.events/register-action
+              {:id :snap/toggle-alignment
+               :label [::alignment "Alignment"]
+               :icon "objects-align-center-vertical"
+               :event [::snap.events/toggle-option :alignment]
+               :active [::snap.subs/option-enabled? :alignment]}])
+
+(rf/dispatch [::action.events/register-action
               {:id :snap/toggle-grid
                :label [::grid "Grid"]
                :icon "grid"
@@ -62,5 +69,6 @@
                          :snap/toggle-midpoints
                          :snap/toggle-corners
                          :snap/toggle-nodes
+                         :snap/toggle-alignment
                          :snap/toggle-grid
                          :snap/toggle-guides]}])

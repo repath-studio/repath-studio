@@ -941,6 +941,7 @@
   :midpoints "Midpoints"
   :corners "Corners"
   :nodes "Nodes"
+  :alignment "Alignment"
   :grid "Grid"
   :guides "Guides"
   :snap-options "Snap options"}

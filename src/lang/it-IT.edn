@@ -977,6 +977,7 @@
   :corners "Angoli"
   :nodes "Nodi"
   :grid "Griglia"
+  :alignment "Allineamento"
   :guides "Guide"
   :snap-options "Opzioni di aggancio"}
 

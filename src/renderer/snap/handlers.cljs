@@ -173,10 +173,12 @@
   (let [index (case axis :x 0 :y 1)
         options (-> db :snap :options)
         attrs (get-in db [:documents (:active-document db) :attrs])]
-    (into (map (fn [point]
-                 (with-meta [(nth point index)]
-                   (assoc (meta point) :point point)))
-               points)
+    (into (cond-> []
+            (contains? options :alignment)
+            (into (map (fn [point]
+                         (with-meta [(nth point index)]
+                           (assoc (meta point) :point point)))
+                       points)))
           (cond-> []
             (and (contains? options :grid) (:grid attrs))
             (into (grid-axis-values db axis))

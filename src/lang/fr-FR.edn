@@ -974,6 +974,7 @@
   :corners "Coins"
   :nodes "Nœuds"
   :grid "Grille"
+  :alignment "Alignement"
   :guides "Guides"
   :snap-options "Options de magnétisme"}
 

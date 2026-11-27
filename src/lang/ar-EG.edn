@@ -926,6 +926,7 @@
   :corners "الزوايا"
   :nodes "العقد"
   :grid "الشبكة"
+  :alignment "المحاذاة"
   :guides "الأدلة"
   :snap-options "خيارات الالتقاط"}
 

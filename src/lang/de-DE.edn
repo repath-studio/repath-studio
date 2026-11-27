@@ -981,6 +981,7 @@
   :corners "Ecken"
   :nodes "Knoten"
   :grid "Raster"
+  :alignment "Ausrichtung"
   :guides "Hilfslinien"
   :snap-options "Einrast-Optionen"}
 

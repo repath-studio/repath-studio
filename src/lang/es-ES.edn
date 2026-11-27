@@ -965,6 +965,7 @@
   :corners "Esquinas"
   :nodes "Nodos"
   :grid "Cuadrícula"
+  :alignment "Alineación"
   :guides "Guías"
   :snap-options "Opciones de ajuste"}
 

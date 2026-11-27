@@ -3,7 +3,7 @@
    [renderer.db :refer [Vec2]]))
 
 (def SnapOption
-  [:enum :centers :midpoints :corners :nodes :grid :guides])
+  [:enum :centers :midpoints :corners :nodes :alignment :grid :guides])
 
 (def SnapOptions
   [:set SnapOption])
@@ -27,7 +27,7 @@
 (def Snap
   [:map {:closed true}
    [:active {:default true} boolean?]
-   [:options {:default #{:centers :midpoints :corners :grid :guides}}
+   [:options {:default #{:centers :midpoints :corners :nodes :guides}}
     SnapOptions]])
 
 (def Snapping

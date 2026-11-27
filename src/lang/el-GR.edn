@@ -985,6 +985,7 @@
   :corners "Γωνία"
   :nodes "Κόμβος"
   :grid "Πλέγμα"
+  :alignment "Ευθυγράμμιση"
   :guides "Οδηγοί"
   :snap-options "Επιλογές προσκόλλησης"}
 
