@@ -3,6 +3,20 @@
 All notable user facing changes to this project will be documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.4.30] - 2026-11-28
+
+**Added**
+
+- Dragging multiple tree elements and reordering [#248](https://github.com/repath-studio/repath-studio/pull/248)
+- Snap improvements [#249](https://github.com/repath-studio/repath-studio/pull/249)
+
+**Fixed**
+
+- Command dialog filtering
+- Time parsing edge cases
+- Negative duration on animation resize
+- Animation set time
+
 ## [0.4.29] - 2026-11-20
 
 **Added**
