@@ -9,7 +9,8 @@
    [renderer.element.handlers :as element.handlers]
    [renderer.frame.handlers :as frame.handlers]
    [renderer.ruler.handlers :as ruler.handlers]
-   [renderer.snap.db :refer [NearestNeighbor SnapOption SnapOptions]]
+   [renderer.snap.db :refer [AxisMatch NearestNeighbor SnapOption
+                             SnapOptions]]
    [renderer.tool.hierarchy :as tool.hierarchy]
    [renderer.utils.element :as utils.element]
    [renderer.utils.math :as utils.math]))
@@ -17,8 +18,13 @@
 (m/=> active? [:-> App boolean?])
 (defn active?
   [db]
-  (and (:active-document db)
-       (-> db :snap :active)))
+  (boolean (and (:active-document db)
+                (-> db :snap :active))))
+
+(m/=> update-snapping [:-> App ifn? [:* any?] App])
+(defn update-snapping
+  [db f & more]
+  (update db :snapping #(apply f (or % {}) more)))
 
 (m/=> toggle-option [:-> App SnapOption App])
 (defn toggle-option
@@ -26,13 +32,55 @@
   (let [is-enabled (contains? (-> db :snap :options) option)]
     (update-in db [:snap :options] (if is-enabled disj conj) option)))
 
+(m/=> axis-participant [:-> any? [:maybe [:enum :x :y]]])
+(defn axis-participant
+  [point]
+  (-> point meta :axis-only))
+
 (m/=> nearest-neighbors [:-> App [:sequential NearestNeighbor]])
 (defn nearest-neighbors
   [db]
-  (let [{:keys [viewbox-kdtree]} db]
+  (let [{:keys [viewbox-kdtree]} (:snapping db)]
     (->> (tool.hierarchy/snapping-points db)
+         (remove axis-participant)
          (keep #(some-> (kdtree/nearest-neighbor viewbox-kdtree %)
                         (assoc :base-point %))))))
+
+(m/=> axis-match [:->
+                  [:enum :x :y] Vec2 [:* any?] number?
+                  [:maybe AxisMatch]])
+(defn axis-match
+  [axis base-point tree threshold]
+  (let [index (case axis :x 0 :y 1)
+        base (nth base-point index)]
+    (when-let [{:keys [point dist-squared]
+                :as result}
+               (kdtree/nearest-neighbor tree [base])]
+      (when (< dist-squared threshold)
+        {:axis axis
+         :value (first point)
+         :point (-> result meta :point)
+         :base-point base-point
+         :delta (- (first point) base)
+         :dist dist-squared
+         :id (-> result meta :id)
+         :label (-> result meta :label)}))))
+
+(m/=> nearest-axis-match [:->
+                          App [:enum :x :y] [:maybe [:sequential Vec2]]
+                          number? [:maybe AxisMatch]])
+(defn nearest-axis-match
+  [db axis base-points threshold]
+  (when-let [tree ((case axis :x :x-tree :y :y-tree) (:snapping db))]
+    (first
+     (sort-by :dist
+              (remove nil?
+                      (map #(axis-match axis % tree threshold)
+                           (filter (fn [point]
+                                     (let [axis-only (axis-participant point)]
+                                       (or (nil? axis-only)
+                                           (= axis-only axis))))
+                                   base-points)))))))
 
 (m/=> update-nearest-neighbors [:-> App App])
 (defn update-nearest-neighbors
@@ -43,20 +91,23 @@
           threshold (Math/pow (/ config/snap-threshold zoom) 2)
           nneighbors (nearest-neighbors db)
           nneighbors (filter #(< (:dist-squared %) threshold) nneighbors)]
-      (assoc db
-             :nearest-neighbors nneighbors
-             :nearest-neighbor (apply min-key :dist-squared nneighbors)))))
-
-(m/=> update-viewport-tree [:-> App App])
-(defn update-viewport-tree
-  [db]
-  (if-not (active? db)
-    db
-    (let [[x y width height] (frame.handlers/viewbox db)
-          boundaries [[x (+ x width)] [y (+ y height)]]]
-      (assoc db :viewbox-kdtree (-> (:kdtree db)
-                                    (kdtree/interval-search boundaries)
-                                    (kdtree/build-tree))))))
+      (if-let [nearest (first (sort-by :dist-squared nneighbors))]
+        (update-snapping db
+                         #(-> %
+                              (assoc :nearest-neighbors nneighbors
+                                     :nearest-neighbor nearest)
+                              (dissoc :nearest-x :nearest-y)))
+        (let [base-points (tool.hierarchy/snapping-points db)]
+          (update-snapping db
+                           #(-> %
+                                (dissoc :nearest-neighbor)
+                                (assoc :nearest-neighbors nneighbors
+                                       :nearest-x
+                                       (nearest-axis-match db :x base-points
+                                                           threshold)
+                                       :nearest-y
+                                       (nearest-axis-match db :y base-points
+                                                           threshold)))))))))
 
 (m/=> add-to-cache [:-> App SnapOptions map? Element map?])
 (defn add-to-cache
@@ -76,17 +127,18 @@
 (defn update-snapping-points-cache
   [db els]
   (let [options (-> db :snap :options)]
-    (assoc db :snapping-points-cache
-           (reduce (partial add-to-cache db options)
-                   (or (:snapping-points-cache db) {})
-                   els))))
+    (update-snapping db
+                     #(assoc % :snapping-points-cache
+                             (reduce (partial add-to-cache db options)
+                                     (or (:snapping-points-cache %) {})
+                                     els)))))
 
 (m/=> snapping-points [:-> App [:maybe [:sequential Element]] [:vector Vec2]])
 (defn snapping-points
   [db els]
   (if (active? db)
     (let [options (-> db :snap :options)
-          cache (:snapping-points-cache db)]
+          cache (-> db :snapping :snapping-points-cache)]
       (into []
             (mapcat (fn [el]
                       (let [[cached-points cached-el cached-options]
@@ -102,29 +154,83 @@
                     els)))
     []))
 
+(m/=> grid-axis-values [:-> App [:enum :x :y] [:sequential [:tuple number?]]])
+(defn grid-axis-values
+  [db axis]
+  (map (fn [value]
+         (with-meta [value] {:label [::grid-line "grid line"]}))
+       (ruler.handlers/axis-steps db axis)))
+
+(m/=> element-axis-values [:-> App [:enum :x :y]
+                           [:sequential [:tuple number?]]])
+(defn element-axis-values
+  [db axis]
+  (let [index (case axis :x 0 :y 1)
+        ids (vec (element.handlers/non-selected-ids db))]
+    (into []
+          (keep (fn [point]
+                  (when (= (axis-participant point) axis)
+                    (with-meta [(nth point index)]
+                      {:label (-> point meta :label)}))))
+          (snapping-points db (element.handlers/entities db ids)))))
+
+(m/=> axis-values [:->
+                   App [:vector Vec2] [:enum :x :y]
+                   [:sequential [:tuple number?]]])
+(defn axis-values
+  [db points axis]
+  (let [index (case axis :x 0 :y 1)
+        options (-> db :snap :options)
+        attrs (get-in db [:documents (:active-document db) :attrs])]
+    (into (cond-> []
+            (contains? options :alignment)
+            (into (map (fn [point]
+                         (with-meta [(nth point index)]
+                           (assoc (meta point) :point point)))
+                       points)))
+          (cond-> []
+            (and (contains? options :grid) (:grid attrs))
+            (into (grid-axis-values db axis))
+
+            (and (contains? options :guides) (:guides attrs))
+            (into (element-axis-values db axis))))))
+
+(m/=> update-viewport-tree [:-> App App])
+(defn update-viewport-tree
+  [db]
+  (if-not (active? db)
+    db
+    (let [[x y width height] (frame.handlers/viewbox db)
+          boundaries [[x (+ x width)] [y (+ y height)]]
+          points (->> boundaries
+                      (kdtree/interval-search (-> db :snapping :kdtree))
+                      (remove axis-participant)
+                      vec)
+          axis-tree #(kdtree/build-tree (axis-values db points %))]
+      (update-snapping db assoc
+                       :viewbox-kdtree (kdtree/build-tree points)
+                       :x-tree (axis-tree :x)
+                       :y-tree (axis-tree :y)))))
+
 (m/=> rebuild-tree [:-> App App])
 (defn rebuild-tree
   [db]
   (if (active? db)
     (let [elements (tool.hierarchy/snapping-elements db)
-          db (update-snapping-points-cache
-              (assoc db :snapping-points-cache {})
-              elements)
-          points (snapping-points db elements)
-          points (cond-> points
-                   (contains? (-> db :snap :options) :grid)
-                   (into (ruler.handlers/steps-intersections db)))]
-      (-> (assoc db :kdtree (kdtree/build-tree points))
+          db (update-snapping-points-cache db elements)]
+      (-> (assoc-in db [:snapping :kdtree]
+                    (kdtree/build-tree (snapping-points db elements)))
           (update-viewport-tree)))
-    (dissoc db :kdtree :viewbox-kdtree :snapping-points-cache)))
+    ;; :snapping has a schema default, so it must stay present
+    (assoc db :snapping {})))
 
 (m/=> update-tree [:-> App ifn? [:vector Vec2] App])
 (defn update-tree
   [db f points]
-  (if (:kdtree db)
+  (if (-> db :snapping :kdtree)
     (if (empty? points)
       db
-      (-> (reduce #(update %1 :kdtree f %2) db points)
+      (-> (reduce #(update-snapping %1 update :kdtree f %2) db points)
           (update-viewport-tree)))
     (rebuild-tree db)))
 
@@ -145,16 +251,20 @@
 (m/=> nearest-delta [:-> App Vec2])
 (defn nearest-delta
   [db]
-  (or (when-let [{:keys [point base-point]} (:nearest-neighbor db)]
-        (utils.math/v-sub point base-point))
-      [0 0]))
+  (let [{:keys [nearest-neighbor nearest-x nearest-y]} (:snapping db)]
+    (if-let [{:keys [point base-point]} nearest-neighbor]
+      (utils.math/v-sub point base-point)
+      (let [dx (or (:delta nearest-x) 0)
+            dy (or (:delta nearest-y) 0)]
+        [dx dy]))))
 
 (m/=> snap-with [:-> App ifn? [:* any?] App])
 (defn snap-with
   [db f & more]
   (if (active? db)
-    (let [db (update-nearest-neighbors db)]
-      (if (:nearest-neighbor db)
+    (let [db (update-nearest-neighbors db)
+          {:keys [nearest-neighbor nearest-x nearest-y]} (:snapping db)]
+      (if (or nearest-neighbor nearest-x nearest-y)
         (apply f db (nearest-delta db) more)
         db))
     db))

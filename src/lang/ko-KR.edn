@@ -605,6 +605,9 @@
  :renderer.tool.impl.base.edit.select
  {:select-handles "핸들 선택"}
 
+ :renderer.snap.handlers
+ {:grid-line "격자 선"}
+
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "%1을 누르면 방향을 제한합니다."]
   :handle "핸들"}
@@ -904,6 +907,7 @@
   :corners "모서리"
   :nodes "노드"
   :grid "그리드"
+  :alignment "정렬"
   :guides "가이드"
   :snap-options "스낵 옵션"}
 

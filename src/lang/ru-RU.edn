@@ -650,6 +650,9 @@
  :renderer.tool.impl.base.edit.select
  {:select-handles "Выбрать маркеры"}
 
+ :renderer.snap.handlers
+ {:grid-line "линия сетки"}
+
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Удерживайте %1 для ограничения направления."]
   :handle "ручка"}
@@ -957,6 +960,7 @@
   :corners "Углы"
   :nodes "Узлы"
   :grid "Сетка"
+  :alignment "Выравнивание"
   :guides "Направляющие"
   :snap-options "Параметры привязки"}
 

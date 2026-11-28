@@ -23,5 +23,20 @@
  :=> contains?)
 
 (rf/reg-sub
+ ::snapping
+ :-> :snapping)
+
+(rf/reg-sub
  ::nearest-neighbor
+ :<- [::snapping]
  :-> :nearest-neighbor)
+
+(rf/reg-sub
+ ::nearest-x
+ :<- [::snapping]
+ :-> :nearest-x)
+
+(rf/reg-sub
+ ::nearest-y
+ :<- [::snapping]
+ :-> :nearest-y)

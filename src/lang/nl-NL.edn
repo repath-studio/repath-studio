@@ -668,6 +668,9 @@
  :renderer.tool.impl.base.edit.select
  {:select-handles "Selecteer handvatten"}
 
+ :renderer.snap.handlers
+ {:grid-line "rasterlijn"}
+
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Houd %1 ingedrukt om richting te beperken."]
   :handle "handvat"}
@@ -973,6 +976,7 @@
   :corners "Hoeken"
   :nodes "Knooppunten"
   :grid "Raster"
+  :alignment "Uitlijning"
   :guides "Hulplijnen"
   :snap-options "Uitlijningsopties"}
 

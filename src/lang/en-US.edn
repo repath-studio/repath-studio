@@ -941,9 +941,13 @@
   :midpoints "Midpoints"
   :corners "Corners"
   :nodes "Nodes"
+  :alignment "Alignment"
   :grid "Grid"
   :guides "Guides"
   :snap-options "Snap options"}
+
+ :renderer.snap.handlers
+ {:grid-line "grid line"}
 
  :renderer.theme.core
  {:theme-mode "Theme mode"

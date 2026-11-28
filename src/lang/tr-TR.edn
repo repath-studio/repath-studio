@@ -645,6 +645,9 @@
  :renderer.tool.impl.base.edit.select
  {:select-handles "Tutamaçları seç"}
 
+ :renderer.snap.handlers
+ {:grid-line "ızgara çizgisi"}
+
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Yönü kısıtlamak için %1 tuşunu basılı tutun."]
   :handle "tutamak"}
@@ -950,6 +953,7 @@
   :corners "Köşeler"
   :nodes "Düğümler"
   :grid "Izgara"
+  :alignment "Hizalama"
   :guides "Kılavuzlar"
   :snap-options "Yapışma seçenekleri"}
 

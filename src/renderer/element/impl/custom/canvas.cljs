@@ -22,8 +22,7 @@
    [renderer.tool.subs :as-alias tool.subs]
    [renderer.tool.views :as tool.views]
    [renderer.utils.dom :as utils.dom]
-   [renderer.utils.element :as utils.element]
-   [renderer.utils.svg :as utils.svg]))
+   [renderer.utils.element :as utils.element]))
 
 (hierarchy/derive! :canvas ::element.hierarchy/element)
 
@@ -52,13 +51,20 @@
 (defn snap-info
   []
   (let [nearest-neighbor @(rf/subscribe [::snap.subs/nearest-neighbor])
-        snapped-el-id (-> nearest-neighbor meta :id)
-        snapped-el @(rf/subscribe [::element.subs/entity snapped-el-id])]
-    (when snapped-el
-      [utils.svg/bounding-box (:bbox snapped-el) true])
+        nearest-x @(rf/subscribe [::snap.subs/nearest-x])
+        nearest-y @(rf/subscribe [::snap.subs/nearest-y])]
+    [:<>
+     [snap.views/snapped-bounding-boxes
+      [nearest-neighbor nearest-x nearest-y]]
 
-    (when nearest-neighbor
-      [snap.views/canvas-label nearest-neighbor])))
+     (when nearest-neighbor
+       [snap.views/canvas-label nearest-neighbor])
+
+     (when nearest-x
+       [snap.views/axis-indicator nearest-x (:delta nearest-y)])
+
+     (when nearest-y
+       [snap.views/axis-indicator nearest-y (:delta nearest-x)])]))
 
 (defmethod element.hierarchy/render :canvas
   [_el]

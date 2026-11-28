@@ -174,20 +174,22 @@
                            [:* Vec2]])
 (defn acc-snapping-points
   [el el-transform options]
-  (let [points (or (when (contains? options :nodes)
-                     (let [centroid (element.hierarchy/centroid el)]
-                       (mapv #(with-meta
-                                (utils.transform/point el-transform %)
-                                (merge (meta %) {:id (:id el)}))
-                             (cond-> (element.hierarchy/snapping-points el)
-                               centroid
-                               (conj (with-meta centroid
-                                       {:label [::centroid "centroid"]}))))))
-                   [])]
-    (cond-> points
-      (:bbox el)
-      (into (mapv #(with-meta % (merge (meta %) {:id (:id el)}))
-                  (utils.bounds/->snapping-points (:bbox el) options))))))
+  (let [points (element.hierarchy/snapping-points el)
+        points (if (contains? options :nodes)
+                 (let [centroid (element.hierarchy/centroid el)]
+                   (cond-> points
+                     centroid
+                     (conj (with-meta centroid
+                             {:label [::centroid "centroid"]}))))
+                 (filter #(-> % meta :axis-only) points))
+        with-id #(with-meta % (merge (meta %) {:id (:id el)}))
+        absolute #(with-meta (utils.transform/point el-transform %) (meta %))]
+    (into (mapv (comp with-id absolute) points)
+          (cond-> []
+            (:bbox el)
+            (into (mapv with-id
+                        (utils.bounds/->snapping-points
+                         (:bbox el) options)))))))
 
 (m/=> attributes [:-> map? map?])
 (defn attributes

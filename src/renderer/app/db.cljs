@@ -18,7 +18,7 @@
    [renderer.menubar.db :refer [Menubar]]
    [renderer.panel.db :as panel.db :refer [Panel PanelId]]
    [renderer.shell.db :refer [Shell]]
-   [renderer.snap.db :refer [Snap NearestNeighbor]]
+   [renderer.snap.db :refer [Snap Snapping]]
    [renderer.theme.db :refer [Theme]]
    [renderer.timeline.db :refer [Timeline]]
    [renderer.tool.db :refer [Handle ToolHistory Tool State Cursor]]
@@ -52,9 +52,6 @@
    [:pointer-offset {:optional true} Vec2]
    [:local-pointer-pos {:default [0 0]} Vec2]
    [:local-pointer-offset {:optional true} Vec2]
-   [:nearest-neighbor-offset {:optional true} [:maybe Vec2]]
-   [:nearest-neighbor {:optional true} [:maybe NearestNeighbor]]
-   [:nearest-neighbors {:optional true} [:sequential NearestNeighbor]]
    [:drag-pointer {:optional true} number?]
    [:pinch-distance {:optional true} number?]
    [:pinch-midpoint {:optional true} Vec2]
@@ -67,6 +64,7 @@
    [:tool-history {:optional true} ToolHistory]
    [:snap {:default {}
            :persist true} Snap]
+   [:snapping {:default {}} Snapping]
    [:active-document {:optional true
                       :persist true} [:maybe DocumentId]]
    [:cursor {:default "default"} Cursor]
@@ -123,9 +121,6 @@
    [:select-box {:optional true} [:maybe Element]]
    [:clicked-element {:optional true} [:or Element Handle]]
    [:insertion-point {:optional true} Vec2]
-   [:kdtree {:optional true} [:maybe map?]]
-   [:viewbox-kdtree {:optional true} [:maybe map?]]
-   [:snapping-points-cache {:optional true} map?]
    [:actions {:default {}} ActionRegistry]
    [:action-groups {:default {}} ActionGroupRegistry]
    [:key-bindings {:default {}

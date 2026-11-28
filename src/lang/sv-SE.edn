@@ -653,6 +653,9 @@
  :renderer.tool.impl.base.edit.select
  {:select-handles "Välj handtag"}
 
+ :renderer.snap.handlers
+ {:grid-line "rutnätslinje"}
+
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Håll %1 för att begränsa riktning."]
   :handle "handtag"}
@@ -956,6 +959,7 @@
   :corners "Hörn"
   :nodes "Noder"
   :grid "Rutnät"
+  :alignment "Justering"
   :guides "Stödlinjer"
   :snap-options "Fästalternativ"}
 

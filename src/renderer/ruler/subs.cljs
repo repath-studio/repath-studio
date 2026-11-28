@@ -27,9 +27,7 @@
  :<- [::document.subs/zoom]
  :<- [::document.subs/grid-step]
  (fn [[zoom grid-step] [_ orientation]]
-   (let [min-step (ruler.handlers/axis-min-step grid-step orientation)]
-     (> (ruler.handlers/current-step zoom grid-step orientation)
-        (ruler.handlers/step conf/grid-target-px conf/max-zoom min-step)))))
+   (ruler.handlers/render-subgrid? zoom grid-step orientation)))
 
 (rf/reg-sub
  ::subgrid-opacity

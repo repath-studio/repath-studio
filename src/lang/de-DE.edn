@@ -670,6 +670,9 @@
  :renderer.tool.impl.base.edit.select
  {:select-handles "Anfasser auswählen"}
 
+ :renderer.snap.handlers
+ {:grid-line "Rasterlinie"}
+
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "Halten Sie %1, um die Richtung zu beschränken."]
   :handle "Griff"}
@@ -977,6 +980,7 @@
   :corners "Ecken"
   :nodes "Knoten"
   :grid "Raster"
+  :alignment "Ausrichtung"
   :guides "Hilfslinien"
   :snap-options "Einrast-Optionen"}
 

@@ -3,7 +3,7 @@ module.exports = function (config) {
   var junitOutputDir = 'junit'
 
   config.set({
-    browserDisconnectTimeout: 10000,
+    browserDisconnectTimeout: 15000,
     customLaunchers: {
       ChromeHeadlessNoSandbox: {
         base: 'ChromeHeadless',

@@ -65,8 +65,9 @@
   (-> db
       (assoc :active-pointers {})
       (dissoc :drag-pointer :pointer-offset :local-pointer-offset
-              :nearest-neighbor :nearest-neighbor-offset
-              :pinch-distance :pinch-midpoint)))
+              :pinch-distance :pinch-midpoint)
+      (update :snapping dissoc :nearest-neighbor
+              :nearest-neighbor-offset :nearest-x :nearest-y)))
 
 (m/=> pointer [:-> App PointerEvent App])
 (defn pointer

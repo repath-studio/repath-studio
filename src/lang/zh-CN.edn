@@ -564,6 +564,9 @@
  :renderer.tool.impl.base.edit.select
  {:select-handles "选择控制点"}
 
+ :renderer.snap.handlers
+ {:grid-line "网格线"}
+
  :renderer.tool.impl.base.edit.edit
  {:help-edit [:div "按住 %1 限制方向。"]
   :handle "句柄"}
@@ -858,6 +861,7 @@
   :corners "角点"
   :nodes "节点"
   :grid "网格"
+  :alignment "对齐"
   :guides "参考线"
   :snap-options "吸附选项"}
 
