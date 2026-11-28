@@ -51,8 +51,9 @@
           deref))
 
 (defn dispatch
-  [action]
-  (fn [_e]
+  [action & {:keys [prevent-default]}]
+  (fn [e]
+    (when prevent-default (.preventDefault e))
     (some-> action
             :event
             rf/dispatch)))
@@ -211,40 +212,43 @@
      [shortcuts action]]))
 
 (defn dropdown-menu-item
-  [action & {:as props}]
-  (cond
-    (= :separator (:type action))
-    [:> DropdownMenu/Separator (views/merge-with-class {:class "menu-separator"}
-                                                       props)]
+  [action & {:keys [prevent-default]
+             :as props}]
+  (let [props (dissoc props :prevent-default)
+        on-select (dispatch action :prevent-default prevent-default)]
+    (cond
+      (= :separator (:type action))
+      [:> DropdownMenu/Separator
+       (views/merge-with-class {:class "menu-separator"} props)]
 
-    (:active action)
-    [:> DropdownMenu/CheckboxItem
-     (views/merge-with-class {:class "menu-checkbox-item inset"
-                              :on-click #(.stopPropagation %)
-                              :on-select (dispatch action)
-                              :checked (checked? action)
-                              :disabled (disabled? action)}
-                             props)
-     [:> DropdownMenu/ItemIndicator
-      {:class "menu-item-indicator"}
-      [views/icon "checkmark"]]
-     [:div.flex.items-center.gap-2
-      (when (:icon action)
-        [views/icon (:icon action)])
-      [label action]]
-     [shortcuts action]]
+      (:active action)
+      [:> DropdownMenu/CheckboxItem
+       (views/merge-with-class {:class "menu-checkbox-item inset"
+                                :on-click #(.stopPropagation %)
+                                :on-select on-select
+                                :checked (checked? action)
+                                :disabled (disabled? action)}
+                               props)
+       [:> DropdownMenu/ItemIndicator
+        {:class "menu-item-indicator"}
+        [views/icon "checkmark"]]
+       [:div.flex.items-center.gap-2
+        (when (:icon action)
+          [views/icon (:icon action)])
+        [label action]]
+       [shortcuts action]]
 
-    :else
-    [:> DropdownMenu/Item
-     (views/merge-with-class {:class "menu-item"
-                              :onSelect (dispatch action)
-                              :disabled (disabled? action)}
-                             props)
-     [:div.flex.items-center.gap-2
-      (when (:icon action)
-        [views/icon (:icon action)])
-      [label action]]
-     [shortcuts action]]))
+      :else
+      [:> DropdownMenu/Item
+       (views/merge-with-class {:class "menu-item"
+                                :onSelect on-select
+                                :disabled (disabled? action)}
+                               props)
+       [:div.flex.items-center.gap-2
+        (when (:icon action)
+          [views/icon (:icon action)])
+        [label action]]
+       [shortcuts action]])))
 
 (defn icon-button
   [action & {:as props}]
@@ -332,7 +336,9 @@
            :title (i18n.views/t (:label options))}
           [views/icon "chevron-up"]]]
         [:> DropdownMenu/Portal
-         (->> (concat (map dropdown-menu-item (:actions options)) children)
+         (->> (concat (map #(dropdown-menu-item % {:prevent-default true})
+                           (:actions options))
+                      children)
               (into [:> DropdownMenu/Content
                      {:side "top"
                       :align "end"
