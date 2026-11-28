@@ -7,4 +7,7 @@
                (-> app
                    (update :snap dissoc :transient-active :threshold)
                    (update :panels set/rename-keys
-                           {:repl-history :shell-output})))]])
+                           {:repl-history :shell-output})))]
+   [[0 4 30] (fn [app]
+               (update-in app [:snap :options] set/union
+                          #{:alignment :grid :guides}))]])
